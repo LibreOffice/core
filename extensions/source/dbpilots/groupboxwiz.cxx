@@ -36,9 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include "optiongrouplayouter.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 
 //#define GBW_STATE_DATASELECTION       0

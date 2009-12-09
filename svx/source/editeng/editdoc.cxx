@@ -1427,9 +1427,11 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT
         else
             pNextFeature = 0;   // Feature interessiert unten nicht
 
-
         DBG_ASSERT( nEnd >= nIndex, "Ende vorm Index?" );
-        aStr += XubString( *pNode, nIndex, nEnd-nIndex );
+        //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
+        //!! thus would result in adding the whole sub string up to the end of the node !!
+        if (nEnd > nIndex)
+            aStr += XubString( *pNode, nIndex, nEnd - nIndex );
 
         if ( pNextFeature )
         {
@@ -1790,7 +1792,12 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
     }
 
     if ( bChanged )
+    {
+        // char attributes need to be sorted by start again
+        pNode->GetCharAttribs().ResortAttribs();
+
         SetModified( TRUE );
+    }
 
     return bChanged;
 }

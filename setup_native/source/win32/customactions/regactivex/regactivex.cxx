@@ -51,8 +51,8 @@
 
 // #define OWN_DEBUG_PRINT
 
-typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, const char* );
-typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL );
+typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, BOOL, const char* );
+typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
 BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
 {
@@ -90,7 +90,7 @@ void WarningMessageInt( wchar_t* pWarning, unsigned int nValue )
 #endif
 
 //----------------------------------------------------------
-void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
+void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
 #ifdef OWN_DEBUG_PRINT
     MessageBoxW(NULL, L"RegisterActiveXNative", L"Information", MB_OK | MB_ICONINFORMATION);
@@ -112,7 +112,18 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 #ifdef OWN_DEBUG_PRINT
             MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
 #endif
-            ( *pNativeProc )( nMode, InstallForAllUser, pActiveXPath );
+            int nLen = strlen( pActiveXPath );
+            int nRemoveLen = strlen( "\\so_activex.dll" );
+            if ( nLen > nRemoveLen )
+            {
+                char* pProgramPath = reinterpret_cast<char*>( malloc( nLen - nRemoveLen + 1 ) );
+                strncpy( pProgramPath, pActiveXPath, nLen - nRemoveLen );
+                pProgramPath[ nLen - nRemoveLen ] = 0;
+
+                ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit, pProgramPath );
+
+                free( pProgramPath );
+            }
         }
 
         FreeLibrary( hModule );
@@ -120,7 +131,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 }
 
 //----------------------------------------------------------
-void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
+void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     // For Win98/WinME the values should be written to the local machine
     OSVERSIONINFO       aVerInfo;
@@ -133,7 +144,7 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
     {
         DllNativeUnregProc pNativeProc = ( DllNativeUnregProc )GetProcAddress( hModule, "DllUnregisterServerNative" );
         if( pNativeProc!=NULL )
-            ( *pNativeProc )( nMode, InstallForAllUser );
+            ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit );
 
         FreeLibrary( hModule );
     }
@@ -162,7 +173,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"BASISINSTALLLOCATION", &pProgPath ) && pProgPath )
+    if ( GetMsiProp( hMSI, L"OFFICEINSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
 #ifdef OWN_DEBUG_PRINT
@@ -313,6 +324,19 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 }
 
 //----------------------------------------------------------
+BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
+{
+    BOOL bResult = FALSE;
+    wchar_t* pVal = NULL;
+    if ( GetMsiProp( hMSI, L"VersionNT64", &pVal ) && pVal )
+    {
+        bResult = TRUE;
+        free( pVal );
+    }
+
+    return bResult;
+}
+//----------------------------------------------------------
 extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
     int nOldInstallMode = 0;
@@ -333,6 +357,8 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 #endif
 
         BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
+        BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
+
         char* pActiveXPath = NULL;
         if ( GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath
         && GetDelta( hMSI, nOldInstallMode, nInstallMode, nDeinstallMode ) )
@@ -351,10 +377,10 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
                 // the control is installed in the new selected configuration
 
                 if ( current_state == INSTALLSTATE_LOCAL && nDeinstallMode )
-                    UnregisterActiveXNative( pActiveXPath, nDeinstallMode, bInstallForAllUser );
+                    UnregisterActiveXNative( pActiveXPath, nDeinstallMode, bInstallForAllUser, bInstallFor64Bit );
 
                 if ( nInstallMode )
-                    RegisterActiveXNative( pActiveXPath, nInstallMode, bInstallForAllUser );
+                    RegisterActiveXNative( pActiveXPath, nInstallMode, bInstallForAllUser, bInstallFor64Bit );
             }
             else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             {
@@ -362,7 +388,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
                 MessageBox(NULL, L"InstallActiveXControl, removing", L"Information", MB_OK | MB_ICONINFORMATION);
 #endif
                 if ( nOldInstallMode )
-                    UnregisterActiveXNative( pActiveXPath, nOldInstallMode, bInstallForAllUser );
+                    UnregisterActiveXNative( pActiveXPath, nOldInstallMode, bInstallForAllUser, bInstallFor64Bit );
             }
         }
 
@@ -393,6 +419,7 @@ extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
         if ( current_state == INSTALLSTATE_LOCAL && GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath )
         {
             BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
+            BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
             {
                 UnregisterActiveXNative( pActiveXPath,
@@ -402,7 +429,8 @@ extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
                                         | CALC_COMPONENT
                                         | WRITER_COMPONENT
                                         | MATH_COMPONENT,
-                                        bInstallForAllUser );
+                                        bInstallForAllUser,
+                                        bInstallFor64Bit );
             }
 
             free( pActiveXPath );

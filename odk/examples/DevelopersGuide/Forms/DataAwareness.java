@@ -37,8 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-package org.openoffice.sdk.forms;
-
 import com.sun.star.beans.PropertyChangeEvent;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySet;

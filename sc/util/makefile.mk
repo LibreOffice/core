@@ -78,6 +78,7 @@ SHL1IMPLIB= sci
 
 # dynamic libraries
 SHL1STDLIBS=       \
+        $(VBAHELPERLIB) \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
@@ -229,8 +230,9 @@ SHL8STDLIBS= \
             $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(CPPULIB) \
-            $(SALLIB)
-
+            $(SALLIB) \
+            $(FORLIB) \
+            $(FORUILIB)
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 SHL8STDLIBS+=$(TKLIB)
 .ENDIF # ENABLE_LAYOUT == TRUE
@@ -300,6 +302,7 @@ SHL9RPATH=OOO
 .ENDIF
 
 SHL9STDLIBS= \
+        $(VBAHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(VCLLIB) \
         $(CPPULIB) \
@@ -315,6 +318,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
+        $(SVXMSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)

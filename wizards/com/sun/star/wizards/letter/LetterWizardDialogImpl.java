@@ -121,7 +121,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public static void main(String args[])
     {
         //only being called when starting wizard remotely
-        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         XMultiServiceFactory xLocMSF = null;
         try
         {

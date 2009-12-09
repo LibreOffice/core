@@ -434,13 +434,13 @@ namespace svt { namespace table
         virtual void                setCellContent(std::vector<std::vector<rtl::OUString> > cellContent)=0;
         /** gets the content of the cells
         */
-        virtual std::vector<std::vector<rtl::OUString> >            getCellContent() = 0;
+        virtual std::vector<std::vector<rtl::OUString> >&           getCellContent() = 0;
         /**sets title of header rows
         */
         virtual void                setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)=0;
         /** gets title of header rows
         */
-        virtual std::vector<rtl::OUString>   getRowHeaderName() = 0;
+        virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }

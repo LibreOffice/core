@@ -3130,20 +3130,6 @@ void RecordObjectBase::writeHeader()
 
 // ============================================================================
 
-void SequenceRecordObjectBase::construct(
-        const ObjectBase& rParent, const BinaryInputStreamRef& rxBaseStrm, const ::rtl::OUString& rSysFileName,
-        const BinaryInputStreamRef& rxRecStrm, const String& rRecNames, const String& rSimpleRecs )
-{
-    RecordObjectBase::construct( rParent, rxBaseStrm, rSysFileName, rxRecStrm, rRecNames, rSimpleRecs );
-}
-
-void SequenceRecordObjectBase::construct( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxBaseStrm, const BinaryInputStreamRef& rxRecStrm,
-        const String& rRecNames, const String& rSimpleRecs )
-{
-    RecordObjectBase::construct( rParent, rxBaseStrm, rxRecStrm, rRecNames, rSimpleRecs );
-}
-
 void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxBaseStrm, const ::rtl::OUString& rSysFileName,
         const String& rRecNames, const String& rSimpleRecs )

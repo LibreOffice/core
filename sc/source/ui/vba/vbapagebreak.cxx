@@ -139,3 +139,37 @@ ScVbaHPageBreak::getServiceNames()
     return aServiceNames;
 }
 
+template class ScVbaPageBreak< excel::XVPageBreak >;
+
+/* class ScVbaVPageBreak */
+ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                  css::uno::Reference< css::beans::XPropertySet >& xProps,
+                                  css::sheet::TablePageBreakData aTablePageBreakData ) throw ( css::uno::RuntimeException )
+:   ScVbaVPageBreak_BASE( xParent, xContext, xProps, aTablePageBreakData )
+{
+}
+
+ScVbaVPageBreak::~ScVbaVPageBreak()
+{
+}
+
+rtl::OUString&
+ScVbaVPageBreak::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreak") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaVPageBreak::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.VPageBreak" ) );
+    }
+    return aServiceNames;
+}
+

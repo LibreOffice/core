@@ -105,8 +105,11 @@ namespace sdr { namespace contact {
         // support for Primitive2D
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
+        // visibility check
+        virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const;
+
     private:
-        ViewObjectContactOfUnoControl();                                                  // never implemented
+        ViewObjectContactOfUnoControl();                                                    // never implemented
         ViewObjectContactOfUnoControl( const ViewObjectContactOfUnoControl& );              // never implemented
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
     };

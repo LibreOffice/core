@@ -350,6 +350,13 @@ Any OTimeModel::getDefaultForReset() const
 }
 
 //------------------------------------------------------------------------------
+void OTimeModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
+}
+
+//------------------------------------------------------------------------------
 Sequence< Type > OTimeModel::getSupportedBindingTypes()
 {
     return Sequence< Type >( &::getCppuType( static_cast< util::Time* >( NULL ) ), 1 );

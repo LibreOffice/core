@@ -372,12 +372,12 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
 Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL)
 {
     INetURLObject aURL( _sURL );
-    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
-        throw NoSuchElementException(_rName, *this);
+    if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+        throw NoSuchElementException( _rName, *this );
 
     try
     {
-        ::ucbhelper::Content aContent(_sURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        ::ucbhelper::Content aContent( _sURL, NULL );
         if ( !aContent.isDocument() )
             throw InteractiveIOException(
                 _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
@@ -398,30 +398,23 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
             SQLException aError;
             aError.Message = sErrorMessage;
 
-            throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), makeAny( aError ) );
+            throw WrappedTargetException( _sURL, *this, makeAny( aError ) );
         }
-        throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), ::cppu::getCaughtException() );
+        throw WrappedTargetException( _sURL, *this, ::cppu::getCaughtException() );
     }
     catch( const Exception& )
     {
-        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), ::cppu::getCaughtException() );
+        throw WrappedTargetException( _sURL, *this, ::cppu::getCaughtException() );
     }
 
-    ::rtl::Reference< ODatabaseModelImpl > pExistent;
-    ObjectCache::iterator aFind = m_aDatabaseObjects.find(_sURL);
+    OSL_ENSURE( m_aDatabaseObjects.find( _sURL ) == m_aDatabaseObjects.end(),
+        "ODatabaseContext::loadObjectFromURL: not intended for already-cached objects!" );
 
-    if ( aFind != m_aDatabaseObjects.end() ) // we found a object registered under the URL
-    {   // register it under the new name
-        pExistent = aFind->second;
-        m_aDatabaseObjects.insert( ObjectCache::value_type( _rName, pExistent.get() ) );
-        m_aDatabaseObjects.erase( aFind );
-    }
-
-    if ( !pExistent.get() )
+    ::rtl::Reference< ODatabaseModelImpl > pModelImpl;
     {
-        pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), *this ) );
+        pModelImpl.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), *this ) );
 
-        Reference< XModel > xModel( pExistent->createNewModel_deliverOwnership( false ), UNO_SET_THROW );
+        Reference< XModel > xModel( pModelImpl->createNewModel_deliverOwnership( false ), UNO_SET_THROW );
         Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
 
         ::comphelper::NamedValueCollection aArgs;
@@ -434,11 +427,11 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         xModel->attachResource( _sURL, aResource );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
-    } // if ( !pExistent.get() )
+    }
 
-    setTransientProperties( _sURL, *pExistent );
+    setTransientProperties( _sURL, *pModelImpl );
 
-    return pExistent->getOrCreateDataSource().get();
+    return pModelImpl->getOrCreateDataSource().get();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseContext::appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
@@ -572,6 +565,8 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
     {
+        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
+            // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
     else
@@ -596,42 +591,30 @@ void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XConta
 //------------------------------------------------------------------------------
 void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
 {
-    MutexGuard aGuard(m_aMutex);
+    ClearableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    Reference< XInterface > xExistent;
+    ::rtl::OUString sURL;
+    if ( !getURLForRegisteredObject( _rName, sURL ) )
+        throw NoSuchElementException( _rName, *this );
+
+    if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
+    {
+        OSL_ENSURE( false, "ODatabaseContext::revokeObject: a database document register by name? This shouldn't happen anymore!" );
+            // all the code should have been changed so that registration is by URL only
+        m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
+    }
 
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
-    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
-    {
-        OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
-        ::rtl::OUString sURL;
-        aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
-        sURL = SvtPathOptions().SubstituteVariable(sURL);
-
-        if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
-        {
-            m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
-        }
-
-        // check if URL is already loaded
-        ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
-        if ( aExistent != m_aDatabaseObjects.end() )
-            m_aDatabaseObjects.erase(aExistent);
-        if (!aDbRegisteredNamesRoot.removeNode(_rName))
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
-        aDbRegisteredNamesRoot.commit();
-    }
-    else
-        throw NoSuchElementException(_rName,*this);
+            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE );
+    if ( !aDbRegisteredNamesRoot.removeNode( _rName ) )
+        throw Exception( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An unexpected und unknown error occured." ) ), *this );
+    aDbRegisteredNamesRoot.commit();
 
     // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), Any(), makeAny(xExistent));
-        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
-    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-    while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
+    ContainerEvent aEvent( *this, makeAny( _rName ), Any(), Any() );
+    aGuard.clear();
+    m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
 // ::com::sun::star::container::XElementAccess
@@ -670,9 +653,9 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
 
     try
     {
-        Reference< XInterface > xExistent = getObject(_rName);
+        Reference< XInterface > xExistent = getObject( _rName );
         if ( xExistent.is() )
-            return makeAny(xExistent);
+            return makeAny( xExistent );
 
         // see whether this is an registered name
         ::rtl::OUString sURL;
@@ -741,36 +724,53 @@ sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( Runtime
     return aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName);
 }
 // -----------------------------------------------------------------------------
-Reference< XInterface > ODatabaseContext::getObject(const ::rtl::OUString& _rName)
+Reference< XInterface > ODatabaseContext::getObject( const ::rtl::OUString& _rURL )
 {
-    ObjectCacheIterator aFind = m_aDatabaseObjects.find(_rName);
+    ObjectCacheIterator aFind = m_aDatabaseObjects.find( _rURL );
     Reference< XInterface > xExistent;
     if ( aFind != m_aDatabaseObjects.end() )
         xExistent = aFind->second->getOrCreateDataSource();
     return xExistent;
 }
 // -----------------------------------------------------------------------------
-void ODatabaseContext::registerPrivate(const ::rtl::OUString& _sName
-                                       ,const ::rtl::Reference<ODatabaseModelImpl>& _pModelImpl)
+void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl )
 {
-    //  OSL_ENSURE(m_aDatabaseObjects.find(_sName) == m_aDatabaseObjects.end(),"Name already exists!");
-    if ( m_aDatabaseObjects.find(_sName) == m_aDatabaseObjects.end() )
+    ::rtl::OUString sURL( _rModelImpl.getURL() );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "DatabaseContext: registering %s", ::rtl::OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+    if ( m_aDatabaseObjects.find( sURL ) == m_aDatabaseObjects.end() )
     {
-        m_aDatabaseObjects.insert(ObjectCache::value_type(_sName,_pModelImpl.get()));
-        setTransientProperties( _sName, *_pModelImpl );
+        m_aDatabaseObjects[ sURL ] = &_rModelImpl;
+        setTransientProperties( sURL, _rModelImpl );
     }
+    else
+        OSL_ENSURE( false, "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseContext::deregisterPrivate(const ::rtl::OUString& _sName)
+void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )
 {
-    m_aDatabaseObjects.erase(_sName);
+    ::rtl::OUString sURL( _rModelImpl.getURL() );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "DatabaseContext: deregistering %s", ::rtl::OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+    m_aDatabaseObjects.erase( sURL );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseContext::nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName)
+void ODatabaseContext::databaseDocumentURLChange( const ::rtl::OUString& _rOldURL, const ::rtl::OUString& _rNewURL )
 {
-    ObjectCache::iterator aFind = m_aDatabaseObjects.find(_sOldName);
-    registerPrivate(_sNewName,aFind->second);
-    m_aDatabaseObjects.erase(aFind);
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "DatabaseContext: changing registration from %s to %s",
+        ::rtl::OUStringToOString( _rOldURL, RTL_TEXTENCODING_UTF8 ).getStr(),
+        ::rtl::OUStringToOString( _rNewURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+    ObjectCache::iterator oldPos = m_aDatabaseObjects.find( _rOldURL );
+    ENSURE_OR_THROW( oldPos != m_aDatabaseObjects.end(), "illegal old database document URL" );
+    ObjectCache::iterator newPos = m_aDatabaseObjects.find( _rNewURL );
+    ENSURE_OR_THROW( newPos == m_aDatabaseObjects.end(), "illegal new database document URL" );
+
+    m_aDatabaseObjects[ _rNewURL ] = oldPos->second;
+    m_aDatabaseObjects.erase( oldPos );
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)

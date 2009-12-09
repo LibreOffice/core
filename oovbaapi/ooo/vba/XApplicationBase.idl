@@ -1,0 +1,66 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile$
+ *
+ *  $Revision$
+ *
+ *  last change: $Author$ $Date$
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __ooo_vba_XApplicationBase_idl__
+#define __ooo_vba_XApplicationBase_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
+#endif
+
+module ooo {  module vba {
+//=============================================================================
+
+interface XApplicationBase
+{
+    interface ::ooo::vba::XHelperInterface;
+
+    [attribute] boolean ScreenUpdating;
+    [attribute] boolean DisplayStatusBar;
+    [attribute, readonly] string Version;
+
+    void Quit();
+
+    any CommandBars( [in] any aIndex );
+    void Run([in] string MacroName, [in] /*Optional*/ any varg1, [in] /*Optional*/ any varg2, [in] /*Optional*/ any varg3, [in] /*Optional*/ any varg4, [in] /*Optional*/ any varg5, [in] /*Optional*/ any varg6, [in] /*Optional*/ any varg7, [in] /*Optional*/ any varg8, [in] /*Optional*/ any varg9, [in] /*Optional*/ any varg10, [in] /*Optional*/ any varg11, [in] /*Optional*/ any varg12, [in] /*Optional*/ any varg13, [in] /*Optional*/ any varg14, [in] /*Optional*/ any varg15, [in] /*Optional*/ any varg16, [in] /*Optional*/ any varg17, [in] /*Optional*/ any varg18, [in] /*Optional*/ any varg19, [in] /*Optional*/ any varg20, [in] /*Optional*/ any varg21, [in] /*Optional*/ any varg22, [in] /*Optional*/ any varg23, [in] /*Optional*/ any varg24, [in] /*Optional*/ any varg25, [in] /*Optional*/ any varg26, [in] /*Optional*/ any varg27, [in] /*Optional*/ any varg28, [in] /*Optional*/ any varg29, [in] /*Optional*/ any varg30);
+    float CentimetersToPoints([in] float Centimeters );
+};
+
+}; };
+
+#endif

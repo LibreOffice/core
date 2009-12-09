@@ -64,6 +64,8 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.script.provider.XScriptProviderSupplier;
+import com.sun.star.sdb.XDocumentDataSource;
+import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XReportDocumentsSupplier;
@@ -253,6 +255,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return new String[]
                 {
                     "testLoadable",
+                    "testDocumentRevenants",
                     "testDocumentEvents",
                     "testGlobalEvents"
                 };
@@ -264,7 +267,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return "DatabaseDocument";
     }
 
-    public void before()
+    // --------------------------------------------------------------------------------------------------------
+    public void before() throws java.lang.Exception
     {
         super.before();
 
@@ -292,10 +296,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void after()
+    public void after() throws java.lang.Exception
     {
-        super.after();
-
         try
         {
             // dispose our callback factory. This will automatically remove it from our service
@@ -313,6 +315,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             e.printStackTrace(System.err);
             failed("failed to close the test case");
         }
+
+        super.after();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -462,6 +466,27 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
+    private PropertyValue[] impl_getMarkerLoadArgs()
+    {
+        return new PropertyValue[]
+                {
+                    new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE ),
+                    new PropertyValue( "TestCase_Marker", 0, "Yes", PropertyState.DIRECT_VALUE )
+                };
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private boolean impl_hasMarker( final PropertyValue[] _args )
+    {
+        for ( int i=0; i<_args.length; ++i )
+        {
+            if ( _args[i].Name.equals( "TestCase_Marker" ) && _args[i].Value.equals( "Yes" ) )
+                return true;
+        }
+        return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     private PropertyValue[] impl_getDefaultLoadArgs()
     {
         return new PropertyValue[]
@@ -505,7 +530,27 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void testDocumentEvents() throws Exception, IOException
+    private XModel impl_loadDocument( final String _documentURL, final PropertyValue[] _loadArgs ) throws Exception
+    {
+        final XComponentLoader loader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class,
+                getORB().createInstance("com.sun.star.frame.Desktop") );
+        return (XModel) UnoRuntime.queryInterface( XModel.class,
+                loader.loadComponentFromURL( _documentURL, _BLANK, 0, _loadArgs ) );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void impl_storeDocument( final XModel _document ) throws Exception, IOException
+    {
+        // store the document
+        final String documentURL = FileHelper.getOOoCompatibleFileURL( _document.getURL() );
+        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface( XStorable.class,
+                _document );
+        storeDoc.store();
+
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private XModel impl_createDocWithMacro( final String _libName, final String _moduleName, final String _code ) throws Exception, IOException
     {
         // create an empty document
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
@@ -514,7 +559,90 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         final XEmbeddedScripts embeddedScripts = (XEmbeddedScripts) UnoRuntime.queryInterface(XEmbeddedScripts.class,
                 databaseDoc);
         final XStorageBasedLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
-        final XNameContainer newLib = basicLibs.createLibrary("EventHandlers");
+        final XNameContainer newLib = basicLibs.createLibrary( _libName );
+        newLib.insertByName( _moduleName, _code );
+
+        return databaseDoc;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** tests various aspects of database document "revenants"
+     *
+     *  Well, I do not really have a good term for this ... The point is, database documents are in real
+     *  only *one* aspect of a more complex thing. The second aspect is a data source. Both, in some sense,
+     *  just represent different views on the same thing. For a given database, there's at each time at most
+     *  one data source, and at most one database document. Both have a independent life time, and are
+     *  created when needed.
+     *  In particular, a document can be closed (this is what happens when the last UI window displaying
+     *  this document is closed), and then dies. Now when the other "view", the data source, still exists,
+     *  the the underlying document data is not discarded, but kept alive (else the data source would die
+     *  just because the document dies, which is not desired). If the document is loaded, again, then
+     *  it is re-created, using the data of its previous "incarnation".
+     *
+     *  This method here tests some of those aspects of a document which should survive the death of one
+     *  instance and re-creation as a revenant.
+    */
+    public void testDocumentRevenants() throws Exception, IOException
+    {
+        // create an empty document
+        XModel databaseDoc = impl_createDocWithMacro( "Lib", "Module",
+            "Sub Hello\n" +
+            "    MsgBox \"Hello\"\n" +
+            "End Sub\n"
+        );
+        impl_storeDocument( databaseDoc );
+        final String documentURL = databaseDoc.getURL();
+
+        // at this stage, the marker should not yet be present in the doc's args, else some of the below
+        // tests become meaningless
+        assure( "A newly created doc should not have the test case marker", !impl_hasMarker( databaseDoc.getArgs() ) );
+
+        // obtain the DataSource associated with the document. Keeping this alive
+        // ensures that the "impl data" of the document is kept alive, too, so when closing
+        // and re-opening it, this "impl data" must be re-used.
+        XDocumentDataSource dataSource = (XDocumentDataSource)UnoRuntime.queryInterface( XDocumentDataSource.class,
+            ((XOfficeDatabaseDocument)UnoRuntime.queryInterface(
+                XOfficeDatabaseDocument.class, databaseDoc )).getDataSource() );
+
+        // close and reload the doc
+        impl_closeDocument(databaseDoc);
+        databaseDoc = impl_loadDocument( documentURL, impl_getMarkerLoadArgs() );
+        // since we just put the marker into the load-call, it should be present at the doc
+        assure( "The test case marker got lost.", impl_hasMarker( databaseDoc.getArgs() ) );
+
+        // The basic library should have survived
+        final XEmbeddedScripts embeddedScripts = (XEmbeddedScripts) UnoRuntime.queryInterface(XEmbeddedScripts.class,
+                databaseDoc);
+        final XStorageBasedLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
+        assure( "Baisc lib did not survive reloading a closed document", basicLibs.hasByName( "Lib" ) );
+        final XNameContainer lib = (XNameContainer)UnoRuntime.queryInterface(
+            XNameContainer.class, basicLibs.getByName( "Lib" ) );
+        assure( "Basic module did not survive reloading a closed document", lib.hasByName( "Module" ) );
+
+        // now closing the doc, and obtaining it from the data source, should preserve the marker we put into the load
+        // args
+        impl_closeDocument( databaseDoc );
+        databaseDoc = (XModel)UnoRuntime.queryInterface( XModel.class, dataSource.getDatabaseDocument() );
+        assure( "The test case marker did not survive re-retrieval of the doc from the data source.",
+            impl_hasMarker( databaseDoc.getArgs() ) );
+
+        // on the other hand, closing and regurlarly re-loading the doc *without* the marker should indeed
+        // lose it
+        impl_closeDocument( databaseDoc );
+        databaseDoc = impl_loadDocument( documentURL, impl_getDefaultLoadArgs() );
+        assure( "Reloading the document kept the old args, instead of the newly supplied ones.",
+            !impl_hasMarker( databaseDoc.getArgs() ) );
+
+        // clean up
+        impl_closeDocument( databaseDoc );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public void testDocumentEvents() throws Exception, IOException
+    {
+        // create an empty document
+        final String libName = "EventHandlers";
+        final String moduleName = "all";
         final String eventHandlerCode =
                 "Option Explicit\n" +
                 "\n" +
@@ -530,10 +658,11 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 "\n" +
                 "  oCallback.documentEventOccured( oEvent )\n" +
                 "End Sub\n";
-        newLib.insertByName("all", eventHandlerCode);
+        XModel databaseDoc = impl_createDocWithMacro( libName, moduleName, eventHandlerCode );
+        final String documentURL = databaseDoc.getURL();
 
         // bind the macro to the OnLoad event
-        final String macroURI = "vnd.sun.star.script:EventHandlers.all.OnLoad?language=Basic&location=document";
+        final String macroURI = "vnd.sun.star.script:" + libName + "." + moduleName + ".OnLoad?language=Basic&location=document";
         final XEventsSupplier eventsSupplier = (XEventsSupplier) UnoRuntime.queryInterface(XEventsSupplier.class,
                 databaseDoc);
         eventsSupplier.getEvents().replaceByName("OnLoad", new PropertyValue[]
@@ -543,19 +672,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 });
 
         // store the document, and close it
-        final String documentURL = FileHelper.getOOoCompatibleFileURL(databaseDoc.getURL());
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                databaseDoc);
-        storeDoc.store();
-        impl_closeDocument(databaseDoc);
+        impl_storeDocument( databaseDoc );
+        impl_closeDocument( databaseDoc );
 
         // ensure the macro security configuration is "ask the user for document macro execution"
         final int oldSecurityLevel = impl_setMacroSecurityLevel(1);
 
         // load it, again
-        final XComponentLoader loader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,
-                getORB().createInstance("com.sun.star.frame.Desktop"));
-
         m_loadDocState = STATE_LOADING_DOC;
         // expected order of states is:
         // STATE_LOADING_DOC - initialized here
@@ -568,8 +691,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         final String context = "OnLoad";
         impl_startObservingEvents(context);
-        databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loader.loadComponentFromURL(documentURL, _BLANK, 0, impl_getMacroExecLoadArgs()));
+        databaseDoc = impl_loadDocument( documentURL, impl_getMacroExecLoadArgs() );
         impl_stopObservingEvents(m_documentEvents, new String[]
                 {
                     "OnLoad"
@@ -789,7 +911,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                     // So, wait a few seconds.
                     try
                     {
-                        _actualEvents.wait(5000);
+                        _actualEvents.wait(20000);
                     }
                     catch (InterruptedException ex)
                     {

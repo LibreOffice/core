@@ -1,4 +1,4 @@
-sw	sw	:    l10n connectivity OOo:writerperfect svx stoc uui writerfilter NULL
+sw	sw	:    l10n connectivity OOo:writerperfect svx stoc uui writerfilter vbahelper NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									nmake		-	all	sw_inc NULL
 sw	sw\uiconfig\layout									nmake	-	all	sw_layout NULL
@@ -33,6 +33,7 @@ sw      sw\source\ui\smartmenu                                          nmake   
 sw      sw\source\ui\table                                              nmake   -       all     sw_table sw_inc NULL
 sw	sw\source\ui\uiview						nmake	-	all	sw_uivw sw_sdi sw_inc NULL
 sw	sw\source\ui\uno						nmake	-	all	sw_uiuno sw_sdi sw_inc NULL
+sw	sw\source\ui\vba						nmake	-	all	sw_vba sw_inc NULL
 sw	sw\source\ui\utlui						nmake	-	all	sw_utlui sw_inc NULL
 sw	sw\source\ui\web						nmake	-	all	sw_web sw_uinc sw_sdi sw_inc NULL
 sw	sw\source\ui\wrtsh						nmake	-	all	sw_wrtsh sw_inc NULL
@@ -69,7 +70,7 @@ sw      sw\source\filter\writer             nmake   -       all     sw_wrtr sw_i
 sw      sw\source\filter\ww1                nmake   -       all     sw_ww1 sw_inc NULL
 sw      sw\source\filter\ww8                nmake   -       all     sw_ww8 sw_inc NULL
 sw      sw\source\filter\xml                nmake   -       all     sw_xml sw_inc NULL
-sw      sw\source\ui                        nmake   -       all     sw_ui sw_app sw_cctrl sw_chrdl sw_conf sw_dbui sw_dchdl sw_dcvw sw_dlg sw_envlp sw_fldui sw_fmtui sw_frmdl sw_globd sw_index sw_ling sw_misc sw_rbbar sw_shell sw_table sw_uiuno sw_uivw sw_utlui sw_web sw_wrtsh sw_smartmenu NULL
+sw      sw\source\ui                        nmake   -       all     sw_ui sw_app sw_cctrl sw_chrdl sw_conf sw_dbui sw_dchdl sw_dcvw sw_dlg sw_envlp sw_fldui sw_fmtui sw_frmdl sw_globd sw_index sw_ling sw_misc sw_rbbar sw_shell sw_table sw_uiuno sw_uivw sw_utlui sw_web sw_wrtsh sw_smartmenu sw_vba NULL
 sw      sw\source\core                      nmake   -       all     sw_core sw_attr sw_bast sw_crsr sw_dcnd sw_doc sw_draw sw_edit sw_excpt sw_fld sw_frmed sw_grph sw_layo sw_ole sw_para sw_sw3io sw_swg sw_text sw_tox sw_txtnd sw_uco sw_undo sw_view sw_acc sw_objpos sw_NumberTree sw_tablecore NULL
 sw      sw\source\filter                    nmake   -       all     sw_flt sw_ascii sw_bsflt sw_html sw_rtf sw_wrtr sw_ww1 sw_ww8 sw_xml NULL
 sw      sw\util                             nmake   -       all     sw_util sw_core sw_flt sw_sdi sw_ui NULL

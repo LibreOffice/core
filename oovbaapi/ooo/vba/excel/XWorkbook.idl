@@ -48,31 +48,20 @@ interface XWorksheet;
 interface XWorksheets;
 interface XStyles;
 
-interface XWorkbook
+interface XWorkbook : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XHelperInterface;
-
-    [attribute, readonly] string  Name;
-    [attribute, readonly] string  Path;
-    [attribute, readonly] string  FullName;
     [attribute, readonly] boolean ProtectStructure;
     [attribute, readonly] XWorksheet ActiveSheet;
-    [attribute] boolean Saved;
     [attribute, readonly] string  CodeName;
+    [attribute] boolean  PrecisionAsDisplayed;
 
     any  Worksheets([in] any sheet);
     any  Styles([in] any Index );
     any  Sheets([in] any sheet);
     any  Windows([in] any index );
-    void Close([in] any SaveChanges, [in] any FileName, [in] any RouteWorkBook);
-    void Protect( [in] any Password );
-    void Unprotect( [in] any Password );
-    void Save();
-    void Activate();
     void ResetColors() raises (com::sun::star::script::BasicErrorException);
-
+    void Activate();
     any Names( [in] any Index );
-
     any Colors([in] any Index) raises (com::sun::star::script::BasicErrorException);
     long FileFormat() raises (com::sun::star::script::BasicErrorException);
     void SaveCopyAs( [in] string Filename );

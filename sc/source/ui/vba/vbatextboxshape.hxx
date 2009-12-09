@@ -37,8 +37,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <ooo/vba/msforms/XTextBoxShape.hpp>
-#include "vbashape.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbashape.hxx>
+#include "excelvbahelper.hxx"
 #include "vbacharacters.hxx"
 
 typedef cppu::ImplInheritanceHelper1< ScVbaShape, ov::msforms::XTextBoxShape > TextBoxShapeImpl_BASE;

@@ -636,7 +636,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      */
     public static void main(String args[])
     {
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         try
         {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);

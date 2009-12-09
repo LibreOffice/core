@@ -39,9 +39,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1

@@ -292,7 +292,7 @@ public:
 
     void            TabChanged();
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
-    void            RefreshZoom();
+    SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
 
     void            UpdateLayerLocks();
@@ -390,7 +390,10 @@ public:
 
     void            SetNewStartIfMarking();
 
-    void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    //void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );

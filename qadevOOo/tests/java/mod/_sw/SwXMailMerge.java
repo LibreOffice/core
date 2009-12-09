@@ -353,7 +353,7 @@ public class SwXMailMerge extends TestCase {
 
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
 
-            DBTools dbt = new DBTools(((XMultiServiceFactory) Param.getMSF()));
+            DBTools dbt = new DBTools( (XMultiServiceFactory)Param.getMSF(), log );
             // registering source in DatabaseContext
             log.println("register database '"+tmpDatabaseUrl+"' as '"+databaseName+"'" );
             dbt.reRegisterDB(databaseName, newSource) ;
@@ -414,7 +414,7 @@ public class SwXMailMerge extends TestCase {
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("closing connections...");
         XMultiServiceFactory xMsf = (XMultiServiceFactory) Param.getMSF();
-        DBTools dbt = new DBTools(xMsf);
+        DBTools dbt = new DBTools( xMsf, log );
 
         if (Param.containsKey("uniqueSuffix")){
             int uniqueSuffix = Param.getInt("uniqueSuffix");

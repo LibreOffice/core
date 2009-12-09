@@ -88,6 +88,8 @@ const sal_uInt32 BIFF_DATAVAL_NODROPDOWN    = 0x00000200;
 const sal_uInt32 BIFF_DATAVAL_SHOWINPUT     = 0x00040000;
 const sal_uInt32 BIFF_DATAVAL_SHOWERROR     = 0x00080000;
 
+const sal_uInt32 BIFF_SHRFEATHEAD_SHEETPROT = 2;
+
 const sal_Int32 OOBIN_OLEOBJECT_CONTENT     = 1;
 const sal_Int32 OOBIN_OLEOBJECT_ICON        = 4;
 const sal_Int32 OOBIN_OLEOBJECT_ALWAYS      = 1;
@@ -889,7 +891,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_SCENPROTECT:       rWorksheetSett.importScenProtect( mrStrm );     break;
                         case BIFF_ID_SCL:               rSheetViewSett.importScl( mrStrm );             break;
                         case BIFF_ID_SHEETPR:           rWorksheetSett.importSheetPr( mrStrm );         break;
-                        case BIFF_ID_SHEETPROTECTION:   rWorksheetSett.importSheetProtection( mrStrm ); break;
+                        case BIFF_ID_SHAREDFEATHEAD:    importSharedFeatHead();                         break;
                         case BIFF_ID_STANDARDWIDTH:     importStandardWidth();                          break;
                         case BIFF_ID_UNCALCED:          rWorkbookSett.importUncalced( mrStrm );         break;
                         case BIFF_ID_VCENTER:           rPageSett.importVerCenter( mrStrm );            break;
@@ -1153,6 +1155,20 @@ void BiffWorksheetFragment::importPTDefinition()
 void BiffWorksheetFragment::importScenarios()
 {
     getScenarios().createSheetScenarios( getSheetIndex() ).importScenarios( mrStrm );
+}
+
+void BiffWorksheetFragment::importSharedFeatHead()
+{
+    mrStrm.skip( 12 );
+    sal_uInt16 nType = mrStrm.readuInt16();
+    mrStrm.skip( 5 );
+    switch( nType )
+    {
+        case BIFF_SHRFEATHEAD_SHEETPROT:
+            if( mrStrm.getRemaining() >= 4 )
+                getWorksheetSettings().importSheetProtection( mrStrm );
+        break;
+    }
 }
 
 void BiffWorksheetFragment::importStandardWidth()

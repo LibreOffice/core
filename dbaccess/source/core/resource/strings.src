@@ -243,7 +243,12 @@ String RID_STR_NAME_NOT_FOUND
 
 String RID_STR_ERROR_WHILE_SAVING
 {
-    Text [ en-US ] = "Could not save the document:\n\n$except$:\n$message$";
+    Text [ en-US ] = "Could not save the document to $location$:\n$message$";
+};
+
+String RID_NO_SUCH_DATA_SOURCE
+{
+    Text [ en-US ] = "Error accessing data source '$name$':\n$error$";
 };
 
 //-------------------------------------------------------------------------

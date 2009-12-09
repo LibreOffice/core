@@ -30,7 +30,7 @@
 #ifndef BIB_HRC
 #define BIB_HRC
 
-#include <extensio.hrc>
+#include "bibliography.hrc"
 
 #ifndef RID_BIB_START
 #define RID_BIB_START                   RID_EXTENSIONS_START

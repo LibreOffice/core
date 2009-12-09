@@ -111,7 +111,9 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::BEGIN_EVENT:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, BEGIN_EVENT");
                 rContext.mrUserEventQueue.registerAnimationStartEvent(
                     pEvent, xNode );
             }
@@ -123,7 +125,9 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::END_EVENT:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, END_EVENT");
                 rContext.mrUserEventQueue.registerAnimationEndEvent(
                     pEvent, xNode );
             }
@@ -137,7 +141,9 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, ON_CLICK");
                 rContext.mrUserEventQueue.registerShapeClickEvent(
                     pEvent, pShape );
             }
@@ -151,7 +157,9 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, ON_DBL_CLICK");
                 rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
                     pEvent, pShape );
             }
@@ -165,7 +173,9 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, ON_MOUSE_ENTER");
                 rContext.mrUserEventQueue.registerMouseEnterEvent(
                     pEvent, pShape );
             }
@@ -179,7 +189,9 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, ON_MOUSE_LEAVE");
                 rContext.mrUserEventQueue.registerMouseLeaveEvent(
                     pEvent, pShape );
             }
@@ -193,13 +205,17 @@ EventSharedPtr generateEvent(
                         "mapped to ON_NEXT!" );
             // FALLTHROUGH intended
         case animations::EventTrigger::ON_NEXT:
-            pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+            pEvent = makeDelay( rFunctor,
+                                nDelay2 + nAdditionalDelay,
+                                "generateEvent, ON_NEXT");
             rContext.mrUserEventQueue.registerNextEffectEvent( pEvent );
             break;
         case animations::EventTrigger::ON_STOP_AUDIO:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor,
+                                    nDelay2 + nAdditionalDelay,
+                                    "generateEvent, ON_STOP_AUDIO");
                 rContext.mrUserEventQueue.registerAudioStoppedEvent(
                     pEvent, xNode );
             }
@@ -218,7 +234,9 @@ EventSharedPtr generateEvent(
                     "not yet implemented!" );
     }
     else if (rEventDescription >>= nDelay1) {
-        pEvent = makeDelay( rFunctor, nDelay1 + nAdditionalDelay );
+        pEvent = makeDelay( rFunctor,
+                            nDelay1 + nAdditionalDelay,
+                            "generateEvent with delay");
         // schedule delay event
         rContext.mrEventQueue.addEvent( pEvent );
     }

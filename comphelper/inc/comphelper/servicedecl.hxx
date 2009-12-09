@@ -169,21 +169,20 @@ template <bool> struct with_args;
 
 /// @internal
 namespace detail {
-
 template <typename ImplT>
-class ServiceImpl
-    : public ::cppu::ImplInheritanceHelper1<ImplT, css::lang::XServiceInfo>,
+class OwnServiceImpl
+    : public ImplT,
       private ::boost::noncopyable
 {
-    typedef ::cppu::ImplInheritanceHelper1<ImplT,css::lang::XServiceInfo> BaseT;
+    typedef ImplT BaseT;
 
 public:
-    ServiceImpl(
+    OwnServiceImpl(
         ServiceDecl const& rServiceDecl,
         css::uno::Sequence<css::uno::Any> const& args,
         css::uno::Reference<css::uno::XComponentContext> const& xContext )
-        : BaseT(args, xContext), m_rServiceDecl(rServiceDecl) {}
-    ServiceImpl(
+        :BaseT(args, xContext), m_rServiceDecl(rServiceDecl) {}
+    OwnServiceImpl(
         ServiceDecl const& rServiceDecl,
         css::uno::Reference<css::uno::XComponentContext> const& xContext )
         : BaseT(xContext), m_rServiceDecl(rServiceDecl) {}
@@ -204,6 +203,22 @@ public:
 
 private:
     ServiceDecl const& m_rServiceDecl;
+};
+
+template <typename ImplT>
+class ServiceImpl : public OwnServiceImpl< ::cppu::ImplInheritanceHelper1<ImplT,css::lang::XServiceInfo> >
+{
+typedef OwnServiceImpl< ::cppu::ImplInheritanceHelper1<ImplT,css::lang::XServiceInfo> > ServiceImpl_BASE;
+public:
+    ServiceImpl(
+        ServiceDecl const& rServiceDecl,
+        css::uno::Sequence<css::uno::Any> const& args,
+        css::uno::Reference<css::uno::XComponentContext> const& xContext )
+        : ServiceImpl_BASE(rServiceDecl, args, xContext) {}
+    ServiceImpl(
+        ServiceDecl const& rServiceDecl,
+        css::uno::Reference<css::uno::XComponentContext> const& xContext )
+        : ServiceImpl_BASE(rServiceDecl, xContext) {}
 };
 
 template <typename ServiceImplT>
@@ -230,7 +245,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<false> > {
                 const& xContext ) const
     {
         return m_postProcessFunc(
-            new ServiceImpl<ImplT>( rServiceDecl, xContext ) );
+            new ImplT( rServiceDecl, xContext ) );
     }
 };
 
@@ -247,7 +262,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
                 const& xContext ) const
     {
         return m_postProcessFunc(
-            new ServiceImpl<ImplT>( rServiceDecl, args, xContext ) );
+            new ImplT( rServiceDecl, args, xContext ) );
     }
 };
 
@@ -261,18 +276,17 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
                or just (uno::Reference<uno::XComponentContext>)
 */
 template <typename ImplT_, typename WithArgsT = with_args<false> >
-struct class_ {
+struct serviceimpl_base {
     typedef ImplT_ ImplT;
-    typedef detail::ServiceImpl<ImplT_> ServiceImplT;
 
     detail::CreateFuncF const m_createFunc;
 
-    typedef detail::PostProcessDefault<ServiceImplT> PostProcessDefaultT;
+    typedef detail::PostProcessDefault<ImplT> PostProcessDefaultT;
 
     /** Default ctor.  Implementation class without args, expecting
         component context as single argument.
     */
-    class_() : m_createFunc(
+    serviceimpl_base() : m_createFunc(
         detail::CreateFunc<ImplT, PostProcessDefaultT, WithArgsT>(
             PostProcessDefaultT() ) ) {}
 
@@ -284,11 +298,29 @@ struct class_ {
                                uno::Reference<uno::XInterface>
     */
     template <typename PostProcessFuncT>
-    explicit class_( PostProcessFuncT const& postProcessFunc )
+    explicit serviceimpl_base( PostProcessFuncT const& postProcessFunc )
         : m_createFunc( detail::CreateFunc<ImplT, PostProcessFuncT, WithArgsT>(
                             postProcessFunc ) ) {}
 };
 
+template <typename ImplT_, typename WithArgsT = with_args<false> >
+struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT >
+{
+    typedef serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT > baseT;
+    /** Default ctor.  Implementation class without args, expecting
+        component context as single argument.
+    */
+    class_() : baseT() {}
+    template <typename PostProcessFuncT>
+    /** Ctor to pass a post processing function/functor.
+
+        @tpl PostProcessDefaultT let your compiler deduce this
+        @param postProcessFunc function/functor that gets the yet unacquired
+                               ImplT_ pointer returning a
+                               uno::Reference<uno::XInterface>
+    */
+    explicit class_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
+};
 
 //
 // component_... helpers with arbitrary service declarations:

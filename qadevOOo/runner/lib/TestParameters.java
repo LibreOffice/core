@@ -117,7 +117,7 @@ public class TestParameters extends Hashtable {
      * The Path to the test documents that are loaded during the test <br>
      */
 
-    public String TestDocumentPath="unkown";
+    public String TestDocumentPath="unknown";
 
     /**
      * 'true' is a log should be written, 'false' elsewhere <br>

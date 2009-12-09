@@ -534,7 +534,7 @@ Reference < XHyphenatedWord > SAL_CALL
 Reference< XPossibleHyphens > SAL_CALL
     Hyphenator::createPossibleHyphens( const ::rtl::OUString& aWord,
                    const ::com::sun::star::lang::Locale& aLocale,
-                   const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
+                   const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::uno::RuntimeException)
 
@@ -544,6 +544,10 @@ Reference< XPossibleHyphens > SAL_CALL
   char *lcword;
   int k;
 
+  PropertyHelper_Hyphen & rHelper = GetPropHelper();
+  rHelper.SetTmpPropVals(aProperties);
+  sal_Int16 minTrail = rHelper.GetMinTrailing();
+  sal_Int16 minLead = rHelper.GetMinLeading();
 
   HyphenDict *dict = NULL;
   rtl_TextEncoding aEnc = 0;
@@ -617,6 +621,9 @@ Reference< XPossibleHyphens > SAL_CALL
       wordlen = encWord.getLength();
       lcword = new char[wordlen+1];
       hyphens = new char[wordlen+5];
+      char ** rep = NULL; // replacements of discretionary hyphenation
+      int * pos = NULL; // array of [hyphenation point] minus [deletion position] 
+      int * cut = NULL; // length of deletions in original word
 
       // copy converted word into simple char buffer
       strcpy(lcword,encWord.getStr());
@@ -627,10 +634,22 @@ Reference< XPossibleHyphens > SAL_CALL
       n++;
       // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
       if (n > 0) {
-     if (hnj_hyphen_hyphenate(dict, lcword, n, hyphens))
+         if (hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut,
+            minLead, minTrail, Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
+            Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2)))))
          {
              delete[] hyphens;
              delete[] lcword;
+
+             if (rep) {
+                 for(int j = 0; j < n; j++) {
+                     if (rep[j]) free(rep[j]);
+                 }
+                 free(rep);
+             }
+             if (pos) free(pos);
+             if (cut) free(cut);
+
              return NULL;
          }
       }
@@ -643,7 +662,7 @@ Reference< XPossibleHyphens > SAL_CALL
       INT16 i;
 
       for ( i = 0; i < encWord.getLength(); i++)
-        if (hyphens[i]&1)
+        if (hyphens[i]&1 && (!rep || !rep[i]))
           nHyphCount++;
 
       Sequence< INT16 > aHyphPos(nHyphCount);
@@ -652,15 +671,14 @@ Reference< XPossibleHyphens > SAL_CALL
       OUString hyphenatedWord;
       nHyphCount = 0;
 
-      for (i = 0; i < encWord.getLength(); i++)
-      {
+      for (i = 0; i < nWord.getLength(); i++) {
           hyphenatedWordBuffer.append(aWord[i]);
-          if (hyphens[i]&1)
-      {
-          pPos[nHyphCount] = i;
-          hyphenatedWordBuffer.append(sal_Unicode('='));
-          nHyphCount++;
-      }
+          // hyphenation position (not alternative)
+          if (hyphens[i]&1 && (!rep || !rep[i])) {
+              pPos[nHyphCount] = i;
+              hyphenatedWordBuffer.append(sal_Unicode('='));
+              nHyphCount++;
+          }
       }
 
       hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
@@ -672,6 +690,16 @@ Reference< XPossibleHyphens > SAL_CALL
 
       delete[] hyphens;
       delete[] lcword;
+
+      if (rep) {
+          for(int j = 0; j < n; j++) {
+              if (rep[j]) free(rep[j]);
+          }
+          free(rep);
+      }
+      if (pos) free(pos);
+      if (cut) free(cut);
+
       return xRes;
   }
 

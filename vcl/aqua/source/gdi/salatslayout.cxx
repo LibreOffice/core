@@ -70,12 +70,13 @@ private:
     // to prevent ATS overflowing the Fixed16.16 values
     // ATS font requests get size limited by downscaling huge fonts
     // in these cases the font scale becomes something bigger than 1.0
-    float           mfFontScale;
+    float               mfFontScale;
 
 private:
     bool    InitGIA( ImplLayoutArgs* pArgs = NULL ) const;
     bool    GetIdealX() const;
     bool    GetDeltaY() const;
+    void    InvalidateMeasurements();
 
     int Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
     int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
@@ -310,7 +311,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         mnTrailingSpaceWidth = rArgs.mpDXArray[ mnCharCount-1 ];
         if( i > 0 )
             mnTrailingSpaceWidth -= rArgs.mpDXArray[ i-1 ];
-        InitGIA(); // ensure valid mpCharWidths[]
+        InitGIA(); // ensure valid mpCharWidths[], TODO: use GetIdealX() instead?
         mnTrailingSpaceWidth -= Fixed2Vcl( mpCharWidths[i] );
         // ignore trailing space for calculating the available width
         nOrigWidth -= mnTrailingSpaceWidth;
@@ -324,10 +325,14 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !nPixelWidth )
         return;
 
-    // HACK: justification requests which change the width by just one pixel are probably
+    // HACK: justification requests which change the width by just one pixel were probably
     // #i86038# introduced by lossy conversions between integer based coordinate system
+    // => ignoring such requests has many more benefits than eventual drawbacks
     if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
         return;
+
+    // changing the layout will make all previous measurements invalid
+    InvalidateMeasurements();
 
     ATSUAttributeTag nTags[3];
     ATSUAttributeValuePtr nVals[3];
@@ -352,7 +357,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( eStatus != noErr )
         return;
 
-    // check result of the justied layout
+    // update the measurements of the justified layout to match the justification request
     if( rArgs.mpDXArray )
         InitGIA( &rArgs );
 }
@@ -1067,6 +1072,23 @@ bool ATSLayout::GetDeltaY() const
 #endif
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+#define DELETEAZ( X ) { delete[] X; X = NULL; }
+
+void ATSLayout::InvalidateMeasurements()
+{
+    mnGlyphCount = -1;
+    DELETEAZ( mpGlyphIds );
+    DELETEAZ( mpCharWidths );
+    DELETEAZ( mpChars2Glyphs );
+    DELETEAZ( mpGlyphs2Chars );
+    DELETEAZ( mpGlyphRTLFlags );
+    DELETEAZ( mpGlyphAdvances );
+    DELETEAZ( mpGlyphOrigAdvs );
+    DELETEAZ( mpDeltaY );
 }
 
 // =======================================================================

@@ -42,6 +42,7 @@ namespace ole {
 
 namespace {
 
+const sal_Char* const OLE_GUID_STDFONT      = "{0BE35203-8F91-11CE-9DE3-00AA004BB851}";
 const sal_Char* const OLE_GUID_STDPIC       = "{0BE35204-8F91-11CE-9DE3-00AA004BB851}";
 const sal_Char* const OLE_GUID_STDHLINK     = "{79EAC9D0-BAF9-11CE-8C82-00AA004BA90B}";
 const sal_Char* const OLE_GUID_URLMONIKER   = "{79EAC9E0-BAF9-11CE-8C82-00AA004BA90B}";

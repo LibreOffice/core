@@ -404,6 +404,16 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
             DBG_ERROR( "no screen found" );
         }
 
+        // #i107076# maintaining size-WYSIWYG-ness causes many problems for
+        //           low-DPI, high-DPI or for mis-reporting devices
+        //           => it is better to limit the calculation result then
+        static const int nMinDPI = 72;
+        if( (mnRealDPIX < nMinDPI) || (mnRealDPIY < nMinDPI) )
+            mnRealDPIX = mnRealDPIY = nMinDPI;
+        static const int nMaxDPI = 200;
+        if( (mnRealDPIX > nMaxDPI) || (mnRealDPIY > nMaxDPI) )
+            mnRealDPIX = mnRealDPIY = nMaxDPI;
+
         // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
         mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
@@ -931,27 +941,29 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
 
-    // use the path to prepare the graphics context
-    CGContextSaveGState( mrContext );
-    CGContextBeginPath( mrContext );
-    CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-    CGPathRelease( xPath );
-
 #ifndef NO_I97317_WORKAROUND
     // #i97317# workaround for Quartz having problems with drawing small polygons
-    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
-        return true;
+    if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
 #endif
+    {
+        // use the path to prepare the graphics context
+        CGContextSaveGState( mrContext );
+        CGContextBeginPath( mrContext );
+        CGContextAddPath( mrContext, xPath );
 
-    // draw path with antialiased polygon
-    CGContextSetShouldAntialias( mrContext, true );
-    CGContextSetAlpha( mrContext, 1.0 - fTransparency );
-    CGContextDrawPath( mrContext, kCGPathEOFillStroke );
-    CGContextRestoreGState( mrContext );
+        // draw path with antialiased polygon
+        CGContextSetShouldAntialias( mrContext, true );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
+        CGContextDrawPath( mrContext, kCGPathEOFillStroke );
+        CGContextRestoreGState( mrContext );
 
-    // mark modified rectangle as updated
-    RefreshRect( aRefreshRect );
+        // mark modified rectangle as updated
+        RefreshRect( aRefreshRect );
+    }
+
+    CGPathRelease( xPath );
+
     return true;
 }
 
@@ -991,27 +1003,28 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     CGMutablePathRef xPath = CGPathCreateMutable();
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
 
-    // use the path to prepare the graphics context
-    CGContextSaveGState( mrContext );
-    CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-    CGPathRelease( xPath );
-
 #ifndef NO_I97317_WORKAROUND
     // #i97317# workaround for Quartz having problems with drawing small polygons
-    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
-        return true;
+    if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
 #endif
+    {
+        // use the path to prepare the graphics context
+        CGContextSaveGState( mrContext );
+        CGContextAddPath( mrContext, xPath );
+        // draw path with antialiased line
+        CGContextSetShouldAntialias( mrContext, true );
+        CGContextSetLineJoin( mrContext, aCGLineJoin );
+        CGContextSetLineWidth( mrContext, rLineWidths.getX() );
+        CGContextDrawPath( mrContext, kCGPathStroke );
+        CGContextRestoreGState( mrContext );
 
-    // draw path with antialiased line
-    CGContextSetShouldAntialias( mrContext, true );
-    CGContextSetLineJoin( mrContext, aCGLineJoin );
-    CGContextSetLineWidth( mrContext, rLineWidths.getX() );
-    CGContextDrawPath( mrContext, kCGPathStroke );
-    CGContextRestoreGState( mrContext );
+        // mark modified rectangle as updated
+        RefreshRect( aRefreshRect );
+    }
 
-    // mark modified rectangle as updated
-    RefreshRect( aRefreshRect );
+    CGPathRelease( xPath );
+
     return true;
 }
 

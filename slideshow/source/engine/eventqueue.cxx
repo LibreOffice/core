@@ -35,6 +35,7 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
+#include "debug.hxx"
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -66,6 +67,7 @@ namespace slideshow
             : maMutex(),
               maEvents(),
               maNextEvents(),
+              maNextNextEvents(),
               mpTimer( pPresTimer )
         {
         }
@@ -103,6 +105,13 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding at %f event [%s] at %x  with delay %f\r",
+                mpTimer->getElapsedTime(),
+                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent.get(),
+                rEvent->getActivationTime(0.0));
+#endif
             ENSURE_OR_RETURN( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
@@ -124,11 +133,43 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding at %f event [%s] at %x  for next round with delay %f\r",
+                mpTimer->getElapsedTime(),
+                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent.get(),
+                rEvent->getActivationTime(0.0));
+#endif
+
             ENSURE_OR_RETURN( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
                                 mpTimer->getElapsedTime()) ) );
+            return true;
+        }
+
+        bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
+        {
+            ::osl::MutexGuard aGuard( maMutex );
+
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding at %f event [%s] at %x for execution when queue is empty with delay %f\r",
+                mpTimer->getElapsedTime(),
+                OUStringToOString(rpEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rpEvent.get(),
+                rpEvent->getActivationTime(0.0));
+#endif
+
+            ENSURE_OR_RETURN(
+                rpEvent.get() != NULL,
+                    "EventQueue::addEvent: event ptr NULL");
+
+            maNextNextEvents.push(
+                EventEntry(
+                    rpEvent,
+                    rpEvent->getActivationTime(mpTimer->getElapsedTime())));
+
             return true;
         }
 
@@ -163,6 +204,17 @@ namespace slideshow
 
             const double nCurrTime( mpTimer->getElapsedTime() );
 
+            // When maEvents does not contain any events that are due now
+            // then process one event from maNextNextEvents.
+            if (!maNextNextEvents.empty()
+                && !bFireAllEvents
+                && (maEvents.empty() || maEvents.top().nTime > nCurrTime))
+            {
+                const EventEntry aEvent (maNextNextEvents.top());
+                maNextNextEvents.pop();
+                maEvents.push(aEvent);
+            }
+
             // process ready/elapsed events. Note that the 'perceived'
             // current time remains constant for this loop, thus we're
             // processing only those events which where ready when we
@@ -188,6 +240,14 @@ namespace slideshow
                         VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
                                        event.pEvent.get(),
                                        event.pEvent->getActivationTime(0.0) );
+#endif
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+                        OSL_TRACE("firing at %f event [%s] at %x with delay %f\r",
+                            mpTimer->getElapsedTime(),
+                            OUStringToOString(event.pEvent->GetDescription(),
+                                RTL_TEXTENCODING_UTF8).getStr(),
+                            event.pEvent.get(),
+                            event.pEvent->getActivationTime(0.0));
 #endif
 
                         event.pEvent->fire();
@@ -243,7 +303,7 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            return maEvents.empty();
+            return maEvents.empty() && maNextEvents.empty() && maNextNextEvents.empty();
         }
 
         double EventQueue::nextTimeout() const
@@ -251,9 +311,16 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
             // return time for next entry (if any)
-            return isEmpty() ?
-                ::std::numeric_limits<double>::max() :
-                maEvents.top().nTime - mpTimer->getElapsedTime();
+            double nTimeout (::std::numeric_limits<double>::max());
+            const double nCurrentTime (mpTimer->getElapsedTime());
+            if ( ! maEvents.empty())
+                nTimeout = maEvents.top().nTime - nCurrentTime;
+            if ( ! maNextEvents.empty())
+                nTimeout = ::std::min(nTimeout, maNextEvents.front().nTime - nCurrentTime);
+            if ( ! maNextNextEvents.empty())
+                nTimeout = ::std::min(nTimeout, maNextNextEvents.top().nTime - nCurrentTime);
+
+            return nTimeout;
         }
 
         void EventQueue::clear()
@@ -263,6 +330,9 @@ namespace slideshow
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
             maEvents = ImplQueueType();
+
+            maNextEvents.clear();
+            maNextNextEvents = ImplQueueType();
         }
     }
 }

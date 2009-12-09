@@ -42,6 +42,7 @@
 #ifdef __MINGW32__
 #include <basetyps.h>
 #endif
+#include "internal/config.hxx"
 
 
 /*
@@ -88,7 +89,8 @@ void Init()
         TCHAR buff[MAX_PATH];
         GetModuleFileName(hThisLibrary, buff, (sizeof(buff)/sizeof(TCHAR)));
         PathTruncateFileName(buff);
-        lstrcat(buff, TEXT("ooofilt.dll"));
+
+        lstrcat(buff, MODULE_NAME_FILTER);
 
         hOoofilt = LoadLibraryEx(buff, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 

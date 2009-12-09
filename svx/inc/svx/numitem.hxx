@@ -76,12 +76,6 @@ namespace com{namespace sun{ namespace star{
 #define SVX_NO_NUM              200 // Markierung fuer keine Numerierung
 #define SVX_NO_NUMLEVEL         0x20
 
-// --> OD 2008-01-10 #newlistlevelattrs# - no longer used
-//#define NUMITEM_VERSION_01        0x01
-//#define NUMITEM_VERSION_02        0x02
-//#define NUMITEM_VERSION_03        0x03
-// <--
-
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
 class SVX_DLLPUBLIC SvxNumberType
 {
@@ -191,14 +185,10 @@ public:
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
     // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
-    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    SvxNumberFormat(SvStream &rStream);
-    // <--
+    SvxNumberFormat(SvStream &rStream);
     virtual ~SvxNumberFormat();
 
-    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
-    // <--
+    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
     BOOL            operator==( const SvxNumberFormat&  ) const;
@@ -304,9 +294,7 @@ public:
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     // <--
     SvxNumRule(const SvxNumRule& rCopy);
-    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//  SvxNumRule(SvStream &rStream);
-    // <--
+    SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();
 
     int                     operator==( const SvxNumRule& ) const;
@@ -314,9 +302,7 @@ public:
 
     SvxNumRule&             operator=( const SvxNumRule&  );
 
-    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    SvStream&               Store(SvStream &rStream);
-    // <--
+    SvStream&               Store(SvStream &rStream);
 
     const SvxNumberFormat*  Get(USHORT nLevel)const;
     const SvxNumberFormat&  GetLevel(USHORT nLevel)const;
@@ -354,11 +340,9 @@ public:
     virtual ~SvxNumBulletItem();
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-//    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-//    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    // <--
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    USHORT  GetVersion( USHORT nFileVersion ) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
     virtual int              operator==( const SfxPoolItem& ) const;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}

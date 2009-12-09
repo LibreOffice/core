@@ -1468,6 +1468,13 @@ void Desktop::Main()
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
+                    // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
+                    // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+                    // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+                    Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                    OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+
                     SetSplashScreenProgress(75);
                     Sequence< Any > lArgs(1);
                     lArgs[0] <<= xContainerWindow;

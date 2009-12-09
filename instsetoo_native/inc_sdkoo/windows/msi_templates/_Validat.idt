@@ -347,6 +347,12 @@ RadioButton	Value	N					Formatted		The value string associated with this button.
 RadioButton	Width	N	0	32767					The width of the button.
 RadioButton	X	N	0	32767					The horizontal coordinate of the upper left corner of the bounding rectangle of the radio button.
 RadioButton	Y	N	0	32767					The vertical coordinate of the upper left corner of the bounding rectangle of the radio button.
+Reg64	Component_	N			Component	1	Identifier		Foreign key into the Component table referencing component that controls the installing of the registry value.
+Reg64	Key	N					RegPath		The key for the registry value.
+Reg64	Name	Y					Formatted		The registry value name.
+Reg64	Registry	N					Identifier		Primary key, non-localized token.
+Reg64	Root	N	-1	3					The predefined root key for the registry value, one of rrkEnum.
+Reg64	Value	Y					Formatted		The registry value.
 Registry	Component_	N			Component	1	Identifier		Foreign key into the Component table referencing component that controls the installing of the registry value.
 Registry	Key	N					RegPath		The key for the registry value.
 Registry	Name	Y					Formatted		The registry value name.

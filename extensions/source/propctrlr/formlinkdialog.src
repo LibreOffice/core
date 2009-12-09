@@ -31,9 +31,7 @@
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HRC
 #include "formlinkdialog.hrc"
 #endif

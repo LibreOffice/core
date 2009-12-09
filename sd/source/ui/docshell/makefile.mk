@@ -47,7 +47,6 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/formatclipboard.obj		\
         $(SLO)$/docshell.obj \
         $(SLO)$/docshel2.obj \
         $(SLO)$/docshel3.obj \

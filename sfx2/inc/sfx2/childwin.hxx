@@ -205,8 +205,10 @@ public:
     void                SetPosSizePixel(const Point& rPoint, Size& rSize);
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-    void                Hide();
-    void                Show( USHORT nFlags );
+//<!--Modified by PengYunQuan for Validity Cell Range Picker
+    virtual void                Hide();
+    virtual void                Show( USHORT nFlags );
+//-->Modified by PengYunQuan for Validity Cell Range Picker
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
     sal_Bool                CanGetFocus() const;

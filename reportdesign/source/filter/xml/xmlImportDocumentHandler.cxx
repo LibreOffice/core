@@ -122,6 +122,9 @@ void SAL_CALL ImportDocumentHandler::startDocument() throw (uno::RuntimeExceptio
 void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->endDocument();
+    uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
+    if ( xReceiver.is() )
+        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
 }
 
 void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)

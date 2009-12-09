@@ -1181,7 +1181,7 @@ ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, 
     ScTextWnd* pTxtWnd = (ScTextWnd*)pWin;
 
     if (pTxtWnd)
-        pTxtWnd->SetAccessibleTextData(this);
+        pTxtWnd->InsertAccessibleTextData( *this );
 }
 
 ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
@@ -1189,7 +1189,7 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
     ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
 
     if (pTxtWnd)
-        pTxtWnd->SetAccessibleTextData(NULL);
+        pTxtWnd->RemoveAccessibleTextData( *this );
 
     if (mbEditEngineCreated && mpEditEngine)
     {
@@ -1210,7 +1210,7 @@ void ScAccessibleEditLineTextData::Dispose()
     ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
 
     if (pTxtWnd)
-        pTxtWnd->SetAccessibleTextData(NULL);
+        pTxtWnd->RemoveAccessibleTextData( *this );
 
     ResetEditMode();
     mpWindow = NULL;

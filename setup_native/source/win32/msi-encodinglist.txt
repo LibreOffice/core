@@ -4,6 +4,8 @@ af    1252  1078   # Afrikaans
 ar    1256  1025
 ar-SA 1256  1025
 as-IN    0  1101   # Assamese
+as       0  1101   # Assamese
+ast   1252  1610
 be-BY 1251  1059   # Belarusian
 bg    1251  1026   # Bulgarian
 bn       0  2117   # Bengali
@@ -12,6 +14,7 @@ bn-IN    0  1093   # Bengali India
 br    1252  1150   # Breton
 brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
+bo       0  2121   
 ca    1252  1027   # Catalan
 cs    1250  1029   # Czech
 cy    1252  1106   # Welsh
@@ -55,12 +58,15 @@ ko     949  1042
 kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
 ku       0  1574
+kid   1252  1033   # key id pseudo language
+ky       0  2100
 lo       0  1108   # Lao
 lt    1257  1063   # Lithuanian
 lv    1257  1062   # Latvian
 mai      0  1605   # Maithili (India)
 mk    1251  1071   # Macedonian
 ml-IN    0  1100
+ml       0  1100
 mn       0  1104   # Mongolian
 mni      0  1112   # Manipuri
 mn-TR    0  2128   # Mongolian Classical/traditional
@@ -80,10 +86,13 @@ or       0  1096   # Oriya
 oc    1252  1154   # Occitan-lengadocian
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
+pap      0  2171 
+om       0  2162
 pl    1250  1045
 pt    1252  2070
 pt-BR 1252  1046
 pt-PT 1252  2070
+ps       0  2171
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049
@@ -91,6 +100,7 @@ rw       0  1569   # Kinyarwanda
 sa-IN    0  1103   # Sanskrit
 sat      0  1606   # Santali
 sb       0  1070   # Sorbian
+sc       0  3047
 sd       0  1113   # Sindhi
 sh    1250  2074   # Serbian Latin
 sk    1250  1051   # Slovak
@@ -103,9 +113,11 @@ st       0  1072   # Southern Sotho, Sutu
 sv    1252  1053
 sw    1252  1089   # Swahili
 sw-TZ 1252  1089   # Swahili
+si       0  2133
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
 te-IN    0  1098
+te       0  1098
 tg       0  1064   # Tajik
 th     874  1054
 ti-ER    0  1139
@@ -117,6 +129,7 @@ uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
 ur-IN    0  2080
 uz       0  1091   # Uzbek (Latin)
+ug       0  2200
 ve       0  1075   # Venda
 vi    1258  1066   # Vietnamese
 xh       0  1076   # Xhosa

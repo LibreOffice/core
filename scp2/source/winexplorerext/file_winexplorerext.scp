@@ -35,12 +35,57 @@ Directory gid_Dir_Shlxthdl
     DosName = "shlxthdl";
 End
 
+File gid_File_Lib_OOoFilt
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofilt.dll";
+End
+
+File gid_File_Lib_OOoFiltProxy
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofiltproxy.dll";
+End
+
+#ifdef BUILD_X64
+
+File gid_File_Lib_OOoFilt64
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofilt_x64.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+File gid_File_Lib_OOoFiltProxy64
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofiltproxy_x64.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
+
 File gid_File_Lib_Shlxthdl
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "shlxthdl.dll";
 End
+
+#ifdef BUILD_X64
+	File gid_File_Lib_Shlxthdl64
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "shlxthdl_x64.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
 
 #if defined M1310
 File gid_File_Lib_Shlxthdl_Msvcr71
@@ -79,4 +124,11 @@ File gid_File_Lib_Shlxtmsi
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "shlxtmsi.dll";
+End
+
+File gid_File_Lib_Reg64
+    TXT_FILE_BODY;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "reg64msi.dll";
 End

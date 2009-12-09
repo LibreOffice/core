@@ -32,6 +32,7 @@
 #define _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
 #include <toolkit/dllapi.h>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -88,8 +89,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
+#include "toolkit/awt/vclxwindow.hxx"
+#include "toolkit/awt/vclxtopwindow.hxx"
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>

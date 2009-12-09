@@ -249,6 +249,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                         ControlPropertiesTabControl.setPage TabDataControl
                     Kontext "TabDataControl"
                         ReferenceValue.setText(sPropertyValue)
+                        ReferenceValue.TypeKeys("<RETURN>",true)
                     Kontext "ControlPropertiesTabControl"
                         ControlPropertiesTabControl.setPage TabGeneralControl
                 elseif sPropertyName = "Repeat" then
@@ -266,6 +267,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                         ControlPropertiesTabControl.setPage TabDataControl
                     Kontext "TabDataControl"
                         ReferenceValueOff.setText(sPropertyValue)
+                        ReferenceValueOff.TypeKeys("<RETURN>",true)
                     Kontext "ControlPropertiesTabControl"
                         ControlPropertiesTabControl.setPage TabGeneralControl
                 elseif sPropertyName = "Readonly" then

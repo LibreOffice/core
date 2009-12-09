@@ -138,6 +138,8 @@ namespace svt { namespace table
         inline  RowPos  getCurRow() const       { return m_nCurRow; }
         inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
+        inline  long    getRowCount() const     { return m_nRowCount; }
+        inline  long    getColumnCount() const  { return m_nColumnCount; }
 
         inline  long    getColHeaderHightPixel() const  { return m_nColHeaderHeightPixel; }
 
@@ -194,7 +196,7 @@ namespace svt { namespace table
         /** to be called when a new row is added to the control*/
         void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
         /** returns the vector, which contains the selected rows*/
-        std::vector<RowPos> getSelectedRows();
+        std::vector<RowPos>& getSelectedRows();
         /** updates the vector, which contains the selected rows after removing the row nRowPos*/
         void    removeSelectedRow(RowPos _nRowPos);
         void    invalidateRows(RowPos _nRowStart, Rectangle& _rCellRect );
@@ -208,15 +210,6 @@ namespace svt { namespace table
         virtual SelectionEngine* getSelEngine();
 
         TableDataWindow* getDataWindow();
-
-    private:
-        /** toggles the cursor visibility
-
-            The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
-        */
-        void        impl_ni_doSwitchCursor( bool _bOn );
-
         /** retrieves the area occupied by the totality of (at least partially) visible cells
 
             The returned area includes row and column headers. Also, it takes into
@@ -234,6 +227,13 @@ namespace svt { namespace table
             minus the row and column header areas.
         */
         void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
+    private:
+        /** toggles the cursor visibility
+
+            The method is not bound to the classes public invariants, as it's used in
+            situations where the they must not necessarily be fullfilled.
+        */
+        void        impl_ni_doSwitchCursor( bool _bOn );
 
         /** returns the number of visible rows.
 

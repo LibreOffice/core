@@ -53,6 +53,7 @@ interface XRange;
 interface XOutline;
 interface XPageSetup;
 interface XHPageBreaks;
+interface XVPageBreaks;
 interface XWorksheet
 {
     interface ::ooo::vba::XHelperInterface;
@@ -70,6 +71,7 @@ interface XWorksheet
     [attribute, readonly] XWorksheet Previous;
     [attribute, readonly] string CodeName;
      [attribute, readonly] short Index;
+     [attribute] long EnableSelection;
 
     void Activate();
     void Calculate( );
@@ -88,6 +90,7 @@ interface XWorksheet
     XOutline Outline();
     XPageSetup PageSetup();
     any HPageBreaks([in] any Index);
+    any VPageBreaks([in] any Index);
     any OLEObjects([in] any Index);
     void ShowDataForm();
     any Shapes([in] any Index);

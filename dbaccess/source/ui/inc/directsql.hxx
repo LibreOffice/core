@@ -108,9 +108,6 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
         ~DirectSQLDialog();
 
-        /// add an history entry
-        void addHistoryEntry(const String& _rStatement);
-
         /// number of history entries
         sal_Int32 getHistorySize() const;
 

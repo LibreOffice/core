@@ -2226,7 +2226,7 @@ interface DrawView
 
     SID_FORMATPAINTBRUSH //
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
 

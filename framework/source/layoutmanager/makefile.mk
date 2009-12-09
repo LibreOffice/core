@@ -39,6 +39,8 @@ ENABLE_EXCEPTIONS=	TRUE
 
 .INCLUDE :  		settings.mk
 
+VISIBILITY_HIDDEN = TRUE
+
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\

@@ -51,6 +51,7 @@ interface XShapes
     */
     any AddLine( [in] long StartX, [in] long StartY, [in] long endX, [in] long endY );
     any AddShape([in] long ShapeType, [in] long StartX, [in] long StartY, [in] long endX, [in] long endY );
+    any AddTextbox([in] long Orientation, [in] long Left, [in] long Top, [in] long Width, [in] long Height );
 };
 }; }; };
 

@@ -60,7 +60,7 @@ protected:
     sal_Bool bAnimated : 1;         // wird von SwGrfNumPortion benutzt
     sal_Bool bNoPaint : 1;          // wird von SwGrfNumPortion benutzt
     sal_Bool bReplace : 1;          // wird von SwGrfNumPortion benutzt
-    sal_Bool bPlaceHolder : 1;
+    const sal_Bool bPlaceHolder : 1;
     sal_Bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }

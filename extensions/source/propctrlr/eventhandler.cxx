@@ -32,7 +32,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "eventhandler.hxx"
-#include "extensio.hrc"
+#include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "formresid.hrc"
 #include "formstrings.hxx"

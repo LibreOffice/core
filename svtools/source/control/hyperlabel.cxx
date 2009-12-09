@@ -107,34 +107,15 @@ namespace svt
     }
 
 
-    void HyperLabel::SetLabelAndSize(::rtl::OUString _rText, const Size& _rNewSize )
+    Size HyperLabel::CalcMinimumSize( long nMaxWidth ) const
     {
-        Size rLocSize = _rNewSize;
-        Size rLogicLocSize = PixelToLogic( _rNewSize, MAP_APPFONT );
-        SetLabel( _rText );
-        ImplCalcMinimumSize( rLocSize );
-        rLocSize.Height() = ( m_pImpl->m_aMinSize.Height());
-//        else
-//            rLocSize = LogicToPixel( Size( rLogicLocSize.Width(), LABELBASEMAPHEIGHT ), MAP_APPFONT );
-        SetSizePixel( rLocSize );
-        Show();
-    }
-
-    sal_Bool HyperLabel::ImplCalcMinimumSize(const Size& _rCompSize )
-    {
-        sal_Bool b_AdjustMinWidth = sal_False;
-        m_pImpl->m_aMinSize = CalcMinimumSize( );
-        if ( m_pImpl->m_aMinSize.Width() >= _rCompSize.Width() )    // the MinimumSize is used to size the FocusRectangle
-        {
-            m_pImpl->m_aMinSize.Width() = _rCompSize.Width();       // and for the MouseMove method
-            m_pImpl->m_aMinSize = CalcMinimumSize(_rCompSize.Width() );
-            b_AdjustMinWidth = sal_True;
-        }
+        m_pImpl->m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
+        // the MinimumSize is used to size the FocusRectangle
+        // and for the MouseMove method
         m_pImpl->m_aMinSize.Height() += 2;
         m_pImpl->m_aMinSize.Width() += 1;
-        return b_AdjustMinWidth;
+        return m_pImpl->m_aMinSize;
     }
-
 
     void HyperLabel::implInit()
     {
@@ -234,17 +215,6 @@ namespace svt
         m_pImpl->bInteractive = ( _bInteractive && IsEnabled() );
     }
 
-    void HyperLabel::SetHyperLabelPosition(sal_uInt16 XPos, sal_uInt16 YPos)
-    {
-        SetPosPixel( LogicToPixel( Point( XPos, YPos ), MAP_APPFONT ) );
-    }
-
-    Point HyperLabel::GetLogicalPosition()
-    {
-        Point aPoint = GetPosPixel( );
-        return PixelToLogic( aPoint, MAP_APPFONT );
-    }
-
     sal_Int16 HyperLabel::GetID() const
     {
         return m_pImpl->ID;
@@ -270,10 +240,9 @@ namespace svt
         return GetText();
     }
 
-    void HyperLabel::SetLabel( ::rtl::OUString _rText )
+    void HyperLabel::SetLabel( const ::rtl::OUString& _rText )
     {
         SetText(_rText);
-        Show();
     }
 
 

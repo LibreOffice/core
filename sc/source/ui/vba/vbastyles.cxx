@@ -29,6 +29,7 @@
  ************************************************************************/
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
+#include <ooo/vba/excel/XRange.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

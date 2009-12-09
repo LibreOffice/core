@@ -124,7 +124,8 @@ void AnimationCommandNode::activate_st()
 
     // deactivate ASAP:
     scheduleDeactivationEvent(
-        makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+        makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+                   "AnimationCommandNode::deactivate" ) );
 }
 
 bool AnimationCommandNode::hasPendingAnimation() const

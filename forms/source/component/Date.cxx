@@ -348,6 +348,13 @@ Any ODateModel::getDefaultForReset() const
 }
 
 //------------------------------------------------------------------------------
+void ODateModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
+}
+
+//------------------------------------------------------------------------------
 Sequence< Type > ODateModel::getSupportedBindingTypes()
 {
     return Sequence< Type >( &::getCppuType( static_cast< util::Date* >( NULL ) ), 1 );

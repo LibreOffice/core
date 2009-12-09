@@ -137,14 +137,14 @@ public:
     // nop:
     virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
 
+    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
+
 protected:
     void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
                                     EventSharedPtr() );
 
     SlideShowContext const&                 getContext() const { return maContext; }
     ::boost::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
-
-    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
     bool checkValidNode() const {
         ENSURE_OR_THROW( mpSelf, "no self ptr set!" );

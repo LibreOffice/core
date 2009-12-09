@@ -152,7 +152,6 @@ namespace connectivity
                         // Vorzeitiger Abbruch der Schleife moeglich, denn
                         // wir haben, was wir wollten.
                         nStartPos = i+1;
-                        *pData = 0;
                         break;
                     }
                     else
@@ -161,6 +160,7 @@ namespace connectivity
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
+            *pData = 0;
             _rStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
         }
     }

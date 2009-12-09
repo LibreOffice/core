@@ -330,7 +330,8 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
         return bRes;
 
     // search for entry with that language
-    LangSvcEntries_Spell *pEntry = aSvcMap[ nLanguage ].get();
+    SpellSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Spell    *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     if (!pEntry)
     {
@@ -497,7 +498,8 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         return xRes;
 
     // search for entry with that language
-    LangSvcEntries_Spell *pEntry = aSvcMap[ nLanguage ].get();
+    SpellSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Spell    *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     if (!pEntry)
     {
@@ -847,8 +849,9 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    SpellCheckerDispatcher      *pThis = (SpellCheckerDispatcher *) this;
-    const LangSvcEntries_Spell *pEntry = pThis->aSvcMap[ nLanguage ].get();
+    SpellCheckerDispatcher          *pThis = (SpellCheckerDispatcher *) this;
+    const SpellSvcByLangMap_t::iterator aIt( pThis->aSvcMap.find( nLanguage ) );
+    const LangSvcEntries_Spell      *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 

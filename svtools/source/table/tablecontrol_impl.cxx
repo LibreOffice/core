@@ -181,24 +181,23 @@ namespace svt { namespace table
         {
             (void)pCellEntryType;
         }
-        virtual std::vector<std::vector<rtl::OUString> > getCellContent()
+        virtual std::vector<std::vector<rtl::OUString> >& getCellContent()
         {
-            std::vector<rtl::OUString> cCC;
-            cCC.push_back(rtl::OUString::createFromAscii(""));
-            std::vector<std::vector<rtl::OUString> > cC;
-            cC.push_back(cCC);
-            return cC;
+            return *( new std::vector<std::vector<rtl::OUString> >);
         }
         virtual void setRowHeaderName(std::vector<rtl::OUString> pCellEntryType)
         {
             (void)pCellEntryType;
         }
-        virtual std::vector<rtl::OUString> getRowHeaderName()
+        virtual std::vector<rtl::OUString>& getRowHeaderName()
         {
-            std::vector<rtl::OUString> cCC;
-            cCC.push_back(rtl::OUString::createFromAscii(""));
-            return cCC;
+            aRowHeaderNames.clear();
+            aRowHeaderNames.push_back(rtl::OUString::createFromAscii(""));
+            return aRowHeaderNames;
         }
+
+        private:
+            std::vector<rtl::OUString> aRowHeaderNames;
     };
 
 
@@ -882,7 +881,7 @@ namespace svt { namespace table
         impl_getAllVisibleDataCellArea( aAllDataCellsArea );
 
         //get the vector, which contains row vectors, each containing the data for the cells in this row
-        std::vector<std::vector<rtl::OUString> > aCellContent = m_pModel->getCellContent();
+        std::vector<std::vector<rtl::OUString> >& aCellContent = m_pModel->getCellContent();
         //if the vector is empty, fill it with empty data, so the table can be painted
         if(aCellContent.empty())
         {
@@ -895,7 +894,7 @@ namespace svt { namespace table
         }
         std::vector<std::vector<rtl::OUString> >::iterator it = aCellContent.begin()+m_nTopRow;
         //get the vector, which contains the row header titles
-        std::vector<rtl::OUString> aRowHeaderContent;
+        std::vector<rtl::OUString>& aRowHeaderContent = m_pModel->getRowHeaderName();
         ::std::vector<rtl::OUString>::iterator itRowName = aRowHeaderContent.begin();
 
         if(m_pModel->hasRowHeaders())
@@ -1525,7 +1524,7 @@ namespace svt { namespace table
     }
 
     //-------------------------------------------------------------------------------
-    std::vector<RowPos> TableControl_Impl::getSelectedRows()
+    std::vector<RowPos>& TableControl_Impl::getSelectedRows()
     {
         return m_nRowSelected;
     }

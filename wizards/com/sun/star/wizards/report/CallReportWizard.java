@@ -36,6 +36,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.Desktop;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
@@ -47,6 +49,27 @@ public class CallReportWizard
 {
 
     static boolean bWizardstartedalready;
+
+    public static void main(String args[])
+    {
+        String ConnectStr = "uno:pipe,name=fs93730;urp;StarOffice.ServiceManager";
+        try
+        {
+            XMultiServiceFactory orb = Desktop.connect(ConnectStr);
+            if ( orb != null )
+            {
+                PropertyValue[] curproperties = new PropertyValue[1];
+                curproperties[0] = Properties.createProperty("DataSourceName", "countries");
+
+                ReportWizard wizard = new ReportWizard(orb);
+                wizard.startReportWizard(orb, curproperties);
+            }
+        }
+        catch (java.lang.Exception jexception)
+        {
+            jexception.printStackTrace(System.out);
+        }
+    }
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>

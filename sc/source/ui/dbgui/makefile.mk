@@ -81,7 +81,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/csvtablebox.obj \
     $(SLO)$/fieldwnd.obj \
     $(SLO)$/pvlaydlg.obj	\
-    $(SLO)$/dapidata.obj
+    $(SLO)$/dapidata.obj	\
+    $(SLO)$/validate.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \

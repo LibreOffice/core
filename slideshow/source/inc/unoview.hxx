@@ -68,6 +68,16 @@ namespace slideshow
                 with a different calling convention under Windows).
              */
             virtual void _dispose() = 0;
+
+            /** Return whether the sound play back is enabled.
+            */
+            virtual bool isSoundEnabled (void) const = 0;
+
+            /** Tell the view whether it may play sounds.  Disabling this
+                can be used to prevent different views to play the same
+                sounds at the same time.
+            */
+            virtual void setIsSoundEnabled (const bool bValue) = 0;
         };
 
         typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;

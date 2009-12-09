@@ -139,9 +139,6 @@ public:
     /// get the datasource type display name from a DSN string
     String getTypeDisplayName(const ::rtl::OUString& _sURL) const;
 
-    /// returns the extension of the user defined type
-    String getTypeExtension(const ::rtl::OUString& _sURL) const;
-
     /// on a given string, cut the type prefix and return the result
     String cutPrefix(const ::rtl::OUString& _sURL) const;
 

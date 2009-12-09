@@ -1319,8 +1319,11 @@ void NeonSession::POST( const rtl::OUString & inPath,
 void NeonSession::ABORT()
     throw ( DAVException )
 {
-    if (NULL !=m_pHttpSession)
-        ne_close_connection(m_pHttpSession);
+    // 11.11.09 (tkr): The following code lines causing crashes if closing a ongoing connection. It turned out that this existing solution doesn't work in multi-threading environments.
+    // So I disabled them in 3.2. . Issue #73893# should fix it in OOo 3.3.
+
+    //if (NULL !=m_pHttpSession)
+    //  ne_close_connection(m_pHttpSession);
 }
 
 // -------------------------------------------------------------------

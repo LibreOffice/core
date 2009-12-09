@@ -62,6 +62,11 @@
 #define DEF_WRITER_LSPACE   500     //Standardeinrueckung
 #define DEF_DRAW_LSPACE     800     //Standardeinrueckung
 
+#define NUMITEM_VERSION_01        0x01
+#define NUMITEM_VERSION_02        0x02
+#define NUMITEM_VERSION_03        0x03
+#define NUMITEM_VERSION_04        0x04
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -224,157 +229,184 @@ SvxNumberFormat::~SvxNumberFormat()
 /* -----------------08.12.98 11:14-------------------
  *
  * --------------------------------------------------*/
-//SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
-//{
-//    USHORT nVersion;
-//  rStream >> nVersion;
+SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
+: mePositionAndSpaceMode( LABEL_WIDTH_AND_POSITION ),
+  meLabelFollowedBy( LISTTAB ),
+  mnListtabPos( 0 ),
+  mnFirstLineIndent( 0 ),
+  mnIndentAt( 0 )
+{
 
-//  USHORT nUSHORT;
-//  rStream >> nUSHORT;
-//  SetNumberingType((sal_Int16)nUSHORT);
-//  rStream >> nUSHORT;
-//  eNumAdjust      = (SvxAdjust)nUSHORT;
-//  rStream >> nUSHORT;
-//  nInclUpperLevels = (BYTE)nUSHORT;
-//  rStream >> nUSHORT;
-//  nStart          = nUSHORT;
-//  rStream >> nUSHORT;
-//  cBullet = nUSHORT;
+    USHORT nVersion;
+  rStream >> nVersion;
 
-//  short nShort;
-//  rStream >> nShort;
-//  nFirstLineOffset        = nShort;
-//  rStream >> nShort;
-//  nAbsLSpace              = nShort;
-//  rStream >> nShort;
-//  nLSpace                 = nShort;
+  USHORT nUSHORT;
+  rStream >> nUSHORT;
+  SetNumberingType((sal_Int16)nUSHORT);
+  rStream >> nUSHORT;
+  eNumAdjust      = (SvxAdjust)nUSHORT;
+  rStream >> nUSHORT;
+  nInclUpperLevels = (BYTE)nUSHORT;
+  rStream >> nUSHORT;
+  nStart          = nUSHORT;
+  rStream >> nUSHORT;
+  cBullet = nUSHORT;
 
-//  rStream >> nShort;
-//  nCharTextDistance       = nShort;
-//  rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
-//  rStream.ReadByteString(sPrefix, eEnc);
-//  rStream.ReadByteString(sSuffix, eEnc);
-//  rStream.ReadByteString(sCharStyleName, eEnc);
-//  rStream >> nUSHORT;
-//  if(nUSHORT)
-//  {
-//        SvxBrushItem aHelper(0);
-//      pGraphicBrush = (SvxBrushItem*) aHelper.Create( rStream, BRUSH_GRAPHIC_VERSION );
-//  }
-//  else
-//      pGraphicBrush = 0;
+  short nShort;
+  rStream >> nShort;
+  nFirstLineOffset        = nShort;
+  rStream >> nShort;
+  nAbsLSpace              = nShort;
+  rStream >> nShort;
+  nLSpace                 = nShort;
 
-//  rStream >> nUSHORT;
-//    eVertOrient          = (sal_Int16)nUSHORT;
+  rStream >> nShort;
+  nCharTextDistance       = nShort;
+  rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+  rStream.ReadByteString(sPrefix, eEnc);
+  rStream.ReadByteString(sSuffix, eEnc);
+  rStream.ReadByteString(sCharStyleName, eEnc);
+  rStream >> nUSHORT;
+  if(nUSHORT)
+  {
+        SvxBrushItem aHelper(0);
+      pGraphicBrush = (SvxBrushItem*) aHelper.Create( rStream, BRUSH_GRAPHIC_VERSION );
+  }
+  else
+      pGraphicBrush = 0;
 
-//  rStream >> nUSHORT;
-//  if(nUSHORT)
-//  {
-//      pBulletFont = new Font;
-//      rStream >> *pBulletFont;
-//        if(!pBulletFont->GetCharSet())
-//            pBulletFont->SetCharSet(rStream.GetStreamCharSet());
-//    }
-//  else
-//      pBulletFont = 0;
-//  rStream >> aGraphicSize;
+  rStream >> nUSHORT;
+    eVertOrient          = (sal_Int16)nUSHORT;
 
-//  rStream >> nBulletColor;
-//  rStream >> nUSHORT;
-//  nBulletRelSize = nUSHORT;
-//  rStream >> nUSHORT;
-//  SetShowSymbol((BOOL)nUSHORT);
+  rStream >> nUSHORT;
+  if(nUSHORT)
+  {
+      pBulletFont = new Font;
+      rStream >> *pBulletFont;
+        if(!pBulletFont->GetCharSet())
+            pBulletFont->SetCharSet(rStream.GetStreamCharSet());
+    }
+  else
+      pBulletFont = 0;
+  rStream >> aGraphicSize;
 
-//  if( nVersion < NUMITEM_VERSION_03 )
-//      cBullet = ByteString::ConvertToUnicode( (sal_Char)cBullet,
-//                          (pBulletFont&&pBulletFont->GetCharSet()) ?  pBulletFont->GetCharSet()
-//                                      : RTL_TEXTENCODING_SYMBOL );
-//    if(pBulletFont)
-//    {
-//        BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
-//        if(bConvertBulletFont)
-//        {
+  rStream >> nBulletColor;
+  rStream >> nUSHORT;
+  nBulletRelSize = nUSHORT;
+  rStream >> nUSHORT;
+  SetShowSymbol((BOOL)nUSHORT);
 
-//            FontToSubsFontConverter pConverter =
-//                        CreateFontToSubsFontConverter(pBulletFont->GetName(),
-//                            FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
-//            if(pConverter)
-//            {
-//                cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
-//                String sFontName = GetFontToSubsFontName(pConverter);
-//                pBulletFont->SetName(sFontName);
-//                DestroyFontToSubsFontConverter(pConverter);
-//            }
-//        }
-//    }
-//}
+  if( nVersion < NUMITEM_VERSION_03 )
+      cBullet = ByteString::ConvertToUnicode( (sal_Char)cBullet,
+                          (pBulletFont&&pBulletFont->GetCharSet()) ?  pBulletFont->GetCharSet()
+                                      : RTL_TEXTENCODING_SYMBOL );
+    if(pBulletFont)
+    {
+        BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
+        if(bConvertBulletFont)
+        {
+
+            FontToSubsFontConverter pConverter =
+                        CreateFontToSubsFontConverter(pBulletFont->GetName(),
+                            FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
+            if(pConverter)
+            {
+                cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
+                String sFontName = GetFontToSubsFontName(pConverter);
+                pBulletFont->SetName(sFontName);
+                DestroyFontToSubsFontConverter(pConverter);
+            }
+        }
+    }
+
+    if( NUMITEM_VERSION_04 <= nVersion )
+    {
+        rStream >> nUSHORT;
+        mePositionAndSpaceMode = (SvxNumPositionAndSpaceMode) nUSHORT;
+        rStream >> nUSHORT;
+        meLabelFollowedBy = ( SvxNumLabelFollowedBy ) nUSHORT;
+        long nLong;
+        rStream >> nLong;
+        mnListtabPos = nLong;
+        rStream >> nLong;
+        mnFirstLineIndent = nLong;
+        rStream >> nLong;
+        mnIndentAt = nLong;
+    }
+}
 /* -----------------08.12.98 11:14-------------------
  *
  * --------------------------------------------------*/
-// --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
-//{
-//    if(pConverter && pBulletFont)
-//    {
-//        cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
-//        String sFontName = GetFontToSubsFontName(pConverter);
-//        pBulletFont->SetName(sFontName);
-//    }
+SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
+{
+    if(pConverter && pBulletFont)
+    {
+        cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
+        String sFontName = GetFontToSubsFontName(pConverter);
+        pBulletFont->SetName(sFontName);
+    }
 
-//    rStream << (USHORT)NUMITEM_VERSION_03;
+    rStream << (USHORT)NUMITEM_VERSION_04;
 
-//    rStream << (USHORT)GetNumberingType();
-//    rStream << (USHORT)eNumAdjust;
-//    rStream << (USHORT)nInclUpperLevels;
-//    rStream << nStart;
-//    rStream << (USHORT)cBullet;
+    rStream << (USHORT)GetNumberingType();
+    rStream << (USHORT)eNumAdjust;
+    rStream << (USHORT)nInclUpperLevels;
+    rStream << nStart;
+    rStream << (USHORT)cBullet;
 
-//    rStream << nFirstLineOffset;
-//    rStream << nAbsLSpace;
-//    rStream << nLSpace;
+    rStream << nFirstLineOffset;
+    rStream << nAbsLSpace;
+    rStream << nLSpace;
 
-//    rStream << nCharTextDistance;
-//    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
-//    rStream.WriteByteString(sPrefix, eEnc);
-//    rStream.WriteByteString(sSuffix, eEnc);
-//    rStream.WriteByteString(sCharStyleName, eEnc);
-//    if(pGraphicBrush)
-//    {
-//        rStream << (USHORT)1;
+    rStream << nCharTextDistance;
+    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+    rStream.WriteByteString(sPrefix, eEnc);
+    rStream.WriteByteString(sSuffix, eEnc);
+    rStream.WriteByteString(sCharStyleName, eEnc);
+    if(pGraphicBrush)
+    {
+        rStream << (USHORT)1;
 
-//        // #75113# in SD or SI force bullet itself to be stored,
-//        // for that purpose throw away link when link and graphic
-//        // are present, so Brush save is forced
-//        if(pGraphicBrush->GetGraphicLink() && pGraphicBrush->GetGraphic())
-//        {
-//            String aEmpty;
-//            pGraphicBrush->SetGraphicLink(aEmpty);
-//        }
+        // #75113# in SD or SI force bullet itself to be stored,
+        // for that purpose throw away link when link and graphic
+        // are present, so Brush save is forced
+        if(pGraphicBrush->GetGraphicLink() && pGraphicBrush->GetGraphic())
+        {
+            String aEmpty;
+            pGraphicBrush->SetGraphicLink(aEmpty);
+        }
 
-//        pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
-//    }
-//    else
-//        rStream << (USHORT)0;
+        pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
+    }
+    else
+        rStream << (USHORT)0;
 
-//    rStream << (USHORT)eVertOrient;
-//    if(pBulletFont)
-//    {
-//        rStream << (USHORT)1;
-//        rStream << *pBulletFont;
-//    }
-//    else
-//        rStream << (USHORT)0;
-//    rStream << aGraphicSize;
+    rStream << (USHORT)eVertOrient;
+    if(pBulletFont)
+    {
+        rStream << (USHORT)1;
+        rStream << *pBulletFont;
+    }
+    else
+        rStream << (USHORT)0;
+    rStream << aGraphicSize;
 
-//    Color nTempColor = nBulletColor;
-//    if(COL_AUTO == nBulletColor.GetColor())
-//        nTempColor = COL_BLACK;
-//    rStream << nTempColor;
-//    rStream << nBulletRelSize;
-//    rStream << (USHORT)IsShowSymbol();
-//    return rStream;
-//}
-// <--
+    Color nTempColor = nBulletColor;
+    if(COL_AUTO == nBulletColor.GetColor())
+        nTempColor = COL_BLACK;
+    rStream << nTempColor;
+    rStream << nBulletRelSize;
+    rStream << (USHORT)IsShowSymbol();
+
+    rStream << ( USHORT ) mePositionAndSpaceMode;
+    rStream << ( USHORT ) meLabelFollowedBy;
+    rStream << ( long ) mnListtabPos;
+    rStream << ( long ) mnFirstLineIndent;
+    rStream << ( long ) mnIndentAt;
+
+    return rStream;
+}
+
 /* -----------------------------23.02.01 11:10--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -839,80 +871,79 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 /* -----------------08.12.98 11:07-------------------
  *
  * --------------------------------------------------*/
-//SvxNumRule::SvxNumRule(SvStream &rStream)
-//{
-//    ++nRefCount;
-//    LanguageType eLang = Application::GetSettings().GetLanguage();
-//    aLocale = SvxCreateLocale(eLang);
-//    USHORT nVersion;
-//    USHORT nTemp;
-//    rStream >> nVersion;
-//    rStream >> nLevelCount;
-//    rStream >> nTemp;
-//    nFeatureFlags = nTemp;
-//    rStream >> nTemp;
-//    bContinuousNumbering = (BOOL)nTemp;
-//    rStream >> nTemp;
-//    eNumberingType       = (SvxNumRuleType)nTemp;
-//    memset( aFmts, 0, sizeof( aFmts ));
+SvxNumRule::SvxNumRule(SvStream &rStream)
+{
+    ++nRefCount;
+    LanguageType eLang = Application::GetSettings().GetLanguage();
+    aLocale = SvxCreateLocale(eLang);
+    USHORT nVersion;
+    USHORT nTemp;
+    rStream >> nVersion;
+    rStream >> nLevelCount;
+    rStream >> nTemp;
+    nFeatureFlags = nTemp;
+    rStream >> nTemp;
+    bContinuousNumbering = (BOOL)nTemp;
+    rStream >> nTemp;
+    eNumberingType       = (SvxNumRuleType)nTemp;
+    memset( aFmts, 0, sizeof( aFmts ));
 
-//    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
-//    {
-//        USHORT nSet;
-//        rStream >> nSet;
-//        if(nSet)
-//            aFmts[i] = new SvxNumberFormat(rStream);
-//        else
-//            aFmts[i] = 0;
-//        aFmtsSet[i] = aFmts[i] ? TRUE : FALSE;
-//    }
-//    if(NUMITEM_VERSION_02 <= nVersion)
-//    {
-//        USHORT nShort;
-//        rStream >> nShort;
-//        nFeatureFlags = nShort;
-//    }
-//}
+    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    {
+        USHORT nSet;
+        rStream >> nSet;
+        if(nSet)
+            aFmts[i] = new SvxNumberFormat(rStream);
+        else
+            aFmts[i] = 0;
+        aFmtsSet[i] = aFmts[i] ? TRUE : FALSE;
+    }
+    if(NUMITEM_VERSION_02 <= nVersion)
+    {
+        USHORT nShort;
+        rStream >> nShort;
+        nFeatureFlags = nShort;
+    }
+}
 
 /* -----------------08.12.98 11:07-------------------
  *
  * --------------------------------------------------*/
-// --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//SvStream&   SvxNumRule::Store(SvStream &rStream)
-//{
-//    rStream<<(USHORT)NUMITEM_VERSION_03;
-//    rStream<<nLevelCount;
-//    //first save of nFeatureFlags for old versions
-//    rStream<<(USHORT)nFeatureFlags;
-//    rStream<<(USHORT)bContinuousNumbering;
-//    rStream<<(USHORT)eNumberingType;
+SvStream&   SvxNumRule::Store(SvStream &rStream)
+{
+    rStream<<(USHORT)NUMITEM_VERSION_03;
+    rStream<<nLevelCount;
+    //first save of nFeatureFlags for old versions
+    rStream<<(USHORT)nFeatureFlags;
+    rStream<<(USHORT)bContinuousNumbering;
+    rStream<<(USHORT)eNumberingType;
 
-//    FontToSubsFontConverter pConverter = 0;
-//    BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
-//    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
-//    {
-//        if(aFmts[i])
-//        {
-//            rStream << USHORT(1);
-//            if(bConvertBulletFont && aFmts[i]->GetBulletFont())
-//            {
-//                if(!pConverter)
-//                    pConverter =
-//                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
-//                                    FONTTOSUBSFONT_EXPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
-//            }
-//            aFmts[i]->Store(rStream, pConverter);
-//        }
-//        else
-//            rStream << USHORT(0);
-//    }
-//    //second save of nFeatureFlags for new versions
-//    rStream<<(USHORT)nFeatureFlags;
-//    if(pConverter)
-//        DestroyFontToSubsFontConverter(pConverter);
+    FontToSubsFontConverter pConverter = 0;
+    BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
+    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    {
+        if(aFmts[i])
+        {
+            rStream << USHORT(1);
+            if(bConvertBulletFont && aFmts[i]->GetBulletFont())
+            {
+                if(!pConverter)
+                    pConverter =
+                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
+                                    FONTTOSUBSFONT_EXPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
+            }
+            aFmts[i]->Store(rStream, pConverter);
+        }
+        else
+            rStream << USHORT(0);
+    }
+    //second save of nFeatureFlags for new versions
+    rStream<<(USHORT)nFeatureFlags;
+    if(pConverter)
+        DestroyFontToSubsFontConverter(pConverter);
 
-//    return rStream;
-//}
+    return rStream;
+}
 
 /* -----------------27.10.98 10:41-------------------
  *
@@ -1179,32 +1210,23 @@ SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-// --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//SfxPoolItem*     SvxNumBulletItem::Create(SvStream &rStream, USHORT) const
-//{
-//    SvxNumRule aRule(rStream);
-//    return new SvxNumBulletItem(aRule, Which() );
-//}
-// <--
+SfxPoolItem*     SvxNumBulletItem::Create(SvStream &rStream, USHORT) const
+{
+    SvxNumRule aRule(rStream);
+    return new SvxNumBulletItem(aRule, Which() );
+}
+USHORT  SvxNumBulletItem::GetVersion( USHORT /*nFileVersion*/ ) const
+{
+    return NUMITEM_VERSION_03;
+}
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-// --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT /*nItemVersion*/ )const
-//{
-//    pNumRule->Store(rStream);
-//    return rStream;
-//}
-// <--
-/* -----------------08.12.98 10:43-------------------
- *
- * --------------------------------------------------*/
-// --> OD 2008-01-10 #newlistlevelattrs# - no longer used
-//USHORT  SvxNumBulletItem::GetVersion( USHORT /*nFileVersion*/ ) const
-//{
-//    return NUMITEM_VERSION_03;
-//}
-// <--
+SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT /*nItemVersion*/ )const
+{
+    pNumRule->Store(rStream);
+    return rStream;
+}
 
 /* -----------------08.12.98 10:43-------------------
  *

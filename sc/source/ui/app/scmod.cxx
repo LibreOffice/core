@@ -2216,4 +2216,82 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
 
 
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
+{
+    std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
 
+    if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
+    {
+        rlRefWindow.push_back( pWnd );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+BOOL  ScModule::UnregisterRefWindow( USHORT nSlotId, Window *pWnd )
+{
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return FALSE;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    std::list<Window*>::iterator i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+
+    if( i == rlRefWindow.end() )
+        return FALSE;
+
+    rlRefWindow.erase( i );
+
+    if( !rlRefWindow.size() )
+        m_mapRefWindow.erase( nSlotId );
+
+    return TRUE;
+}
+
+BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
+{
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return FALSE;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    return rlRefWindow.end() != std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+}
+
+Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
+{
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return FALSE;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+
+    for( std::list<Window*>::iterator i = rlRefWindow.begin(); i!=rlRefWindow.end(); i++ )
+        if ( pWndAncestor->IsWindowOrChild( *i, (*i)->IsSystemWindow() ) )
+            return *i;
+
+    return NULL;
+}
+
+Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
+{
+    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+
+    for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
+        i!=m_mapRefWindow.end(); i++ )
+        for( std::list<Window*>::iterator j = i->second.begin(); j!=i->second.end(); j++ )
+            if ( pWndAncestor->IsWindowOrChild( *j, (*j)->IsSystemWindow() ) )
+                return *j;
+
+    return NULL;
+}
+//<!--Added by PengYunQuan for Validity Cell Range Picker

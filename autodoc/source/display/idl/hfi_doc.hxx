@@ -53,12 +53,18 @@ class HF_IdlDocu : public HtmlFactory_Idl
 
 
     /** Produces documentation by the CodeInfo accompanying
+        ->i_ce.
+    */
+    void                Produce_fromCodeEntity(
+                            const client &      i_ce ) const;
+
+    /** Produces documentation by the CodeInfo accompanying
         a link or reference to a CodeEntity.
 
         @param i_rScopeGivingCe
         Gives the scope from which links are to be calculated.
     */
-    void                Produce_byDocu4Reference(
+    void                Produce_fromReference(
                             const ce_info &     i_rDocuForReference,
                             const client &      i_rScopeGivingCe ) const;
 

@@ -155,6 +155,8 @@ using namespace ::com::sun::star::io;
 #define MAX_REDIRECT 5
 
 
+sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath );
+
 //==========================================================
 namespace {
 
@@ -1145,6 +1147,15 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             }
             catch( uno::Exception )
             {}
+
+            if ( !bContentReadonly )
+            {
+                // the file is not readonly, check the ACL
+
+                String aPhysPath;
+                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
+                    bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
+            }
         }
 
         // do further checks only if the file not readonly in fs

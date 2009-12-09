@@ -1,0 +1,85 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef EXTENSIONS_BIBLIOGRAPHY_HRC
+#define EXTENSIONS_BIBLIOGRAPHY_HRC
+
+#include "extensio.hrc"
+
+#define HID_BIB_CHANGESOURCE                    ( HID_BIBLIO_START +   0)
+#define HID_BIB_MAPPINGDLG                      ( HID_BIBLIO_START +   1)
+#define HID_BIB_TBX_TABLE                       ( HID_BIBLIO_START +   2)
+#define HID_BIB_TBX_SEARCH                      ( HID_BIBLIO_START +   3)
+#define HID_BIB_TBX_AUTOFILTER                  ( HID_BIBLIO_START +   4)
+#define HID_BIB_IDENTIFIER_POS                  ( HID_BIBLIO_START +   5)
+#define HID_BIB_AUTHORITYTYPE_POS               ( HID_BIBLIO_START +   6)
+#define HID_BIB_AUTHOR_POS                      ( HID_BIBLIO_START +   7)
+#define HID_BIB_TITLE_POS                       ( HID_BIBLIO_START +   8)
+#define HID_BIB_YEAR_POS                        ( HID_BIBLIO_START +   9)
+#define HID_BIB_ISBN_POS                        ( HID_BIBLIO_START +  10)
+#define HID_BIB_BOOKTITLE_POS                   ( HID_BIBLIO_START +  11)
+#define HID_BIB_CHAPTER_POS                     ( HID_BIBLIO_START +  12)
+#define HID_BIB_EDITION_POS                     ( HID_BIBLIO_START +  13)
+#define HID_BIB_EDITOR_POS                      ( HID_BIBLIO_START +  14)
+#define HID_BIB_HOWPUBLISHED_POS                ( HID_BIBLIO_START +  15)
+#define HID_BIB_INSTITUTION_POS                 ( HID_BIBLIO_START +  16)
+#define HID_BIB_JOURNAL_POS                     ( HID_BIBLIO_START +  17)
+#define HID_BIB_MONTH_POS                       ( HID_BIBLIO_START +  18)
+#define HID_BIB_NOTE_POS                        ( HID_BIBLIO_START +  19)
+#define HID_BIB_ANNOTE_POS                      ( HID_BIBLIO_START +  20)
+#define HID_BIB_NUMBER_POS                      ( HID_BIBLIO_START +  21)
+#define HID_BIB_ORGANIZATIONS_POS               ( HID_BIBLIO_START +  22)
+#define HID_BIB_PAGES_POS                       ( HID_BIBLIO_START +  23)
+#define HID_BIB_PUBLISHER_POS                   ( HID_BIBLIO_START +  24)
+#define HID_BIB_ADDRESS_POS                     ( HID_BIBLIO_START +  25)
+#define HID_BIB_SCHOOL_POS                      ( HID_BIBLIO_START +  26)
+#define HID_BIB_SERIES_POS                      ( HID_BIBLIO_START +  27)
+#define HID_BIB_REPORTTYPE_POS                  ( HID_BIBLIO_START +  28)
+#define HID_BIB_VOLUME_POS                      ( HID_BIBLIO_START +  29)
+#define HID_BIB_URL_POS                         ( HID_BIBLIO_START +  30)
+#define HID_BIB_CUSTOM1_POS                     ( HID_BIBLIO_START +  31)
+#define HID_BIB_CUSTOM2_POS                     ( HID_BIBLIO_START +  32)
+#define HID_BIB_CUSTOM3_POS                     ( HID_BIBLIO_START +  33)
+#define HID_BIB_CUSTOM4_POS                     ( HID_BIBLIO_START +  34)
+#define HID_BIB_CUSTOM5_POS                     ( HID_BIBLIO_START +  35)
+#define HID_BIB_DB_TBX                          ( HID_BIBLIO_START +  36)
+#define HID_BIB_DB_GHIDCTRL                     ( HID_BIBLIO_START +  37)
+#define HID_BIB_CONTROL_PAGE                    ( HID_BIBLIO_START +  38)
+#define HID_BIB_CONTROL_PARENT                  ( HID_BIBLIO_START +  39)
+#define UID_BIB_FRAME_WINDOW                    ( HID_BIBLIO_START +  40)
+#define HID_BIB_DELETE_RECORD                   ( HID_BIBLIO_START +  41)
+#define HID_BIB_INSERT_RECORD                   ( HID_BIBLIO_START +  42)
+#define HID_BIB_DB_GRIDCTRL                     ( HID_BIBLIO_START +  43)
+#define HID_DLG_MAPPING                         ( HID_BIBLIO_START +  44)
+#define HID_DLG_DBCHANGE                        ( HID_BIBLIO_START +  45)
+#define HID_SELECTION_TLB                       ( HID_BIBLIO_START +  46)
+    // !! if you add new IDs, please also adjust HID_ABP_LAST below !!
+#define HID_BIB_LAST    HID_SELECTION_TLB
+
+#if HID_BIB_LAST > HID_BIBLIO_END
+    #error help id range overflow (BIBLIO)
+#endif
+
+#endif // EXTENSIONS_BIBLIOGRAPHY_HRC

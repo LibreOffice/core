@@ -179,7 +179,7 @@ sub getNextSdfObj
     }
     else
     {
-        $line =~ /^(([^\t]*)\t([^\t]*).*)/o ;
+        $line =~ /^(([^\t]*)\t([^\t]*)[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t[^\t]*\t*)/o ;
         if( defined $1 && defined $2 && defined $3 )
         {
             $obj->line  ( $1 );

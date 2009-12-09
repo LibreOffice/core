@@ -108,6 +108,7 @@ testcase tToolsCustomize
         
         Kontext "TabCustomizeMenu"
         '/// Click button 'Command' ///'
+        sleep(1)
         Command.click
         printlog "opened second one"
         WaitSlot()
@@ -123,6 +124,7 @@ testcase tToolsCustomize
         WaitSlot()
         Kontext "TabCustomizeMenu"
         '/// Click button 'Command' ///'
+		sleep(1)
         Command.click
         printlog "opened third one"
         WaitSlot()
@@ -192,8 +194,10 @@ testcase tToolsCustomize
         
         waitslot
         Kontext "TabCustomizeToolbars"
+        sleep(1)
         '/// Click button 'Command' ///'
         Command.click
+        waitslot
         '/// Select the firste entry 'Rename' ///'
         hMenuSelectNr(1)
         '/// Dialog 'Name' comes up ///'
@@ -206,7 +210,9 @@ testcase tToolsCustomize
         endif        
 
         Kontext "TabCustomizeToolbars"
+        sleep(1)
         Command.click
+        waitslot
         hMenuSelectNr(1)
         Kontext "CustomizeToolbarsReName"
         call DialogTest (CustomizeToolbarsReName)
@@ -217,7 +223,9 @@ testcase tToolsCustomize
         waitslot
         Kontext "TabCustomizeToolbars"
         '/// Click button 'Command' ///'
+        sleep(1)
         Command.click
+        waitslot
         '/// Select the fifth entry 'Change Icon' ///'
         hMenuSelectNr(5)
         '/// Dialog 'Change Icon' comes up ///'
@@ -252,6 +260,7 @@ testcase tToolsCustomize
         WaitSlot()
         Kontext "TabCustomizeToolbars"
         '/// On Tab Page 'Customize Menus' click on Button 'Toolbar' ///'
+        sleep(1)
         MenuBtn.openMenu
         WaitSlot()
         hMenuSelectNr(1)

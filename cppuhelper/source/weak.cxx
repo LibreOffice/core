@@ -216,22 +216,28 @@ void SAL_CALL OWeakObject::release() throw()
     if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
         // notify/clear all weak-refs before object's dtor is executed
         // (which may check weak-refs to this object):
-        if (m_pWeakConnectionPoint != 0) {
-            OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
-            m_pWeakConnectionPoint = 0;
-            try {
-                p->dispose();
-            }
-            catch (RuntimeException const& exc) {
-                OSL_ENSURE(
-                    false, OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                static_cast<void>(exc);
-            }
-            p->release();
-        }
+        disposeWeakConnectionPoint();
         // destroy object:
         delete this;
+    }
+}
+
+void OWeakObject::disposeWeakConnectionPoint()
+{
+    OSL_PRECOND( m_refCount == 0, "OWeakObject::disposeWeakConnectionPoint: only to be called with a ref count of 0!" );
+    if (m_pWeakConnectionPoint != 0) {
+        OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
+        m_pWeakConnectionPoint = 0;
+        try {
+            p->dispose();
+        }
+        catch (RuntimeException const& exc) {
+            OSL_ENSURE(
+                false, OUStringToOString(
+                    exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            static_cast<void>(exc);
+        }
+        p->release();
     }
 }
 

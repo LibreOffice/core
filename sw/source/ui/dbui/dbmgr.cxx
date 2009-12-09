@@ -3298,7 +3298,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
             if(nDocNo == 1 || bPageStylesWithHeaderFooter)
             {
-                pTargetView->GetDocShell()->_LoadStyles( *pWorkView->GetDocShell(), sal_True );
+                pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), sal_True );
             }
             if(nDocNo > 1)
             {

@@ -40,6 +40,8 @@ LIBTARGET=			NO
 
 .INCLUDE :  		settings.mk
 
+VISIBILITY_HIDDEN = TRUE
+
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\

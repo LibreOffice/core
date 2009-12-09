@@ -128,7 +128,8 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
-
+#include <basic/sbstar.hxx>
+#include <basic/basmgr.hxx>
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -358,6 +359,26 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         aDocument.SetInsertingFromOtherDoc( FALSE );
+    // add vba globals ( if they are availabl )
+    uno::Any aGlobs;
+        uno::Sequence< uno::Any > aArgs(1);
+        aArgs[ 0 ] <<= GetModel();
+    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+    GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+        // Fake ThisComponent being setup by Activate ( which is a view
+        // related thing ),
+        //  a) if another document is opened then in theory  ThisComponent
+        //     will be reset as before,
+        //  b) when this document is  'really' Activated then ThisComponent
+        //     again will be set as before
+        // The only wrinkle seems if this document is loaded 'InVisible'
+        // but.. I don't see that this is possible from the vba API
+        // I could be wrong though
+        // There may be implications setting the current component
+        // too early :-/ so I will just manually set the Basic Variables
+        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+        if ( pAppMgr )
+            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
 
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
@@ -2559,3 +2580,16 @@ void ScDocShellModificator::SetDocumentModified()
         pDoc->BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+sal_Bool ScDocShell::AcceptStateUpdate() const
+{
+    if( SfxObjectShell::AcceptStateUpdate() )
+        return sal_True;
+
+    if( SC_MOD()->Find1RefWindow( SFX_APP()->GetTopWindow() ) )
+        return sal_True;
+
+    return sal_False;
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker

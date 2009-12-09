@@ -542,12 +542,32 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
+SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
+        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+{
+    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
+}
+
 SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
     Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
                         rMenu.GetHelpText(nSlotId), rBindings);
+    UnBind();
+    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
+    pUnoCtrl->acquire();
+    pUnoCtrl->GetNewDispatch();
+}
+
+SfxUnoMenuControl::SfxUnoMenuControl(
+    const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
+    const String& rItemText, const String& rHelpText,
+    SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+    : SfxMenuControl( nSlotId, rBindings )
+{
+    Bind( pVirt, nSlotId, rItemText, rHelpText, rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();

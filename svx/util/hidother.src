@@ -71,11 +71,6 @@ hidspecial HID_FIELD_SEL_WIN                { HelpID =HID_FIELD_SEL_WIN         
 hidspecial HID_FILTER_NAVIGATOR             { HelpID =HID_FILTER_NAVIGATOR      ;};
 hidspecial HID_FILTER_NAVIGATOR_WIN         { HelpID =HID_FILTER_NAVIGATOR_WIN  ;};
 
-hidspecial HID_FM_PROPDLG_TABCTR            { HelpID =HID_FM_PROPDLG_TABCTR     ;};
-hidspecial HID_FM_PROPDLG_TAB_GENERAL       { HelpID =HID_FM_PROPDLG_TAB_GENERAL;};
-hidspecial HID_FM_PROPDLG_TAB_DATA          { HelpID =HID_FM_PROPDLG_TAB_DATA   ;};
-hidspecial HID_FM_PROPDLG_TAB_EVT           { HelpID =HID_FM_PROPDLG_TAB_EVT    ;};
-
 hidspecial HID_VALUESET_SINGLENUM           { HelpID = HID_VALUESET_SINGLENUM ;};
 hidspecial HID_VALUESET_BULLET              { HelpID = HID_VALUESET_BULLET   ;};
 hidspecial HID_VALUESET_NUM                 { HelpID = HID_VALUESET_NUM      ;};
@@ -87,8 +82,6 @@ hidspecial HID_OPTCOOKIES_HEADERBAR         { HelpId = HID_OPTCOOKIES_HEADERBAR 
 hidspecial HID_TPPAGE_FULLSIZE              { HelpId = HID_TPPAGE_FULLSIZE      ;};
 hidspecial HID_OPTINET2_CTL_COOKIES         { HelpId = HID_OPTINET2_CTL_COOKIES ;};
 hidspecial HID_OPTPATH_CTL_PATH             { HelpId = HID_OPTPATH_CTL_PATH     ;};
-
-hidspecial HID_TABORDER_CONTROLS            { HelpId = HID_TABORDER_CONTROLS    ;};
 
 hidspecial HID_POPUP_LINEEND                { HelpId = HID_POPUP_LINEEND            ;};
 hidspecial HID_POPUP_LINEEND_CTRL           { HelpId = HID_POPUP_LINEEND_CTRL       ;};

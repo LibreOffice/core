@@ -77,8 +77,6 @@ namespace dbaui
         const AdvancedSettingsSupport&  getAdvancedSettingsSupport() const;
 
         /// determines whether or not the data source requires authentication
-        AuthenticationMode  getAuthentication() const;
-
         static  AuthenticationMode  getAuthentication( const ::rtl::OUString& _sURL );
 
     private:

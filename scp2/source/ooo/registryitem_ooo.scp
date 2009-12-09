@@ -37,11 +37,26 @@ RegistryItem gid_Regitem_Bau
     Value = "soffice.StarConfigFile.6";
 End
 
+RegistryItem gid_Regitem_AppID__df595024_3257_41b3_bcf1_a51515ad205e
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "AppID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager";
+End
+
 RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
     ModuleID = gid_Module_Root;
     Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_AppID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Name = "AppID";
+    Value = "{82154420-0FBF-11d4-8313-005004526AB4}";
 End
 
 RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Localserver32
@@ -517,52 +532,6 @@ RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath_Branded
     Name = "%PRODUCTNAME %PRODUCTVERSION";
     Value  = "<progpath>\program";
 End
-
-// Begin registry items for the MS Indexing server filter component
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-// Better?: "OpenOffice.org Format Filter"
-// old:    Value = "opendocument.org Filter";
-    Value = "OpenDocument Format Filter";
-	Styles = ();
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\ooofiltproxy.dll";
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-//? Better: "OpenOffice.org Persistent Handler"
-// old:    Value = "opendocument.org Persistent Handler";
-    Value = "OpenDocument Format Persistent Handler";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
-    Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-End
-
-// End registry items for the MS Indexing server filter component
 
 // "OpenWith" Windows Registry keys for extensions supported by OOo
 

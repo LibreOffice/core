@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "..\..\inc\extensio.hrc"           // HID_FUNC_XXX
-//#include "hidother.hrc"
+
+#include "bibliography.hrc"
 
 hidspecial HID_BIB_IDENTIFIER_POS                   { HelpID = HID_BIB_IDENTIFIER_POS          ; };
 hidspecial HID_BIB_AUTHORITYTYPE_POS                { HelpID = HID_BIB_AUTHORITYTYPE_POS       ; };

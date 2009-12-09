@@ -1050,10 +1050,10 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 
     if ( xDrawPeerView.is() )
     {
-    Reference< XVclWindowPeer > xWindowPeer;
-    xWindowPeer.set( xDrawPeer, UNO_QUERY );
-    if ( xWindowPeer.is() )
-        xWindowPeer->setDesignMode( mbDesignMode );
+        Reference< XVclWindowPeer > xWindowPeer;
+        xWindowPeer.set( xDrawPeer, UNO_QUERY );
+        if ( xWindowPeer.is() )
+            xWindowPeer->setDesignMode( mbDesignMode );
         xDrawPeerView->draw( x, y );
     }
 

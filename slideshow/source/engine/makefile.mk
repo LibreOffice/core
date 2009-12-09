@@ -72,6 +72,7 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/color.obj \
             $(SLO)$/delayevent.obj \
+            $(SLO)$/effectrewinder.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \
@@ -89,7 +90,8 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/unoviewcontainer.obj \
             $(SLO)$/usereventqueue.obj \
             $(SLO)$/waitsymbol.obj \
-            $(SLO)$/wakeupevent.obj
+            $(SLO)$/wakeupevent.obj \
+            $(SLO)$/debug.obj
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
 SLOFILES +=  $(SLO)$/sp_debug.obj

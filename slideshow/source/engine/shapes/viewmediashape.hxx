@@ -166,6 +166,7 @@ namespace slideshow
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> mxComponentContext;
+            bool mbIsSoundEnabled;
         };
 
         typedef ::boost::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;

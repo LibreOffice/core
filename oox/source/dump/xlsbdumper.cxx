@@ -1130,16 +1130,16 @@ void RecordStreamObject::implDumpRecordBody()
                 case 0:     dumpDec< sal_Int32 >( "operator", "CFRULE-CELL-OPERATOR" ); break;
                 case 5:     dumpDec< sal_Int32 >( "rank" );                             break;
                 case 8:     dumpDec< sal_Int32 >( "operator", "CFRULE-TEXT-OPERATOR" ); break;
-                case 15:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 16:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 17:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 18:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 19:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 20:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 21:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 22:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 23:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
-                case 24:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 15:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 16:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 17:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 18:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 19:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 20:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 21:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 22:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 23:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
+                case 24:    dumpDec< sal_Int32 >( "operator", "CFRULE-DATE-OPERATOR" ); break;
                 case 25:    dumpDec< sal_Int32 >( "std-dev" );                          break;
                 case 26:    dumpDec< sal_Int32 >( "std-dev" );                          break;
                 case 29:    dumpDec< sal_Int32 >( "std-dev" );                          break;
@@ -1306,38 +1306,22 @@ void RecordStreamObject::implDumpRecordBody()
                     case 0:
                         dumpDec< sal_uInt8 >( "pattern", "FILLPATTERNS" );
                     break;
-                    case 1:
-                    case 2:
+                    case 1: case 2: case 5:
                         dumpColor();
                     break;
                     case 3:
-                        dumpDec< sal_Int32 >( "gradient-type", "FILL-GRADIENTTYPE" );
-                        dumpDec< double >( "linear-angle" );
-                        dumpDec< double >( "pos-left" );
-                        dumpDec< double >( "pos-right" );
-                        dumpDec< double >( "pos-top" );
-                        dumpDec< double >( "pos-bottom" );
+                        dumpGradientHead();
                     break;
                     case 4:
                         dumpDec< sal_uInt16 >( "index" );
                         dumpDec< double >( "stop-position" );
                         dumpColor( "stop-color" );
                     break;
-                    case 5:
-                        dumpColor();
-                    break;
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                    case 12:
+                    case 6: case 7: case 8: case 9: case 10: case 11: case 12:
                         dumpColor( "color" );
                         dumpDec< sal_uInt16 >( "style", "BORDERSTYLES" );
                     break;
-                    case 13:
-                    case 14:
+                    case 13: case 14:
                         dumpBoolean( "value" );
                     break;
                     case 15:
@@ -1355,9 +1339,7 @@ void RecordStreamObject::implDumpRecordBody()
                     case 19:
                         dumpDec< sal_uInt8 >( "text-dir", "XF-TEXTDIRECTION" );
                     break;
-                    case 20:
-                    case 21:
-                    case 22:
+                    case 20: case 21: case 22:
                         dumpBoolean( "value" );
                     break;
                     case 24:
@@ -1372,12 +1354,7 @@ void RecordStreamObject::implDumpRecordBody()
                     case 27:
                         dumpDec< sal_uInt16 >( "escapement", "FONT-ESCAPEMENT" );
                     break;
-                    case 28:
-                    case 29:
-                    case 30:
-                    case 31:
-                    case 32:
-                    case 33:
+                    case 28: case 29: case 30: case 31: case 32: case 33:
                         dumpBoolean( "value" );
                     break;
                     case 34:
@@ -1399,10 +1376,9 @@ void RecordStreamObject::implDumpRecordBody()
                         dumpDec< sal_uInt16 >( "numfmt-id" );
                     break;
                     case 42:
-                        dumpDec< sal_uInt16 >( "relative-indent" );
+                        dumpDec< sal_Int16 >( "relative-indent" );
                     break;
-                    case 43:
-                    case 44:
+                    case 43: case 44:
                         dumpBoolean( "value" );
                     break;
                 }
@@ -1503,12 +1479,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "fill-pattern", "FILLPATTERNS" );
             dumpColor( "fg-color" );
             dumpColor( "bg-color" );
-            dumpDec< sal_Int32 >( "gradient-type", "FILL-GRADIENTTYPE" );
-            dumpDec< double >( "linear-angle" );
-            dumpDec< double >( "pos-left" );
-            dumpDec< double >( "pos-right" );
-            dumpDec< double >( "pos-top" );
-            dumpDec< double >( "pos-bottom" );
+            dumpGradientHead();
             out().resetItemIndex();
             for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
             {
@@ -2172,6 +2143,16 @@ void RecordStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt16 >( "used-flags", "XF-USEDFLAGS" );
         break;
     }
+}
+
+void RecordStreamObject::dumpGradientHead()
+{
+    dumpDec< sal_Int32 >( "gradient-type", "FILL-GRADIENTTYPE" );
+    dumpDec< double >( "linear-angle" );
+    dumpDec< double >( "pos-left" );
+    dumpDec< double >( "pos-right" );
+    dumpDec< double >( "pos-top" );
+    dumpDec< double >( "pos-bottom" );
 }
 
 void RecordStreamObject::dumpCellHeader( bool bWithColumn )

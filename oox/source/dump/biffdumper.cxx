@@ -510,8 +510,25 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     // #122185# bPhonetic flag may be set, but phonetic data may be missing
     if( nPhoneticSize > 0 )
     {
+        sal_Int64 nStrmPos = mxBiffStrm->tell();
         IndentGuard aIndGuard( out() );
-        dumpBinary( "phonetic-data", nPhoneticSize, false );
+        writeEmptyItem( "phonetic-data" );
+        dumpUnused( 2 );
+        dumpDec< sal_uInt16 >( "size" );
+        dumpDec< sal_uInt16 >( "font-idx", "FONTNAMES" );
+        dumpHex< sal_uInt16 >( "flags", "PHONETICPR-FLAGS" );
+        sal_uInt16 nCount = dumpDec< sal_uInt16 >( "portion-count" );
+        sal_uInt16 nLen = dumpDec< sal_uInt16 >( "text-len" );
+        dumpUnicodeArray( "text", mxBiffStrm->readuInt16() );
+        if( nLen == 0 ) dumpUnused( 2 );
+        for( sal_uInt16 nPortion = 0; !mxBiffStrm->isEof() && (nPortion < nCount); ++nPortion )
+        {
+            MultiItemsGuard aMultiGuard( out() );
+            dumpDec< sal_uInt16 >( "first-portion-char" );
+            dumpDec< sal_uInt16 >( "first-main-char" );
+            dumpDec< sal_uInt16 >( "main-char-count" );
+        }
+        dumpRemainingTo( nStrmPos + nPhoneticSize );
     }
 
     return aString;
@@ -1604,6 +1621,14 @@ void WorkbookStreamObject::implDumpRecordBody()
                 initializePerSheet();
         break;
 
+        case BIFF_ID_BOOKEXT:
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt32 >( "rec-size" );
+            dumpHex< sal_uInt32 >( "flags-1", "BOOKEXT-FLAGS1" );
+            if( rStrm.getRemaining() > 0 ) dumpHex< sal_uInt8 >( "flags-2", "BOOKEXT-FLAGS2" );
+            if( rStrm.getRemaining() > 0 ) dumpHex< sal_uInt8 >( "flags-3", "BOOKEXT-FLAGS3" );
+        break;
+
         case BIFF2_ID_BOOLERR:
         case BIFF3_ID_BOOLERR:
             dumpCellHeader( nRecId == BIFF2_ID_BOOLERR );
@@ -1612,7 +1637,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_CFHEADER:
             dumpDec< sal_uInt16 >( "rule-count" );
-            dumpBool< sal_uInt16 >( "need-update" );
+            dumpHex< sal_uInt16 >( "flags", "CFHEADER-FLAGS" );
             dumpRange( "bounding-range" );
             dumpRangeList();
         break;
@@ -1623,63 +1648,43 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "operator", "CFRULE-OPERATOR" );
             sal_uInt16 nFmla1Size = dumpDec< sal_uInt16 >( "formula1-size" );
             sal_uInt16 nFmla2Size = dumpDec< sal_uInt16 >( "formula2-size" );
-            sal_uInt32 nFlags = dumpHex< sal_uInt32 >( "flags", "CFRULE-FLAGS" );
-            dumpUnused( 2 );
-            if( getFlag< sal_uInt32 >( nFlags, 0x04000000 ) )
-            {
-                writeEmptyItem( "font-block" );
-                IndentGuard aIndGuard( out() );
-                sal_Int64 nRecPos = rStrm.tell();
-                dumpUniString( "name", BIFF_STR_8BITLENGTH );
-                dumpUnused( static_cast< sal_Int32 >( nRecPos + 64 - rStrm.tell() ) );
-                dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
-                dumpHex< sal_uInt32 >( "flags", "CFRULE-FONTFLAGS" );
-                dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
-                dumpDec< sal_uInt16 >( "escapement", "FONT-ESCAPEMENT" );
-                dumpDec< sal_uInt8 >( "underline", "FONT-UNDERLINE" );
-                dumpUnused( 3 );    // family/charset?
-                dumpDec< sal_Int32 >( "color", mxColors );
-                dumpUnused( 4 );
-                dumpHex< sal_uInt32 >( "used-flags", "CFRULE-FONTUSEDFLAGS" );
-                dumpDec< sal_uInt32 >( "escapement-used", "CFRULE-FONTUSED" );
-                dumpDec< sal_uInt32 >( "underline-used", "CFRULE-FONTUSED" );
-                dumpUnused( 18 );
-            }
-            if( getFlag< sal_uInt32 >( nFlags, 0x08000000 ) )
-            {
-                writeEmptyItem( "alignment-block" );
-                IndentGuard aIndGuard( out() );
-                dumpHex< sal_uInt8 >( "alignent", "CFRULE-ALIGNMENT" );
-                dumpHex< sal_uInt8 >( "rotation", "TEXTROTATION" );
-                dumpHex< sal_uInt16 >( "indent", "CFRULE-INDENT" );
-                dumpDec< sal_uInt16 >( "relative-indent" );
-                dumpUnknown( 2 );
-            }
-            if( getFlag< sal_uInt32 >( nFlags, 0x10000000 ) )
-            {
-                writeEmptyItem( "border-block" );
-                IndentGuard aIndGuard( out() );
-                dumpHex< sal_uInt16 >( "border-style", "XF-BORDERSTYLE" );
-                dumpHex< sal_uInt16 >( "border-color1", "XF-BORDERCOLOR1" );
-                dumpHex< sal_uInt32 >( "border-color2", "CFRULE-BORDERCOLOR2" );
-            }
-            if( getFlag< sal_uInt32 >( nFlags, 0x20000000 ) )
-            {
-                writeEmptyItem( "pattern-block" );
-                IndentGuard aIndGuard( out() );
-                dumpHex< sal_uInt32 >( "pattern", "CFRULE-FILLBLOCK" );
-            }
-            if( getFlag< sal_uInt32 >( nFlags, 0x40000000 ) )
-            {
-                writeEmptyItem( "protection-block" );
-                IndentGuard aIndGuard( out() );
-                dumpHex< sal_uInt16 >( "flags", "CFRULE-PROTECTION-FLAGS" );
-            }
-            if( nFmla1Size > 0 )
-                getFormulaDumper().dumpNameFormula( "formula1", nFmla1Size );
-            if( nFmla2Size > 0 )
-                getFormulaDumper().dumpNameFormula( "formula2", nFmla2Size );
+            dumpCfRuleProp();
+            if( nFmla1Size > 0 ) getFormulaDumper().dumpNameFormula( "formula1", nFmla1Size );
+            if( nFmla2Size > 0 ) getFormulaDumper().dumpNameFormula( "formula2", nFmla2Size );
         }
+        break;
+
+        case BIFF_ID_CFRULE12:
+        {
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt8 >( "type", "CFRULE12-TYPE" );
+            dumpDec< sal_uInt8 >( "operator", "CFRULE-OPERATOR" );
+            sal_uInt16 nFmla1Size = dumpDec< sal_uInt16 >( "formula1-size" );
+            sal_uInt16 nFmla2Size = dumpDec< sal_uInt16 >( "formula2-size" );
+            dumpDxf12Prop();
+            if( nFmla1Size > 0 ) getFormulaDumper().dumpNameFormula( "formula1", nFmla1Size );
+            if( nFmla2Size > 0 ) getFormulaDumper().dumpNameFormula( "formula2", nFmla2Size );
+            getFormulaDumper().dumpNameFormula( "active-formula" );
+            dumpHex< sal_uInt8 >( "flags", "CFRULE12-FLAGS" );
+            dumpDec< sal_uInt16 >( "priority" );
+            dumpCfRule12Param( dumpDec< sal_uInt16 >( "sub-type", "CFRULE12-SUBTYPE" ) );
+        }
+        break;
+
+        case BIFF_ID_CFRULEEXT:
+            dumpFrHeader( true, true );
+            dumpBool< sal_uInt32 >( "cfrule12-follows" );
+            dumpDec< sal_uInt16 >( "cfheader-id" );
+            if( rStrm.getRemaining() >= 25 )
+            {
+                dumpDec< sal_uInt16 >( "cfrule-idx" );
+                dumpDec< sal_uInt8 >( "operator", "CFRULE-OPERATOR" );
+                sal_uInt8 nSubType = dumpDec< sal_uInt8 >( "sub-type", "CFRULE12-SUBTYPE" );
+                dumpDec< sal_uInt16 >( "priority" );
+                dumpHex< sal_uInt8 >( "flags", "CFRULEEXT-FLAGS" );
+                if( dumpBoolean( "has-dxf-data" ) ) dumpDxf12Prop();
+                dumpCfRule12Param( nSubType );
+            }
         break;
 
         case BIFF_ID_CH3DDATAFORMAT:
@@ -1729,10 +1734,9 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt16 >( "flags", "CHCHART3D-FLAGS" );
         break;
 
-        case BIFF_ID_CHTYPEGROUP:
-            dumpUnused( 16 );
-            dumpHex< sal_uInt16 >( "flags", "CHTYPEGROUP-FLAGS" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt16 >( "group-idx" );
+        case BIFF_ID_CHECKCOMPAT:
+            dumpFrHeader( true, true );
+            dumpBool< sal_uInt32 >( "check-compatibility" );
         break;
 
         case BIFF_ID_CHDATAFORMAT:
@@ -1961,6 +1965,12 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
         break;
 
+        case BIFF_ID_CHTYPEGROUP:
+            dumpUnused( 16 );
+            dumpHex< sal_uInt16 >( "flags", "CHTYPEGROUP-FLAGS" );
+            if( eBiff >= BIFF5 ) dumpDec< sal_uInt16 >( "group-idx" );
+        break;
+
         case BIFF_ID_CHVALUERANGE:
             dumpDec< double >( "minimum" );
             dumpDec< double >( "maximum" );
@@ -1999,6 +2009,11 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
         break;
 
+        case BIFF_ID_COMPRESSPICS:
+            dumpFrHeader( true, true );
+            dumpBool< sal_uInt32 >( "recommend-compress-pics" );
+        break;
+
         case BIFF_ID_CONT:
             if( (eBiff == BIFF8) && (getLastRecId() == BIFF_ID_OBJ) )
                 dumpEmbeddedDff();
@@ -2016,6 +2031,11 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpDec< sal_uInt16 >( "y" );
             }
         }
+        break;
+
+        case BIFF_ID_COUNTRY:
+            dumpDec< sal_uInt16 >( "ui-country", "COUNTRY" );
+            dumpDec< sal_uInt16 >( "sys-country", "COUNTRY" );
         break;
 
         case BIFF_ID_CRN:
@@ -2098,6 +2118,13 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "dval-entry-count" );
         break;
 
+        case BIFF_ID_DBCELL:
+            dumpDec< sal_uInt32 >( "reverse-offset-to-row" );
+            out().resetItemIndex();
+            while( rStrm.getRemaining() >= 2 )
+                dumpDec< sal_uInt16 >( "#cell-offset" );
+        break;
+
         case BIFF2_ID_DEFINEDNAME:
         case BIFF3_ID_DEFINEDNAME:
         {
@@ -2141,6 +2168,12 @@ void WorkbookStreamObject::implDumpRecordBody()
         case BIFF3_ID_DIMENSION:
             dumpRange( "used-area", true, (nRecId == BIFF3_ID_DIMENSION) && (eBiff == BIFF8) );
             if( nRecId == BIFF3_ID_DIMENSION ) dumpUnused( 2 );
+        break;
+
+        case BIFF_ID_DXF:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt16 >( "flags", "DXF-FLAGS" );
+            dumpDxfProp();
         break;
 
         case BIFF_ID_EXTERNALBOOK:
@@ -2255,6 +2288,11 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpFontRec();
         break;
 
+        case BIFF_ID_FORCEFULLCALC:
+            dumpFrHeader( true, true );
+            dumpBool< sal_Int32 >( "recalc-all-formulas" );
+        break;
+
         case BIFF2_ID_FORMAT:
         case BIFF4_ID_FORMAT:
             dumpFormatRec();
@@ -2275,9 +2313,32 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpString( "footer", BIFF_STR_8BITLENGTH );
         break;
 
+        case BIFF_ID_GUTS:
+            dumpDec< sal_uInt16 >( "row-outlines-width" );
+            dumpDec< sal_uInt16 >( "column-outlines-height" );
+            dumpDec< sal_uInt16 >( "row-levels", "GUTS-LEVELS" );
+            dumpDec< sal_uInt16 >( "column-levels", "GUTS-LEVELS" );
+        break;
+
         case BIFF_ID_HEADER:
             if( rStrm.getRemaining() > 0 )
                 dumpString( "header", BIFF_STR_8BITLENGTH );
+        break;
+
+        case BIFF_ID_HEADERFOOTER:
+        {
+            dumpFrHeader( true, true );
+            dumpGuid( "view-guid" );
+            dumpHex< sal_uInt16 >( "flags", "HEADERFOOTER-FLAGS" );
+            sal_uInt16 nEvenHLen = dumpDec< sal_uInt16 >( "even-h-len" );
+            sal_uInt16 nEvenFLen = dumpDec< sal_uInt16 >( "even-f-len" );
+            sal_uInt16 nFirstHLen = dumpDec< sal_uInt16 >( "first-h-len" );
+            sal_uInt16 nFirstFLen = dumpDec< sal_uInt16 >( "first-f-len" );
+            if( nEvenHLen > 0 ) dumpUniString( "even-h" );
+            if( nEvenFLen > 0 ) dumpUniString( "even-f" );
+            if( nFirstHLen > 0 ) dumpUniString( "first-h" );
+            if( nFirstFLen > 0 ) dumpUniString( "first-f" );
+        }
         break;
 
         case BIFF_ID_HYPERLINK:
@@ -2305,6 +2366,20 @@ void WorkbookStreamObject::implDumpRecordBody()
                 }
             }
         }
+        break;
+
+        case BIFF2_ID_INDEX:
+        case BIFF3_ID_INDEX:
+            if( eBiff <= BIFF4 )
+                dumpHex< sal_uInt32 >( "first-defname-pos", "CONV-DEC" );
+            else
+                dumpUnused( 4 );
+            dumpRowIndex( "first-row-with-cell", eBiff == BIFF8 );
+            dumpRowIndex( "first-free-row", eBiff == BIFF8 );
+            if( nRecId == BIFF3_ID_INDEX ) dumpHex< sal_uInt32 >( (eBiff <= BIFF4) ? "first-xf-pos" : "defcolwidth-pos", "CONV-DEC" );
+            out().resetItemIndex();
+            while( rStrm.getRemaining() >= 4 )
+                dumpHex< sal_uInt32 >( "#first-row-pos-of-block", "CONV-DEC" );
         break;
 
         case BIFF2_ID_INTEGER:
@@ -2339,6 +2414,13 @@ void WorkbookStreamObject::implDumpRecordBody()
         case BIFF_ID_MSODRAWINGSEL:
             dumpEmbeddedDff();
             mbHasDff = true;
+        break;
+
+        case BIFF_ID_MTHREADSETTINGS:
+            dumpFrHeader( true, true );
+            dumpBool< sal_Int32 >( "multi-thread-enabled" );
+            dumpBool< sal_Int32 >( "manual-thread-count" );
+            dumpDec< sal_Int32 >( "thread-count" );
         break;
 
         case BIFF_ID_MULTBLANK:
@@ -2396,6 +2478,12 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_OBJ:
             dumpObjRec();
+        break;
+
+        case BIFF_ID_PAGELAYOUTVIEW:
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt16 >( "scaling", "CONV-PERCENT" );
+            dumpHex< sal_uInt16 >( "flags", "PAGELAYOUTVIEW-FLAGS" );
         break;
 
         case BIFF_ID_PAGESETUP:
@@ -2570,6 +2658,11 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
         break;
 
+        case BIFF_ID_RECALCID:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt32 >( "recalc-engine-id" );
+        break;
+
         case BIFF_ID_RK:
             dumpCellHeader();
             dumpRk( "value" );
@@ -2661,6 +2754,20 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRangeList( "selection", false );
         break;
 
+        case BIFF_ID_SHAREDFEATHEAD:
+        {
+            dumpFrHeader( true, true );
+            sal_uInt16 nType = dumpDec< sal_uInt16 >( "feature-type", "SHAREDFEATHEAD-TYPE" );
+            dumpUnused( 1 );
+            if( dumpBool< sal_Int32 >( "has-data" ) ) switch( nType )
+            {
+                case 2:
+                    dumpHex< sal_uInt32 >( "allowed-flags", "SHAREDFEATHEAD-PROT-FLAGS" );
+                break;
+            }
+        }
+        break;
+
         case BIFF_ID_SHAREDFMLA:
             dumpRange( "formula-range", false );
             dumpUnused( 1 );
@@ -2680,16 +2787,20 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpString( "sheet-name", BIFF_STR_8BITLENGTH, BIFF_STR_8BITLENGTH );
         break;
 
+        case BIFF_ID_SHEETEXT:
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt32 >( "rec-size" );
+            dumpDec< sal_uInt32 >( "flags-1", "SHEETEXT-FLAGS1" );
+            if( rStrm.getRemaining() >= 20 )
+            {
+                dumpDec< sal_uInt32 >( "flags-2", "SHEETEXT-FLAGS2" );
+                dumpExtCfColor( "tab-color" );
+            }
+        break;
+
         case BIFF_ID_SHEETHEADER:
             dumpHex< sal_uInt32 >( "substream-size", "CONV-DEC" );
             dumpByteString( "sheet-name", BIFF_STR_8BITLENGTH );
-        break;
-
-        case BIFF_ID_SHEETPROTECTION:
-            dumpFrHeader( true, true );
-            dumpUnused( 7 );
-            dumpHex< sal_uInt16 >( "allowed-flags", "SHEETPROTECTION-FLAGS" );
-            dumpUnused( 2 );
         break;
 
         case BIFF_ID_SST:
@@ -2725,6 +2836,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_Int8 >( "builtin-idx", "STYLEEXT-BUILTIN" );
             dumpDec< sal_Int8 >( "outline-level" );
             dumpUnicodeArray( "style-name", rStrm.readuInt16() );
+            dumpDxfProp();
         break;
 
         case BIFF_ID_SXEXT:
@@ -2737,6 +2849,22 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpDec< sal_uInt16 >( "server-pagefields-string-count" );
                 dumpDec< sal_uInt16 >( "odbc-connection-string-count" );
             }
+        break;
+
+        case BIFF_ID_TABLESTYLES:
+        {
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt32 >( "table-style-count" );
+            sal_uInt16 nDefTableLen, nDefPivotLen;
+            rStrm >> nDefTableLen >> nDefPivotLen;
+            dumpUnicodeArray( "def-table-style", nDefTableLen );
+            dumpUnicodeArray( "def-pivot-style", nDefPivotLen );
+        }
+        break;
+
+        case BIFF_ID_THEME:
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt32 >( "theme-version", "THEME-VERSION" );
         break;
 
         case BIFF_ID_TXO:
@@ -2813,6 +2941,21 @@ void WorkbookStreamObject::implDumpRecordBody()
         case BIFF5_ID_XF:
             dumpXfRec();
         break;
+
+        case BIFF_ID_XFCRC:
+            dumpFrHeader( true, true );
+            dumpUnused( 2 );
+            dumpDec< sal_uInt16 >( "xf-count" );
+            dumpHex< sal_uInt32 >( "xf-checksum" );
+        break;
+
+        case BIFF_ID_XFEXT:
+            dumpFrHeader( true, true );
+            dumpUnused( 2 );
+            dumpXfIdx( "xf-idx" );
+            dumpUnused( 2 );
+            dumpXfExtProp();
+        break;
     }
 }
 
@@ -2851,12 +2994,12 @@ sal_uInt16 WorkbookStreamObject::dumpColorIdx( const String& rName, bool b16Bit 
 
 sal_uInt16 WorkbookStreamObject::dumpFontIdx( const String& rName, bool b16Bit )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, rName( "font-idx" ), "FONTNAMES" );
+    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, rName( "font-idx" ), mxFontNames );
 }
 
 sal_uInt16 WorkbookStreamObject::dumpFormatIdx( const String& rName )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( getBiff() >= BIFF5, rName( "fmt-idx" ), "FORMATS" );
+    return dumpDec< sal_uInt16, sal_uInt8 >( getBiff() >= BIFF5, rName( "fmt-idx" ), mxFormats );
 }
 
 sal_uInt16 WorkbookStreamObject::dumpXfIdx( const String& rName, bool bBiff2Style )
@@ -2872,6 +3015,54 @@ sal_uInt16 WorkbookStreamObject::dumpXfIdx( const String& rName, bool bBiff2Styl
     else
         nXfIdx = dumpDec< sal_uInt16 >( aName );
     return nXfIdx;
+}
+
+void WorkbookStreamObject::dumpExtColorValue( sal_uInt32 nColorType )
+{
+    switch( nColorType )
+    {
+        case 0:     dumpUnused( 4 );                                break;
+        case 1:     dumpDec< sal_uInt32 >( "color-idx", mxColors ); break;
+        case 2:     dumpColorABGR();                                break;
+        case 3:     dumpDec< sal_uInt32 >( "theme-id" );            break;
+        case 4:     dumpUnused( 4 );                                break;
+        default:    dumpUnknown( 4 );
+    }
+}
+
+void WorkbookStreamObject::dumpExtColor( const String& rName )
+{
+    MultiItemsGuard aMultiGuard( out() );
+    writeEmptyItem( rName( "color" ) );
+    switch( extractValue< sal_uInt8 >( dumpDec< sal_uInt8 >( "flags", "EXTCOLOR-FLAGS" ), 1, 7 ) )
+    {
+        case 0:     dumpUnused( 1 );                    break;
+        case 1:     dumpColorIdx( "color-idx", false ); break;
+        case 2:     dumpUnused( 1 );                    break;
+        case 3:     dumpDec< sal_uInt8 >( "theme-id" ); break;
+        case 4:     dumpUnused( 1 );                    break;
+        default:    dumpUnknown( 1 );
+    }
+    dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
+    dumpColorABGR();
+}
+
+void WorkbookStreamObject::dumpExtCfColor( const String& rName )
+{
+    MultiItemsGuard aMultiGuard( out() );
+    writeEmptyItem( rName( "color" ) );
+    dumpExtColorValue( dumpExtColorType< sal_uInt32 >() );
+    dumpDec< double >( "tint", "CONV-FLOAT-TO-PERC" );
+}
+
+void WorkbookStreamObject::dumpExtGradientHead()
+{
+    dumpDec< sal_Int32 >( "gradient-type", "EXTGRADIENT-TYPE" );
+    dumpDec< double >( "linear-angle" );
+    dumpDec< double >( "pos-left" );
+    dumpDec< double >( "pos-right" );
+    dumpDec< double >( "pos-top" );
+    dumpDec< double >( "pos-bottom" );
 }
 
 OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 nStrLen )
@@ -2908,6 +3099,285 @@ void WorkbookStreamObject::dumpBoolErr()
         writeErrorCodeItem( "errorcode", nValue );
     else
         writeBooleanItem( "boolean", nValue );
+}
+
+void WorkbookStreamObject::dumpCfRuleProp()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    sal_uInt32 nFlags1 = dumpHex< sal_uInt32 >( "flags-1", "CFRULE-FLAGS1" );
+    sal_uInt16 nFlags2 = dumpHex< sal_uInt16 >( "flags-2", "CFRULE-FLAGS2" );
+    if( getFlag< sal_uInt32 >( nFlags1, 0x02000000 ) )
+    {
+        writeEmptyItem( "numfmt-block" );
+        IndentGuard aIndGuard( out() );
+        if( getFlag< sal_uInt16 >( nFlags2, 0x0001 ) )
+        {
+            dumpDec< sal_uInt16 >( "size" );
+            dumpUniString( "numfmt" );
+        }
+        else
+        {
+            dumpUnused( 1 );
+            dumpDec< sal_uInt8 >( "fmt-idx", mxFormats );
+        }
+    }
+    if( getFlag< sal_uInt32 >( nFlags1, 0x04000000 ) )
+    {
+        writeEmptyItem( "font-block" );
+        IndentGuard aIndGuard( out() );
+        sal_Int64 nRecPos = rStrm.tell();
+        dumpUniString( "name", BIFF_STR_8BITLENGTH );
+        dumpUnused( static_cast< sal_Int32 >( nRecPos + 64 - rStrm.tell() ) );
+        dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
+        dumpHex< sal_uInt32 >( "flags", "CFRULE-FONTFLAGS" );
+        dumpDec< sal_Int16 >( "weight", "CFRULE-FONTWEIGHT" );
+        dumpDec< sal_Int16 >( "escapement", "CFRULE-FONTESCAPEMENT" );
+        dumpDec< sal_Int8 >( "underline", "CFRULE-FONTUNDERLINE" );
+        dumpDec< sal_uInt8 >( "family", "FONT-FAMILY" );
+        dumpDec< sal_uInt8 >( "charset", "CHARSET" );
+        dumpUnused( 1 );
+        dumpDec< sal_Int32 >( "color", "CFRULE-FONTCOLOR" );
+        dumpUnused( 4 );
+        dumpHex< sal_uInt32 >( "used-flags", "CFRULE-FONTUSEDFLAGS" );
+        dumpDec< sal_uInt32 >( "escapement-used", "CFRULE-FONTUSED" );
+        dumpDec< sal_uInt32 >( "underline-used", "CFRULE-FONTUSED" );
+        dumpDec< sal_uInt32 >( "weight-used", "CFRULE-FONTUSED" );
+        dumpUnused( 4 );
+        dumpDec< sal_Int32 >( "first-char" );
+        dumpDec< sal_Int32 >( "char-count" );
+        dumpDec< sal_uInt16 >( "font-idx" );
+    }
+    if( getFlag< sal_uInt32 >( nFlags1, 0x08000000 ) )
+    {
+        writeEmptyItem( "alignment-block" );
+        IndentGuard aIndGuard( out() );
+        dumpHex< sal_uInt8 >( "alignent", "CFRULE-ALIGNMENT" );
+        dumpHex< sal_uInt8 >( "rotation", "TEXTROTATION" );
+        dumpHex< sal_uInt16 >( "indent", "CFRULE-INDENT" );
+        dumpDec< sal_Int32 >( "relative-indent" );
+    }
+    if( getFlag< sal_uInt32 >( nFlags1, 0x10000000 ) )
+    {
+        writeEmptyItem( "border-block" );
+        IndentGuard aIndGuard( out() );
+        dumpHex< sal_uInt16 >( "border-style", "XF-BORDERSTYLE" );
+        dumpHex< sal_uInt16 >( "border-color1", "XF-BORDERCOLOR1" );
+        dumpHex< sal_uInt32 >( "border-color2", "CFRULE-BORDERCOLOR2" );
+    }
+    if( getFlag< sal_uInt32 >( nFlags1, 0x20000000 ) )
+    {
+        writeEmptyItem( "pattern-block" );
+        IndentGuard aIndGuard( out() );
+        dumpHex< sal_uInt32 >( "pattern", "CFRULE-FILLBLOCK" );
+    }
+    if( getFlag< sal_uInt32 >( nFlags1, 0x40000000 ) )
+    {
+        writeEmptyItem( "protection-block" );
+        IndentGuard aIndGuard( out() );
+        dumpHex< sal_uInt16 >( "flags", "CFRULE-PROTECTION-FLAGS" );
+    }
+}
+
+void WorkbookStreamObject::dumpXfExtProp()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !rStrm.isEof() && (nIndex < nCount); ++nIndex )
+    {
+        out().startMultiItems();
+        sal_Int64 nStartPos = rStrm.tell();
+        writeEmptyItem( "SUBREC" );
+        sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "XFEXT-SUBREC" );
+        sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
+        sal_Int64 nEndPos = nStartPos + nSubRecSize;
+        out().endMultiItems();
+        IndentGuard aIndGuard( out() );
+        switch( nSubRecId )
+        {
+            case 4: case 5: case 7: case 8: case 9: case 10: case 11: case 13:
+            {
+                sal_uInt16 nColorType = dumpExtColorType< sal_uInt16 >();
+                dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
+                dumpExtColorValue( nColorType );
+                dumpUnused( 8 );
+            }
+            break;
+            case 6:
+                dumpExtGradientHead();
+                out().resetItemIndex();
+                for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
+                {
+                    writeEmptyItem( "#stop" );
+                    IndentGuard aIndGuard2( out() );
+                    sal_uInt16 nColorType = dumpExtColorType< sal_uInt16 >();
+                    dumpExtColorValue( nColorType );
+                    dumpDec< double >( "stop-pos" );
+                    dumpDec< double >( "tint", "CONV-FLOAT-TO-PERC" );
+                }
+            break;
+            case 14:
+                dumpDec< sal_Int8 >( "font-scheme", "EXTFONT-SCHEME" );
+            break;
+            case 15:
+                dumpDec< sal_uInt16 >( "indent" );
+            break;
+        }
+        dumpRemainingTo( nEndPos );
+    }
+}
+
+void WorkbookStreamObject::dumpDxfProp()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    dumpUnused( 2 );
+    for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !rStrm.isEof() && (nIndex < nCount); ++nIndex )
+    {
+        out().startMultiItems();
+        sal_Int64 nStartPos = rStrm.tell();
+        writeEmptyItem( "SUBREC" );
+        sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "DXF-SUBREC" );
+        sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
+        sal_Int64 nEndPos = nStartPos + nSubRecSize;
+        out().endMultiItems();
+        IndentGuard aIndGuard( out() );
+        switch( nSubRecId )
+        {
+            case 0:
+                dumpDec< sal_uInt8 >( "pattern", mxFillPatterns );
+            break;
+            case 1: case 2: case 5:
+                dumpExtColor();
+            break;
+            case 3:
+                dumpExtGradientHead();
+            break;
+            case 4:
+                dumpDec< sal_uInt16 >( "index" );
+                dumpDec< double >( "stop-position" );
+                dumpExtColor( "stop-color" );
+            break;
+            case 6: case 7: case 8: case 9: case 10: case 11: case 12:
+                dumpExtColor( "color" );
+                dumpDec< sal_uInt16 >( "style", mxBorderStyles );
+            break;
+            case 13: case 14:
+                dumpBoolean( "value" );
+            break;
+            case 15:
+                dumpDec< sal_uInt8 >( "alignment", "XF-HORALIGN" );
+            break;
+            case 16:
+                dumpDec< sal_uInt8 >( "alignment", "XF-VERALIGN" );
+            break;
+            case 17:
+                dumpDec< sal_uInt8 >( "rotation", "TEXTROTATION" );
+            break;
+            case 18:
+                dumpDec< sal_uInt16 >( "indent" );
+            break;
+            case 19:
+                dumpDec< sal_uInt8 >( "text-dir", "XF-TEXTDIRECTION" );
+            break;
+            case 20: case 21: case 22: case 23:
+                dumpBoolean( "value" );
+            break;
+            case 24:
+                dumpUnicodeArray( "name", rStrm.readuInt16() );
+            break;
+            case 25:
+                dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
+            break;
+            case 26:
+                dumpDec< sal_uInt16 >( "underline", "FONT-UNDERLINE" );
+            break;
+            case 27:
+                dumpDec< sal_uInt16 >( "escapement", "FONT-ESCAPEMENT" );
+            break;
+            case 28: case 29: case 30: case 31: case 32: case 33:
+                dumpBoolean( "value" );
+            break;
+            case 34:
+                dumpDec< sal_uInt8 >( "charset", "CHARSET" );
+            break;
+            case 35:
+                dumpDec< sal_uInt8 >( "family", "FONT-FAMILY" );
+            break;
+            case 36:
+                dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
+            break;
+            case 37:
+                dumpDec< sal_uInt8 >( "scheme", "EXTFONT-SCHEME" );
+            break;
+            case 38:
+                dumpUnicodeArray( "numfmt", rStrm.readuInt16() );
+            break;
+            case 41:
+                dumpDec< sal_uInt16 >( "fmt-idx", mxFormats );
+            break;
+            case 42:
+                dumpDec< sal_Int16 >( "relative-indent" );
+            break;
+            case 43: case 44:
+                dumpBoolean( "value" );
+            break;
+        }
+        dumpRemainingTo( nEndPos );
+    }
+}
+
+void WorkbookStreamObject::dumpDxf12Prop()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    writeEmptyItem( "dxf-data" );
+    IndentGuard aIndGuard( out() );
+    sal_uInt32 nSize = dumpDec< sal_uInt32 >( "dxf-size" );
+    if( nSize == 0 )
+    {
+        dumpUnused( 2 );
+    }
+    else
+    {
+        sal_Int64 nEndPos = rStrm.tell() + nSize;
+        dumpCfRuleProp();
+        if( rStrm.tell() + 8 <= nEndPos )
+        {
+            dumpUnused( 6 );
+            dumpXfExtProp();
+        }
+        dumpRemainingTo( nEndPos );
+    }
+}
+
+void WorkbookStreamObject::dumpCfRule12Param( sal_uInt16 nSubType )
+{
+    sal_uInt8 nSize = dumpDec< sal_uInt8 >( "params-size" );
+    sal_Int64 nEndPos = getBiffStream().tell() + nSize;
+    {
+        writeEmptyItem( "params" );
+        IndentGuard aIndGuard( out() );
+        switch( nSubType )
+        {
+            case 5:
+                dumpHex< sal_uInt8 >( "flags", "CFRULE12-TOP10-FLAGS" );
+                dumpDec< sal_uInt16 >( "rank" );
+                dumpUnused( 13 );
+            break;
+            case 8:
+                dumpDec< sal_uInt16 >( "operator", "CFRULE12-TEXT-OPERATOR" );
+                dumpUnused( 14 );
+            break;
+            case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24:
+                dumpDec< sal_uInt16 >( "operator", "CFRULE12-DATE-OPERATOR" );
+                dumpUnused( 14 );
+            break;
+            case 25: case 26: case 29: case 30:
+                dumpDec< sal_uInt16 >( "std-dev" );
+                dumpUnused( 14 );
+            break;
+            default:
+                dumpUnused( 16 );
+        }
+    }
+    dumpRemainingTo( nEndPos );
 }
 
 void WorkbookStreamObject::dumpFontRec()

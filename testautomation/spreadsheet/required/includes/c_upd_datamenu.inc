@@ -549,14 +549,20 @@ testcase tDataValidity
     printlog " Choose last entry (not between) in 'Data' combobox"
     Daten.select (8)
     Call DialogTest ( TabWerte,3 )
-    '/// Choose 7th entry (Cell range) in 'Allow' combobox
-    printlog " Choose 7th entry (Cell range) in 'Allow' combobox"
+    '/// Choose 7th entry (List) in 'Allow' combobox
+    printlog " Choose 7th entry (List) in 'Allow' combobox"
     Zulassen.select (7)
-    Call DialogTest ( TabWerte,4 ) 
-    '/// Choose 6th entry (List) in 'Allow' combobox
-    printlog " Choose 6th entry (List) in 'Allow' combobox"
+    Call DialogTest ( TabWerte,4 )
+    '/// Choose 6th entry (Cell range) in 'Allow' combobox
+    printlog " Choose 6th entry (Cell range) in 'Allow' combobox"
     Zulassen.select (6)
     Call DialogTest ( TabWerte,5 )
+    printlog " Press Shrink button"
+    SourceShrink.Click
+    Kontext "TabWerte"
+    printlog " Close rangechooser"
+    SourceShrink.Click
+    Kontext "TabWerte"
     '/// Switch to tabpage 'Input Help'
     printlog " Switch to tabpage 'Input Help'"
     Kontext

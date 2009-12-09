@@ -118,6 +118,8 @@ protected:
 
     virtual sal_Bool        approveDbColumnType( sal_Int32 _nColumnType );
 
+    virtual void            resetNoBroadcast();
+
 protected:
     virtual sal_uInt16 getPersistenceFlags() const;
 

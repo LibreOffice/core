@@ -295,15 +295,6 @@ namespace dbaui
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
         sal_Bool isTableFormat() const;
 
-        /** copies a table which was constructed by tags like HTML or RTF
-            @param  _rDesc
-                The Drop descriptor
-            @param  _bCheck
-                If set to <TRUE/> than the controller checks only if a copy is possible.
-        */
-        sal_Bool copyTagTable(  OTableCopyHelper::DropDescriptor& _rDesc
-                                , sal_Bool _bCheck);
-
         /** fills the vector with all supported formats
             @param  _eType
                 The type for which we need the formats

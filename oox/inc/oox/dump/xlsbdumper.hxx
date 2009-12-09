@@ -211,6 +211,7 @@ protected:
     virtual void        implDumpRecordBody();
 
 private:
+    void                dumpGradientHead();
     void                dumpCellHeader( bool bWithColumn );
 
 private:

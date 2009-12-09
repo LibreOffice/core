@@ -252,6 +252,13 @@ Any OPatternModel::getDefaultForReset() const
     return makeAny( m_aDefaultText );
 }
 
+//------------------------------------------------------------------------------
+void OPatternModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aLastKnownValue.clear();
+}
+
 //.........................................................................
 }   // namespace frm
 //.........................................................................

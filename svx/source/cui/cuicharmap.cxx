@@ -71,11 +71,12 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne, const SfxItemSet* 
     if ( pItem )
         bOne = pItem->GetValue();
 
+    mpCharMapData =  new SvxCharMapData( this, bOne, &DIALOG_MGR() );
+
     SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
     if ( pCharItem )
-        SetChar( pItem->GetValue() );
+        SetChar( pCharItem->GetValue() );
 
-    mpCharMapData =  new SvxCharMapData( this, bOne, &DIALOG_MGR() );
 
     SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, FALSE );
     if ( pDisableItem && pDisableItem->GetValue() )

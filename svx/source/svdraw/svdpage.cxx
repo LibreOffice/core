@@ -671,7 +671,13 @@ const Rectangle& SdrObjList::GetAllObjSnapRect() const
 
 const Rectangle& SdrObjList::GetAllObjBoundRect() const
 {
-    if (bRectsDirty) {
+    // #i106183# for deep group hierarchies like in chart2, the invalidates
+    // through the hierarchy are not correct; use a 2nd hint for the needed
+    // recalculation. Future versions will have no bool flag at all, but
+    // just aOutRect in empty state to representate an invalid state, thus
+    // it's a step in the right direction.
+    if (bRectsDirty || aOutRect.IsEmpty())
+    {
         ((SdrObjList*)this)->RecalcRects();
         ((SdrObjList*)this)->bRectsDirty=FALSE;
     }

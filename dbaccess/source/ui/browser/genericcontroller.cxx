@@ -282,6 +282,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     }
 }
 
+#ifdef WNT
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
@@ -302,6 +303,7 @@ OGenericUnoController::OGenericUnoController()
     // we simply abort here.
     abort();
 }
+#endif
 
 // -----------------------------------------------------------------------------
 OGenericUnoController::~OGenericUnoController()

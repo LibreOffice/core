@@ -3615,6 +3615,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
             break;
         case FontSubsetInfo::TYPE1_PFA:
         case FontSubsetInfo::TYPE1_PFB:
+        case FontSubsetInfo::ANY_TYPE1:
             break;
         default:
             DBG_ERROR( "unknown fonttype in PDF font descriptor" );

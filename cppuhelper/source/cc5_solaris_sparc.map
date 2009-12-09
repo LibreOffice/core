@@ -379,3 +379,8 @@ UDK_3.6 { # OOo 3.0
         __1cEcppuSOPropertySetHelper2t5B6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___pn0AWIEventNotificationHook_b_v_;
         __1cEcppuSOPropertySetHelper2t6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___pn0AWIEventNotificationHook_b_v_;
 } UDK_3.5;
+
+UDK_3.7 { # OOo 3.3
+    global:
+        __1cEcppuLOWeakObjectbAdisposeWeakConnectionPoint6M_v_;
+} UDK_3.6;

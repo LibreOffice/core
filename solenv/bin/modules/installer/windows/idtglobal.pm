@@ -484,6 +484,16 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
     }
 
+    if ( $definestring eq "reg64" )
+    {
+        $oneline = "Registry\tRoot\tKey\tName\tValue\tComponent_\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ti2\tl255\tL255\tL0\ts72\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "Reg64\tRegistry\n";
+        push(@{$idtref}, $oneline);
+    }
+
     if ( $definestring eq "createfolder" )
     {
         $oneline = "Directory_\tComponent_\n";

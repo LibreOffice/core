@@ -305,6 +305,7 @@ IDLFILES=\
         XToggleButton.idl\
     XToolkit.idl\
     XTopWindow.idl\
+    XTopWindow2.idl\
     XTopWindowListener.idl\
     XUnitConversion.idl\
     XUnoControlContainer.idl\

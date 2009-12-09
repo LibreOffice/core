@@ -135,6 +135,9 @@ namespace frm
         ORichTextPeer();
         ~ORichTextPeer();
 
+        // XView
+        void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
+
         // XVclWindowPeer
         virtual void SAL_CALL setProperty( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::RuntimeException);
 

@@ -116,12 +116,6 @@ namespace dbaccess
             m_pImpl = NULL;
         }
     }
-    ResMgr* ResourceManager::getResManager()
-    {
-        ensureImplExists();
-        return m_pImpl;
-    }
-
 //.........................................................................
 }
 //.........................................................................

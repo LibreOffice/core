@@ -65,6 +65,7 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <string>
 
 namespace /* private */
 {
@@ -324,6 +325,8 @@ private:
     iso_lang_identifier active_iso_lang_;
 };
 
+typedef std::map< unsigned short , std::string , std::less< unsigned short > > shortmap;
+
 //###########################################
 void add_group_entries(
     Config& aConfig,
@@ -334,21 +337,35 @@ void add_group_entries(
 
     aConfig.SetGroup(GroupName);
     size_t key_count = aConfig.GetKeyCount();
+    shortmap map;
 
     for (size_t i = 0; i < key_count; i++)
     {
         ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<USHORT>(i));
         ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<USHORT>(i));
+        iso_lang_identifier myiso_lang( iso_lang );
+        LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
+        if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
+        {
+            Substitutor.set_language(iso_lang_identifier(iso_lang));
 
-        Substitutor.set_language(iso_lang_identifier(iso_lang));
+            key_value_utf8.EraseLeadingAndTrailingChars('\"');
 
-        key_value_utf8.EraseLeadingAndTrailingChars('\"');
+            OUString key_value_utf16 =
+                rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
-        OUString key_value_utf16 =
-            rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
-
-        Substitutor.add_substitution(
-            GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
+            Substitutor.add_substitution(
+                GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
+            map[ static_cast<unsigned short>(ltype) ] = std::string( iso_lang.GetBuffer() );
+        }
+        else
+        {
+            if( !map[ ltype ].empty() )
+            {
+                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", ltype , map[ ltype ].c_str() , iso_lang.GetBuffer());
+                exit( -1 );
+            }
+        }
     }
 }
 

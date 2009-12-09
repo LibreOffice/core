@@ -45,7 +45,9 @@ namespace dbaui
     //------------------------------------------------------------------------
     void OBoldListboxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
     {
-        SvLBoxString::InitViewData(pView,pEntry, _pViewData);
+        SvLBoxString::InitViewData( pView, pEntry, _pViewData );
+        if ( !m_bEmphasized )
+            return;
         if (!_pViewData)
             _pViewData = pView->GetViewDataItem( pEntry, this );
         pView->Push(PUSH_ALL);

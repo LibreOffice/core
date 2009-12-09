@@ -57,15 +57,6 @@ namespace dbmm
     {
     public:
         /** creates an interaction handler by instantiating a css.task.InteractionHandler
-            component at the given component context.
-        */
-        InteractionHandler( const ::comphelper::ComponentContext& _rContext );
-
-        /** creates an InteractionHandler instance, using the given existing UNO handler.
-        */
-        InteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler );
-
-        /** creates an interaction handler by instantiating a css.task.InteractionHandler
             component at the given component context, or using the given document's interaction handler,
             if one is specified in the document's media descriptor.
         */

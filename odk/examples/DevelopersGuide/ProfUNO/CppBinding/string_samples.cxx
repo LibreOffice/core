@@ -40,6 +40,8 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 
@@ -47,7 +49,7 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using rtl::OString;
 
-int main( int argc, char * argv [] )
+SAL_IMPLEMENT_MAIN()
 {
     // string concatination
 

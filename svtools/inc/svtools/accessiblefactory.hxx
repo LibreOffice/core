@@ -40,6 +40,7 @@
 #endif
 #include "AccessibleBrowseBoxObjType.hxx"
 #include "accessibletableprovider.hxx"
+#include "accessibletable.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -88,6 +89,11 @@ namespace svt
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const = 0;
+        virtual table::IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                table::IAccessibleTable& _rTable
             ) const = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

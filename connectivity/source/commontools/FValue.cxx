@@ -40,12 +40,15 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
-using namespace connectivity;
-using namespace dbtools;
+using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
+
+namespace connectivity
+{
 
 namespace {
     static sal_Bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
@@ -1809,6 +1812,107 @@ void ORowSetValue::setSigned(sal_Bool _bMod)
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+namespace detail
+{
+    class SAL_NO_VTABLE IValueSource
+    {
+    public:
+        virtual ::rtl::OUString             getString() const = 0;
+        virtual sal_Bool                    getBoolean() const = 0;
+        virtual sal_Int8                    getByte() const = 0;
+        virtual sal_Int16                   getShort() const = 0;
+        virtual sal_Int32                   getInt() const = 0;
+        virtual sal_Int64                   getLong() const = 0;
+        virtual float                       getFloat() const = 0;
+        virtual double                      getDouble() const = 0;
+        virtual Date                        getDate() const = 0;
+        virtual Time                        getTime() const = 0;
+        virtual DateTime                    getTimestamp() const = 0;
+        virtual Sequence< sal_Int8 >        getBytes() const = 0;
+        virtual Reference< XInputStream >   getBinaryStream() const = 0;
+        virtual Reference< XInputStream >   getCharacterStream() const = 0;
+        virtual sal_Bool                    wasNull() const = 0;
+
+        virtual ~IValueSource() { }
+    };
+
+    class RowValue : public IValueSource
+    {
+    public:
+        RowValue( const Reference< XRow >& _xRow, const sal_Int32 _nPos )
+            :m_xRow( _xRow )
+            ,m_nPos( _nPos )
+        {
+        }
+
+        // IValueSource
+        virtual ::rtl::OUString             getString() const           { return m_xRow->getString( m_nPos ); };
+        virtual sal_Bool                    getBoolean() const          { return m_xRow->getBoolean( m_nPos ); };
+        virtual sal_Int8                    getByte() const             { return m_xRow->getByte( m_nPos ); };
+        virtual sal_Int16                   getShort() const            { return m_xRow->getShort( m_nPos ); }
+        virtual sal_Int32                   getInt() const              { return m_xRow->getInt( m_nPos ); }
+        virtual sal_Int64                   getLong() const             { return m_xRow->getLong( m_nPos ); }
+        virtual float                       getFloat() const            { return m_xRow->getFloat( m_nPos ); };
+        virtual double                      getDouble() const           { return m_xRow->getDouble( m_nPos ); };
+        virtual Date                        getDate() const             { return m_xRow->getDate( m_nPos ); };
+        virtual Time                        getTime() const             { return m_xRow->getTime( m_nPos ); };
+        virtual DateTime                    getTimestamp() const        { return m_xRow->getTimestamp( m_nPos ); };
+        virtual Sequence< sal_Int8 >        getBytes() const            { return m_xRow->getBytes( m_nPos ); };
+        virtual Reference< XInputStream >   getBinaryStream() const     { return m_xRow->getBinaryStream( m_nPos ); };
+        virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
+        virtual sal_Bool                    wasNull() const             { return m_xRow->wasNull( ); };
+
+    private:
+        const Reference< XRow > m_xRow;
+        const sal_Int32         m_nPos;
+    };
+
+    class ColumnValue : public IValueSource
+    {
+    public:
+        ColumnValue( const Reference< XColumn >& _rxColumn )
+            :m_xColumn( _rxColumn )
+        {
+        }
+
+        // IValueSource
+        virtual ::rtl::OUString             getString() const           { return m_xColumn->getString(); };
+        virtual sal_Bool                    getBoolean() const          { return m_xColumn->getBoolean(); };
+        virtual sal_Int8                    getByte() const             { return m_xColumn->getByte(); };
+        virtual sal_Int16                   getShort() const            { return m_xColumn->getShort(); }
+        virtual sal_Int32                   getInt() const              { return m_xColumn->getInt(); }
+        virtual sal_Int64                   getLong() const             { return m_xColumn->getLong(); }
+        virtual float                       getFloat() const            { return m_xColumn->getFloat(); };
+        virtual double                      getDouble() const           { return m_xColumn->getDouble(); };
+        virtual Date                        getDate() const             { return m_xColumn->getDate(); };
+        virtual Time                        getTime() const             { return m_xColumn->getTime(); };
+        virtual DateTime                    getTimestamp() const        { return m_xColumn->getTimestamp(); };
+        virtual Sequence< sal_Int8 >        getBytes() const            { return m_xColumn->getBytes(); };
+        virtual Reference< XInputStream >   getBinaryStream() const     { return m_xColumn->getBinaryStream(); };
+        virtual Reference< XInputStream >   getCharacterStream() const  { return m_xColumn->getCharacterStream(); };
+        virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull( ); };
+
+    private:
+        const Reference< XColumn >  m_xColumn;
+    };
+}
+
+// -----------------------------------------------------------------------------
+void ORowSetValue::fill( const sal_Int32 _nType, const Reference< XColumn >& _rxColumn )
+{
+    detail::ColumnValue aColumnValue( _rxColumn );
+    impl_fill( _nType, sal_True, aColumnValue );
+}
+
+// -----------------------------------------------------------------------------
+void ORowSetValue::fill( sal_Int32 _nPos, sal_Int32 _nType, sal_Bool  _bNullable, const Reference< XRow>& _xRow )
+{
+    detail::RowValue aRowValue( _xRow, _nPos );
+    impl_fill( _nType, _bNullable, aRowValue );
+}
+
 // -----------------------------------------------------------------------------
 void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
@@ -1819,10 +1923,8 @@ void ORowSetValue::fill(sal_Int32 _nPos,
 }
 
 // -----------------------------------------------------------------------------
-void ORowSetValue::fill(sal_Int32 _nPos,
-                     sal_Int32 _nType,
-                     sal_Bool  _bNullable,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
+void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const detail::IValueSource& _rValueSource )
+
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill (2)" );
     sal_Bool bReadData = sal_True;
@@ -1833,63 +1935,63 @@ void ORowSetValue::fill(sal_Int32 _nPos,
     case DataType::DECIMAL:
     case DataType::NUMERIC:
     case DataType::LONGVARCHAR:
-        (*this) = _xRow->getString(_nPos);
+        (*this) = _rValueSource.getString();
         break;
     case DataType::BIGINT:
         if ( isSigned() )
-            (*this) = _xRow->getLong(_nPos);
+            (*this) = _rValueSource.getLong();
         else
-            (*this) = _xRow->getString(_nPos);
+            (*this) = _rValueSource.getString();
         break;
     case DataType::FLOAT:
-        (*this) = _xRow->getFloat(_nPos);
+        (*this) = _rValueSource.getFloat();
         break;
     case DataType::DOUBLE:
     case DataType::REAL:
-        (*this) = _xRow->getDouble(_nPos);
+        (*this) = _rValueSource.getDouble();
         break;
     case DataType::DATE:
-        (*this) = _xRow->getDate(_nPos);
+        (*this) = _rValueSource.getDate();
         break;
     case DataType::TIME:
-        (*this) = _xRow->getTime(_nPos);
+        (*this) = _rValueSource.getTime();
         break;
     case DataType::TIMESTAMP:
-        (*this) = _xRow->getTimestamp(_nPos);
+        (*this) = _rValueSource.getTimestamp();
         break;
     case DataType::BINARY:
     case DataType::VARBINARY:
     case DataType::LONGVARBINARY:
-        (*this) = _xRow->getBytes(_nPos);
+        (*this) = _rValueSource.getBytes();
         break;
     case DataType::BIT:
     case DataType::BOOLEAN:
-        (*this) = _xRow->getBoolean(_nPos);
+        (*this) = _rValueSource.getBoolean();
         break;
     case DataType::TINYINT:
         if ( isSigned() )
-            (*this) = _xRow->getByte(_nPos);
+            (*this) = _rValueSource.getByte();
         else
-            (*this) = _xRow->getShort(_nPos);
+            (*this) = _rValueSource.getShort();
         break;
     case DataType::SMALLINT:
         if ( isSigned() )
-            (*this) = _xRow->getShort(_nPos);
+            (*this) = _rValueSource.getShort();
         else
-            (*this) = _xRow->getInt(_nPos);
+            (*this) = _rValueSource.getInt();
         break;
     case DataType::INTEGER:
         if ( isSigned() )
-            (*this) = _xRow->getInt(_nPos);
+            (*this) = _rValueSource.getInt();
         else
-            (*this) = _xRow->getLong(_nPos);
+            (*this) = _rValueSource.getLong();
         break;
     case DataType::CLOB:
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getCharacterStream(_nPos));
+        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getCharacterStream());
         setTypeKind(DataType::CLOB);
         break;
     case DataType::BLOB:
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getBinaryStream(_nPos));
+        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getBinaryStream());
         setTypeKind(DataType::BLOB);
         break;
     default:
@@ -1897,7 +1999,7 @@ void ORowSetValue::fill(sal_Int32 _nPos,
         bReadData = false;
         break;
     }
-    if ( bReadData && _bNullable && _xRow->wasNull() )
+    if ( bReadData && _bNullable && _rValueSource.wasNull() )
         setNull();
     setTypeKind(_nType);
 }
@@ -2043,3 +2145,5 @@ void ORowSetValue::fill(const Any& _rValue)
             break;
     }
 }
+
+}   // namespace connectivity

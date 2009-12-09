@@ -41,6 +41,12 @@
 
 #include <tools/shl.hxx>
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#include <map>
+#include <list>
+#include <algorithm>
+//-->Added by PengYunQuan for Validity Cell Range Picker
+
 
 class KeyEvent;
 class SdrModel;
@@ -145,6 +151,9 @@ class ScModule: public SfxModule, public SfxListener
     bool                mbIsInSharedDocLoading;
     bool                mbIsInSharedDocSaving;
 
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    std::map<USHORT, std::list<Window*> > m_mapRefWindow;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -253,7 +262,10 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     //  Referenzeingabe:
-    void                SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    //void              SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);
     BOOL                IsFormulaMode();
     BOOL                IsRefDialogOpen();
@@ -276,6 +288,14 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    SC_DLLPUBLIC BOOL   RegisterRefWindow( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC BOOL   UnregisterRefWindow( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC BOOL   IsAliveRefDlg( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC Window * Find1RefWindow( USHORT nSlotId, Window *pWndAncestor );
+    SC_DLLPUBLIC Window * Find1RefWindow( Window *pWndAncestor );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )

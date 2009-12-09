@@ -34,10 +34,6 @@
 #include <ooo/vba/XHelperInterface.idl>
 #endif
 
-#ifndef __ooo_vba_excel_XTextFrame_idl__
-#include <ooo/vba/excel/XTextFrame.idl>
-#endif
-
 #ifndef __ooo_vba_msforms_XLineFormat_idl__
 #include <ooo/vba/msforms/XLineFormat.idl>
 #endif
@@ -66,14 +62,13 @@ interface XShape : ooo::vba::XHelperInterface
     [attribute, readonly] XLineFormat Line;
     [attribute, readonly] XFillFormat Fill;
     [attribute, readonly] XPictureFormat PictureFormat;
+    [attribute] boolean LockAspectRatio;
+    [attribute] boolean LockAnchor;
+    [attribute] long RelativeHorizontalPosition;
+    [attribute] long RelativeVerticalPosition;
 
-    /*
-    using in word
-    [attribute] RelativeHorizontalPosition
-    [attribute] RelativeVerticalPosition
-    [attribute] XWrapFormat WrapFormat;
-    */
-    ooo::vba::excel::XTextFrame TextFrame();
+    any TextFrame();
+    any WrapFormat();
     void Delete();
     void ZOrder( [in] long ZOrderCmd );
     void IncrementRotation( [in] double Increment );

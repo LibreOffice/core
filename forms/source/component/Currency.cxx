@@ -257,6 +257,13 @@ Any OCurrencyModel::getDefaultForReset() const
     return aValue;
 }
 
+//------------------------------------------------------------------------------
+void OCurrencyModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
+}
+
 //.........................................................................
 }   // namespace frm
 //.........................................................................

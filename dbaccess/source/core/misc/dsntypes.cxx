@@ -299,12 +299,6 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const ::rtl::O
     return aProperties.getPropertyValues();
 }
 
-// -----------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeExtension(const ::rtl::OUString& _sURL) const
-{
-    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("Extension",::rtl::OUString());
-}
 //-------------------------------------------------------------------------
 bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) const
 {

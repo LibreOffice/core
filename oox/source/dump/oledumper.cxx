@@ -1037,7 +1037,6 @@ void OcxLabelObject::implDumpShortProperties()
     dumpSpecialEffectProperty< sal_uInt16 >( 0 );
     dumpStreamProperty();
     dumpUnicodeProperty();
-    dumpBoolProperty();
     dumpStreamProperty();
 }
 

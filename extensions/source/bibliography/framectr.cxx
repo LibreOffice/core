@@ -42,18 +42,12 @@
 #include "framectr.hxx"
 #include "datman.hxx"
 #include "bibresid.hxx"
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <vcl/svapp.hxx>
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include <extensio.hrc>
-#endif
+#include "bibliography.hrc"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormController.hpp>

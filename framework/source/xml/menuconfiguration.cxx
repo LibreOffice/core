@@ -44,10 +44,6 @@
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>
 
-#ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
-#include <services/layoutmanager.hxx>
-#endif
-
 #ifndef _FRAMEWORK_UIELEMENT_ROOTITEMCONTAINER_HXX_
 #include <uielement/rootitemcontainer.hxx>
 #endif

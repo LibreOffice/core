@@ -33,9 +33,7 @@
 #include "eformspropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"

@@ -89,29 +89,6 @@ OQueryDescriptor::OQueryDescriptor()
 }
 
 //--------------------------------------------------------------------------
-OQueryDescriptor::OQueryDescriptor(const Reference< XPropertySet >& _rxCommandDefinition)
-    :OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper,sal_True)
-{
-    DBG_CTOR(OQueryDescriptor,NULL);
-    registerProperties();
-    ODataSettings::registerPropertiesFor(this);
-
-    osl_incrementInterlockedCount(&m_refCount);
-
-    OSL_ENSURE(_rxCommandDefinition.is(), "OQueryDescriptor_Base::OQueryDescriptor_Base : invalid source property set !");
-    try
-    {
-        ::comphelper::copyProperties(_rxCommandDefinition,this);
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(sal_False, "OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
-    }
-    osl_decrementInterlockedCount(&m_refCount);
-}
-
-//--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     :OQueryDescriptor_Base(_rSource,*this)
     ,ODataSettings(m_aBHelper,sal_True)

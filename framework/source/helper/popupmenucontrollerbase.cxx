@@ -186,7 +186,9 @@ void SAL_CALL PopupMenuControllerBase::highlight( const css::awt::MenuEvent& ) t
 void PopupMenuControllerBase::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL)
 {
     Sequence<PropertyValue>      aArgs;
-    _xDispatch->dispatch( aURL, aArgs );
+    OSL_ENSURE(_xDispatch.is(),"PopupMenuControllerBase::impl_select: No dispatch");
+    if ( _xDispatch.is() )
+        _xDispatch->dispatch( aURL, aArgs );
 }
 
 void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
@@ -204,7 +206,7 @@ void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent
     xServiceManager = m_xServiceManager;
     aLock.unlock();
 
-    if ( xPopupMenu.is() && xDispatch.is() )
+    if ( xPopupMenu.is() )
     {
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
         if ( pPopupMenu )

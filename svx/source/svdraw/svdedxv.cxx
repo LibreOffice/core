@@ -30,6 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
+#include <com/sun/star/i18n/WordType.hpp>
+
 #include <svtools/accessibilityoptions.hxx>
 
 #include <svx/svdedxv.hxx>
@@ -46,6 +49,7 @@
 #include <vcl/cursor.hxx>
 #include <svx/unotext.hxx>
 
+#include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -60,7 +64,6 @@
 #include "svx/svdetc.hxx"   // fuer GetDraftFillColor
 #include "svx/svdotable.hxx"
 #include <svx/selectioncontroller.hxx>
-
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
@@ -69,6 +72,7 @@
 #include <svx/svddrgv.hxx>  // fuer SetSolidDragging()
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
+#include "globl3d.hxx"
 #include <svx/outliner.hxx>
 #include <svx/adjitem.hxx>
 
@@ -1923,3 +1927,223 @@ void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
     // applications can derive from these virtual methods to do something before a drop or paste operation
 }
 
+bool SdrObjEditView::SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const
+{
+    if( nObjectInventor != SdrInventor && nObjectInventor != E3dInventor )
+        return false;
+    switch(nObjectIdentifier)
+    {
+        case OBJ_NONE:
+        case OBJ_GRUP:
+            return false;
+        case OBJ_LINE:
+        case OBJ_RECT:
+        case OBJ_CIRC:
+        case OBJ_SECT:
+        case OBJ_CARC:
+        case OBJ_CCUT:
+        case OBJ_POLY:
+        case OBJ_PLIN:
+        case OBJ_PATHLINE:
+        case OBJ_PATHFILL:
+        case OBJ_FREELINE:
+        case OBJ_FREEFILL:
+        case OBJ_SPLNLINE:
+        case OBJ_SPLNFILL:
+        case OBJ_TEXT:
+        case OBJ_TEXTEXT:
+        case OBJ_TITLETEXT:
+        case OBJ_OUTLINETEXT:
+        case OBJ_GRAF:
+        case OBJ_OLE2:
+        case OBJ_TABLE:
+            return true;
+        case OBJ_EDGE:
+        case OBJ_CAPTION:
+            return false;
+        case OBJ_PATHPOLY:
+        case OBJ_PATHPLIN:
+            return true;
+        case OBJ_PAGE:
+        case OBJ_MEASURE:
+        case OBJ_DUMMY:
+        case OBJ_FRAME:
+        case OBJ_UNO:
+            return false;
+        case OBJ_CUSTOMSHAPE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static const USHORT* GetFormatRangeImpl( bool bTextOnly )
+{
+    static const USHORT gRanges[] = {
+        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
+        SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
+        SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
+        XATTR_LINE_FIRST, XATTR_LINE_LAST,
+        XATTR_FILL_FIRST, XATTRSET_FILL,
+        EE_PARA_START, EE_PARA_END,
+        EE_CHAR_START, EE_CHAR_END,
+        0,0
+    };
+    return &gRanges[ bTextOnly ? 10 : 0];
+}
+
+bool SdrObjEditView::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  )
+{
+    if( mxSelectionController.is() && mxSelectionController->TakeFormatPaintBrush(rFormatSet) )
+        return true;
+
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() >= 1 )
+    {
+        OutlinerView* pOLV = GetTextEditOutlinerView();
+
+        rFormatSet.reset( new SfxItemSet( GetModel()->GetItemPool(), GetFormatRangeImpl( pOLV != NULL ) ) );
+        if( pOLV )
+        {
+            rFormatSet->Put( pOLV->GetAttribs() );
+        }
+        else
+        {
+            const BOOL bOnlyHardAttr = FALSE;
+            rFormatSet->Put( GetAttrFromMarked(bOnlyHardAttr) );
+        }
+        return true;
+    }
+
+    return false;
+}
+
+static SfxItemSet CreatePaintSet( const USHORT *pRanges, SfxItemPool& rPool, const SfxItemSet& rSourceSet, const SfxItemSet& rTargetSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
+{
+    SfxItemSet aPaintSet( rPool, pRanges );
+
+    while( *pRanges )
+    {
+        USHORT nWhich = *pRanges++;
+        const USHORT nLastWhich = *pRanges++;
+
+        if( bNoCharacterFormats && (nWhich == EE_CHAR_START) )
+            continue;
+
+        if( bNoParagraphFormats && (nWhich == EE_PARA_START ) )
+            continue;
+
+        for( ; nWhich < nLastWhich; nWhich++ )
+        {
+            const SfxPoolItem* pSourceItem = rSourceSet.GetItem( nWhich );
+            const SfxPoolItem* pTargetItem = rTargetSet.GetItem( nWhich );
+
+            if( (pSourceItem && !pTargetItem) || (pSourceItem && pTargetItem && !((*pSourceItem) == (*pTargetItem)) ) )
+            {
+                aPaintSet.Put( *pSourceItem );
+            }
+        }
+    }
+    return aPaintSet;
+}
+
+void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats )
+{
+    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
+    if(pParaObj)
+    {
+        SdrOutliner& rOutliner = rTextObj.ImpGetDrawOutliner();
+        rOutliner.SetText(*pParaObj);
+
+        sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
+
+        if(nParaCount)
+        {
+            for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
+            {
+                if( !bNoCharacterFormats )
+                    rOutliner.QuickRemoveCharAttribs( nPara, /* remove all */0 );
+
+                SfxItemSet aSet(rOutliner.GetParaAttribs(nPara));
+                aSet.Put(CreatePaintSet( GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );
+                rOutliner.SetParaAttribs(nPara, aSet);
+            }
+
+            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
+            rOutliner.Clear();
+
+            rTextObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
+        }
+    }
+}
+
+void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
+{
+    if( !mxSelectionController.is() || !mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
+    {
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        OutlinerView* pOLV = GetTextEditOutlinerView();
+
+        const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
+
+        if( !pOLV )
+        {
+            // if not in text edit mode (aka the user selected text or clicked on a word)
+            // apply formating attributes to selected shape
+            // All formating items (see ranges above) that are unequal in selected shape and
+            // the format paintbrush are hard set on the selected shape.
+
+            const USHORT* pRanges = rFormatSet.GetRanges();
+            bool bTextOnly = true;
+
+            while( *pRanges )
+            {
+                if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
+                {
+                    bTextOnly = false;
+                    break;
+                }
+                pRanges += 2;
+            }
+
+            if( !bTextOnly )
+            {
+                SfxItemSet aPaintSet( CreatePaintSet( GetFormatRangeImpl(false), *rShapeSet.GetPool(), rFormatSet, rShapeSet, bNoCharacterFormats, bNoParagraphFormats ) );
+                const BOOL bReplaceAll = FALSE;
+                SetAttrToMarked(aPaintSet, bReplaceAll);
+            }
+
+            // now apply character and paragraph formating to text, if the shape has any
+            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+            if( pTextObj )
+            {
+                sal_Int32 nText = pTextObj->getTextCount();
+
+                while( --nText >= 0 )
+                {
+                    SdrText* pText = pTextObj->getText( nText );
+                    ApplyFormatPaintBrushToText( rFormatSet, *pTextObj, pText, bNoCharacterFormats, bNoParagraphFormats );
+                }
+            }
+        }
+        else
+        {
+            ::Outliner* pOutliner = pOLV->GetOutliner();
+            if( pOutliner )
+            {
+                const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+
+                ESelection aSel( pOLV->GetSelection() );
+                if( !aSel.HasRange() )
+                    pOLV->SetSelection( rEditEngine.GetWord( aSel, com::sun::star::i18n::WordType::DICTIONARY_WORD ) );
+
+                const BOOL bRemoveParaAttribs = !bNoParagraphFormats;
+                pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
+                SfxItemSet aSet( pOLV->GetAttribs() );
+                SfxItemSet aPaintSet( CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );
+                pOLV->SetAttribs( aPaintSet );
+            }
+        }
+    }
+}

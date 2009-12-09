@@ -747,6 +747,13 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
         loadData( false );
 }
 
+//------------------------------------------------------------------------------
+void OComboBoxModel::resetNoBroadcast()
+{
+    OBoundControlModel::resetNoBroadcast();
+    m_aLastKnownValue.clear();
+}
+
 //-----------------------------------------------------------------------------
 sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {

@@ -335,7 +335,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
 
             HF_IdlDocu
                 aDocuDisplay(Env(), aDocuList);
-            aDocuDisplay.Produce_byDocu4Reference(*(*it).Info(), i_ce);
+            aDocuDisplay.Produce_fromReference(*(*it).Info(), i_ce);
         }
         else
         {

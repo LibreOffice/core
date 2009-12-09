@@ -255,12 +255,6 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    AuthenticationMode DataSourceMetaData::getAuthentication() const
-    {
-        return getAuthenticationMode( m_pImpl->getType() );
-    }
-
-    //--------------------------------------------------------------------
     AuthenticationMode  DataSourceMetaData::getAuthentication( const ::rtl::OUString& _sURL )
     {
         return getAuthenticationMode( _sURL );

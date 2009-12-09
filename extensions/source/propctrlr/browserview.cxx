@@ -32,9 +32,7 @@
 #include "precompiled_extensions.hxx"
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
-#endif
+#include "propctrlr.hrc"
 #include <tools/debug.hxx>
 #include <memory>
 

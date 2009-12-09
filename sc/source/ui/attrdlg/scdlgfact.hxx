@@ -546,7 +546,10 @@ public:
                                                             int nId );
 
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
-                                                        const SfxItemSet* pArgSet,int nId  );
+    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+    //                                                  const SfxItemSet* pArgSet,int nId  );
+                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  );
+    //-->Modified by PengYunQuan for Validity Cell Range Picker
 
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId );

@@ -36,7 +36,7 @@
 #ifndef _GLOBALACC_SRC
 #include <svx/globlac.hrc>
 #endif
-#include <extensio.hrc>
+#include "bibliography.hrc"
 
 #include "bib.hrc"
 

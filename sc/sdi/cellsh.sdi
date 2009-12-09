@@ -52,6 +52,9 @@ interface CellSelection
     SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
     SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
+    // no Exec/StateMethod needed, but SfxDispatcher complains if the slot is not included in the shell
+    SID_VALIDITY_REFERENCE []
+
     // Datenbank-Operationen {
     SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SORT_DESCENDING     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]

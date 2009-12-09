@@ -182,21 +182,11 @@ public class Desktop
 
     public static XMultiServiceFactory connect(String connectStr) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception
     {
-        XComponentContext xcomponentcontext = null;
-        XMultiComponentFactory xMultiComponentFactory = getMultiComponentFactory();
-        // create a connector, so that it can contact the office
-        Object xUrlResolver = xMultiComponentFactory.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", xcomponentcontext);
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(XUnoUrlResolver.class, xUrlResolver);
-        Object rInitialObject = urlResolver.resolve(connectStr);
-        XNamingService rName = (XNamingService) UnoRuntime.queryInterface(XNamingService.class, rInitialObject);
-        XMultiServiceFactory xMSF = null;
-        if (rName != null)
-        {
-            System.err.println("got the remote naming service !");
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
-            xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
-        }
-        return (xMSF);
+        XMultiComponentFactory componentFactory = getMultiComponentFactory();
+        Object xUrlResolver = componentFactory.createInstanceWithContext( "com.sun.star.bridge.UnoUrlResolver", null );
+        XUnoUrlResolver urlResolver = UnoRuntime.queryInterface(XUnoUrlResolver.class, xUrlResolver);
+        XMultiServiceFactory orb = UnoRuntime.queryInterface(XMultiServiceFactory.class, urlResolver.resolve( connectStr ) );
+        return orb;
     }
 
     public static String getIncrementSuffix(XNameAccess xElementContainer, String ElementName)

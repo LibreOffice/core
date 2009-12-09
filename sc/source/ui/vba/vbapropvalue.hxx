@@ -32,7 +32,7 @@
 #include <ooo/vba/XPropValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include "vbahelper.hxx"
+#include "excelvbahelper.hxx"
 
 typedef ::cppu::WeakImplHelper1< ov::XPropValue > PropValueImpl_BASE;
 

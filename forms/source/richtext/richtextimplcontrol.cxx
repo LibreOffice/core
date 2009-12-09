@@ -605,21 +605,32 @@ namespace frm
         _pDev->SetMapMode( aNormalizedMapMode );
 
         // translate coordinates
-        Point aPos( OutputDevice::LogicToLogic( _rPos, aOriginalMapMode, aNormalizedMapMode ) );
-        Size aSize( OutputDevice::LogicToLogic( _rSize, aOriginalMapMode, aNormalizedMapMode ) );
+        Point aPos( _rPos );
+        Size aSize( _rSize );
+        if ( aOriginalMapMode.GetMapUnit() == MAP_PIXEL )
+        {
+            aPos = _pDev->PixelToLogic( _rPos, aNormalizedMapMode );
+            aSize = _pDev->PixelToLogic( _rSize, aNormalizedMapMode );
+        }
+        else
+        {
+            aPos = OutputDevice::LogicToLogic( _rPos, aOriginalMapMode, aNormalizedMapMode );
+            aSize = OutputDevice::LogicToLogic( _rSize, aOriginalMapMode, aNormalizedMapMode );
+        }
 
         Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
+        aPlayground.Right() -= aOnePixel.Width();
+        aPlayground.Bottom() -= aOnePixel.Height();
 
         // background
         _pDev->SetLineColor();
-        _pDev->DrawRect( Rectangle( aPlayground.TopLeft(), m_pEngine->GetPaperSize()) );
+        _pDev->DrawRect( aPlayground );
 
-        // possibly with border
+        // do we need to draw a border?
         bool bBorder = ( m_pAntiImpl->GetStyle() & WB_BORDER );
         if ( bBorder )
-            // let's draw a border
-            _pDev->SetLineColor( COL_BLACK );
+            _pDev->SetLineColor( m_pAntiImpl->GetSettings().GetStyleSettings().GetMonoColor() );
         else
             _pDev->SetLineColor();
         _pDev->SetFillColor( m_pAntiImpl->GetBackground().GetColor() );
@@ -632,7 +643,9 @@ namespace frm
         // leave a space of one pixel between the "surroundings" of the control
         // and the content
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
+        lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
+        // actually draw the content
         m_pEngine->Draw( _pDev, aPlayground, Point(), TRUE );
 
         _pDev->Pop();

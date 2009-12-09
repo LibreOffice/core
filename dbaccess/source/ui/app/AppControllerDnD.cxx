@@ -902,18 +902,6 @@ sal_Bool OApplicationController::isTableFormat()  const
     return m_aTableCopyHelper.isTableFormat(getViewClipboard());
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
-{
-    // first get the dest connection
-    ::osl::MutexGuard aGuard( getMutex() );
-
-    SharedConnection xConnection( ensureConnection() );
-    if ( !xConnection.is() )
-        return sal_False;
-
-    return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
-}
-// -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nAsyncDrop = 0;

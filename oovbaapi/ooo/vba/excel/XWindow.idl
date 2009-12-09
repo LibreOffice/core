@@ -46,10 +46,8 @@ module ooo {  module vba {  module excel {
 interface XRange;
 interface XWorksheet;
 interface XPane;
-interface XWindow
+interface XWindow : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XHelperInterface;
-
     [attribute] any Caption;
     [attribute] boolean DisplayGridlines;
     [attribute] boolean DisplayHeadings;
@@ -58,8 +56,6 @@ interface XWindow
     [attribute] boolean DisplayVerticalScrollBar;
     [attribute] boolean DisplayWorkbookTabs;
     [attribute] boolean FreezePanes;
-    [attribute] long Height;
-    [attribute] long Left;
     [attribute] boolean Split;
     [attribute] long SplitColumn;
     [attribute] double SplitHorizontal;
@@ -67,10 +63,7 @@ interface XWindow
     [attribute] double SplitVertical;
     [attribute] any ScrollColumn;
     [attribute] any ScrollRow;
-    [attribute] long Top;
     [attribute] any View;
-    [attribute] boolean Visible;
-    [attribute] long Width;
     [attribute] any WindowState;
     [attribute] any Zoom;
     any SelectedSheets( [in] any aIndex );

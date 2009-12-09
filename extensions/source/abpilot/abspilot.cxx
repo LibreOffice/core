@@ -31,12 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "abspilot.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
-#ifndef EXTENSIONS_ABPRESID_HRC
+#include "abpilot.hrc"
 #include "abpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>

@@ -105,7 +105,7 @@ public:
     void            Restore();
 
     void            Maximize( BOOL bMaximize = TRUE );
-    BOOL            IsMaximized();
+    BOOL            IsMaximized() const;
 };
 
 #endif // _SV_WRKWIN_HXX

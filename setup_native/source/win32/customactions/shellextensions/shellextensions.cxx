@@ -102,22 +102,95 @@ RegistryEntry InfotipHandler = { TEXT("{087B3AE3-E237-4467-B8DB-5A38AB959AC9}"),
 RegistryEntry PropHandler = { TEXT("{63542C48-9552-494A-84F7-73AA6A7C99C1}"), TEXT("OpenOffice.org Property Sheet Handler") };
 RegistryEntry ThumbViewer = { TEXT("{3B092F0C-7696-40E3-A80F-68D74DA84210}"), TEXT("OpenOffice.org Thumbnail Viewer") };
 
+BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
+{
+    DWORD sz = 0;
+       if ( MsiGetProperty( hMSI, pPropName, 0, &sz ) == ERROR_MORE_DATA )
+       {
+           sz++;
+           DWORD nbytes = sz * sizeof( char );
+           char* buff = reinterpret_cast<char*>( malloc( nbytes ) );
+           ZeroMemory( buff, nbytes );
+           MsiGetProperty( hMSI, pPropName, buff, &sz );
+           *ppValue = buff;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+bool IsVersionNT64( MSIHANDLE hMSI )
+{
+    char* pVal = NULL;
+
+    if ( GetMsiProp( hMSI, "VersionNT64", &pVal ) && pVal )
+    {
+        free( pVal );
+        return true;
+    }
+
+    return false;
+}
+
+
+
+
 /*
     Called during installation when the module "Windows Explorer Extensions" is
     selected.
 */
-extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE)
+extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
 {
     //MessageBox(NULL, TEXT("InstallExecSequenceEntry"), TEXT("Pythonmsi"), MB_OK | MB_ICONINFORMATION);
     HKEY hKey;
-    if (RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"), &hKey) == ERROR_SUCCESS)
-    {
-        RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
-        RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
-        RegSetValueEx(hKey, PropHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(PropHandler.Value), _tcslen(PropHandler.Value) + 1);
-        RegSetValueEx(hKey, ThumbViewer.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ThumbViewer.Value), _tcslen(ThumbViewer.Value) + 1);
 
-        RegCloseKey(hKey);
+
+// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
+// Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
+// extensions\source\activex\main\so_activex.cpp
+#ifndef KEY_WOW64_64KEY
+    #define KEY_WOW64_64KEY (0x0100)
+#endif
+
+    if (IsVersionNT64(hMSI))
+    {
+        // Open Windows 64 Bit Registry
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS)
+        {
+            RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
+            RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
+            RegSetValueEx(hKey, PropHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(PropHandler.Value), _tcslen(PropHandler.Value) + 1);
+            RegSetValueEx(hKey, ThumbViewer.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ThumbViewer.Value), _tcslen(ThumbViewer.Value) + 1);
+
+            RegCloseKey(hKey);
+        }
+
+        // Open Windows 32 Bit Registry on Win64 maschine
+
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE, &hKey ) == ERROR_SUCCESS)
+        {
+            RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
+            RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
+            RegSetValueEx(hKey, PropHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(PropHandler.Value), _tcslen(PropHandler.Value) + 1);
+            RegSetValueEx(hKey, ThumbViewer.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ThumbViewer.Value), _tcslen(ThumbViewer.Value) + 1);
+
+            RegCloseKey(hKey);
+        }
+
+
+    } else
+    {
+        if (RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"), &hKey) == ERROR_SUCCESS)
+        {
+            RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
+            RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
+            RegSetValueEx(hKey, PropHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(PropHandler.Value), _tcslen(PropHandler.Value) + 1);
+            RegSetValueEx(hKey, ThumbViewer.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ThumbViewer.Value), _tcslen(ThumbViewer.Value) + 1);
+
+            RegCloseKey(hKey);
+        }
     }
     return ERROR_SUCCESS;
 }

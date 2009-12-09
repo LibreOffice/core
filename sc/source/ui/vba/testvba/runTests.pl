@@ -20,7 +20,7 @@ my $theResult;
 my $officepath = shift || die "please specify path to office installation program dir";
 my $DocName = shift || "";
 my $programpath = "$officepath"."3/program:$officepath/program:";
-my $basiclibrarypath = "$officepath/basis3.1/program";
+my $basiclibrarypath = "$officepath/basis3.2/program";
 my $urelibpath = "$officepath/ure/lib";
 my $binext = "";
 my $testDocDir = "$binDir/TestDocuments";

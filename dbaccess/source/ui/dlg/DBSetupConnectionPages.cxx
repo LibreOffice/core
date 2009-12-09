@@ -952,14 +952,8 @@ DBG_NAME(OFinalDBPageSetup)
             aPos.X() = pWindows[i].first->GetPosPixel().X();
             Size aSize = pWindows[i].first->GetSizePixel();
             FixedText* pText = dynamic_cast<FixedText*>(pWindows[i].first);
-            CheckBox* pCheck = dynamic_cast<CheckBox*>(pWindows[i].first);
-            RadioButton* pRadio = dynamic_cast<RadioButton*>(pWindows[i].first);
             if ( pText )
                 aSize = pText->CalcMinimumSize(aSize.Width());
-            else if ( pRadio )
-                aSize = pRadio->CalcMinimumSize(aSize.Width());
-            else if ( pCheck )
-                aSize = pCheck->CalcMinimumSize(aSize.Width());
             pWindows[i].first->SetPosSizePixel(aPos,aSize);
             aPos.Y() += aSize.Height() + pWindows[i].second;
         }

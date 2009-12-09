@@ -315,7 +315,7 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT (START_X , 100 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 8 ) ;
-        Text[ en-US ] = "~After the database file has been saved, what do you want to do?" ;
+        Text[ en-US ] = "After the database file has been saved, what do you want to do?" ;
     };
 
     CheckBox CB_OPENAFTERWARDS

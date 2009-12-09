@@ -48,6 +48,8 @@
 #include <stdio.h>
 #include <wchar.h>
 
+#include <sal/main.h>
+
 #include <cppuhelper/bootstrap.hxx>
 
 #include <osl/file.hxx>
@@ -70,8 +72,9 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
 
 
+
 //============================================================================
-int SAL_CALL main( int argc, char **argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"));
      if (argc < 2)

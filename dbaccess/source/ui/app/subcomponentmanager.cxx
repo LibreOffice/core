@@ -125,8 +125,9 @@ namespace dbaui
                 xModel.set( _rxComponent, UNO_QUERY );
                 if ( xModel.is() )
                 {
-                    xController.set( xModel->getCurrentController(), UNO_SET_THROW );
-                    xFrame.set( xController->getFrame(), UNO_SET_THROW );
+                    xController.set( xModel->getCurrentController() );
+                    if ( xController.is() )
+                        xFrame.set( xController->getFrame(), UNO_SET_THROW );
                 }
                 else
                 {
@@ -468,13 +469,15 @@ namespace dbaui
         // put into map
         SubComponentAccessor aKey( _rName, _nComponentType, _eOpenMode );
         SubComponentDescriptor aElement( _rxComponent );
+        ENSURE_OR_THROW( aElement.xModel.is() || aElement.xController.is(), "illegal component" );
 
         m_pData->m_aComponents.insert( SubComponentMap::value_type(
             aKey, aElement
         ) ) ;
 
         // add as listener
-        aElement.xController->addEventListener( this );
+        if ( aElement.xController.is() )
+            aElement.xController->addEventListener( this );
         if ( aElement.xModel.is() )
             aElement.xModel->addEventListener( this );
 

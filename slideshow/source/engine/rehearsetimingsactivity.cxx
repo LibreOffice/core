@@ -72,6 +72,9 @@ public:
     WakeupEvent( boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
+#if OSL_DEBUG_LEVEL > 1
+        Event(::rtl::OUString::createFromAscii("WakeupEvent")),
+#endif
         maTimer(pTimeBase),
         mnNextTime(0.0),
         mpActivity(rActivity),

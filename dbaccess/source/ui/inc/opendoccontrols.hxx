@@ -61,7 +61,6 @@ namespace dbaui
         ::rtl::OUString     m_sModule;
 
     public:
-        OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle = 0 );
         OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
 
     protected:
@@ -81,7 +80,6 @@ namespace dbaui
         MapIndexToStringPair    m_aURLs;
 
     public:
-        OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle = WB_BORDER );
         OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
 
         String  GetSelectedDocumentURL() const;

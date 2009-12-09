@@ -779,13 +779,6 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
-    void SAL_CALL ComposedPropertyUIUpdate::fire()
-    {
-        impl_checkDisposed();
-        impl_fireAll_throw();
-    }
-
     //--------------------------------------------------------------------
     void ComposedPropertyUIUpdate::impl_fireAll_throw()
     {

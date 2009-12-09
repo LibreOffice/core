@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
 class ScVbaPalette;

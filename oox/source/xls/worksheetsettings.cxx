@@ -60,21 +60,21 @@ const sal_uInt16 BIFF_SHEETPR_SYMBOLSRIGHT      = 0x0080;
 const sal_uInt16 BIFF_SHEETPR_FITTOPAGES        = 0x0100;
 const sal_uInt16 BIFF_SHEETPR_SKIPEXT           = 0x0200;       /// BIFF3-BIFF4
 
-const sal_uInt16 BIFF_SHEETPROT_OBJECTS         = 0x0001;
-const sal_uInt16 BIFF_SHEETPROT_SCENARIOS       = 0x0002;
-const sal_uInt16 BIFF_SHEETPROT_FORMAT_CELLS    = 0x0004;
-const sal_uInt16 BIFF_SHEETPROT_FORMAT_COLUMNS  = 0x0008;
-const sal_uInt16 BIFF_SHEETPROT_FORMAT_ROWS     = 0x0010;
-const sal_uInt16 BIFF_SHEETPROT_INSERT_COLUMNS  = 0x0020;
-const sal_uInt16 BIFF_SHEETPROT_INSERT_ROWS     = 0x0040;
-const sal_uInt16 BIFF_SHEETPROT_INSERT_HLINKS   = 0x0080;
-const sal_uInt16 BIFF_SHEETPROT_DELETE_COLUMNS  = 0x0100;
-const sal_uInt16 BIFF_SHEETPROT_DELETE_ROWS     = 0x0200;
-const sal_uInt16 BIFF_SHEETPROT_SELECT_LOCKED   = 0x0400;
-const sal_uInt16 BIFF_SHEETPROT_SORT            = 0x0800;
-const sal_uInt16 BIFF_SHEETPROT_AUTOFILTER      = 0x1000;
-const sal_uInt16 BIFF_SHEETPROT_PIVOTTABLES     = 0x2000;
-const sal_uInt16 BIFF_SHEETPROT_SELECT_UNLOCKED = 0x4000;
+const sal_uInt32 BIFF_SHEETPROT_OBJECTS         = 0x00000001;
+const sal_uInt32 BIFF_SHEETPROT_SCENARIOS       = 0x00000002;
+const sal_uInt32 BIFF_SHEETPROT_FORMAT_CELLS    = 0x00000004;
+const sal_uInt32 BIFF_SHEETPROT_FORMAT_COLUMNS  = 0x00000008;
+const sal_uInt32 BIFF_SHEETPROT_FORMAT_ROWS     = 0x00000010;
+const sal_uInt32 BIFF_SHEETPROT_INSERT_COLUMNS  = 0x00000020;
+const sal_uInt32 BIFF_SHEETPROT_INSERT_ROWS     = 0x00000040;
+const sal_uInt32 BIFF_SHEETPROT_INSERT_HLINKS   = 0x00000080;
+const sal_uInt32 BIFF_SHEETPROT_DELETE_COLUMNS  = 0x00000100;
+const sal_uInt32 BIFF_SHEETPROT_DELETE_ROWS     = 0x00000200;
+const sal_uInt32 BIFF_SHEETPROT_SELECT_LOCKED   = 0x00000400;
+const sal_uInt32 BIFF_SHEETPROT_SORT            = 0x00000800;
+const sal_uInt32 BIFF_SHEETPROT_AUTOFILTER      = 0x00001000;
+const sal_uInt32 BIFF_SHEETPROT_PIVOTTABLES     = 0x00002000;
+const sal_uInt32 BIFF_SHEETPROT_SELECT_UNLOCKED = 0x00004000;
 
 } // namespace
 
@@ -277,8 +277,7 @@ void WorksheetSettings::importPassword( BiffInputStream& rStrm )
 
 void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
 {
-    rStrm.skip( 19 );
-    sal_uInt16 nFlags = rStrm.readuInt16();
+    sal_uInt32 nFlags = rStrm.readuInt32();
     // set flag means protection is disabled
     maSheetProt.mbObjects          = !getFlag( nFlags, BIFF_SHEETPROT_OBJECTS );
     maSheetProt.mbScenarios        = !getFlag( nFlags, BIFF_SHEETPROT_SCENARIOS );

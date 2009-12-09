@@ -71,6 +71,7 @@
 #include "viewmediashape.hxx"
 #include "mediashape.hxx"
 #include "tools.hxx"
+#include "unoview.hxx"
 
 using namespace ::com::sun::star;
 
@@ -88,12 +89,19 @@ namespace slideshow
             mxShape( rxShape ),
             mxPlayer(),
             mxPlayerWindow(),
-            mxComponentContext( rxContext )
+            mxComponentContext( rxContext ),
+            mbIsSoundEnabled(true)
         {
             ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
+
+            UnoViewSharedPtr pUnoView (::boost::dynamic_pointer_cast<UnoView>(rViewLayer));
+            if (pUnoView)
+            {
+                mbIsSoundEnabled = pUnoView->isSoundEnabled();
+            }
         }
 
         // ---------------------------------------------------------------------
@@ -352,7 +360,7 @@ namespace slideshow
                     getPropertyValue( bMute,
                                       rxProps,
                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Mute" )));
-                    mxPlayer->setMute( bMute );
+                    mxPlayer->setMute( bMute || !mbIsSoundEnabled);
 
                     sal_Int16 nVolumeDB(0);
                     getPropertyValue( nVolumeDB,

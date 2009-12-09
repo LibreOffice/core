@@ -44,6 +44,7 @@
 #define STR_NO_TABLE_EDITOR_DIALOG  ( STR_HSQLDB_BASE +    3 )
 #define STR_NO_TABLENAME            ( STR_HSQLDB_BASE +    4 )
 #define STR_NO_DOCUMENTUI           ( STR_HSQLDB_BASE +    5 )
+#define STR_ERROR_NEW_VERSION       ( STR_HSQLDB_BASE +    6 )
 
 #endif // CONNECTIVITY_RESOURCE_HSQLDB_HRC
 

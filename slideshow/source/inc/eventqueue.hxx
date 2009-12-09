@@ -72,6 +72,13 @@ namespace slideshow
              */
             bool addEventForNextRound( const EventSharedPtr& event );
 
+            /** Another way to control the order of asynchronous event
+                exeqution.  Use this method to schedule events that are to
+                be executed after all regular events that have no delay,
+                even when they schedule new regular events without delay.
+            */
+            bool addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent);
+
             /** Process the event queue.
 
                 This method executes all events whose timeout has
@@ -138,6 +145,7 @@ namespace slideshow
             ImplQueueType                   maEvents;
             typedef ::std::vector<EventEntry> EventEntryVector;
             EventEntryVector                maNextEvents;
+            ImplQueueType                   maNextNextEvents;
             void process_( bool bFireAllEvents );
 
             // perform timing of events via relative time

@@ -37,6 +37,7 @@
 
 #include <tools/urlobj.hxx>
 #include "vbawindow.hxx"
+#include "vbaglobals.hxx"
 //#include "vbaworkbook.hxx"
 
 using namespace ::com::sun::star;
@@ -47,15 +48,15 @@ sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
 
-uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext )
+uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
 {
-    return new ScVbaWorkbook( uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext,  xModel );
+    return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
 
-uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
+uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext ), xContext,xModel ) );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext,xModel ) );
     return uno::makeAny( xWin );
 }
 
@@ -108,12 +109,13 @@ public:
 
 class WindowEnumImpl : public  WindowComponentEnumImpl
 {
+    uno::Any m_aApplication;
 public:
-    WindowEnumImpl(const uno::Reference< uno::XComponentContext >& xContext, const Components& components ):WindowComponentEnumImpl( xContext, components ) {}
-    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ): WindowComponentEnumImpl( xContext ) {}
+    WindowEnumImpl(const uno::Reference< uno::XComponentContext >& xContext, const Components& components, const uno::Any& aApplication ):WindowComponentEnumImpl( xContext, components ), m_aApplication( aApplication ){}
+    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  const uno::Any& aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication( aApplication ) {}
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
-        return ComponentToWindow( WindowComponentEnumImpl::nextElement(), m_xContext );
+        return ComponentToWindow( WindowComponentEnumImpl::nextElement(), m_xContext, m_aApplication );
     }
 };
 
@@ -212,16 +214,19 @@ ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParen
 {
 }
 
+ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
+{
+}
 uno::Reference< container::XEnumeration >
 ScVbaWindows::createEnumeration() throw (uno::RuntimeException)
 {
-    return new WindowEnumImpl( mxContext );
+    return new WindowEnumImpl( mxContext, Application() );
 }
 
 uno::Any
 ScVbaWindows::createCollectionObject( const css::uno::Any& aSource )
 {
-    return ComponentToWindow( aSource,  mxContext );
+    return ComponentToWindow( aSource,  mxContext, Application() );
 }
 
 uno::Type
@@ -230,12 +235,6 @@ ScVbaWindows::getElementType() throw (uno::RuntimeException)
     return excel::XWindows::static_type(0);
 }
 
-uno::Reference< XCollection >
-ScVbaWindows::Windows( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-{
-    uno::Reference< container::XIndexAccess > xIndex( new WindowsAccessImpl( xContext ) );
-    return  new ScVbaWindows( uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext , xIndex );
-}
 
 void SAL_CALL
 ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWorkbook*/, const uno::Any& /*SyncHorizontal*/, const uno::Any& /*SyncVertical*/ ) throw (uno::RuntimeException)

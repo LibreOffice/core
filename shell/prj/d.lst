@@ -4,6 +4,9 @@
 ..\%__SRC%\lib\*.uno.so %_DEST%\lib%_EXT%\*.uno.so
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+..\%__SRC%\bin\x64\shlxthdl.dll %_DEST%\bin%_EXT%\shlxthdl_x64.dll
+..\%__SRC%\bin\x64\ooofiltproxy.dll %_DEST%\bin%_EXT%\ooofiltproxy_x64.dll
+..\%__SRC%\bin\x64\ooofilt.dll %_DEST%\bin%_EXT%\ooofilt_x64.dll
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 

@@ -31,12 +31,13 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #define DBACORE_SDBCORETOOLS_HXX
 
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
+
+namespace comphelper
+{
+    class ComponentContext;
+}
 
 //.........................................................................
 namespace dbaccess
@@ -70,6 +71,11 @@ namespace dbaccess
         const sal_Char* _pAsciiSettingsName,
         ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
     );
+
+    // -----------------------------------------------------------------------------
+    /** retrieves a to-be-displayed string for a given caught exception;
+    */
+    ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Any& _rError );
 
 //.........................................................................
 }   // namespace dbaccess

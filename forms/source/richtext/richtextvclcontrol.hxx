@@ -117,13 +117,15 @@ namespace frm
         const EditView& getView() const;
               EditView& getView();
 
+        // Window overridables
+        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
+
     protected:
         // Window overridables
         virtual void        Resize();
         virtual void        GetFocus();
         virtual void        StateChanged( StateChangedType nStateChange );
         virtual long        PreNotify( NotifyEvent& _rNEvt );
-        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
         virtual long        Notify( NotifyEvent& _rNEvt );
 
     private:

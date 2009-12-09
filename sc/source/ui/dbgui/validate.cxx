@@ -53,6 +53,12 @@
 #include "validate.hxx"
 #include "compiler.hxx"
 #include "formula/opcode.hxx" //CHINA001
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#include "tabvwsh.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/childwin.hxx>
+#include "reffact.hxx"
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 // ============================================================================
 
@@ -66,8 +72,19 @@ static USHORT pValueRanges[] =
 
 // ============================================================================
 
-ScValidationDlg::ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet ) :
-    SfxTabDialog( pParent, ScResId( TAB_DLG_VALIDATION ), pArgSet )
+//<!--Modified by PengYunQuan for Validity Cell Range Picker
+//ScValidationDlg::ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet ) :
+//    SfxTabDialog( pParent, ScResId( TAB_DLG_VALIDATION ), pArgSet )
+ScValidationDlg::ScValidationDlg( Window*           pParent,
+                                 const SfxItemSet* pArgSet,
+                                 ScTabViewShell *pTabViewSh,
+                                 SfxBindings *pB /*= NULL*/
+                      ) :
+        ScValidationDlgBase( pParent ? pParent : SFX_APP()->GetTopWindow(), TAB_DLG_VALIDATION, pArgSet, pB ),
+            m_bOwnRefHdlr( false ),
+            m_pTabVwSh( pTabViewSh ),
+            m_bRefInputting( false )
+//-->Modified by PengYunQuan for Validity Cell Range Picker
 {
     AddTabPage( TP_VALIDATION_VALUES,    ScTPValidationValue::Create, 0 );
     AddTabPage( TP_VALIDATION_INPUTHELP, ScTPValidationHelp::Create,  0 );
@@ -75,8 +92,100 @@ ScValidationDlg::ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet ) :
     FreeResource();
 }
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
+{
+    if ( rRange.aStart != rRange.aEnd )
+        if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+            if( m_pRefEdit )
+                pValidationDlg/*->GetRefHandler()*/->RefInputStart( m_pRefEdit );
+
+    if ( m_pRefEdit )
+    {
+        String  aStr;
+        rRange.Format( aStr, SCR_ABS_3D, pDoc );
+        m_pRefEdit->SetRefString( aStr );
+        //m_pRefEdit->SetRefString( rRange.aStart != rRange.aEnd ? aStr : String::CreateFromAscii("=").Append( aStr ) );
+    }
+}
+
+void ScTPValidationValue:: SetActiveHdl()
+{
+    if ( m_pRefEdit ) m_pRefEdit->GrabFocus();
+
+    if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        if( m_pRefEdit )
+        {
+            pValidationDlg/*->GetRefHandler()*/->RefInputDone();
+        }
+}
+
+void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
+{
+    if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+    {
+        if( pEdit == m_pRefEdit )
+        {
+            if( Window *pPreWnd = pEdit==&maEdMax?&maFtMax:(pEdit==&maEdMin?&maFtMin:NULL) )
+            {
+                pPreWnd->SetParent( pValidationDlg );
+                pPreWnd->Hide();
+            }
+
+            m_pRefEdit->SetParent( pValidationDlg );
+        }
+
+        if( pButton == &m_btnRef )m_btnRef.SetParent( pValidationDlg );
+    }
+}
+
+void            ScTPValidationValue::RefInputDonePreHdl()
+{
+
+    if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
+    {
+        if( Window *pPreWnd = m_pRefEdit==&maEdMax?&maFtMax:(m_pRefEdit==&maEdMin?&maFtMin:NULL) )
+        {
+            pPreWnd->SetParent( this );
+            pPreWnd->Show();
+        }
+
+        m_pRefEdit->SetParent( this );
+
+        m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+//      aExample1.SetParent( m_pRefEdit ); // the aExample1's child order will affect acc key
+    }
+
+    if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
+//  if( aExample1.GetParent()!=this ) aExample1.SetParent( this );
+}
+
+void            ScTPValidationValue::RefInputDonePostHdl()
+{
+
+
+    if( m_pRefEdit && !m_pRefEdit->HasFocus() )
+        m_pRefEdit->GrabFocus();
+
+}
+
+
+BOOL ScValidationDlg::Close()
+{
+    if( m_bOwnRefHdlr )
+        if( SfxTabPage* pPage = GetTabPage( TP_VALIDATION_VALUES ) )
+            static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+
+    return ScValidationDlgBase::Close();
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker
+
 ScValidationDlg::~ScValidationDlg()
 {
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    if( m_bOwnRefHdlr )
+        RemoveRefDlg( FALSE );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 
@@ -236,7 +345,10 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     maStrMax  ( ScResId( SCSTR_VALID_MAXIMUM ) ),
     maStrValue( ScResId( SCSTR_VALID_VALUE ) ),
     maStrRange( ScResId( SCSTR_VALID_RANGE ) ),
-    maStrList ( ScResId( SCSTR_VALID_LIST ) )
+    maStrList ( ScResId( SCSTR_VALID_LIST ) ),
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+        m_btnRef( this, ScResId( RB_VALIDITY_REF ) )
+//-->Added by PengYunQuan for Validity Cell Range Picker
 {
     Init();
     FreeResource();
@@ -246,6 +358,9 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     String aListSep = ::GetScCompilerNativeSymbol( ocSep ); //CHINA001
     DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    m_btnRef.Hide();
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 ScTPValidationValue::~ScTPValidationValue()
@@ -257,6 +372,13 @@ void ScTPValidationValue::Init()
     maLbAllow.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
     maLbValue.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
     maCbShow.SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    maEdMin.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    maEdMin.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    maEdMax.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    m_btnRef.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    maEdMax.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 
     maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
     maLbValue.SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
@@ -374,6 +496,133 @@ void ScTPValidationValue::SetSecondFormula( const String& rFmlaStr )
     maEdMax.SetText( rFmlaStr );
 }
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+ScValidationDlg * ScTPValidationValue::GetValidationDlg()
+{
+    if( Window *pParent = GetParent() )
+        do{
+            if ( dynamic_cast<ScValidationDlg*>( pParent ) )
+                return static_cast< ScValidationDlg * >( pParent );
+        }while ( NULL != ( pParent = pParent->GetParent() ) );
+    return NULL;
+}
+void ScTPValidationValue::SetupRefDlg()
+{
+    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        if( pValidationDlg->SetupRefDlg() )
+        {
+            pValidationDlg->SetHandler( this );
+            pValidationDlg->SetSetRefHdl( (ScRefHandlerHelper::PFUNCSETREFHDLTYPE)( &ScTPValidationValue::SetReferenceHdl ) );
+            pValidationDlg->SetSetActHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::SetActiveHdl ) );
+            pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
+            pValidationDlg->SetRefInputDonePreHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePreHdl ) );
+            pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
+
+            if ( maEdMax.IsVisible() ) { m_pRefEdit = &maEdMax; }
+            else if ( maEdMin.IsVisible() ) {  m_pRefEdit = &maEdMin; }
+
+            if( m_pRefEdit && !m_pRefEdit->HasFocus() ) m_pRefEdit->GrabFocus();
+
+            if( m_pRefEdit ) m_pRefEdit->SetRefDialog( pValidationDlg );
+            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit );
+        }
+}
+
+void ScTPValidationValue::RemoveRefDlg()
+{
+    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        if( pValidationDlg->RemoveRefDlg() )
+        {
+            pValidationDlg->SetHandler( NULL );
+            pValidationDlg->SetSetRefHdl( NULL );
+            pValidationDlg->SetSetActHdl( NULL );
+            pValidationDlg->SetRefInputStartPreHdl( NULL );
+            pValidationDlg->SetRefInputDonePreHdl( NULL );
+            pValidationDlg->SetRefInputDonePostHdl( NULL );
+
+            if( m_pRefEdit ) m_pRefEdit->SetRefDialog( NULL );
+            m_pRefEdit = NULL;
+
+            m_btnRef.SetReferences( NULL, NULL );
+
+#if ! defined( WNT ) && !defined( _MSC_VER )
+            TidyListBoxes();
+#endif
+        }
+}
+
+void ScTPValidationValue::TidyListBoxes()
+{
+    if ( Window *pWnd = GetChild( 0 ) )
+    {
+        bool bFindLst = false;
+        std::list<Window*> alstOrder;
+
+        do{
+            if( pWnd->GetParent() == this )
+            {
+                if ( !bFindLst )
+                {
+                    try{
+                        if( dynamic_cast<ListBox*>(pWnd)||dynamic_cast<ListBox*>(pWnd->GetWindow(WINDOW_CLIENT) ) )
+                            bFindLst = true;
+                    }
+                    catch( ... )
+                    {
+                        if ( *(void**)pWnd == *(void**)&maLbValue )
+                            bFindLst = true;
+                        else if ( Window *pClient = pWnd->GetWindow( WINDOW_CLIENT ) )
+                            if ( *(void**)pClient == *(void**)&maLbValue )
+                                bFindLst = true;
+                    }
+                }
+
+                if ( bFindLst )
+                    alstOrder.push_back( pWnd->GetWindow( WINDOW_CLIENT ) );
+            }
+        }while( NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT  ) ) );
+
+        pWnd = GetChild(0);
+
+        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) );
+
+        if ( pWnd )
+        {
+            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); i++ )
+            {
+                Window *pParent = (*i)->GetParent();
+                (*i)->SetParent( pWnd );
+                (*i)->SetParent( pParent );
+            }
+        }
+    }
+}
+
+IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, /*pEdit*/ )
+{
+    USHORT  nPos=maLbAllow.GetSelectEntryPos();
+
+    if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
+    {
+        SetupRefDlg();
+    }
+
+    return 0;
+}
+
+IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
+{
+    if( pWnd == m_pRefEdit || pWnd == &m_btnRef )
+        if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+            if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
+                if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_btnRef.HasFocus() )
+                {
+                    RemoveRefDlg();
+                }
+
+    return 0;
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 // ----------------------------------------------------------------------------
 
@@ -427,7 +676,9 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
     maFtMax.Show( bShowMax );
     maEdMax.Show( bShowMax );
     maFtHint.Show( bRange );
-
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    m_btnRef.Show( bRange );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     return 0;
 }
 
@@ -660,3 +911,114 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, EMPTYARG )
     return( 0L );
 }
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+bool ScValidationDlg::EnterRefStatus()
+{
+    ScTabViewShell *pTabViewShell = GetTabViewShell();
+
+    if( !pTabViewShell ) return false;
+
+    USHORT nId  = SLOTID;
+    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+    if ( pWnd && pWnd->GetWindow()!= this ) pWnd = NULL;
+
+    SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+
+    return true;
+}
+
+bool ScValidationDlg::LeaveRefStatus()
+{
+    ScTabViewShell *pTabViewShell = GetTabViewShell();
+
+    if( !pTabViewShell ) return false;
+
+    USHORT nId  = SLOTID;
+    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+    //SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+    if ( pViewFrm->GetChildWindow( nId ) )
+    {
+        DoClose( nId );
+    }
+    return true;
+}
+
+bool ScValidationDlg::SetupRefDlg()
+{
+    if ( m_bOwnRefHdlr ) return false;
+    if( EnterRefMode() )
+    {
+        SetModal( FALSE );
+        return  /*SetChkShell( GetDocShell() ),*/ m_bOwnRefHdlr = true && EnterRefStatus();
+    }
+
+    return false;
+}
+
+bool ScValidationDlg::RemoveRefDlg( BOOL bRestoreModal /* = TRUE */ )
+{
+    bool bVisLock = false;
+    bool bFreeWindowLock = false;
+
+    ScTabViewShell *pTabVwSh = GetTabViewShell();
+
+    if( !pTabVwSh ) return false;
+
+    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
+    {
+        bVisLock = static_cast<ScValidityRefChildWin*>(pWnd)->LockVisible( true );
+        bFreeWindowLock = static_cast<ScValidityRefChildWin*>(pWnd)->LockFreeWindow( true );
+    }
+
+    if ( !m_bOwnRefHdlr ) return false;
+    if( LeaveRefStatus() && LeaveRefMode() )
+    {
+        m_bOwnRefHdlr = false;
+
+        if( bRestoreModal )
+            SetModal( TRUE );
+    }
+
+    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
+    {
+        static_cast<ScValidityRefChildWin*>(pWnd)->LockVisible( bVisLock );
+        static_cast<ScValidityRefChildWin*>(pWnd)->LockFreeWindow( bFreeWindowLock );
+    }
+
+    return true;
+}
+
+//TYPEINIT1( ScTPValidationValue, SfxTabPage )
+
+void ScTPValidationValue::ScRefButtonEx::Click()
+{
+    if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
+        pParent->OnClick( this );
+
+    ScRefButton::Click();
+}
+
+void ScTPValidationValue::OnClick( Button *pBtn )
+{
+    if( pBtn == &m_btnRef )
+        SetupRefDlg();
+}
+
+BOOL ScValidationDlg::IsChildFocus()
+{
+    if ( const Window *pWin = Application::GetFocusWindow() )
+        while( NULL != ( pWin = pWin->GetParent() ) )
+            if( pWin == this )
+                return TRUE;
+
+    return FALSE;
+}
+
+
+bool    ScValidationDlg::IsAlive()
+{
+    return SC_MOD()->IsAliveRefDlg( SLOTID, this );
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker

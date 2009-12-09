@@ -32,7 +32,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "controltype.hxx"
-#include "extensio.hrc"
+#include "propctrlr.hrc"
 #include "fontdialog.hxx"
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"

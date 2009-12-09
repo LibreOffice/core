@@ -1302,7 +1302,7 @@ testcase tMasterDocToolsHyphenation
 
     Kontext "Silbentrennung"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists() ) then
+    if ( Silbentrennung.Exists( 2 ) ) then
         Call DialogTest ( Silbentrennung )
         Silbentrennung.Cancel
     else

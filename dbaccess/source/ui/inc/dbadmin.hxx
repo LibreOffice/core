@@ -114,8 +114,6 @@ public:
 protected:
     // adds a new detail page and remove all the old ones
     void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
-    // removes all detail pages
-    void removeDetailPages();
 
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();

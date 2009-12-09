@@ -141,6 +141,7 @@ namespace frm
 
         virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
+        virtual void        resetNoBroadcast();
 
         virtual void        onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
         virtual void        onDisconnectedDbColumn();

@@ -32,20 +32,20 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <ooo/vba/excel/XOLEObject.hpp>
+#include <ooo/vba/msforms/XControl.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XOLEObject > OLEObjectImpl_BASE;
 
 class ScVbaOLEObject : public OLEObjectImpl_BASE
 {
-    css::uno::Reference< css::awt::XWindowPeer > m_xWindowPeer;
 protected:
     css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
     ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape );
