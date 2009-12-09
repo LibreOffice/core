@@ -2669,18 +2669,18 @@ namespace docfunc
                 if ( !pParentTxtFmtColl )
                     continue;
 
-                // --> OD 2007-12-07 #i77708#
-                // consider that explicitly no list style is set - empty string
-                // at numrule item.
-//                const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
-//                if ( rDirectItem.GetValue().Len() != 0 )
                 if ( SFX_ITEM_SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
                 {
-                    bRet = true;
-                    break;
+                    // --> OD 2009-11-12 #i106218#
+                    // consider that the outline style is set
+                    const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
+                    if ( rDirectItem.GetValue() != rDoc.GetOutlineNumRule()->GetName() )
+                    {
+                        bRet = true;
+                        break;
+                    }
+                    // <--
                 }
-                // <--
-
             }
 
         }
