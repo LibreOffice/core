@@ -435,15 +435,17 @@ namespace dbaui
                 // page
                 _inout_rDisplayName = String();
                 break;
-            case ::dbaccess::DST_MYSQL_NATIVE_DIRECT:
-                // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
-                // this driver is installed
-                if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
-                    _inout_rDisplayName = String();
-                break;
             default:
                 break;
             }
+        }
+
+        if ( eType == ::dbaccess::DST_MYSQL_NATIVE_DIRECT )
+        {
+            // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
+            // this driver is installed
+            if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
+                _inout_rDisplayName = String();
         }
 
         if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )

@@ -53,7 +53,7 @@ import java.io.IOException;
 
 /** complex test case for Base's application UI
  */
-public class ApplicationController extends complexlib.ComplexTestCase
+public class ApplicationController extends TestCase
 {
 
     private HsqlDatabase m_database;
@@ -65,22 +65,6 @@ public class ApplicationController extends complexlib.ComplexTestCase
         super();
     }
 
-    // --------------------------------------------------------------------------------------------------------
-    protected final XComponentContext getComponentContext()
-    {
-        XComponentContext context = null;
-        try
-        {
-            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getORB());
-            context = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
-                    orbProps.getPropertyValue("DefaultContext"));
-        }
-        catch (Exception ex)
-        {
-            failed("could not retrieve the ComponentContext");
-        }
-        return context;
-    }
     // --------------------------------------------------------------------------------------------------------
 
     public String[] getTestMethodNames()
@@ -95,12 +79,6 @@ public class ApplicationController extends complexlib.ComplexTestCase
     public String getTestObjectName()
     {
         return getClass().getName();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    protected final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory) param.getMSF();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -143,15 +121,17 @@ public class ApplicationController extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void before() throws Exception, java.lang.Exception
+    public void before() throws java.lang.Exception
     {
+        super.before();
         impl_switchToDocument(null);
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void after()
+    public void after() throws java.lang.Exception
     {
         impl_closeDocument();
+        super.after();
     }
     // --------------------------------------------------------------------------------------------------------
 
@@ -161,9 +141,7 @@ public class ApplicationController extends complexlib.ComplexTestCase
         // then those changes are saved in the old document, actually
         final String oldDocumentURL = m_database.getDocumentURL();
 
-        final File documentFile = java.io.File.createTempFile(getTestObjectName(), ".odb");
-        documentFile.deleteOnExit();
-        final String newDocumentURL = URLHelper.getFileURLFromSystemPath(documentFile.getAbsoluteFile());
+        final String newDocumentURL = createTempFileURL();
 
         // store the doc in a new location
         final XStorable storeDoc = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );

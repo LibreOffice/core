@@ -710,7 +710,7 @@ void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOExce
 Reference< XStorage> ODocumentContainer::getContainerStorage() const
 {
     return  m_pImpl->m_pDataSource
-        ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bFormsContainer ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
+        ?   m_pImpl->m_pDataSource->getStorage( m_bFormsContainer ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
         :   Reference< XStorage>();
 }
 

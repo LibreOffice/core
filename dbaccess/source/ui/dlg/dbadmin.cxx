@@ -121,16 +121,6 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
 
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
-// -----------------------------------------------------------------------------
-void ODbAdminDialog::removeDetailPages()
-{
-    // remove all current detail pages
-    while (m_aCurrentDetailPages.size())
-    {
-        RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
-        m_aCurrentDetailPages.pop();
-    }
-}
 
 // -----------------------------------------------------------------------------
 void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)

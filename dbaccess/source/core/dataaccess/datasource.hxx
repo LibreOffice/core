@@ -70,11 +70,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE11_HXX_
-#include <cppuhelper/implbase11.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE12_HXX_
-#include <cppuhelper/implbase12.hxx>
+#ifndef _CPPUHELPER_COMPBASE11_HXX_
+#include <cppuhelper/compbase11.hxx>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
 #include <com/sun/star/embed/XTransactionListener.hpp>
@@ -142,32 +139,31 @@ class OChildCommitListen_Impl;
 //============================================================
 //= ODatabaseSource
 //============================================================
-typedef ::cppu::ImplHelper11    <   ::com::sun::star::lang::XServiceInfo
-                                ,   ::com::sun::star::sdbc::XDataSource
-                                ,   ::com::sun::star::sdb::XBookmarksSupplier
-                                ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
-                                ,   ::com::sun::star::sdb::XCompletedConnection
-                                ,   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::sdbc::XIsolatedConnection
-                                ,   ::com::sun::star::sdbcx::XTablesSupplier
-                                ,   ::com::sun::star::util::XFlushable
-                                ,   ::com::sun::star::util::XFlushListener
-                                ,   ::com::sun::star::sdb::XDocumentDataSource
-                                >   ODatabaseSource_Base;
+typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::lang::XServiceInfo
+                                            ,   ::com::sun::star::sdbc::XDataSource
+                                            ,   ::com::sun::star::sdb::XBookmarksSupplier
+                                            ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
+                                            ,   ::com::sun::star::sdb::XCompletedConnection
+                                            ,   ::com::sun::star::container::XContainerListener
+                                            ,   ::com::sun::star::sdbc::XIsolatedConnection
+                                            ,   ::com::sun::star::sdbcx::XTablesSupplier
+                                            ,   ::com::sun::star::util::XFlushable
+                                            ,   ::com::sun::star::util::XFlushListener
+                                            ,   ::com::sun::star::sdb::XDocumentDataSource
+                                            >   ODatabaseSource_Base;
 
 
 class ODatabaseSource   :public ModelDependentComponent // must be first
-                        ,public OSubComponent
+                        ,public ODatabaseSource_Base
                         ,public ::cppu::OPropertySetHelper
                         ,public ::comphelper::OPropertyArrayUsageHelper < ODatabaseSource >
-                        ,public ODatabaseSource_Base
 {
     friend class ODatabaseContext;
     friend class OConnection;
     friend class OSharedConnectionManager;
 
 private:
-
+    using ODatabaseSource_Base::rBHelper;
     OBookmarkContainer                      m_aBookmarks;
     ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 

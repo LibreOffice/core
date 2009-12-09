@@ -378,16 +378,6 @@ namespace dbaui
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
-    //======================================================================
-    //= ReportDesigner
-    //======================================================================
-    //----------------------------------------------------------------------
-    ReportDesigner::ReportDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication , const Reference< XFrame >& _rxParentFrame)
-        :DatabaseObjectView( _rxORB, _rxApplication,  _rxParentFrame,static_cast< ::rtl::OUString >( URL_COMPONENT_REPORTDESIGN ) )
-    {
-    }
-
-
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................

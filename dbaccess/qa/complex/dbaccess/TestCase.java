@@ -69,12 +69,12 @@ public abstract class TestCase extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void before()
+    public void before() throws java.lang.Exception
     {
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void after()
+    public void after() throws java.lang.Exception
     {
     }
 

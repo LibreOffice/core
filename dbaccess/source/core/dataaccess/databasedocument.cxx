@@ -40,18 +40,10 @@
 #include "documenteventexecutor.hxx"
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
-
-#include <comphelper/documentconstants.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/numberedcollection.hxx>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/property.hxx>
-#include <svtools/saveopt.hxx>
-
-#include <framework/titlehelper.hxx>
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -74,14 +66,17 @@
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/interaction.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
+#include <svtools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errcode.hxx>
@@ -178,6 +173,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_bAllowDocumentScripting( false )
 {
     DBG_CTOR(ODatabaseDocument,NULL);
+    OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -195,14 +191,25 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     // #i94840#
     if ( m_pImpl->hadInitializedDocument() )
     {
-        impl_setInitialized();
-        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
+        // Note we set our init-state to "Initializing", not "Initialized". We're created from inside the ModelImpl,
+        // which is expected to call attachResource in case there was a previous incarnation of the document,
+        // so we can properly finish our initialization then.
+        impl_setInitializing();
+
+        if ( m_pImpl->getURL().getLength() )
+        {
+            // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
+            // here is effectively loading the document.
+            // #i105505# / 2009-10-01 / frank.schoenheit@sun.com
+            m_aViewMonitor.onLoadedDocument();
+        }
     }
 }
 
 //--------------------------------------------------------------------------
 ODatabaseDocument::~ODatabaseDocument()
 {
+    OSL_TRACE( "DD: dtor: %p: %p", this, m_pImpl.get() );
     DBG_DTOR(ODatabaseDocument,NULL);
     if ( !ODatabaseDocument_OfficeDocument::rBHelper.bInDispose && !ODatabaseDocument_OfficeDocument::rBHelper.bDisposed )
     {
@@ -561,6 +568,8 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         // should know this before anybody actually uses the object.
         m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
 
+        aGuard.clear();
+        // <- SYNCHRONIZED
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
@@ -807,13 +816,11 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
             throw;
         }
 
-        Exception aExcept;
-        aError >>= aExcept;
-
-        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
+        sErrorMessage = ResourceManager::loadString(
             RID_STR_ERROR_WHILE_SAVING,
-            "$except$", aError.getValueTypeName(),
-            "$message$", aExcept.Message
+            "$location$", _rURL,
+            "$message$", sErrorMessage
         );
         throw IOException( sErrorMessage, *this );
     }
@@ -979,10 +986,11 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
         Exception aExcept;
         aError >>= aExcept;
 
-        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
+        sErrorMessage = ResourceManager::loadString(
             RID_STR_ERROR_WHILE_SAVING,
-            "$except$", aError.getValueTypeName(),
-            "$message$", aExcept.Message
+            "$location$", _rURL,
+            "$message$", sErrorMessage
         );
         throw IOException( sErrorMessage, *this );
     }
@@ -1356,6 +1364,24 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     if ( aSaveOpt.IsSaveRelFSys() )
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rMediaDescriptor.getOrDefault("URL",::rtl::OUString())));
 
+    ::rtl::OUString aVersion;
+    SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
+
+    // older versions can not have this property set, it exists only starting from ODF1.2
+    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+        aVersion = ODFVER_012_TEXT;
+
+    if ( aVersion.getLength() )
+    {
+        try
+        {
+            xInfoSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Version" )), uno::makeAny( aVersion ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
@@ -1444,6 +1470,7 @@ void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference<
 //------------------------------------------------------------------------------
 void ODatabaseDocument::disposing()
 {
+    OSL_TRACE( "DD: disp: %p: %p", this, m_pImpl.get() );
     if ( !m_pImpl.is() )
     {
         // this means that we're already disposed
