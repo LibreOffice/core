@@ -35,7 +35,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/font.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/outlobj.hxx>
@@ -49,7 +49,7 @@
 #include <svx/svxfont.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "cell.hxx"

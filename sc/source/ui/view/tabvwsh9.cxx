@@ -44,7 +44,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"

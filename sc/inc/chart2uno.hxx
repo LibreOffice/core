@@ -37,7 +37,7 @@
 #include "token.hxx"
 #include "chartlis.hxx"
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -59,7 +59,7 @@
 #include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <hash_set>
 #include <list>

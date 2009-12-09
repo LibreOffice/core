@@ -30,8 +30,8 @@
 #ifndef _CHART2_ITEMPOOL_HXX
 #define _CHART2_ITEMPOOL_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
 
 namespace chart
 {

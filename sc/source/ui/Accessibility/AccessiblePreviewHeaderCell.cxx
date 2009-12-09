@@ -51,7 +51,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <vcl/window.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/convert.hxx>

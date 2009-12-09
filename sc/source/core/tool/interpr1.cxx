@@ -37,8 +37,8 @@
 #include <svx/langitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <sfx2/docfile.hxx>

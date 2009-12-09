@@ -58,7 +58,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
 #include <vcl/outdev.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include "document.hxx"
 #include "rangelst.hxx"

@@ -45,8 +45,8 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/frame.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -71,7 +71,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include "document.hxx"
 #include "xmlwrap.hxx"
