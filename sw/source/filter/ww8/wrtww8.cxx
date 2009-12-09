@@ -117,6 +117,8 @@
 #include <svx/mscodec.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
+#include "WW8Sttbf.hxx"
+#include "WW8FibData.hxx"
 
 using namespace sw::util;
 using namespace sw::types;
@@ -2368,37 +2370,45 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     if ( m_rWW8Export.bWrtWW8 )
     {
+        sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
+
         sal_uInt8 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TCellShd );
-        m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10), m_rWW8Export.pO->Count() );
-
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        for (sal_uInt32 m = 0; m < 2; m++)
         {
-            const SwTableBox * pBox1 = rTabBoxes[n];
-            const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
-            const SfxPoolItem * pI = NULL;
-            Color aColor;
+            m_rWW8Export.InsUInt16( aSprmIds[m] );
+            m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10),
+                                     m_rWW8Export.pO->Count() );
 
-            if ( SFX_ITEM_ON == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
+            for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
             {
-                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                const SwTableBox * pBox1 = rTabBoxes[n];
+                const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
+                const SfxPoolItem * pI = NULL;
+                Color aColor;
+
+                if ( SFX_ITEM_ON ==
+                     pFrmFmt->GetAttrSet().
+                     GetItemState( RES_BACKGROUND, false, &pI ) )
+                {
+                    aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                }
+                else
+                    aColor = COL_AUTO;
+
+                WW8SHDLong aSHD;
+                aSHD.setCvFore( 0xFF000000 );
+
+                sal_uInt32 nBgColor = aColor.GetColor();
+                if ( nBgColor == COL_AUTO )
+                    aSHD.setCvBack( 0xFF000000 );
+                else
+                    aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
+
+                aSHD.Write( m_rWW8Export );
             }
-            else
-                aColor = COL_AUTO;
-
-            WW8SHDLong aSHD;
-            aSHD.setCvFore( 0xFF000000 );
-
-            sal_uInt32 nBgColor = aColor.GetColor();
-            if ( nBgColor == COL_AUTO )
-                aSHD.setCvBack( 0xFF000000 );
-            else
-                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
-
-            aSHD.Write( m_rWW8Export );
         }
     }
 }
@@ -2413,11 +2423,24 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
+#ifdef DEBUG
+struct SwNodeHash
+{
+    size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
+};
+
+typedef ::std::hash_set<SwNode *, SwNodeHash> SwNodeHashSet;
+typedef ::std::deque<SwNode *> SwNodeDeque;
+#endif
+
 void MSWordExportBase::WriteText()
 {
 #ifdef DEBUG
     ::std::clog << "<WriteText>" << ::std::endl;
-//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+
+    SwNodeHashSet aNodeSet;
+    SwNodeDeque aNodeDeque;
 #endif
 
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
@@ -2425,6 +2448,29 @@ void MSWordExportBase::WriteText()
              pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex() ) )
     {
         SwNode * pNd = pCurPam->GetNode();
+
+#ifdef DEBUG
+        if (aNodeSet.find(pNd) == aNodeSet.end())
+        {
+            aNodeSet.insert(pNd);
+            aNodeDeque.push_back(pNd);
+        }
+        else
+        {
+            ::std::clog << "<already-done><which>" << dbg_out(*pNd)
+                        << "</which><nodes>" << ::std::endl;
+
+            SwNodeDeque::const_iterator aEnd = aNodeDeque.end();
+
+            for (SwNodeDeque::const_iterator aIt = aNodeDeque.begin();
+                 aIt != aEnd; aIt++)
+            {
+                ::std::clog << dbg_out(**aIt) << ::std::endl;
+            }
+
+            ::std::clog << "</nodes></already-done>" << ::std::endl;
+        }
+#endif
 
         if ( pNd->IsTxtNode() )
             SectionBreaksAndFrames( *pNd->GetTxtNode() );
@@ -2534,6 +2580,8 @@ void WW8Export::WriteMainText()
     ::std::clog << "</WriteMainText>" << ::std::endl;
 #endif
 }
+
+typedef ww8::WW8Sttb< ww8::WW8Struct >  WW8SttbAssoc;
 
 void WW8Export::WriteFkpPlcUsw()
 {
@@ -2656,8 +2704,45 @@ void WW8Export::WriteFkpPlcUsw()
         ExportDopTypography(pDop->doptypography);
 
         WriteDop( *this );                      // Document-Properties
+
+        // Write SttbfAssoc
+        WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
+            (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
+        // --> OD 2009-10-19 #i106057#
+        if ( pSttbfAssoc )
+        // <--
+        {
+            ::std::vector<String> aStrings;
+
+            ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
+            ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
+            for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
+                 aIt != aItEnd; aIt++)
+            {
+                String aStr(aIt->getStr());
+                aStrings.push_back(aStr);
+            }
+
+            WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
+                               pFib->lcbSttbfAssoc);
+        }
+
     }
     Strm().Seek( 0 );
+
+    // Reclaim stored FIB data from document.
+    ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
+          (pDoc->getExternalData(::sw::FIB).get());
+
+    // --> OD 2009-10-19 #i106057#
+    if ( pFibData )
+    // <--
+    {
+        pFib->fReadOnlyRecommended =
+            pFibData->getReadOnlyRecommended() ? 1 : 0;
+        pFib->fWriteReservation =
+            pFibData->getWriteReservation() ? 1 : 0;
+    }
 
     pFib->Write( Strm() );  // FIB
 }
@@ -3479,7 +3564,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     const sal_uInt8 aFldData[] =
     {
-        0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
         0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!  /10
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
@@ -3487,7 +3571,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
         0,0,0,0,                            // /               /4
     };
-    int slen = sizeof( aFldData )
+    sal_uInt32 slen=sizeof(sal_uInt32)
+        + sizeof(aFldData)
         + sizeof( aFldHeader )
         + 2*ffname.getLength() + 4
         + 2*ffdeftext.getLength() + 4
@@ -3496,12 +3581,11 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffstattext.getLength() + 4
         + 2*ffentrymcr.getLength() + 4
         + 2*ffexitmcr.getLength() + 4;
-#ifdef OSL_BIGENDIAN
-    slen = SWAPLONG( slen );
-#endif // OSL_BIGENDIAN
-    *( (sal_uInt32 *)aFldData ) = slen;
+
+    *pDataStrm << slen;
+
     int len = sizeof( aFldData );
-    OSL_ENSURE( len == 0x44, "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
+    OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
     pDataStrm->Write( aFldData, len );
 
     len = sizeof( aFldHeader );
@@ -3560,6 +3644,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
 
+        ShortToSVBT16(0, nStyle);
         m_rWW8Export.pO->Insert( (BYTE*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
         TableInfoRow(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),

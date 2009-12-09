@@ -35,6 +35,11 @@
 #include <hash_map>
 #include <tox.hxx>
 class String;
+
+namespace rtl
+{
+class OUString;
+}
 class SwNode;
 class SwTxtAttr;
 class SwpHints;
@@ -69,6 +74,7 @@ extern bool bDbgOutPrintAttrSet;
 
 SW_DLLPUBLIC const char * dbg_out(const void * pVoid);
 SW_DLLPUBLIC const char * dbg_out(const String & aStr);
+SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr);
 SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt);
 SW_DLLPUBLIC const char * dbg_out(const SwNode & rNode);

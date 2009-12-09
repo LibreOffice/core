@@ -311,16 +311,16 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
+    { 0, 0 },                                           // RES_TXTATR_META
+    { 0, 0 },                                           // RES_TXTATR_METAFIELD
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
+    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
+    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
-    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
-    { 0, 0 },                                           // RES_TXTATR_META,
-    { 0, 0 },                                           // RES_TXTATR_METAFIELD,
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT

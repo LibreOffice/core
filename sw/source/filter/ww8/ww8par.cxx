@@ -138,6 +138,8 @@
 #include <dbgoutsw.hxx>
 #endif
 
+#include "WW8Sttbf.hxx"
+#include "WW8FibData.hxx"
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
@@ -3740,6 +3742,34 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 
+    ::ww8::WW8FibData * pFibData = new ::ww8::WW8FibData();
+
+    if (pWwFib->fReadOnlyRecommended)
+        pFibData->setReadOnlyRecommended(true);
+    else
+        pFibData->setReadOnlyRecommended(false);
+
+    if (pWwFib->fWriteReservation)
+        pFibData->setWriteReservation(true);
+    else
+        pFibData->setWriteReservation(false);
+
+    ::sw::tExternalDataPointer pExternalFibData(pFibData);
+
+    rDoc.setExternalData(::sw::FIB, pExternalFibData);
+
+    ::sw::tExternalDataPointer pSttbfAsoc
+          (new ::ww8::WW8Sttb<ww8::WW8Struct>(*pTableStream, pWwFib->fcSttbfAssoc, pWwFib->lcbSttbfAssoc));
+
+    rDoc.setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
+
+    if (pWwFib->fWriteReservation || pWwFib->fReadOnlyRecommended)
+    {
+        SwDocShell * pDocShell = rDoc.GetDocShell();
+        if (pDocShell)
+            pDocShell->SetReadOnlyUI(sal_True);
+    }
+
     pPaM = new SwPaM(rPos);
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
@@ -4349,7 +4379,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         pStrm->Read(pIn, nUnencryptedHdr);
                         aDecryptMain.Write(pIn, nUnencryptedHdr);
-                        delete pIn;
+                        delete [] pIn;
 
                         DecryptXOR(aCtx, *pStrm, aDecryptMain);
 

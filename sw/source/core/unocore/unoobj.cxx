@@ -2387,9 +2387,10 @@ void SAL_CALL SwXTextCursor::setAllPropertiesToDefault()
         // selection specific attribut ranges
         USHORT aResetableSetRange[] = {
             RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
             RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-            RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+            RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
             0
         };
         SvUShortsSort   aParaWhichIds;
