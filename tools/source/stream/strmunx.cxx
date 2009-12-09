@@ -745,7 +745,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
                       aFileCopier.Execute();
                     }
                 }
-              delete pBuf;
+              delete [] pBuf;
             }
         }
     }

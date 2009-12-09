@@ -1094,13 +1094,6 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
         return NULL;
 
     // fill in font info
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF; break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1; break;
-        default:
-            return NULL;
-    }
     rInfo.m_nAscent     = aFontInfo.m_nAscend;
     rInfo.m_nDescent    = aFontInfo.m_nDescend;
     rInfo.m_aPSName     = rMgr.getPSName( aFont );
@@ -1137,8 +1130,21 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
     rInfo.m_nCapHeight  = yMax; // Well ...
 
     for( int i = 0; i < 256; i++ )
-
         pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
+
+    switch( aFontInfo.m_eType )
+    {
+        case psp::fonttype::TrueType:
+            rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+            break;
+        case psp::fonttype::Type1: {
+            const bool bPFA = ((*(unsigned char*)pFile) < 0x80);
+            rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
+            }
+            break;
+        default:
+            return NULL;
+    }
 
     return pFile;
 }

@@ -77,23 +77,29 @@ void KDEXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    KAboutData *kAboutData = new KAboutData( "OpenOffice.org",
-            "OpenOffice.org",
+    KAboutData *kAboutData = new KAboutData("OpenOffice.org",
+            "kdelibs4",
             ki18n( "OpenOffice.org" ),
             "3.0.0",
             ki18n( "OpenOffice.org with KDE Native Widget Support." ),
             KAboutData::License_LGPL,
-            ki18n( "Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008 Novell, Inc"),
+            ki18n( "Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Novell, Inc"),
             ki18n( "OpenOffice.org is an office suite.\n" ),
             "http://kde.openoffice.org/index.html",
             "dev@kde.openoffice.org" );
+
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),
             "kendy@artax.karlin.mff.cuni.cz",
             "http://artax.karlin.mff.cuni.cz/~kendy" );
+    kAboutData->addAuthor( ki18n("Roman Shtylman"),
+            ki18n( "Porting to KDE 4." ),
+            "shtylman@gmail.com", "http://shtylman.com" );
     kAboutData->addAuthor( ki18n("Eric Bischoff"),
             ki18n( "Accessibility fixes, porting to KDE 4." ),
             "bischoff@kde.org" );
+
+    //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 1;
     USHORT nIdx;
@@ -135,6 +141,7 @@ void KDEXLib::Init()
 
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
+    KApplication::setQuitOnLastWindowClosed(false);
 
     Display* pDisp = QX11Info::display();
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);

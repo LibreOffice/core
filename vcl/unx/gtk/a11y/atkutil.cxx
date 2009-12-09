@@ -221,7 +221,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
             }
-            catch(lang::IndexOutOfBoundsException e)
+            catch(const lang::IndexOutOfBoundsException &e)
             {
                 g_warning("Focused object has invalid index in parent");
             }
@@ -577,7 +577,14 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
         if( g_aWindowList.find(pWindow) == g_aWindowList.end() )
         {
             g_aWindowList.insert(pWindow);
-            aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            try
+            {
+                aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            }
+            catch( const uno::Exception &e )
+            {
+                g_warning( "Exception caught processing focus events" );
+            }
         }
 #ifdef ENABLE_TRACING
         else
@@ -608,7 +615,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
             }
         }
     }
-    catch( uno::Exception e )
+    catch( const uno::Exception& e )
     {
         g_warning( "Exception caught processing menu highlight events" );
     }

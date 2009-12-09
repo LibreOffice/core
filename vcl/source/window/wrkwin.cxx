@@ -310,7 +310,7 @@ void WorkWindow::Maximize( BOOL bMaximize )
     ImplSetFrameState( bMaximize ? SAL_FRAMESTATE_MAXIMIZED : SAL_FRAMESTATE_NORMAL );
 }
 
-BOOL WorkWindow::IsMaximized()
+BOOL WorkWindow::IsMaximized() const
 {
     BOOL bRet = FALSE;
 
