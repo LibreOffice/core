@@ -135,7 +135,8 @@ static int nFTVERSION = 0;
 static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
-static FT_Error (*pFTEmbolden)(FT_GlyphSlot);
+FT_Error (*pFTEmbolden)(FT_GlyphSlot);
+FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -472,6 +473,7 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
     pFTEmbolden     = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
+    pFTOblique      = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Oblique" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
@@ -2487,10 +2489,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         {
                             const USHORT nGlyph0 = GetUShort( pCoverage+0 );
                             const USHORT nGlyph1 = GetUShort( pCoverage+2 );
-                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
+                            const USHORT nStartCoverageIndex = GetUShort( pCoverage+4 );
+                            DBG_ASSERT( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
+                            (void)nStartCoverageIndex;
                             pCoverage += 6;
                             for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
+                                aSubstVector.push_back( GlyphSubst( j, 0 ) );
                         }
                     }
                     break;

@@ -2157,7 +2157,17 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
         BringWindowToTop( hWnd );
 
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
-        SetForegroundWindow( hWnd );
+    {
+        // This magic code is necessary to connect the input focus of the
+        // current window thread and the thread which owns the window that
+        // should be the new foreground window.
+        HWND   hCurrWnd     = GetForegroundWindow();
+        DWORD  myThreadID   = GetCurrentThreadId();
+        DWORD  currThreadID = GetWindowThreadProcessId(hCurrWnd,NULL);
+        AttachThreadInput(myThreadID, currThreadID,TRUE);
+        SetForegroundWindow(hWnd);
+        AttachThreadInput(myThreadID,currThreadID,FALSE);
+    }
 
     if ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
     {
@@ -5426,7 +5436,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
         }
 
         aEvt.mnCursorPos = aEvt.maText.Len();
@@ -5452,7 +5462,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
 
             WIN_BYTE*   pAttrBuf = NULL;
             LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, 0, 0 );
@@ -5488,7 +5498,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 }
 
                 aEvt.mpTextAttr = pSalAttrAry;
-                delete pAttrBuf;
+                delete [] pAttrBuf;
             }
         }
 
@@ -5525,7 +5535,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         }
 
         if ( pSalAttrAry )
-            delete pSalAttrAry;
+            delete [] pSalAttrAry;
     }
 
     return !bDef;

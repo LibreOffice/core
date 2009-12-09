@@ -6514,7 +6514,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             // nach vorne, wenn es gewuenscht ist
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
-                ImplStartToTop( 0 );
+                ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, FALSE );
             }
 
@@ -9752,6 +9752,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     EnableOutput();
 
     DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
+        return;
 
     // preserve graphicsstate
     Push();
