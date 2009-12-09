@@ -106,7 +106,7 @@
 #include "anminfo.hxx"
 #include "optsitem.hxx"
 #include "Window.hxx"
-
+#include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -203,13 +203,22 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(HasCurrentFunction())
     {
-        if(GetOldFunction() == GetCurrentFunction())
+        if( (nSId == SID_FORMATPAINTBRUSH) && (GetCurrentFunction()->GetSlotID() == SID_TEXTEDIT) )
         {
-            SetOldFunction(0);
+            // save text edit mode for format paintbrush!
+            SetOldFunction( GetCurrentFunction() );
+        }
+        else
+        {
+            if(GetOldFunction() == GetCurrentFunction())
+            {
+                SetOldFunction(0);
+            }
         }
 
         if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR && nSId != SID_TEXT_FITTOSIZE &&
              nSId != SID_ATTR_CHAR_VERTICAL && nSId != SID_TEXT_FITTOSIZE_VERTICAL &&
+             nSId != SID_FORMATPAINTBRUSH &&
              mpDrawView->IsTextEdit() )
         {
             mpDrawView->SdrEndTextEdit();
@@ -526,8 +535,18 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
         break;
 
+        case SID_FORMATPAINTBRUSH:
+        {
+            SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            rReq.Done();
+            SfxBindings& rBind = GetViewFrame()->GetBindings();
+            rBind.Invalidate( nSId );
+            rBind.Update( nSId );
+            break;
+        }
+
         default:
-        break;
+           break;
     }
 
     if(HasOldFunction())

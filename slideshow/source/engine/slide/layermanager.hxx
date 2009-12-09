@@ -254,33 +254,18 @@ namespace slideshow
                 hash< ::com::sun::star::uno::Reference<
                       ::com::sun::star::drawing::XShape > > > XShapeHash;
 
-            /** Element of all-shapes set
-             */
-            struct ShapeEntry
+            class ShapeComparator
             {
-                /// Shape this entry stands for
-                ShapeSharedPtr    mpShape;
-
-                /// Layer this shape is currently displayed on
-                LayerWeakPtr      mpLayer;
-
-                explicit ShapeEntry( ShapeSharedPtr const& rShape ) :
-                    mpShape(rShape),
-                    mpLayer()
-                {}
-
-                ShapeSharedPtr const& getShape() const { return mpShape; }
-
-                bool operator<( const ShapeEntry& rRHS ) const
+            public:
+                bool operator() (const ShapeSharedPtr& rpS1, const ShapeSharedPtr& rpS2 ) const
                 {
-                    return Shape::lessThanShape::compare(mpShape.get(),
-                                                         rRHS.mpShape.get());
+                    return Shape::lessThanShape::compare(rpS1.get(), rpS2.get());
                 }
             };
-
             /** Set of all shapes
              */
-            typedef ::std::set< ShapeEntry > LayerShapeSet;
+        private:
+            typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
             typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
@@ -309,12 +294,12 @@ namespace slideshow
                 denoting one-behind-the-last shape of nCurrLayerIndex
              */
             void           commitLayerChanges( std::size_t                    nCurrLayerIndex,
-                                               LayerShapeSet::const_iterator  aFirstLayerShape,
-                                               LayerShapeSet::const_iterator  aEndLayerShapes );
+                                               LayerShapeMap::const_iterator  aFirstLayerShape,
+                                               LayerShapeMap::const_iterator  aEndLayerShapes );
 
             /** Init Shape layers with background layer.
              */
-            void          putShape2BackgroundLayer( const ShapeEntry& rShapeEntry );
+            void          putShape2BackgroundLayer( LayerShapeMap::value_type& rShapeEntry );
 
             /** Commits any pending layer reorg, due to shapes either
                 entering or leaving animation mode
@@ -364,7 +349,7 @@ namespace slideshow
                 for buffering animation enable/disable changes, and
                 shape update requests.
             */
-            LayerShapeSet            maAllShapes;
+            LayerShapeMap            maAllShapes;
 
             /** Set of shapes that have requested an update
 
