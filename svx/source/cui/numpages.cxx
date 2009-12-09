@@ -386,6 +386,12 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
@@ -577,6 +583,13 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
+
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
@@ -807,6 +820,13 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
+
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
@@ -1112,6 +1132,13 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
+
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
@@ -1544,6 +1571,13 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
+
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
@@ -3441,6 +3475,13 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
+
+        if( eState != SFX_ITEM_SET )
+        {
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+            eState = SFX_ITEM_SET;
+        }
+
     }
     DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;

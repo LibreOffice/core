@@ -137,6 +137,19 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     return aRetURL;
 }
 
+
+// Hold Packages to improve performance (#i106100)
+// The PackageManager implementation seems to completely throw away all cached data
+// as soon as the last reference to a XPackage dies. Maybe this should be changed.
+struct ImplPackageSequenceHolder
+{
+    Sequence< Reference< deployment::XPackage > >   m_aUserPackagesSeq;
+    Sequence< Reference< deployment::XPackage > >   m_aSharedPackagesSeq;
+};
+
+static ImplPackageSequenceHolder* GpPackageSequenceHolder = NULL;
+
+
 Databases::Databases( sal_Bool showBasic,
                       const rtl::OUString& instPath,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
@@ -187,6 +200,8 @@ Databases::Databases( sal_Bool showBasic,
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
         m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
+
+    GpPackageSequenceHolder = new ImplPackageSequenceHolder();
 }
 
 Databases::~Databases()
@@ -235,6 +250,7 @@ Databases::~Databases()
         }
     }
 
+    delete GpPackageSequenceHolder;
 }
 
 static bool impl_getZipFile(
@@ -802,6 +818,10 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
+        // the following object must live longer than the
+        // pointer returned by aDBData.getData()
+        DBData aDBData;
+
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -813,7 +833,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
-                DBData aDBData;
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {
@@ -1527,6 +1546,8 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        if( GpPackageSequenceHolder != NULL )
+            GpPackageSequenceHolder->m_aUserPackagesSeq = m_aUserPackagesSeq;
 
         m_bUserPackagesLoaded = true;
     }
@@ -1557,6 +1578,8 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        if( GpPackageSequenceHolder != NULL )
+            GpPackageSequenceHolder->m_aSharedPackagesSeq = m_aSharedPackagesSeq;
 
         m_bSharedPackagesLoaded = true;
     }

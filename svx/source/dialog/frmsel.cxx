@@ -328,7 +328,7 @@ void FrameSelectorImpl::InitColors()
 {
     const StyleSettings& rSett = mrFrameSel.GetSettings().GetStyleSettings();
     maBackCol = rSett.GetFieldColor();
-    mbHCMode = maBackCol.IsDark();
+    mbHCMode = rSett.GetHighContrastMode();
     maArrowCol = rSett.GetFieldTextColor();
     maMarkCol.operator=( maBackCol ).Merge( maArrowCol, mbHCMode ? 0x80 : 0xC0 );
     maHCLineCol = rSett.GetLabelTextColor();

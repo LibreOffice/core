@@ -81,6 +81,7 @@
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -706,6 +707,29 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
             SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
             pActFrame->Enable( TRUE );
             pActFrame->GetDispatcher()->Lock( FALSE );
+
+            if  (   ( m_pData->m_pViewShell->GetObjectShell() != NULL )
+                &&  ( m_pData->m_pViewShell->GetObjectShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+                )
+            {
+                SfxViewFrame* pViewFrm = m_pData->m_pViewShell->GetViewFrame();
+                if ( !pViewFrm->GetFrame()->IsInPlace() )
+                {
+                    // for outplace embedded objects, we want the layout manager to keep the content window
+                    // size constant, if possible
+                    try
+                    {
+                        uno::Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
+                        uno::Reference< beans::XPropertySet > xLayouterProps(
+                            xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ), uno::UNO_QUERY_THROW );
+                        xLayouterProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreserveContentSize" ) ), uno::makeAny( sal_True ) );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                }
+            }
         }
     }
 }

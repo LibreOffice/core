@@ -2088,7 +2088,7 @@ SpinField* DbCurrencyField::createField( Window* _pParent, WinBits _nFieldStyle,
 //------------------------------------------------------------------------------
 double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
-    volatile double fValue = GetValue(_rxField, xFormatter);
+    double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
     {
         // OSL_TRACE("double = %.64f ",fValue);
@@ -2166,7 +2166,7 @@ sal_Bool DbCurrencyField::commitControl()
     Any aVal;
     if (aText.Len() != 0)   // nicht null
     {
-        volatile double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
+        double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
         if (m_nScale)
         {
             fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);

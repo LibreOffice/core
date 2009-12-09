@@ -113,6 +113,7 @@ namespace drawinglayer
         {
             // Prepare VDev, MetaFile and connections
             OutputDevice* pLastOutputDevice = mpOutputDevice;
+            GDIMetaFile* pLastMetafile = mpMetaFile;
             basegfx::B2DRange aPrimitiveRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
 
             // transform primitive range with current transformation (e.g shadow offset)
@@ -125,6 +126,7 @@ namespace drawinglayer
             MapMode aNewMapMode(pLastOutputDevice->GetMapMode());
 
             mpOutputDevice = &aContentVDev;
+            mpMetaFile = &o_rContentMetafile;
             aContentVDev.EnableOutput(false);
             aContentVDev.SetMapMode(pLastOutputDevice->GetMapMode());
             o_rContentMetafile.Record(&aContentVDev);
@@ -145,6 +147,7 @@ namespace drawinglayer
             o_rContentMetafile.SetPrefMapMode(aNewMapMode);
             o_rContentMetafile.SetPrefSize(aPrimitiveRectangle.GetSize());
             mpOutputDevice = pLastOutputDevice;
+            mpMetaFile = pLastMetafile;
 
             return aPrimitiveRectangle;
         }
@@ -219,7 +222,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicFill;
-                mrMetaFile.AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicFillCount++;
             }
         }
@@ -229,7 +232,7 @@ namespace drawinglayer
             if(pSvtGraphicFill && mnSvtGraphicFillCount)
             {
                 mnSvtGraphicFillCount--;
-                mrMetaFile.AddAction(new MetaCommentAction("XPATHFILL_SEQ_END"));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_END"));
                 delete pSvtGraphicFill;
             }
         }
@@ -372,7 +375,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicStroke;
-                mrMetaFile.AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicStrokeCount++;
             }
         }
@@ -382,7 +385,7 @@ namespace drawinglayer
             if(pSvtGraphicStroke && mnSvtGraphicStrokeCount)
             {
                 mnSvtGraphicStrokeCount--;
-                mrMetaFile.AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"));
                 delete pSvtGraphicStroke;
             }
         }
@@ -392,7 +395,7 @@ namespace drawinglayer
 
         VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
         :   VclProcessor2D(rViewInformation, rOutDev),
-            mrMetaFile(*rOutDev.GetConnectMetaFile()),
+            mpMetaFile(rOutDev.GetConnectMetaFile()),
             mnSvtGraphicFillCount(0),
             mnSvtGraphicStrokeCount(0),
             mfCurrentUnifiedTransparence(0.0),
@@ -816,19 +819,19 @@ namespace drawinglayer
                     {
                         default : // case drawinglayer::primitive2d::FIELD_TYPE_COMMON :
                         {
-                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon));
                             break;
                         }
                         case drawinglayer::primitive2d::FIELD_TYPE_PAGE :
                         {
-                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringPage));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringPage));
                             break;
                         }
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
                             const rtl::OUString& rURL = rFieldPrimitive.getString();
                             const String aOldString(rURL);
-                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
                         }
                     }
@@ -838,7 +841,7 @@ namespace drawinglayer
                     process(rContent);
 
                     // for the end comment the type is not relevant yet, they are all the same. Just add.
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringEnd));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringEnd));
 
                     if(mpPDFExtOutDevData && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType())
                     {
@@ -863,7 +866,7 @@ namespace drawinglayer
 
                     // process recursively and add MetaFile comment
                     process(rLinePrimitive.get2DDecomposition(getViewInformation2D()));
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     break;
                 }
@@ -876,7 +879,7 @@ namespace drawinglayer
 
                     // process recursively and add MetaFile comment
                     process(rBulletPrimitive.get2DDecomposition(getViewInformation2D()));
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     break;
                 }
@@ -893,7 +896,7 @@ namespace drawinglayer
 
                     // process recursively and add MetaFile comment
                     process(rParagraphPrimitive.get2DDecomposition(getViewInformation2D()));
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
                     if(mpPDFExtOutDevData)
                     {
@@ -910,9 +913,9 @@ namespace drawinglayer
                     static const ByteString aCommentStringB("XTEXT_PAINTSHAPE_END");
 
                     // add MetaFile comment, process recursively and add MetaFile comment
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA));
                     process(rBlockPrimitive.get2DDecomposition(getViewInformation2D()));
-                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB));
+                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB));
 
                     break;
                 }
@@ -965,17 +968,17 @@ namespace drawinglayer
                                     // create the entries for the respective break positions
                                     if(i == nNextCellBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
+                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
                                         nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                     }
                                     if(i == nNextWordBoundary.endPos)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
+                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
                                         nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                     }
                                     if(i == nNextSentenceBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
+                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
                                         nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
                                     }
                                 }
@@ -1057,7 +1060,7 @@ namespace drawinglayer
                                 {
                                     const Polygon aToolsPolygon(aCandidate);
 
-                                    mrMetaFile.AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
+                                    mpMetaFile->AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
                                 }
                             }
 
@@ -1500,7 +1503,10 @@ namespace drawinglayer
                             // svae old mfCurrentUnifiedTransparence and set new one
                             // so that contained SvtGraphicStroke may use the current one
                             const double fLastCurrentUnifiedTransparence(mfCurrentUnifiedTransparence);
-                            mfCurrentUnifiedTransparence = rUniAlphaCandidate.getAlpha();
+                            // #i105377# paint the content metafile opaque as the transparency gets
+                            // split of into the gradient below
+                            // mfCurrentUnifiedTransparence = rUniAlphaCandidate.getAlpha();
+                            mfCurrentUnifiedTransparence = 0;
 
                             // various content, create content-metafile
                             GDIMetaFile aContentMetafile;

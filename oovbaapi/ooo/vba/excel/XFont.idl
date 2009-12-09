@@ -47,22 +47,9 @@ module ooo {  module vba {  module excel {
 
 interface XFont
 {
-    interface ::ooo::vba::XHelperInterface;
-
-    [attribute] any   Size;
     [attribute] any StandardFontSize;
     [attribute] any  StandardFont;
     [attribute] any  FontStyle;
-    [attribute] any    ColorIndex;
-    [attribute] any    Color;
-    [attribute] any Bold;
-    [attribute] any Underline;
-    [attribute] any Strikethrough;
-    [attribute] any Shadow;
-    [attribute] any Italic;
-    [attribute] any Subscript;
-    [attribute] any Superscript;
-    [attribute] any  Name;
     [attribute] any  OutlineFont;
 };
 

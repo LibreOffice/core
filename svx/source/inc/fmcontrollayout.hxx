@@ -59,6 +59,22 @@ namespace svxform
         */
         static bool useDynamicBorderColor( DocumentType _eDocType );
 
+        /** determines whether for the given document type, form controls should use the document's reference device
+            for text rendering
+        */
+        static bool useDocumentReferenceDevice( DocumentType _eDocType );
+
+        /** gets the "default" style in a document which can be used if some default text format is needed
+
+            It depends on the type document type which concrete kind of style is returned, but it is expected to support
+            the css.style.CharacterProperties service.
+
+            @param _rxModel
+                a form component.
+        */
+        static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                    getDefaultDocumentTextStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
     private:
         ControlLayouter();    // never implemented
 

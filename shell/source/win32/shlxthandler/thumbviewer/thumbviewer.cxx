@@ -30,19 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
+
 #include "internal/global.hxx"
 
 #ifndef INFOTIPS_HXX_INCLUDED
 #include "internal/thumbviewer.hxx"
 #endif
 #include "internal/shlxthdl.hxx"
-#include "internal/utilities.hxx"
 #include "internal/registry.hxx"
 #include "internal/fileextensions.hxx"
 #include "internal/config.hxx"
 #include "internal/zipfile.hxx"
+#include "internal/utilities.hxx"
 
 #include "internal/resource.h"
+
 #include <stdio.h>
 #include <utility>
 #include <stdlib.h>
@@ -212,15 +214,15 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Read(void *pv, ULONG cb, ULONG *pcb
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *)
 {
-    size_t size = ref_zip_buffer_.size();
-    size_t p = 0;
+    __int64 size = (__int64) ref_zip_buffer_.size();
+    __int64 p = 0;
 
     switch (dwOrigin)
     {
         case STREAM_SEEK_SET:
             break;
         case STREAM_SEEK_CUR:
-            p = pos_;
+            p = (__int64) pos_;
             break;
         case STREAM_SEEK_END:
             p = size - 1;
@@ -229,10 +231,11 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD 
 
    HRESULT hr = STG_E_INVALIDFUNCTION;
 
-   p += dlibMove.LowPart;
-   if (p < size)
+   p += dlibMove.QuadPart;
+
+   if ( ( p >= 0 ) && (p < size) )
    {
-        pos_ = p;
+        pos_ = (size_t) p;
         hr = S_OK;
    }
    return hr;
@@ -468,6 +471,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     }
     catch(std::exception&)
     {
+        OutputDebugStringFormat( "CThumbviewer Extract ERROR!\n" );
         hr = E_FAIL;
     }
     return hr;
