@@ -187,6 +187,7 @@ SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
 BASICLIB=-lsb$(DLLPOSTFIX)
+VBAHELPERLIB=-lvbahelper$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -220,12 +221,14 @@ JPEG3RDLIB=-ljpeg
 .ELSE
 JPEG3RDLIB=-ljpeglib
 .ENDIF
-.IF "$(SYSTEM_NEON)" == "YES" || "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(SYSTEM_NEON)" == "YES"
+NEON3RDLIB=-lneon
+.ELIF "$(GUI)$(COM)"=="WNTGCC"
 NEON3RDLIB=-lneon
 .ELIF "$(OS)" == "MACOSX"
-NEON3RDLIB=$(SOLARLIBDIR)/libneon.a
+NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
 .ELSE
-NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
+NEON3RDLIB=-lneon
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
@@ -422,7 +425,9 @@ SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
+VBAHELPERLIB=vbahelper.lib
 TKTLIB=tkt.lib
+SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 SVXMSFILTERLIB=isvxmsfilter.lib
 SVXLIB=isvx.lib
@@ -438,7 +443,7 @@ EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
-NEON3RDLIB=neon.lib
+NEON3RDLIB=ineon.lib
 BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib

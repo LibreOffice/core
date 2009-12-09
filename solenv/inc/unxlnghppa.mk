@@ -6,7 +6,7 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: unxlngm68k.mk,v $
+# $RCSfile: unxlnghppa.mk,v $
 #
 # $Revision: 1.2 $
 #
@@ -29,13 +29,11 @@
 #
 #*************************************************************************
 
-# mk file for Unix Linux m68k using GCC, please make generic modifications to unxlng.mk
-
-CDEFAULTOPT=-Os
+# mk file for Unix Linux HPPA using GCC, please make generic modifications to unxlng.mk
 PICSWITCH:=-fPIC
 .INCLUDE : unxlng.mk
-CDEFS+=-DM68K
-CFLAGS+=-fsigned-char -fno-omit-frame-pointer
-CFLAGSCC+=-fsigned-char
-CFLAGSCXX+=-fsigned-char
-DLLPOSTFIX=lm
+CDEFS+=-DHPPA
+CFLAGS+=
+CFLAGSCC+=
+CFLAGSCXX+=
+DLLPOSTFIX=lh
