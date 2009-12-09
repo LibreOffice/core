@@ -368,12 +368,6 @@ public abstract class Configuration
         }
     }
 
-    public static XNameAccess getChildNodebyIndex(Object _oNode, int _index)
-    {
-        XNameAccess xNameAccessNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _oNode);
-        return getChildNodebyIndex(xNameAccessNode, _index);
-    }
-
     public static XNameAccess getChildNodebyIndex(XNameAccess _xNameAccess, int _index)
     {
         try

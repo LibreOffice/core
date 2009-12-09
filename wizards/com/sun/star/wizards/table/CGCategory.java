@@ -59,12 +59,14 @@ public class CGCategory
         xMSF = _xMSF;
     }
 
-    public void initialize(int _index)
+    public void initialize(String category)
     {
         try
         {
             oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
-            xNameAccessCurBusinessNode = Configuration.getChildNodebyIndex(oconfigView, _index);
+            xNameAccessCurBusinessNode = Configuration.getChildNodebyName(
+                UnoRuntime.queryInterface(XNameAccess.class, oconfigView),
+                category);
         }
         catch (Exception e)
         {

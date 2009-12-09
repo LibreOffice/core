@@ -42,8 +42,6 @@ import com.sun.star.wizards.common.Properties;
 
 public class FieldDescription
 {
-
-    int category;
     private String tablename = "";
 //  String fieldname;
     private String keyname;
@@ -63,7 +61,6 @@ public class FieldDescription
     {
         xMSF = _xMSF;
         aLocale = _aLocale;
-        category = _curscenarioselector.getCategory();
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
         keyname = _keyname;

@@ -168,19 +168,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         initializeCategory(BUSINESS);
     }
 
-    public int getCategory()
-    {
-        if (optBusiness.getState())
-        {
-            curcategory = BUSINESS;
-        }
-        else
-        {
-            curcategory = PRIVATE;
-        }
-        return curcategory;
-    }
-
     public void selectCategory()
     {
         if (optBusiness.getState())
@@ -197,7 +184,8 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     {
         try
         {
-            oCGCategory.initialize(_iCategory);
+            oCGCategory.initialize(
+                _iCategory == PRIVATE ? "private" : "business");
             xTableListBox.removeItems((short) 0, xTableListBox.getItemCount());
             xTableListBox.addItems(oCGCategory.getTableNames(), (short) _iCategory);
             initializeTable(0);
