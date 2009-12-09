@@ -74,7 +74,7 @@ import javax.xml.transform.stream.StreamResult;
 class RegistrationDocument {
 
     private static final String REGISTRATION_DATA_SCHEMA =
-            "/com/sun/servicetag/resources/product_registration.xsd";
+            "/com/sun/star/servicetag/resources/product_registration.xsd";
     private static final String REGISTRATION_DATA_VERSION = "1.0";
     private static final String SERVICE_TAG_VERSION = "1.0";
     final static String ST_NODE_REGISTRATION_DATA = "registration_data";
@@ -155,16 +155,46 @@ class RegistrationDocument {
     // initialize a document from an input stream 
     private static Document initializeDocument(InputStream in) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        SchemaFactory sf = null;
         try {
-            // XML schema for validation
-            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            URL xsdUrl = RegistrationDocument.class.getResource(REGISTRATION_DATA_SCHEMA);
-            Schema schema = sf.newSchema(xsdUrl);
-            Validator validator = schema.newValidator();
+            // Some Java versions (e.g., 1.5.0_06-b05) fail with a
+            // NullPointerException if SchemaFactory.newInstance is called with
+            // a null context class loader, so work around that here (and the
+            // class loader of this class hopefully is not the null bootstrap
+            // class loader):
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            if (cl == null) {
+                Thread.currentThread().setContextClassLoader(
+                    RegistrationDocument.class.getClassLoader());
+            }
+            try {
+               sf = SchemaFactory.newInstance(
+                   XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            } finally {
+               Thread.currentThread().setContextClassLoader(cl);
+            }
+
+            Schema schema = null;
+            try {
+                // Even using the workaround above is not enough on some
+                // Java versions. Therefore try to workaround the validation
+                // completely!
+                URL xsdUrl = RegistrationDocument.class.getResource(REGISTRATION_DATA_SCHEMA);
+                schema = sf.newSchema(xsdUrl);
+            }
+        catch (NullPointerException nex) {
+        }
+            
+            Validator validator = null;
+            if (schema != null)
+                validator = schema.newValidator();
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(in));
-            validator.validate(new DOMSource(doc));
+            
+            if (validator != null)
+                validator.validate(new DOMSource(doc));
+            
             return doc;
         } catch (SAXException sxe) {
             IllegalArgumentException e = new IllegalArgumentException("Error generated in parsing");

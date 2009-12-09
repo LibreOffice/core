@@ -213,7 +213,9 @@ public class SystemEnvironment {
      * @param clockrate The clockrate to set.
      */
     public void setClockRate(String clockrate) {
-        this.clockrate = clockrate;
+        Float f = Float.parseFloat(clockrate);
+        Integer nClockrate = f.intValue();
+        this.clockrate = nClockrate.toString();
     }
 
     /**
