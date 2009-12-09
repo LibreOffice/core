@@ -222,8 +222,6 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     }
     if ( !ImplCreateMainNotes() )
         return;
-    maTextRuleList.First();                         // rewind list, so we can get the current or next entry without
-                                                    // searching, all entrys are sorted#
     for ( i = 0; i < mnPages; i++ )
     {
         if ( !ImplCreateSlide( i ) )
@@ -274,8 +272,6 @@ PPTWriter::~PPTWriter()
     while( aStyleSheetIter < maStyleSheetList.end() )
         delete *aStyleSheetIter++;
 
-    for ( pPtr = maTextRuleList.First(); pPtr; pPtr = maTextRuleList.Next() )
-        delete (TextRuleEntry*)pPtr;
     for ( pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
         delete (::rtl::OUString*)pPtr;
     for ( pPtr = maHyperlink.First(); pPtr; pPtr = maHyperlink.Next() )
@@ -560,22 +556,12 @@ sal_Bool PPTWriter::ImplCreateDocument()
 
     mpPptEscherEx->OpenContainer( EPP_SlideListWithText );      // Animation info fuer die Slides
 
-    sal_uInt32  nShapes;
-    sal_Bool    bOtherThanPlaceHolders;
-
     for ( i = 0; i < mnPages; i++ )
     {
-        sal_uInt32  nPOffset, nPObjects;
-        sal_Bool    bOutliner, bTitle;
-
-        bOtherThanPlaceHolders = bOutliner = bTitle = FALSE;
-        nPObjects = 0;
-
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
-        *mpStrm << (sal_uInt32)0;                               // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
-        nPOffset = mpStrm->Tell();
-        *mpStrm << (sal_uInt32)0                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
+        *mpStrm << (sal_uInt32)0                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
+                << (sal_uInt32)4                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
                 << (INT32)0                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
                 << (INT32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
                 << (sal_uInt32)0;                               // reserved, usualy 0
@@ -583,8 +569,6 @@ sal_Bool PPTWriter::ImplCreateDocument()
         if ( !ImplGetPageByIndex( i, NORMAL ) )                 // sehr aufregend: noch einmal ueber alle seiten
             return FALSE;
         ImplSetCurrentStyleSheet( ImplGetMasterIndex( NORMAL ) );
-
-        const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
             aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
@@ -597,113 +581,16 @@ sal_Bool PPTWriter::ImplCreateDocument()
         }
         else
             maSlideNameList.Insert( new ::rtl::OUString(), LIST_APPEND );
-
-        nShapes = mXShapes->getCount();
-
-        sal_Bool bSecOutl = FALSE;
-        if ( nShapes && ( rLayout.bTitlePossible || rLayout.bOutlinerPossible ) )
-        {
-            for ( sal_uInt32 nIndex = 0; nIndex < nShapes; nIndex++ )
-            {
-                if ( !ImplGetShapeByIndex( nIndex ) )
-                    continue;
-
-                if ( mbPresObj && ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) ) )
-                {
-                    if ( bOutliner == FALSE )
-                    {
-                        bOutliner = TRUE;
-                        mnTextStyle = EPP_TEXTSTYLE_BODY;
-                        sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
-                        if ( bSecOutl )
-                            nTextType = EPP_TEXTTYPE_HalfBody;
-                        else if ( mType == "presentation.Subtitle" )
-                            nTextType = EPP_TEXTTYPE_CenterBody;
-
-                        TextRuleEntry* pRule = new TextRuleEntry( i );
-                        SvMemoryStream aExtBu( 0x200, 0x200 );
-                        if ( !mbEmptyPresObj )
-                            ImplGetText();
-                        ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu, NULL );
-                        ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
-                        if ( rLayout.bSecOutlinerPossible )
-                        {
-                            if ( ( nIndex + 1 ) < nShapes )
-                            {
-                                if ( ImplGetShapeByIndex( nIndex + 1 ) && mType == "presentation.Outliner" )
-                                {
-                                    bSecOutl = TRUE;
-                                    TextRuleEntry* pTempRule = new TextRuleEntry( i );
-                                    SvMemoryStream aTmpStrm( 0x200, 0x200 );
-                                    if ( !mbEmptyPresObj )
-                                        ImplGetText();
-                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pTempRule, aTmpStrm, NULL );
-                                    ImplWriteExtParaHeader( aTmpStrm, nPObjects++, nTextType, i + 0x100 );
-                                    maTextRuleList.Insert( (void*)pTempRule, LIST_APPEND );
-                                }
-                            }
-                        }
-                    }
-                }
-                else if ( rLayout.bTitlePossible && ( mType == "presentation.TitleText" ) )
-                {
-                    if ( bTitle == FALSE )
-                    {
-                        bTitle = TRUE;
-                        mnTextStyle = EPP_TEXTSTYLE_TITLE;
-                        TextRuleEntry* pRule = new TextRuleEntry( i );
-                        SvMemoryStream aExtBu( 0x200, 0x200 );
-                        if ( !mbEmptyPresObj )
-                            ImplGetText();
-                        ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu, NULL );
-                        ImplWriteExtParaHeader( aExtBu, nPObjects++, EPP_TEXTTYPE_Title, i + 0x100 );
-                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
-                    }
-                }
-                else
-                {
-                    if ( mbEmptyPresObj )
-                        nPObjects++;
-                    else
-                        bOtherThanPlaceHolders = TRUE;  // muss noch auf background und leeren Title/outliner geprueft werden !!!
-                }
-                if ( bOutliner && bTitle && bOtherThanPlaceHolders )
-                    break;
-            }
-        }
-        if ( nPObjects )
-        {
-            sal_uInt32 nOldPos = mpStrm->Tell();
-            mpStrm->Seek( nPOffset );
-            *mpStrm << (sal_uInt32)( ( bOtherThanPlaceHolders ) ? 4 : 0 );
-            *mpStrm << nPObjects;
-            mpStrm->Seek( nOldPos );
-        }
     }
     mpPptEscherEx->CloseContainer();    // EPP_SlideListWithText
 
     mpPptEscherEx->OpenContainer( EPP_SlideListWithText, 2 );   // Animation info fuer die notes
     for( i = 0; i < mnPages; i++ )
     {
-        if ( !ImplGetPageByIndex( i, NOTICE ) )
-            return FALSE;
-
-        nShapes = mXShapes->getCount();
-
-        bOtherThanPlaceHolders = FALSE;
-        if ( nShapes )
-        {
-            for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == FALSE ); nIndex++ )
-            {
-                 if ( ImplGetShapeByIndex( nIndex ) && ( mType != "drawing.Page" ) )
-                    bOtherThanPlaceHolders = TRUE;
-            }
-        }
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, mpStrm->Tell() );
         *mpStrm << (sal_uInt32)0
-                << (sal_uInt32)( ( bOtherThanPlaceHolders ) ? 4 : 0 )
+                << (sal_uInt32)4
                 << (INT32)0
                 << (INT32)i + 0x100
                 << (sal_uInt32)0;
