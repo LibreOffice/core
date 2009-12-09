@@ -84,7 +84,10 @@ MOZILLA_VERSION=1.1.14
 TARFILE_NAME=seamonkey-$(MOZILLA_VERSION).source
 
 TARFILE_ROOTDIR=mozilla
-PATCH_FILES=seamonkey-source-$(MOZILLA_VERSION).patch
+PATCH_FILES = \
+    seamonkey-source-$(MOZILLA_VERSION).patch \
+    patches/dtoa.patch \
+    patches/respect_disable_pango.patch \
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
@@ -131,6 +134,7 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-image-encoders \
                 --disable-plugins \
                 --disable-printing \
+                --disable-pango \
                 --enable-extensions="pref"
 
 #.IF "$(GUI)"!="WNT"
@@ -183,6 +187,10 @@ CXXFLAGS+=-m64
 .ENDIF
 .EXPORT : CXXFLAGS
 .ENDIF          # "$(COMNAME)"=="sunpro5"
+.IF "$(COM)$(OS)$(CPUNAME)" == "GCCLINUXPOWERPC64"
+CXXFLAGS:=-mminimal-toc
+.EXPORT : CXXFLAGS
+.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
