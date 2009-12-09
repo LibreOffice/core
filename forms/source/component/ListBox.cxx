@@ -1003,23 +1003,23 @@ namespace frm
     sal_Bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         // current selektion list
-        const ORowSetValue rCurrentValue( getFirstSelectedValue() );
-        if ( rCurrentValue != m_aSaveValue )
+        const ORowSetValue aCurrentValue( getFirstSelectedValue() );
+        if ( aCurrentValue != m_aSaveValue )
         {
-            if ( rCurrentValue.isNull() )
+            if ( aCurrentValue.isNull() )
                 m_xColumnUpdate->updateNull();
             else
             {
                 try
                 {
-                    m_xColumnUpdate->updateObject( rCurrentValue.makeAny() );
+                    m_xColumnUpdate->updateObject( aCurrentValue.makeAny() );
                 }
                 catch ( const Exception& )
                 {
                     return sal_False;
                 }
             }
-            m_aSaveValue = rCurrentValue;
+            m_aSaveValue = aCurrentValue;
         }
         return sal_True;
     }
@@ -1037,10 +1037,10 @@ namespace frm
 
         Sequence< sal_Int16 > aSelectionIndicies;
 
-        // Bei NULL-Eintraegen Selektion aufheben!
         ORowSetValue aCurrentValue;
-        aCurrentValue.fill( xBoundField->getPropertyValue( PROPERTY_VALUE ) );
+        aCurrentValue.fill( getFieldType(), m_xColumn );
 
+        // reset selection for NULL values
         if ( aCurrentValue.isNull() )
         {
             if ( m_nNULLPos != -1 )
@@ -1085,6 +1085,13 @@ namespace frm
         }
 
         return aValue;
+    }
+
+    //--------------------------------------------------------------------
+    void OListBoxModel::resetNoBroadcast()
+    {
+        OBoundControlModel::resetNoBroadcast();
+        m_aSaveValue.setNull();
     }
 
     //--------------------------------------------------------------------
