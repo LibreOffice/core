@@ -383,6 +383,8 @@ public:
     Reference < XInputStream > xInputStream;
     Reference < XStream > xStream;
 
+    uno::Reference< io::XStream > m_xLockingStream;
+
     sal_uInt32                  nLastStorageError;
     ::rtl::OUString             aCharset;
 
@@ -1122,21 +1124,18 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 
     if ( !bResult && !IsReadOnly() )
     {
-        // check whether the file is readonly in fs
-        // the check is only necessary if
-        // do it only for loading, some contents still might have problems with this property, let them not affect the saving
         sal_Bool bContentReadonly = sal_False;
-        if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
+        if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            // let the stream be opened to check the possibility to open it for editing
-            GetMedium_Impl();
+            // let the original document be opened to check the possibility to open it for editing
+            // and to let the writable stream stay open to hold the lock on the document
+            GetLockingStream_Impl();
         }
 
         // "IsReadOnly" property does not allow to detect whether the file is readonly always
         // so we try always to open the file for editing
         // the file is readonly only in case the read-write stream can not be opened
-        SFX_ITEMSET_ARG( pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, sal_False);
-        if ( bLoading && !pWriteStreamItem )
+        if ( bLoading && !pImp->m_xLockingStream.is() )
         {
             try
             {
@@ -2267,6 +2266,45 @@ void SfxMedium::ClearBackup_Impl()
 }
 
 //----------------------------------------------------------------
+void SfxMedium::GetLockingStream_Impl()
+{
+    if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+      && !pImp->m_xLockingStream.is() )
+    {
+        SFX_ITEMSET_ARG( pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, sal_False);
+        if ( pWriteStreamItem )
+            pWriteStreamItem->GetValue() >>= pImp->m_xLockingStream;
+
+        if ( !pImp->m_xLockingStream.is() )
+        {
+            // open the original document
+            uno::Sequence< beans::PropertyValue > xProps;
+            TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
+            comphelper::MediaDescriptor aMedium( xProps );
+
+            aMedium.addInputStreamOwnLock();
+
+            uno::Reference< io::XInputStream > xInputStream;
+            aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
+            aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+
+            if ( !pImp->pTempFile && !aName.Len() )
+            {
+                // the medium is still based on the original file, it makes sence to initialize the streams
+                if ( pImp->m_xLockingStream.is() )
+                    pImp->xStream = pImp->m_xLockingStream;
+
+                if ( xInputStream.is() )
+                    pImp->xInputStream = xInputStream;
+
+                if ( !pImp->xInputStream.is() && pImp->xStream.is() )
+                    pImp->xInputStream = pImp->xStream->getInputStream();
+            }
+        }
+    }
+}
+
+//----------------------------------------------------------------
 void SfxMedium::GetMedium_Impl()
 {
     if ( !pInStream )
@@ -2332,27 +2370,36 @@ void SfxMedium::GetMedium_Impl()
                 TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
                 comphelper::MediaDescriptor aMedium( xProps );
 
-                if ( bFromTempFile )
+                if ( pImp->m_xLockingStream.is() && !bFromTemplate )
                 {
-                    aMedium[comphelper::MediaDescriptor::PROP_URL()] <<= ::rtl::OUString( aFileName );
-                    aMedium.erase( comphelper::MediaDescriptor::PROP_READONLY() );
-                    aMedium.addInputStream();
-                }
-                else if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
-                {
-                    // use the special locking approach only for file URLs
-                    aMedium.addInputStreamOwnLock();
+                    // the medium is not based on the temporary file, so the original stream can be used
+                    pImp->xStream = pImp->m_xLockingStream;
                 }
                 else
-                    aMedium.addInputStream();
+                {
+                    if ( bFromTempFile )
+                    {
+                        aMedium[comphelper::MediaDescriptor::PROP_URL()] <<= ::rtl::OUString( aFileName );
+                        aMedium.erase( comphelper::MediaDescriptor::PROP_READONLY() );
+                        aMedium.addInputStream();
+                    }
+                    else if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+                    {
+                        // use the special locking approach only for file URLs
+                        aMedium.addInputStreamOwnLock();
+                    }
+                    else
+                        aMedium.addInputStream();
 
-                // the ReadOnly property set in aMedium is ignored
-                // the check is done in LockOrigFileOnDemand() for file and non-file URLs
+                    // the ReadOnly property set in aMedium is ignored
+                    // the check is done in LockOrigFileOnDemand() for file and non-file URLs
 
-                //TODO/MBA: what happens if property is not there?!
+                    //TODO/MBA: what happens if property is not there?!
+                    aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
+                    aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
+                }
+
                 GetContent();
-                aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
-                aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
                 if ( !pImp->xInputStream.is() && pImp->xStream.is() )
                     pImp->xInputStream = pImp->xStream->getInputStream();
             }
@@ -2661,7 +2708,7 @@ void SfxMedium::Close()
 
     CloseStreams_Impl();
 
-    UnlockFile();
+    UnlockFile( sal_False );
 }
 
 void SfxMedium::CloseAndRelease()
@@ -2694,11 +2741,31 @@ void SfxMedium::CloseAndRelease()
 
     CloseAndReleaseStreams_Impl();
 
-    UnlockFile();
+    UnlockFile( sal_True );
 }
 
-void SfxMedium::UnlockFile()
+void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
 {
+    if ( pImp->m_xLockingStream.is() )
+    {
+        if ( bReleaseLockStream )
+        {
+            try
+            {
+                uno::Reference< io::XInputStream > xInStream = pImp->m_xLockingStream->getInputStream();
+                uno::Reference< io::XOutputStream > xOutStream = pImp->m_xLockingStream->getOutputStream();
+                if ( xInStream.is() )
+                    xInStream->closeInput();
+                if ( xOutStream.is() )
+                    xOutStream->closeOutput();
+            }
+            catch( uno::Exception& )
+            {}
+        }
+
+        pImp->m_xLockingStream = uno::Reference< io::XStream >();
+    }
+
     if ( pImp->m_bLocked )
     {
         try
@@ -2720,7 +2787,13 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
     uno::Reference< io::XInputStream > xInToClose = pImp->xInputStream;
     uno::Reference< io::XOutputStream > xOutToClose;
     if ( pImp->xStream.is() )
+    {
         xOutToClose = pImp->xStream->getOutputStream();
+
+        // if the locking stream is closed here the related member should be cleaned
+        if ( pImp->xStream == pImp->m_xLockingStream )
+            pImp->m_xLockingStream = uno::Reference< io::XStream >();
+    }
 
     // The probably exsisting SvStream wrappers should be closed first
     CloseStreams_Impl();
