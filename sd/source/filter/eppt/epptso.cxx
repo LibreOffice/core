@@ -46,7 +46,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
