@@ -373,9 +373,11 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     SvtUserOptions aUserOpt;
     m_edFirst.SetText(aUserOpt.GetFirstName());
     m_edLast.SetText(aUserOpt.GetLastName());
+#if 0
     rtl::OUString aUserName;
     vos::OSecurity().getUserName( aUserName );
        aUserOpt.SetID( aUserName );
+#endif
 
     m_edInitials.SetText(aUserOpt.GetID());
     if (m_lang == LANGUAGE_RUSSIAN)

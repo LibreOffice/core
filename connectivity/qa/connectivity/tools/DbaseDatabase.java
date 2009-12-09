@@ -65,7 +65,8 @@ public class DbaseDatabase extends AbstractDatabase
     private void createDBDocument() throws Exception
     {
         final File documentFile = File.createTempFile("dbase", ".odb");
-        documentFile.deleteOnExit();
+        if ( documentFile.exists() )
+            documentFile.delete();
         final File subPath = new File(documentFile.getParent() + File.separator + documentFile.getName().replaceAll(".odb", "") + File.separator );
         subPath.mkdir();
         //subPath.deleteOnExit();
