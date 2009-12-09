@@ -36,9 +36,9 @@
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>

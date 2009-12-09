@@ -54,7 +54,7 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <unomid.h>
 

@@ -49,7 +49,7 @@
 #include <web.hrc>
 #include <globdoc.hrc>
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <unomid.h>
 

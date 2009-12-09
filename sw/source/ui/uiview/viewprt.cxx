@@ -43,25 +43,25 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <sfx2/request.hxx>
 
 #include <sfx2/app.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/printdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
 #include <svx/paperinf.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <svx/prtqry.hxx>
 #include <svx/svdview.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/flagitem.hxx>
 #include <svx/linkmgr.hxx>
 
 #include <modcfg.hxx>
@@ -85,10 +85,10 @@
 #include <globals.hrc>
 #include <view.hrc>
 #include <app.hrc>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
 #include <unomid.h>
 
@@ -618,17 +618,17 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                     0 );
 
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+        utl::MiscCfg aMisc;
 
         if(bWeb)
             aSet.Put(SfxUInt16Item(SID_HTML_MODE,
                     ::GetHtmlMode(((SwWrtShell*)pSh)->GetView().GetDocShell())));
         aSet.Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN,
-                        pMisc->IsNotFoundWarning() ));
+                        aMisc.IsNotFoundWarning() ));
         aSet.Put(aAddPrinterItem);
         aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
-            (pMisc->IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0)   |
-            (pMisc->IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
+            (aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0)   |
+            (aMisc.IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
 
         pIDDA->getPrinter( true )->SetOptions( aSet );
     }

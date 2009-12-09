@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/langitem.hxx>

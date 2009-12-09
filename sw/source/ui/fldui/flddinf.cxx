@@ -38,7 +38,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -63,7 +63,7 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

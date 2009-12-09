@@ -214,7 +214,7 @@ public:
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhichL = 0 )
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     { pChgSet->ClearItem( nWhichL ); }
 #else
         ;

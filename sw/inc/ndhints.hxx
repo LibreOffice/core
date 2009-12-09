@@ -31,7 +31,7 @@
 #define _NDHINTS_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/mempool.hxx>
 
 #include "swtypes.hxx"
@@ -117,7 +117,7 @@ public:
         { return m_HintStarts[nIdx]; }
     inline USHORT Count() const { return m_HintStarts.Count(); }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool Check() const;
 #endif
 };

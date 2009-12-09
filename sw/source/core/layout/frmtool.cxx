@@ -1690,7 +1690,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         delete pPageMaker;
         if( pDoc->GetLayoutCache() )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
             pDoc->GetLayoutCache()->CompareLayout( *pDoc );
 #endif

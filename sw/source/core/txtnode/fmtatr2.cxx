@@ -35,9 +35,9 @@
 #include "unomid.h"
 
 #include <basic/sbxvar.hxx>
-#include <svtools/macitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/stylepool.hxx>
+#include <svl/macitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/stylepool.hxx>
 #include <fmtautofmt.hxx>
 #include <fchrfmt.hxx>
 #include <fmtinfmt.hxx>
@@ -59,7 +59,7 @@
 #include <unometa.hxx>
 #include <unoobj.hxx> // SwXTextRange
 #include <docsh.hxx>
-#include <svtools/zforlist.hxx> // GetNumberFormat
+#include <svl/zforlist.hxx> // GetNumberFormat
 
 #include <boost/bind.hpp>
 #include <algorithm>

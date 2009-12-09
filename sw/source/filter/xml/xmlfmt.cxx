@@ -37,7 +37,7 @@
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
 #include <format.hxx>
