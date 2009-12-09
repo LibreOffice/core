@@ -50,4 +50,4 @@ ALLTAR : $(INCCOM)$/langmacros.inc
     @echo ------------------------------
     @echo Making: $@  
     @@-$(RENAME) $@ $@.tmp
-    $(PERL) macro.pl -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    $(COMMAND_ECHO)$(PERL) macro.pl $(VERBOSITY) -o $@.tmp && $(RENAME:s/+//) $@.tmp $@

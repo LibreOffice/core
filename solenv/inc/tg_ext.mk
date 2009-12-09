@@ -68,6 +68,9 @@ fake_root_dir=/$(TARFILE_NAME)
 fake_back=../
 .ENDIF "$(TARFILE_IS_FLAT)" != ""
 
+TARFILE_LOCATION*=$(BACK_PATH)$(fake_back)download
+TARFILE_LOCATION2=$(eq,$(BACK_PATH)$(fake_back)download,$(TARFILE_LOCATION) $(PRJ)/download $(TARFILE_LOCATION))
+
 P_CONFIGURE_DIR=$(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$(BUILD_DIR)
 P_INSTALL_DIR=$(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$(BUILD_DIR)
@@ -109,59 +112,59 @@ ALLTAR : \
     $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
 
 clean:
-    cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
-    $(RM) $(PACKAGE_DIR)/$(BUILD_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
+    $(COMMAND_ECHO)$(RM) $(PACKAGE_DIR)/$(BUILD_FLAG_FILE)
 
-$(MISC)/%.unpack : $(PRJ)/download/%.tar.bz2
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.tar.Z
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.tar.gz
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.tgz
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.tar
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
     @-$(RM) $@
-    noop $(assign UNPACKCMD := $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar)
+    @noop $(assign UNPACKCMD := $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.zip
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.zip
     @-$(RM) $@
-    noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).zip)
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_NAME).zip)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
-$(MISC)/%.unpack : $(PRJ)/download/%.jar
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.jar
     @-$(RM) $@
 .IF "$(OS)"=="SOLARIS"
-    noop $(assign UNPACKCMD := jar xf $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).jar)
+    @noop $(assign UNPACKCMD := jar xf $(TARFILE_LOCATION)/$(TARFILE_NAME).jar)
 .ELSE			# "$(OS)"=="SOLARIS"
-    noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).jar)
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_NAME).jar)
 .ENDIF			# "$(OS)"=="SOLARIS"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -169,9 +172,9 @@ $(MISC)/%.unpack : $(PRJ)/download/%.jar
 #do unpack
 $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
     $(IFEXIST) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme $(FI)
-    -rm -rf $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme
+    $(COMMAND_ECHO)-rm -rf $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme
     @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
-    cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
     @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -exec chmod a+x {{}} \;
@@ -188,21 +191,21 @@ $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_AD
 $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
 .IF "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
     @echo no patch needed...
-    $(TOUCH) $@
+    $(COMMAND_ECHO)$(TOUCH) $@
 .ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(GUI)"=="WNT"
 # hack to make 4nt version 4,01 work and still get propper
 # errorcodes for versions < 3,00
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
-#	cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+#	$(COMMAND_ECHO)cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(BSCLIENT)"!=""
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
@@ -211,17 +214,17 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
 # Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
     $(DELAY) 2
 .ENDIF # "$(GUI)"=="WNT"
-    $(TOUCH) $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
 .ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
 
 .IF "$(CONVERTFILES)"!=""
 $(MISC)/$(TARGET)_convert_unx_flag :  $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE)
-    $(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) && $(TOUCH) $(MISC)/$(TARGET)_convert_unx_flag
+    $(COMMAND_ECHO)$(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) && $(TOUCH) $(MISC)/$(TARGET)_convert_unx_flag
 
 $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(MISC)/$(TARGET)_convert_unx_flag
 
 $(MISC)/$(TARGET)_convert_dos_flag : $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
-    $(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) && $(TOUCH) $(MISC)/$(TARGET)_convert_dos_flag
+    $(COMMAND_ECHO)$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) && $(TOUCH) $(MISC)/$(TARGET)_convert_dos_flag
 
 $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE) : $(MISC)/$(TARGET)_convert_dos_flag
 
@@ -232,43 +235,43 @@ patch : $(MISC)/$(TARGET)_convert_dos_flag
 $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
     @@-$(RM) $@
 .IF "$(CONFIGURE_ACTION)" == "none" || "$(CONFIGURE_ACTION)"==""
-    $(TOUCH) $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE)
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE)
 .ELSE			# "$(CONFIGURE_ACTION)"=="none" || "$(CONFIGURE_ACTION)"==""
-    -$(MKDIR) $(P_CONFIGURE_DIR)
+    $(COMMAND_ECHO)-$(MKDIR) $(P_CONFIGURE_DIR)
 .IF "$(OS)"=="OS2"
-    cd $(P_CONFIGURE_DIR) && sh -c "$(CONFIGURE_ACTION:s!\!/!) $(CONFIGURE_FLAGS:s!\!/!)" && $(TOUCH) $(CONFIGURE_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(P_CONFIGURE_DIR) && sh -c "$(CONFIGURE_ACTION:s!\!/!) $(CONFIGURE_FLAGS:s!\!/!)" && $(TOUCH) $(CONFIGURE_FLAG_FILE)
 .ELSE
-    cd $(P_CONFIGURE_DIR) && $(CONFIGURE_ACTION) $(CONFIGURE_FLAGS) && $(TOUCH) $(CONFIGURE_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(P_CONFIGURE_DIR) && $(CONFIGURE_ACTION) $(CONFIGURE_FLAGS) && $(TOUCH) $(CONFIGURE_FLAG_FILE)
 .ENDIF
-    mv $(P_CONFIGURE_DIR)/$(CONFIGURE_FLAG_FILE) $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE)
+    $(COMMAND_ECHO)mv $(P_CONFIGURE_DIR)/$(CONFIGURE_FLAG_FILE) $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE)
 .ENDIF			# "$(CONFIGURE_ACTION)"=="none" ||	"$(CONFIGURE_ACTION)"==""
 
 
 $(PACKAGE_DIR)/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE)
     @@-$(RM) $@
 .IF "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
-    $(TOUCH) $(PACKAGE_DIR)/$(BUILD_FLAG_FILE)
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(BUILD_FLAG_FILE)
 .ELSE			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
-    -$(MKDIR) $(P_BUILD_DIR)
-    cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(ABS_PACKAGE_DIR)/$(BUILD_FLAG_FILE)
+    $(COMMAND_ECHO)-$(MKDIR) $(P_BUILD_DIR)
+    $(COMMAND_ECHO)cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(ABS_PACKAGE_DIR)/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
 
 $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)/$(BUILD_FLAG_FILE)
     @@-$(RM) $@
 .IF "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
-    $(TOUCH) $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .ELSE			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
-    -$(MKDIR) $(P_INSTALL_DIR)
-    -$(MKDIR) $(P_INSTALL_TARGET_DIR)
-    cd $(P_INSTALL_DIR) && $(INSTALL_ACTION) $(INSTALL_FLAGS) && $(TOUCH) $(INSTALL_FLAG_FILE)
-    mv $(P_INSTALL_DIR)/$(INSTALL_FLAG_FILE) $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
+    $(COMMAND_ECHO)-$(MKDIR) $(P_INSTALL_DIR)
+    $(COMMAND_ECHO)-$(MKDIR) $(P_INSTALL_TARGET_DIR)
+    $(COMMAND_ECHO)cd $(P_INSTALL_DIR) && $(INSTALL_ACTION) $(INSTALL_FLAGS) && $(TOUCH) $(INSTALL_FLAG_FILE)
+    $(COMMAND_ECHO)mv $(P_INSTALL_DIR)/$(INSTALL_FLAG_FILE) $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
 
 $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .IF "$(OUT2LIB)"!=""
-    $(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(LB)
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(LB)
 .IF "$(OS)"=="MACOSX"
-    $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl extshl \
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl extshl \
         $(EXTRPATH) \
         $(shell ls $(foreach,j,$(OUT2LIB) $(LB)/$(j:f)) | \
             (grep -v '\.a$$' || test $$? = 1))
@@ -276,17 +279,17 @@ $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
 .IF "$(OUT2INC_SUBDIR)"!=""
-    -$(MKDIRHIER) $(INCCOM)/$(OUT2INC_SUBDIR)
-    $(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)/$(OUT2INC_SUBDIR)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(INCCOM)/$(OUT2INC_SUBDIR)
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)/$(OUT2INC_SUBDIR)
 .ELSE          # "$(OUT2INC_SUBDIR)"!=""
-    $(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)
 .ENDIF          # "$(OUT2INC_SUBDIR)"!=""
 .ENDIF			# "$(OUT2INC)"!=""
 .IF "$(OUTDIR2INC)"!=""
-    $(COPY) $(DEREFERENCE) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)
+    $(COMMAND_ECHO)$(COPY) $(DEREFERENCE) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(INCCOM)
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""
-    $(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(BIN)
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(BIN)
 .IF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
     @noop $(foreach,j,$(foreach,k,$(OUT2BIN) \
         $(shell -ls -1 $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$k | $(GREP) .dll)) \
@@ -295,15 +298,15 @@ $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
 .ENDIF          # "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
 .ENDIF			# "$(OUT2BIN)"!=""
 .IF "$(OUT2CLASS)"!=""
-    $(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(CLASSDIR)
+    $(COMMAND_ECHO)$(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i) $(CLASSDIR)
 .ENDIF			# "$(OUT2BIN)"!=""
-    $(TOUCH) $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
 
 $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_NAME).unpack $(PATCH_FILES)
     @-mv $(MISC)/$(TARFILE_ROOTDIR) $(MISC)/$(TARFILE_ROOTDIR).old
     @-rm -rf $(MISC)/$(TARFILE_ROOTDIR).old
     @-$(MKDIRHIER) $(MISC)$(fake_root_dir)
-    cd $(MISC)$(fake_root_dir) && $(subst,$(BACK_PATH),$(MBACK_PATH) $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_NAME).unpack))
+    $(COMMAND_ECHO)cd $(MISC)$(fake_root_dir) && $(subst,$(BACK_PATH),$(MBACK_PATH) $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_NAME).unpack))
 .IF "$(P_ADDITIONAL_FILES)"!=""
     noop $(foreach,i,$(P_ADDITIONAL_FILES) $(shell echo dummy > $i))
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
@@ -315,32 +318,32 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_NAME).unpack $(PATCH_FILES)
 # hack to make 4nt version 4,01 work and still get propper
 # errorcodes for versions < 3,00
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
-#	cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
+#	$(COMMAND_ECHO)cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(MISC) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    cd $(MISC) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
 .ELSE           # "$(BSCLIENT)"!=""
-    cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .IF "$(CONVERTFILES)"!=""
-    $(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
+    $(COMMAND_ECHO)$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
 .ENDIF          # "$(CONVERTFILES)"!=""
 .ENDIF			# "$(PATCH_FILES)"!="none" && "$(PATCH_FILES)"!="
 .IF "$(GUI)"=="UNX"	
-    $(TOUCH) $@
+    $(COMMAND_ECHO)$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE)
     @-$(MKDIRHIER) $(@:d)
-    -echo dummy > $@
-    -$(TOUCH) $@
-    -echo dummy > $(@:d)$(@:b)
-    -$(TOUCH) $(@:d)$(@:b)
+    $(COMMAND_ECHO)-echo dummy > $@
+    $(COMMAND_ECHO)-$(TOUCH) $@
+    $(COMMAND_ECHO)-echo dummy > $(@:d)$(@:b)
+    $(COMMAND_ECHO)-$(TOUCH) $(@:d)$(@:b)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)/$(TARFILE_ROOTDIR).done $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
@@ -349,12 +352,12 @@ create_patch : $(MISC)/$(TARFILE_ROOTDIR).done $(PACKAGE_DIR)/$(PATCH_FLAG_FILE)
     @@-$(RM) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
 #ignore returncode of 1 (indicates differences...)
 # hard coded again to get the same directory level as before. quite ugly...
-    -cd $(PRJ)/$(ROUT) && diff -ru misc/$(TARFILE_ROOTDIR) misc/build/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)/bin/cleandiff.pl | tr -d "\015" > misc/$(NEW_PATCH_FILE_NAME:f).tmp
-    -mv $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
-    -$(TOUCH) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
-    $(PERL) $(SOLARENV)/bin/patch_sanitizer.pl $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak $(MISC)/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME)
+    $(COMMAND_ECHO)-cd $(PRJ)/$(ROUT) && diff -ru misc/$(TARFILE_ROOTDIR) misc/build/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)/bin/cleandiff.pl | tr -d "\015" > misc/$(NEW_PATCH_FILE_NAME:f).tmp
+    $(COMMAND_ECHO)-mv $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
+    $(COMMAND_ECHO)-$(TOUCH) $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/patch_sanitizer.pl $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak $(MISC)/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME)
     @@-$(RM) $(MISC)/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)/$(PATH_IN_MODULE)/$(NEW_PATCH_FILE_NAME).bak
-    $(MAKECMD) $(MAKEMACROS) patch
+    $(COMMAND_ECHO)$(MAKECMD) $(MAKEMACROS) patch
     @echo still some problems with win32 generated patches...
     @echo $(USQ)find your new changes in $(NEW_PATCH_FILE_NAME). don't forget to move/rename that patch and insert it in your makefiles PATCH_FILES to activate.$(USQ)
 

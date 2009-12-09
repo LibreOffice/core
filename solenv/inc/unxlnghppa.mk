@@ -6,9 +6,9 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: tg_sdi.mk,v $
+# $RCSfile: unxlnghppa.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,35 +29,11 @@
 #
 #*************************************************************************
 
-#######################################################
-# instructions for ???
-# unroll begin
-
-.IF "$(HIDSID$(TNR)PARTICLE)"!=""
-$(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@.$(ROUT).tmp $@
-    @$(TYPE) $(MISC)/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
-    @-$(RM) $@
-    @$(RENAME) $@.$(ROUT).tmp $@
-.ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
-
-.IF "$(SDI$(TNR)TARGET)"!=""
-$(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(SVIDL) @$(mktmp \
-    $(VERBOSITY) \
-    -fs$(INCCOMX)/$(SDI$(TNR)NAME).hxx	\
-    -fd$(INCCOMX)/$(SDI$(TNR)NAME).ilb	\
-    -fm$(MISC)/$(SDI$(TNR)NAME).don	\
-    -fl$(MISC)/$(SDI$(TNR)NAME).lst         \
-    -fx$(SDI$(TNR)EXPORT).sdi		\
-    -fz$(MISC)/$(SDI$(TNR)NAME).sid	\
-    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
-.ENDIF # "$(SDI$(TNR)TARGET)"!=""
-
-# Instruction for ???
-# unroll end
-#######################################################
-
+# mk file for Unix Linux HPPA using GCC, please make generic modifications to unxlng.mk
+PICSWITCH:=-fPIC
+.INCLUDE : unxlng.mk
+CDEFS+=-DHPPA
+CFLAGS+=
+CFLAGSCC+=
+CFLAGSCXX+=
+DLLPOSTFIX=lh

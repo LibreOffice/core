@@ -57,20 +57,20 @@ COMPONENT_FILES_SRC*=./
 # here in case of "just copied" .xcu files
 $(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)/|$(COMPONENT_FILES_SRC)|)
     @@-$(MKDIRHIER) $(@:s|$(fixme2)|$(MISC)|:d)
-    $(COPY) $< $(@:s|$(fixme2)|$(MISC)|)
+    $(COMMAND_ECHO)$(COPY) $< $(@:s|$(fixme2)|$(MISC)|)
 .ENDIF			# "$(COMPONENT_FILES)"!=""
 
 .IF "$(COMPONENT_JARFILES)"!=""
 $(COMPONENT_JARFILES) : $(CLASSDIR)/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $@
 .ENDIF			# "$(COMPONENT_JARFILES)"!=""
 
 .IF "$(COMPONENT_LIBRARIES)"!=""
 # TODO(Q3): strip the binary?
 $(COMPONENT_LIBRARIES) : $(DLLDEST)/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $@
 .IF "$(OS)$(CPU)"=="WNTI"
 .IF "$(COM)"=="GCC"
    $(GNUCOPY) $(SOLARBINDIR)/mingwm10.dll $(EXTENSIONDIR)
@@ -129,11 +129,11 @@ PHONYDESC=.PHONY
 .IF "$(DESCRIPTION)"!=""
 $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     @@-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.$(EXTNAME)
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.$(EXTNAME)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)/$(TARGET)_lang_track.mk
-    $(TYPE) $@.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $(MISC)/desc.tmp.$(EXTNAME)
+    $(COMMAND_ECHO)$(TYPE) $@.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $(MISC)/desc.tmp.$(EXTNAME)
     @@-$(RM) $@.$(EXTNAME)
-    $(TYPE) $(MISC)/desc.tmp.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(MISC)/desc.tmp.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
     @@-$(RM) $(MISC)/desc.tmp.$(EXTNAME)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -151,7 +151,7 @@ PACKLICDEPS=$(CUSTOM_LICENSE)
 .IF "$(PACKLICS)"!=""
 $(PACKLICS) : $(PACKLICDEPS)
     @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
+    $(COMMAND_ECHO)$(GNUCOPY) $< $@
 .ENDIF			# "$(PACKLICS)"!=""
 
 .IF "$(COMPONENT_MANIFEST)"!=""
@@ -159,9 +159,9 @@ $(PACKLICS) : $(PACKLICDEPS)
 $(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(COMPONENT_MANIFEST_GENERIC)" == ""
-    $(TYPE) $(MANIFEST_SRC) | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" | $(SED) "s/EXEC_EXTENSION/$(EXECPOST)/" > $@
+    $(COMMAND_ECHO)$(TYPE) $(MANIFEST_SRC) | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" | $(SED) "s/EXEC_EXTENSION/$(EXECPOST)/" > $@
 .ELSE			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
-    $(PERL) $(SOLARENV)/bin/makemani.pl $(PRJ)/util/manifest.xml $(EXTENSIONDIR) $(COMPONENT_MANIFEST_SEARCHDIR) $(@:d:d)
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/makemani.pl $(PRJ)/util/manifest.xml $(EXTENSIONDIR) $(COMPONENT_MANIFEST_SEARCHDIR) $(@:d:d)
 .ENDIF			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
 .ENDIF			# "$(COMPONENT_MANIFEST)"!=""
 

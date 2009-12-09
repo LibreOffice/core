@@ -53,9 +53,6 @@ ALLDEP .PHONY:
     echo xxx$(DEPFILES)xxx
     @@-$(RM) $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
-    @echo ---
-    @echo      $(PWD) - Old dependency files removed or updated
-    @echo ---
 
 
 ALLDPC: \
@@ -93,15 +90,10 @@ ALLDPC: \
 .ENDIF			# "$(nodep)"!=""
 .ELSE		# anything requiring dependencies
 
-
 ALLDPC:
-    @echo ------------------------------
-    @echo No Dependencies
     @echo $(EMQ)# > $(MISC)/$(TARGET).dpc
 
 ALLDEP:
-    @echo ------------------------------
-    @echo No Dependencies
 
 .ENDIF
 

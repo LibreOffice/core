@@ -88,7 +88,7 @@ SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)T
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL$(TNR)VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL$(TNR)VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL$(TNR)VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL$(TNR)VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -151,16 +151,20 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)OBJS)!"=""
     @$(TYPE) /dev/null $(SHL$(TNR)LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL$(TNR)INTERFACE) -f $(SHL$(TNR)FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL$(TNR)INTERFACE) -f $(SHL$(TNR)FILTERFILE) -m $@
 
 .ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)/$(SHL$(TNR)TARGET).vmap
 $(USE_SHL$(TNR)VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL$(TNR)FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL$(TNR)FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
@@ -187,25 +191,25 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL$(TNR)OBJS)"!=""
     -echo $(foreach,i,$(SHL$(TNR)OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL$(TNR)LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -247,7 +251,7 @@ SHL$(TNR)LINKRESO*=$(MISC)/$(SHL$(TNR)TARGET)_res.o
 .IF "$(SHL$(TNR)LIBS)"!=""
 $(MISC)/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL$(TNR)LIBS)"!=""
 .ENDIF
 
@@ -263,14 +267,14 @@ SHL$(TNR)LINKLIST=$(MISC)/$(SHL$(TNR)TARGET)_link.lst
 SHL$(TNR)LINKLISTPARAM=@$(SHL$(TNR)LINKLIST)
 $(SHL$(TNR)LINKLIST) : $(SHL$(TNR)LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL$(TNR)LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -297,8 +301,7 @@ $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)DEPN) \
                     $(SHL$(TNR)IMP_ORD) \
                     $(SHL$(TNR)LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL$(TNR)TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
@@ -318,10 +321,10 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
-    $(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -343,13 +346,15 @@ $(SHL$(TNR)TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL$(TNR)LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) @$(mktmp \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL$(TNR)STACK) $(SHL$(TNR)BASEX)	\
@@ -368,15 +373,15 @@ $(SHL$(TNR)TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -out:$(SHL$(TNR)TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -392,16 +397,16 @@ $(SHL$(TNR)TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
-    $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -out:$(SHL$(TNR)TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -415,18 +420,18 @@ $(SHL$(TNR)TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL$(TNR)TARGET).lnk
-        -$(RM) $(MISC)/$(SHL$(TNR)TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL$(TNR)TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX) \
         $(SHL$(TNR)STACK) $(MAPFILE) \
@@ -438,17 +443,17 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
         ) >> $(MISC)/$(SHL$(TNR)TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL$(TNR)TARGET).lnk
-        $(SHL$(TNR)LINKER) @$(MISC)/$(SHL$(TNR)TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL$(TNR)TARGET).lnk
+        $(COMMAND_ECHO)$(SHL$(TNR)LINKER) @$(MISC)/$(SHL$(TNR)TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -464,11 +469,13 @@ $(SHL$(TNR)TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL$(TNR)RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
@@ -481,21 +488,29 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
-    -$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-    $(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) -- -s $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
-    cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -513,16 +528,16 @@ $(SHL$(TNR)TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 
 .IF "$(SHL$(TNR)ALLRES)"!=""
-    +$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL$(TNR)DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -535,7 +550,7 @@ $(SHL$(TNR)TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL$(TNR)LINKER) -v 	$(SHL$(TNR)LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) -v 	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -o $(SHL$(TNR)TARGETN)	\
         $(SHL$(TNR)DEF) \
@@ -553,7 +568,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL$(TNR)TARGET8)" != "$(SHL$(TNR)TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL$(TNR)TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL$(TNR)TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -600,8 +615,7 @@ $(SHL$(TNR)IMPLIBN):	\
 $(SHL$(TNR)IMPLIBN):	\
                     $(SHL$(TNR)LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL$(TNR)IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -622,7 +636,7 @@ $(SHL$(TNR)IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL$(TNR)VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL$(TNR)VERSIONOBJ)
     +@echo build of $(SHL$(TNR)TARGETN) creates $@
 
 .ELSE

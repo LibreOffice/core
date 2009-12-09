@@ -251,8 +251,9 @@ Make_targets()/*
 
    for( lp = Targets->ce_prq; lp != NIL(LINK); lp = lp->cl_next ) {
       CELLPTR tgt = lp->cl_prq;
-      if( !(tgt->ce_attr & A_UPDATED) )
-     printf( "`%s' is up to date\n", tgt->CE_NAME );
+      if( !(tgt->ce_attr & A_UPDATED)
+          && (Verbose & V_MAKE) )
+          printf( "`%s' is up to date\n", tgt->CE_NAME );
    }
 
    DB_RETURN( 0 );

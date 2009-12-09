@@ -55,7 +55,7 @@ SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL1VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -118,16 +118,20 @@ $(USE_SHL1VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL1OBJS)!"=""
     @$(TYPE) /dev/null $(SHL1LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL1INTERFACE) -f $(SHL1FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL1INTERFACE) -f $(SHL1FILTERFILE) -m $@
 
 .ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)/$(SHL1TARGET).vmap
 $(USE_SHL1VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL1FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL1FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL1VERSIONMAP)"!=""
@@ -154,25 +158,25 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL1VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL1VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL1VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL1VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL1OBJS)"!=""
     -echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL1LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -214,7 +218,7 @@ SHL1LINKRESO*=$(MISC)/$(SHL1TARGET)_res.o
 .IF "$(SHL1LIBS)"!=""
 $(MISC)/$(SHL1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL1LIBS)"!=""
 .ENDIF
 
@@ -230,14 +234,14 @@ SHL1LINKLIST=$(MISC)/$(SHL1TARGET)_link.lst
 SHL1LINKLISTPARAM=@$(SHL1LINKLIST)
 $(SHL1LINKLIST) : $(SHL1LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL1LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -264,8 +268,7 @@ $(SHL1TARGETN) : \
                     $(SHL1DEPN) \
                     $(SHL1IMP_ORD) \
                     $(SHL1LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL1TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL1DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL1DEFAULTRES:b).rc
@@ -285,10 +288,10 @@ $(SHL1TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
-    $(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL1LINKRES) $(SHL1LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -310,13 +313,15 @@ $(SHL1TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
         $(SHL1STDSHL) $(STDSHL1) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL1USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL1LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL1LINKER) @$(mktmp \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL1STACK) $(SHL1BASEX)	\
@@ -335,15 +340,15 @@ $(SHL1TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -out:$(SHL1TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -359,16 +364,16 @@ $(SHL1TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
-    $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -out:$(SHL1TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -382,18 +387,18 @@ $(SHL1TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL1TARGET).lnk
-        -$(RM) $(MISC)/$(SHL1TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL1TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL1TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL1BASEX) \
         $(SHL1STACK) $(MAPFILE) \
@@ -405,17 +410,17 @@ $(SHL1TARGETN) : \
         $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
         ) >> $(MISC)/$(SHL1TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL1TARGET).lnk
-        $(SHL1LINKER) @$(MISC)/$(SHL1TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL1TARGET).lnk
+        $(COMMAND_ECHO)$(SHL1LINKER) @$(MISC)/$(SHL1TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -431,11 +436,13 @@ $(SHL1TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_1.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL1RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
@@ -448,21 +455,29 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_1.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
-    -$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-    $(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) -- -s $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL1TARGETN:b)
-    cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -480,16 +495,16 @@ $(SHL1TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 
 .IF "$(SHL1ALLRES)"!=""
-    +$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
 .ENDIF			# "$(SHL1ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL1DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -502,7 +517,7 @@ $(SHL1TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL1LINKER) -v 	$(SHL1LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL1LINKER) -v 	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -o $(SHL1TARGETN)	\
         $(SHL1DEF) \
@@ -520,7 +535,7 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL1TARGET8)" != "$(SHL1TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL1TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL1TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -594,7 +609,7 @@ SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL2VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -657,16 +672,20 @@ $(USE_SHL2VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL2OBJS)!"=""
     @$(TYPE) /dev/null $(SHL2LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL2INTERFACE) -f $(SHL2FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL2INTERFACE) -f $(SHL2FILTERFILE) -m $@
 
 .ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)/$(SHL2TARGET).vmap
 $(USE_SHL2VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL2FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL2FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL2VERSIONMAP)"!=""
@@ -693,25 +712,25 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL2VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL2VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL2VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL2VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL2OBJS)"!=""
     -echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL2LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -753,7 +772,7 @@ SHL2LINKRESO*=$(MISC)/$(SHL2TARGET)_res.o
 .IF "$(SHL2LIBS)"!=""
 $(MISC)/$(SHL2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL2LIBS)"!=""
 .ENDIF
 
@@ -769,14 +788,14 @@ SHL2LINKLIST=$(MISC)/$(SHL2TARGET)_link.lst
 SHL2LINKLISTPARAM=@$(SHL2LINKLIST)
 $(SHL2LINKLIST) : $(SHL2LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL2LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -803,8 +822,7 @@ $(SHL2TARGETN) : \
                     $(SHL2DEPN) \
                     $(SHL2IMP_ORD) \
                     $(SHL2LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL2TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL2DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL2DEFAULTRES:b).rc
@@ -824,10 +842,10 @@ $(SHL2TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
-    $(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL2LINKRES) $(SHL2LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -849,13 +867,15 @@ $(SHL2TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
         $(SHL2STDSHL) $(STDSHL2) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL2USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL2LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL2LINKER) @$(mktmp \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL2STACK) $(SHL2BASEX)	\
@@ -874,15 +894,15 @@ $(SHL2TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -out:$(SHL2TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -898,16 +918,16 @@ $(SHL2TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
-    $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -out:$(SHL2TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -921,18 +941,18 @@ $(SHL2TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL2TARGET).lnk
-        -$(RM) $(MISC)/$(SHL2TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL2TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL2TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL2BASEX) \
         $(SHL2STACK) $(MAPFILE) \
@@ -944,17 +964,17 @@ $(SHL2TARGETN) : \
         $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
         ) >> $(MISC)/$(SHL2TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL2TARGET).lnk
-        $(SHL2LINKER) @$(MISC)/$(SHL2TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL2TARGET).lnk
+        $(COMMAND_ECHO)$(SHL2LINKER) @$(MISC)/$(SHL2TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -970,11 +990,13 @@ $(SHL2TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_2.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL2RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
@@ -987,21 +1009,29 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_2.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
-    -$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-    $(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) -- -s $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL2TARGETN:b)
-    cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -1019,16 +1049,16 @@ $(SHL2TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 
 .IF "$(SHL2ALLRES)"!=""
-    +$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
 .ENDIF			# "$(SHL2ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL2DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -1041,7 +1071,7 @@ $(SHL2TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL2LINKER) -v 	$(SHL2LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL2LINKER) -v 	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -o $(SHL2TARGETN)	\
         $(SHL2DEF) \
@@ -1059,7 +1089,7 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL2TARGET8)" != "$(SHL2TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL2TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL2TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -1133,7 +1163,7 @@ SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL3VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL3VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL3VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1196,16 +1226,20 @@ $(USE_SHL3VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL3OBJS)!"=""
     @$(TYPE) /dev/null $(SHL3LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL3INTERFACE) -f $(SHL3FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL3INTERFACE) -f $(SHL3FILTERFILE) -m $@
 
 .ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)/$(SHL3TARGET).vmap
 $(USE_SHL3VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL3FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL3FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL3VERSIONMAP)"!=""
@@ -1232,25 +1266,25 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL3VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL3VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL3VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL3VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL3OBJS)"!=""
     -echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL3LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -1292,7 +1326,7 @@ SHL3LINKRESO*=$(MISC)/$(SHL3TARGET)_res.o
 .IF "$(SHL3LIBS)"!=""
 $(MISC)/$(SHL3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL3LIBS)"!=""
 .ENDIF
 
@@ -1308,14 +1342,14 @@ SHL3LINKLIST=$(MISC)/$(SHL3TARGET)_link.lst
 SHL3LINKLISTPARAM=@$(SHL3LINKLIST)
 $(SHL3LINKLIST) : $(SHL3LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL3LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -1342,8 +1376,7 @@ $(SHL3TARGETN) : \
                     $(SHL3DEPN) \
                     $(SHL3IMP_ORD) \
                     $(SHL3LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL3TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL3DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL3DEFAULTRES:b).rc
@@ -1363,10 +1396,10 @@ $(SHL3TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
-    $(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL3LINKRES) $(SHL3LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -1388,13 +1421,15 @@ $(SHL3TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
         $(SHL3STDSHL) $(STDSHL3) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL3USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL3LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL3LINKER) @$(mktmp \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL3STACK) $(SHL3BASEX)	\
@@ -1413,15 +1448,15 @@ $(SHL3TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -out:$(SHL3TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -1437,16 +1472,16 @@ $(SHL3TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
-    $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -out:$(SHL3TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -1460,18 +1495,18 @@ $(SHL3TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL3TARGET).lnk
-        -$(RM) $(MISC)/$(SHL3TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL3TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL3TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL3BASEX) \
         $(SHL3STACK) $(MAPFILE) \
@@ -1483,17 +1518,17 @@ $(SHL3TARGETN) : \
         $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
         ) >> $(MISC)/$(SHL3TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL3TARGET).lnk
-        $(SHL3LINKER) @$(MISC)/$(SHL3TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL3TARGET).lnk
+        $(COMMAND_ECHO)$(SHL3LINKER) @$(MISC)/$(SHL3TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -1509,11 +1544,13 @@ $(SHL3TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_3.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL3RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
@@ -1526,21 +1563,29 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_3.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
-    -$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-    $(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) -- -s $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL3TARGETN:b)
-    cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -1558,16 +1603,16 @@ $(SHL3TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 
 .IF "$(SHL3ALLRES)"!=""
-    +$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
 .ENDIF			# "$(SHL3ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL3DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -1580,7 +1625,7 @@ $(SHL3TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL3LINKER) -v 	$(SHL3LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL3LINKER) -v 	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -o $(SHL3TARGETN)	\
         $(SHL3DEF) \
@@ -1598,7 +1643,7 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL3TARGET8)" != "$(SHL3TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL3TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL3TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -1672,7 +1717,7 @@ SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL4VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL4VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL4VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1735,16 +1780,20 @@ $(USE_SHL4VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL4OBJS)!"=""
     @$(TYPE) /dev/null $(SHL4LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL4INTERFACE) -f $(SHL4FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL4INTERFACE) -f $(SHL4FILTERFILE) -m $@
 
 .ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)/$(SHL4TARGET).vmap
 $(USE_SHL4VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL4FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL4FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL4VERSIONMAP)"!=""
@@ -1771,25 +1820,25 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL4VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL4VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL4VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL4VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL4OBJS)"!=""
     -echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL4LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -1831,7 +1880,7 @@ SHL4LINKRESO*=$(MISC)/$(SHL4TARGET)_res.o
 .IF "$(SHL4LIBS)"!=""
 $(MISC)/$(SHL4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL4LIBS)"!=""
 .ENDIF
 
@@ -1847,14 +1896,14 @@ SHL4LINKLIST=$(MISC)/$(SHL4TARGET)_link.lst
 SHL4LINKLISTPARAM=@$(SHL4LINKLIST)
 $(SHL4LINKLIST) : $(SHL4LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL4LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -1881,8 +1930,7 @@ $(SHL4TARGETN) : \
                     $(SHL4DEPN) \
                     $(SHL4IMP_ORD) \
                     $(SHL4LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL4TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL4DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL4DEFAULTRES:b).rc
@@ -1902,10 +1950,10 @@ $(SHL4TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
-    $(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL4LINKRES) $(SHL4LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -1927,13 +1975,15 @@ $(SHL4TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
         $(SHL4STDSHL) $(STDSHL4) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL4USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL4LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL4LINKER) @$(mktmp \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL4STACK) $(SHL4BASEX)	\
@@ -1952,15 +2002,15 @@ $(SHL4TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -out:$(SHL4TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -1976,16 +2026,16 @@ $(SHL4TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
-    $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -out:$(SHL4TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -1999,18 +2049,18 @@ $(SHL4TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL4TARGET).lnk
-        -$(RM) $(MISC)/$(SHL4TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL4TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL4TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL4BASEX) \
         $(SHL4STACK) $(MAPFILE) \
@@ -2022,17 +2072,17 @@ $(SHL4TARGETN) : \
         $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
         ) >> $(MISC)/$(SHL4TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL4TARGET).lnk
-        $(SHL4LINKER) @$(MISC)/$(SHL4TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL4TARGET).lnk
+        $(COMMAND_ECHO)$(SHL4LINKER) @$(MISC)/$(SHL4TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2048,11 +2098,13 @@ $(SHL4TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_4.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL4RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
@@ -2065,21 +2117,29 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_4.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
-    -$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-    $(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) -- -s $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL4TARGETN:b)
-    cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -2097,16 +2157,16 @@ $(SHL4TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 
 .IF "$(SHL4ALLRES)"!=""
-    +$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
 .ENDIF			# "$(SHL4ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL4DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -2119,7 +2179,7 @@ $(SHL4TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL4LINKER) -v 	$(SHL4LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL4LINKER) -v 	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -o $(SHL4TARGETN)	\
         $(SHL4DEF) \
@@ -2137,7 +2197,7 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL4TARGET8)" != "$(SHL4TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL4TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL4TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -2211,7 +2271,7 @@ SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL5VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL5VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL5VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2274,16 +2334,20 @@ $(USE_SHL5VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL5OBJS)!"=""
     @$(TYPE) /dev/null $(SHL5LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL5INTERFACE) -f $(SHL5FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL5INTERFACE) -f $(SHL5FILTERFILE) -m $@
 
 .ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)/$(SHL5TARGET).vmap
 $(USE_SHL5VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL5FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL5FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL5VERSIONMAP)"!=""
@@ -2310,25 +2374,25 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL5VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL5VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL5VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL5VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL5OBJS)"!=""
     -echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL5LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -2370,7 +2434,7 @@ SHL5LINKRESO*=$(MISC)/$(SHL5TARGET)_res.o
 .IF "$(SHL5LIBS)"!=""
 $(MISC)/$(SHL5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL5LIBS)"!=""
 .ENDIF
 
@@ -2386,14 +2450,14 @@ SHL5LINKLIST=$(MISC)/$(SHL5TARGET)_link.lst
 SHL5LINKLISTPARAM=@$(SHL5LINKLIST)
 $(SHL5LINKLIST) : $(SHL5LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL5LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -2420,8 +2484,7 @@ $(SHL5TARGETN) : \
                     $(SHL5DEPN) \
                     $(SHL5IMP_ORD) \
                     $(SHL5LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL5TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL5DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL5DEFAULTRES:b).rc
@@ -2441,10 +2504,10 @@ $(SHL5TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
-    $(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL5LINKRES) $(SHL5LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -2466,13 +2529,15 @@ $(SHL5TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
         $(SHL5STDSHL) $(STDSHL5) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL5USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL5LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL5LINKER) @$(mktmp \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL5STACK) $(SHL5BASEX)	\
@@ -2491,15 +2556,15 @@ $(SHL5TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -out:$(SHL5TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -2515,16 +2580,16 @@ $(SHL5TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
-    $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -out:$(SHL5TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -2538,18 +2603,18 @@ $(SHL5TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL5TARGET).lnk
-        -$(RM) $(MISC)/$(SHL5TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL5TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL5TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL5BASEX) \
         $(SHL5STACK) $(MAPFILE) \
@@ -2561,17 +2626,17 @@ $(SHL5TARGETN) : \
         $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
         ) >> $(MISC)/$(SHL5TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL5TARGET).lnk
-        $(SHL5LINKER) @$(MISC)/$(SHL5TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL5TARGET).lnk
+        $(COMMAND_ECHO)$(SHL5LINKER) @$(MISC)/$(SHL5TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2587,11 +2652,13 @@ $(SHL5TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_5.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL5RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
@@ -2604,21 +2671,29 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_5.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
-    -$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-    $(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) -- -s $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL5TARGETN:b)
-    cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -2636,16 +2711,16 @@ $(SHL5TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 
 .IF "$(SHL5ALLRES)"!=""
-    +$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
 .ENDIF			# "$(SHL5ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL5DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -2658,7 +2733,7 @@ $(SHL5TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL5LINKER) -v 	$(SHL5LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL5LINKER) -v 	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -o $(SHL5TARGETN)	\
         $(SHL5DEF) \
@@ -2676,7 +2751,7 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL5TARGET8)" != "$(SHL5TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL5TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL5TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -2750,7 +2825,7 @@ SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL6VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL6VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL6VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2813,16 +2888,20 @@ $(USE_SHL6VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL6OBJS)!"=""
     @$(TYPE) /dev/null $(SHL6LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL6INTERFACE) -f $(SHL6FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL6INTERFACE) -f $(SHL6FILTERFILE) -m $@
 
 .ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)/$(SHL6TARGET).vmap
 $(USE_SHL6VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL6FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL6FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL6VERSIONMAP)"!=""
@@ -2849,25 +2928,25 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL6VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL6VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL6VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL6VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL6OBJS)"!=""
     -echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL6LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -2909,7 +2988,7 @@ SHL6LINKRESO*=$(MISC)/$(SHL6TARGET)_res.o
 .IF "$(SHL6LIBS)"!=""
 $(MISC)/$(SHL6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL6LIBS)"!=""
 .ENDIF
 
@@ -2925,14 +3004,14 @@ SHL6LINKLIST=$(MISC)/$(SHL6TARGET)_link.lst
 SHL6LINKLISTPARAM=@$(SHL6LINKLIST)
 $(SHL6LINKLIST) : $(SHL6LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL6LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -2959,8 +3038,7 @@ $(SHL6TARGETN) : \
                     $(SHL6DEPN) \
                     $(SHL6IMP_ORD) \
                     $(SHL6LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL6TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL6DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL6DEFAULTRES:b).rc
@@ -2980,10 +3058,10 @@ $(SHL6TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
-    $(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL6LINKRES) $(SHL6LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -3005,13 +3083,15 @@ $(SHL6TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
         $(SHL6STDSHL) $(STDSHL6) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL6USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL6LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL6LINKER) @$(mktmp \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL6STACK) $(SHL6BASEX)	\
@@ -3030,15 +3110,15 @@ $(SHL6TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -out:$(SHL6TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -3054,16 +3134,16 @@ $(SHL6TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
-    $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -out:$(SHL6TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -3077,18 +3157,18 @@ $(SHL6TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL6TARGET).lnk
-        -$(RM) $(MISC)/$(SHL6TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL6TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL6TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL6BASEX) \
         $(SHL6STACK) $(MAPFILE) \
@@ -3100,17 +3180,17 @@ $(SHL6TARGETN) : \
         $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
         ) >> $(MISC)/$(SHL6TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL6TARGET).lnk
-        $(SHL6LINKER) @$(MISC)/$(SHL6TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL6TARGET).lnk
+        $(COMMAND_ECHO)$(SHL6LINKER) @$(MISC)/$(SHL6TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3126,11 +3206,13 @@ $(SHL6TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_6.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL6RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
@@ -3143,21 +3225,29 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_6.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
-    -$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-    $(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) -- -s $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL6TARGETN:b)
-    cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -3175,16 +3265,16 @@ $(SHL6TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 
 .IF "$(SHL6ALLRES)"!=""
-    +$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
 .ENDIF			# "$(SHL6ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL6DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -3197,7 +3287,7 @@ $(SHL6TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL6LINKER) -v 	$(SHL6LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL6LINKER) -v 	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -o $(SHL6TARGETN)	\
         $(SHL6DEF) \
@@ -3215,7 +3305,7 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL6TARGET8)" != "$(SHL6TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL6TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL6TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -3289,7 +3379,7 @@ SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL7VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL7VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL7VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3352,16 +3442,20 @@ $(USE_SHL7VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL7OBJS)!"=""
     @$(TYPE) /dev/null $(SHL7LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL7INTERFACE) -f $(SHL7FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL7INTERFACE) -f $(SHL7FILTERFILE) -m $@
 
 .ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)/$(SHL7TARGET).vmap
 $(USE_SHL7VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL7FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL7FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL7VERSIONMAP)"!=""
@@ -3388,25 +3482,25 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL7VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL7VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL7VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL7VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL7OBJS)"!=""
     -echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL7LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -3448,7 +3542,7 @@ SHL7LINKRESO*=$(MISC)/$(SHL7TARGET)_res.o
 .IF "$(SHL7LIBS)"!=""
 $(MISC)/$(SHL7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL7LIBS)"!=""
 .ENDIF
 
@@ -3464,14 +3558,14 @@ SHL7LINKLIST=$(MISC)/$(SHL7TARGET)_link.lst
 SHL7LINKLISTPARAM=@$(SHL7LINKLIST)
 $(SHL7LINKLIST) : $(SHL7LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL7LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -3498,8 +3592,7 @@ $(SHL7TARGETN) : \
                     $(SHL7DEPN) \
                     $(SHL7IMP_ORD) \
                     $(SHL7LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL7TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL7DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL7DEFAULTRES:b).rc
@@ -3519,10 +3612,10 @@ $(SHL7TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
-    $(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL7LINKRES) $(SHL7LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -3544,13 +3637,15 @@ $(SHL7TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
         $(SHL7STDSHL) $(STDSHL7) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL7USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL7LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL7LINKER) @$(mktmp \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL7STACK) $(SHL7BASEX)	\
@@ -3569,15 +3664,15 @@ $(SHL7TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -out:$(SHL7TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -3593,16 +3688,16 @@ $(SHL7TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
-    $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -out:$(SHL7TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -3616,18 +3711,18 @@ $(SHL7TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL7TARGET).lnk
-        -$(RM) $(MISC)/$(SHL7TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL7TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL7TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL7BASEX) \
         $(SHL7STACK) $(MAPFILE) \
@@ -3639,17 +3734,17 @@ $(SHL7TARGETN) : \
         $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
         ) >> $(MISC)/$(SHL7TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL7TARGET).lnk
-        $(SHL7LINKER) @$(MISC)/$(SHL7TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL7TARGET).lnk
+        $(COMMAND_ECHO)$(SHL7LINKER) @$(MISC)/$(SHL7TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3665,11 +3760,13 @@ $(SHL7TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_7.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL7RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
@@ -3682,21 +3779,29 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_7.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
-    -$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-    $(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) -- -s $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL7TARGETN:b)
-    cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -3714,16 +3819,16 @@ $(SHL7TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 
 .IF "$(SHL7ALLRES)"!=""
-    +$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
 .ENDIF			# "$(SHL7ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL7DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -3736,7 +3841,7 @@ $(SHL7TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL7LINKER) -v 	$(SHL7LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL7LINKER) -v 	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -o $(SHL7TARGETN)	\
         $(SHL7DEF) \
@@ -3754,7 +3859,7 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL7TARGET8)" != "$(SHL7TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL7TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL7TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -3828,7 +3933,7 @@ SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL8VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL8VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL8VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3891,16 +3996,20 @@ $(USE_SHL8VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL8OBJS)!"=""
     @$(TYPE) /dev/null $(SHL8LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL8INTERFACE) -f $(SHL8FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL8INTERFACE) -f $(SHL8FILTERFILE) -m $@
 
 .ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)/$(SHL8TARGET).vmap
 $(USE_SHL8VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL8FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL8FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL8VERSIONMAP)"!=""
@@ -3927,25 +4036,25 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL8VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL8VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL8VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL8VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL8OBJS)"!=""
     -echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL8LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -3987,7 +4096,7 @@ SHL8LINKRESO*=$(MISC)/$(SHL8TARGET)_res.o
 .IF "$(SHL8LIBS)"!=""
 $(MISC)/$(SHL8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL8LIBS)"!=""
 .ENDIF
 
@@ -4003,14 +4112,14 @@ SHL8LINKLIST=$(MISC)/$(SHL8TARGET)_link.lst
 SHL8LINKLISTPARAM=@$(SHL8LINKLIST)
 $(SHL8LINKLIST) : $(SHL8LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL8LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -4037,8 +4146,7 @@ $(SHL8TARGETN) : \
                     $(SHL8DEPN) \
                     $(SHL8IMP_ORD) \
                     $(SHL8LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL8TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL8DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL8DEFAULTRES:b).rc
@@ -4058,10 +4166,10 @@ $(SHL8TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
-    $(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL8LINKRES) $(SHL8LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -4083,13 +4191,15 @@ $(SHL8TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
         $(SHL8STDSHL) $(STDSHL8) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL8USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL8LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL8LINKER) @$(mktmp \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL8STACK) $(SHL8BASEX)	\
@@ -4108,15 +4218,15 @@ $(SHL8TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -out:$(SHL8TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -4132,16 +4242,16 @@ $(SHL8TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
-    $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -out:$(SHL8TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -4155,18 +4265,18 @@ $(SHL8TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL8TARGET).lnk
-        -$(RM) $(MISC)/$(SHL8TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL8TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL8TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL8BASEX) \
         $(SHL8STACK) $(MAPFILE) \
@@ -4178,17 +4288,17 @@ $(SHL8TARGETN) : \
         $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
         ) >> $(MISC)/$(SHL8TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL8TARGET).lnk
-        $(SHL8LINKER) @$(MISC)/$(SHL8TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL8TARGET).lnk
+        $(COMMAND_ECHO)$(SHL8LINKER) @$(MISC)/$(SHL8TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -4204,11 +4314,13 @@ $(SHL8TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_8.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL8RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
@@ -4221,21 +4333,29 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_8.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
-    -$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-    $(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) -- -s $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL8TARGETN:b)
-    cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -4253,16 +4373,16 @@ $(SHL8TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 
 .IF "$(SHL8ALLRES)"!=""
-    +$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
 .ENDIF			# "$(SHL8ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL8DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -4275,7 +4395,7 @@ $(SHL8TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL8LINKER) -v 	$(SHL8LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL8LINKER) -v 	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -o $(SHL8TARGETN)	\
         $(SHL8DEF) \
@@ -4293,7 +4413,7 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL8TARGET8)" != "$(SHL8TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL8TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL8TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -4367,7 +4487,7 @@ SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL9VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL9VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL9VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -4430,16 +4550,20 @@ $(USE_SHL9VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL9OBJS)!"=""
     @$(TYPE) /dev/null $(SHL9LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL9INTERFACE) -f $(SHL9FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL9INTERFACE) -f $(SHL9FILTERFILE) -m $@
 
 .ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)/$(SHL9TARGET).vmap
 $(USE_SHL9VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL9FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL9FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL9VERSIONMAP)"!=""
@@ -4466,25 +4590,25 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL9VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL9VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL9VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL9VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL9OBJS)"!=""
     -echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL9LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -4526,7 +4650,7 @@ SHL9LINKRESO*=$(MISC)/$(SHL9TARGET)_res.o
 .IF "$(SHL9LIBS)"!=""
 $(MISC)/$(SHL9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL9LIBS)"!=""
 .ENDIF
 
@@ -4542,14 +4666,14 @@ SHL9LINKLIST=$(MISC)/$(SHL9TARGET)_link.lst
 SHL9LINKLISTPARAM=@$(SHL9LINKLIST)
 $(SHL9LINKLIST) : $(SHL9LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL9LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -4576,8 +4700,7 @@ $(SHL9TARGETN) : \
                     $(SHL9DEPN) \
                     $(SHL9IMP_ORD) \
                     $(SHL9LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL9TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL9DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL9DEFAULTRES:b).rc
@@ -4597,10 +4720,10 @@ $(SHL9TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
-    $(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL9LINKRES) $(SHL9LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -4622,13 +4745,15 @@ $(SHL9TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
         $(SHL9STDSHL) $(STDSHL9) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL9USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL9LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL9LINKER) @$(mktmp \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL9STACK) $(SHL9BASEX)	\
@@ -4647,15 +4772,15 @@ $(SHL9TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -out:$(SHL9TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -4671,16 +4796,16 @@ $(SHL9TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
-    $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -out:$(SHL9TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -4694,18 +4819,18 @@ $(SHL9TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL9TARGET).lnk
-        -$(RM) $(MISC)/$(SHL9TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL9TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL9TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL9BASEX) \
         $(SHL9STACK) $(MAPFILE) \
@@ -4717,17 +4842,17 @@ $(SHL9TARGETN) : \
         $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
         ) >> $(MISC)/$(SHL9TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL9TARGET).lnk
-        $(SHL9LINKER) @$(MISC)/$(SHL9TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL9TARGET).lnk
+        $(COMMAND_ECHO)$(SHL9LINKER) @$(MISC)/$(SHL9TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -4743,11 +4868,13 @@ $(SHL9TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_9.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL9RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
@@ -4760,21 +4887,29 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_9.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
-    -$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-    $(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) -- -s $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL9TARGETN:b)
-    cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -4792,16 +4927,16 @@ $(SHL9TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 
 .IF "$(SHL9ALLRES)"!=""
-    +$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
 .ENDIF			# "$(SHL9ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL9DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -4814,7 +4949,7 @@ $(SHL9TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL9LINKER) -v 	$(SHL9LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL9LINKER) -v 	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -o $(SHL9TARGETN)	\
         $(SHL9DEF) \
@@ -4832,7 +4967,7 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL9TARGET8)" != "$(SHL9TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL9TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL9TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -4906,7 +5041,7 @@ SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)/src/version.c $@
-    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL10VERSIONOBJ:b).h/ > $@
+    $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL10VERSIONOBJ:b).h/ > $@
 
 .INIT : $(SHL10VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -4969,16 +5104,20 @@ $(USE_SHL10VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL10OBJS)!"=""
     @$(TYPE) /dev/null $(SHL10LIBS:s/.lib/.dump/) >> $@.dump
-    $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL10INTERFACE) -f $(SHL10FILTERFILE) -m $@
+    $(COMMAND_ECHO) $(PERL) $(SOLARENV)/bin/mapgen.pl -d $@.dump -s $(SHL10INTERFACE) -f $(SHL10FILTERFILE) -m $@
 
 .ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)/$(SHL10TARGET).vmap
 $(USE_SHL10VERSIONMAP) :
+.IF "$(VERBOSE)" == "TRUE"
     @echo -----------------------------
     @echo SHL10FILTERFILE not set!
     @echo -----------------------------
     @$(TOUCH) $@
     @echo dummy file to keep the dependencies for later use.
+.ELSE
+    @$(TOUCH) $@
+.ENDIF
 #	force_dmake_to_error
 .ENDIF			# "$(SHL10FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL10VERSIONMAP)"!=""
@@ -5005,25 +5144,25 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
 .ELIF "$(COMNAME)"=="sunpro5"
-    tr -d "\015" < $(SHL10VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL10VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    tr -d "\015" < $(SHL10VERSIONMAP) > $@
+    $(COMMAND_ECHO) tr -d "\015" < $(SHL10VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    -cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    @-cat $@ | $(AWK) -f $(SOLARENV)/bin/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL10OBJS)"!=""
     -echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL10LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
+    $(COMMAND_ECHO)-$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)/bin/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -5065,7 +5204,7 @@ SHL10LINKRESO*=$(MISC)/$(SHL10TARGET)_res.o
 .IF "$(SHL10LIBS)"!=""
 $(MISC)/$(SHL10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL10LIBS)"!=""
 .ENDIF
 
@@ -5081,14 +5220,14 @@ SHL10LINKLIST=$(MISC)/$(SHL10TARGET)_link.lst
 SHL10LINKLISTPARAM=@$(SHL10LINKLIST)
 $(SHL10LINKLIST) : $(SHL10LIBS)
     @@-$(RM) $@
-    $(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL10LIBS)"!=""
 .ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
-    echo . > $@
+    @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 .IF "$(GUI)" == "OS2"
@@ -5115,8 +5254,7 @@ $(SHL10TARGETN) : \
                     $(SHL10DEPN) \
                     $(SHL10IMP_ORD) \
                     $(SHL10LINKLIST)
-    @echo ------------------------------
-    @echo Making: $(SHL10TARGETN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL10DEFAULTRES)"!=""
     @@-$(RM) $(MISC)/$(SHL10DEFAULTRES:b).rc
@@ -5136,10 +5274,10 @@ $(SHL10TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
-    $(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
+    $(COMMAND_ECHO)$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
 .IF "$(COM)"=="GCC"
     windres $(SHL10LINKRES) $(SHL10LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
@@ -5161,13 +5299,15 @@ $(SHL10TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
         $(SHL10STDSHL) $(STDSHL10) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL10USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-    $(SHL10LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(SHL10LINKER) @$(mktmp \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL10STACK) $(SHL10BASEX)	\
@@ -5186,15 +5326,15 @@ $(SHL10TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -out:$(SHL10TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -5210,16 +5350,16 @@ $(SHL10TARGETN) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
-    $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -out:$(SHL10TARGETN)	\
         -map:$(MISC)/$(@:B).map				\
@@ -5233,18 +5373,18 @@ $(SHL10TARGETN) : \
     )
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
-        -$(RM) del $(MISC)/$(SHL10TARGET).lnk
-        -$(RM) $(MISC)/$(SHL10TARGET).lst
-        $(TYPE) $(mktmp \
+        $(COMMAND_ECHO)-$(RM) del $(MISC)/$(SHL10TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL10TARGET).lst
+        $(COMMAND_ECHO)$(TYPE) $(mktmp \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL10BASEX) \
         $(SHL10STACK) $(MAPFILE) \
@@ -5256,17 +5396,17 @@ $(SHL10TARGETN) : \
         $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
         ) >> $(MISC)/$(SHL10TARGET).lnk
-        $(TYPE) $(MISC)/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL10TARGET).lnk
-        $(SHL10LINKER) @$(MISC)/$(SHL10TARGET).lnk
+        $(COMMAND_ECHO)$(TYPE) $(MISC)/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)/$(SHL10TARGET).lnk
+        $(COMMAND_ECHO)$(SHL10LINKER) @$(MISC)/$(SHL10TARGET).lnk
         @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
-        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -5282,11 +5422,13 @@ $(SHL10TARGETN) : \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_10.cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL10RPATH) $@
-    @echo "Making: $@.jnilib"
+    @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
@@ -5299,21 +5441,29 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_10.cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
-    -$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-    $(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-    $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    $(COMMAND_ECHO)-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    $(COMMAND_ECHO)$(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+.IF "$(VERBOSE)"=="TRUE"
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+.ELSE
+    $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) -- -s $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+.ENDIF
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    $(RM) $(LB)/$(SHL10TARGETN:b)
-    cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
+    $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)
+    $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+.ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
 
 .IF "$(GUI)" == "OS2"
@@ -5331,16 +5481,16 @@ $(SHL10TARGETN) : \
 #	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 # YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 
 .IF "$(SHL10ALLRES)"!=""
-    +$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
+    $(COMMAND_ECHO)+$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
 .ENDIF			# "$(SHL10ALLRES)"!=""
 
 .IF "$(USE_DEFFILE)"!=""
 
-    $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+    $(COMMAND_ECHO)$(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
         $(SHL10DEF) \
         $(STDOBJ) \
         -L$(LB) \
@@ -5353,7 +5503,7 @@ $(SHL10TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(SHL10LINKER) -v 	$(SHL10LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL10LINKER) -v 	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -o $(SHL10TARGETN)	\
         $(SHL10DEF) \
@@ -5371,7 +5521,7 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
 .IF "$(SHL10TARGET8)" != "$(SHL10TARGET)"
-    +$(COPY) $@ $(@:d)$(SHL10TARGET8).dll
+    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL10TARGET8).dll
 .ENDIF
 
 .ENDIF			# "$(GUI)" == "OS2"
@@ -5411,8 +5561,7 @@ $(SHL1IMPLIBN):	\
 $(SHL1IMPLIBN):	\
                     $(SHL1LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL1IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5433,7 +5582,7 @@ $(SHL1IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL1VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL1VERSIONOBJ)
     +@echo build of $(SHL1TARGETN) creates $@
 
 .ELSE
@@ -5466,8 +5615,7 @@ $(SHL2IMPLIBN):	\
 $(SHL2IMPLIBN):	\
                     $(SHL2LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL2IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5488,7 +5636,7 @@ $(SHL2IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL2VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL2VERSIONOBJ)
     +@echo build of $(SHL2TARGETN) creates $@
 
 .ELSE
@@ -5521,8 +5669,7 @@ $(SHL3IMPLIBN):	\
 $(SHL3IMPLIBN):	\
                     $(SHL3LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL3IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5543,7 +5690,7 @@ $(SHL3IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL3VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL3VERSIONOBJ)
     +@echo build of $(SHL3TARGETN) creates $@
 
 .ELSE
@@ -5576,8 +5723,7 @@ $(SHL4IMPLIBN):	\
 $(SHL4IMPLIBN):	\
                     $(SHL4LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL4IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5598,7 +5744,7 @@ $(SHL4IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL4VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL4VERSIONOBJ)
     +@echo build of $(SHL4TARGETN) creates $@
 
 .ELSE
@@ -5631,8 +5777,7 @@ $(SHL5IMPLIBN):	\
 $(SHL5IMPLIBN):	\
                     $(SHL5LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL5IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5653,7 +5798,7 @@ $(SHL5IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL5VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL5VERSIONOBJ)
     +@echo build of $(SHL5TARGETN) creates $@
 
 .ELSE
@@ -5686,8 +5831,7 @@ $(SHL6IMPLIBN):	\
 $(SHL6IMPLIBN):	\
                     $(SHL6LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL6IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5708,7 +5852,7 @@ $(SHL6IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL6VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL6VERSIONOBJ)
     +@echo build of $(SHL6TARGETN) creates $@
 
 .ELSE
@@ -5741,8 +5885,7 @@ $(SHL7IMPLIBN):	\
 $(SHL7IMPLIBN):	\
                     $(SHL7LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL7IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5763,7 +5906,7 @@ $(SHL7IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL7VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL7VERSIONOBJ)
     +@echo build of $(SHL7TARGETN) creates $@
 
 .ELSE
@@ -5796,8 +5939,7 @@ $(SHL8IMPLIBN):	\
 $(SHL8IMPLIBN):	\
                     $(SHL8LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL8IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5818,7 +5960,7 @@ $(SHL8IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL8VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL8VERSIONOBJ)
     +@echo build of $(SHL8TARGETN) creates $@
 
 .ELSE
@@ -5851,8 +5993,7 @@ $(SHL9IMPLIBN):	\
 $(SHL9IMPLIBN):	\
                     $(SHL9LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL9IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5873,7 +6014,7 @@ $(SHL9IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL9VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL9VERSIONOBJ)
     +@echo build of $(SHL9TARGETN) creates $@
 
 .ELSE
@@ -5906,8 +6047,7 @@ $(SHL10IMPLIBN):	\
 $(SHL10IMPLIBN):	\
                     $(SHL10LIBS)
 .ENDIF
-    @echo ------------------------------1
-    @echo Making: $(SHL10IMPLIBN)
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
     @echo no ImportLibs on mingw
@@ -5928,7 +6068,7 @@ $(SHL10IMPLIBN):	\
 
 # touch creates an empty file, but this is not good for emxomfar, so
 # create a dummy lib here
-    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL10VERSIONOBJ)
+    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL10VERSIONOBJ)
     +@echo build of $(SHL10TARGETN) creates $@
 
 .ELSE
