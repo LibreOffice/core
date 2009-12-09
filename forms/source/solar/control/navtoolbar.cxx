@@ -75,11 +75,6 @@ namespace frm
             return sLabel;
         }
 
-        static bool lcl_isHighContrast( const Color& _rColor )
-        {
-            return _rColor.IsDark();
-        }
-
         ::rtl::OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
         {
             const sal_Char* pAsciiCommandName = NULL;
@@ -375,7 +370,7 @@ namespace frm
         if ( !m_pImageProvider )
             return;
 
-        const bool bIsHighContrast = lcl_isHighContrast( GetBackground().GetColor() );
+        const bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         const USHORT nItemCount = m_pToolbar->GetItemCount();
 
