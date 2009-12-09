@@ -95,14 +95,29 @@ SvNumberFormatter*  ScPoolHelper::GetFormTable() const
         pFormTable->SetColorLink( LINK( m_pSourceDoc, ScDocument, GetUserDefinedColor ) );
         pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
 
+        UseDocOptions();        // null date, year2000, std precision
+    }
+    return pFormTable;
+}
+
+void ScPoolHelper::UseDocOptions() const
+{
+    if (pFormTable)
+    {
         USHORT d,m,y;
         aOpt.GetDate( d,m,y );
         pFormTable->ChangeNullDate( d,m,y );
         pFormTable->ChangeStandardPrec( (USHORT)aOpt.GetStdPrecision() );
         pFormTable->SetYear2000( aOpt.GetYear2000() );
     }
-    return pFormTable;
 }
+
+void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
+{
+    aOpt = rOpt;
+    UseDocOptions();        // #i105512# if the number formatter exists, update its settings
+}
+
 void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document

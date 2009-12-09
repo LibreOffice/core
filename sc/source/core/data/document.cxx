@@ -476,6 +476,12 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateChartsContainingTab( nTab );
                 pTab[nTab]->SetName(rName);
+
+                // If formulas refer to the renamed sheet, the TokenArray remains valid,
+                // but the XML stream must be re-generated.
+                for (i=0; i<=MAXTAB; ++i)
+                    if (pTab[i] && pTab[i]->IsStreamValid())
+                        pTab[i]->SetStreamValid( FALSE );
             }
         }
     return bValid;

@@ -33,6 +33,7 @@
 #include <ooo/vba/excel/XlHAlign.hpp>
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/Constants.hpp>
+#include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
@@ -341,7 +342,7 @@ template< typename Ifc1 >
 uno::Any SAL_CALL
 ScVbaFormat<Ifc1>::Borders( const uno::Any& Index ) throw (script::BasicErrorException, uno::RuntimeException )
 {
-    ScVbaPalette aPalette( getDocShell( mxModel ) );
+    ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
     uno::Reference< XCollection > xColl =  new ScVbaBorders( thisHelperIface(), ScVbaFormat_BASE::mxContext, uno::Reference< table::XCellRange >( mxPropertySet, uno::UNO_QUERY_THROW ), aPalette );
 
     if ( Index.hasValue() )
@@ -355,7 +356,7 @@ template< typename Ifc1 >
 uno::Reference< excel::XFont > SAL_CALL
 ScVbaFormat<Ifc1>::Font(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    ScVbaPalette aPalette( getDocShell( mxModel ) );
+    ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
     return new ScVbaFont( thisHelperIface(), ScVbaFormat_BASE::mxContext, aPalette, mxPropertySet );
 }
 

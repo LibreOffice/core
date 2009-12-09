@@ -840,8 +840,9 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
     ScDocShellModificator aModificator( *this );
 
     // #i92477# be consistent with ScDocFunc::InsertTable: any index past the last sheet means "append"
+    // #i101139# nDestTab must be the target position, not APPEND (for CopyTabProtection etc.)
     if ( nDestTab >= aDocument.GetTableCount() )
-        nDestTab = SC_TAB_APPEND;
+        nDestTab = aDocument.GetTableCount();
 
     if (bCopy)
     {

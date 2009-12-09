@@ -102,6 +102,10 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <basic/basmgr.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <sfx2/app.hxx>
 
 
 using namespace com::sun::star;
@@ -165,13 +169,13 @@ void ImportExcel8::Boundsheet( void )
     UINT8           nLen;
     UINT16          nGrbit;
 
-    aIn.Ignore( 4 );
+    aIn.DisableDecryption();
+    maSheetOffsets.push_back( aIn.ReaduInt32() );
+    aIn.EnableDecryption();
     aIn >> nGrbit >> nLen;
 
     String aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
-
-    *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )
@@ -248,16 +252,6 @@ void ImportExcel8::SheetProtection( void )
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
 
-bool lcl_hasVBAEnabled()
-{
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
-        // test if vba service is present
-    uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY );
-
-    return xGlobals.is();
-}
-
 void ImportExcel8::ReadBasic( void )
 {
     bHasBasic = TRUE;
@@ -273,7 +267,7 @@ void ImportExcel8::ReadBasic( void )
         if( bLoadCode || bLoadStrg )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            bool bAsComment = !bLoadExecutable || !lcl_hasVBAEnabled();
+        bool bAsComment = !bLoadExecutable;
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }

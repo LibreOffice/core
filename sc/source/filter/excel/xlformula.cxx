@@ -30,18 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-// XXX xestream.hxx MUST be included before xlformula.hxx because of the
-// redifinition of the CREATE_OUSTRING() macro, which is in oox/helper.hxx
-// (indirectly included via xestream.hxx) and ../inc/ftools.hxx (indirectly
-// included via xlformula.hxx) that does an undef first. Ugly.
-#include "xestream.hxx"
 #include "xlformula.hxx"
 
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "token.hxx"
 #include "tokenarray.hxx"
+#include "xestream.hxx"
 #include "xistream.hxx"
 #include "xlroot.hxx"
 

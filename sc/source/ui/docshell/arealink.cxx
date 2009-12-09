@@ -172,6 +172,10 @@ void __EXPORT ScAreaLink::Closed()
         bAddUndo = FALSE;   // nur einmal
     }
 
+    SCTAB nDestTab = aDestArea.aStart.Tab();
+    if (pDoc->IsStreamValid(nDestTab))
+        pDoc->SetStreamValid(nDestTab, FALSE);
+
     SvBaseLink::Closed();
 }
 

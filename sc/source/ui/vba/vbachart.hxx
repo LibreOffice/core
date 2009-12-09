@@ -41,7 +41,7 @@
 #include <ooo/vba/excel/XChart.hpp>
 #include <ooo/vba/excel/XDataLabels.hpp>
 #include <ooo/vba/excel/XSeries.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1<ov::excel::XChart > ChartImpl_BASE;
 

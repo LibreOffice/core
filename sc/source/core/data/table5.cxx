@@ -249,6 +249,9 @@ void ScTable::RemoveManualBreaks()
 
     if (pRowFlags)
         pRowFlags->AndValue( 0, MAXROW, sal::static_int_cast<BYTE>(~CR_MANUALBREAK) );
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 BOOL ScTable::HasManualBreaks() const
@@ -287,6 +290,9 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
         pTabProtection.reset(new ScTableProtection(*pProtect));
     else
         pTabProtection.reset(NULL);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 ScTableProtection* ScTable::GetProtection()

@@ -31,27 +31,20 @@
 #define SC_VBA_DIALOG_HXX
 
 #include <cppuhelper/implbase1.hxx>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <ooo/vba/XGlobals.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XDialog.hpp>
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbadialogbase.hxx>
 
-#include "vbahelperinterface.hxx"
-#include "vbadialog.hxx"
-
-typedef InheritedHelperInterfaceImpl1< ov::excel::XDialog > ScVbaDialog_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaDialogBase, ov::excel::XDialog > ScVbaDialog_BASE;
 
 class ScVbaDialog : public ScVbaDialog_BASE
 {
-    sal_Int32 mnIndex;
 public:
-    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, sal_Int32 nIndex, const css::uno::Reference< css::uno::XComponentContext > xContext ):ScVbaDialog_BASE( xParent, xContext ), mnIndex( nIndex ) {}
+    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):ScVbaDialog_BASE( xParent, xContext, xModel, nIndex ) {}
     virtual ~ScVbaDialog() {}
 
     // Methods
-    virtual void SAL_CALL Show() throw (css::uno::RuntimeException);
-    rtl::OUString mapIndexToName( sal_Int32 nIndex );
+    virtual rtl::OUString mapIndexToName( sal_Int32 nIndex );
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

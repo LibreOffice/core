@@ -114,6 +114,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
 
     rtl::OUString           maBuildId;
+    sal_Int32               mnXlsWriteProtPass;
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 
