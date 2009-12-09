@@ -37,11 +37,11 @@
 #include <limits.h>
 #include <tools/shl.hxx>
 #include <vcl/image.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 

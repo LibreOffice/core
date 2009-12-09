@@ -114,18 +114,19 @@
 #include <unotools/ucbhelper.hxx>
 #include <tools/tempfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/signal.h>
 #include <rtl/uuid.h>
-#include <svtools/pathoptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/languageoptions.hxx>
+#include <unotools/internaloptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
-#include <svtools/folderrestriction.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/folderrestriction.hxx>
 #include <unotools/tempfile.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -147,9 +148,9 @@
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/regoptions.hxx>
+#include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
 
@@ -1323,13 +1324,15 @@ void Desktop::Main()
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
-
+/*
+        // locale and UI locale in AppSettings are now retrieved from configuration or system directly via SvtSysLocale
+        // no reason to set while starting
         // set UI language and locale
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
         //LanguageSelection langselect;
         OUString aUILocaleString = LanguageSelection::getLanguageString();
         Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
-        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+        LanguageType eLanguage = SvtSysLocale().GetLanguage();
 
         // #i39040#, do not call anything between GetSettings and SetSettings that might have
         // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
@@ -1339,7 +1342,7 @@ void Desktop::Main()
         aSettings.SetLanguage( eLanguage );
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-
+*/
 
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );
@@ -1349,7 +1352,7 @@ void Desktop::Main()
         else
             aTitle = aTitleString;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
@@ -1400,7 +1403,7 @@ void Desktop::Main()
 
             if (IsFirstStartWizardNeeded())
             {
-                ::svt::RegOptions().removeReminder(); // remove patch registration reminder
+                ::utl::RegOptions().removeReminder(); // remove patch registration reminder
                 Reference< XJob > xFirstStartJob( xSMgr->createInstance(
                     DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
                 if (xFirstStartJob.is())
@@ -1834,10 +1837,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
-
-    MiscSettings aMiscSettings( rSettings.GetMiscSettings() );
-    aMiscSettings.SetTwoDigitYearStart( (USHORT) SfxMiscCfg().GetYear2000() );
-    rSettings.SetMiscSettings( aMiscSettings );
 }
 
 // ========================================================================

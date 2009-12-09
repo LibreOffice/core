@@ -35,11 +35,11 @@
 
 #include <svx/unoshtxt.hxx>
 #include <unoedhlp.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/style.hxx>
+#include <svl/hint.hxx>
+#include <svl/style.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdobj.hxx>

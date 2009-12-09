@@ -31,7 +31,7 @@
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #define _CONNECTIVITY_KAB_FIELDS_HXX_
 
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustring.hxx>
 

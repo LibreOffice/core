@@ -32,8 +32,8 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 // class SvxCharHiddenItem -------------------------------------------------

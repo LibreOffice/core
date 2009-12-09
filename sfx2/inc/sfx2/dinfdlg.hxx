@@ -37,15 +37,15 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/zforlist.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/zforlist.hxx>
 
 #include "tabdlg.hxx"
 

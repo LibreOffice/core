@@ -85,13 +85,13 @@
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
@@ -99,7 +99,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <boost/bind.hpp>
 
 //_________________________________________________________________________________________________________________

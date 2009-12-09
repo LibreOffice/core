@@ -30,10 +30,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX

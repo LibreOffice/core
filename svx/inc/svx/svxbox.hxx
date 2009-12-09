@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 
 #ifndef _LSTBOX_HXX //autogen

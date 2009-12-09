@@ -32,12 +32,12 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _INETMSG_HXX //autogen
-#include <svtools/inetmsg.hxx>
+#include <svl/inetmsg.hxx>
 #endif
 #include <tools/diagnose_ex.h>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <vos/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -80,7 +80,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -111,12 +111,12 @@ using namespace ::com::sun::star::container;
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/inettype.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/inettype.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>

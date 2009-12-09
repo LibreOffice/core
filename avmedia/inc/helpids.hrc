@@ -31,7 +31,7 @@
 #ifndef _AVMEDIA_HELPIDS_HRC
 #define _AVMEDIA_HELPIDS_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define HID_AVMEDIA_TOOLBOXITEM_PLAY    (HID_AVMEDIA_START+0)
 #define HID_AVMEDIA_TOOLBOXITEM_PAUSE   (HID_AVMEDIA_START+1)
