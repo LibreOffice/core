@@ -165,7 +165,6 @@ public:
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
     static void             SetViewFrame( SfxViewFrame* );
-    static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc, USHORT nViewId=0, BOOL bHidden = FALSE );
 
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );

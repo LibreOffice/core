@@ -3505,13 +3505,6 @@ void SfxViewFrame::UpdateDocument_Impl()
     pDoc->UpdateFromTemplate_Impl();
 }
 
-SfxViewFrame* SfxViewFrame::CreateViewFrame( SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
-{
-    SfxFrame* pFrame = SfxFrame::Create( rDoc, nViewId, bHidden );
-    OSL_ENSURE( pFrame, "SfxViewFrame::CreateViewFrame: failed!" );
-    return pFrame ? pFrame->GetCurrentViewFrame() : NULL;
-}
-
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
     SFX_APP()->SetViewFrame_Impl( pFrame );
