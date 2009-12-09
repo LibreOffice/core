@@ -39,6 +39,13 @@ ENABLE_EXCEPTIONS = true
 SLOFILES = \
     $(SLO)$/cookiedg.obj \
     $(SLO)$/iahndl.obj \
+    $(SLO)$/iahndl-authentication.obj \
+    $(SLO)$/iahndl-ssl.obj \
+    $(SLO)$/iahndl-cookies.obj \
+    $(SLO)$/iahndl-filter.obj \
+    $(SLO)$/iahndl-locking.obj \
+    $(SLO)$/iahndl-ioexceptions.obj \
+    $(SLO)$/iahndl-errorhandler.obj \
     $(SLO)$/logindlg.obj \
     $(SLO)$/services.obj \
     $(SLO)$/masterpassworddlg.obj \
@@ -46,17 +53,17 @@ SLOFILES = \
     $(SLO)$/openlocked.obj \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
-    $(SLO)$/fltdlg.obj\
-    $(SLO)$/interactionhandler.obj\
-    $(SLO)$/requeststringresolver.obj\
-    $(SLO)$/unknownauthdlg.obj\
-    $(SLO)$/sslwarndlg.obj\
-    $(SLO)$/secmacrowarnings.obj\
-    $(SLO)$/filechanged.obj\
-    $(SLO)$/alreadyopen.obj\
-    $(SLO)$/lockfailed.obj\
-    $(SLO)$/trylater.obj\
-    $(SLO)$/newerverwarn.obj\
+    $(SLO)$/fltdlg.obj \
+    $(SLO)$/interactionhandler.obj \
+    $(SLO)$/requeststringresolver.obj \
+    $(SLO)$/unknownauthdlg.obj \
+    $(SLO)$/sslwarndlg.obj \
+    $(SLO)$/secmacrowarnings.obj \
+    $(SLO)$/filechanged.obj \
+    $(SLO)$/alreadyopen.obj \
+    $(SLO)$/lockfailed.obj \
+    $(SLO)$/trylater.obj \
+    $(SLO)$/newerverwarn.obj \
     $(SLO)$/passwordcontainer.obj
 
 SRS1NAME=$(TARGET)
