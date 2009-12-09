@@ -217,7 +217,7 @@ void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 
 void OOXMLFastDocumentHandler::setStream(Stream * pStream)
 {
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_PROTOCOL
     mpTmpStream.reset(new StreamProtocol(pStream, debug_logger));
     mpStream = mpTmpStream.get();
 #else

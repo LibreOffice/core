@@ -965,6 +965,24 @@ bool OOXMLFastContextHandler::propagatesProperties() const
     return false;
 }
 
+void OOXMLFastContextHandler::propagateCellProperties()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("propagateCellProperties");
+#endif
+
+    mpParserState->setCellProperties(getPropertySet());
+}
+
+void OOXMLFastContextHandler::propagateRowProperties()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("propagateRowProperties");
+#endif
+
+    mpParserState->setRowProperties(getPropertySet());
+}
+
 void OOXMLFastContextHandler::propagateTableProperties()
 {
 #ifdef DEBUG_ELEMENT
@@ -972,6 +990,75 @@ void OOXMLFastContextHandler::propagateTableProperties()
 #endif
 
     mpParserState->setTableProperties(getPropertySet());
+}
+
+void OOXMLFastContextHandler::sendCellProperties()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("sendCellProperties");
+#endif
+
+    mpParserState->resolveCellProperties(*mpStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("sendCellProperties");
+#endif
+}
+
+void OOXMLFastContextHandler::sendRowProperties()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("sendRowProperties");
+#endif
+
+    mpParserState->resolveRowProperties(*mpStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("sendRowProperties");
+#endif
+}
+
+void OOXMLFastContextHandler::sendTableProperties()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("sendTableProperties");
+#endif
+
+    mpParserState->resolveTableProperties(*mpStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("sendTableProperties");
+#endif
+}
+
+void OOXMLFastContextHandler::clearCellProps()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("clearCellProps");
+#endif
+
+    mpParserState->setCellProperties(OOXMLPropertySet::Pointer_t
+                                     (new OOXMLPropertySetImpl()));
+}
+
+void OOXMLFastContextHandler::clearRowProps()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("clearRowProps");
+#endif
+
+    mpParserState->setRowProperties(OOXMLPropertySet::Pointer_t
+                                    (new OOXMLPropertySetImpl()));
+}
+
+void OOXMLFastContextHandler::clearTableProps()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("clearTableProps");
+#endif
+
+    mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
+                                     (new OOXMLPropertySetImpl()));
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
@@ -1837,6 +1924,8 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
         debug_logger->endElement("endcell");
 #endif
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+
+        sendCellProperties();
     }
 }
 
@@ -1897,7 +1986,8 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 #endif
 
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
-        mpParserState->resolveTableProperties(*mpStream);
+        sendRowProperties();
+        sendTableProperties();
     }
 
     startCharacterGroup();
@@ -1905,6 +1995,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
     if (isForwardEvents())
         mpStream->utext(s0xd, 1);
 
+    endCharacterGroup();
     endParagraphGroup();
 }
 

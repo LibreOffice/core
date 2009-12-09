@@ -219,6 +219,42 @@ void OOXMLParserState::setCharacterProperties
         mpCharacterProps->add(pProps);
 }
 
+void OOXMLParserState::setCellProperties
+(OOXMLPropertySet::Pointer_t pProps)
+{
+    if (mpCellProps.get() == NULL)
+        mpCellProps = pProps;
+    else
+        mpCellProps->add(pProps);
+}
+
+void OOXMLParserState::setRowProperties
+(OOXMLPropertySet::Pointer_t pProps)
+{
+    if (mpRowProps.get() == NULL)
+        mpRowProps = pProps;
+    else
+        mpRowProps->add(pProps);
+}
+
+void OOXMLParserState::resolveCellProperties(Stream & rStream)
+{
+    if (mpCellProps.get() != NULL)
+    {
+        rStream.props(mpCellProps);
+        mpCellProps.reset(new OOXMLPropertySetImpl());
+    }
+}
+
+void OOXMLParserState::resolveRowProperties(Stream & rStream)
+{
+    if (mpRowProps.get() != NULL)
+    {
+        rStream.props(mpRowProps);
+        mpRowProps.reset(new OOXMLPropertySetImpl());
+    }
+}
+
 void OOXMLParserState::resolveTableProperties(Stream & rStream)
 {
     if (mpTableProps.get() != NULL)

@@ -51,6 +51,8 @@ class OOXMLParserState
     rtl::OUString msXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
+    OOXMLPropertySet::Pointer_t mpCellProps;
+    OOXMLPropertySet::Pointer_t mpRowProps;
     OOXMLPropertySet::Pointer_t mpTableProps;
 
 public:
@@ -93,6 +95,10 @@ public:
     void resolveCharacterProperties(Stream & rStream);
     OOXMLPropertySet::Pointer_t getCharacterProperties() const;
     void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);
+    void resolveCellProperties(Stream & rStream);
+    void setCellProperties(OOXMLPropertySet::Pointer_t pProps);
+    void resolveRowProperties(Stream & rStream);
+    void setRowProperties(OOXMLPropertySet::Pointer_t pProps);
     void resolveTableProperties(Stream & rStream);
     void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
 

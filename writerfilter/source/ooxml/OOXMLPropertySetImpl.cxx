@@ -161,7 +161,7 @@ Sprm * OOXMLPropertyImpl::clone()
 void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
     writerfilter::Properties * pProperties = NULL;
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_PROTOCOL
     pProperties = new writerfilter::PropertiesProtocol(&rProperties, debug_logger);
 #else
     pProperties = &rProperties;
@@ -699,7 +699,7 @@ OOXMLTableImpl::~OOXMLTableImpl()
 
 void OOXMLTableImpl::resolve(Table & rTable)
 {
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_PROTOCOL
     Table * pTable = new TableProtocol(&rTable, debug_logger);
 #else
     Table * pTable = &rTable;

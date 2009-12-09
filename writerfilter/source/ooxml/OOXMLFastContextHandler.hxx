@@ -221,9 +221,17 @@ public:
     void text(const ::rtl::OUString & sText);
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
+    virtual void propagateTableProperties();
+    virtual void propagateRowProperties();
+    virtual void propagateCellProperties();
     virtual bool propagatesProperties() const;
     void sendPropertiesWithId(const Id & rId);
-    void propagateTableProperties();
+    void sendCellProperties();
+    void sendRowProperties();
+    void sendTableProperties();
+    void clearCellProps();
+    void clearRowProps();
+    void clearTableProps();
     void clearProps();
 
     const ::rtl::OUString & getText() const;
