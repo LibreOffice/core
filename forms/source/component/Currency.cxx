@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 //.........................................................................
 namespace frm
