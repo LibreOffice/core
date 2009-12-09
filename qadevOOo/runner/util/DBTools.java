@@ -30,6 +30,7 @@
 
 package util;
 
+import com.sun.star.uno.Exception;
 import java.io.PrintWriter ;
 
 // access the implementations via names
@@ -69,6 +70,7 @@ public class DBTools {
 
     private XMultiServiceFactory xMSF = null ;
     private XNamingService dbContext = null ;
+    private PrintWriter m_log = null;
 
     //JDBC driver
     public final static String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
@@ -166,7 +168,9 @@ public class DBTools {
         /**
         * Creates an empty instance.
         */
-        public DataSourceInfo() {}
+        public DataSourceInfo()
+        {
+        }
 
         /**
         * Creates an instance laying upon specified DataSource.
@@ -248,38 +252,23 @@ public class DBTools {
         * appropriate service properties.
         * @return <code>com.sun.star.sdb.DataSource</code> service.
         */
-        public Object getDataSourceService() {
-            Object src = null ;
-            try {
-                src = xMSF.createInstance("com.sun.star.sdb.DataSource") ;
-            } catch (com.sun.star.uno.Exception e) {}
-
-            if (src == null) return null ;
+        public Object getDataSourceService() throws Exception
+        {
+            Object src = src = xMSF.createInstance("com.sun.star.sdb.DataSource") ;
 
             XPropertySet props = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, src) ;
 
-            try {
-                if (Name != null) props.setPropertyValue("Name", Name) ;
-                if (URL != null) props.setPropertyValue("URL", URL) ;
-                if (Info != null) props.setPropertyValue("Info", Info) ;
-                if (User != null) props.setPropertyValue("User", User) ;
-                if (Password != null) props.setPropertyValue("Password", Password) ;
-                if (IsPasswordRequired != null) props.setPropertyValue("IsPasswordRequired", IsPasswordRequired) ;
-                if (SuppressVersionColumns != null) props.setPropertyValue("SuppressVersionColumns", SuppressVersionColumns) ;
-                if (IsReadOnly != null) props.setPropertyValue("IsReadOnly", IsReadOnly) ;
-                if (TableFilter != null) props.setPropertyValue("TableFilter", TableFilter) ;
-                if (TableTypeFilter != null) props.setPropertyValue("TableTypeFilter", TableTypeFilter) ;
-
-            } catch (com.sun.star.beans.UnknownPropertyException e) {
-                return null ;
-            } catch (com.sun.star.beans.PropertyVetoException e) {
-                return null ;
-            } catch (com.sun.star.lang.WrappedTargetException e) {
-                return null ;
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                return null ;
-            }
+            if (Name != null) props.setPropertyValue("Name", Name) ;
+            if (URL != null) props.setPropertyValue("URL", URL) ;
+            if (Info != null) props.setPropertyValue("Info", Info) ;
+            if (User != null) props.setPropertyValue("User", User) ;
+            if (Password != null) props.setPropertyValue("Password", Password) ;
+            if (IsPasswordRequired != null) props.setPropertyValue("IsPasswordRequired", IsPasswordRequired) ;
+            if (SuppressVersionColumns != null) props.setPropertyValue("SuppressVersionColumns", SuppressVersionColumns) ;
+            if (IsReadOnly != null) props.setPropertyValue("IsReadOnly", IsReadOnly) ;
+            if (TableFilter != null) props.setPropertyValue("TableFilter", TableFilter) ;
+            if (TableTypeFilter != null) props.setPropertyValue("TableTypeFilter", TableTypeFilter) ;
 
             return src ;
         }
@@ -289,8 +278,10 @@ public class DBTools {
     * Creates class instance.
     * @param xMSF <code>XMultiServiceFactory</code>.
     */
-    public DBTools(XMultiServiceFactory xMSF) {
+    public DBTools(XMultiServiceFactory xMSF, PrintWriter _logger )
+    {
         this.xMSF = xMSF ;
+        this.m_log = _logger;
 
         try {
             Object cont = xMSF.createInstance("com.sun.star.sdb.DatabaseContext") ;
