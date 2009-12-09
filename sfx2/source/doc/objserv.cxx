@@ -428,28 +428,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // collect data for dialog
                 String aURL, aTitle;
-                if ( HasName() && !pImp->aNewName.Len() )
+                if ( HasName() )
                 {
                     aURL = GetMedium()->GetName();
                     aTitle = GetTitle();
                 }
                 else
                 {
-                    if ( !pImp->aNewName.Len() )
-                    {
-                        aURL = DEFINE_CONST_UNICODE( "private:factory/" );
-                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-                        // aTitle = String( SfxResId( STR_NONAME ) );
-                    }
-                    else
-                    {
-                        aURL = DEFINE_CONST_UNICODE( "[private:factory/" );
-                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-                        aURL += DEFINE_CONST_UNICODE( "]" );
-                        INetURLObject aURLObj( pImp->aNewName );
-                        aURL += String(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI ));
-                        // aTitle = aURLObj.GetBase();
-                    }
+                    aURL = DEFINE_CONST_UNICODE( "private:factory/" );
+                    aURL += String::CreateFromAscii( GetFactory().GetShortName() );
 
                     aTitle = GetTitle();
                 }
@@ -1191,7 +1178,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 
             case SID_CLOSING:
             {
-                rSet.Put( SfxBoolItem( SID_CLOSING, Get_Impl()->bInCloseEvent ) );
+                rSet.Put( SfxBoolItem( SID_CLOSING, false ) );
                 break;
             }
 

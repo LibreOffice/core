@@ -189,8 +189,6 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 //--------------------------------------------------------------------
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 :mpObjectContainer(0)
-    ,pAccMgr(0)
-    ,pCfgMgr( 0)
     ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )
     ,aMacroMode( *this )
@@ -199,10 +197,8 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,nVisualDocumentNumber( USHRT_MAX)
     ,nDocumentSignatureState( SIGNATURESTATE_UNKNOWN )
     ,nScriptingSignatureState( SIGNATURESTATE_UNKNOWN )
-    ,bTemplateConfig( sal_False)
     ,bInList( sal_False)
     ,bClosing( sal_False)
-    ,bSetInPlaceObj( sal_False)
     ,bIsSaving( sal_False)
     ,bPasswd( sal_False)
     ,bIsTmp( sal_False)
@@ -213,11 +209,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bInPrepareClose( sal_False )
     ,bPreparedForClose( sal_False )
     ,bWaitingForPicklist( sal_False )
-    ,bModuleSearched( sal_False )
-    ,bIsHelpObjSh( sal_False )
-    ,bForbidCaching( sal_False )
     ,bForbidReload( sal_False )
-    ,bSupportsEventMacros( sal_True )
     ,bBasicInitialized( sal_False )
     ,bIsPrintJobCancelable( sal_True )
     ,bOwnsStorage( sal_True )
@@ -236,30 +228,24 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bAllowShareControlFileClean( sal_True )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
-    ,bDoNotTouchDocInfo( sal_False )
     ,pReloadTimer ( 0)
     ,pMarkData( 0 )
     ,nLoadedFlags ( SFX_LOADED_MAINDOCUMENT )
     ,nFlagsInProgress( 0 )
-    ,bInFrame( sal_False )
     ,bModalMode( sal_False )
     ,bRunningMacro( sal_False )
     ,bReloadAvailable( sal_False )
     ,nAutoLoadLocks( 0 )
     ,pModule( 0 )
-    ,pFrame( 0 )
-    ,pTbxConfig( 0 )
     ,eFlags( SFXOBJECTSHELL_UNDEFINED )
     ,bReadOnlyUI( sal_False )
     ,bHiddenLockedByAPI( sal_False )
-    ,bInCloseEvent( sal_False )
     ,nStyleFilter( 0 )
     ,bDisposing( sal_False )
     ,m_bEnableSetModified( sal_True )
     ,m_bIsModified( sal_False )
     ,m_nMapUnit( MAP_100TH_MM )
     ,m_bCreateTempStor( sal_False )
-    ,m_xDocInfoListener()
     ,m_bIsInit( sal_False )
     ,m_bIncomplEncrWarnShown( sal_False )
 {
@@ -341,10 +327,6 @@ SfxObjectShell::~SfxObjectShell()
     SfxObjectShell::Close();
     pImp->xModel = NULL;
 
-//  DELETEX(pImp->pEventConfig);
-//    DELETEX(pImp->pTbxConfig);
-//    DELETEX(pImp->pAccMgr);
-//    DELETEX(pImp->pCfgMgr);
     DELETEX(pImp->pReloadTimer );
 
     SfxApplication *pSfxApp = SFX_APP();
@@ -881,12 +863,9 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 {
     OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
     pImp->xModel = pModel;
-    if ( pModel ) {
+    if ( pModel )
+    {
         pModel->addCloseListener( new SfxModelListener_Impl(this) );
-        //pImp->m_xDocInfoListener = new SfxDocInfoListener_Impl(*this);
-        //uno::Reference<util::XModifyBroadcaster> xMB(
-        //    pModel->getDocumentProperties(), uno::UNO_QUERY_THROW);
-        //xMB->addModifyListener(pImp->m_xDocInfoListener);
     }
 }
 

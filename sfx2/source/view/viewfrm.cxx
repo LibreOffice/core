@@ -677,9 +677,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER, sal_False);
 
-                if( !pURLItem || pURLItem->GetValue() == xOldObj->GetMedium()->GetName() )
-                    xOldObj->Get_Impl()->bForbidCaching = sal_True;
-
                 sal_Bool bHasStorage = pMedium->HasStorage_Impl();
                 if( bHandsOff )
                 {
