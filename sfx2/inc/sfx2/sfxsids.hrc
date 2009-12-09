@@ -733,7 +733,7 @@
 #define SID_WIN_MINIMIZED                   (SID_SFX_START + 625)
 #define SID_WIN_MAXIMIZED                   (SID_SFX_START + 626)
 #define SID_WIN_FULLSCREEN                  (SID_SFX_START + 627)
-#define SID_WIN_POSSIZE                     (SID_SFX_START + 628)
+    // FREE, was SID_WIN_POSSIZE
 #define SID_WIN_VISIBLE                     (SID_SFX_START + 629)
 
 #define SID_VIEWSHELL0                      (SID_SFX_START + 630)

@@ -323,9 +323,6 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             break;
         }
 
-        case SID_WIN_POSSIZE:
-            break;
-
         case SID_NEWDOCDIRECT :
         {
             SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
@@ -440,13 +437,6 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
 
             case SID_SHOWPOPUPS :
                 break;
-
-            case SID_WIN_POSSIZE:
-            {
-                rSet.Put( SfxRectangleItem( nWhich, Rectangle(
-                        GetWindow().GetPosPixel(), GetWindow().GetSizePixel() ) ) );
-                break;
-            }
 
             case SID_OBJECT:
                 if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )

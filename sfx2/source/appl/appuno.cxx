@@ -181,7 +181,6 @@ static const String sMacroExecMode              = String::CreateFromAscii( "Macr
 static const String sUpdateDocMode              = String::CreateFromAscii( "UpdateDocMode"              );
 static const String sMinimized                  = String::CreateFromAscii( "Minimized"                  );
 static const String sInteractionHdl             = String::CreateFromAscii( "InteractionHandler"         );
-static const String sWindowState                = String::CreateFromAscii( "WindowState"                );
 static const String sUCBContent                 = String::CreateFromAscii( "UCBContent"                 );
 static const String sRepairPackage              = String::CreateFromAscii( "RepairPackage"              );
 static const String sDocumentTitle              = String::CreateFromAscii( "DocumentTitle"              );
@@ -741,14 +740,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
                 }
-                else if ( aName == sWindowState )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for WindowState" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
-                }
                 else if ( aName == sTemplateName )
                 {
                     ::rtl::OUString sVal;
@@ -1018,8 +1009,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_WIN_POSSIZE ) == SFX_ITEM_SET )
-                nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
@@ -1174,8 +1163,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_BLACK_LIST )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
-                        continue;
-                    if ( nId == SID_WIN_POSSIZE )
                         continue;
                     if ( nId == SID_TEMPLATE_NAME )
                         continue;
@@ -1496,11 +1483,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sMediaType;
-                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
-            if ( rSet.GetItemState( SID_WIN_POSSIZE, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sWindowState;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )

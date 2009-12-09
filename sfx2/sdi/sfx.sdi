@@ -400,33 +400,6 @@ SfxVoidItem AddWatch SID_BASICIDE_ADDWATCH
 ]
 
 //--------------------------------------------------------------------------
-SfxRectangleItem Area SID_WIN_POSSIZE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem Author SID_DOCINFO_AUTHOR
 
 [

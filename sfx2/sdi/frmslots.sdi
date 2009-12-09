@@ -400,11 +400,6 @@ interface TopWindow : BrowseWindow
     [
         StateMethod = StateView_Impl ;
     ]
-    SID_WIN_POSSIZE // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
     SID_CLOSEWIN // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;

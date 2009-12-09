@@ -530,18 +530,14 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper
     if( !pImp->bHidden )
         rDoc.OwnerLock( sal_True );
 
-    Sequence< PropertyValue > aUserData;
-    bool bClearWinPosSizeItem = false;
-    bool bReadUserData = false;
-
     // if no view-related data exists in the set, then obtain the view data from the model
+    Sequence< PropertyValue > aUserData;
     if ( !bHasJumpMark && !bHasPluginMode && !bHasViewId )
     {
         if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
         {
             SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
             pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-            bClearWinPosSizeItem = bReadUserData = true;
         }
     }
 
@@ -626,20 +622,11 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper
 
     SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );
 
-    if ( bClearWinPosSizeItem )
+    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
+    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
+    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
     {
-        SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
-        pMediumSet->ClearItem( SID_WIN_POSSIZE );
-    }
-
-    if ( bReadUserData )
-    {
-        // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-        // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-        if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
-        {
-            pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
-        }
+        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
     }
 
     return GetCurrentDocument() == &rDoc;
