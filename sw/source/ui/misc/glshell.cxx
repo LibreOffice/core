@@ -309,7 +309,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         }
 
         // Dokumenttitel setzen
-        SfxViewFrame* pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, nViewId, !bShow );
+        SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
         String aDocTitle(SW_RES( STR_GLOSSARY ));
         aDocTitle += ' ';
         aDocTitle += sLongName;

@@ -429,7 +429,7 @@ SwXMailMerge::SwXMailMerge() :
     SwDocShell *pDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh = pDocShell;
     xDocSh->DoInitNew( 0 );
-    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = (SwView*) pFrame->GetViewShell();
     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 

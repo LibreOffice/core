@@ -210,7 +210,7 @@ static USHORT nTitleNo = 0;
     // Neues Dokument erzeugen (kein Show!)
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
-    pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+    pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = (SwView*) pFrame->GetViewShell();
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
     pSh = pNewView->GetWrtShellPtr();
