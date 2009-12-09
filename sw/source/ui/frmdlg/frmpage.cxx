@@ -2641,8 +2641,8 @@ void BmpWindow::Paint( const Rectangle& )
         aGraphic.Draw( this, aPntPos, aPntSz );
     else
     {
-        bool bIsDark = ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() != FALSE );
-        DrawBitmapEx( aPntPos, aPntSz, bIsDark ? aBmpHC : aBmp );
+        bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+        DrawBitmapEx( aPntPos, aPntSz, bHC ? aBmpHC : aBmp );
     }
 }
 
