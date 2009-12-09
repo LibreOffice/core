@@ -356,15 +356,6 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                                     SfxFrame& i_rTargetFrame, SfxObjectShell& i_rDocument ) const
-{
-    SfxAllItemSet aSet( SFX_APP()->GetPool() );
-    TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
-    return i_rTargetFrame.InsertDocument_Impl( i_rDocument, aSet );
-}
-
-// --------------------------------------------------------------------------------------------------------------------
 SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel >& i_rxDocument ) const
 {
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
@@ -468,11 +459,11 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
         ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
         pRequest->addContinuation( pApprove.get() );
 
-        const Reference< XInteractionHandler2 > xHandler( xInteraction, UNO_QUERY_THROW );
+        const Reference< XInteractionHandler2 > xHandler( xInteraction, UNO_QUERY );
     #if OSL_DEBUG_LEVEL > 0
         const sal_Bool bHandled =
     #endif
-        xHandler->handleInteractionRequest( pRequest.get() );
+        xHandler.is() && xHandler->handleInteractionRequest( pRequest.get() );
 
     #if OSL_DEBUG_LEVEL > 0
         if ( !bHandled )
@@ -485,6 +476,14 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCollection& io_rDescriptor )
+{
+    // remove the arguments which are for the loader only, and not for a call to attachResource
+    io_rDescriptor.remove( "StatusIndicator" );
+    io_rDescriptor.remove( "Model" );
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -571,10 +570,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             {
                 xLoadable->initNew();
 
-                ::comphelper::NamedValueCollection aArgs( aDescriptor );
-                aArgs.remove( "StatusIndicator" );  // TODO: why this?
-
-                xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
+                impl_removeLoaderArguments( aDescriptor );
+                xModel->attachResource( ::rtl::OUString(), aDescriptor.getPropertyValues() );
             }
             else
             {
@@ -583,7 +580,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
         else
         {
-            // tell the doc its load args.
+            // tell the doc its (current) load args.
             xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
 
             // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
@@ -611,8 +608,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
         wFrame = pTargetFrame;
 
-        // insert the document into the frame
-        if ( !impl_plugDocIntoFrame( aDescriptor, *pTargetFrame, *xDoc ) )
+        // plug the document into the frame
+        if ( !pTargetFrame->InsertDocument_Impl( *xDoc, aDescriptor ) )
             throw RuntimeException();
 
         if ( !bExternalModel )

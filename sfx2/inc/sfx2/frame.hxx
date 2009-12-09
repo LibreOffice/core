@@ -71,6 +71,7 @@ namespace com
 #include <svtools/brdcst.hxx>
 #include <tools/list.hxx>
 #include <svtools/poolitem.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 class SvBorder;
 class SfxWorkWindow;
@@ -218,7 +219,7 @@ public:
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 
-    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper::NamedValueCollection& i_rArgs );
     SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
     SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;

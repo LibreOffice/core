@@ -1020,8 +1020,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_WIN_POSSIZE ) == SFX_ITEM_SET )
                 nAdditional++;
-    //        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
-    //            nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
@@ -1519,12 +1517,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = sJumpMark;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
-
-            SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
-            if ( pRectItem )
-            {
-                DBG_ERROR("PosSizeItem not supported yet!");
             }
 
             if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )

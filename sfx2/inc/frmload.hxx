@@ -122,12 +122,6 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument
                         ) const;
 
-    sal_Bool            impl_plugDocIntoFrame(
-                            const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                  SfxFrame& i_rTargetFrame,
-                                  SfxObjectShell& i_rDocument
-                        ) const;
-
     void                impl_lockHiddenDocument(
                                   SfxObjectShell& i_rDocument,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
@@ -141,6 +135,10 @@ private:
     SfxFrame*           impl_getOrCreateEmptySfxFrame(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame
                         ) const;
+
+    void                impl_removeLoaderArguments(
+                            ::comphelper::NamedValueCollection& io_rDescriptor
+                        );
 };
 
 #endif

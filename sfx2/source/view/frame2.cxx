@@ -467,7 +467,7 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 
 namespace
 {
-    bool lcl_getViewDataAndID( const Reference< XModel >& _rxDocument, Sequence< PropertyValue >& _o_viewData, USHORT& _o_viewId )
+    bool lcl_getViewDataAndID( const Reference< XModel >& _rxDocument, Sequence< PropertyValue >& _o_viewData, sal_Int16& _o_viewId )
     {
         _o_viewData.realloc(0);
         _o_viewId = 0;
@@ -481,7 +481,6 @@ namespace
             return false;
 
         // obtain the ViewID from the view data
-        _o_viewId = 0;
         if ( xViewData->getByIndex( 0 ) >>= _o_viewData )
         {
             ::comphelper::NamedValueCollection aNamedUserData( _o_viewData );
@@ -489,14 +488,14 @@ namespace
             if ( sViewId.getLength() )
             {
                 sViewId = sViewId.copy( 4 );    // format is like in "view3"
-                _o_viewId = USHORT( sViewId.toInt32() );
+                _o_viewId = sal_Int16( sViewId.toInt32() );
             }
         }
         return true;
     }
 }
 
-sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& rSet )
+sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper::NamedValueCollection& i_rArgs )
 /* [Beschreibung]
  */
 {
@@ -514,42 +513,35 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     OSL_PRECOND( GetCurrentDocument() == NULL,
         "SfxFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
-    SFX_ITEMSET_ARG( &rSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
-    SFX_ITEMSET_ARG( &rSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
-    SFX_ITEMSET_ARG( &rSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
-    SFX_ITEMSET_ARG( &rSet, pHidItem,    SfxBoolItem,        SID_HIDDEN,         sal_False );    // hidden
-    SFX_ITEMSET_ARG( &rSet, pEditItem,   SfxBoolItem,        SID_VIEWONLY,       sal_False );    // view only
-    SFX_ITEMSET_ARG( &rSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
-    SFX_ITEMSET_ARG( &rSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
+    // view ID
+    sal_Int16 nViewId = 0;
+    const bool bHasViewId = i_rArgs.get_ensureType( "ViewId", nViewId );
 
-    // hidden?
-    pImp->bHidden = pHidItem ? pHidItem->GetValue() : pImp->bHidden;
+    // jump mark
+    ::rtl::OUString sJumpMark;
+    const bool bHasJumpMark = i_rArgs.get_ensureType( "JumpMark", sJumpMark );
 
     // plugin mode
-    const USHORT nPluginMode = pPluginMode ? pPluginMode->GetValue() : 0;
+    sal_Int16 nPluginMode = 0;
+    const bool bHasPluginMode = i_rArgs.get_ensureType( "PluginMode", nPluginMode );
 
-    // view only?
-    if ( pEditItem && pEditItem->GetValue() )
-        SetMenuBarOn_Impl( FALSE );
-
-    // view ID
-    USHORT nViewId = pViewIdItem ? pViewIdItem->GetValue() : 0;
-
+    // hidden?
+    pImp->bHidden = i_rArgs.getOrDefault( "Hidden", pImp->bHidden );
     if( !pImp->bHidden )
         rDoc.OwnerLock( sal_True );
 
     Sequence< PropertyValue > aUserData;
-    bool bClearPosSizeZoom = false;
+    bool bClearWinPosSizeItem = false;
     bool bReadUserData = false;
 
     // if no view-related data exists in the set, then obtain the view data from the model
-    if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
+    if ( !bHasJumpMark && !bHasPluginMode && !bHasViewId )
     {
         if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
         {
             SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
             pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-            bClearPosSizeZoom = bReadUserData = true;
+            bClearWinPosSizeItem = bReadUserData = true;
         }
     }
 
@@ -578,19 +570,15 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     }
 
     OSL_ENSURE( ( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT )
-            ||  ( pJumpItem == NULL ),
+            ||  ( !bHasJumpMark ),
         "SfxFrame::InsertDocument_Impl: so this code wasn't dead?" );
         // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
         // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
         // here is never called before the load process finished. At least not with a jump item != NULL.
-    if( pJumpItem )
+    if( bHasJumpMark )
     {
-        pViewFrame->GetViewShell()->JumpToMark( pJumpItem->GetValue() );
+        pViewFrame->GetViewShell()->JumpToMark( sJumpMark );
     }
-
-    // Position und Groesse setzen
-    if ( pAreaItem )
-        PositionWindow_Impl( pAreaItem->GetValue() );
 
     if ( !pImp->bHidden )
     {
@@ -624,7 +612,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     }
     else
     {
-        DBG_ASSERT( !IsInPlace() && !pPluginMode, "Special modes not compatible with hidden mode!" );
+        DBG_ASSERT( !IsInPlace() && !bHasPluginMode, "Special modes not compatible with hidden mode!" );
         GetWindow().Show();
     }
 
@@ -638,12 +626,10 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
 
     SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );
 
-    if ( bClearPosSizeZoom )
+    if ( bClearWinPosSizeItem )
     {
         SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
-        pMediumSet->ClearItem( SID_VIEW_POS_SIZE );
         pMediumSet->ClearItem( SID_WIN_POSSIZE );
-        pMediumSet->ClearItem( SID_VIEW_ZOOM_MODE );
     }
 
     if ( bReadUserData )

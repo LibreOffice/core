@@ -4040,6 +4040,11 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     if ( !pViewShell->GetController().is() )
         pViewShell->SetController( new SfxBaseController( pViewShell ) );
 
+    // some initial view settings, coming from our most recent attachResource call
+    ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
+    if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
+        pViewFrame->GetFrame()->SetMenuBarOn_Impl( FALSE );
+
     return Reference< XController2 >( pViewShell->GetController(), UNO_QUERY_THROW );
 }
 

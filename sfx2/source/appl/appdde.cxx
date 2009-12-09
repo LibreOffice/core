@@ -597,16 +597,13 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
 //          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
-            // minimiert!
-            SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
-            SfxRectangleItem aRectItem( SID_VIEW_POS_SIZE, Rectangle() );
 
             SfxBoolItem aSilent(SID_SILENT, TRUE);
             SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
                     &aName, &aNewView,
-                    &aViewStat,&aRectItem/*aHidden*/,
+                    /*aHidden,*/
                     &aSilent, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
