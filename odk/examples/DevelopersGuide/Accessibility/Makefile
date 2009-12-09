@@ -68,7 +68,11 @@ JAVAFILES = \
 		TextualDisplay.java
 
 APP1_CLASSFILES = $(patsubst %.java,$(OUT_APP_CLASS)/%.class,$(JAVAFILES))
-APP1_CLASSNAMES = $(patsubst %.java,%.class,$(JAVAFILES))
+APP1_CLASSNAMES = $(patsubst %.java,%.class,$(JAVAFILES)) \
+	 EventListenerProxy$(ICL)1.class \
+	 EventListenerProxy$(ICL)2.class \
+	 EventListenerProxy$(ICL)3.class \
+	 EventListenerProxy$(ICL)4.class
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_APP_CLASS))

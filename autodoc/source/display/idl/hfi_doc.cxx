@@ -55,8 +55,17 @@ HF_IdlDocu::~HF_IdlDocu()
 }
 
 void
-HF_IdlDocu::Produce_byDocu4Reference( const ce_info &   i_rDocuForReference,
-                                      const client &    i_rScopeGivingCe ) const
+HF_IdlDocu::Produce_fromCodeEntity( const client & i_ce ) const
+{
+    const ce_info *
+        i_pDocu = Get_IdlDocu(i_ce.Docu());
+    if (i_pDocu != 0)
+        Produce_byDocuAndScope(*i_pDocu, &i_ce, i_ce);
+}
+
+void
+HF_IdlDocu::Produce_fromReference( const ce_info &   i_rDocuForReference,
+                                   const client &    i_rScopeGivingCe ) const
 {
     Produce_byDocuAndScope(i_rDocuForReference, 0, i_rScopeGivingCe );
 }
@@ -121,11 +130,31 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
         }
     }
 
+    std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
+        aSeeAlsosWithoutText;
+    std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
+        aSeeAlsosWithText;
+
     for ( std::vector< ary::inf::AtTag2* >::const_iterator
                 iter = i_rDocu.Tags().begin();
           iter != i_rDocu.Tags().end();
           ++iter )
     {
+        csi::dsapi::DT_SeeAlsoAtTag*
+            pSeeAlso = dynamic_cast< csi::dsapi::DT_SeeAlsoAtTag * >(*iter);
+        if (pSeeAlso != 0 )
+        {
+            if ( pSeeAlso->Text().IsEmpty() )
+            {
+                aSeeAlsosWithoutText.push_back(pSeeAlso);
+            }
+            else
+            {
+                aSeeAlsosWithText.push_back(pSeeAlso);
+            }
+            continue;
+        }
+
         if ( strlen( (*iter)->Title() ) > 0 )
         {
             HF_IdlTag
@@ -136,5 +165,30 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
                                  rOut.Produce_Definition(),
                                  *(*iter) );
         }
+    }   // end for
+
+    if (aSeeAlsosWithoutText.size() > 0)
+    {
+        HF_IdlTag
+            aSeeAlsoTag(Env(),  i_rScopeGivingCe);
+        Xml::Element &
+            rTerm = rOut.Produce_Term();
+        aSeeAlsoTag.Produce_byData( rTerm,
+                                    rOut.Produce_Definition(),
+                                    aSeeAlsosWithoutText );
+    }
+
+    for ( std::vector< csi::dsapi::DT_SeeAlsoAtTag* >::const_iterator
+                itSee2 = aSeeAlsosWithText.begin();
+          itSee2 != aSeeAlsosWithText.end();
+          ++itSee2 )
+    {
+        HF_IdlTag
+            aTag(Env(),  i_rScopeGivingCe);
+        Xml::Element &
+            rTerm = rOut.Produce_Term();
+            aTag.Produce_byData( rTerm,
+                                 rOut.Produce_Definition(),
+                                 *(*itSee2) );
     }   // end for
 }
