@@ -39,20 +39,10 @@
 
 testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
 
-    '///<h1>Execute macros from a trusted path</h1>
-    '///<i>This testcase takes parameters and requires a number of settings
-    '///+ to run. See the calling .bas-file for details. <br>
-    '///+ Furthermore a number of
-    '///+ workfiles are used that have a documentbound macro as payload which is 
-    '///+ executed at the &quot;On document load&quot; event.<br>
-    '///<ul>
 
     dim irc as integer
     dim cMsg as string
 
-    '///+<li>Click &quot;FileOpen&quot; or go to the dialog via menu</li>
-    '///+<li>Enter the path to a file with macros within the trusted path</li>
-    '///+<li>Open the file</li>
     cWorkFile = convertToUrl( convertpath( cWorkFile ) )
     FileOpen( "URL", cWorkFile, "FrameName", "_default"
     irc = hFileWait( false )
@@ -71,7 +61,6 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
     ' *) Covered by test "f_sec_macrosecurity.bas"
        
 
-    '///+<li>Test for security-warning, warn if it pops up</li>
     if ( irc = -2 ) then
         kontext "SecurityWarning"
         if ( SecurityWarning.exists() ) then
@@ -80,7 +69,6 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
         endif
     endif
 
-    '///+<li>Verify that the macro is executed</li>
     printlog( "Verify that the macro is executed" )
     kontext "Active"
     if ( active.exists( 2 ) ) then
@@ -92,15 +80,12 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
             warnlog( "Invalid messagebox is open, please check" )
         endif
 
-        '///+<li>Close the macro</li>
         active.ok()
 
     endif
 
-    '///+<li>Close the document</li>
     hDestroyDocument()
 
-    '///</ul>
 
 
 endcase

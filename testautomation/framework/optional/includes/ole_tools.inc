@@ -107,7 +107,6 @@ sub SendEscape(optional iTimes as Integer)
     if IsMissing( iTimes ) then
         iTimes = 1
     endif
-    '///+press [ESCAPE]
     printlog( "    - send <ESCAPE> keystroke to document" )
     select case gApplication
     case "WRITER"
@@ -165,7 +164,6 @@ end sub
 '*******************************************************************************
 
 sub UncheckAutoFileExtension()
-    '///+uncheck automatic file extension, if checked
     Kontext "SpeichernDlg"
     if SpeichernDlg.exists(5) then
         if AutomatischeDateinamenserweiterung.Exists() then
@@ -208,7 +206,6 @@ end function
 '*******************************************************************************
 
 sub OLESetFocus()
-    '///+activate the OLE-Object with a doubleclick
     const ICWAIT as Integer = 10
     PrintLog "    - set focus to OLE object (edit mode)"
     select case gApplication
@@ -256,7 +253,6 @@ end sub
 '*******************************************************************************
 
 sub OLESetFocus2()
-    '///+activate the OLE-Object with a doubleclick
     'default waitstate
     const ICWAIT as Integer = 1
     PrintLog "    - set focus to OLE object (edit mode)"
@@ -386,7 +382,6 @@ end sub
 '*******************************************************************************
 
 sub OLERemoveFocus
-    '///+Deselect OLE object
     printlog( "Remove focus from OLE object for " & gApplication )
     select case gApplication
     case "WRITER"    : call SendEscape( 2 )
@@ -402,16 +397,13 @@ end sub
 
 sub ClosePresentationFloat()
     gApplication = "IMPRESS"
-    '///+Open a new document
     printlog( "Open a new document" )
     hNewDocument
     'use the tiny little hammer to kill the presentation float
     printlog( "Reset the application (which closes the presentation toolbar)" )
     resetapplication
-    '///+Open a new document
     printlog( "Open a new document" )
     hNewDocument
-    '///+Look if the presentation toolbar is visible, if yes->warning
     Kontext "CommonTaskbar"
     try
         printlog( "Try to click a button on the presentation toolbar" )
@@ -420,7 +412,6 @@ sub ClosePresentationFloat()
     catch
         printlog( "Button is unavailable. Good" )
     endcatch
-    '///+Close the document
     printlog( "Close the document" )
     hCloseDocument
     gApplication = "WRITER" ' reset, just in case...
@@ -432,35 +423,14 @@ end sub
 function hStepThroughChartWizard() as boolean
     
     
-    '///<h3>Step through the Chart Wizard leaving all defaults</h3>
-    '///<i>This functin just steps through the Chart Wizard using the
-    '///+ &quot;Next...&quot; button on each page. It will not change any
-    '///+ values under way. The Wizard is closed using the &quot;Finish&quot;
-    '///+ button.</i><br><br>
-    
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
     
     
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Errorcondition (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: Wizard finished without errors</li>
-    '///+<li>FALSE: Wizard did not open</li>
-    '///+<li>In case of problems you need to perfom recovery yourself</li>
-    '///</ul>
-    '///</ol>
+    
     
     const CFN = "hStepThroughChartWizard::"
     printlog( CFN & "Enter" )
     dim brc as boolean 'a multi purpose boolean returnvalue
     
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Verify that the Chart Wizard is open</li>
     Kontext "ChartWizard"
     if ( not chartWizard.exists( 1 ) ) then
         
@@ -469,32 +439,26 @@ function hStepThroughChartWizard() as boolean
         
     else
         
-        '///+<li>Click &quot;Next&quot; on the first page of the Chart wizard</li>
         Kontext "ChartWizard"
         GoNext.Click()
         
-        '///+<li>Click &quot;Next&quot; on the second page of the Chart wizard</li>
         Kontext "ChartWizard"
         GoNext.Click()
         
-        '///+<li>Click &quot;Next&quot; on the third page of the Chart wizard</li>
         Kontext "ChartWizard"
         GoNext.Click()
         
-        '///+<li>Click &quot;Finish&quot; on the fourth page of the Chart wizard</li>
         Kontext "ChartWizard"
         ChartWizard.ok()
         Sleep( 3 )
         
     endif
     
-    '///+<li>Verify that the Chart Wizard is closed</li>
     kontext "ChartWizard"
     if ( ChartWizard.exists( 1 ) ) then
         warnlog( CFN & "Chart Wizard is still open" )
     endif
     
-    '///</ul>
     
     printlog( CFN & "Exit" )
     

@@ -328,7 +328,7 @@ sub GetLanguageInformation
     ' Issue #i97875 (JSK) experimental delay
     ' If we're too fast we might encounter that the Setup.xcu is not created yet.
     ' So we retry a couple of times    
-    while( IsMissing( SetupXML ) ) 
+    while( not FileExists( SetupXML ) ) 
         iTimeOut = iTimeOut + 1
         if ( iTimeOut = 10 ) then
             warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."

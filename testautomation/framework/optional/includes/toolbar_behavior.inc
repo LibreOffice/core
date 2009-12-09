@@ -38,11 +38,8 @@
 '\************************************************************************
 
 testcase tToolbarBehavior
-'/// context sensitive ///'
     hNewDocument()
     sleep (5)
-'/// presupposion recover ///'
-'/// if enabled: view->toolbars->reset ///'
         'ViewToolbarsReset
         hUseMenu()
         printlog hMenuSelectNr(3)
@@ -60,8 +57,6 @@ testcase tToolbarBehavior
         else
             printlog "Toolbars resetet"
         endif
-'/// writer with table ///'
-    '/// check, that toolbar is not available ///'
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
         warnlog "Toolbar is already available?"
@@ -76,7 +71,6 @@ testcase tToolbarBehavior
     else
         warnlog "no table"
     endif
-'/// toolbar is available now ///'
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
         printlog "Toolbar is available."
@@ -84,7 +78,6 @@ testcase tToolbarBehavior
         warnlog "Toolbar is not available"
     endif
 
-'/// close via toolbar->contextmenu->Close Toolbar ///'
     if NOT TableObjectBar.isDocked then
     	TableObjectBar.dock
     	printlog "Toolbar got docked, to use thier kontext menu"
@@ -97,7 +90,6 @@ testcase tToolbarBehavior
         else
             printlog "Toolbar is not available"
         endif
-'/// leave table ///'
         hTypeKeys("<mod1 end><mod1 end>")
         kontext "TableObjectBar"
         if TableObjectBar.exists(5) then
@@ -105,7 +97,6 @@ testcase tToolbarBehavior
         else
             printlog "Toolbar is not available"
         endif
-'/// enter table again -> toolbar is available again ///'
     hTypeKeys("<mod1 home>")
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
@@ -114,7 +105,6 @@ testcase tToolbarBehavior
         warnlog "Toolbar is not available"
     endif
 
-    '/// close toolbar permanently ///'
     Call hToolbarSelect ( "Table", false )
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
@@ -123,7 +113,6 @@ testcase tToolbarBehavior
         printlog "Toolbar is not available"
     endif
 
-    '/// leave table ///'
     hTypeKeys("<mod1 end><mod1 end>")
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
@@ -132,7 +121,6 @@ testcase tToolbarBehavior
         printlog "Toolbar is not available"
     endif
 
-    '/// enter table again: still no toolbar ///'
     hTypeKeys("<mod1 home>")
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
@@ -141,7 +129,6 @@ testcase tToolbarBehavior
         printlog "Toolbar is not available"
     endif
     
-'/// choose view->toolbars->reset ///'
         'ViewToolbarsReset
         hUseMenu()
         printlog hMenuSelectNr(3)
@@ -159,7 +146,6 @@ testcase tToolbarBehavior
         else
             printlog "Toolbars resetet"
         endif
-'/// toolbar is visible again ///'
     kontext "TableObjectBar"
     if TableObjectBar.exists(5) then
         printlog "Toolbar is available."

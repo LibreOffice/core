@@ -42,6 +42,7 @@ use File::Basename;
 use File::Path;
 use File::Copy;
 use Getopt::Long;
+use SourceConfig;
 
 ########################
 #                       #
@@ -57,6 +58,7 @@ $is_do_deinstall = 0;
 $is_without_msiexec = 1;
 $is_oo = 1;
 
+$sourceconfig_obj;
 $gui = $ENV{GUI};
 $temp_path = $ENV{TEMP};
 $vcsid = $ENV{VCSID};
@@ -702,7 +704,9 @@ sub doInstall {
                     if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                         next;
                     }
-                    $Command = "rpm --define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
+                    $Command = "rpm ";
+                    $Command .= "--ignorearch " if (defined $ENV{HOSTTYPE} && ($ENV{HOSTTYPE} eq 'x86_64-linux'));
+                    $Command .= "--define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
                     execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
                 $ENV{LD_LIBRARY_PATH}=$ld_library_backup;
@@ -858,12 +862,22 @@ sub getInstset {
         foreach $project (@install_list) {
             @DirArray=();
             $TestDir1 = "$RootDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
-            $TestDir2 = "$StandDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
             if (-e "$TestDir1") {
                 $InstDir= $TestDir1;
             }
-            elsif (-e "$TestDir2") {
-                $InstDir="$TestDir2";
+            else {
+                $sourceconfig_obj = SourceConfig->new() if (!defined ($sourceconfig_obj));
+                my $module_path = $sourceconfig_obj->get_module_path($project);
+                # only if module exists
+                if (defined ($module_path)) {
+                    $TestDir2 = "$module_path$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
+                }
+                else {
+                    $TestDir2 = $module_path;
+                }
+                if (defined ($TestDir2) && -e "$TestDir2") {
+                    $InstDir="$TestDir2";
+                }
             }
             if ($InstDir eq "") {
                 next;

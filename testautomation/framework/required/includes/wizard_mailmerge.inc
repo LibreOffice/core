@@ -41,6 +41,8 @@ private CSV_DATABASE as string
 
 testcase tUpdtWizardMailMerge
 
+    printlog( "Resource test for the mailmerge wizard" )
+
     dim brc as boolean
     dim irc as integer
     
@@ -50,18 +52,12 @@ testcase tUpdtWizardMailMerge
     hDeleteFile( CSV_DATABASE )
     hRemoveDatabaseConnections()
 
-    '///<H1>Update test for Mailmerge Wizard</H1>
-    '///<ul>
     
-    '///+<li>Make sure exactly one single writer document is open</li>
     hInitSingleDoc()
     
-    '///<li>Open the Mailmerge-Wizard</li>
     printlog( "Open the Mailmerge-Wizard" )
     ToolsMailMergeWizard
     
-    '///<ol>
-    '///<li>Page 1</li>
     Kontext "MailMergeWizard"
     brc = hUpdtMMWpage1()
     if ( not brc ) then
@@ -69,43 +65,34 @@ testcase tUpdtWizardMailMerge
         goto endsub
     endif
     
-    '///<li>Page 2</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage2()
     
-    '///<li>Page 3</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
 	hUpdtMMWpage3()
     
-    '///<li>Page 4</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage4()
     
-    '///<li>Page 5</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage5()
 
-    '///<li>Page 6</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage6()
     
-    '///<li>Page 7</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage7()
     
-    '///<li>Page 8</li>
     Kontext "MailMergeWizard"
     brc = hClickNextButton()
     hUpdtMMWPage8()
     
-    '///</ol>
-    '///<li>close the wizard</li>
     printlog( "close the wizard" )
     Kontext "MailMergeWizard"
     MailMergeWizard.cancel()
@@ -113,7 +100,6 @@ testcase tUpdtWizardMailMerge
     hRemoveDatabaseConnections()
     hCloseDocument()
     hCloseDocument()
-    '///</ul>
     
 
 endcase
@@ -122,25 +108,10 @@ endcase
 
 function hUpdtMMWpage1() as boolean
 
-    '///<h3>Update test for Mailmerge Wizard - page 1</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>Do not use</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
     
 
     const CFN = "hUpdtMMWpage1::"
     
-    '///+<li>Verify that the tabpage is open</li>
     Kontext "TabMailMergeSourceDocument"
     if ( not TabMailMergeSourceDocument.exists() ) then
         warnlog( CFN & "Page 1 could not be accessed" )
@@ -148,13 +119,11 @@ function hUpdtMMWpage1() as boolean
         exit function
     endif
 
-    '///+<li>Click on Browse Document to open FileOpen</li>
     Kontext "TabMailMergeSourceDocument"
     if ( BrowseDocument.exists( 1 ) ) then
         if ( BrowseDocument.isEnabled ) then
             BrowseDocument.click()
             
-            '///+<li>Cancel FileOpen dialog</li>
             Kontext "OeffnenDlg"
             if ( OeffnenDlg.exists( 1 ) ) then
                 printlog( CFN & "BrowseDocument::File Open Dialog" )
@@ -170,13 +139,11 @@ function hUpdtMMWpage1() as boolean
         warnlog( CFN & "BrowseDocument::Button does not exist" )
     endif
     
-    '///+<li>Click on Browse Template to open the New...-dialog</li>
     Kontext "TabMailMergeSourceDocument"
     if ( BrowseTemplate.exists( 2 ) ) then
         if ( BrowseTemplate.isEnabled ) then
             BrowseTemplate.click()
             
-            '///+<li>Cancel the New...-dialog</li>
             Kontext "Neu"
             if ( Neu.exists( 1 ) ) then
                 printlog( CFN & "BrowseTemplate::New Dialog" )
@@ -192,7 +159,6 @@ function hUpdtMMWpage1() as boolean
         warnlog( CFN & "BrowseTemplate::Button does not exist" )
     endif
         
-    '///+<li>Check to create a new document</li>
     kontext "TabMailMergeSourceDocument"
     if ( CreateANewDocument.exists( 2 ) ) then
         if ( CreateANewDocument.isEnabled ) then
@@ -206,7 +172,6 @@ function hUpdtMMWpage1() as boolean
     endif
 
     hUpdtMMWPage1() = true
-    '///</ul>
 
 end function
 
@@ -214,21 +179,9 @@ end function
 
 function hUpdtMMWpage2()
 
-    '///<h3>Update test for Mailmerge Wizard - page 2</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage2::"
 
-    '///+<li>Verify that the tabpage is open</li>
     Kontext "TabMailMergeDocumentType"
     if ( not TabMailMergeDocumentType.exists( 2 ) ) then
         warnlog( CFN & "Page 2 could not be accessed" )
@@ -237,7 +190,6 @@ function hUpdtMMWpage2()
     
     call dialogtest( TabMailMergeDocumentType )
     
-    '///+<li>Check the Letter-checkbox</li>
     printlog( CFN & "Select to create a letter" )
     if ( Letter.exists() ) then
         if ( Letter.isEnabled() ) then
@@ -248,7 +200,6 @@ function hUpdtMMWpage2()
     else
         warnlog( CFN & "Letter Checkbox does not exist" )
     endif
-    '///</ul>
     
 end function   
 
@@ -256,17 +207,6 @@ end function
 
 function hUpdtMMWpage3()
 
-    '///<h3>Update test for Mailmerge Wizard - page 3</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage3::"
     
@@ -274,7 +214,6 @@ function hUpdtMMWpage3()
         cDatabase = gTesttoolpath & "framework\required\input\mailmerge_data.odb"
         cDatabase = convertpath( cDatabase )
     
-    '///+<li>Verify that the tabpage is open</li>
     Kontext "TabMailMergeAddressBlock"
     if ( not TabMailMergeAddressBlock.exists( 2 ) ) then
         warnlog( CFN & "Page 3 could not be accessed" )
@@ -283,11 +222,9 @@ function hUpdtMMWpage3()
     
     call Dialogtest( TabMailMergeAddressBlock )
     
-    '///+<li>Click &quot;different addresslist&quot; button and open all subsequent dialogs</li>
     Kontext "TabMailMergeAddressBlock"
     hSelectDifferentAddressList( cDatabase )
     
-    '///+<li>Click more button</li>
     Kontext "TabMailMergeAddressBlock"
     if ( AddressBlock.exists( 2 ) ) then
 
@@ -299,13 +236,10 @@ function hUpdtMMWpage3()
 
 	hSelectAddressBlock()
     
-        '///+<li>Click match fields button</li>
-    	'///+<li>Assign any value to all of the listboxes</li>
         hUpdtMailmergeMatchFields()
     else
         warnlog( CFN & "AddressBlock-Checkbox missing, skipping dialogs" )
     endif
-    '///</ul>
     
     
 end function
@@ -314,24 +248,12 @@ end function
 
 function hUpdtMMWpage4()
 
-    '///<h3>Update test for Mailmerge Wizard - page 4</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage4::"
     dim brc as boolean
    
     brc = false
 
-    '///+<li>Verify that the tabpage is open</li>
     Kontext "TabMailMergeGreetingsPage"
     if ( not TabMailMergeGreetingsPage.exists( 2 ) ) then
         warnlog( CFN & "Page 4 could not be accessed" )
@@ -342,13 +264,11 @@ function hUpdtMMWpage4()
     
     ' the salutation checkbox must be checked, otherwise the buttons are not 
     ' available
-    '///+<li>Verify that the Checkbox for Salutation is chaecked</li>
     if ( not GreetingPersonalized.isEnabled() ) then
         warnlog( CFN & "CheckBox Salutation not in HID.LST, it should be checked" )
         exit function
     endif
     
-    '///+<li>Edit Addressblock for female salutation (GreetingsbuttonFemale)</li>
     Kontext "TabMailMergeGreetingsPage"
     printlog( CFN & "GreetingButtonFemale" )
     if ( GreetingButtonFemale.isEnabled() ) then
@@ -357,7 +277,6 @@ function hUpdtMMWpage4()
         warnlog( CFN & "GreetingButtonFemale is not enabled" )
     endif
 
-    '///+<li>Edit Addressblock for female salutation (GreetingsbuttonMale)</li>
     Kontext "TabMailMergeGreetingsPage"
     printlog( CFN & "GreetingButtonMale" )
     if ( GreetingButtonMale.isEnabled() ) then
@@ -366,9 +285,7 @@ function hUpdtMMWpage4()
         warnlog( CFN & "GreetingButtonMale is not enabled" )
     endif
 
-    '///+<li>Click the &quot;Match Fields&quot;-button</li>
     Kontext "TabMailMergeGreetingsPage"
-    '///</ul>
 
 end function
 
@@ -377,32 +294,18 @@ end function
 
 function hUpdtMMWpage5()
 
-    '///<h3>Update test for Mailmerge Wizard - page 5</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage5::"
     
-    '///+<li>Verify that the tabpage is open</li>
     kontext "TabMailMergeLayoutPage"
     if ( not TabMailMergeLayoutPage.exists( 2 ) ) then
         warnlog( CFN & "Page 5 could not be accessed" )
         exit function
     endif
     
-    '///+<li>Change nothing, go to next page directly</li>
     call DialogTest( TabMailMergeLayoutPage )
     
     printlog( CFN )
-    '///</ul>
     
 end function
 
@@ -410,23 +313,11 @@ end function
 
 function hUpdtMMWpage6()
 
-    '///<h3>Update test for Mailmerge Wizard - page 6</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage6::"
     
     printlog( CFN )
     
-    '///+<li>Verify that the tabpage is open</li>
     kontext "TabMailMergePrepare"
     if ( not TabMailMergePrepare.exists( 2 ) ) then
         warnlog( CFN & "Page 6 could not be accessed" )
@@ -435,9 +326,7 @@ function hUpdtMMWpage6()
     
     call DialogTest( TabMailMergePrepare )
     
-    '///+<li>Click the &quot;Edit&quot;-button</li>
     qaerrorlog( "Skipping preview button" )
-    '///</ul>
     
 end function
 
@@ -445,23 +334,11 @@ end function
 
 function hUpdtMMWpage7()
 
-    '///<h3>Update test for Mailmerge Wizard - page 7</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
     
     const CFN = "hUpdtMMWpage7::"
     
     printlog( CFN )    
     
-    '///+<li>Verify that the tabpage is open</li>
     kontext "TabMailMergePersonalize"
     hWaitForObject( EditIndividualButton, 8000 )
     'if ( not TabMailMergePersonalize.exists( 2 ) ) then
@@ -471,9 +348,7 @@ function hUpdtMMWpage7()
     
     call DialogTest( TabMailMergePersonalize )
     
-    '///+<li>Click on &quot;EditIndividual&quot;-button</li>
     qaerrorlog( "Skipping Preview-Button" )
-    '///</ul>
     
 end function
 
@@ -481,21 +356,9 @@ end function
 
 function hUpdtMMWpage8()
 
-    '///<h3>Update test for Mailmerge Wizard - page 8</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hUpdtMMWpage8::"
     
-    '///+<li>Verify that the tabpage is open</li>
     kontext "TabMailMergeOutputPage"
     if ( not TabMailMergeOutputPage.exists( 2 ) ) then
         warnlog( CFN & "Page 8 could not be accessed" )
@@ -506,22 +369,17 @@ function hUpdtMMWpage8()
     
     call DialogTest( TabMailMergeOutputPage )
     
-    '///+<li>Check Save Document, go throught subsequent dialogs (if any)</li>
     kontext "TabMailMergeOutputPage"
     hSaveStartingDocument()
     
-    '///+<li>Check Save Mailmerge Document, go throught subsequent dialogs (if any)</li>
     kontext "TabMailMergeOutputPage"
     hSaveMailMergeDocument()
     
-    '///+<li>Check Print, go throught subsequent dialogs (if any)</li>
     kontext "TabMailMergeOutputPage"
     hPrintMailMergeDocument()
     
-    '///+<li>Check Send, go throught subsequent dialogs (if any)</li>
     kontext "TabMailMergeOutputPage"
     hSendMailMergeDocument()
-    '///</ul>
     
 end function
 
@@ -529,25 +387,6 @@ end function
 
 function hSelectDifferentAddressList( cDatabase as string ) as boolean
 
-    '///<h3>Update test for &quot;Select Address List&quot; dialog</h3>
-    '///<i>Starting point: Page three of the Mail Merge Wizard</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Path/Name of the database (string)</li>
-    '///<ul>
-    '///+<li>Valid, readable database</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if all is ok</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hSelectDifferentAddressList::"
     
@@ -556,11 +395,9 @@ function hSelectDifferentAddressList( cDatabase as string ) as boolean
     dim iAddressList as integer
     dim cAddressList as string
         
-    '///+<li>Click the &quot;Select Address List...&quot; button</li>        
     Kontext "TabMailMergeAddressBlock"
     SelectAddressListButton.click()
 
-    '///+<li>Verify that the dialog is open</li>
     Kontext "SelectAddressList"
     if ( SelectAddressList.exists( 2 ) ) then
         printlog( CFN & "Select Address List Dialog" )
@@ -571,31 +408,25 @@ function hSelectDifferentAddressList( cDatabase as string ) as boolean
         exit function
     endif
 	    
-	'///+<li>Add the named database</li>
     Kontext "SelectAddressList"
     brc = hAddDatabase( cDatabase ) 
 
     
-    '///+<li>Make sure we have at least two databases to choose from</li>
     Kontext "SelectAddressList"
     if ( SelectAddressList.exists( 2 ) ) then
         if ( AddressList.getItemCount() < 2 ) then
             brc = hAddDatabase( cDatabase )
         endif
         
-        '///+<li>Create another address list, return</li>
         Kontext "SelectAddressList"
         brc = hEditCreateAddressList( 1 )
 	
-        '///+<li>Open the filter dialog, work with it and return</li>
         Kontext "SelectAddressList" 
         brc = hFilterDialog()
 
-        '///+<li>Edit the address list, return</li>
         Kontext "SelectAddressList"
         brc = hEditCreateAddressList( 2 )
 	
-        '///+<li>Verify that the ok button is enabled for all address lists</li>
         Kontext "SelectAddressList"
         for iAddressList = 1 to AddressList.getItemCount()
         
@@ -626,7 +457,6 @@ function hSelectDifferentAddressList( cDatabase as string ) as boolean
     
     Kontext "TabMailMergeAddressBlock"
     hSelectDifferentAddressList() = brc
-    '///</ul>
 
 end function
 
@@ -634,36 +464,17 @@ end function
 
 function hWaitForBackToWizardFloat() as boolean
 
-    '///<h3>Update test: Try to close the BackToWizard float</h3>
-    '///<i>Starting point: Edit individual document from Mail Merge Wizard
-    '///+ Back to wizard float must be visible</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if all is ok</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hWaitForBackToWizardFloat::"
     dim brc as boolean
     
     printlog( CFN & "Enter" )
            
-    '///+<li>Try to grab the float (it is currently an "active"</li>
     Kontext "MailMergeFloat"
     if ( MailMergeFloat.exists( 20 ) ) then
         printlog( CFN & "Back to document float is open" )
         ReturnToMailMergeWizard.click()
         
-        '///+<li>Verify that we are back to the wizard (might take some time)</li>
         Kontext "MailMergeWizard"
         if ( MailMergeWizard.exists( 5 ) ) then
             printlog( CFN & "Successfully returned to Mail Merge Wizard" )
@@ -679,7 +490,6 @@ function hWaitForBackToWizardFloat() as boolean
     
     printlog( CFN & "Exit with result = " & brc )
     hWaitForBackToWizardFloat() = brc
-    '///</ul>
         
 end function
 
@@ -687,25 +497,6 @@ end function
 
 function hAddDatabase( cDatabase as string ) as boolean
 
-    '///<h3>Update test for &quot;Add Database&quot; dialog</h3>
-    '///<i>Starting point: Select Address List dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Path to database to be added (string)</li>
-    '///<ul>
-    '///+<li>Database must be valid</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if all is ok</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
     
     const CFN = "hAddDatabase::"
     
@@ -714,10 +505,8 @@ function hAddDatabase( cDatabase as string ) as boolean
         
     dim iWait as integer
     
-    '///+<li>Click &quot;Add...&quot;</li>
     add.click()
 
-    '///+<li>File Open dialog opens, enter filename</li>
     Kontext "OeffnenDlg"
     if ( OeffnenDlg.exists( 2 ) ) then
         printlog( CFN & "File Open Dialog" )
@@ -730,11 +519,9 @@ function hAddDatabase( cDatabase as string ) as boolean
 	
     ' When a new addressdatabase is imported it might take some time before we
     ' get back to the SelectAddressList dialog
-    '///+<li>Wait for the dialog to populate (might take an instant)</li>
     hWaitForSelectAddressListDialog()
     
     hAddDatabase() = brc
-    '///</ul>
     
 end function
 
@@ -797,22 +584,6 @@ end function
 
 function hFindDialog() as boolean
 
-    '///<h3>Update test for Mail Merge Wizard Find dialog</h3>
-    '///<i>Starting point: Select Address List dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if all is ok</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
 
     const CFN = "hFindDialog::"
 
@@ -836,7 +607,6 @@ function hFindDialog() as boolean
 	
     Kontext "NewAddressList"
     hFindDialog() = brc
-    '///</ul>
 	
 end function
 
@@ -844,20 +614,6 @@ end function
 
 function hCustomizeAddressList() as boolean
 
-    '///<h3>Update test for Mail Merge Wizard Customize Address List dialog</h3>
-    '///<i>Starting point: New Address List dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>    
 
 
     const CFN = "hCustomizeAddressList::"
@@ -902,7 +658,6 @@ function hCustomizeAddressList() as boolean
         
     Kontext "NewAddressList"
     hCustomizeAddressList() = brc
-    '///</ul>
 	
 end function
 
@@ -939,20 +694,6 @@ end function
 
 function hFilterDialog() as integer
 
-    '///<h3>Update test for Mail Merge Wizard Filter dialog</h3>
-    '///<i>Starting point: Select Address List dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>    
 
     const CFN = "hFilterDialog::"
     
@@ -983,7 +724,6 @@ function hFilterDialog() as integer
     
     hWaitForSelectAddressListDialog()
     hFilterDialog() = brc
-    '///</ul>
   
 end function
 
@@ -1435,22 +1175,6 @@ end function
 
 function hUpdtMailmergeMatchFields() as boolean
 
-    '///<h3>Assign random fields on the Match Fields dialog of the Mailmerge Wizard</h3>
-    '///<i>Starting point: Match fields dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on no error</li>
-    '///+<li>FALSE otherwise</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
     
     const CFN = "hUpdtMailmergeMatchFields::"
     dim brc as boolean
@@ -1459,14 +1183,12 @@ function hUpdtMailmergeMatchFields() as boolean
     Kontext "TabMailMergeAddressBlock"
     MatchFieldsButton.click()
     
-    '///+<li>Verify that the match fields dialog is open</li>
     kontext "MatchFields"
     if ( not MatchFields.exists( 2 ) ) then
         warnlog( CFN & "Unable to access Match Fields dialog" )
         brc = false
     else
     
-        '///+<li>Assign randomly one of the 8 values to each of the 14 listboxes</li>
         Title.select( 2 )
         FirstName.select( 3 )
         LastName.select( 4 )
@@ -1482,7 +1204,6 @@ function hUpdtMailmergeMatchFields() as boolean
         EMail.select( 5 )
         Gender.select( 4 )
         
-        '///+<li>Return to the Mail Merge Wizard</li>
         MatchFields.OK()
         printlog( CFN & "Leaving Match Fields Dialog" )
         brc = true
@@ -1490,7 +1211,6 @@ function hUpdtMailmergeMatchFields() as boolean
     endif
     
     hUpdtMailmergeMatchFields() = brc
-    '///</ul>
         
 end function
 

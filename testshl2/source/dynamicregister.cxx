@@ -46,14 +46,14 @@
 
 namespace fixes
 {
-    void changedir(const char* _sPath)
+    int changedir(const char* _sPath)
     {
 #if defined(WIN32)
         // chdir(_sPath) is marked depricated since Visual C++ 2005
         // use _chdir instead
-        ::_chdir(_sPath);
+        return ::_chdir(_sPath);
 #else
-        ::chdir(_sPath);
+        return ::chdir(_sPath);
 #endif
     }
 }

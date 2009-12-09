@@ -38,6 +38,8 @@
 '\******************************************************************************
 
 testcase tUpdtWizardDocumentConverter
+
+    printlog( "Resource test for the document converter" )
     
     dim irc as integer
     dim brc as boolean
