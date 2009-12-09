@@ -6,9 +6,9 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: target.pmk,v $
+# $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,10 +29,58 @@
 #
 #*************************************************************************
 
-$(OUT)$/misc$/$(TARGET).idls: makefile.mk
-    $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
+PRJ=..$/..$/..
 
-ALLTAR: $(OUT)$/misc$/$(TARGET).idls
+PRJNAME=bridges
+TARGET=gcc3_uno
+LIBTARGET=no
+ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC=TRUE
 
+# --- Settings -----------------------------------------------------
 
+.INCLUDE :  settings.mk
+
+# --- Files --------------------------------------------------------
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXH"
+
+.IF "$(cppu_no_leak)" == ""
+CFLAGS += -DLEAK_STATIC_DATA
+.ENDIF
+
+CFLAGSCXX += -fno-omit-frame-pointer 
+
+NOOPTFILES= \
+    $(SLO)$/cpp2uno.obj \
+    $(SLO)$/except.obj \
+    $(SLO)$/uno2cpp.obj \
+    $(SLO)$/call.obj
+
+CFLAGSNOOPT=-O0
+
+SLOFILES= \
+    $(SLO)$/cpp2uno.obj \
+    $(SLO)$/except.obj \
+    $(SLO)$/uno2cpp.obj \
+    $(SLO)$/call.obj
+
+SHL1TARGET= $(TARGET)
+
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1VERSIONMAP=..$/..$/bridge_exports.map
+SHL1RPATH=URELIB
+
+SHL1OBJS = $(SLOFILES)
+SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
+
+SHL1STDLIBS= \
+    $(CPPULIB)			\
+    $(SALLIB)
+
+.ENDIF
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
