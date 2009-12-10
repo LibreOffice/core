@@ -38,16 +38,11 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-
 #include <svx/adjitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/lspcitem.hxx>
-
 #include <svx/flditem.hxx>
-
 #include <impedit.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
@@ -78,7 +73,6 @@
 
 #include <math.h>
 #include <vcl/svapp.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <vcl/metric.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>

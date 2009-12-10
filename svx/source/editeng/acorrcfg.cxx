@@ -32,8 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include "acorrcfg.hxx"
-#include <sfx2/app.hxx>
-
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>

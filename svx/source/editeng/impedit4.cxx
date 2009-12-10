@@ -33,12 +33,9 @@
 
 #include <eeng_pch.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/svapp.hxx>
-
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/lspcitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/tstpitem.hxx>
@@ -74,29 +71,19 @@
 #include <svx/emphitem.hxx>
 #include <textconv.hxx>
 #include <svx/svxdlg.hxx>
-
 #include <rtl/tencinfo.h>
-
 #include <svtools/rtfout.hxx>
-
-#ifndef SVX_LIGHT
 #include <edtspell.hxx>
-#endif
 #include <svx/scripttypeitem.hxx>
 #include <unolingu.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/transliterationwrapper.hxx>
-
-#ifndef _TXTCMP_HXX //autogen
 #include <unotools/textsearch.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <vcl/help.hxx>
-
 #include <svtools/rtfkeywd.hxx>
 
 using namespace ::com::sun::star;

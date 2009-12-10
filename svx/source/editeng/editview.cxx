@@ -42,7 +42,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>

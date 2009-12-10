@@ -59,16 +59,8 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <fontitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/cmdevt.h>
 
-#ifndef SVX_LIGHT
-#ifndef _SFXFRAME_HXX //autogen
-#include <sfx2/frame.hxx>
-#endif
-#endif
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

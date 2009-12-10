@@ -67,7 +67,7 @@
 
 #define ITEMID_SETITEM      0
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>

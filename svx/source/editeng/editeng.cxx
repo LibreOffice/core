@@ -81,13 +81,12 @@
 #include <bulitem.hxx>
 #include <unolingu.hxx>
 #include <linguistic/lngprops.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
-#include <sfx2/srchdefs.hxx>
+#include <svl/srchdefs.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <svx/frmdiritem.hxx>

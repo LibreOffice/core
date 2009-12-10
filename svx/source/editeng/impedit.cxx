@@ -38,28 +38,21 @@
 #include <svx/editview.hxx>
 #include <tools/poly.hxx>
 #include <unolingu.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEvent.hpp>
 #include <com/sun/star/linguistic2/XDictionaryEventListener.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#endif
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-
 #include <vos/mutex.hxx>
-
 #include <svx/flditem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/transfer.hxx>
-
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
