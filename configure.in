@@ -652,10 +652,13 @@ AC_ARG_WITH(directx-home,
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
 AC_ARG_WITH(mozilla-build,
-[  --with-mozilla-build   For Windows users, please supply the path to the
+[  --with-mozilla-build    For Windows users, please supply the path to the
                           mozilla build tools.
  
                           Usage: --with-mozilla-build=<absolute path to mozilla build tools>
+
+						  At the moment of this writing, an installer for the mozilla build tools
+						  can be obtained from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32.
 ],[MOZILLABUILD=$withval],)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ./solenv,
@@ -4378,7 +4381,9 @@ if test "$enable_nss_module" != "no"; then
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for Mozilla build tooling])
       if test -z "$MOZILLABUILD" ; then
-AC_MSG_ERROR([Mozilla build tooling not found. Use --with-mozilla-build=<absolut path to mozilla build tooling (mozilla-build)>])
+AC_MSG_ERROR([Mozilla build tooling not found.
+Use the --with-mozilla-build option after installling the tools obtained
+from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
       else
          if test \( "$WITH_MINGWIN" = "yes" \) ; then
             if test ! -d "$MOZILLABUILD" ; then
