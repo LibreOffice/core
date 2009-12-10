@@ -138,6 +138,9 @@ private:
     UINT16          nStyleLB_InitialSelection;
     BOOL            bSfxSymbolsAuto;
 
+    // item ID for the given icon theme
+    // might be zero when the theme is not installed and the item is removed
+    ULONG           aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;
     SvtOptionsDrawinglayer* mpDrawinglayerOpt;
