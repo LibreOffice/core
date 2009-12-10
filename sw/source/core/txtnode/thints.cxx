@@ -153,12 +153,14 @@ bool isOverlap(const xub_StrLen nStart1, const xub_StrLen nEnd1,
      || ((nStart1 < nStart2) && (nStart2 < nEnd1) && (nEnd1 < nEnd2)); // (2)
 }
 
+/// #i106930#: now asymmetric: empty hint1 is _not_ nested, but empty hint2 is
 static
 bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
                  const xub_StrLen nStart2, const xub_StrLen nEnd2)
 {
-    return (nStart1 == nStart2) // in this case ends do not matter
-        || ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
+    return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
+        ? (nStart1 != nEnd1) // same start/end: nested except if hint1 empty
+        : ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
 }
 
 static
@@ -1065,11 +1067,6 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
     case RES_TXTATR_TOXMARK:
         pNew = new SwTxtTOXMark( (SwTOXMark&)rNew, nStt, &nEnd );
         break;
-    case RES_UNKNOWNATR_CONTAINER:
-    case RES_TXTATR_UNKNOWN_CONTAINER:
-        pNew = new SwTxtXMLAttrContainer( (SvXMLAttrContainerItem&)rNew,
-                                        nStt, nEnd );
-        break;
     case RES_TXTATR_CJK_RUBY:
         pNew = new SwTxtRuby( (SwFmtRuby&)rNew, nStt, nEnd );
         break;
@@ -1669,8 +1666,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
 
     SfxItemSet aCharSet( *rSet.GetPool(), aCharAutoFmtSetRange );
 
-    USHORT nWhich, nCount = 0;
-    SwTxtAttr* pNew;
+    USHORT nCount = 0;
     SfxItemIter aIter( *pSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
@@ -1678,8 +1674,10 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
     {
         if ( pItem && (reinterpret_cast<SfxPoolItem*>(-1) != pItem))
         {
-            nWhich = pItem->Which();
-            if ( isCHRATR(nWhich) || isTXTATR(nWhich) || isUNKNOWNATR(nWhich) )
+            const USHORT nWhich = pItem->Which();
+            ASSERT( isCHRATR(nWhich) || isTXTATR(nWhich),
+                    "SwTxtNode::SetAttr(): unknown attribute" );
+            if ( isCHRATR(nWhich) || isTXTATR(nWhich) )
             {
                 if ((RES_TXTATR_CHARFMT == nWhich) &&
                     (GetDoc()->GetDfltCharFmt() ==
@@ -1698,7 +1696,8 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
                     }
                     else
                     {
-                        pNew = MakeTxtAttr( *GetDoc(),
+
+                        SwTxtAttr *const pNew = MakeTxtAttr( *GetDoc(),
                                 const_cast<SfxPoolItem&>(*pItem), nStt, nEnd );
                         if ( pNew )
                         {
@@ -1862,20 +1861,18 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         }
 
         const USHORT nSize = m_pSwpHints->Count();
-        USHORT n;
-        xub_StrLen nAttrStart;
-        const xub_StrLen* pAttrEnd;
 
         if( nStt == nEnd )             // kein Bereich:
         {
-            for( n = 0; n < nSize; ++n )        //
+            for (USHORT n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
-                nAttrStart = *pHt->GetStart();
+                const xub_StrLen nAttrStart = *pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
-                if( 0 == ( pAttrEnd = pHt->GetEnd() ))      // nie Attribute ohne Ende
+                const xub_StrLen* pAttrEnd = pHt->GetEnd();
+                if ( ! pAttrEnd ) // no attributes without end
                     continue;
 
                 if( ( nAttrStart < nStt &&
@@ -1889,22 +1886,21 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         else                            // es ist ein Bereich definiert
         {
             // --> FME 2007-03-13 #i75299#
-            std::vector< SwPoolItemEndPair >* pAttrArr = 0;
+            ::std::auto_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
             // <--
 
             const USHORT coArrSz = static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<USHORT>(RES_CHRATR_BEGIN) +
-                                   static_cast<USHORT>(RES_UNKNOWNATR_END) -
-                                   static_cast<USHORT>(RES_UNKNOWNATR_BEGIN);
+                                   static_cast<USHORT>(RES_CHRATR_BEGIN);
 
-            for( n = 0; n < nSize; ++n )
+            for (USHORT n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
-                nAttrStart = *pHt->GetStart();
+                const xub_StrLen nAttrStart = *pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
-                if( 0 == ( pAttrEnd = pHt->GetEnd() ))      // nie Attribute ohne Ende
+                const xub_StrLen* pAttrEnd = pHt->GetEnd();
+                if ( ! pAttrEnd ) // no attributes without end
                     continue;
 
                 BOOL bChkInvalid = FALSE;
@@ -1927,7 +1923,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                 if( bChkInvalid )
                 {
                     // uneindeutig ?
-                    SfxItemIter* pItemIter = 0;
+                    ::std::auto_ptr< SfxItemIter > pItemIter;
                     const SfxPoolItem* pItem = 0;
 
                     if ( RES_TXTATR_AUTOFMT == pHt->Which() )
@@ -1935,7 +1931,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                         const SfxItemSet* pAutoSet = CharFmt::GetItemSet( pHt->GetAttr() );
                         if ( pAutoSet )
                         {
-                            pItemIter = new SfxItemIter( *pAutoSet );
+                            pItemIter.reset( new SfxItemIter( *pAutoSet ) );
                             pItem = pItemIter->GetCurItem();
                         }
                     }
@@ -1947,21 +1943,20 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     while ( pItem )
                     {
                         const USHORT nHintWhich = pItem->Which();
+                        ASSERT(!isUNKNOWNATR(nHintWhich),
+                                "SwTxtNode::GetAttr(): unkonwn attribute?");
 
-                        if( !pAttrArr )
-                            pAttrArr = new std::vector< SwPoolItemEndPair >( coArrSz );
+                        if ( !pAttrArr.get() )
+                        {
+                            pAttrArr.reset(
+                                new std::vector< SwPoolItemEndPair >(coArrSz));
+                        }
 
                         std::vector< SwPoolItemEndPair >::iterator pPrev = pAttrArr->begin();
                         if (isCHRATR(nHintWhich) ||
                             isTXTATR_WITHEND(nHintWhich))
                         {
                             pPrev += nHintWhich - RES_CHRATR_BEGIN;
-                        }
-                        else if (isUNKNOWNATR(nHintWhich))
-                        {
-                            pPrev += nHintWhich - RES_UNKNOWNATR_BEGIN + (
-                                static_cast< USHORT >(RES_TXTATR_WITHEND_END) -
-                                static_cast< USHORT >(RES_CHRATR_BEGIN) );
                         }
                         else
                         {
@@ -2006,28 +2001,21 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                             }
                         }
 
-                        pItem = ( pItemIter && !pItemIter->IsAtEnd() ) ? pItemIter->NextItem() : 0;
+                        pItem = ( pItemIter.get() && !pItemIter->IsAtEnd() )
+                                    ? pItemIter->NextItem() : 0;
                     } // end while
-
-                    delete pItemIter;
                 }
             }
 
-            if( pAttrArr )
+            if ( pAttrArr.get() )
             {
-                for( n = 0; n < coArrSz; ++n )
+                for (USHORT n = 0; n < coArrSz; ++n)
                 {
                     const SwPoolItemEndPair& rItemPair = (*pAttrArr)[ n ];
                     if( (0 != rItemPair.mpItem) && ((SfxPoolItem*)-1 != rItemPair.mpItem) )
                     {
-                        USHORT nWh;
-                        if( n < static_cast<USHORT>( static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                                     static_cast<USHORT>(RES_CHRATR_BEGIN) ) )
-                            nWh = static_cast<USHORT>(n + RES_CHRATR_BEGIN);
-                        else
-                            nWh = n - static_cast<USHORT>( static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                                           static_cast<USHORT>(RES_CHRATR_BEGIN) +
-                                                           static_cast<USHORT>(RES_UNKNOWNATR_BEGIN) );
+                        const USHORT nWh =
+                            static_cast<USHORT>(n + RES_CHRATR_BEGIN);
 
                         if( nEnd <= rItemPair.mnEndPos ) // hinter oder genau Ende
                         {
@@ -2039,8 +2027,6 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                             rSet.InvalidateItem( nWh );
                     }
                 }
-
-                delete pAttrArr;
             }
         }
         if( aFmtSet.Count() )

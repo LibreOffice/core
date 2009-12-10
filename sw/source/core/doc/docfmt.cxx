@@ -625,7 +625,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
              (RES_TXTATR_CHARFMT == nWhich) ||
              (RES_TXTATR_INETFMT == nWhich) ||
              (RES_TXTATR_AUTOFMT == nWhich) ||
-             isUNKNOWNATR(nWhich) )
+             (RES_TXTATR_UNKNOWN_CONTAINER == nWhich) )
         {
             pCharSet  = &rChgSet;
             bCharAttr = true;
@@ -636,7 +636,8 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
              || isPARATR_LIST(nWhich)
              // <--
              || isFRMATR(nWhich)
-             || isGRFATR(nWhich) )
+             || isGRFATR(nWhich)
+             || isUNKNOWNATR(nWhich) )
         {
             pOtherSet = &rChgSet;
             bOtherAttr = true;
@@ -653,7 +654,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                    RES_TXTATR_AUTOFMT, RES_TXTATR_AUTOFMT,
                                    RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                   RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+               RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                                    0 );
 
         SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
@@ -663,6 +664,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                     // <--
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
+                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                     0 );
 
         pTmpCharItemSet->Put( rChgSet );
@@ -755,7 +757,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                 RES_TXTATR_META, RES_TXTATR_METAFIELD,
-                                RES_TXTATR_CJK_RUBY, RES_TXTATR_WITHEND_END-1,
+                                RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
                                 0 );
 
             aTxtSet.Put( rChgSet );
@@ -1744,36 +1746,45 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
                  pFmt != pCNd->GetFmtColl() &&
                  pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
             {
-                // --> OD 2008-04-08 #refactorlists#
-//                if ( pPara->pHistory )
-//                {
-//                    SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
-//                    ASSERT( pTNd,
-//                            "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
-//                    SwRegHistory aRegH( pTNd, *pTNd, pPara->pHistory );
-//                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
-//                }
-//                else
-//                {
-//                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
-//                }
-                std::auto_ptr< SwRegHistory > pRegH;
-                if ( pPara->pHistory )
+                // --> OD 2009-09-07 #b6876367#
+                // Check, if the list style of the paragraph will change.
+                bool bChangeOfListStyleAtParagraph( true );
+                SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
+                ASSERT( pTNd,
+                        "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
                 {
-                    SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
-                    ASSERT( pTNd,
-                            "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
-                    pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
+                    SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
+                    if ( pNumRuleAtParagraph )
+                    {
+                        const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
+                                                            pFmt->GetNumRule();
+                        if ( rNumRuleItemAtParagraphStyle.GetValue() ==
+                                                pNumRuleAtParagraph->GetName() )
+                        {
+                            bChangeOfListStyleAtParagraph = false;
+                        }
+                    }
                 }
 
-                pCNd->ResetAttr( RES_PARATR_NUMRULE );
+                if ( bChangeOfListStyleAtParagraph )
+                {
+                    // --> OD 2008-04-08 #refactorlists#
+                    std::auto_ptr< SwRegHistory > pRegH;
+                    if ( pPara->pHistory )
+                    {
+                        pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
+                    }
 
-                // reset all list attributes
-                pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
-                pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
-                pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
-                pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-                pCNd->ResetAttr( RES_PARATR_LIST_ID );
+                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
+
+                    // reset all list attributes
+                    pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
+                    pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
+                    pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+                    pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+                    pCNd->ResetAttr( RES_PARATR_LIST_ID );
+                }
+                // <--
             }
             // <--
         }
@@ -2658,18 +2669,18 @@ namespace docfunc
                 if ( !pParentTxtFmtColl )
                     continue;
 
-                // --> OD 2007-12-07 #i77708#
-                // consider that explicitly no list style is set - empty string
-                // at numrule item.
-//                const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
-//                if ( rDirectItem.GetValue().Len() != 0 )
                 if ( SFX_ITEM_SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
                 {
-                    bRet = true;
-                    break;
+                    // --> OD 2009-11-12 #i106218#
+                    // consider that the outline style is set
+                    const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
+                    if ( rDirectItem.GetValue() != rDoc.GetOutlineNumRule()->GetName() )
+                    {
+                        bRet = true;
+                        break;
+                    }
+                    // <--
                 }
-                // <--
-
             }
 
         }
