@@ -50,14 +50,6 @@
 
 // -----------------------------------------------------------------------
 
-String GetLanguageString( LanguageType eType )
-{
-    static const SvtLanguageTable aLangTable;
-    return aLangTable.GetString( eType );
-}
-
-// -----------------------------------------------------------------------
-
 String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
 {
     INetURLObject aURLObj;
@@ -77,7 +69,7 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
     else
     {
         aTmp += sal_Unicode( '[' );
-        aTmp += ::GetLanguageString( (LanguageType)nLang );
+        aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
         aTmp += sal_Unicode( ']' );
     }
 

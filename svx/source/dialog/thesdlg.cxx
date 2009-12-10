@@ -54,7 +54,7 @@
 #include "thesdlg.hrc"
 #include <unolingu.hxx>
 #include <svx/langbox.hxx>
-
+#include <svtools/langtab.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -365,7 +365,7 @@ void SvxThesaurusDialog::Init_Impl(sal_Int16 nLanguage)
     aStr.Erase( aStr.Search( sal_Unicode( '(' ) ) - 1 );
     aStr.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) ) );
     //aStr += GetLanguageString( (LanguageType)pImpl->pThesaurus->GetLanguage() );
-    aStr += GetLanguageString( (LanguageType) nLanguage );
+    aStr += SvtLanguageTable::GetLanguageString( (LanguageType) nLanguage );
     aStr.Append( sal_Unicode( ')' ) );
     SetText( aStr );    // Text der Window-Leiste setzen (Wort + Sprache)
 
@@ -491,7 +491,7 @@ IMPL_LINK( SvxThesaurusDialog, SpellErrorHdl_Impl, void *, pError )
 {
     // Der "ubergebene Pointer pError ist die falsche Sprachen-Nummer
     LanguageType eLang = (LanguageType)(sal_uIntPtr)pError;
-    String aErr( ::GetLanguageString( eLang ) );
+    String aErr( SvtLanguageTable::GetLanguageString( eLang ) );
     // Fehlermeldung ausgeben
     ErrorHandler::HandleError(
         *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );

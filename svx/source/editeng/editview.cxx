@@ -40,6 +40,7 @@
 #include <i18npool/mslangid.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/langtab.hxx>
 
 #include <sfx2/srchitem.hxx>
 
@@ -56,7 +57,6 @@
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <editeng.hrc>
-#include <dlgutil.hxx>
 #include <helpid.hrc>
 #include <i18npool/lang.h>
 #include <vcl/menu.hxx>
@@ -1080,8 +1080,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 nGuessLangPara = nGuessLangWord;
 
             aPopupMenu.InsertSeparator();
-            String aTmpWord( ::GetLanguageString( nGuessLangWord ) );
-            String aTmpPara( ::GetLanguageString( nGuessLangPara ) );
+            String aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
+            String aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
             String aWordStr( EditResId( RID_STR_WORD ) );
             aWordStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpWord );
             String aParaStr( EditResId( RID_STR_PARAGRAPH ) );

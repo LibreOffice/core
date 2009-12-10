@@ -47,7 +47,6 @@ typedef long (*FUNC_CONVERT)(long);
 // Functions -------------------------------------------------------------
 
 // HM- und LanguageStrings aus der Resource laden
-SVX_DLLPUBLIC String    GetLanguageString( LanguageType eType );
 SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang,
                        const BOOL bNeg );
 

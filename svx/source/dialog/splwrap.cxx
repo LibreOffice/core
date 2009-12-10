@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
+#include <svtools/langtab.hxx>
 
 #ifndef __RSC
 #include <tools/errinf.hxx>
@@ -134,14 +135,14 @@ void SvxSpellWrapper::ShowLanguageErrors()
 
         if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
         {
-            String aErr( ::GetLanguageString( nLang ) );
+            String aErr( SvtLanguageTable::GetLanguageString( nLang ) );
             ErrorHandler::HandleError(
                 *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
             nTmpSpell = SVX_LANG_MISSING;
         }
         if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
         {
-            String aErr( ::GetLanguageString( nLang ) );
+            String aErr( SvtLanguageTable::GetLanguageString( nLang ) );
             ErrorHandler::HandleError(
                 *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
             nTmpHyph = SVX_LANG_MISSING;

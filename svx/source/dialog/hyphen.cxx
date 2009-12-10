@@ -49,9 +49,7 @@
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include <unolingu.hxx>
-#ifndef _USR_USTRING_HXX
-//#include <usr/ustring.hxx>
-#endif
+#include <svtools/langtab.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -250,7 +248,7 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
 
 void SvxHyphenWordDialog::SetLabel_Impl( LanguageType nLang )
 {
-    String aLangStr( ::GetLanguageString( nLang ) );
+    String aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
     String aTmp( aLabel );
     aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
     aTmp.Append( aLangStr );
@@ -513,7 +511,7 @@ IMPL_LINK_INLINE_END( SvxHyphenWordDialog, GetFocusHdl_Impl, Edit *, EMPTYARG )
 IMPL_LINK( SvxHyphenWordDialog, LangError_Impl, void *, nLang )
 {
     // Status anzeigen
-    String aErr( ::GetLanguageString( (LanguageType)(sal_IntPtr)nLang ) );
+    String aErr( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_IntPtr)nLang ) );
     aErr += SVX_RESSTR( RID_SVXSTR_HMERR_CHECKINSTALL );
     InfoBox( this, aErr ).Execute();
     return 0;
