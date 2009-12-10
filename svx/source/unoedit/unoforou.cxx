@@ -40,7 +40,7 @@
 #include <svx/editdata.hxx>
 #include <svx/outliner.hxx>
 #include <unoedhlp.hxx>
-#include <svx/svdobj.hxx>
+//#include <svx/svdobj.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/eeitem.hxx>
@@ -53,9 +53,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, SdrObject* pSdrObj /* = 0 */ ) :
+SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, BOOL bOutlText /* = FALSE */ ) :
     rOutliner( rOutl ),
-    pSdrObject( pSdrObj ),
+    bOutlinerText( bOutlText ),
     mpAttribsCache( NULL ),
     mpParaAttribsCache( NULL ),
     mnParaAttribsCache( 0 )
@@ -490,7 +490,7 @@ sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, sal_Int16 nNewDepth )
         {
             rOutliner.SetDepth( pPara, nNewDepth );
 
-            const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
+//          const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
             if( bOutlinerText )
                 rOutliner.SetLevelDependendStyleSheet( nPara );
 

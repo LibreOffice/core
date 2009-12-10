@@ -40,10 +40,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>
-
-#ifndef _SVSTOR_HXX
+#include <svx/editeng.hxx>
 #include <sot/storage.hxx>
-#endif
 #include <svl/itemprop.hxx>
 #include <sfx2/docfile.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -165,7 +163,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap );
+    static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 
     uno::Reference<text::XText > xParent;
     SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );

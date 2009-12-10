@@ -607,8 +607,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 // -
         }
 
-        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, mpObject );
 
+        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = sal_True;
 
@@ -707,8 +707,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
         if( pEditOutliner )
         {
-            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, mpObject );
-
+            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
             mbForwarderIsEditMode = sal_True;
         }
     }

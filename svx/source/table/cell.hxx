@@ -47,6 +47,7 @@
 
 class SfxItemSet;
 class OutlinerParaObject;
+class SdrObject;
 
 namespace sdr { namespace properties {
     class TextProperties;

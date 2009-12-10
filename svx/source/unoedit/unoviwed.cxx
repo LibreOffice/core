@@ -36,8 +36,6 @@
 #include <svx/unoviwed.hxx>
 #include <svx/editview.hxx>
 #include <svx/editeng.hxx>
-#include <svx/svdotext.hxx>
-
 
 SvxEditEngineViewForwarder::SvxEditEngineViewForwarder( EditView& rView ) :
     mrView( rView )

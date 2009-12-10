@@ -78,7 +78,7 @@
 #include "unoapi.hxx"
 #include "svx/svdomeas.hxx"
 #include "svx/svdpagv.hxx"
-
+#include "svx/svdpool.hxx"
 #include <tools/shl.hxx>    //
 #include "svx/dialmgr.hxx"      // not nice, we need our own resources some day
 #include "svx/dialogs.hrc"      //
@@ -124,30 +124,9 @@ using ::svx::IPropertyValueProvider;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
-const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
-{
-    // Propertymap fuer einen Outliner Text
-    static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =
-    {
-        SVX_UNOEDIT_CHAR_PROPERTIES,
-        SVX_UNOEDIT_FONT_PROPERTIES,
-        SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        SVX_UNOEDIT_PARA_PROPERTIES,
-        {MAP_CHAR_LEN("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0,0}
-    };
-
-    return aSvxUnoOutlinerTextCursorPropertyMap;
-}
-const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
-{
-    static SfxItemPropertySet aTextCursorSfxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
-    return &aTextCursorSfxPropertySet;
-}
 const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
 {
-    static SvxItemPropertySet aTextCursorSvxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
+    static SvxItemPropertySet aTextCursorSvxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aTextCursorSvxPropertySet;
 }
 
@@ -238,7 +217,7 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
-,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
+,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 ,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
 ,   mpObj(pObject)
 ,   mpModel(NULL)
@@ -268,7 +247,7 @@ SvxShape::SvxShape() throw()
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
-,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
+,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 ,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
 ,   mpObj(NULL)
 ,   mpModel(NULL)
@@ -4230,13 +4209,13 @@ void SvxShape::updateShapeKind()
 * class SvxShapeText                                                   *
 ***********************************************************************/
 SvxShapeText::SvxShapeText() throw ()
-: SvxShape(NULL, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+: SvxShape(NULL, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
 }
 
 //----------------------------------------------------------------------
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
@@ -4473,8 +4452,7 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* p
 ***********************************************************************/
 DBG_NAME(SvxShapeRect)
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE), aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE) )
-
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE), aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 {
     DBG_CTOR(SvxShapeRect,NULL);
 }

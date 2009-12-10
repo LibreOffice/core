@@ -61,6 +61,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 // <--
 #include <vcl/unohelp.hxx>
+#include <svx/editeng.hxx>
 
 //------------------------------------------------------------------------
 //
@@ -105,7 +106,7 @@ namespace accessibility
             {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
             {0,0,0,0,0,0}
         };
-        static SvxItemPropertySet aPropSet( aPropMap );
+        static SvxItemPropertySet aPropSet( aPropMap, EditEngine::GetGlobalItemPool() );
         return &aPropSet;
     }
 

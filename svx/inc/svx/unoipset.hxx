@@ -48,9 +48,10 @@ class SVX_DLLPUBLIC SvxItemPropertySet
     const SfxItemPropertyMapEntry*  _pMap;
     SvxIDPropertyCombineList*   pCombiList;
     sal_Bool                    mbConvertTwips;
+    SfxItemPool&                mrItemPool;
 
 public:
-    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, sal_Bool bConvertTwips = sal_False );
+    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool, sal_Bool bConvertTwips = sal_False );
     ~SvxItemPropertySet();
 
     // Methoden, die direkt mit dem ItemSet arbeiten
@@ -75,6 +76,12 @@ public:
 
     static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > getPropertySetInfo( const SfxItemPropertyMapEntry* pMap );
 };
+
+/** converts the given any with a metric to 100th/mm if needed */
+SVX_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
+
+/** converts the given any with a metric from 100th/mm to the given metric if needed */
+SVX_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
 
 #endif // _SVX_UNOIPSET_HXX_
 

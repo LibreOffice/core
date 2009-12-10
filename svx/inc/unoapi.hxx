@@ -104,21 +104,5 @@ SVX_DLLPUBLIC void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String
 */
 SVX_DLLPUBLIC void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
 
-/** returns the which id for the given property name.  This only works for
-    properties of shapes (map SVXMAP_SHAPE is used for searching)
-
-    Note: As this function has no access to SvxItemPropertySet but only to
-    SfxItemPropertyMap, the search in the map is not done via bsearch, but by
-    linear search.
- */
-// os: unused function
-//SVX_DLLPUBLIC sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName );
-
-/** converts the given any with a metric to 100th/mm if needed */
-SVX_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
-
-/** converts the given any with a metric from 100th/mm to the given metric if needed */
-SVX_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
-
 #endif // _SVX_UNOAPI_HXX_
 

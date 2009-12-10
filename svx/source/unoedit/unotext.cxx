@@ -34,9 +34,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HDL_
 #include <com/sun/star/text/XTextField.hdl>
-#endif
 #include <vos/mutex.hxx>
 #include <svl/itemset.hxx>
 
@@ -44,15 +42,11 @@
 #include <svl/itempool.hxx>
 #include <fontitem.hxx>
 #include <svx/tstpitem.hxx>
-#include <svx/svdobj.hxx>
 #include <svl/intitem.hxx>
-
 #include <svl/eitem.hxx>
-
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include <svx/unoshtxt.hxx>
 #include <svx/unoprnms.hxx>
 #include <svx/unotext.hxx>
 #include <svx/unoedsrc.hxx>
@@ -96,7 +90,7 @@ const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
 }
 const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet()
 {
-    static SvxItemPropertySet aSvxTextPortionPropertySet( ImplGetSvxTextPortionPropertyMap() );
+    static SvxItemPropertySet aSvxTextPortionPropertySet( ImplGetSvxTextPortionPropertyMap(), EditEngine::GetGlobalItemPool() );
     return &aSvxTextPortionPropertySet;
 }
 
@@ -104,6 +98,28 @@ const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
 {
     static SfxItemPropertySet aSvxTextPortionSfxPropertySet( ImplGetSvxTextPortionPropertyMap() );
     return &aSvxTextPortionSfxPropertySet;
+}
+
+const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
+{
+    // Propertymap fuer einen Outliner Text
+    static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =
+    {
+        SVX_UNOEDIT_CHAR_PROPERTIES,
+        SVX_UNOEDIT_FONT_PROPERTIES,
+        SVX_UNOEDIT_OUTLINER_PROPERTIES,
+        SVX_UNOEDIT_PARA_PROPERTIES,
+        {MAP_CHAR_LEN("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+        {0,0,0,0,0,0}
+    };
+
+    return aSvxUnoOutlinerTextCursorPropertyMap;
+}
+const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
+{
+    static SfxItemPropertySet aTextCursorSfxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
+    return &aTextCursorSfxPropertySet;
 }
 
 // ====================================================================
@@ -518,7 +534,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
 
 void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet ) throw( beans::UnknownPropertyException, lang::IllegalArgumentException )
 {
-    if(!SetPropertyValueHelper( rOldSet, pMap, rValue, rNewSet, &rSelection, (SvxTextEditSource*)GetEditSource() ))
+    if(!SetPropertyValueHelper( rOldSet, pMap, rValue, rNewSet, &rSelection, GetEditSource() ))
     {
         //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
         //  muss vorher das alte Item aus dem Dokument geholt werden
@@ -527,7 +543,7 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxTextEditSource* pEditSource /* = NULL*/ ) throw( uno::RuntimeException )
+sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ ) throw( uno::RuntimeException )
 {
     switch( pMap->nWID )
     {
@@ -693,12 +709,12 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
         break;
 
     default:
-        if(!GetPropertyValueHelper( *((SfxItemSet*)(&rSet)), pMap, rAny, &maSelection, (SvxTextEditSource*)GetEditSource() ))
+        if(!GetPropertyValueHelper( *((SfxItemSet*)(&rSet)), pMap, rAny, &maSelection, GetEditSource() ))
             rAny = mpPropSet->getPropertyValue(pMap, rSet);
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxTextEditSource* pEditSource /* = NULL */ )
+sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
     throw( uno::RuntimeException )
 {
     switch( pMap->nWID )
@@ -2517,7 +2533,7 @@ SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, BOOL ) const
     // AW: Very dangerous: The former implementation used a SfxItemPool created on the
     // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using
     // a deleted Pool by design.
-    return SfxItemSet(SdrObject::GetGlobalDrawObjectItemPool());
+    return SfxItemSet(EditEngine::GetGlobalItemPool());
 }
 
 SfxItemSet SvxDummyTextSource::GetParaAttribs( sal_uInt16 ) const

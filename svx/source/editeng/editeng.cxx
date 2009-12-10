@@ -84,7 +84,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/help.hxx>
-#include <svx/xpoly.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
@@ -111,6 +110,7 @@ static sal_Bool bDebugPaint = sal_False;
 
 SV_IMPL_VARARR( EECharAttribArray, EECharAttrib );
 
+static SfxItemPool* pGlobalPool=0;
 
 // ----------------------------------------------------------------------
 // EditEngine
@@ -2618,6 +2618,13 @@ SfxItemPool* EditEngine::CreatePool( sal_Bool bPersistentRefCounts )
 {
     SfxItemPool* pPool = new EditEngineItemPool( bPersistentRefCounts );
     return pPool;
+}
+
+SfxItemPool& EditEngine::GetGlobalItemPool()
+{
+    if ( !pGlobalPool )
+        pGlobalPool = CreatePool();
+    return *pGlobalPool;
 }
 
 sal_uInt32 EditEngine::RegisterClipboardFormatName()

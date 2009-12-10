@@ -458,6 +458,7 @@ public:
     virtual Rectangle GetBulletArea( USHORT nPara );
 
     static SfxItemPool* CreatePool( BOOL bLoadRefCounts = TRUE );
+    static SfxItemPool& GetGlobalItemPool();
     static sal_uInt32   RegisterClipboardFormatName();
     static BOOL     DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static BOOL     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );

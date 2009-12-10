@@ -32,12 +32,14 @@
 #define SVX_UNOPROV_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <svx/svdpool.hxx>
+//#include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxItemPropertySet;
+class SfxItemPool;
+
 /***********************************************************************
 * class UHashMap                                                       *
 ***********************************************************************/
@@ -110,7 +112,7 @@ public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
     const SfxItemPropertyMapEntry* GetMap(UINT16 nPropertyId);
-    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId);
+    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool);
 };
 
 /***********************************************************************

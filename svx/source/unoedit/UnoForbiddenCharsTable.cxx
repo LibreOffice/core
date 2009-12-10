@@ -34,7 +34,7 @@
 #include "forbiddencharacterstable.hxx"
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "unolingu.hxx"
+#include "unolingu.hxx" // LocalToLanguage, LanguageToLocale
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -313,8 +313,8 @@ public:
     const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
-    static sal_Bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxTextEditSource* pEditSource = NULL ) throw( ::com::sun::star::uno::RuntimeException );
-    static sal_Bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxTextEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
+    static sal_Bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxEditSource* pEditSource = NULL ) throw( ::com::sun::star::uno::RuntimeException );
+    static sal_Bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
 
     void attachField( const SvxFieldData* pData ) throw();
 

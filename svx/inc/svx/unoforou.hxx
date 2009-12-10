@@ -37,7 +37,6 @@
 #include <svx/editdata.hxx>
 
 class Outliner;
-class SdrObject;
 
 //  SvxOutlinerForwarder - SvxTextForwarder fuer Outliner
 
@@ -45,7 +44,7 @@ class SVX_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {
 private:
     Outliner&           rOutliner;
-    SdrObject*          pSdrObject;
+    BOOL                bOutlinerText;
 
     /** this pointer may be null or point to an item set for the attribs of
         the selection maAttribsSelection */
@@ -62,7 +61,7 @@ private:
     mutable USHORT      mnParaAttribsCache;
 
 public:
-                        SvxOutlinerForwarder( Outliner& rOutl, SdrObject* pSdrObj = 0 );
+                        SvxOutlinerForwarder( Outliner& rOutl, BOOL bOutlText = FALSE );
     virtual             ~SvxOutlinerForwarder();
 
     virtual USHORT      GetParagraphCount() const;

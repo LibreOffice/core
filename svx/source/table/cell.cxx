@@ -62,6 +62,7 @@
 #include "svx/boxitem.hxx"
 #include "svx/xflbstit.hxx"
 #include "svx/xflbmtit.hxx"
+#include <svx/svdpool.hxx>
 
 // -----------------------------------------------------------------------------
 
@@ -110,7 +111,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap );
+    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aSvxCellPropertySet;
 }
 

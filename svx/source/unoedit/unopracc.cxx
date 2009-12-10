@@ -50,9 +50,7 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef _SVX_UNOPRACC_HXX_
 #include "unopracc.hxx"
-#endif
 #include <svx/unoedsrc.hxx>
 
 using namespace ::com::sun::star;

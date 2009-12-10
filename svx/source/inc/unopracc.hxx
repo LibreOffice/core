@@ -31,7 +31,6 @@
 #ifndef _SVX_UNOPRACC_HXX
 #define _SVX_UNOPRACC_HXX
 
-#include <svx/unoshape.hxx>
 #include <svx/unotext.hxx>
 
 

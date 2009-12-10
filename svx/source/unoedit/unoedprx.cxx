@@ -53,10 +53,7 @@
 //------------------------------------------------------------------------
 #include "unoedprx.hxx"
 #include <svx/unotext.hxx>
-
 #include "unoedhlp.hxx"
-#include <svx/svdmodel.hxx>
-#include <svx/svdpntv.hxx>
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>

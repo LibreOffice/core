@@ -46,6 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \
         $(SLO)$/unoedsrc.obj	\
+        $(SLO)$/serviceinfohelper.obj \
         $(SLO)$/unoedhlp.obj	\
         $(SLO)$/unoviwou.obj	\
         $(SLO)$/unofored.obj	\

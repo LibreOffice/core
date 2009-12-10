@@ -39,13 +39,10 @@
 #include <svl/itemprop.hxx>
 
 #include <svx/unoipset.hxx>
-#include <svx/svdpool.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
-#include <svx/deflt3d.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/editeng.hxx>
-#include "unoapi.hxx"
-#include <svx/svdobj.hxx>
 
 #include <algorithm>
 
@@ -69,9 +66,9 @@ struct SvxIDPropertyCombine
 
 DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, sal_Bool bConvertTwips )
+SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, sal_Bool bConvertTwips )
 :   m_aPropertyMap( pMap ),
-    _pMap(pMap), mbConvertTwips(bConvertTwips)
+    _pMap(pMap), mbConvertTwips(bConvertTwips), mrItemPool( rItemPool )
 {
     pCombiList = NULL;
 }
@@ -311,20 +308,19 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     // Noch kein UsrAny gemerkt, generiere Default-Eintrag und gib
     // diesen zurueck
 
-    SdrItemPool& rItemPool = SdrObject::GetGlobalDrawObjectItemPool();
-    const SfxMapUnit eMapUnit = rItemPool.GetMetric((USHORT)pMap->nWID);
+    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((USHORT)pMap->nWID);
     BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
     uno::Any aVal;
-    SfxItemSet aSet( rItemPool, pMap->nWID, pMap->nWID);
+    SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Default aus ItemPool holen
-        if(rItemPool.IsWhich(pMap->nWID))
-            aSet.Put(rItemPool.GetDefaultItem(pMap->nWID));
+        if(mrItemPool.IsWhich(pMap->nWID))
+            aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
     }
 
     if(aSet.Count())
