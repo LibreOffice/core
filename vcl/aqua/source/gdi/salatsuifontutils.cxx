@@ -207,6 +207,13 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meItalic     = ITALIC_NONE;
     rDFA.mbSymbolFlag = false;
 
+    // ignore bitmap fonts
+    ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
+    ByteCount nHeadLen = 0;
+    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x68656164/*head*/, 0, 0, NULL, &nHeadLen );
+    if( (rc != noErr) || (nHeadLen <= 0) )
+        return false;
+
     // all scalable fonts on this platform are subsettable
     rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
@@ -216,7 +223,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
-    OSStatus rc = ATSUCountFontNames( nFontID, &nFontNameCount );
+    rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
         return false;
     int nBestNameValue = 0;

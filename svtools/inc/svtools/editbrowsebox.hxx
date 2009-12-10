@@ -675,6 +675,7 @@ namespace svt
     private:
         virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const;
+        using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
         SVT_DLLPRIVATE void DetermineFocus( const sal_uInt16 _nGetFocusFlags = 0);
         inline void HideAndDisable(CellControllerRef& rController);

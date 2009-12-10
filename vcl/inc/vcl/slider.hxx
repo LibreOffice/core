@@ -70,6 +70,7 @@ private:
     Link            maSlideHdl;
     Link            maEndSlideHdl;
 
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );

@@ -1320,8 +1320,13 @@ void StatusBar::SetItemText( USHORT nItemId, const XubString& rText )
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
-            if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
+            if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
+                ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
+            {
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+                ImplFormat();
+                Invalidate();
+            }
 
             // Item neu Zeichen, wenn StatusBar sichtbar und
             // UpdateMode gesetzt ist
