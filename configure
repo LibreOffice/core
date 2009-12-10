@@ -3013,7 +3013,7 @@ fi
 if test "${with_system_stdlibs+set}" = set; then
   withval=$with_system_stdlibs;
 else
-  checkforprelink=yes
+  checkforstdlibproblems=yes
 fi
 
 
@@ -11590,7 +11590,7 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
              gccvisbroken=no;
          else
              gccvisbroken=yes;
@@ -11999,9 +11999,9 @@ $as_echo "$as_me: error: No valid check available. Please check the block for yo
                 _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[-A-Za-z]*//`
         _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-        if test "$_jdk_ver" -lt 10600; then
-             { { $as_echo "$as_me:$LINENO: error: IBM JDK is too old, you need at least 1.6" >&5
-$as_echo "$as_me: error: IBM JDK is too old, you need at least 1.6" >&2;}
+        if test "$_jdk_ver" -lt 10500; then
+             { { $as_echo "$as_me:$LINENO: error: IBM JDK is too old, you need at least 1.5" >&5
+$as_echo "$as_me: error: IBM JDK is too old, you need at least 1.5" >&2;}
    { (exit 1); exit 1; }; }
         fi
 
@@ -14068,11 +14068,18 @@ fi
 
 
 if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
-  if test -n "$checkforprelink" -a -f /etc/rpm/macros.prelink; then
-    with_system_stdlibs=yes
-    { $as_echo "$as_me:$LINENO: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
+  if test -n "$checkforstdlibproblems"; then
+    if test -f /etc/rpm/macros.prelink; then
+      with_system_stdlibs=yes
+      { $as_echo "$as_me:$LINENO: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
 $as_echo "$as_me: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
-    echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+      echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    elif test "$GCC" = "yes" -a ! -e `$CC -print-file-name=libgcc_s.so.1`; then
+      with_system_stdlibs=yes
+      { $as_echo "$as_me:$LINENO: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
+$as_echo "$as_me: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
+      echo "platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    fi
   fi
 fi
 
