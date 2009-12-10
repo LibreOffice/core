@@ -4024,10 +4024,13 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );
+    OSL_POSTCOND( pViewFrame, "SfxBaseModel::createViewController: no frame?" );
 
     // delegate to SFX' view factory
     SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( nViewNo );
+    pViewFrame->GetBindings().ENTERREGISTRATIONS();
     SfxViewShell* pViewShell = rViewFactory.CreateInstance( pViewFrame, pOldViewShell );
+    pViewFrame->GetBindings().LEAVEREGISTRATIONS();
     ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
 
     // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
