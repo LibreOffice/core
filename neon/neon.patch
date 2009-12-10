@@ -499,6 +499,7 @@
 +PRJNAME=neon
 +TARGET=neon
 +LIBTARGET=NO
++USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
 +# --- Settings -----------------------------------------------------
@@ -512,7 +513,19 @@
 +.IF "$(SYSTEM_LIBXML)" == "YES"
 +CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 +.ELSE
-+CFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
++LIBXMLINCDIR=external$/libxml
++CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
++.ENDIF
++
++.IF "$(SYSTEM_OPENSSL)" == "YES"
++CFLAGS+= $(OPENSSL_CFLAGS)
++.ENDIF
++
++.IF "$(SYSTEM_ZLIB)" == "YES"
++CFLAGS+=-DSYSTEM_ZLIB
++.ELSE
++ZLIBINCDIR=external$/zlib
++CFLAGS+=-I$(SOLARINCDIR)$/$(ZLIBINCDIR)
 +.ENDIF
 +
 +SLOFILES= \
@@ -547,12 +560,38 @@
 +#       $(SLO)$/ne_gnutls.obj \
 +#       $(SLO)$/ne_stubssl.obj
 +
-+LIB1TARGET=$(SLB)$/$(TARGET).lib
-+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-+LIB1OBJFILES=$(SLOFILES)
++SHL1OBJS=$(SLOFILES)
++SHL1TARGET=$(TARGET)
++SHL1VERSIONMAP=exports.map
++SHL1IMPLIB=i$(TARGET)
++
++SHL1STDLIBS+= $(LIBXML2LIB) \
++              $(ZLIB3RDLIB)
++
++.IF "$(GUI)"=="WNT"
++	SHL1STDLIBS+= $(WSOCK32LIB)
++	.IF "$(WINDOWS_VISTA_PSDK)" != ""
++		SHL1STDLIBS+= $(WS2_32LIB)
++	.ENDIF
++	SHL1STDLIBS+= $(OPENSSLLIB)
++.ELSE # WNT
++	.IF "$(OS)"=="SOLARIS"
++		SHL1STDLIBS+= -lnsl -lsocket -ldl
++	.ENDIF # SOLARIS
++	.IF "$(OS)"=="OS2"
++		SHL1STDLIBS+= pthread.lib libz.lib
++	.ENDIF # OS2
++	.IF "$(SYSTEM_OPENSSL)"=="YES"
++		SHL1STDLIBS+= $(OPENSSLLIB)
++	.ELSE
++		SHL1STDLIBS+= $(OPENSSLLIBST)
++	.ENDIF
++.ENDIF # WNT
++
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +
 +# --- Targets ------------------------------------------------------
-+
++DEF1NAME=$(SHL1TARGET)
 +.INCLUDE :  target.mk
 --- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
 +++ misc/build/neon-0.28.2/src/ne_auth.c	2009-11-26 23:41:57.000000000 +0100
@@ -594,8 +633,8 @@
  static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
                             struct auth_challenge *chall, char *pwbuf) 
  {
--    if (chall->handler->creds(chall->handler->userdata, sess->realm, 
-+    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm, 
+-    if (chall->handler->creds(chall->handler->userdata, sess->realm,
++    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm,
                                chall->handler->attempt++, sess->username, pwbuf) == 0) {
          return 0;
      } else {
@@ -603,11 +642,11 @@
      int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
      int status;
      char *response = NULL;
--    
+-
 +    char password[NE_ABUFSIZ];
 +
      NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
--    
+-
 +
      if (!sess->sspi_context) {
          ne_uri uri = {0};
@@ -617,7 +656,7 @@
          }
      }
 +
-+	/* Authentification needs more than one http request. 
++	/* Authentification needs more than one http request.
 +	 * As long as authentification in progress use the existing credentials.
 +	 * Otherwise get new credentials.*/
 +	if (!parms->opaque)
@@ -637,7 +676,7 @@
  
 +#ifdef HAVE_NTLM
 +
-+static char *request_ntlm(auth_session *sess, struct auth_request *request) 
++static char *request_ntlm(auth_session *sess, struct auth_request *request)
 +{
 +    char *token = ne_ntlm_getRequestToken(sess->ntlm_context);
 +    if (token) {
@@ -651,12 +690,12 @@
 +
 +static int ntlm_challenge(auth_session *sess, int attempt,
 +                          struct auth_challenge *parms,
-+                          ne_buffer **errmsg) 
++                          ne_buffer **errmsg)
 +{
 +    int status;
-+    
++
 +    NE_DEBUG(NE_DBG_HTTPAUTH, "auth: NTLM challenge.\n");
-+    
++
 +    if (!parms->opaque && (!sess->ntlm_context || (attempt > 1))) {
 +        char password[NE_ABUFSIZ];
 +
@@ -674,7 +713,7 @@
 +        }
 +
 +        status = ne_ntlm_create_context(&sess->ntlm_context,
-+                                        sess->username, 
++                                        sess->username,
 +                                        password);
 +        if (status) {
 +            return status;
@@ -689,7 +728,7 @@
 +    return 0;
 +}
 +#endif /* HAVE_NTLM */
-+ 
++
 +
  /* Examine a digest challenge: return 0 if it is a valid Digest challenge,
   * else non-zero. */
@@ -827,7 +866,7 @@
 +++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-11-26 23:41:57.000000000 +0100
 @@ -1 +1,703 @@
 -dummy
-+/* 
++/*
 +   Handling of NTLM Authentication
 +   Copyright (C) 2003, Daniel Stenberg <daniel@haxx.se>
 +   Copyright (C) 2009, Kai Sommerfeld <kso@openoffice.org>
@@ -836,7 +875,7 @@
 +   modify it under the terms of the GNU Library General Public
 +   License as published by the Free Software Foundation; either
 +   version 2 of the License, or (at your option) any later version.
-+   
++
 +   This library is distributed in the hope that it will be useful,
 +   but WITHOUT ANY WARRANTY; without even the implied warranty of
 +   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -850,7 +889,7 @@
 +*/
 +
 +/* NTLM details:
-+   
++
 +   http://davenport.sourceforge.net/ntlm.html
 +   http://www.innovation.ch/java/ntlm.html
 +
@@ -1058,8 +1097,8 @@
 +      memcpy(ctx->nonce, &buffer[24], 8);
 +
 +    /* at index decimal 20, there's a 32bit NTLM flag field */
-+      
-+    if (buffer) ne_free(buffer); 
++
++    if (buffer) ne_free(buffer);
 +  }
 +  else {
 +    if(ctx->state >= NTLMSTATE_TYPE1)
@@ -1145,7 +1184,7 @@
 +
 +  if (len > 14)
 +    len = 14;
-+  
++
 +  for (i=0; i<len; i++)
 +    pw[i] = toupper(password[i]);
 +
@@ -1159,7 +1198,7 @@
 +    setup_des_key(pw, DESKEY(ks));
 +    DES_ecb_encrypt((DES_cblock *)magic, (DES_cblock *)lmbuffer,
 +                    DESKEY(ks), DES_ENCRYPT);
-+  
++
 +    setup_des_key(pw+7, DESKEY(ks));
 +    DES_ecb_encrypt((DES_cblock *)magic, (DES_cblock *)(lmbuffer+8),
 +                    DESKEY(ks), DES_ENCRYPT);
@@ -1213,13 +1252,13 @@
 +  if(!ctx->user || !ctx->passwd)
 +    /* no user, no auth */
 +    return 0; /* OK */
-+  
++
 +  switch(ctx->state) {
 +  case NTLMSTATE_TYPE1:
 +  default: /* for the weird cases we (re)start here */
 +    hostoff = 32;
 +    domoff = hostoff + hostlen;
-+    
++
 +    /* Create and send a type-1 message:
 +
 +    Index Description          Content
@@ -1272,7 +1311,7 @@
 +    ctx->requestToken = ne_base64(ntlmbuf, size);
 +
 +    break;
-+    
++
 +  case NTLMSTATE_TYPE2:
 +    /* We received the type-2 already, create a type-3 message:
 +
@@ -1290,7 +1329,7 @@
 +    52 (64) start of data block
 +
 +    */
-+  
++
 +  {
 +    int lmrespoff;
 +    int ntrespoff;
@@ -1340,25 +1379,25 @@
 +                    "%c%c" /* NT-response allocated space */
 +                    "%c%c" /* NT-response offset */
 +                    "%c%c" /* 2 zeroes */
-+                    
++
 +                    "%c%c"  /* domain length */
 +                    "%c%c"  /* domain allocated space */
 +                    "%c%c"  /* domain name offset */
 +                    "%c%c"  /* 2 zeroes */
-+                    
++
 +                    "%c%c"  /* user length */
 +                    "%c%c"  /* user allocated space */
 +                    "%c%c"  /* user offset */
 +                    "%c%c"  /* 2 zeroes */
-+                    
++
 +                    "%c%c"  /* host length */
 +                    "%c%c"  /* host allocated space */
 +                    "%c%c"  /* host offset */
 +                    "%c%c%c%c%c%c"  /* 6 zeroes */
-+                    
++
 +                    "\xff\xff"  /* message length */
 +                    "%c%c"  /* 2 zeroes */
-+                    
++
 +                    "\x01\x82" /* flags */
 +                    "%c%c"  /* 2 zeroes */
 +
@@ -1375,7 +1414,7 @@
 +                    SHORTPAIR(0x18),
 +                    SHORTPAIR(lmrespoff),
 +                    0x0, 0x0,
-+                    
++
 +#ifdef USE_NTRESPONSES
 +                    SHORTPAIR(0x18),  /* NT-response length, twice */
 +                    SHORTPAIR(0x18),
@@ -1395,12 +1434,12 @@
 +                    SHORTPAIR(userlen),
 +                    SHORTPAIR(useroff),
 +                    0x0, 0x0,
-+                    
++
 +                    SHORTPAIR(hostlen),
 +                    SHORTPAIR(hostlen),
 +                    SHORTPAIR(hostoff),
 +                    0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-+             
++
 +                    0x0, 0x0,
 +
 +                    0x0, 0x0);
@@ -1428,7 +1467,7 @@
 +    }
 +
 +#ifdef USE_NTRESPONSES
-+    if(size < ((int)sizeof(ntlmbuf) - 0x18)) {      
++    if(size < ((int)sizeof(ntlmbuf) - 0x18)) {
 +      memcpy(&ntlmbuf[size], ntresp, 0x18);
 +      size += 0x18;
 +    }
@@ -1504,7 +1543,7 @@
 +        if (context->state <= NTLMSTATE_TYPE3) {
 +	  ntlm ntlmstatus = ne_input_ntlm(context, responseToken);
 +
-+	  if (ntlmstatus != NTLM_FINE) { 
++	  if (ntlmstatus != NTLM_FINE) {
 +	    return -1;
 +	  }
 +	}
@@ -1534,7 +1573,7 @@
 +++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-11-26 23:41:57.000000000 +0100
 @@ -1 +1,44 @@
 -dummy
-+/* 
++/*
 +   Handling of NTLM Authentication
 +   Copyright (C) 2009, Kai Sommerfeld <kso@openoffice.org>
 +
@@ -1542,7 +1581,7 @@
 +   modify it under the terms of the GNU Library General Public
 +   License as published by the Free Software Foundation; either
 +   version 2 of the License, or (at your option) any later version.
-+   
++
 +   This library is distributed in the hope that it will be useful,
 +   but WITHOUT ANY WARRANTY; without even the implied warranty of
 +   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -1594,12 +1633,12 @@
          return -1;
      }
  
-+    return 0; 
++    return 0;
 +}
 +
 +/*
 + * Simplification wrapper arround AcquireCredentialsHandle as most of
-+ * the parameters do not change. 
++ * the parameters do not change.
 + */
 +static int acquireCredentialsHandleForUsername(CredHandle * credentials, char *package, const char *username, const char *password)
 +{
@@ -1652,7 +1691,7 @@
  
          /* Reset any existing context since we are starting over */
          resetContext(sspiContext);
-+		
++
 +	if (strlen(username) != 0) {
 +	  if (acquireCredentialsHandleForUsername
 +	        (&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
