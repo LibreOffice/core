@@ -40,9 +40,6 @@
 
 #include <svtools/langtab.hxx>
 #include <svl/itemset.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-
 #include <svx/dialogs.hrc>
 
 #include "dlgutil.hxx"
@@ -172,33 +169,12 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
 
 // -----------------------------------------------------------------------
 
-FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
+FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = NULL;
-    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
-    else
-    {
-        SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
-        if ( pFrame )
-            pSh = pFrame->GetObjectShell();
-        if ( pSh )  // #93209# the object shell is not always available during reload
-        {
-            SfxModule* pModule = pSh->GetModule();
-            if ( pModule )
-            {
-                const SfxPoolItem* _pItem = pModule->GetItem( SID_ATTR_METRIC );
-                if ( _pItem )
-                    eUnit = (FieldUnit)( (SfxUInt16Item*)_pItem )->GetValue();
-            }
-            else
-            {
-                DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
-            }
-        }
-    }
     return eUnit;
 }
 

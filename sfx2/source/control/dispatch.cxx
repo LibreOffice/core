@@ -3215,3 +3215,14 @@ sal_uInt32 SfxDispatcher::GetDisableFlags() const
     return pImp->nDisableFlags;
 }
 
+SfxModule* SfxDispatcher::GetModule() const
+{
+    for ( sal_uInt16 nShell = 0;; ++nShell )
+    {
+        SfxShell *pSh = GetShell(nShell);
+        if ( pSh == NULL )
+            return 0;
+        if ( pSh->ISA(SfxModule) )
+            return (SfxModule*) pSh;
+    }
+}

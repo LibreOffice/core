@@ -307,7 +307,8 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     FreeResource();
 
     // Metrik einstellen
-    eFUnit = GetModuleFieldUnit( NULL );
+    eFUnit = pInBindings->GetDispatcher()->GetModule()->GetModuleFieldUnit();
+
     aMtrDepth.SetUnit( eFUnit );
     aMtrDistance.SetUnit( eFUnit );
     aMtrFocalLength.SetUnit( eFUnit );
@@ -509,7 +510,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
         ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
-    eFUnit = GetModuleFieldUnit( &rAttrs );
+    eFUnit = GetModuleFieldUnit( rAttrs );
 
 
 // Segmentanzahl aenderbar ? und andere Stati
@@ -1754,7 +1755,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
         ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-        eFUnit = GetModuleFieldUnit( &rAttrs );
+        eFUnit = GetModuleFieldUnit( rAttrs );
     }
 
     // Anzahl Segmente (horizontal)

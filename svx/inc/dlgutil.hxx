@@ -56,7 +56,7 @@ SVX_DLLPUBLIC void SetFieldUnit( MetricField& rCtrl,
 SVX_DLLPUBLIC void SetFieldUnit( MetricBox& rCtrl,
                    FieldUnit eUnit, BOOL bAll = FALSE );
 
-SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet = NULL );
+SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
 
 // Metriken umrechnen
 SVX_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );

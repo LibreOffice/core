@@ -225,7 +225,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     aDivisionPointY.SetText(aDivisionPointX.GetText());
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rCoreSet );
+    FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
     long nFirst, nLast, nMin, nMax;
 
     lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);

@@ -295,7 +295,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aMtrFldShadowY.SetModifyHdl( aLink );
 
     // System-Metrik setzen
-    const FieldUnit eDlgUnit = GetModuleFieldUnit();
+    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetModuleFieldUnit();
     SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldTextStart, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldShadowX, eDlgUnit, TRUE );
@@ -605,7 +605,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             if ( pItem->GetValue() == XFTSHADOW_NORMAL )
             {
                 nId = TBI_SHADOW_NORMAL;
-                 const FieldUnit eDlgUnit = GetModuleFieldUnit();
+                const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetModuleFieldUnit();
 
 //              aFbShadowX.SetBitmap( Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, _pMgr ) ) );
                 //aMtrFldShadowX.SetUnit(FUNIT_MM);
@@ -888,7 +888,7 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     // System-Metrik evtl. neu setzen
     // Dieses sollte mal als Listener passieren, ist aber aus
     // inkompatibilitaetsgruenden z.Z. nicht moeglich
-    const FieldUnit eDlgUnit = GetModuleFieldUnit();
+    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetModuleFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
         SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );

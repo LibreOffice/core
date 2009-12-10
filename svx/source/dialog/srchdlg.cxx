@@ -2320,8 +2320,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
 
     // Metrik abfragen
     SfxMapUnit eMapUnit = SFX_MAPUNIT_CM;
-    FieldUnit eFieldUnit = GetModuleFieldUnit();
-
+    FieldUnit eFieldUnit = pSh->GetModule()->GetModuleFieldUnit();
     switch ( eFieldUnit )
     {
         case FUNIT_MM:          eMapUnit = SFX_MAPUNIT_MM; break;

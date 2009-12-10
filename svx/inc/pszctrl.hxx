@@ -46,6 +46,7 @@ class SVX_DLLPUBLIC SvxPosSizeStatusBarControl : public SfxStatusBarControl
 {
 private:
     SvxPosSizeStatusBarControl_Impl*    pImp;
+    SVX_DLLPRIVATE String       GetMetricStr_Impl( long nVal );
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 

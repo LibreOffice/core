@@ -60,6 +60,7 @@
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include "stbctrls.h"
+#include "sfx2/module.hxx"
 
 #include <svx/dialogs.hrc>
 #include <unotools/localedatawrapper.hxx>
@@ -81,10 +82,10 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-String GetMetricStr_Impl( long nVal )
+String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
     // Applikations-Metrik besorgen und setzen
-    FieldUnit eOutUnit = GetModuleFieldUnit( NULL );
+    FieldUnit eOutUnit = SfxModule::GetActiveModule()->GetModuleFieldUnit();
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
     String sMetric;

@@ -36,6 +36,8 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/imgdef.hxx>
 #include <sal/types.h>
+#include <vcl/fldunit.hxx>
+
 class ImageList;
 
 class SfxAcceleratorManager;
@@ -96,6 +98,7 @@ public:
     BOOL                        IsActive() const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
+    FieldUnit                   GetModuleFieldUnit() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();

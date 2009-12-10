@@ -51,6 +51,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/intitem.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -410,4 +411,15 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
     if( pFrame )
         pSh = pFrame->GetObjectShell();
     return pSh ? pSh->GetModule() : 0;
+}
+
+FieldUnit SfxModule::GetModuleFieldUnit() const
+{
+    FieldUnit eUnit = FUNIT_INCH;
+    const SfxPoolItem* _pItem = GetItem( SID_ATTR_METRIC );
+    if ( _pItem )
+        eUnit = (FieldUnit)( (SfxUInt16Item*)_pItem )->GetValue();
+    else
+        DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+    return eUnit;
 }

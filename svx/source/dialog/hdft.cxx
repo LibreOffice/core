@@ -188,7 +188,7 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     FreeResource();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aDistEdit, eFUnit );
     SetFieldUnit( aHeightEdit, eFUnit );
     SetFieldUnit( aLMEdit, eFUnit );
