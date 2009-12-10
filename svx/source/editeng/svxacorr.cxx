@@ -36,31 +36,17 @@
 #include <tools/urlobj.hxx>
 #include <tools/table.hxx>
 #include <i18npool/mslangid.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _STORINFO_HXX //autogen
 #include <sot/storinfo.hxx>
-#endif
-#ifndef _SFX_DOCFILE_HXX
-#include <sfx2/docfile.hxx>
-#endif
-#include <sfx2/sfxhelp.hxx>
-#include <sfx2/viewfrm.hxx>
 // fuer die Sort-String-Arrays aus dem SVMEM.HXX
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <svtools/helpopt.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
-#ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL_
 #include <com/sun/star/i18n/UnicodeType.hdl>
-#endif
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/localedatawrapper.hxx>
@@ -68,23 +54,15 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
 #include <sot/storage.hxx>
 #include <comphelper/storagehelper.hxx>
-
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/escpitem.hxx>
 #include <svx/svxacorr.hxx>
 #include "unolingu.hxx"
-
-#ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -96,6 +74,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
+#include <vcl/help.hxx>
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -1326,9 +1305,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
     } while( FALSE );
 
-    SfxViewFrame* pVFrame;
-    if( nRet && 0 != (pVFrame = SfxViewFrame::Current()) &&
-        pVFrame->GetFrame() )
+    if( nRet )
     {
         ULONG nHelpId = 0;
         if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
@@ -1357,7 +1334,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( nHelpId )
         {
             nHelpId += HID_AUTOCORR_HELP_START - 1;
-            SfxHelp::OpenHelpAgent( pVFrame->GetFrame(), nHelpId );
+            Application::GetHelp()->OpenHelpAgent( nHelpId );
         }
     }
 

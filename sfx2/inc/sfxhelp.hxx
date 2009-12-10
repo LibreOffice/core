@@ -50,6 +50,7 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 private:
     SAL_DLLPRIVATE virtual BOOL Start( ULONG nHelpId, const Window* pWindow );
     SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
+    SAL_DLLPRIVATE virtual void OpenHelpAgent( ULONG nHelpId );
 
     SAL_DLLPRIVATE String GetHelpModuleName_Impl();
     SAL_DLLPRIVATE String CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
