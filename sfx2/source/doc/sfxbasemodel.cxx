@@ -3931,12 +3931,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
     for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
-    {
-        ::rtl::OUStringBuffer aViewName;
-        aViewName.appendAscii( "view" );
-        aViewName.append( nViewNo );
-        aViewNames[nViewNo] = aViewName.makeStringAndClear();
-    }
+        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetViewName();
     return aViewNames;
 }
 
@@ -4002,17 +3997,9 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     if ( impl_isDisposed() )
         throw lang::DisposedException();
 
-    // number of view to create
-    if ( i_rViewName.indexOfAsciiL( "view", 4 ) != 0 )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
-    const USHORT nViewId = (USHORT)i_rViewName.copy( 4 ).toInt32();
-
-    SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    sal_Int32 nViewNo = -1;
-    for ( nViewNo = 0; nViewNo < rDocumentFactory.GetViewFactoryCount(); ++nViewNo )
-        if ( rDocumentFactory.GetViewFactory( nViewNo ).GetOrdinal() == nViewId )
-            break;
-    if ( nViewNo >= rDocumentFactory.GetViewFactoryCount() )
+    // find the proper SFX view factory
+    SfxViewFactory* pViewFactory = GetObjectShell()->GetFactory().GetViewFactoryByViewName( i_rViewName );
+    if ( !pViewFactory )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
     // determine previous shell (used in some special cases)
@@ -4027,9 +4014,8 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     OSL_POSTCOND( pViewFrame, "SfxBaseModel::createViewController: no frame?" );
 
     // delegate to SFX' view factory
-    SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( nViewNo );
     pViewFrame->GetBindings().ENTERREGISTRATIONS();
-    SfxViewShell* pViewShell = rViewFactory.CreateInstance( pViewFrame, pOldViewShell );
+    SfxViewShell* pViewShell = pViewFactory->CreateInstance( pViewFrame, pOldViewShell );
     pViewFrame->GetBindings().LEAVEREGISTRATIONS();
     ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
 
@@ -4038,7 +4024,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     pViewFrame->SetViewShell_Impl( pViewShell );
 
     // remember ViewID
-    pViewFrame->SetCurViewId_Impl( rViewFactory.GetOrdinal() );
+    pViewFrame->SetCurViewId_Impl( pViewFactory->GetOrdinal() );
 
     // ensure a default controller, if the view shell did not provide an own implementation
     if ( !pViewShell->GetController().is() )

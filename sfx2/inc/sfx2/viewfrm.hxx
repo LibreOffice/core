@@ -307,26 +307,25 @@ public:
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
-    SAL_DLLPRIVATE static SfxViewFrame* Create_Impl( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
-
-//#endif
-private:
-    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
-    SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
     SAL_DLLPRIVATE static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >
                         LoadDocument_Impl(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewFactoryArgs,
-                            const USHORT i_nViewId
+                            const ::rtl::OUString& i_rViewName
                         );
+
+//#endif
+private:
+    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
+    SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
 
     /** loads a new view of our document into our frame
 
         This method completely bypasses the UNO loader mechanism, it exchanges the current view on SFX level. Use
         it for quick inplace view switches only.
     */
-    SAL_DLLPRIVATE SfxViewShell* LoadNewSfxView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell );
+    SAL_DLLPRIVATE SfxViewShell* LoadNewSfxView_Impl( const ::rtl::OUString& i_rViewName, SfxViewShell* i_pOldShell );
 
     /** loads the given existing document into the given frame
 

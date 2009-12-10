@@ -2010,19 +2010,14 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 //--------------------------------------------------------------------
 Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
         const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame, const Sequence< PropertyValue >& i_rViewFactoryArgs,
-        const USHORT i_nViewId )
+        const ::rtl::OUString& i_rViewName )
 {
     ENSURE_OR_THROW( i_rFrame.is(), "illegal frame" );
     const Reference < XModel2 > xModel( i_rDoc.GetModel(), UNO_QUERY_THROW );
 
-    ::rtl::OUStringBuffer sViewName;
-    sViewName.appendAscii( "view" );
-    sViewName.append( sal_Int32( i_nViewId ) );
-        // TODO: extend the SfxViewFactory with support for speaking view names
-
     // let the model create a new controller
     const Reference< XController2 > xController( xModel->createViewController(
-        sViewName.makeStringAndClear(),
+        i_rViewName,
         i_rViewFactoryArgs,
         i_rFrame
     ), UNO_SET_THROW );
@@ -2115,7 +2110,7 @@ void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const R
 }
 
 //--------------------------------------------------------------------
-SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell )
+SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const ::rtl::OUString& i_rViewName , SfxViewShell* i_pOldShell )
 {
     ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
     OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewSfxView_Impl: not allowed to be called with an exsiting view shell!" );
@@ -2128,7 +2123,7 @@ SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const USHORT i_nViewId, SfxView
         *GetObjectShell(),
         GetFrame()->GetFrameInterface(),
         aViewCreationArgs.getPropertyValues(),
-        i_nViewId
+        i_rViewName
     );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( xController.get() );
@@ -2204,36 +2199,6 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxViewFrame::Create_Impl( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
-{
-    SfxViewFrame* pViewFrame = NULL;
-    try
-    {
-        Reference< XController2 > xController = LoadDocument_Impl(
-            i_rDoc, i_rFrame.GetFrameInterface(), Sequence< PropertyValue >(), i_nViewId );
-        ENSURE_OR_THROW( xController.is(), "invalid controller returned by LoadDocument_Impl" );
-            // LoadDocument_Impl is expected to throw in case of a failure ...
-
-        if ( xController.is() )
-        {
-            pViewFrame = SfxViewFrame::Get( xController.get(), &i_rDoc );
-            if ( !pViewFrame )
-            {
-                OSL_ENSURE( false, "SfxViewFrame::Create_Impl: wrong controller implementation!" );
-                Reference< XComponent > xComponent( xController, UNO_QUERY_THROW );
-                xComponent->dispose();
-            }
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    return pViewFrame;
-}
-
-//--------------------------------------------------------------------
-
 sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 (
     sal_uInt16  nViewIdOrNo,    /*  > 0
@@ -2296,8 +2261,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
         // create and load new ViewShell
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
-        const sal_uInt16 nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
-        SfxViewShell* pNewSh = LoadNewSfxView_Impl( nViewId, pOldSh );
+        const sal_Int16 nViewNo = ( bIsIndex || !nViewIdOrNo ) ? nViewIdOrNo : rDocFact.GetViewNo_Impl( nViewIdOrNo, 0 );
+        const ::rtl::OUString sViewName( rDocFact.GetViewFactory( nViewNo ).GetViewName() );
+        SfxViewShell* pNewSh = LoadNewSfxView_Impl( sViewName, pOldSh );
 
         // allow resize events to be processed
         UnlockAdjustPosSizePixel();

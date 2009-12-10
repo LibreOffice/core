@@ -103,6 +103,7 @@ using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
+using ::com::sun::star::frame::XController2;
 /** === end UNO using === **/
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
@@ -518,9 +519,12 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
             if ( !sViewId.getLength() )
                 break;
 
-            sViewId = sViewId.copy( 4 );    // format is like in "view3"
-            nViewId = sal_Int16( sViewId.toInt32() );
-            io_rDescriptor.put( "ViewId", nViewId );
+            // somewhat weird convention here ... in the view data, the ViewId is a string, effectively describing
+            // a view name. In the document load descriptor, the ViewId is in fact the numeric ID.
+
+            SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
+            if ( pViewFactory )
+                io_rDescriptor.put( "ViewId", sal_Int16( pViewFactory->GetOrdinal() ) );
         }
         while ( false );
     }
@@ -660,12 +664,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         pTargetFrame->PrepareForDoc_Impl( *xDoc, aDescriptor );
 
         // ensure the ID of the to-be-created view is in the descriptor, if possible
-        sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
+        const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
+        const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
+        const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetViewName() );
 
         // plug the document into the frame
-        SfxViewFrame* pViewFrame = SfxViewFrame::Create_Impl( *pTargetFrame, *xDoc, nViewId );
-        if ( !pViewFrame )
-            throw RuntimeException();
+        Reference< XController2 > xController = SfxViewFrame::LoadDocument_Impl(
+            *xDoc, pTargetFrame->GetFrameInterface(), Sequence< PropertyValue >(), sViewName );
+        ENSURE_OR_THROW( xController.is(), "invalid controller" );
+            // this is expected to throw in case of a failure ...
 
         if ( !bExternalModel )
         {

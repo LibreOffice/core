@@ -322,7 +322,7 @@ String SfxObjectFactory::GetModuleName() const
 }
 
 
-sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback )
+sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const
 {
     for ( sal_uInt16 curViewNo = 0; curViewNo < GetViewFactoryCount(); ++curViewNo )
     {
@@ -331,4 +331,19 @@ sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const s
            return curViewNo;
     }
     return i_nFallback;
+}
+
+SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rViewName ) const
+{
+    SfxViewFactory* pViewFactory = NULL;
+    for (   USHORT nViewNo = 0;
+            nViewNo < GetViewFactoryCount();
+            ++nViewNo
+        )
+    {
+        SfxViewFactory& rViewFac( GetViewFactory( nViewNo ) );
+        if ( rViewFac.GetViewName() == i_rViewName )
+            return &rViewFac;
+    }
+    return NULL;
 }

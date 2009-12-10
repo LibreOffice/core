@@ -97,6 +97,9 @@ public:
     USHORT          GetViewFactoryCount() const;
     SfxViewFactory& GetViewFactory(USHORT i = 0) const;
 
+    /// returns the view factory whose GetViewName delivers the requested logical name
+    SfxViewFactory* GetViewFactoryByViewName( const String& i_rViewName ) const;
+
     // Filter
     const SfxFilter* GetTemplateFilter() const;
     static String   GetStandardTemplate( const String& rServiceName );
@@ -110,7 +113,7 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModule_Impl( SfxModule* );
     SAL_DLLPRIVATE static void UpdateFilterContainers_Impl();
-    SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback );
+    SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
 //#endif
 
 private:

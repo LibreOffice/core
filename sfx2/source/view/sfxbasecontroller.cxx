@@ -95,6 +95,7 @@
 #include <hash_map>
 
 #include <sfx2/event.hxx>
+#include "viewfac.hxx"
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
@@ -565,13 +566,18 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
 ::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !m_pData->m_pViewShell )
+    if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
         throw DisposedException();
 
-    ::rtl::OUStringBuffer sViewName;
-    sViewName.appendAscii( "view" );
-    sViewName.append( sal_Int32( GetViewFrame_Impl()->GetCurViewId() ) );
-    return sViewName.makeStringAndClear();
+    const SfxObjectFactory& rDocFac( m_pData->m_pViewShell->GetObjectShell()->GetFactory() );
+    sal_uInt16 nViewNo = rDocFac.GetViewNo_Impl( GetViewFrame_Impl()->GetCurViewId(), rDocFac.GetViewFactoryCount() );
+    OSL_ENSURE( nViewNo < rDocFac.GetViewFactoryCount(), "SfxBaseController::getViewControllerName: view ID not found in view factories!" );
+
+    ::rtl::OUString sViewName;
+    if ( nViewNo < rDocFac.GetViewFactoryCount() )
+        sViewName = rDocFac.GetViewFactory( nViewNo ).GetViewName();
+
+    return sViewName;
 }
 
 SfxViewFrame* SfxBaseController::GetViewFrame_Impl() const
