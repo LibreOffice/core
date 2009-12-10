@@ -832,7 +832,7 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     }
     if( bSetURL )
     {
-        GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+        GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
         XOBitmap aBMP( aGrafObj );
         SetBitmapValue( aBMP );
     }

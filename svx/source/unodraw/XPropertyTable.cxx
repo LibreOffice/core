@@ -718,7 +718,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
     if(!(rAny >>= aURL))
         return NULL;
 
-    GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+    GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
     XOBitmap aBMP( aGrafObj );
 
     const String aName( rName );

@@ -212,7 +212,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         OUString aURL;
         if( rValue >>= aURL )
         {
-            GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
             static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
             return true;
         }

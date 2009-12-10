@@ -63,9 +63,6 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDraw
 /** returns the SdrPage from the given StarOffice API wrapper */
 SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage ) throw() ;
 
-/** returns a GraphicObject for this URL */
-SVX_DLLPUBLIC GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
-
 /** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
     with that name
 */

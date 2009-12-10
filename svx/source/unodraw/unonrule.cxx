@@ -458,7 +458,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             OUString aURL;
             if( aVal >>= aURL )
             {
-                GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+                GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
                 SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
                 aFmt.SetGraphicBrush( &aBrushItem );
                 continue;

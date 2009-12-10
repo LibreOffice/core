@@ -34,11 +34,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xit.hxx>
-#ifndef SVX_LIGHT
-#ifndef _SFXDOCFILE_HXX
-#include <sfx2/docfile.hxx>
-#endif
-#endif
 #include "UnoNameItemTable.hxx"
 
 #include <svx/xbtmpit.hxx>
@@ -127,41 +122,4 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( Sdr
 {
     return *new SvxUnoBitmapTable(pModel);
 }
-#include <tools/stream.hxx>
-#include <unotools/localfilehelper.hxx>
 
-/** returns a GraphicObject for this URL */
-GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
-{
-    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
-
-    if( aURL.Search( aPrefix ) == 0 )
-    {
-        // graphic manager url
-        ByteString aUniqueID( String(rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 )), RTL_TEXTENCODING_UTF8 );
-        return GraphicObject( aUniqueID );
-    }
-    else
-    {
-        Graphic     aGraphic;
-
-#ifndef SVX_LIGHT
-        if ( aURL.Len() )
-        {
-            SfxMedium   aMedium( aURL, STREAM_READ, TRUE );
-            SvStream*   pStream = aMedium.GetInStream();
-
-            if( pStream )
-                GraphicConverter::Import( *pStream, aGraphic );
-        }
-#else
-        String aSystemPath( rURL );
-        utl::LocalFileHelper::ConvertURLToSystemPath( aSystemPath, aSystemPath );
-        SvFileStream aFile( aSystemPath, STREAM_READ );
-        GraphicConverter::Import( aFile, aGraphic );
-#endif
-
-
-        return GraphicObject( aGraphic );
-    }
-}
