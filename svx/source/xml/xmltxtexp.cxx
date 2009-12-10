@@ -244,7 +244,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {
         return uno::Reference< uno::XInterface >(
-            SvxCreateNumRule( (SdrModel*)NULL ), uno::UNO_QUERY );
+            SvxCreateNumRule(), uno::UNO_QUERY );
     }
     if (   (0 == aServiceSpecifier.reverseCompareToAsciiL(
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime")))

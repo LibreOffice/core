@@ -34,23 +34,12 @@
 #define PROPERTY_NONE 0
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase5.hxx>
-
-#include <svl/itempool.hxx>
-#include <goodies/grfmgr.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/graph.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <toolkit/unohlp.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -60,11 +49,9 @@
 #include <svx/numitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/unotext.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/numitem.hxx>
 #include "unofdesc.hxx"
 #include "unonrule.hxx"
-#include "unoapi.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::util::XCloneable;
@@ -111,52 +98,9 @@ unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
     return aSvxToUnoAdjust[eAdjust];
 }
 
-
-
 /******************************************************************
  * SvxUnoNumberingRules
  ******************************************************************/
-
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< XIndexReplace, XAnyCompare, XUnoTunnel, XCloneable, XServiceInfo >
-{
-private:
-    SvxNumRule maRule;
-public:
-    SvxUnoNumberingRules( const SvxNumRule& rRule ) throw();
-    virtual ~SvxUnoNumberingRules() throw();
-
-    UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
-
-    //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
-
-    //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(RuntimeException) ;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
-
-    //XElementAccess
-    virtual Type SAL_CALL getElementType() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw(RuntimeException);
-
-    // XAnyCompare
-    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException);
-
-    // XCloneable
-    virtual Reference< XCloneable > SAL_CALL createClone(  ) throw (RuntimeException);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
-
-    // intern
-    Sequence<beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
-    void setNumberingRuleByIndex( const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( RuntimeException, IllegalArgumentException );
-
-    static sal_Int16 Compare( const Any& rAny1, const Any& rAny2 );
-
-    const SvxNumRule& getNumRule() const { return maRule; }
-};
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
@@ -597,8 +541,7 @@ bool SvxGetNumRule( Reference< XIndexReplace > xRule, SvxNumRule& rNumRule )
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-Reference< XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
+com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
 {
     DBG_ASSERT( pRule, "No default SvxNumRule!" );
     if( pRule )
@@ -612,30 +555,6 @@ Reference< XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-
-Reference< XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
-{
-    SvxNumRule* pDefaultRule = NULL;
-    if( pModel )
-    {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
-        if( pItem )
-        {
-            pDefaultRule = pItem->GetNumRule();
-        }
-    }
-
-    if( pDefaultRule )
-    {
-        return SvxCreateNumRule( pDefaultRule );
-    }
-    else
-    {
-        SvxNumRule aTempRule( 0, 10, false );
-        return SvxCreateNumRule( &aTempRule );
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -689,4 +608,10 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
 Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
 {
     return new SvxUnoNumberingRulesCompare();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > SvxCreateNumRule() throw()
+{
+    SvxNumRule aTempRule( 0, 10, false );
+    return SvxCreateNumRule( &aTempRule );
 }

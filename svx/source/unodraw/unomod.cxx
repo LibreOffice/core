@@ -751,5 +751,30 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
+#include <unonrule.hxx>
+com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+{
+    SvxNumRule* pDefaultRule = NULL;
+    if( pModel )
+    {
+        SvxNumBulletItem* pItem = (SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        if( pItem )
+        {
+            pDefaultRule = pItem->GetNumRule();
+        }
+    }
+
+    if( pDefaultRule )
+    {
+        return SvxCreateNumRule( pDefaultRule );
+    }
+    else
+    {
+        SvxNumRule aTempRule( 0, 10, false );
+        return SvxCreateNumRule( &aTempRule );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
 
 #endif
