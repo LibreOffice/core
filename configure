@@ -11185,7 +11185,6 @@ $as_echo "$as_me: WARNING: using stlport. Warning, breaks your ABI compatability
          echo "using stlport. Warning, breaks your ABI compatability!" >>warn
       fi
    fi
-fi
 
 if test -z "$STLPORT4"; then
   STLPORT4="NO_STLPORT4"
