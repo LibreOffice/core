@@ -2978,7 +2978,7 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (ecj)])
         #TODO: what's to do here? some switch to do 1.5 compiling?
         JAVAFLAGS="-source 1.5 -target 1.5"
-        _gij_longver="50000"
+        _gij_longver="40200"
     fi
 fi
 
@@ -3033,7 +3033,7 @@ fi
 if test "$SOLAR_JAVA" != ""; then
     dnl first check if we have been asked to autodetect JAVA_HOME with a recent gij
     if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
-      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "50000"; then
+      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
         cat > findhome.java <<_ACEOF
 [import java.io.File;
 
@@ -3073,7 +3073,7 @@ _ACEOF
     fi
 
     dnl second sanity check JAVA_HOME if possible
-    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "50000"; then
+    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
@@ -3853,25 +3853,14 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         ], []
     )
     AC_MSG_CHECKING([whether db is at least 4.1])
-    for v in `seq 1 7`; do
-       AC_TRY_RUN([
+    AC_TRY_RUN([
 #include <db.h>
 
 int main(int argc, char **argv) {
-       if(DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == $v) return 0;
+       if(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)) return 0;
        else return 1;
 }
-       ], [DB_VERSION_MINOR=$v], [])
-    done
-    if test "$DB_VERSION_MINOR" -gt "1"; then
-       AC_MSG_RESULT([OK])
-       DB_VERSION=4.$DB_VERSION_MINOR
-    else
-       AC_MSG_ERROR([no. you need at least db 4.1])
-    fi
-    # does not work :/
-    #AC_CHECK_LIB(db, db_create, [],
-    #  [AC_MSG_ERROR([db library not installed or functional])], [])
+    ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
     AC_HAVE_LIBRARY(db, [],
       [AC_MSG_ERROR([db not installed or functional])], [])
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
@@ -5938,37 +5927,74 @@ AC_SUBST(LIBSERIALIZER_JAR)
 if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
   AC_MSG_CHECKING([which Apache commons-* libs to use])
   if test "$with_system_apache_commons" = "yes"; then
-       SYSTEM_APACHE_COMMONS=YES
-       AC_MSG_RESULT([external])
+    SYSTEM_APACHE_COMMONS=YES
+    AC_MSG_RESULT([external])
     if test "$ENABLE_MEDIAWIKI" = "YES"; then
-        if test -z "$COMMONS_CODEC_JAR"; then
-                COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
-        fi
-   AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
-        [AC_MSG_ERROR(commons-codec.jar not found.)], [])
-        if test -z "$COMMONS_LANG_JAR"; then
-                COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
-        fi
-   AC_CHECK_FILE($COMMONS_LANG_JAR, [],
-        [AC_MSG_ERROR(commons-lang.jar not found.)], [])
-        if test -z "$COMMONS_HTTPCLIENT_JAR"; then
-                COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
-        fi
-   AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
-        [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+      if test -z $COMMONS_CODEC_JAR; then
+        AC_CHECK_FILE(/usr/share/java/commons-codec-1.3.jar, 
+          [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
+              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar ],
+              [AC_MSG_ERROR(commons-codec.jar replacement not found.)]
+            )
+          ]
+        )
+      else
+        AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
+             [AC_MSG_ERROR(commons-codec.jar not found.)], [])
+      fi
+
+      if test -z $COMMONS_LANG_JAR; then
+        AC_CHECK_FILE(/usr/share/java/commons-lang-2.3.jar, 
+          [ COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/commons-lang.jar, 
+              [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
+              [AC_MSG_ERROR(commons-lang.jar replacement not found.)]
+            )
+          ]
+        )
+      else
+        AC_CHECK_FILE($COMMONS_LANG_JAR, [],
+             [AC_MSG_ERROR(commons-lang.jar not found.)], [])
+      fi
+
+      if test -z $COMMONS_HTTPCLIENT_JAR; then
+        AC_CHECK_FILE(/usr/share/java/commons-httpclient-3.1.jar, 
+          [ COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/commons-httpclient.jar, 
+              [ COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient.jar ],
+              [AC_MSG_ERROR(commons-httpclient.jar replacement not found.)]
+            )
+          ]
+        )
+      else
+        AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
+             [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+      fi
     fi
     if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
-        if test -z "$COMMONS_LOGGING_JAR"; then
-                COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
-        fi
-   AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
-        [AC_MSG_ERROR(commons-logging.jar not found.)], [])
-
+      if test -z $COMMONS_LOGGING_JAR; then
+        AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar, 
+          [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/commons-logging.jar, 
+              [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
+              [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
+            )
+          ]
+        )
+      else
+        AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+             [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+      fi
     fi
   else
-        AC_MSG_RESULT([internal])
-        SYSTEM_APACHE_COMMONS=NO
-        BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
+    AC_MSG_RESULT([internal])
+    SYSTEM_APACHE_COMMONS=NO
+    BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
   fi
 fi
 AC_SUBST(SYSTEM_APACHE_COMMONS)
