@@ -1921,6 +1921,9 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const = 0;
         virtual Reference< XInputStream >   getBinaryStream() const = 0;
         virtual Reference< XInputStream >   getCharacterStream() const = 0;
+        virtual Reference< XClob >          getClob() const = 0;
+        virtual Reference< XBlob >          getBlob() const = 0;
+        virtual Any                         getObject() const = 0;
         virtual sal_Bool                    wasNull() const = 0;
 
         virtual ~IValueSource() { }
@@ -1950,6 +1953,9 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xRow->getBytes( m_nPos ); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xRow->getBinaryStream( m_nPos ); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
+        virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
+        virtual Reference< XBlob >          getBlob() const             { return m_xRow->getBlob( m_nPos ); };
+        virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos ,NULL); };
         virtual sal_Bool                    wasNull() const             { return m_xRow->wasNull( ); };
 
     private:
@@ -1980,6 +1986,9 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xColumn->getBytes(); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xColumn->getBinaryStream(); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xColumn->getCharacterStream(); };
+        virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
+        virtual Reference< XBlob >          getBlob() const             { return m_xColumn->getBlob(); };
+        virtual Any                         getObject() const           { return m_xColumn->getObject(NULL); };
         virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull( ); };
 
     private:
@@ -2075,23 +2084,15 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const
             (*this) = _rValueSource.getLong();
         break;
     case DataType::CLOB:
-<<<<<<< local
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getClob(_nPos));
-=======
-        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getCharacterStream());
->>>>>>> other
+        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getClob());
         setTypeKind(DataType::CLOB);
         break;
     case DataType::BLOB:
-<<<<<<< local
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getBlob(_nPos));
-=======
-        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getBinaryStream());
->>>>>>> other
+        (*this) = ::com::sun::star::uno::makeAny(_rValueSource.getBlob());
         setTypeKind(DataType::BLOB);
         break;
     case DataType::OTHER:
-        (*this) = _xRow->getObject(_nPos,NULL);
+        (*this) = _rValueSource.getObject();
         setTypeKind(DataType::OTHER);
         break;
     default:
