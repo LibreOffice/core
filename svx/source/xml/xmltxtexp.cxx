@@ -61,7 +61,6 @@
 
 #include <cppuhelper/implbase4.hxx>
 #include <svx/unofield.hxx>
-#include <svx/unomod.hxx>
 #include "unonrule.hxx"
 
 using namespace com::sun::star;
@@ -256,7 +255,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
-    return SvxUnoDrawMSFactory::createTextField( aServiceSpecifier );
+    return SvxUnoTextCreateTextField( aServiceSpecifier );
 
 }
 

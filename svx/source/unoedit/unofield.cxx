@@ -1118,4 +1118,66 @@ sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName 
     return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference< uno::XInterface > xRet;
 
+    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
+
+    // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
+    // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
+    const OUString aTextFieldPrexit2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
+
+    if( (ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0) ||
+        (ServiceSpecifier.compareTo( aTextFieldPrexit2, aTextFieldPrexit2.getLength() ) == 0) )
+    {
+        OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
+
+        sal_Int32 nId = ID_UNKNOWN;
+
+        if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
+        {
+            nId = ID_DATEFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+        {
+            nId = ID_URLFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
+        {
+            nId = ID_PAGEFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
+        {
+            nId = ID_PAGESFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
+        {
+            nId = ID_TABLEFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
+        {
+            nId = ID_EXT_FILEFIELD;
+        }
+        else if (aFieldType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("docinfo.Title") ) ||
+                 aFieldType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
+        {
+            nId = ID_FILEFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
+        {
+            nId = ID_AUTHORFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Measure") ) )
+        {
+            nId = ID_MEASUREFIELD;
+        }
+
+        if( nId != ID_UNKNOWN )
+            xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
+    }
+
+    return xRet;
+}
