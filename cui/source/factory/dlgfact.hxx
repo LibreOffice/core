@@ -66,6 +66,8 @@ class SvPasteObjectDialog;
 class SvBaseLinksDlg;
 class SvxTransformTabDialog;
 class SvxCaptionTabDialog;
+class SvxThesaurusDialog;
+class SvxHyphenWordDialog;
 
 namespace svx{
 class HangulHanjaConversionDialog;
@@ -184,7 +186,22 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual String  GetCurrentSuggestion( ) const;
 };
 
-// for HangulHanjaConversionDialog end
+class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
+{
+    DECL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl,SvxThesaurusDialog)
+    virtual String      GetWord();
+    virtual sal_uInt16  GetLanguage() const;
+    virtual Window*     GetWindow();
+};
+
+
+class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
+{
+    DECL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl,SvxHyphenWordDialog)
+    virtual void    SelLeft();
+    virtual void    SelRight();
+    virtual Window* GetWindow();
+};
 
 // for FmShowColsDialog begin
 class FmShowColsDialog;
@@ -633,6 +650,13 @@ public:
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
                                             HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                                                const String &rWord, sal_Int16 nLanguage );
+
+    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
+                                                const String &rWord, LanguageType nLang,
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                SvxSpellWrapper* pWrapper );
 
    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent );  //add for FmShowColsDialog
    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
