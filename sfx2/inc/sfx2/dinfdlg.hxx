@@ -44,9 +44,9 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svtools/headbar.hxx>
-#include <unotools/syslocale.hxx>
-#include <svl/zforlist.hxx>
-
+#include <svtools/syslocale.hxx>
+#include <svtools/zforlist.hxx>
+#include <com/sun/star/util/Duration.hpp>
 #include "tabdlg.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -358,6 +358,55 @@ public:
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
+class CustomPropertiesDateField : public DateField
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesDateField(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            DateField( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+class CustomPropertiesTimeField : public TimeField
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesTimeField(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            TimeField( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+class CustomPropertiesDurationField : public Edit
+{
+    CustomPropertyLine*             m_pLine;
+    com::sun::star::util::Duration  m_aDuration;
+protected:
+    virtual void    RequestHelp(const HelpEvent& rEvt);
+public:
+    CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    ~CustomPropertiesDurationField();
+
+    void SetDuration( const com::sun::star::util::Duration& rDuration );
+    const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
+};
+
+class CustomPropertiesEditButton : public PushButton
+{
+    CustomPropertyLine*             m_pLine;
+
+public:
+    CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    ~CustomPropertiesEditButton();
+
+    DECL_LINK(ClickHdl, PushButton*);
+};
+
 class CustomPropertiesRemoveButton : public ImageButton
 {
 private:
@@ -394,8 +443,17 @@ struct CustomPropertyLine
     ComboBox                        m_aNameBox;
     CustomPropertiesTypeBox         m_aTypeBox;
     CustomPropertiesEdit            m_aValueEdit;
+    CustomPropertiesDateField       m_aDateField;
+    CustomPropertiesTimeField       m_aTimeField;
+    const String                    m_sDurationFormat;
+    CustomPropertiesDurationField   m_aDurationField;
+    CustomPropertiesEditButton     m_aEditButton;
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
+
+    Point                           m_aDatePos;
+    Point                           m_aTimePos;
+    Size                            m_aDateTimeSize;
 
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
@@ -413,6 +471,10 @@ private:
     ComboBox                            m_aNameBox;
     ListBox                             m_aTypeBox;
     Edit                                m_aValueEdit;
+    DateField                           m_aDateField;
+    TimeField                           m_aTimeField;
+    Edit                                m_aDurationField;
+    PushButton                          m_aEditButton;
     CustomPropertiesYesNoButton         m_aYesNoButton;
     ImageButton                         m_aRemoveButton;
 
@@ -430,6 +492,8 @@ private:
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
     DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
+    //add lose focus handlers of Date/TimeField?
+
     DECL_LINK(  EditTimeoutHdl, Timer* );
     DECL_LINK(  BoxTimeoutHdl, Timer* );
 
