@@ -41,9 +41,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
 #endif
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
-#endif
+#include "propctrlr.hrc"
 #include "formmetadata.hxx"
 
 /** === begin UNO includes === **/

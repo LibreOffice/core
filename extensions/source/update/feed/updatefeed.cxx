@@ -96,14 +96,16 @@ public:
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
         {
             sal_Int32 n = m_xStream->readBytes(aData, nBytesToRead);
-            OSL_TRACE( "\n %s", aData.get()->elements );
+            if ( n )
+                OSL_TRACE( "Read [%d] bytes: %s\n", n, aData.get()->elements );
             return n;
         };
     virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
         {
             sal_Int32 n = m_xStream->readSomeBytes(aData, nMaxBytesToRead);
-            OSL_TRACE( "\n %s", aData.get()->elements );
+            if ( n )
+                OSL_TRACE( "Read [%d] bytes: %s\n", n, aData.get()->elements );
             return n;
         };
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )

@@ -1370,6 +1370,16 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         uno::Reference< io::XSeekable > xTempSeek( xTempInStream, uno::UNO_QUERY_THROW );
 
+        try
+        {
+            xTempSeek->seek( 0 );
+        }
+        catch( uno::Exception& r )
+        {
+            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Temporary file should be seekable!" ) ),
+                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+        }
+
         // switch to the new temporary stream only after the transfer
         PostinitializationGuard aPostInitGuard( xTempInStream, *this );
 
@@ -1381,8 +1391,6 @@ void SAL_CALL ZipPackage::commitChanges()
             // preparation for copy step
             try
             {
-                xTempSeek->seek( 0 );
-
                 xOutputStream = m_xStream->getOutputStream();
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
                 if ( !xTruncate.is() )

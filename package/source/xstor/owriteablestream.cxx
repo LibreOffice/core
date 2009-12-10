@@ -592,18 +592,21 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             if ( aData.getLength() > nRead )
                 aData.realloc( nRead );
 
-            if ( nRead && nRead <= MAX_STORCACHE_SIZE )
+            if ( nRead <= MAX_STORCACHE_SIZE )
             {
                 uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
                 OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
 
-                uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
-                xOutStream->writeBytes( aData );
+                if ( nRead )
+                {
+                    uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
+                    xOutStream->writeBytes( aData );
+                }
                 m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
                 m_xCacheStream = xCacheStream;
                 m_xCacheSeek->seek( 0 );
             }
-            else if ( nRead && !m_aTempURL.getLength() )
+            else if ( !m_aTempURL.getLength() )
             {
                 m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
