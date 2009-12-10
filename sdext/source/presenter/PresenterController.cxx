@@ -1004,12 +1004,21 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
 
         case awt::Key::LEFT:
         case awt::Key::PAGEUP:
+            if (mxSlideShowController.is())
+            {
+                if (rEvent.Modifiers == awt::KeyModifier::MOD2)
+                    mxSlideShowController->gotoPreviousSlide();
+                else
+                    mxSlideShowController->gotoPreviousEffect();
+            }
+            break;
+
         case awt::Key::UP:
         case awt::Key::P:
         case awt::Key::BACKSPACE:
             if (mxSlideShowController.is())
             {
-                mxSlideShowController->gotoPreviousSlide();
+                mxSlideShowController->gotoPreviousEffect();
             }
             break;
 
