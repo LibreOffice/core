@@ -46,6 +46,7 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <svx/svdpool.hxx>
 
 #include <svx/charscaleitem.hxx>
 #include <svx/algitem.hxx>
@@ -273,7 +274,7 @@ namespace
     {
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE)->getPropertyMap();
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
         PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
@@ -296,7 +297,7 @@ namespace
     {
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE)->getPropertyMap();
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
         PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
