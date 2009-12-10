@@ -522,9 +522,10 @@ private:
 #define STYLE_SYMBOLS_HICONTRAST    ((ULONG)2)
 #define STYLE_SYMBOLS_INDUSTRIAL    ((ULONG)3)
 #define STYLE_SYMBOLS_CRYSTAL       ((ULONG)4)
-#define STYLE_SYMBOLS_TANGO     ((ULONG)5)
-#define STYLE_SYMBOLS_CLASSIC       ((ULONG)6)
-#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)6)
+#define STYLE_SYMBOLS_TANGO         ((ULONG)5)
+#define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
+#define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
+#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -948,6 +949,8 @@ public:
     void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
     ULONG                           GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
+    // check whether the symbols style is supported (icons are installed)
+    bool                            CheckSymbolStyle( ULONG nStyle ) const;
     ULONG                           GetAutoSymbolsStyle() const;
 
     ULONG                           GetCurrentSymbolsStyle() const;
