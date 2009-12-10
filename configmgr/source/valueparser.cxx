@@ -95,7 +95,15 @@ bool parseValue(Span const & text, sal_Bool * value) {
 
 bool parseValue(Span const & text, sal_Int16 * value) {
     OSL_ASSERT(text.is() && value != 0);
-    sal_Int32 n = rtl::OString(text.begin, text.length).toInt32();
+    // For backwards compatibility, support hexadecimal values:
+    sal_Int32 n =
+        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            RTL_CONSTASCII_LENGTH("0X")) == 0 ?
+        rtl::OString(
+            text.begin + RTL_CONSTASCII_LENGTH("0X"),
+            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
+        rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
@@ -106,14 +114,30 @@ bool parseValue(Span const & text, sal_Int16 * value) {
 
 bool parseValue(Span const & text, sal_Int32 * value) {
     OSL_ASSERT(text.is() && value != 0);
-    *value = rtl::OString(text.begin, text.length).toInt32();
+    // For backwards compatibility, support hexadecimal values:
+    *value =
+        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            RTL_CONSTASCII_LENGTH("0X")) == 0 ?
+        rtl::OString(
+            text.begin + RTL_CONSTASCII_LENGTH("0X"),
+            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
+        rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
 
 bool parseValue(Span const & text, sal_Int64 * value) {
     OSL_ASSERT(text.is() && value != 0);
-    *value = rtl::OString(text.begin, text.length).toInt64();
+    // For backwards compatibility, support hexadecimal values:
+    *value =
+        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            RTL_CONSTASCII_LENGTH("0X")) == 0 ?
+        rtl::OString(
+            text.begin + RTL_CONSTASCII_LENGTH("0X"),
+            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt64(16) :
+        rtl::OString(text.begin, text.length).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
