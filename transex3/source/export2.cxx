@@ -42,6 +42,7 @@
 #include <iomanip>
 #include <tools/urlobj.hxx>
 #include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 //
@@ -93,7 +94,7 @@ ResData::~ResData()
 /*****************************************************************************/
 ByteString Export::sLanguages;
 ByteString Export::sForcedLanguages;
-ByteString Export::sIsoCode99;
+//ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
 void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
@@ -646,6 +647,16 @@ int Export::getCurrentDirectory( rtl::OUString& base_fqurl_out, rtl::OUString& b
     aDir.ToAbs();
     base_out = rtl::OUString( aDir.GetFull() );
     return osl::File::getFileURLFromSystemPath( base_out , base_fqurl_out );
+}
+
+void Export::getCurrentDir( string& dir )
+{
+    char buffer[64000];
+    if( getcwd( buffer , sizeof( buffer ) ) == 0 ){
+        cerr << "Error: getcwd failed!\n";
+        exit( -1 );
+    }
+    dir = string( buffer );
 }
 
 
