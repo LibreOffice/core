@@ -58,7 +58,7 @@
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
-
+#include <svtools/langtab.hxx>
 
 // #104122#
 #include <svx/frmdiritem.hxx>
@@ -1385,7 +1385,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
 IMPL_LINK( FuText, SpellError, void *, nLang )
 {
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;

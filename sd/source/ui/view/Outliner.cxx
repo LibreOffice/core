@@ -61,7 +61,7 @@
 #include <svx/editeng.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <svtools/langtab.hxx>
 #include "strings.hrc"
 #include "sdstring.hrc"
 #include "eetext.hxx"
@@ -1395,7 +1395,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
