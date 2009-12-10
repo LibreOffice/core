@@ -55,7 +55,7 @@
 #include <svx/langitem.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/unolingu.hxx>
-#include <svx/thesdlg.hxx>
+#include <svx/svxdlg.hxx>
 #include <svx/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
@@ -600,7 +600,7 @@ void SwView::StartThesaurus()
         pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
-    SvxThesaurusDialog *pDlg = NULL;
+    AbstractThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
     {
@@ -611,7 +611,8 @@ void SwView::StartThesaurus()
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), sal_True );
-            pDlg = new SvxThesaurusDialog( &GetEditWin(),
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            pDlg = pFact->CreateThesaurusDialog( &GetEditWin(),
                                            xThes, aTmp, eLang );
         }
 
@@ -637,12 +638,12 @@ void SwView::StartThesaurus()
             else
                 aWinTop.Y() = aBtmPos.Y();
 
-            Size aSz = pDlg->GetSizePixel();
+            Size aSz = pDlg->GetWindow()->GetSizePixel();
             if ( aWinBtm.Y() - aWinTop.Y() > aSz.Height() )
             {
                 aWinTop.X() = ( aWinTop.X() + aWinBtm.X() - aSz.Width() ) / 2;
                 aWinTop.Y() = ( aWinTop.Y() + aWinBtm.Y() - aSz.Height() ) / 2;
-                pDlg->SetPosPixel( aWinTop );
+                pDlg->GetWindow()->SetPosPixel( aWinTop );
             }
         }
 
