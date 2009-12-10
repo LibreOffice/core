@@ -89,7 +89,7 @@ const rtl::OUString UCBDeadPropertyValue::aXMLEnd
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
     int parent,
-    const char *nspace,
+    const char * /*nspace*/,
     const char *name,
     const char ** )
 {
