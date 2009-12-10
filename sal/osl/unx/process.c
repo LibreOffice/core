@@ -467,6 +467,9 @@ static void ChildStatusProc(void *pData)
     if ( (status == 0) && ((pid = fork()) == 0) )
     {
         /* Child */
+        int chstatus = 0;
+        sal_Int32 nWrote;
+
         if (channel[0] != -1) close(channel[0]);
 
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
@@ -482,7 +485,6 @@ static void ChildStatusProc(void *pData)
 #endif
         }
 
-          int chstatus = 0;
           if (data.m_pszDir)
               chstatus = chdir(data.m_pszDir);
 
@@ -534,7 +536,7 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        sal_Int32 nWrote = write(channel[1], &errno, sizeof(errno));
+        nWrote = write(channel[1], &errno, sizeof(errno));
         if (nWrote != sizeof(errno))
             OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
