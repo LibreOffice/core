@@ -38,7 +38,7 @@
 #include <svx/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 

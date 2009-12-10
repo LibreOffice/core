@@ -41,7 +41,7 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/flstitem.hxx>
 #include <svl/eitem.hxx>

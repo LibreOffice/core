@@ -33,7 +33,7 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>

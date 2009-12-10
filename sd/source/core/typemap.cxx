@@ -48,7 +48,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/protitem.hxx>
 #include <svx/chrtitem.hxx>
-
+#include <sfx2/msg.hxx>
 #include <svl/globalnameitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postattr.hxx>
@@ -56,7 +56,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/algitem.hxx>

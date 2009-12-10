@@ -49,7 +49,7 @@
 #include <svx/akrnitem.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lspcitem.hxx>

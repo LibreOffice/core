@@ -69,7 +69,7 @@
 #include <svx/outlobj.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/editobj.hxx>
 #include "fubullet.hxx"
 #include "optsitem.hxx"

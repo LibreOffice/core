@@ -35,7 +35,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <sfx2/app.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
 #ifndef _SO_CLSIDS_HXX //autogen

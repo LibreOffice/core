@@ -45,7 +45,7 @@
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #ifdef _OUTLINER_HXX
 #include <svx/outliner.hxx>

@@ -37,7 +37,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include "fupoor.hxx"
