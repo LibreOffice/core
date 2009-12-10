@@ -2370,7 +2370,7 @@ void SfxMedium::GetMedium_Impl()
                 TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
                 comphelper::MediaDescriptor aMedium( xProps );
 
-                if ( pImp->m_xLockingStream.is() && !bFromTemplate )
+                if ( pImp->m_xLockingStream.is() && !bFromTempFile )
                 {
                     // the medium is not based on the temporary file, so the original stream can be used
                     pImp->xStream = pImp->m_xLockingStream;

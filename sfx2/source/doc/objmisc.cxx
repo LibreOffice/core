@@ -2538,12 +2538,20 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-        ::rtl::OUString aFileURL =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+#ifdef WNT
+        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+#else
+        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}" ) );
+#endif
+
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-        ::rtl::OUString aBuildID =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+#ifdef WNT
+        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+#else
+        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setuprc:buildid}" ) );
+#endif
+
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( aFileURL.getLength() )
