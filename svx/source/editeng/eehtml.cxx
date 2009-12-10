@@ -52,7 +52,7 @@
 #define STYLE_PRE               101
 
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
-    : SfxHTMLParser( rIn, true )
+    : HTMLParser( rIn, true )
     , aBaseURL( rBaseURL )
 {
     pImpEditEngine = 0;

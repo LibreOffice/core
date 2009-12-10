@@ -34,7 +34,7 @@
 #include <svl/svarray.hxx>
 
 #include <editdoc.hxx>
-#include <sfx2/sfxhtml.hxx>
+#include <svtools/parhtml.hxx>
 
 class ImpEditEngine;
 
@@ -46,9 +46,7 @@ struct AnchorInfo
     String  aText;
 };
 
-#ifndef SVX_LIGHT
-
-class EditHTMLParser : public SfxHTMLParser
+class EditHTMLParser : public HTMLParser
 {
     using HTMLParser::CallParser;
 private:
@@ -99,7 +97,5 @@ public:
 
 SV_DECL_REF( EditHTMLParser )
 SV_IMPL_REF( EditHTMLParser );
-
-#endif
 
 #endif // _EEHTML_HXX

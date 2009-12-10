@@ -357,40 +357,6 @@ IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
     return 0;
 }
 
-rtl_TextEncoding SfxHTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader )
-{
-    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
-    if( pHTTPHeader )
-    {
-        SvKeyValue aKV;
-        for( BOOL bCont = pHTTPHeader->GetFirst( aKV ); bCont;
-             bCont = pHTTPHeader->GetNext( aKV ) )
-        {
-            if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
-            {
-                if( aKV.GetValue().Len() )
-                {
-                    eRet = SfxHTMLParser::GetEncodingByMIME( aKV.GetValue() );
-                }
-            }
-        }
-    }
-    return eRet;
-}
-
-BOOL SfxHTMLParser::SetEncodingByHTTPHeader(
-                                SvKeyValueIterator *pHTTPHeader )
-{
-    BOOL bRet = FALSE;
-    rtl_TextEncoding eEnc = SfxHTMLParser::GetEncodingByHttpHeader( pHTTPHeader );
-    if(RTL_TEXTENCODING_DONTKNOW != eEnc)
-    {
-        SetSrcEncoding( eEnc );
-        bRet = TRUE;
-    }
-    return bRet;
-}
-
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
 {
     aScriptType = DEFINE_CONST_UNICODE(SVX_MACRO_LANGUAGE_JAVASCRIPT);
