@@ -73,6 +73,7 @@
 #include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include "treeopt.hxx"
+#include <svtools/langtab.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -927,7 +928,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
             sTitle = m_sTitleSpellingGrammar;
         }
     }
-    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", ::GetLanguageString(nLang) );
+    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
     SetText( sTitle );
 }
 /*-------------------------------------------------------------------------
