@@ -95,6 +95,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "about.hxx"
@@ -841,6 +842,42 @@ namespace
         }
         return pView;
     }
+    Reference< XFrame > lcl_findStartModuleFrame( const ::comphelper::ComponentContext& i_rContext )
+    {
+        try
+        {
+            Reference < XFramesSupplier > xSupplier( i_rContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+            Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
+
+            Reference< XModuleManager > xCheck( i_rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+
+            sal_Int32 nCount = xContainer->getCount();
+            for ( sal_Int32 i=0; i<nCount; ++i )
+            {
+                try
+                {
+                    Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
+                    ::rtl::OUString sModule = xCheck->identify( xFrame );
+                    if ( sModule.equalsAscii( "com.sun.star.frame.StartModule" ) )
+                        return xFrame;
+                }
+                catch( const UnknownModuleException& )
+                {
+                    // silence
+                }
+                catch(const Exception&)
+                {
+                    // re-throw, caught below
+                    throw;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+               DBG_UNHANDLED_EXCEPTION();
+        }
+        return NULL;
+    }
 }
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
@@ -942,8 +979,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
                     aLoadArgs.put( "URL", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sbasic" ) ) );
 
-                    SfxFrame* pFrame = SfxFrame::CreateBlank();
-                    ENSURE_OR_THROW( pFrame, "could not create a blank SfxFrame" );
+                    Reference< XFrame > xStartModuleFrame( lcl_findStartModuleFrame( aContext ) );
+                    SfxFrame* pFrame = xStartModuleFrame.is() ? SfxFrame::Create( xStartModuleFrame ) : SfxFrame::CreateBlank();
+                    ENSURE_OR_THROW( pFrame, "could not create a SfxFrame to load the Basic IDE into!" );
 
                     xLoader->load( aLoadArgs.getPropertyValues(), pFrame->GetFrameInterface() );
                 }
