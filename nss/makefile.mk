@@ -57,7 +57,6 @@ BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
 
-
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(BUILD64)"=="1"
@@ -81,6 +80,10 @@ OUT2LIB=dist$/out$/lib$/*$(DLLPOST)
 
 BUILD_DIR=security$/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all
+#See #i105566# && moz#513024#
+.IF "$(OS)"=="LINUX"
+BUILD_ACTION+=FREEBL_NO_DEPEND=1
+.ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"
 
