@@ -50,3 +50,4 @@ CFLAGSOPT=   					# no optimizing for non products
 
 # platform specific identifier for shared libs
 DLLPOSTFIX=fx
+BUILD64=1

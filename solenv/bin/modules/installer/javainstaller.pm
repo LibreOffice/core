@@ -461,7 +461,6 @@ sub set_classpath_for_install_sdk
     else { installer::exiter::exit_program("ERROR: Environment variable \"INPATH\" not set!", "set_classpath_for_install_sdk"); }
 
     if ( defined( $ENV{ 'UPDMINOREXT' } ) ) { $updMinorExt =  $ENV{'UPDMINOREXT'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable \"UPDMINOREXT\" not set!", "set_classpath_for_install_sdk") if ( ! $ENV{UPDATER} ); }
 
     $installsdk = $solarVersion .  $installer::globals::separator . $inPath . $installer::globals::separator . "bin" . $updMinorExt;
     $installsdk = $installsdk . $installer::globals::separator . "javainstaller";
