@@ -169,6 +169,7 @@ ShellResource::ShellResource()
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
+    sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
 
     aTOXIndexName(          SW_RES(STR_TOI)),
     aTOXUserName(           SW_RES(STR_TOU)),
