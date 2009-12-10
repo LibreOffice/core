@@ -408,7 +408,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         if ( pItem->GetGraphicLink() )
             sGrfName = *pItem->GetGraphicLink();
         ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
-        const Graphic *pGrf = pItem->GetGraphic( rView.GetDocShell() );
+        const Graphic *pGrf = pItem->GetGraphic();
         if ( pGrf )
         {
             aGraphic = *pGrf;

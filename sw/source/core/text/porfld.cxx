@@ -828,7 +828,7 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
 
 // --> OD 2008-01-23 #newlistlevelattrs#
 SwGrfNumPortion::SwGrfNumPortion(
-        SwFrm *pFrm,
+        SwFrm*,
         const XubString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
@@ -845,8 +845,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     if( pGrfBrush )
     {
         *pBrush = *pGrfBrush;
-        SwDocShell *pSh = pFrm->GetShell()->GetDoc()->GetDocShell();
-        const Graphic* pGraph = pGrfBrush->GetGraphic( pSh );
+        const Graphic* pGraph = pGrfBrush->GetGraphic();
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );
         else

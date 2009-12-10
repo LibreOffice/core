@@ -1639,8 +1639,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 
     //Hier kein Link, wir wollen die Grafik synchron laden!
     ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
-    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject(
-                                                    GETOBJSHELL() );
+    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
     /// OD 17.10.2002 #103876# - outsourcing drawing of background with a background color.
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
@@ -1687,7 +1686,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                 ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
             SfxObjectShell &rObjSh = *GETOBJSHELL();
-            const Graphic* pGrf = pBrush->GetGraphic( &rObjSh );
+            const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
             {
                 ePos = pBrush->GetGraphicPos();
@@ -1767,7 +1766,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             // OD 17.10.2002 #103876# - draw background of tiled graphic
             // before drawing tiled graphic in loop
             // determine graphic object
-            GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject( GETOBJSHELL() ));
+            GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject());
             // calculate aligned paint rectangle
             SwRect aAlignedPaintRect = rOut;
             ::SwAlignRect( aAlignedPaintRect, &rSh );
@@ -1857,8 +1856,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
              (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
            )
         {
-            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject(
-                                                    GETOBJSHELL() );
+            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject();
             if ( bConsiderBackgroundTransparency )
             {
                 GraphicAttr pGrfAttr = pGrf->GetAttr();
