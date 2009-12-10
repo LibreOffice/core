@@ -285,9 +285,13 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewI
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
+        ::rtl::OUString sLoaderURL( rDoc.GetModel()->getURL() );
+        if ( sLoaderURL.getLength() == 0 )
+            sLoaderURL = rDoc.GetFactory().GetFactoryURL();
+
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
-            rDoc.GetModel()->getURL(),
+            sLoaderURL,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
             0,
             aLoadArgs

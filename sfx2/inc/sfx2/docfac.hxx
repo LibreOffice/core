@@ -85,6 +85,7 @@ public:
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
     const char*     GetShortName() const { return pShortName; }
+    String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
     String          GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
     String          GetModuleName() const;
     void            SetDocumentTypeNameResource( const ResId& rId );

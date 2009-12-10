@@ -2107,12 +2107,7 @@ void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const R
 
     ::rtl::OUString sURL( xDocument->getURL() );
     if ( !sURL.getLength() )
-    {
-        ::rtl::OUStringBuffer aURLComposer;
-        aURLComposer.appendAscii( "private:factory/" );
-        aURLComposer.appendAscii( i_rDoc.GetFactory().GetShortName() );
-        sURL = aURLComposer.makeStringAndClear();
-    }
+        sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
     xLoader->loadComponentFromURL( sURL, ::rtl::OUString::createFromAscii( "_self" ), 0,

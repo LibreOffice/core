@@ -287,6 +287,14 @@ const SvGlobalName& SfxObjectFactory::GetClassId() const
     return pImpl->aClassName;
 }
 
+String SfxObjectFactory::GetFactoryURL() const
+{
+    ::rtl::OUStringBuffer aURLComposer;
+    aURLComposer.appendAscii( "private:factory/" );
+    aURLComposer.appendAscii( GetShortName() );
+    return aURLComposer.makeStringAndClear();
+}
+
 String SfxObjectFactory::GetModuleName() const
 {
     static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
