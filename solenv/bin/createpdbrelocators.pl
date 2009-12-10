@@ -62,6 +62,7 @@ print "$script_name -- version: $script_rev\n";
 
 my $inpath    = $ENV{INPATH};
 my $milestone = $ENV{UPDMINOR};
+my $milestoneext = $ENV{UPDMINOREXT};
 
 if ( $ARGV[0] ) {
     if ( $milestone && ( $milestone ne $ARGV[0] ) ) {
@@ -74,8 +75,8 @@ if ( !$inpath || !$milestone ) {
     print STDERR "$script_name: INAPTH or UPDMINOR not set!\n";
     exit(1);
 }
-
-my $rc = CreatePDBRelocators::create_pdb_relocators($inpath, $milestone, "");
+my $relocators = CreatePDBRelocators->new();
+my $rc = $relocators->create_pdb_relocators($inpath, $milestoneext, "");
 
 if ( !$rc ) {
     print STDERR "$script_name: creating PDB relocators failed!\n";
