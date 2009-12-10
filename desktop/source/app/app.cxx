@@ -1468,6 +1468,13 @@ void Desktop::Main()
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
+                    // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
+                    // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+                    // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+                    Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                    OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+
                     SetSplashScreenProgress(75);
                     Sequence< Any > lArgs(1);
                     lArgs[0] <<= xContainerWindow;
@@ -1738,8 +1745,15 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         aSeq[0] <<= bQuickstart;
 
         // Try to instanciate quickstart service. This service is not mandatory, so
-        // do nothing if service is not available.
+        // do nothing if service is not available
+
+        // #i105753# the following if was invented for performance
+        // unfortunately this broke the QUARTZ behavior which is to always run
+        // in quickstart mode since Mac applications do not usually quit
+        // when the last document closes
+        #ifndef QUARTZ
         if ( bQuickstart )
+        #endif
         {
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),

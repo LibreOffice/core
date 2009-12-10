@@ -127,8 +127,7 @@ SHL1STDLIBS=\
         $(UCBHELPERLIB)  \
         $(COMPHELPERLIB) \
         $(NEON3RDLIB)    \
-        $(LIBXML2LIB)    \
-        $(ZLIB3RDLIB)
+        $(LIBXML2LIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)

@@ -151,8 +151,8 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     aMiscSettings.SetEnableATToolSupport( m_aAccessibilityTool.IsChecked() );
 #endif
     aAllSettings.SetMiscSettings(aMiscSettings);
-    Application::SetSettings(aAllSettings);
     Application::MergeSystemSettings( aAllSettings );
+    Application::SetSettings(aAllSettings);
 
     return FALSE;
 }
