@@ -473,6 +473,8 @@ public:
 
     friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
+
+    static GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL );
 };
 
 // ------------------

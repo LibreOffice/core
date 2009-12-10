@@ -1292,3 +1292,28 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     return rOStm;
 }
 
+#define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
+
+GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &rURL )
+{
+    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
+    if( aURL.Search( aPrefix ) == 0 )
+    {
+        // graphic manager url
+        ByteString aUniqueID( String(rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 )), RTL_TEXTENCODING_UTF8 );
+        return GraphicObject( aUniqueID );
+    }
+    else
+    {
+        Graphic     aGraphic;
+        if ( aURL.Len() )
+        {
+            SvStream*   pStream = utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
+            if( pStream )
+                GraphicConverter::Import( *pStream, aGraphic );
+        }
+
+        return GraphicObject( aGraphic );
+    }
+}
+
