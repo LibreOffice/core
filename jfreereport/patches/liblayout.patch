@@ -1,5 +1,5 @@
---- misc/liblayout/build.xml	(Revision 6728)
-+++ misc/build/liblayout/build.xml	(Arbeitskopie)
+--- misc/liblayout-0.2.10/build.xml	(Revision 6728)
++++ misc/build/liblayout-0.2.10/build.xml	(Arbeitskopie)
 @@ -24,6 +24,6 @@
    <!-- Setup the compile classpath -->
    <path id="classpath">

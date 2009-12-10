@@ -36,12 +36,15 @@ PACKAGE = com$/sun$/star$/report$/function$/metadata
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 #----- compile .java files -----------------------------------------
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 CLASSPATH!:==$(CLASSPATH)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)
 .ELSE
-JARFILES += libbase-1.0.0.jar libformula-0.2.0.jar
+JARFILES += \
+    libbase-$(LIBBASE_VERSION).jar                      \
+    libformula-$(LIBFORMULA_VERSION).jar
 .ENDIF
 
 JAVAFILES       :=	AuthorFunction.java \
