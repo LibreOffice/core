@@ -77,6 +77,7 @@ LIB1OBJFILES= \
          $(SLO)$/svdorect.obj        \
          $(SLO)$/svdoedge.obj        \
          $(SLO)$/svdomeas.obj        \
+         $(SLO)$/svdfield.obj		 \
          $(SLO)$/svdopath.obj        \
          $(SLO)$/svdocapt.obj        \
          $(SLO)$/svdocirc.obj        \

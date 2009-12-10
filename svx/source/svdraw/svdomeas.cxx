@@ -77,37 +77,7 @@
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
 SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SV_IMPL_PERSIST1(SdrMeasureField,SvxFieldData);
-
-__EXPORT SdrMeasureField::~SdrMeasureField()
-{
-}
-
-SvxFieldData* __EXPORT SdrMeasureField::Clone() const
-{
-    return new SdrMeasureField(*this);
-}
-
-int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
-{
-    return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
-}
-
-void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
-{
-    UINT16 nFieldKind;
-    rIn>>nFieldKind;
-    eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
-}
-
-void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
-{
-    rOut<<(UINT16)eMeasureFieldKind;
-}
-
-void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& rStr) const
+void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMeasureFieldKind ) const
 {
     rStr.Erase();
     Fraction aMeasureScale(1, 1);
@@ -116,14 +86,14 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
     FieldUnit eMeasureUnit(FUNIT_NONE);
     FieldUnit eModUIUnit(FUNIT_NONE);
 
-    const SfxItemSet& rSet = rObj.GetMergedItemSet();
+    const SfxItemSet& rSet = GetMergedItemSet();
     bTextRota90 = ((SdrMeasureTextRota90Item&)rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
     eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
     aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
     bShowUnit = ((SdrMeasureShowUnitItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
     sal_Int16 nNumDigits = ((SdrMeasureDecimalPlacesItem&)rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
 
-    SdrModel* pModel = rObj.pModel;
+    //SdrModel* pModel = rObj.pModel;
 
     switch(eMeasureFieldKind)
     {
@@ -136,7 +106,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
                 if(eMeasureUnit == FUNIT_NONE)
                     eMeasureUnit = eModUIUnit;
 
-                INT32 nLen(GetLen(rObj.aPt2 - rObj.aPt1));
+                INT32 nLen(GetLen(aPt2 - aPt1));
                 Fraction aFact(1,1);
 
                 if(eMeasureUnit != eModUIUnit)
@@ -199,7 +169,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
         {
             if(bShowUnit)
             {
-                if(rObj.pModel)
+                if(pModel)
                 {
                     eModUIUnit = pModel->GetUIUnit();
 
@@ -620,7 +590,7 @@ FASTBOOL SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara,
     const SvxFieldData* pField=rField.GetField();
     SdrMeasureField* pMeasureField=PTR_CAST(SdrMeasureField,pField);
     if (pMeasureField!=NULL) {
-        pMeasureField->TakeRepresentation(*this,rRet);
+        TakeRepresentation(rRet, pMeasureField->GetMeasureFieldKind());
         if (rpFldColor!=NULL) {
             if (!bEdit)
             {

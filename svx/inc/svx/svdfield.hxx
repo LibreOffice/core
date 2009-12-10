@@ -66,7 +66,6 @@ public:
     virtual int operator==(const SvxFieldData&) const;
     SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }
     void SetMeasureFieldKind(SdrMeasureFieldKind eNewKind) { eMeasureFieldKind=eNewKind; }
-    void TakeRepresentation(const SdrMeasureObj& rObj, XubString& rStr) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
