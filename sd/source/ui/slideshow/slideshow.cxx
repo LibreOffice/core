@@ -43,7 +43,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-
+#include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 
 #include <sfx2/topfrm.hxx>
@@ -151,7 +151,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap())
+, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )

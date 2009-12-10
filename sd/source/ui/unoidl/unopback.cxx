@@ -34,7 +34,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
-
+#include <svx/svdpool.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -61,7 +61,7 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl );
+    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aPageBackgroundPropertySet_Impl;
 }
 

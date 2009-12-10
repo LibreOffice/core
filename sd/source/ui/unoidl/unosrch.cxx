@@ -33,9 +33,8 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
-#ifndef SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
+#include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unotext.hxx>
 
@@ -732,7 +731,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
 SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw()
 {
-    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap());
+    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
 
     mbBackwards = sal_False;
     mbCaseSensitive = sal_False;

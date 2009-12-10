@@ -55,7 +55,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
-
+#include <svx/svdpool.hxx>
 #include "stlsheet.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -104,7 +104,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl );
+    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return aPropSet;
 }
 

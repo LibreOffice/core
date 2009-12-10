@@ -44,9 +44,7 @@
 
 #include <osl/mutex.hxx>
 
-#ifndef _UTL_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -67,11 +65,10 @@
 #include <svx/svdorect.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-
-#include <svtools/unoimap.hxx>
+#include <svx/svdpool.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/svdpagv.hxx>
-
+#include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unonrule.hxx>
 #include <svx/eeitem.hxx>
@@ -207,7 +204,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl );
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aDrawModelPropertySet_Impl;
 }
 

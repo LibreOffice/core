@@ -77,7 +77,7 @@
 #include <svx/svditer.hxx>
 #include <svtools/wmf.hxx>
 #include <svx/svdoole2.hxx>
-
+#include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
 #include "misc.hxx"
 #include "View.hxx"
@@ -259,19 +259,19 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         if( ePageKind == PK_STANDARD )
         {
             //PK_STANDARD always has a background property
-            static SvxItemPropertySet aDrawPagePropertySet_Impl( aDrawPagePropertyMap_Impl );
+            static SvxItemPropertySet aDrawPagePropertySet_Impl( aDrawPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
             pRet = &aDrawPagePropertySet_Impl;
         }
         else
         {
             if(bWithoutBackground)
             {
-                static SvxItemPropertySet aDrawPageNotesHandoutPropertyNoBackSet_Impl( aDrawPageNotesHandoutPropertyNoBackMap_Impl );
+                static SvxItemPropertySet aDrawPageNotesHandoutPropertyNoBackSet_Impl( aDrawPageNotesHandoutPropertyNoBackMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aDrawPageNotesHandoutPropertyNoBackSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aDrawPageNotesHandoutPropertySet_Impl( aDrawPageNotesHandoutPropertyMap_Impl );
+                static SvxItemPropertySet aDrawPageNotesHandoutPropertySet_Impl( aDrawPageNotesHandoutPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aDrawPageNotesHandoutPropertySet_Impl;
             }
         }
@@ -280,12 +280,12 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
     {
             if(bWithoutBackground)
             {
-                static SvxItemPropertySet aGraphicPagePropertyNoBackSet_Impl( aGraphicPagePropertyNoBackMap_Impl );
+                static SvxItemPropertySet aGraphicPagePropertyNoBackSet_Impl( aGraphicPagePropertyNoBackMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aGraphicPagePropertyNoBackSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aGraphicPagePropertySet_Impl( aGraphicPagePropertyMap_Impl );
+                static SvxItemPropertySet aGraphicPagePropertySet_Impl( aGraphicPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aGraphicPagePropertySet_Impl;
             }
     }
@@ -341,12 +341,12 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
     const SvxItemPropertySet* pRet = 0;
     if( ePageKind == PK_HANDOUT )
     {
-        static SvxItemPropertySet aHandoutMasterPagePropertySet_Impl( aHandoutMasterPagePropertyMap_Impl );
+        static SvxItemPropertySet aHandoutMasterPagePropertySet_Impl( aHandoutMasterPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
         pRet = &aHandoutMasterPagePropertySet_Impl;
     }
     else
     {
-        static SvxItemPropertySet aMasterPagePropertySet_Impl( aMasterPagePropertyMap_Impl );
+        static SvxItemPropertySet aMasterPagePropertySet_Impl( aMasterPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
         pRet = &aMasterPagePropertySet_Impl;
     }
     return pRet;

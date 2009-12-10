@@ -42,7 +42,7 @@
 #include <vos/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
-
+#include <svx/svdpool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/unoimap.hxx>
@@ -247,12 +247,12 @@ static SdTypesCache gImplTypesCache;
         {
             if( bGraphicObj )
             {
-                static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl());
+                static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aImpress_SdXShapePropertyGraphicSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl());
+                static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aImpress_SdXShapePropertySet_Impl;
             }
         }
@@ -260,12 +260,12 @@ static SdTypesCache gImplTypesCache;
         {
             if( bGraphicObj )
             {
-                static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl());
+                static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aDraw_SdXShapePropertyGraphicSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl());
+                static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aDraw_SdXShapePropertySet_Impl;
             }
         }
@@ -282,7 +282,7 @@ static SdTypesCache gImplTypesCache;
 
     static const SvxItemPropertySet* lcl_GetEmpty_SdXShapePropertySet_Impl()
     {
-        static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl() );
+        static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool() );
         return &aEmptyPropSet;
     }
 const SvEventDescription* ImplGetSupportedMacroItems()
