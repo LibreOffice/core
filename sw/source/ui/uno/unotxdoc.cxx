@@ -2678,7 +2678,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
+    // const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
