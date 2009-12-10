@@ -1106,7 +1106,7 @@ enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
 NameClashResolveDialogResult
 executeNameClashResolveDialog(
-    Window * pParent,
+    Window * /*pParent*/,
     rtl::OUString const & /*rTargetFolderURL*/,
     rtl::OUString const & /*rClashingName*/,
     rtl::OUString & /*rProposedNewName*/)
@@ -1119,7 +1119,7 @@ executeNameClashResolveDialog(
 
 NameClashResolveDialogResult
 executeSimpleNameClashResolveDialog(
-    Window * pParent,
+    Window * /*pParent*/,
     rtl::OUString const & /*rTargetFolderURL*/,
     rtl::OUString const & /*rClashingName*/,
     rtl::OUString & /*rProposedNewName*/)
