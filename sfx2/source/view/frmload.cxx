@@ -33,6 +33,7 @@
 
 #include "frmload.hxx"
 #include "objshimp.hxx"
+#include "viewfac.hxx"
 #include "sfx2/app.hxx"
 #include "sfx2/dispatch.hxx"
 #include "sfx2/docfac.hxx"
@@ -491,40 +492,46 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-void SfxFrameLoader_Impl::impl_determineViewID_nothrow( const SfxObjectShell& i_rDocument, ::comphelper::NamedValueCollection& io_rDescriptor )
+sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, ::comphelper::NamedValueCollection& io_rDescriptor )
 {
-    if ( io_rDescriptor.has( "ViewId" ) )
-        // nothing to do
-        return;
-
+    sal_Int16 nViewId = io_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) );
     try
     {
-        Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
-        Reference< XIndexAccess > xViewData;
-        if ( xViewDataSupplier.is() )
-            xViewData.set( xViewDataSupplier->getViewData() );
+        if ( nViewId == 0 ) do
+        {
+            Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
+            Reference< XIndexAccess > xViewData;
+            if ( xViewDataSupplier.is() )
+                xViewData.set( xViewDataSupplier->getViewData() );
 
-        if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
-            // no view data stored together with the model
-            return;
+            if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+                // no view data stored together with the model
+                break;
 
-        // obtain the ViewID from the view data
-        Sequence< PropertyValue > aViewData;
-        if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
-            return;
+            // obtain the ViewID from the view data
+            Sequence< PropertyValue > aViewData;
+            if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
+                break;
 
-        ::comphelper::NamedValueCollection aNamedViewData( aViewData );
-        ::rtl::OUString sViewId = aNamedViewData.getOrDefault( "ViewId", ::rtl::OUString() );
-        if ( !sViewId.getLength() )
-            return;
+            ::comphelper::NamedValueCollection aNamedViewData( aViewData );
+            ::rtl::OUString sViewId = aNamedViewData.getOrDefault( "ViewId", ::rtl::OUString() );
+            if ( !sViewId.getLength() )
+                break;
 
-        sViewId = sViewId.copy( 4 );    // format is like in "view3"
-        io_rDescriptor.put( "ViewId", sal_Int16( sViewId.toInt32() ) );
+            sViewId = sViewId.copy( 4 );    // format is like in "view3"
+            nViewId = sal_Int16( sViewId.toInt32() );
+            io_rDescriptor.put( "ViewId", nViewId );
+        }
+        while ( false );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+
+    if ( nViewId == 0 )
+        nViewId = i_rDocument.GetFactory().GetViewFactory( 0 ).GetOrdinal();
+    return nViewId;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -649,11 +656,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
         wFrame = pTargetFrame;
 
+        // prepare it
+        pTargetFrame->PrepareForDoc_Impl( *xDoc, aDescriptor );
+
         // ensure the ID of the to-be-created view is in the descriptor, if possible
-        impl_determineViewID_nothrow( *xDoc, aDescriptor );
+        sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
 
         // plug the document into the frame
-        if ( !pTargetFrame->InsertDocument_Impl( *xDoc, aDescriptor ) )
+        SfxViewFrame* pViewFrame = SfxViewFrame::Create_Impl( *pTargetFrame, *xDoc, nViewId );
+        if ( !pViewFrame )
             throw RuntimeException();
 
         if ( !bExternalModel )

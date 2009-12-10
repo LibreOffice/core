@@ -140,7 +140,7 @@ private:
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
-    void                impl_determineViewID_nothrow(
+    sal_Int16           impl_determineEffectiveViewId_nothrow(
                             const SfxObjectShell& i_rDocument,
                                   ::comphelper::NamedValueCollection& io_rDescriptor
                         );

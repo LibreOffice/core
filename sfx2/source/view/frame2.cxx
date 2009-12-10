@@ -34,7 +34,6 @@
 #include "impframe.hxx"
 #include "objshimp.hxx"
 #include "sfxhelp.hxx"
-#include "viewfac.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -466,49 +465,19 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
     }
 }
 
-sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper::NamedValueCollection& i_rArgs )
-/* [Beschreibung]
- */
+void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc, const ::comphelper::NamedValueCollection& i_rArgs )
 {
-    OSL_PRECOND( rDoc.GetMedium(), "SfxFrame::InsertDocument_Impl: no medium -> no view!");
-    if ( !rDoc.GetMedium() )
-        return sal_False;
-
-    OSL_PRECOND( GetCurrentViewFrame() == NULL,
-        "SfxObjectShell::InsertDocument_Impl: no support (anymore) for loading into a non-empty frame!" );
-        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
-        // done in higher layers, namely in the framework.
-    if ( GetCurrentViewFrame() != NULL )
-        return sal_False;
-
-    OSL_PRECOND( GetCurrentDocument() == NULL,
-        "SfxFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
-
-    // view ID
-    sal_Int16 nViewId = i_rArgs.getOrDefault( "ViewId", sal_Int16( 0 ) );
-
-    // jump mark
-    const bool bHasJumpMark = i_rArgs.has( "JumpMark" );
-
-    // plugin mode
-    sal_Int16 nPluginMode = 0;
-    const bool bHasPluginMode = i_rArgs.get_ensureType( "PluginMode", nPluginMode );
-
     // hidden?
+    OSL_ENSURE( !pImp->bHidden, "when does this happen?" );
     pImp->bHidden = i_rArgs.getOrDefault( "Hidden", pImp->bHidden );
 
-    UpdateDescriptor( &rDoc );
+    // update our descriptor
+    UpdateDescriptor( &i_rDoc );
 
+    // plugin mode
+    sal_Int16 nPluginMode = i_rArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
-
-    SfxViewFrame* pViewFrame = SfxViewFrame::Create_Impl( *this, rDoc, nViewId ? nViewId : rDoc.GetFactory().GetViewFactory( 0 ).GetOrdinal() );
-    OSL_ENSURE( pViewFrame, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxViewFrame!" );
-    if ( !pViewFrame )
-        // TODO: better error handling? Under which conditions can this fail?
-        return sal_False;
-
-    return GetCurrentDocument() == &rDoc;
 }
 
 bool SfxFrame::IsMarkedHidden_Impl() const
