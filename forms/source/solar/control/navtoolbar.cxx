@@ -74,6 +74,7 @@ namespace frm
             sLabel += String::CreateFromAscii( " " );
             return sLabel;
         }
+<<<<<<< local
 
         static bool lcl_isHighContrast( const Color& _rColor )
         {
@@ -111,6 +112,8 @@ namespace frm
             OSL_ENSURE( false, "lcl_getCommandURL: unknown FormFeature!" );
             return ::rtl::OUString();
         }
+=======
+>>>>>>> other
     }
 
     //=====================================================================
@@ -424,7 +427,15 @@ namespace frm
         if ( _eSize != m_eImageSize )
         {
             m_eImageSize = _eSize;
+<<<<<<< local
             implUpdateImages();
+=======
+            ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
+            pImageManager->SetImagesForceSize( *m_pToolbar, GetSettings().GetStyleSettings().GetHighContrastMode(), m_eImageSize == eLarge );
+
+            // parts of our layout is dependent on the size of our icons
+            Resize();
+>>>>>>> other
         }
     }
 

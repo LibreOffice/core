@@ -216,7 +216,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
 
-    if ( GetBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // high contrast mode needs other images
         maSigsValidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_VALID_HC ) ) );

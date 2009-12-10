@@ -89,7 +89,7 @@ public class QueryWizard extends WizardDialog
         CurDBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
-/*    public static void main(String args[])
+    public static void main(String args[])
     {
         String ConnectStr = "uno:pipe,name=fs93730;urp;StarOffice.ServiceManager";
         try
@@ -110,7 +110,6 @@ public class QueryWizard extends WizardDialog
             jexception.printStackTrace(System.out);
         }
     }
- */
 
     public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues)
     {

@@ -151,7 +151,6 @@ public:
     DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
         :m_xDocumentModify( getXModel( _rxFormComponent ), UNO_QUERY )
     {
-        OSL_ENSURE( m_xDocumentModify.is(), "DocumentModifyGuard::DocumentModifyGuard: no document, or no XModifiable2!" );
         impl_changeModifiableFlag_nothrow( false );
     }
     ~DocumentModifyGuard()

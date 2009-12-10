@@ -1248,6 +1248,13 @@ Any OFormattedModel::getDefaultForReset() const
     return m_xAggregateSet->getPropertyValue( PROPERTY_EFFECTIVE_DEFAULT );
 }
 
+//------------------------------------------------------------------------------
+void OFormattedModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
+}
+
 //.........................................................................
 }
 //.........................................................................
