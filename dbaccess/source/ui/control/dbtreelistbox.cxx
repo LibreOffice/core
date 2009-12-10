@@ -568,7 +568,7 @@ namespace
     void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        const BOOL bHiContrast = rSettings.GetMenuColor().IsDark();
+        const BOOL bHiContrast = rSettings.GetHighContrastMode();
         uno::Reference< frame::XController > xController = _rCommandController.getXController();
         uno::Reference< frame::XFrame> xFrame;
         if ( xController.is() )

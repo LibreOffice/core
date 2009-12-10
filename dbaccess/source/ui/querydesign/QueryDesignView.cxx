@@ -330,86 +330,6 @@ namespace
 
         return eErrorCode;
     }
-    //------------------------------------------------------------------------------
-    ::rtl::OUString QuoteField( const OQueryDesignView* _pView,const ::rtl::OUString& rValue, sal_Int32 aType )
-    {
-        ::rtl::OUString rNewValue;
-        switch (rValue.toChar())
-        {
-            case '?':
-                if (rValue.getLength() != 1)
-                    break;
-            case '\'':  // ::rtl::OUString Quotierung oder Datum
-            //case '#': // Datumsquotierung // jetengine
-            case ':':   // Parameter
-            case '[':   // Parameter
-                return rValue;
-        }
-
-        Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
-        Reference< XDatabaseMetaData >  xMetaData;
-        if(xConnection.is())
-            xMetaData = xConnection->getMetaData();
-        ::rtl::OUString aQuote;
-        try
-        {
-            if(xMetaData.is())
-                aQuote = xMetaData->getIdentifierQuoteString();
-
-            switch( aType )
-            {
-                case DataType::DATE:
-                case DataType::TIME:
-                case DataType::TIMESTAMP:
-                    if (rValue.toChar() != '{') // nur quoten, wenn kein Access Datum
-                        rNewValue = ::dbtools::quoteName(aQuote,rValue);
-                    else
-                        rNewValue = rValue;
-                    break;
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                case DataType::LONGVARCHAR:
-                    rNewValue = ::dbtools::quoteName(aQuote,rValue);
-                    break;
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
-                case DataType::TINYINT:
-                case DataType::SMALLINT:
-                case DataType::INTEGER:
-                case DataType::BIGINT:
-                case DataType::REAL:
-                case DataType::DOUBLE:
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::LONGVARBINARY:
-                    rNewValue = rValue;
-                    break;
-                case DataType::BIT:
-                case DataType::BOOLEAN:
-                    {
-                        if(xMetaData.is())
-                        {
-                            ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
-                            if (bCase(rValue, String(ModuleRes(STR_QUERY_TRUE))))
-                                rNewValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TRUE"));
-                            else if (bCase(rValue, String(ModuleRes(STR_QUERY_FALSE))))
-                                rNewValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FALSE"));
-                            else
-                                rNewValue = rValue;
-                        }
-                    }
-                    break;
-                default:
-                    DBG_ERROR( "QuoteField: illegal type" );
-                break;
-            }
-        }
-        catch(SQLException&)
-        {
-            DBG_ERROR( "QuoteField: Exception" );
-        }
-        return rNewValue;
-    }
     // -----------------------------------------------------------------------------
 
     /** FillDragInfo fills the field description out of the table
@@ -1385,6 +1305,9 @@ namespace
 
             // first extract the inner joins conditions
             GetInnerJoinCriteria(_pView,pNodeTmp);
+            // now simplify again, join are checked in ComparisonPredicate
+            ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
+            pNodeTmp = pNode->getChild(1);
 
             // it could happen that pCondition is not more valid
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pNodeTmp, rLevel);
@@ -1395,7 +1318,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
@@ -1432,7 +1355,11 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                {
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                    if ( !bAddOrOnOneLine)
+                        nLevel++;
+                }
             }
         }
         else
@@ -1466,7 +1393,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine)
     {
@@ -1480,10 +1407,18 @@ namespace
         // Runde Klammern
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
-            sal_uInt16 nLevel2 = nLevel;
             // check if we have to put the or criteria on one line.
-            bool bMustAddOrOnOneLine = CheckOrCriteria(pCondition->getChild(1),NULL);
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
+            const  ::connectivity::OSQLParseNode* pSearchCondition = pCondition->getChild(1);
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,NULL);
+            if ( SQL_ISRULE( pSearchCondition, search_condition) ) // we have a or
+            {
+                _pSelectionBrw->DuplicateConditionLevel( nLevel);
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(0), nLevel,bHaving,bMustAddOrOnOneLine );
+                ++nLevel;
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+            }
+            else
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition, nLevel,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) )
@@ -1579,10 +1514,32 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
                 }
             }
+            else
+            {
+                // Funktions-Bedingung parsen
+                ::rtl::OUString sCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,1);
+                Reference< XConnection> xConnection = rController.getConnection();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                    // the international doesn't matter I have a string
+                ::rtl::OUString sName;
+                pCondition->getChild(0)->parseNodeToPredicateStr(sName,
+                                                    xConnection,
+                                                    rController.getNumberFormatter(),
+                                                    aLocale,
+                                                    static_cast<sal_Char>(sDecimal.toChar()),
+                                                    &rController.getParser().getContext());
+
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
+                aDragLeft->SetField(sName);
+                aDragLeft->SetFunctionType(FKT_OTHER);
+
+                if ( bHaving )
+                    aDragLeft->SetGroupBy(sal_True);
+                _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
+            }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
         {
-
             // Funktions-Bedingung parsen
             ::rtl::OUString aCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,0);
 

@@ -1836,6 +1836,32 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     }
 }
 //------------------------------------------------------------------------------
+void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
+{
+    DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    const sal_uInt16 nNewLevel = nLevel +1;
+    OTableFields& rFields = getFields();
+    OTableFields::iterator aIter = rFields.begin();
+    OTableFields::iterator aEnd = rFields.end();
+    for(;aIter != aEnd;++aIter)
+    {
+        OTableFieldDescRef pEntry = *aIter;
+
+        ::rtl::OUString sValue = pEntry->GetCriteria(nLevel);
+        if ( sValue.getLength() )
+        {
+            pEntry->SetCriteria( nNewLevel, sValue);
+            if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
+            {
+                RowInserted( GetRowCount()-1, 1, TRUE );
+                m_bVisibleRow.push_back(sal_True);
+                ++m_nVisibleCount;
+            }
+            m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = sal_True;
+        } // if (!pEntry->GetCriteria(nLevel).getLength() )
+    } // for(;aIter != getFields().end();++aIter)
+}
+//------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel,bool _bAddOrOnOneLine )
 {
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
