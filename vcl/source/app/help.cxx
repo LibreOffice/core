@@ -70,6 +70,10 @@ BOOL Help::Start( ULONG, const Window* )
     return FALSE;
 }
 
+void Help::OpenHelpAgent( ULONG )
+{
+}
+
 // -----------------------------------------------------------------------
 
 BOOL Help::Start( const XubString&, const Window* )

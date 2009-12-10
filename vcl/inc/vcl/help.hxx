@@ -75,6 +75,7 @@ public:
 
     virtual BOOL        Start( ULONG nHelpId, const Window* pWindow  );
     virtual BOOL        Start( const XubString& rKeyWord, const Window* pWindow );
+    virtual void        OpenHelpAgent( ULONG nHelpId );
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 
