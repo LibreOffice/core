@@ -1,16 +1,16 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: w_hyphenation.bas,v $
+'* $RCSfile: gridcontrol.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
+'* last change: $Author: jsk $ $Date: 2008/06/20 08:07:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -29,38 +29,27 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
-'* owner :  helge.delfs@sun.com
+'* owner : thorsten.bosbach@sun.com
 '*
-'* short description : Tools / Hyphenation test
+'* short description : test availablity of gridcontrol
 '*
-'\*******************************************************************
+'\******************************************************************************
 
 sub main
-
-    use "writer\tools\includes\w_tools.inc"
-    use "writer\tools\includes\w_tool4.inc"
-    use "writer\tools\includes\w_tools_hyphenation.inc"
-    use "writer\optional\includes\hyphenation\w_hyphenation.inc"
-
-    printlog Chr(13) + "******* Writer - Hyphenation - Test *******"
-
-    Call hStatusIn ( "writer" , "w_hyphenation.bas" )
-    Call wEnableHyphenation(true)
-    Call tHyphenation_1
-    Call tHyphenation_2    
-    Call tHyphenation_3
-    Call tHyphenation_4
-    Call wEnableHyphenation(false)
-
-    Call hStatusOut
-
+    use "framework\optional\includes\basic_gridcontrol.inc"
+    call hStatusIn ("framework", "f_basic_gridcontrol.bas")
+    printlog "Load Document with gridcontrol"
+    call tGridcontrolLoad
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+    call hStatusOut   
 end sub
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    Call GetUseFiles
     gApplication = "WRITER"
+    call GetUseFiles()
 end sub
+
