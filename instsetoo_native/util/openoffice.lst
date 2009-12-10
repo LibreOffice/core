@@ -14,7 +14,7 @@ Globals
 			SERVICETAG_PRODUCTVERSION 3.3
 			SERVICETAG_PARENTNAME OpenOffice.org 3.3 
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-			SERVICETAG_URN urn:uuid:cd39f1d0-f2fc-11dd-8c47-080020a9ed93
+			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
 			BASISPACKAGEPREFIX ooobasis
@@ -191,7 +191,7 @@ OpenOffice_Dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			REGISTRYLAYERNAME LayerDev
-			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
+			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
@@ -533,7 +533,7 @@ BrOffice_Dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			REGISTRYLAYERNAME LayerDevBroffice
-			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
+			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
