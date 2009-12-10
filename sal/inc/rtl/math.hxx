@@ -362,7 +362,6 @@ inline void setInf(double * pd, bool bNegative)
         double sd;
         sal_math_Double md;
     };
-    sd = *pd;
     md.w32_parts.msw = bNegative ? 0xFFF00000 : 0x7FF00000;
     md.w32_parts.lsw = 0;
     *pd = sd;
@@ -377,7 +376,6 @@ inline void setNan(double * pd)
         double sd;
         sal_math_Double md;
     };
-    sd = *pd;
     md.w32_parts.msw = 0x7FFFFFFF;
     md.w32_parts.lsw = 0xFFFFFFFF;
     *pd = sd;
