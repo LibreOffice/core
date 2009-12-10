@@ -553,7 +553,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetModuleFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -587,7 +587,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetModuleFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
