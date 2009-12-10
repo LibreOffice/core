@@ -31,9 +31,7 @@
 #ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #define _EXTENSIONS_DBP_DBPRESID_HRC_
 
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 //========================================================================
 // basics

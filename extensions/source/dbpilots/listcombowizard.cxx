@@ -40,9 +40,7 @@
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbtools.hxx>
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 #include <comphelper/extract.hxx>
 
 //.........................................................................

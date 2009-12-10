@@ -675,6 +675,13 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 }
 
 //------------------------------------------------------------------------------
+void OEditModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aLastKnownValue.clear();
+}
+
+//------------------------------------------------------------------------------
 sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
