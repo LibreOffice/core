@@ -35,8 +35,8 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
-
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/flditem.hxx>
@@ -100,7 +100,7 @@ const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         }
         bTwipsSet = TRUE;
     }
-    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl );
+    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aHdFtPropertySet_Impl;
 }
 

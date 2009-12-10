@@ -34,7 +34,7 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
+#include <svx/svdpool.hxx>
 
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
@@ -794,7 +794,7 @@ const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
 }
 const SvxItemPropertySet* lcl_GetEditPropertySet()
 {
-    static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap() );
+    static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
 }
 
