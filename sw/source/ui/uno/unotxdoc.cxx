@@ -194,7 +194,12 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView ? pSwView->HasSelection( sal_False ) : false;  // check for any selection, not just text selection
     const bool bHasPostIts      = lcl_GetPostIts( pDocShell->GetDoc(), 0 );
-    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts );
+
+    // get default values to use in dialog from documents SwPrintData
+    const SwPrintData *pPrintData = pDocShell->GetDoc()->getPrintData();
+    DBG_ASSERT( pPrintData, "failed to get SwPrintData from document" );
+
+    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, *pPrintData );
 }
 
 ////////////////////////////////////////////////////////////
@@ -2619,6 +2624,42 @@ SwDoc * SwXTextDocument::GetRenderDoc(
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+static void lcl_SavePrintUIOptionsToDocumentPrintData(
+    SwDoc &rDoc,
+    const SwPrintUIOptions &rPrintUIOptions,
+    bool bIsPDFEXport )
+{
+    if (!rDoc.getPrintData())
+    {
+        SwPrintData *pTmpData = new SwPrintData;
+        rDoc.setPrintData ( *pTmpData );
+        delete pTmpData;    // setPrintData does make its own copy!
+    }
+
+    SwPrintData *pDocPrintData = rDoc.getPrintData();
+
+    pDocPrintData->SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
+    pDocPrintData->SetPrintTable( rPrintUIOptions.IsPrintTables() );
+    pDocPrintData->SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
+    pDocPrintData->SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
+    pDocPrintData->SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
+    pDocPrintData->SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
+    pDocPrintData->SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
+    pDocPrintData->SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
+    pDocPrintData->SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
+    pDocPrintData->SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
+    pDocPrintData->SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
+    pDocPrintData->SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
+    pDocPrintData->SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
+    pDocPrintData->SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
+    // pDocPrintData->SetPrintSingleJobs( b ); handled by File/Print dialog itself
+    // pDocPrintData->SetFaxName( s ); n/a in File/Print dialog
+    pDocPrintData->SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
+    pDocPrintData->SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
+}
+
+
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
@@ -2643,6 +2684,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
     if (!pDoc || !pView)
         return 0;
+
+    // save current UI options from the print dialog for the next call to that dialog
+    lcl_SavePrintUIOptionsToDocumentPrintData( *pDoc, *m_pPrintUIOptions, bIsPDFExport );
 
     sal_Int32 nRet = 0;
     if (bIsSwSrcView)
@@ -2678,7 +2722,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
             m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
-                    m_pPrintUIOptions, m_pRenderData, bIsSkipEmptyPages, bIsPDFExport );
+                    m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
             //SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
             const TypeId aSwViewTypeId = TYPE(SwView);

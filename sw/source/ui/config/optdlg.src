@@ -215,60 +215,66 @@ TabPage TP_OPTPRINT_PAGE
         Text [ en-US ] = "Contents" ;
         Group = TRUE ;
     };
-    CheckBox CB_PGRF
+    CheckBox CB_PGRF /*functionally merged with CB_PDRAW*/
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "~Graphics" ;
+        Text [ en-US ] = "~Pictures and objects" ;
         TabStop = TRUE ;
         Group = TRUE ;
     };
+/*
+    removed, tables now always get printed
     CheckBox CB_PTAB
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Tables" ;
     };
+*/
+/*
+    functionally merged with CB_PGRF (pictures and graphics)
     CheckBox CB_PDRAW
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Dra~wings" ;
     };
+*/
     CheckBox CB_CTRLFLD
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Control~s" ;
+        Text [ en-US ] = "Form control~s" ;
     };
     CheckBox CB_BACKGROUND
     {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Ba~ckground" ;
+        Text [ en-US ] = "Page ba~ckground" ;
     };
     CheckBox CB_BLACK_FONT
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Print blac~k" ;
+        Text [ en-US ] = "Print text in blac~k" ;
     };
     CheckBox CB_HIDDEN_TEXT
     {
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Hidden te~xt" ;
     };
     CheckBox CB_TEXT_PLACEHOLDER
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Text ~placeholder" ;
     };
     FixedLine FL_SEP_PRT_LEFT
     {
         Pos = MAP_APPFONT ( 85 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
         Vert = TRUE;
     };
     FixedLine FL_2
@@ -292,21 +298,24 @@ TabPage TP_OPTPRINT_PAGE
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Right pages" ;
     };
+/*
+    removed, noe handled by the new print dialog (i.e. vcl) itself
     CheckBox CB_REVERSE
     {
         Pos = MAP_APPFONT ( 96 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Re~versed" ;
     };
+*/
     CheckBox CB_PROSPECT
     {
-        Pos = MAP_APPFONT ( 96 , 53 ) ;
+        Pos = MAP_APPFONT ( 96 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Broch~ure" ;
     };
     CheckBox CB_PROSPECT_RTL
     {
-        Pos = MAP_APPFONT ( 103 , 66 ) ;
+        Pos = MAP_APPFONT ( 103 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Right to Left" ;
         Text [ x-comment ] = " ";
@@ -340,7 +349,7 @@ TabPage TP_OPTPRINT_PAGE
     FixedLine FL_SEP_PRT_RIGHT
     {
         Pos = MAP_APPFONT ( 169 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
         Vert = TRUE;
     };
     FixedLine FL_3
@@ -352,35 +361,37 @@ TabPage TP_OPTPRINT_PAGE
     };
     FixedLine FL_4
     {
-        Pos = MAP_APPFONT ( 6 , 121 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
         Text [ en-US ] = "Other";
     };
     CheckBox CB_PRINTEMPTYPAGES
     {
-        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Print ~automatically inserted blank pages";
     };
+/*
     CheckBox CB_SINGLEJOBS
     {
-        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Create s~ingle print jobs" ;
     };
+*/
     CheckBox CB_PAPERFROMSETUP
     {
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Paper tray from printer settings";
     };
     FixedText FT_FAX
     {
-        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Group = TRUE ;
         Text [ en-US ] = "~Fax";
@@ -388,7 +399,7 @@ TabPage TP_OPTPRINT_PAGE
     ListBox LB_FAX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 171 ) ;
+        Pos = MAP_APPFONT ( 70 , 132 ) ;
         Size = MAP_APPFONT ( 184 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -945,7 +956,7 @@ StringArray STR_PRINTOPTUI
         < "Page ba~ckground"; >;
         < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
         < "~Pictures and objects"; >;
-        < "Specifies whether the graphics of your text document are printed"; >;
+        < "Specifies whether the graphics and drawing or OLE objects of your text document are printed"; >;
         < "Hidden te~xt"; >;
         < "Enable this option to print text that is marked as hidden."; >;
         < "~Text placeholder"; >;

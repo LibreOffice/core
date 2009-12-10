@@ -119,8 +119,8 @@ class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
     CheckBox        aGrfCB;
-    CheckBox        aTabCB;
-    CheckBox        aDrawCB;
+//  CheckBox        aTabCB;
+//  CheckBox        aDrawCB;
     CheckBox        aCtrlFldCB;
     CheckBox        aBackgroundCB;
     CheckBox        aBlackFontCB;
@@ -132,7 +132,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     FixedLine       aFL2;
     CheckBox        aLeftPageCB;
     CheckBox        aRightPageCB;
-    CheckBox        aReverseCB;
+//  CheckBox        aReverseCB;
     CheckBox        aProspectCB;
     CheckBox        aProspectCB_RTL;
 
@@ -145,7 +145,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     FixedLine        aFL3;
     FixedLine        aFL4;
     CheckBox        aPrintEmptyPagesCB;
-    CheckBox        aSingleJobsCB;
+//    CheckBox        aSingleJobsCB;
     CheckBox        aPaperFromSetupCB;
     FixedText       aFaxFT;
     ListBox         aFaxLB;
