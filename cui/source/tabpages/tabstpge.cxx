@@ -153,7 +153,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
 
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aTabBox, eFUnit );
 
     // Buttons initialisieren

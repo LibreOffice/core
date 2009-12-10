@@ -140,7 +140,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& r
 {
     FreeResource();
 
-    eFUnit = GetModuleFieldUnit( &rInAttrs );
+    eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );

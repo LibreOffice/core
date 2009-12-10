@@ -239,7 +239,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),TRUE) != SFX_ITEM_UNKNOWN;
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rCoreAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
 
     if( mbUseMarginItem )
     {

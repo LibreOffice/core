@@ -347,7 +347,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     }
     Init_Impl();
 
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aLeftMarginEdit, eFUnit );
     SetFieldUnit( aRightMarginEdit, eFUnit );
     SetFieldUnit( aTopMarginEdit, eFUnit );

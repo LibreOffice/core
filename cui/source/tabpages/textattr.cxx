@@ -133,7 +133,7 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 {
     FreeResource();
 
-    FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( aMtrFldLeft, eFUnit );
     SetFieldUnit( aMtrFldRight, eFUnit );
     SetFieldUnit( aMtrFldTop, eFUnit );

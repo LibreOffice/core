@@ -259,7 +259,7 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
-    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(aMtrPosX, eDlgUnit, TRUE);
     SetFieldUnit(aMtrPosY, eDlgUnit, TRUE);
 
@@ -545,7 +545,7 @@ void SvxSlantTabPage::Construct()
 {
     // get the range
     DBG_ASSERT(pView, "no valid view (!)");
-    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(aMtrRadius, eDlgUnit, TRUE);
 
     { // #i75273#
@@ -776,7 +776,7 @@ void SvxPositionSizeTabPage::Construct()
 {
     // get range and work area
     DBG_ASSERT( mpView, "no valid view (!)" );
-    meDlgUnit = GetModuleFieldUnit( &GetItemSet() );
+    meDlgUnit = GetModuleFieldUnit( GetItemSet() );
     SetFieldUnit( maMtrPosX, meDlgUnit, TRUE );
     SetFieldUnit( maMtrPosY, meDlgUnit, TRUE );
     SetFieldUnit( maMtrWidth, meDlgUnit, TRUE );

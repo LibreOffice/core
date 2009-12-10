@@ -589,7 +589,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
     m_bIsInRightToLeft(false)
 {
     FreeResource();
-    FieldUnit eDlgUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eDlgUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( m_aHoriByMF, eDlgUnit, TRUE );
     SetFieldUnit( m_aVertByMF, eDlgUnit, TRUE );
     SetFieldUnit( m_aWidthMF , eDlgUnit, TRUE );

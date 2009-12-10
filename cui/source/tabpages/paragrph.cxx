@@ -440,7 +440,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     String aEmpty;
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rSet );
+    FieldUnit eFUnit = GetModuleFieldUnit( rSet );
     SetFieldUnit( aLeftIndent, eFUnit );
     SetFieldUnit( aRightIndent, eFUnit );
     SetFieldUnit( aFLineIndent, eFUnit );

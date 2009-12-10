@@ -133,7 +133,7 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
 
     FillTypeLB();
 
-    const FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    const FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( aMtrFldHorz1, eFUnit );
     SetFieldUnit( aMtrFldHorz2, eFUnit );
     SetFieldUnit( aMtrFldVert1, eFUnit );

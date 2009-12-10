@@ -174,7 +174,7 @@ SvxLineTabPage::SvxLineTabPage
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
     {

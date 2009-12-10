@@ -252,7 +252,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 
     //------------Metrik einstellen-----------------------------
 
-    FieldUnit eFUnit = GetModuleFieldUnit( &rOutAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rOutAttrs );
 
     switch ( eFUnit )
     {
