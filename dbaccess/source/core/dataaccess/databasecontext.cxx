@@ -546,18 +546,6 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     ClearableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    ::rtl::OUString sURL;
-    if ( !getURLForRegisteredObject( _rName, sURL ) )
-        throw NoSuchElementException( _rName, *this );
-
-    if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
-    {
-        OSL_ENSURE( false, "ODatabaseContext::revokeObject: a database document register by name? This shouldn't happen anymore!" );
-            // all the code should have been changed so that registration is by URL only
-        m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
-    }
-
-<<<<<<< local
     ::rtl::OUString sURL = getDatabaseLocation( _rName );
 
     revokeDatabaseLocation( _rName );
@@ -572,13 +560,6 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
     if ( aExistent != m_aDatabaseObjects.end() )
         m_aDatabaseObjects.erase(aExistent);
-=======
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE );
-    if ( !aDbRegisteredNamesRoot.removeNode( _rName ) )
-        throw Exception( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An unexpected und unknown error occured." ) ), *this );
-    aDbRegisteredNamesRoot.commit();
->>>>>>> other
 
     // notify our container listeners
     ContainerEvent aEvent( *this, makeAny( _rName ), Any(), Any() );

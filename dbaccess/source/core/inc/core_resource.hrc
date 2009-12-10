@@ -88,7 +88,6 @@
 #define RID_STR_NAME_NOT_FOUND                  ( RID_CORE_STRINGS_START + 45 )
 #define RID_STR_QUERY_DOES_NOT_EXIST            ( RID_CORE_STRINGS_START + 46 )
 #define RID_STR_ERROR_WHILE_SAVING              ( RID_CORE_STRINGS_START + 47 )
-<<<<<<< local
 #define RID_STR_NO_SUB_FOLDER                   ( RID_CORE_STRINGS_START + 48 )
 
 #define RID_STR_NO_DELETE_BEFORE_AFTER          ( RID_CORE_STRINGS_START + 49 )
@@ -111,9 +110,7 @@
 #define RID_STR_CONNECTION_REQUEST              ( RID_CORE_STRINGS_START + 65 )
 #define RID_STR_MISSING_EXTENSION               ( RID_CORE_STRINGS_START + 66 )
 
-=======
-#define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 48 )
->>>>>>> other
+#define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 67 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 
