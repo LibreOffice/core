@@ -34,15 +34,9 @@
 // include ---------------------------------------------------------------
 #include <tools/list.hxx>
 #include <vcl/outdev.hxx>
-#include <sfx2/objsh.hxx>
-
 #include <svx/svxids.hrc>
-
-
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/xtable.hxx>
-#include "drawitem.hxx"
 #include <svx/itemtype.hxx>
 
 // -----------------------------------------------------------------------
@@ -161,17 +155,6 @@ XubString GetSvxString( sal_uInt16 nId )
 
 XubString GetColorString( const Color& rCol )
 {
-    const SfxPoolItem* pItem = NULL;
-    XColorTable* pCol = NULL;
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-
-    if ( pSh )
-    {
-        pItem = pSh->GetItem( SID_COLOR_TABLE );
-        if( pItem )
-            pCol = static_cast<const SvxColorTableItem*>(pItem )->GetColorTable();
-    }
-
     XubString sStr;
 
     FASTBOOL bFound = sal_False;
