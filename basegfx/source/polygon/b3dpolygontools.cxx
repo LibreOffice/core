@@ -875,52 +875,147 @@ namespace basegfx
             }
             else
             {
+                bool bRetval(false);
                 const B3DVector aPlaneNormal(rCandidate.getNormal());
 
                 if(!aPlaneNormal.equalZero())
                 {
-                    const double fAbsX(fabs(aPlaneNormal.getX()));
-                    const double fAbsY(fabs(aPlaneNormal.getY()));
-                    const double fAbsZ(fabs(aPlaneNormal.getZ()));
+                    const sal_uInt32 nPointCount(rCandidate.count());
 
-                    if(fAbsX > fAbsY && fAbsX > fAbsZ)
+                    if(nPointCount)
                     {
-                        // normal points mostly in X-Direction, use YZ-Polygon projection for check
-                        B3DHomMatrix aTrans;
+                        B3DPoint aCurrentPoint(rCandidate.getB3DPoint(nPointCount - 1));
+                        const double fAbsX(fabs(aPlaneNormal.getX()));
+                        const double fAbsY(fabs(aPlaneNormal.getY()));
+                        const double fAbsZ(fabs(aPlaneNormal.getZ()));
 
-                        aTrans.set(0, 0, 0.0);
-                        aTrans.set(0, 1, 1.0);
-                        aTrans.set(1, 1, 0.0);
-                        aTrans.set(1, 2, 1.0);
+                        if(fAbsX > fAbsY && fAbsX > fAbsZ)
+                        {
+                            // normal points mostly in X-Direction, use YZ-Polygon projection for check
+                            // x -> y, y -> z
+                            for(sal_uInt32 a(0); a < nPointCount; a++)
+                            {
+                                const B3DPoint aPreviousPoint(aCurrentPoint);
+                                aCurrentPoint = rCandidate.getB3DPoint(a);
 
-                        const B2DPolygon aYZ(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+                                // cross-over in Z?
+                                const bool bCompZA(fTools::more(aPreviousPoint.getZ(), rPoint.getZ()));
+                                const bool bCompZB(fTools::more(aCurrentPoint.getZ(), rPoint.getZ()));
 
-                        return isInside(aYZ, B2DPoint(rPoint.getY(), rPoint.getZ()), bWithBorder);
-                    }
-                    else if(fAbsY > fAbsX && fAbsY > fAbsZ)
-                    {
-                        // normal points mostly in Y-Direction, use XZ-Polygon projection for check
-                        B3DHomMatrix aTrans;
+                                if(bCompZA != bCompZB)
+                                {
+                                    // cross-over in Y?
+                                    const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
+                                    const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
 
-                        aTrans.set(1, 1, 0.0);
-                        aTrans.set(1, 2, 1.0);
+                                    if(bCompYA == bCompYB)
+                                    {
+                                        if(bCompYA)
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        const double fCompare(
+                                            aCurrentPoint.getY() - (aCurrentPoint.getZ() - rPoint.getZ()) *
+                                            (aPreviousPoint.getY() - aCurrentPoint.getY()) /
+                                            (aPreviousPoint.getZ() - aCurrentPoint.getZ()));
 
-                        const B2DPolygon aXZ(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+                                        if(fTools::more(fCompare, rPoint.getY()))
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if(fAbsY > fAbsX && fAbsY > fAbsZ)
+                        {
+                            // normal points mostly in Y-Direction, use XZ-Polygon projection for check
+                            // x -> x, y -> z
+                            for(sal_uInt32 a(0); a < nPointCount; a++)
+                            {
+                                const B3DPoint aPreviousPoint(aCurrentPoint);
+                                aCurrentPoint = rCandidate.getB3DPoint(a);
 
-                        return isInside(aXZ, B2DPoint(rPoint.getX(), rPoint.getZ()), bWithBorder);
-                    }
-                    else
-                    {
-                        // normal points mostly in Z-Direction, use XY-Polygon projection for check
-                        B3DHomMatrix aTrans;
+                                // cross-over in Z?
+                                const bool bCompZA(fTools::more(aPreviousPoint.getZ(), rPoint.getZ()));
+                                const bool bCompZB(fTools::more(aCurrentPoint.getZ(), rPoint.getZ()));
 
-                        const B2DPolygon aXY(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+                                if(bCompZA != bCompZB)
+                                {
+                                    // cross-over in X?
+                                    const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
+                                    const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
 
-                        return isInside(aXY, B2DPoint(rPoint.getX(), rPoint.getY()), bWithBorder);
+                                    if(bCompXA == bCompXB)
+                                    {
+                                        if(bCompXA)
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        const double fCompare(
+                                            aCurrentPoint.getX() - (aCurrentPoint.getZ() - rPoint.getZ()) *
+                                            (aPreviousPoint.getX() - aCurrentPoint.getX()) /
+                                            (aPreviousPoint.getZ() - aCurrentPoint.getZ()));
+
+                                        if(fTools::more(fCompare, rPoint.getX()))
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // normal points mostly in Z-Direction, use XY-Polygon projection for check
+                            // x -> x, y -> y
+                            for(sal_uInt32 a(0); a < nPointCount; a++)
+                            {
+                                const B3DPoint aPreviousPoint(aCurrentPoint);
+                                aCurrentPoint = rCandidate.getB3DPoint(a);
+
+                                // cross-over in Y?
+                                const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
+                                const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+
+                                if(bCompYA != bCompYB)
+                                {
+                                    // cross-over in X?
+                                    const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
+                                    const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+
+                                    if(bCompXA == bCompXB)
+                                    {
+                                        if(bCompXA)
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        const double fCompare(
+                                            aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
+                                            (aPreviousPoint.getX() - aCurrentPoint.getX()) /
+                                            (aPreviousPoint.getY() - aCurrentPoint.getY()));
+
+                                        if(fTools::more(fCompare, rPoint.getX()))
+                                        {
+                                            bRetval = !bRetval;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
-                return false;
+                return bRetval;
             }
         }
 

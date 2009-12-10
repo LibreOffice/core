@@ -381,6 +381,19 @@ public:
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL );
 
+    /** Get transparency at given position
+
+        @param nX
+        integer X-Position in Bitmap
+
+        @param nY
+        integer Y-Position in Bitmap
+
+        @return transparency value in the range of [0 .. 255] where
+                0 is not transparent, 255 is fully transparent
+     */
+    sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
+
 public:
 
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );

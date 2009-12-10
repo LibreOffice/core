@@ -43,7 +43,7 @@
 #include "vcl/ilstbox.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/combobox.hxx"
-#include "vcl/controllayout.hxx"
+#include "vcl/controldata.hxx"
 
 #include "tools/debug.hxx"
 
@@ -719,7 +719,7 @@ void ListBox::Resize()
 
 void ListBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const Control* pMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {
@@ -743,7 +743,7 @@ void ListBox::FillLayoutData() const
 
 long ListBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all

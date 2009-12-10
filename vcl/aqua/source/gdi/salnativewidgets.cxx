@@ -430,9 +430,10 @@ BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
 #define CTRL_STATE_SELECTED     0x0040
 #define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
 */
-static ThemeDrawState getState( ControlState nState )
+UInt32 AquaSalGraphics::getState( ControlState nState )
 {
-    if( (nState & CTRL_STATE_ENABLED) == 0 )
+    bool bDrawActive = mpFrame ? ([mpFrame->getWindow() isKeyWindow] ? true : false) : true;
+    if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
     {
         if( (nState & CTRL_STATE_HIDDEN) == 0 )
             return kThemeStateInactive;
