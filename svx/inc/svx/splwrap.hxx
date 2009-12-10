@@ -81,7 +81,7 @@ private:
                              // aufnehmen und nicht den Dialog starten.
 
     SVX_DLLPRIVATE sal_Bool     SpellNext();        // naechsten Bereich anwaehlen
-    SVX_DLLPRIVATE sal_Bool FindSpellError();   // Suche nach Fehlern ( ueber Bereiche hinweg )
+    sal_Bool    FindSpellError();   // Suche nach Fehlern ( ueber Bereiche hinweg )
 
 public:
     SvxSpellWrapper( Window* pWn,

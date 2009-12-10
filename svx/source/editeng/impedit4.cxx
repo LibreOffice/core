@@ -73,6 +73,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/emphitem.hxx>
 #include <textconv.hxx>
+#include <svx/svxdlg.hxx>
 
 #include <rtl/tencinfo.h>
 
@@ -2563,18 +2564,19 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
     if (!xThes.is())
         return EE_SPELL_ERRORFOUND;
 
-    SvxThesaurusDialog aDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) );
-
-    if ( aDialog.Execute() == RET_OK )
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    AbstractThesaurusDialog* pDlg = pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) );
+    if ( pDlg->Execute() == RET_OK )
     {
         // Wort ersetzen...
         pEditView->pImpEditView->DrawSelection();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
-        pEditView->InsertText( aDialog.GetWord() );
+        pEditView->InsertText( pDlg->GetWord() );
         pEditView->ShowCursor( sal_True, sal_False );
     }
 
+    delete pDlg;
     return EE_SPELL_OK;
 #else
     return EE_SPELL_NOSPELLER;

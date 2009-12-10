@@ -56,7 +56,6 @@ SRC1FILES =  \
         fontwork.src \
         frmsel.src \
         hdft.src \
-        hyphen.src \
         hyprlink.src \
         imapdlg.src \
         impgrf.src \
@@ -70,7 +69,6 @@ SRC1FILES =  \
         srchdlg.src \
         svxbmpnumvalueset.src \
         swframeposstrings.src \
-        thesdlg.src \
         txenctab.src \
         ucsubset.src
 
@@ -85,7 +83,6 @@ LIB1OBJFILES= \
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
         $(SLO)$/hangulhanja.obj \
-        $(SLO)$/hyphen.obj \
         $(SLO)$/impgrf.obj \
         $(SLO)$/langbox.obj \
         $(SLO)$/opengrf.obj \
@@ -93,7 +90,6 @@ LIB1OBJFILES= \
         $(SLO)$/splwrap.obj \
         $(SLO)$/svxdlg.obj \
         $(SLO)$/stddlg.obj \
-        $(SLO)$/thesdlg.obj
 
 LIB2TARGET=$(SLB)$/$(TARGET).lib
 

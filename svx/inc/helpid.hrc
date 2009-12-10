@@ -122,7 +122,7 @@
 #define HID_GRFFILTER_SMOOTH                                        (HID_SVX_START +  84)
 #define HID_GRFFILTER_SOBEL                                         (HID_SVX_START +  85)
 #define HID_GRFFILTER_SOLARIZE                                      (HID_SVX_START +  86)
-#define HID_HYPHENATE                                               (HID_SVX_START +  87)
+
 #define HID_IMAPDLG_ACTIVE                                          (HID_SVX_START +  88)
 #define HID_IMAPDLG_APPLY                                           (HID_SVX_START +  89)
 #define HID_IMAPDLG_CIRCLE                                          (HID_SVX_START +  90)
@@ -226,7 +226,7 @@
 #define HID_SVX_TP_DOCRECOVERY_SAVE                                 (HID_SVX_START + 188)
 #define HID_SVX_TP_ERR_REP_SEND                                     (HID_SVX_START + 189)
 #define HID_SVX_TP_ERR_REP_WELCOME                                  (HID_SVX_START + 190)
-#define HID_THES_LANGUAGE                                           (HID_SVX_START + 191)
+
 #define HID_VALUESET_EXTRUSION_DIRECTION                            (HID_SVX_START + 192)
 #define HID_VALUESET_EXTRUSION_LIGHTING                             (HID_SVX_START + 193)
 #define HID_WIN_FONTWORK_ALIGN                                      (HID_SVX_START + 194)

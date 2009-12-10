@@ -31,8 +31,6 @@
 #define SVX_HANGUL_HANJA_CONVERSION_HXX
 
 #include <vcl/window.hxx>
-#include <svx/svxenum.hxx>
-
 #include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>

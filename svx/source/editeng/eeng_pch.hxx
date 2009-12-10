@@ -37,7 +37,3 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-#ifndef SVX_LIGHT
-#include <svx/thesdlg.hxx>
-#endif
-

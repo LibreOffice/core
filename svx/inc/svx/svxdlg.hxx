@@ -47,6 +47,8 @@ namespace linguistic2{
     class XDictionary;
     class XSpellChecker1;
     class XSpellChecker;
+    class XThesaurus;
+    class XHyphenator;
 }}}}
 class SvxSpellWrapper; //add for SvxSpellCheckDialog
 typedef SfxTabPage* (*CreateSvxDistributePage)(Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
@@ -61,6 +63,8 @@ class SearchAttrItemList;
 class FmFormShell;
 class Graphic;
 class SdrObject;
+class SvxSpellWrapper;
+
 namespace svx{ class SpellDialogChildWindow;}
 
 #define EMPTY_FRAME_REF com::sun::star::uno::Reference < com::sun::star::frame::XFrame >()
@@ -98,6 +102,22 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog /
     virtual HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const =0;
     virtual void    FocusSuggestion( )= 0;
     virtual String  GetCurrentSuggestion( ) const =0;
+};
+
+class AbstractThesaurusDialog : public VclAbstractDialog
+{
+public:
+    virtual String      GetWord() = 0;
+    virtual sal_uInt16  GetLanguage() const = 0;
+    virtual Window*     GetWindow() = 0;
+};
+
+class AbstractHyphenWordDialog : public VclAbstractDialog
+{
+public:
+    virtual void    SelLeft() = 0;
+    virtual void    SelRight() = 0;
+    virtual Window* GetWindow() = 0;
 };
 
 class AbstractFmShowColsDialog : public VclAbstractDialog //add for FmShowColsDialog
@@ -380,6 +400,14 @@ public:
 
     virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
                                             HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) = 0;
+
+    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                                                const String &rWord, sal_Int16 nLanguage ) = 0;
+
+    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
+                                                const String &rWord, LanguageType nLang,
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                SvxSpellWrapper* pWrapper ) = 0;
 
     virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) = 0;
 

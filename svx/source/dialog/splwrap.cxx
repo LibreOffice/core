@@ -51,9 +51,8 @@
 #include <map>
 
 #include <svx/svxenum.hxx>
-#include "hyphen.hxx"       // Der HyphenDialog
 #include <svx/splwrap.hxx>      // Der Wrapper
-#include <svx/thesdlg.hxx>      // ThesaurusDlg
+#include <svx/svxdlg.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>
@@ -358,14 +357,14 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
     }
 
     WAIT_ON();  // while looking up for initial word
-    SvxThesaurusDialog aDlg(pWin, xThes, rWord, nLanguage);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    AbstractThesaurusDialog* pDlg = pFact->CreateThesaurusDialog( pWin, xThes, rWord, nLanguage );
     WAIT_OFF();
-
-    if ( aDlg.Execute()== RET_OK )
+    if ( pDlg->Execute()== RET_OK )
     {
-        ChangeThesWord( aDlg.GetWord() );
+        ChangeThesWord( pDlg->GetWord() );
     }
-
+    delete pDlg;
 }
 
 // -----------------------------------------------------------------------
@@ -414,12 +413,12 @@ void SvxSpellWrapper::SpellDocument( )
         bDialog = sal_True;
         if (xHyphWord.is())
         {
-            DBG_ASSERT(xHyphWord.is(), "NULL pointer");
-            SvxHyphenWordDialog* pDlg =
-                new SvxHyphenWordDialog( xHyphWord->getWord(),
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            AbstractHyphenWordDialog* pDlg = pFact->CreateHyphenWordDialog( pWin,
+                            xHyphWord->getWord(),
                             SvxLocaleToLanguage( xHyphWord->getLocale() ),
-                            pWin, xHyph, this );
-            pWin = pDlg;
+                            xHyph, this );
+            pWin = pDlg->GetWindow();
             pDlg->Execute();
             delete pDlg;
         }

@@ -80,47 +80,6 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen? : Sonderbereichpr³fung ist ausgeschaltet, Trotzdem pr³fen? */
     Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
 };
- // Strings ---------------------------------------------------------------
-String RID_SVXSTR_HMSTATUS_OK
-{
-    Text [ en-US ] = "The word is spelled correctly" ;
-};
-String RID_SVXSTR_HMSTATUS_DONTUSE
-{
-    Text [ en-US ] = "Avoid using this word" ;
-};
-String RID_SVXSTR_HMSTATUS_WRONG
-{
-    Text [ en-US ] = "Unknown word." ;
-};
-String RID_SVXSTR_HMSTATUS_CAPERROR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
-    /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
-    Text [ en-US ] = "Capitalization error" ;
-};
-String RID_SVXSTR_HMSTATUS_INVALID_LANG
-{
-    Text [ en-US ] = "Language not supported";
-};
-String RID_SVXSTR_HMERR_CHECKINSTALL
-{
-    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-    Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
-};
-String RID_SVXSTR_HMERR_ADDWORD
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
-    /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
-    Text [ en-US ] = "The word could not be added to dictionary" ;
-};
-String RID_SVXSTR_HMERR_HYPH
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
-    Text [ en-US ] = "Hyphenation not available" ;
-};
 String RID_SVXSTR_HMERR_THESAURUS
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
