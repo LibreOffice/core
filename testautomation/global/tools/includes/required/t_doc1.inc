@@ -189,6 +189,15 @@ sub hNewDocument ( optional bANewDoc )
     case else             : WarnLog "hNewDocument: No Applikation named '" + gApplication + "' exists in this routine!"
     end select
     Sleep 2
+
+    ' #i107038: This code forces the writer to display one page only which is
+    ' zoomed to pagewidth, filling the entire - previously maximized - window.
+    ' This is required because the VCL Testtool might eventually draw objects 
+    ' outside the document window.
+    if ( gApplication = "WRITER" ) then
+        ViewZoom "Zoom.Value", 0, "Zoom.ValueSet", 28703, "Zoom.Type", 3
+    endif
+    
 end sub
 '
 '-------------------------------------------------------------------------------
