@@ -1883,7 +1883,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if(bGraphTransparency)
         {
-            const GraphicObject* pObject = rBgdAttr.GetGraphicObject(SfxObjectShell::Current());
+            const GraphicObject* pObject = rBgdAttr.GetGraphicObject();
             if(pObject)
                 aGraphTransMF.SetValue(lcl_TransparencyToPercent(pObject->GetAttr().GetTransparency()));
             else
@@ -1903,8 +1903,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             // Grafik ist im Item vorhanden und muss nicht
             // geladen werden:
 
-            const Graphic* pGraphic =
-                rBgdAttr.GetGraphic( SfxObjectShell::Current() );
+            const Graphic* pGraphic = rBgdAttr.GetGraphic();
 
             if ( !pGraphic && aBtnPreview.IsChecked() )
                 bIsGraphicValid = LoadLinkedGraphic_Impl();

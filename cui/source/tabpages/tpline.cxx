@@ -1555,7 +1555,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-        SfxObjectShell *pDocSh = SfxObjectShell::Current();
 
         nNumMenuGalleryItems=aGrfNames.Count();
         for(long i = 0; i < nNumMenuGalleryItems; i++)
@@ -1575,7 +1574,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (UINT16)(MN_GALLERY_ENTRY + i);
             aGrfBrushItems.Insert(pInfo, i);
-            const Graphic* pGraphic = pBrushItem->GetGraphic(pDocSh);
+            const Graphic* pGraphic = pBrushItem->GetGraphic();
 
             if(pGraphic)
             {
