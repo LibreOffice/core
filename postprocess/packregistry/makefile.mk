@@ -339,7 +339,7 @@ MY_FILES_main += \
 .IF "$(ENABLE_KAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
 .END
-.IF "$(SYSTEM_MOZILLA)" == "NO" && "$(WITH_MOZILLA)" == "YES" && \
+.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
         "$(OS)" != "MACOSX"
 .IF "$(OS)" == "WNT"
 MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
