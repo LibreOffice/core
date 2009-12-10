@@ -34,17 +34,19 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
-
-#include "mtnotification.hxx"
-#include "oleembobj.hxx"
-
-// TODO: when conversion service is ready this headers should disappear
-#include <svtools/filter.hxx>
-#include <vcl/graph.hxx>
-
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <unotools/streamhelper.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include "mtnotification.hxx"
+#include "oleembobj.hxx"
 
 
 using namespace ::com::sun::star;
@@ -52,7 +54,7 @@ using namespace ::com::sun::star;
 
 sal_Bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
-                                const ::rtl::OUString& aFormatShortName,
+                                const ::rtl::OUString& aMimeType,
                                 uno::Any& aResult )
 {
     // produces sequence with data in requested format and returns it in aResult
@@ -60,34 +62,34 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     {
         SvMemoryStream aBufStream( pBuf, nBufSize, STREAM_READ );
         aBufStream.ObjectOwnsMemory( sal_False );
-
-        Graphic aGraph;
-        GraphicFilter aGrFilter( sal_True );
-        if ( aGrFilter.ImportGraphic( aGraph, String(), aBufStream ) == ERRCODE_NONE )
+        uno::Reference < io::XInputStream > xIn = new utl::OInputStreamHelper( aBufStream.GetLockBytes(), nBufSize );
+        try
         {
-            sal_uInt16 nFormat = aGrFilter.GetExportFormatNumberForShortName( aFormatShortName );
-
-            if ( nFormat != GRFILTER_FORMAT_DONTKNOW )
+            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.graphics.GraphicProvider") ), uno::UNO_QUERY );
+            if( xGraphicProvider.is() )
             {
-                SvMemoryStream aNewStream( 65535, 65535 );
-                if ( aGrFilter.ExportGraphic( aGraph, String(), aNewStream, nFormat ) == ERRCODE_NONE )
+                uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
+                aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                aMediaProperties[0].Value <<= xIn;
+                uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
+                if( xGraphic.is() )
                 {
-                    /*
-                    {
-                        aNewStream.Seek( 0 );
-                        SvFileStream aFile( String::CreateFromAscii( "file:///d:/test.png" ), STREAM_STD_READWRITE);
-                        aFile.SetStreamSize( 0 );
-                        aNewStream >> aFile;
-                    }
-                    */
+                    SvMemoryStream aNewStream( 65535, 65535 );
+                    uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
+                    uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
+                    aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                    aMediaProperties[0].Value <<= xOut;
+                    aMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                    aMediaProperties[0].Value <<= aMimeType;
 
-                    aResult <<= uno::Sequence< sal_Int8 >(
-                                                    reinterpret_cast< const sal_Int8* >( aNewStream.GetData() ),
-                                                    aNewStream.Seek( STREAM_SEEK_TO_END ) );
+                    xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
+                    aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.Seek( STREAM_SEEK_TO_END ) );
                     return sal_True;
                 }
             }
         }
+        catch (uno::Exception&)
+        {}
     }
 
     return sal_False;
@@ -96,7 +98,6 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 // =====================================================================
 // MainThreadNotificationRequest
 // =====================================================================
-
 MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect )
 : m_pObject( xObj.get() )
 , m_xObject( static_cast< embed::XEmbeddedObject* >( xObj.get() ) )
@@ -104,49 +105,31 @@ MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Refer
 , m_nAspect( nAspect )
 {}
 
-void MainThreadNotificationRequest::mainThreadWorkerStart( MainThreadNotificationRequest* pMTRequest )
+void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (uno::RuntimeException)
 {
-    if ( Application::GetMainThreadIdentifier() == osl_getThreadIdentifier( NULL ) )
+    if ( m_pObject )
     {
-        // this is the main thread
-        worker( pMTRequest, pMTRequest );
-    }
-    else
-        Application::PostUserEvent( STATIC_LINK( NULL, MainThreadNotificationRequest, worker ), pMTRequest );
-}
-
-IMPL_STATIC_LINK_NOINSTANCE( MainThreadNotificationRequest, worker, MainThreadNotificationRequest*, pMTRequest )
-{
-    if ( pMTRequest )
-    {
-        if ( pMTRequest->m_pObject )
+        try
         {
-            try
+            uno::Reference< uno::XInterface > xLock = m_xObject.get();
+            if ( xLock.is() )
             {
-                uno::Reference< uno::XInterface > xLock = pMTRequest->m_xObject.get();
-                if ( xLock.is() )
-                {
-                    // this is the main thread, the solar mutex must be locked
-                    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    if ( pMTRequest->m_nNotificationType == OLECOMP_ONCLOSE )
-                        pMTRequest->m_pObject->OnClosed_Impl();
-                    else if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_CONTENT )
-                        pMTRequest->m_pObject->OnViewChanged_Impl();
-                    else if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_ICON )
-                        pMTRequest->m_pObject->OnIconChanged_Impl();
-                }
-            }
-            catch( uno::Exception& )
-            {
-                // ignore all the errors
+                // this is the main thread, the solar mutex must be locked
+                if ( m_nNotificationType == OLECOMP_ONCLOSE )
+                    m_pObject->OnClosed_Impl();
+                else if ( m_nAspect == embed::Aspects::MSOLE_CONTENT )
+                    m_pObject->OnViewChanged_Impl();
+                else if ( m_nAspect == embed::Aspects::MSOLE_ICON )
+                    m_pObject->OnIconChanged_Impl();
             }
         }
-
-        delete pMTRequest;
+        catch( uno::Exception& )
+        {
+            // ignore all the errors
+        }
     }
-
-    return 0;
 }
 
-// =====================================================================
-
+MainThreadNotificationRequest::~MainThreadNotificationRequest()
+{
+}
