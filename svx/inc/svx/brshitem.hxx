@@ -33,9 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <svl/poolitem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
 #include "svx/svxdllapi.h"
@@ -44,7 +42,6 @@
 
 class Graphic;
 class GraphicObject;
-class SfxObjectShell;
 class CntWallpaperItem;
 namespace rtl
 {
@@ -125,8 +122,8 @@ public:
     void                PurgeGraphic() const;
     void                PurgeMedium() const;
 
-    const Graphic*          GetGraphic( SfxObjectShell* pSh = 0) const;
-    const GraphicObject*    GetGraphicObject( SfxObjectShell* pSh = 0) const;
+    const Graphic*          GetGraphic() const;
+    const GraphicObject*    GetGraphicObject() const;
     const String*           GetGraphicLink() const      { return pStrLink; }
     const String*           GetGraphicFilter() const    { return pStrFilter; }
 
@@ -138,7 +135,6 @@ public:
 
     SvxBrushItem&       operator=( const SvxBrushItem& rItem);
 
-    //static void                   InitSfxLink();
     static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
     static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
     CntWallpaperItem*           CreateCntWallpaperItem() const;

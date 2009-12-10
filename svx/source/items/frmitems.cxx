@@ -34,56 +34,7 @@
 // include ---------------------------------------------------------------
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
-
-#include <limits.h>
-#include <comphelper/processfactory.hxx>
-
-
-#include <goodies/grfmgr.hxx>
-#include <tools/urlobj.hxx>
-#ifndef SVX_LIGHT
-#ifndef _SFXDOCFILE_HXX //autogen
-#include <sfx2/docfile.hxx>
-#endif
-#include <sfx2/objsh.hxx>
-#endif // !SVX_LIGHT
-#include <basic/sbx.hxx>
-#define GLOBALOVERFLOW3
-
-#define _SVX_FRMITEMS_CXX
-
-#include <svl/memberid.hrc>
-#include <svtools/wallitem.hxx>
-#include <svl/cntwall.hxx>
-
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <svx/impgrf.hxx>
-#include <svx/svxids.hrc>
-#include <svx/svxitems.hrc>
-#include <svx/dialogs.hrc>
-
-#include <svx/pbinitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include "prntitem.hxx"
-#include "opaqitem.hxx"
-#include "protitem.hxx"
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include "bolnitem.hxx"
-#include <svx/brshitem.hxx>
-//CHINA001 #include "backgrnd.hxx"
-#include <svx/frmdiritem.hxx>
-
-#include <svx/itemtype.hxx>
-#include <svx/dialmgr.hxx>
-#include "svxerr.hxx"
-#include <svx/unoprnms.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
@@ -106,7 +57,44 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 
+#include <unotools/ucbstreamhelper.hxx>
+#include <limits.h>
+#include <comphelper/processfactory.hxx>
+#include <goodies/grfmgr.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/types.hxx>
+#include <svl/memberid.hrc>
+#include <svtools/wallitem.hxx>
+#include <svl/cntwall.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#define GLOBALOVERFLOW3
+
+#define _SVX_FRMITEMS_CXX
+
+#include <svx/impgrf.hxx>
+#include <svx/svxids.hrc>
+#include <svx/svxitems.hrc>
+#include <svx/dialogs.hrc>
+#include <svx/pbinitem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include "prntitem.hxx"
+#include "opaqitem.hxx"
+#include "protitem.hxx"
+#include <svx/shaditem.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/keepitem.hxx>
+#include "bolnitem.hxx"
+#include <svx/brshitem.hxx>
+#include <svx/frmdiritem.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/dialmgr.hxx>
+#include "svxerr.hxx"
+#include <svx/unoprnms.hxx>
 #include <svx/unomid.hxx>
 
 using namespace ::rtl;
@@ -193,7 +181,6 @@ SfxItemPresentation SvxPaperBinItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -221,7 +208,7 @@ SfxItemPresentation SvxPaperBinItem::GetPresentation
         //no break necessary
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
+
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3457,64 +3444,12 @@ public:
     GraphicObject*  pGraphicObject;
     sal_Int8        nGraphicTransparency; //contains a percentage value which is
                                           //copied to the GraphicObject when necessary
-#ifndef SVX_LIGHT
-    SfxMediumRef    xMedium;
-#endif
     Link            aDoneLink;
+    SvStream*       pStream;
 
-    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0) {}
-};
-/*
-// class SvxBrushItemLink_Impl -------------------------------------------
-
-class SvxBrushItemLink_Impl : public SfxBrushItemLink
-{
-    virtual Graphic                     GetGraphic( const String& rLink, const String& rFilter );
-    virtual CreateSvxBrushTabPage       GetBackgroundTabpageCreateFunc();
-    virtual GetSvxBrushTabPageRanges    GetBackgroundTabpageRanges();
+    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
 };
 
-// -----------------------------------------------------------------------
-
-Graphic SvxBrushItemLink_Impl::GetGraphic( const String& rLink, const String& rFilter)
-{
-    Graphic aResult;
-    SvxBrushItem aItem( rLink, rFilter, GPOS_TILED );
-    const Graphic* pGraph = aItem.GetGraphic();
-    if( pGraph )
-        aResult = *pGraph;
-    return aResult;
-}
-
-// -----------------------------------------------------------------------
-
-CreateSvxBrushTabPage SvxBrushItemLink_Impl::GetBackgroundTabpageCreateFunc()
-{
-#ifndef SVX_LIGHT
-    return (CreateSvxBrushTabPage)SvxBackgroundTabPage::Create;
-#else
-    return CreateSvxBrushTabPage();
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-GetSvxBrushTabPageRanges SvxBrushItemLink_Impl::GetBackgroundTabpageRanges()
-{
-#ifndef SVX_LIGHT
-    return (GetSvxBrushTabPageRanges)SvxBackgroundTabPage::GetRanges;
-#else
-    return GetSvxBrushTabPageRanges();
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-void SvxBrushItem::InitSfxLink()
-{
-    SfxBrushItemLink::Set( new SvxBrushItemLink_Impl );
-}
-*/
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::SetDoneLink( const Link& rLink )
@@ -3747,10 +3682,6 @@ SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
 
 SvxBrushItem::~SvxBrushItem()
 {
-#ifndef SVX_LIGHT
-    if( pImpl->xMedium.Is() )
-        pImpl->xMedium->SetDoneLink( Link() );
-#endif
     delete pImpl->pGraphicObject;
     delete pImpl;
     delete pStrLink;
@@ -3961,7 +3892,6 @@ SfxItemPresentation SvxBrushItem::GetPresentation
     XubString&          rText, const IntlWrapper *
     ) const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -3990,7 +3920,7 @@ SfxItemPresentation SvxBrushItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
+
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -4117,95 +4047,35 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 // const wegcasten, da const als logisches const zu verstehen ist
 // wenn GetGraphic() gerufen wird, soll sich das Item darum kuemmern,
 // eine gelinkte Grafik zu holen.
-
-GraphicFilter* GetGrfFilter();
-
-IMPL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void*, EMPTYARG )
-{
-#ifndef SVX_LIGHT
-    pThis->pImpl->pGraphicObject = new GraphicObject;
-    SvStream* pStream = pThis->pImpl->xMedium->GetInStream();
-    if( pStream && !pStream->GetError() )
-    {
-        Graphic aGraphic;
-        int nRes;
-        pStream->Seek( STREAM_SEEK_TO_BEGIN );
-        nRes = GetGrfFilter()->
-            ImportGraphic( aGraphic, *pThis->pStrLink, *pStream,
-                           GRFILTER_FORMAT_DONTKNOW, NULL, GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG );
-
-        if( nRes != GRFILTER_OK )
-        {
-            DELETEZ( pThis->pImpl->pGraphicObject );
-            pThis->bLoadAgain = sal_False;
-        }
-        else
-        {
-            pThis->pImpl->pGraphicObject->SetGraphic( aGraphic );
-            pThis->ApplyGraphicTransparency_Impl();
-        }
-    }
-    else
-    {
-        DELETEZ( pThis->pImpl->pGraphicObject );
-        pThis->bLoadAgain = sal_False;
-    }
-
-    pThis->pImpl->xMedium.Clear();
-    pThis->pImpl->aDoneLink.Call( pThis );
-#endif
-    return 0;
-}
-
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::PurgeGraphic() const
 {
-#ifndef SVX_LIGHT
     PurgeMedium();
     DELETEZ( pImpl->pGraphicObject );
     ((SvxBrushItem*)this)->bLoadAgain = sal_True;
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::PurgeMedium() const
 {
-#ifndef SVX_LIGHT
-    pImpl->xMedium.Clear();
-#endif
+    DELETEZ( pImpl->pStream );
 }
 
 // -----------------------------------------------------------------------
+GraphicFilter* GetGrfFilter();
 
-const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
+const GraphicObject* SvxBrushItem::GetGraphicObject() const
 {
-#ifndef SVX_LIGHT
-    if ( bLoadAgain && pStrLink && !pImpl->pGraphicObject && !pImpl->xMedium.Is() )
+    if ( bLoadAgain && pStrLink && !pImpl->pGraphicObject )
     // wenn Grafik schon geladen, als Cache benutzen
     {
         //JP 29.6.2001: only with "valid" names - empty names now allowed
         if( pStrLink->Len() )
         {
-            pImpl->xMedium = new SfxMedium(
-                *pStrLink, STREAM_STD_READ, sal_False );
-
-            if( pImpl->xMedium->IsRemote() )
-            {
-                if( pSh )
-                {
-                    pSh->RegisterTransfer( *pImpl->xMedium );
-                }
-                else
-                {
-                    DBG_WARNING( "SvxBrushItem::GetGraphic ohne DocShell" );
-                }
-            }
-
-            SfxMediumRef xRef( pImpl->xMedium );
-            // Ref halten wg. synchr. DoneCallback
-            if( pImpl->aDoneLink.IsSet() )
+            // currently we don't have asynchronous processing
+/*          if( pImpl->aDoneLink.IsSet() )
             {
                 // Auf besonderen Wunsch des Writers wird der synchrone und der
                 // asynchrone Fall was die Benachrichtigung angeht unterschiedlich
@@ -4217,23 +4087,47 @@ const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
                 pImpl->xMedium->DownLoad(
                     STATIC_LINK( this, SvxBrushItem, DoneHdl_Impl ) );
                 pImpl->aDoneLink = aTmp;
+            } */
+
+            pImpl->pStream = utl::UcbStreamHelper::CreateStream( *pStrLink, STREAM_STD_READ );
+            if( pImpl->pStream && !pImpl->pStream->GetError() )
+            {
+                Graphic aGraphic;
+                int nRes;
+                pImpl->pStream->Seek( STREAM_SEEK_TO_BEGIN );
+                nRes = GetGrfFilter()->
+                    ImportGraphic( aGraphic, *pStrLink, *pImpl->pStream,
+                                   GRFILTER_FORMAT_DONTKNOW, NULL, GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG );
+
+                if( nRes != GRFILTER_OK )
+                {
+                    const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
+                }
+                else
+                {
+                    pImpl->pGraphicObject = new GraphicObject;
+                    pImpl->pGraphicObject->SetGraphic( aGraphic );
+                    const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
+                }
             }
             else
             {
-                pImpl->xMedium->DownLoad( );
-                DoneHdl_Impl( (SvxBrushItem*)this, 0 );
+                const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
             }
+
+            // currently we don't have asynchronous processing
+//          pThis->pImpl->aDoneLink.Call( pThis );
         }
     }
-#endif
+
     return pImpl->pGraphicObject;
 }
 
 // -----------------------------------------------------------------------
 
-const Graphic* SvxBrushItem::GetGraphic( SfxObjectShell* pSh ) const
+const Graphic* SvxBrushItem::GetGraphic() const
 {
-    const GraphicObject* pGrafObj = GetGraphicObject( pSh );
+    const GraphicObject* pGrafObj = GetGraphicObject();
     return( pGrafObj ? &( pGrafObj->GetGraphic() ) : NULL );
 }
 
