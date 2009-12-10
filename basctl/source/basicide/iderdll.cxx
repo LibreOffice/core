@@ -56,7 +56,7 @@
 
 
 #define ITEMID_SEARCH   0
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
 using ::rtl::OUString;

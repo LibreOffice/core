@@ -106,7 +106,7 @@
 #define ITEMID_LINE         0
 #define ITEMID_BRUSH        0
 
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/postitem.hxx>
