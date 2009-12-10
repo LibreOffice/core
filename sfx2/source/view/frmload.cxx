@@ -54,6 +54,8 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/interaction.hxx>
@@ -98,6 +100,8 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::util::XCloseable;
+using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::container::XIndexAccess;
 /** === end UNO using === **/
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
@@ -487,6 +491,43 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+void SfxFrameLoader_Impl::impl_determineViewID_nothrow( const SfxObjectShell& i_rDocument, ::comphelper::NamedValueCollection& io_rDescriptor )
+{
+    if ( io_rDescriptor.has( "ViewId" ) )
+        // nothing to do
+        return;
+
+    try
+    {
+        Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
+        Reference< XIndexAccess > xViewData;
+        if ( xViewDataSupplier.is() )
+            xViewData.set( xViewDataSupplier->getViewData() );
+
+        if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+            // no view data stored together with the model
+            return;
+
+        // obtain the ViewID from the view data
+        Sequence< PropertyValue > aViewData;
+        if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
+            return;
+
+        ::comphelper::NamedValueCollection aNamedViewData( aViewData );
+        ::rtl::OUString sViewId = aNamedViewData.getOrDefault( "ViewId", ::rtl::OUString() );
+        if ( !sViewId.getLength() )
+            return;
+
+        sViewId = sViewId.copy( 4 );    // format is like in "view3"
+        io_rDescriptor.put( "ViewId", sal_Int16( sViewId.toInt32() ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
     throw( RuntimeException )
@@ -607,6 +648,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // create a frame
         SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
         wFrame = pTargetFrame;
+
+        // ensure the ID of the to-be-created view is in the descriptor, if possible
+        impl_determineViewID_nothrow( *xDoc, aDescriptor );
 
         // plug the document into the frame
         if ( !pTargetFrame->InsertDocument_Impl( *xDoc, aDescriptor ) )

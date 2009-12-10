@@ -139,6 +139,11 @@ private:
     void                impl_removeLoaderArguments(
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         );
+
+    void                impl_determineViewID_nothrow(
+                            const SfxObjectShell& i_rDocument,
+                                  ::comphelper::NamedValueCollection& io_rDescriptor
+                        );
 };
 
 #endif

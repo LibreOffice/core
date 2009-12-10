@@ -1552,7 +1552,7 @@ void SfxObjectShell::PositionView_Impl()
 
 sal_Bool SfxObjectShell::IsLoading() const
 /*  [Beschreibung ]
-    Wurde bereits FinishedLoading aufgerufeb? */
+    Has FinishedLoading been called? */
 {
     return !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT );
 }

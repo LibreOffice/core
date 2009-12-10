@@ -225,6 +225,7 @@ public:
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
+    SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
 //#endif
 private:
     SAL_DLLPRIVATE void Construct_Impl();

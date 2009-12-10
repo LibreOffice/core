@@ -48,8 +48,6 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -72,7 +70,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::frame::XComponentLoader;
@@ -465,36 +462,6 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
     }
 }
 
-namespace
-{
-    bool lcl_getViewDataAndID( const Reference< XModel >& _rxDocument, Sequence< PropertyValue >& _o_viewData, sal_Int16& _o_viewId )
-    {
-        _o_viewData.realloc(0);
-        _o_viewId = 0;
-
-        Reference< XViewDataSupplier > xViewDataSupplier( _rxDocument, UNO_QUERY );
-        Reference< XIndexAccess > xViewData;
-        if ( xViewDataSupplier.is() )
-            xViewData = xViewDataSupplier->getViewData();
-
-        if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
-            return false;
-
-        // obtain the ViewID from the view data
-        if ( xViewData->getByIndex( 0 ) >>= _o_viewData )
-        {
-            ::comphelper::NamedValueCollection aNamedUserData( _o_viewData );
-            ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
-            if ( sViewId.getLength() )
-            {
-                sViewId = sViewId.copy( 4 );    // format is like in "view3"
-                _o_viewId = sal_Int16( sViewId.toInt32() );
-            }
-        }
-        return true;
-    }
-}
-
 sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper::NamedValueCollection& i_rArgs )
 /* [Beschreibung]
  */
@@ -514,12 +481,10 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper
         "SfxFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
     // view ID
-    sal_Int16 nViewId = 0;
-    const bool bHasViewId = i_rArgs.get_ensureType( "ViewId", nViewId );
+    sal_Int16 nViewId = i_rArgs.getOrDefault( "ViewId", sal_Int16( 0 ) );
 
     // jump mark
-    ::rtl::OUString sJumpMark;
-    const bool bHasJumpMark = i_rArgs.get_ensureType( "JumpMark", sJumpMark );
+    const bool bHasJumpMark = i_rArgs.has( "JumpMark" );
 
     // plugin mode
     sal_Int16 nPluginMode = 0;
@@ -527,19 +492,6 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper
 
     // hidden?
     pImp->bHidden = i_rArgs.getOrDefault( "Hidden", pImp->bHidden );
-    if( !pImp->bHidden )
-        rDoc.OwnerLock( sal_True );
-
-    // if no view-related data exists in the set, then obtain the view data from the model
-    Sequence< PropertyValue > aUserData;
-    if ( !bHasJumpMark && !bHasPluginMode && !bHasViewId )
-    {
-        if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
-        {
-            SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
-            pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        }
-    }
 
     UpdateDescriptor( &rDoc );
 
@@ -552,83 +504,10 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const ::comphelper
         // TODO: better error handling? Under which conditions can this fail?
         return sal_False;
 
-    if ( nPluginMode == 1 )
-    {
-        pViewFrame->ForceOuterResize_Impl( FALSE );
-        pViewFrame->GetBindings().HidePopups(TRUE);
-
-        // MBA: layoutmanager of inplace frame starts locked and invisible
-        GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-        GetWorkWindow_Impl()->Lock_Impl( TRUE );
-
-        GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-    }
-
-    OSL_ENSURE( ( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT )
-            ||  ( !bHasJumpMark ),
-        "SfxFrame::InsertDocument_Impl: so this code wasn't dead?" );
-        // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
-        // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
-        // here is never called before the load process finished. At least not with a jump item != NULL.
-    if( bHasJumpMark )
-    {
-        pViewFrame->GetViewShell()->JumpToMark( sJumpMark );
-    }
-
-    if ( !pImp->bHidden )
-    {
-        if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
-            pViewFrame->GetDispatcher()->HideUI( TRUE );
-        else
-            pViewFrame->GetDispatcher()->HideUI( FALSE );
-
-        if ( IsInPlace() )
-            pViewFrame->LockAdjustPosSizePixel();
-
-        if ( ( nPluginMode == 3 ) )
-            GetWorkWindow_Impl()->SetInternalDockingAllowed(FALSE);
-
-        if ( !IsInPlace() )
-            pViewFrame->GetDispatcher()->Update_Impl();
-        pViewFrame->Show();
-        GetWindow().Show();
-        if ( !IsInPlace() || ( nPluginMode == 3 ) )
-            pViewFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
-        rDoc.OwnerLock( sal_False );
-
-        if ( IsInPlace() )
-        {
-            pViewFrame->UnlockAdjustPosSizePixel();
-            // force resize for OLE server to fix layout problems of writer and math
-            // see i53651
-            if ( nPluginMode == 3 )
-                pViewFrame->Resize(TRUE);
-        }
-    }
-    else
-    {
-        DBG_ASSERT( !IsInPlace() && !bHasPluginMode, "Special modes not compatible with hidden mode!" );
-        GetWindow().Show();
-    }
-
-    // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
-    pViewFrame->UpdateTitle();
-
-    if ( !IsInPlace() )
-    {
-        pViewFrame->Resize(TRUE);
-    }
-
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );
-
-    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
-    {
-        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
-    }
-
     return GetCurrentDocument() == &rDoc;
 }
 
+bool SfxFrame::IsMarkedHidden_Impl() const
+{
+    return pImp->bHidden;
+}

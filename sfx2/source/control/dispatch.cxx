@@ -530,6 +530,7 @@ void SfxDispatcher::Pop
     else
         aMsg += ByteString::CreateFromInt64( (sal_uIntPtr) &rShell );
     aMsg += bDelete ? ") with delete" : ")";
+    if ( bUntil ) aMsg += " (up to)";
     DbgTrace( aMsg.GetBuffer() );
 #endif
 

@@ -49,6 +49,7 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
@@ -60,6 +61,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -121,6 +123,12 @@ using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XDispatchProvider;
+using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::container::XIndexAccess;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Exception;
 namespace css = ::com::sun::star;
 
 struct GroupIDToCommandGroup
@@ -603,6 +611,10 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
         if ( m_pData->m_pViewShell )
         {
             ConnectSfxFrame_Impl( E_CONNECT );
+
+            // attaching the frame to the controller is the last step in the creation of a new view, so notify this
+            SfxEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell() );
+            SFX_APP()->NotifyEvent( aHint );
         }
     }
 }
@@ -1258,14 +1270,14 @@ BOOL SfxBaseController::HasMouseClickListeners_Impl()
 void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 {
     ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
-    SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
-    ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    ENSURE_OR_THROW( pViewFrame, "a view shell without a view frame is pretty pathological" );
 
     const bool bConnect = ( i_eConnect != E_DISCONNECT );
 
     // disable window and dispatcher
-    pActFrame->Enable( bConnect );
-    pActFrame->GetDispatcher()->Lock( !bConnect );
+    pViewFrame->Enable( bConnect );
+    pViewFrame->GetDispatcher()->Lock( !bConnect );
 
     if ( bConnect )
     {
@@ -1273,30 +1285,118 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
         // RECONNECT, we're not allowed to push them
         if ( i_eConnect != E_RECONNECT )
         {
-            pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
+            pViewFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
             if ( m_pData->m_pViewShell->GetSubShell() )
-                pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
+                pViewFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
             m_pData->m_pViewShell->PushSubShells_Impl();
-            pActFrame->GetDispatcher()->Flush();
+            pViewFrame->GetDispatcher()->Flush();
         }
 
         Window* pEditWin = m_pData->m_pViewShell->GetWindow();
         if ( pEditWin && m_pData->m_pViewShell->IsShowView_Impl() )
             pEditWin->Show();
 
-        if ( SfxViewFrame::Current() == pActFrame )
-            pActFrame->GetDispatcher()->Update_Impl( sal_True );
+        if ( SfxViewFrame::Current() == pViewFrame )
+            pViewFrame->GetDispatcher()->Update_Impl( sal_True );
 
-        Window* pFrameWin = &pActFrame->GetWindow();
-        if ( pFrameWin != &pActFrame->GetFrame()->GetWindow() )
+        Window* pFrameWin = &pViewFrame->GetWindow();
+        if ( pFrameWin != &pViewFrame->GetFrame()->GetWindow() )
             pFrameWin->Show();
+
+        if ( i_eConnect == E_CONNECT )
+        {
+            ::comphelper::NamedValueCollection aDocumentArgs( getModel()->getArgs() );
+
+            const sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
+            const bool bHasPluginMode = ( nPluginMode != 0 );
+
+            SfxFrame* pFrame = pViewFrame->GetFrame();
+            SfxObjectShell& rDoc = *m_pData->m_pViewShell->GetObjectShell();
+            if ( !pFrame->IsMarkedHidden_Impl() )
+            {
+                if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
+                    pViewFrame->GetDispatcher()->HideUI( TRUE );
+                else
+                    pViewFrame->GetDispatcher()->HideUI( FALSE );
+
+                if ( pFrame->IsInPlace() )
+                    pViewFrame->LockAdjustPosSizePixel();
+
+                if ( nPluginMode == 3 )
+                    pFrame->GetWorkWindow_Impl()->SetInternalDockingAllowed( FALSE );
+
+                if ( !pFrame->IsInPlace() )
+                    pViewFrame->GetDispatcher()->Update_Impl();
+                pViewFrame->Show();
+                pFrame->GetWindow().Show();
+                if ( !pFrame->IsInPlace() || ( nPluginMode == 3 ) )
+                    pViewFrame->MakeActive_Impl( pFrame->GetFrameInterface()->isActive() );
+
+                if ( pFrame->IsInPlace() )
+                {
+                    pViewFrame->UnlockAdjustPosSizePixel();
+                    // force resize for OLE server to fix layout problems of writer and math
+                    // see i53651
+                    if ( nPluginMode == 3 )
+                        pViewFrame->Resize( TRUE );
+                }
+            }
+            else
+            {
+                DBG_ASSERT( !pFrame->IsInPlace() && !bHasPluginMode, "Special modes not compatible with hidden mode!" );
+                pFrame->GetWindow().Show();
+            }
+
+            // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
+            pViewFrame->UpdateTitle();
+
+            if ( !pFrame->IsInPlace() )
+                pViewFrame->Resize( TRUE );
+
+            // if there's a JumpMark given, then, well, jump to it
+            const ::rtl::OUString sJumpMark = aDocumentArgs.getOrDefault( "JumpMark", ::rtl::OUString() );
+            const bool bHasJumpMark = ( sJumpMark.getLength() > 0 );
+            OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )
+                    ||  ( !sJumpMark.getLength() ),
+                "SfxBaseController::ConnectSfxFrame_Impl: so this code wasn't dead?" );
+                // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
+                // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
+                // here is never called before the load process finished. At least not with a non-empty jump mark
+            if ( sJumpMark.getLength() )
+                m_pData->m_pViewShell->JumpToMark( sJumpMark );
+
+            // if no plugin mode and no jump mark was supplied, check whether the document itself can provide view data, and
+            // if so, forward it to the view/shell.
+            if ( !bHasPluginMode && !bHasJumpMark )
+            {
+                try
+                {
+                    Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY );
+                    Reference< XIndexAccess > xViewData;
+                    if ( xViewDataSupplier.is() )
+                        xViewData = xViewDataSupplier->getViewData();
+                    if ( xViewData.is() && xViewData->getCount() > 0 )
+                    {
+                        Sequence< PropertyValue > aViewData;
+                        if ( ( xViewData->getByIndex( 0 ) >>= aViewData ) && ( aViewData.getLength() ) )
+                        {
+                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, TRUE );
+                        }
+                    }
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+            }
+        }
     }
 
     // invalidate slot corresponding to the view shell
-    const sal_uInt16 nViewNo = m_pData->m_pViewShell->GetObjectShell()->GetFactory().GetViewNo_Impl( pActFrame->GetCurViewId(), USHRT_MAX );
+    const sal_uInt16 nViewNo = m_pData->m_pViewShell->GetObjectShell()->GetFactory().GetViewNo_Impl( pViewFrame->GetCurViewId(), USHRT_MAX );
     DBG_ASSERT( nViewNo != USHRT_MAX, "view shell id not found" );
     if ( nViewNo != USHRT_MAX )
-        pActFrame->GetBindings().Invalidate( nViewNo + SID_VIEWSHELL0 );
+        pViewFrame->GetBindings().Invalidate( nViewNo + SID_VIEWSHELL0 );
 }
 
 //=============================================================================

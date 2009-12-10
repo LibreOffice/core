@@ -104,6 +104,7 @@
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include "viewfac.hxx"
+#include "workwin.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
@@ -4044,6 +4045,21 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
         pViewFrame->GetFrame()->SetMenuBarOn_Impl( FALSE );
+
+    const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
+    if ( nPluginMode == 1 )
+    {
+        pViewFrame->ForceOuterResize_Impl( FALSE );
+        pViewFrame->GetBindings().HidePopups( TRUE );
+
+        SfxFrame* pFrame = pViewFrame->GetFrame();
+        // MBA: layoutmanager of inplace frame starts locked and invisible
+        pFrame->GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
+        pFrame->GetWorkWindow_Impl()->Lock_Impl( TRUE );
+
+        pFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+    }
 
     return Reference< XController2 >( pViewShell->GetController(), UNO_QUERY_THROW );
 }
