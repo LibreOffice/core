@@ -272,6 +272,8 @@ public:
     static void RemoveSGMLComment( String &rString, BOOL bFull );
 
     static BOOL InternalImgToPrivateURL( String& rURL );
+    static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
+    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };
 
 inline void HTMLParser::StartPRE( BOOL bRestart )
