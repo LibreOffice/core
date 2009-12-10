@@ -34,7 +34,7 @@
 
 
 #include "scitems.hxx"
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 

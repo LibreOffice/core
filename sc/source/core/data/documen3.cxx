@@ -35,7 +35,7 @@
 
 #include "scitems.hxx"
 #include <svx/langitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>

@@ -44,7 +44,7 @@
 #include <svx/fmdpage.hxx>
 #include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unoprnms.hxx>
 #include <svx/unotext.hxx>

@@ -43,7 +43,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>

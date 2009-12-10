@@ -39,7 +39,7 @@
 #include "scitems.hxx"
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>

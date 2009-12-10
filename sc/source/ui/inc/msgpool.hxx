@@ -32,7 +32,7 @@
 #define SC_MSGPOOL_HXX
 
 #include "scitems.hxx"
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 
 #include <svl/itempool.hxx>

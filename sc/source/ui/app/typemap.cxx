@@ -69,7 +69,7 @@
 #include <sfx2/objitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/postitem.hxx>
 #include <sfx2/tplpitem.hxx>

@@ -43,7 +43,7 @@
 #include <svl/zformat.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/numinf.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

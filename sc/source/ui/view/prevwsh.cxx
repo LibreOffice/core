@@ -40,7 +40,7 @@
 
 #include <sfx2/app.hxx>
 #include <svx/sizeitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
 //CHINA001 #include <svx/zoom.hxx>

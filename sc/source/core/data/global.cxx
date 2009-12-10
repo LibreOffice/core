@@ -40,7 +40,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>

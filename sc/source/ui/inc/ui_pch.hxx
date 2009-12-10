@@ -324,7 +324,7 @@
 #include <fupoor.hxx>
 #include <docpool.hxx>
 #include <vcl/button.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdorect.hxx>
 #include <svl/whiter.hxx>
 #include <stlpool.hxx>

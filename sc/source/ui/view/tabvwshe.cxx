@@ -40,7 +40,7 @@
 #include <svx/editview.hxx>
 #include <svx/flditem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>

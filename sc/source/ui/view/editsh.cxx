@@ -52,7 +52,7 @@
 #include <svx/postitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/shdditem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
