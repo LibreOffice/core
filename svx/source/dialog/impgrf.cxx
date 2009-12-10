@@ -37,8 +37,6 @@
 #include <tools/bigint.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -47,6 +45,7 @@
 #include <ucbhelper/content.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::ucbhelper;
 using namespace com::sun::star::uno;
@@ -56,7 +55,6 @@ using namespace com::sun::star::uno;
 
 #define _SVX_IMPGRF_CXX
 #include "svx/impgrf.hxx"
-
 #include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 #include "helpid.hrc"
@@ -85,8 +83,6 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
                     ? pFilter->GetImportFormatNumber( rFilterName )
                     : GRFILTER_FORMAT_DONTKNOW;
 
-    SfxMedium* pMed = 0;
-
     // dann teste mal auf File-Protokoll:
     SvStream* pStream = NULL;
     INetURLObject aURL( rPath );
@@ -98,38 +94,20 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
     }
     else if ( INET_PROT_FILE != aURL.GetProtocol() )
     {
-        // z.Z. nur auf die aktuelle DocShell
-        pMed = new SfxMedium( rPath, STREAM_READ, TRUE );
-        pMed->DownLoad();
-        pStream = pMed->GetInStream();
+        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
     }
-    int nRes = GRFILTER_OK;
 
+    int nRes = GRFILTER_OK;
     if ( !pStream )
         nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
     else
-        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream,
-                                       nFilter, pDeterminedFormat );
+        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
 
 #ifdef DBG_UTIL
     if( nRes )
-    {
-        if( pMed )
-        {
-            DBG_WARNING3( "GrafikFehler [%d] - [%s] URL[%s]",
-                            nRes,
-                            pMed->GetPhysicalName().GetBuffer(),
-                            rPath.GetBuffer() );
-        }
-        else
-        {
-            DBG_WARNING2( "GrafikFehler [%d] - [%s]", nRes, rPath.GetBuffer() );
-        }
-    }
+        DBG_WARNING2( "GrafikFehler [%d] - [%s]", nRes, rPath.GetBuffer() );
 #endif
 
-    if ( pMed )
-        delete pMed;
     return nRes;
 }
 
