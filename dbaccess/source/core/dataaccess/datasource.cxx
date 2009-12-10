@@ -200,8 +200,6 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) thr
 //--------------------------------------------------------------------
 void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
 {
-    DBG_ASSERT( Source.Source == m_aBroadcaster.get(), "FlushNotificationAdapter::disposing: where did this come from?" );
-
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
         xListener->disposing( Source );
@@ -562,21 +560,22 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl)
             :ModelDependentComponent( _pImpl )
-            ,OSubComponent( getMutex(), Reference< XInterface >() )
-            ,OPropertySetHelper(OComponentHelper::rBHelper)
+            ,ODatabaseSource_Base( getMutex() )
+            ,OPropertySetHelper( ODatabaseSource_Base::rBHelper )
             ,m_aBookmarks( *this, getMutex() )
             ,m_aFlushListeners( getMutex() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::ODatabaseSource" );
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
+    OSL_TRACE( "DS: ctor: %p: %p", this, m_pImpl.get() );
 }
 
 //--------------------------------------------------------------------------
 ODatabaseSource::~ODatabaseSource()
 {
+    OSL_TRACE( "DS: dtor: %p: %p", this, m_pImpl.get() );
     DBG_DTOR(ODatabaseSource,NULL);
-    if ( !OComponentHelper::rBHelper.bInDispose && !OComponentHelper::rBHelper.bDisposed )
+    if ( !ODatabaseSource_Base::rBHelper.bInDispose && !ODatabaseSource_Base::rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -604,11 +603,8 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
                                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(
-        ::comphelper::concatSequences(
-            OSubComponent::getTypes(),
-            aPropertyHelperTypes.getTypes()
-        ),
-        ODatabaseSource_Base::getTypes()
+        ODatabaseSource_Base::getTypes(),
+        aPropertyHelperTypes.getTypes()
     );
 }
 
@@ -634,39 +630,26 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::queryInterface" );
-    Any aIface = OSubComponent::queryInterface( rType );
-    if (!aIface.hasValue())
-    {
-        aIface = ODatabaseSource_Base::queryInterface( rType );
-        if ( !aIface.hasValue() )
-        {
-            aIface = ::cppu::queryInterface(
-                        rType,
-                        static_cast< XPropertySet* >( this ),
-                        static_cast< XFastPropertySet* >( this ),
-                        static_cast< XMultiPropertySet* >( this ));
-        }
-    }
+    Any aIface = ODatabaseSource_Base::queryInterface( rType );
+    if ( !aIface.hasValue() )
+        aIface = ::cppu::OPropertySetHelper::queryInterface( rType );
     return aIface;
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::acquire() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::acquire" );
-    OSubComponent::acquire();
+    ODatabaseSource_Base::acquire();
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::release() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::release" );
-    OSubComponent::release();
+    ODatabaseSource_Base::release();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
 }
@@ -720,8 +703,8 @@ sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName 
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
-    OSubComponent::disposing();
+    OSL_TRACE( "DS: disp: %p, %p", this, m_pImpl.get() );
+    ODatabaseSource_Base::WeakComponentImplHelperBase::disposing();
     OPropertySetHelper::disposing();
 
     EventObject aDisposeEvent(static_cast<XWeak*>(this));

@@ -2051,7 +2051,7 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
 Reference< XStorage> ODocumentDefinition::getContainerStorage() const
 {
     return  m_pImpl->m_pDataSource
-        ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
+        ?   m_pImpl->m_pDataSource->getStorage( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
         :   Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------

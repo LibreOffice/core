@@ -78,8 +78,6 @@ namespace dbaui
         const FeatureSet&   getFeatureSet() const;
 
         /// determines whether or not the data source requires authentication
-        AuthenticationMode  getAuthentication() const;
-
         static  AuthenticationMode  getAuthentication( const ::rtl::OUString& _sURL );
 
     private:

@@ -325,6 +325,7 @@ namespace
 
         return eErrorCode;
     }
+<<<<<<< local
     //------------------------------------------------------------------------------
     ::rtl::OUString QuoteField( const OQueryDesignView* _pView,const ::rtl::OUString& rValue, sal_Int32 aType )
     {
@@ -407,6 +408,8 @@ namespace
         }
         return rNewValue;
     }
+=======
+>>>>>>> other
     // -----------------------------------------------------------------------------
 
     /** FillDragInfo fills the field description out of the table
@@ -1384,7 +1387,11 @@ namespace
             GetInnerJoinCriteria(_pView,pNodeTmp);
             // now simplify again, join are checked in ComparisonPredicate
             ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
+<<<<<<< local
             pNodeTmp = pNode->getChild(1);
+=======
+            pNodeTmp = pNode->getChild(1);
+>>>>>>> other
 
             // it could happen that pCondition is not more valid
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pNodeTmp, rLevel);

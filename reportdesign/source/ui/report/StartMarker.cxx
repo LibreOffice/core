@@ -194,7 +194,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 void OStartMarker::changeImage()
 {
     Image* pImage = NULL;
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
     else
         pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
@@ -212,7 +212,7 @@ void OStartMarker::initDefaultNodeImages()
     }
 
     Image* pImage = NULL;
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
     }

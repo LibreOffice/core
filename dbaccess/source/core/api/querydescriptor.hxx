@@ -165,10 +165,6 @@ protected:
     virtual ~OQueryDescriptor();
 public:
     OQueryDescriptor();
-    /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
-        won't have any column informations (the column container will be empty)
-    */
-    OQueryDescriptor(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForeignDescriptor);
     OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
 
     // com::sun::star::lang::XTypeProvider

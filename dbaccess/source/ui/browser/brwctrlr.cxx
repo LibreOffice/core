@@ -1495,7 +1495,10 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
         m_aCurrentError = aInfo;
     }
     else
+    {
+        m_aCurrentError = aInfo;
         m_aAsyncDisplayError.Call();
+    }
 }
 
 //------------------------------------------------------------------------------

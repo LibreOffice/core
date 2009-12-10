@@ -143,11 +143,13 @@ class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStor
     NamedStorages       m_aExposedStorages;
     ODatabaseModelImpl* m_pModelImplementation;
     bool                m_bPropagateCommitToRoot;
+    bool                m_bDisposingSubStorages;
 
 public:
     DocumentStorageAccess( ODatabaseModelImpl& _rModelImplementation )
         :m_pModelImplementation( &_rModelImplementation )
         ,m_bPropagateCommitToRoot( true )
+        ,m_bDisposingSubStorages( false )
     {
         DBG_CTOR( DocumentStorageAccess, NULL );
     }
@@ -161,19 +163,8 @@ protected:
 public:
     void dispose();
 
-    void    suspendCommitPropagation()
-    {
-        DBG_ASSERT( m_bPropagateCommitToRoot, "DocumentStorageAccess:: suspendCommitPropagation: already suspended" );
-        m_bPropagateCommitToRoot = false;
-    }
-    void    resumeCommitPropagation()
-    {
-        DBG_ASSERT( !m_bPropagateCommitToRoot, "DocumentStorageAccess:: suspendCommitPropagation: already suspended" );
-        m_bPropagateCommitToRoot = true;
-    }
-
     // XDocumentSubStorageSupplier
-    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 nMode ) throw (RuntimeException);
+    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 _nMode ) throw (RuntimeException);
     virtual Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException);
 
     // XTransactionListener
@@ -184,6 +175,32 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    /// disposes all storages managed by this instance
+    void disposeStorages();
+
+    /// disposes all known sub storages
+    void commitStorages() SAL_THROW(( IOException, RuntimeException ));
+
+    /// commits the dedicated "database" storage
+    bool commitEmbeddedStorage( bool _bPreventRootCommits );
+
+private:
+    /** opens the sub storage with the given name, in the given mode
+    */
+    Reference< XStorage > impl_openSubStorage_nothrow( const ::rtl::OUString& _rStorageName, sal_Int32 _nMode );
+
+    void impl_suspendCommitPropagation()
+    {
+        OSL_ENSURE( m_bPropagateCommitToRoot, "DocumentStorageAccess::impl_suspendCommitPropagation: already suspended" );
+        m_bPropagateCommitToRoot = false;
+    }
+    void impl_resumeCommitPropagation()
+    {
+        OSL_ENSURE( !m_bPropagateCommitToRoot, "DocumentStorageAccess::impl_resumeCommitPropagation: not suspended" );
+        m_bPropagateCommitToRoot = true;
+    }
+
 };
 
 //--------------------------------------------------------------------------
@@ -214,17 +231,117 @@ void DocumentStorageAccess::dispose()
 }
 
 //--------------------------------------------------------------------------
-Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 nMode ) throw (RuntimeException)
+Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const ::rtl::OUString& _rStorageName, sal_Int32 _nDesiredMode )
+{
+    OSL_ENSURE( _rStorageName.getLength(),"ODatabaseModelImpl::impl_openSubStorage_nothrow: Invalid storage name!" );
+
+    Reference< XStorage > xStorage;
+    try
+    {
+        Reference< XStorage > xRootStorage( m_pModelImplementation->getOrCreateRootStorage() );
+        if ( xRootStorage.is() )
+        {
+            sal_Int32 nRealMode = m_pModelImplementation->m_bDocumentReadOnly ? ElementModes::READ : _nDesiredMode;
+            if ( nRealMode == ElementModes::READ )
+            {
+                Reference< XNameAccess > xSubStorageNames( xRootStorage, UNO_QUERY );
+                if ( xSubStorageNames.is() && !xSubStorageNames->hasByName( _rStorageName ) )
+                    return xStorage;
+            }
+
+            xStorage = xRootStorage->openStorageElement( _rStorageName, nRealMode );
+
+            Reference< XTransactionBroadcaster > xBroad( xStorage, UNO_QUERY );
+            if ( xBroad.is() )
+                xBroad->addTransactionListener( this );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return xStorage;
+}
+
+//--------------------------------------------------------------------------
+void DocumentStorageAccess::disposeStorages()
+{
+    m_bDisposingSubStorages = true;
+
+    NamedStorages::iterator aEnd = m_aExposedStorages.end();
+    for (   NamedStorages::iterator aIter = m_aExposedStorages.begin();
+            aIter != aEnd ;
+            ++aIter
+        )
+    {
+        try
+        {
+            ::comphelper::disposeComponent( aIter->second );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+    m_aExposedStorages.clear();
+
+    m_bDisposingSubStorages = false;
+}
+
+//--------------------------------------------------------------------------
+void DocumentStorageAccess::commitStorages() SAL_THROW(( IOException, RuntimeException ))
+{
+    try
+    {
+        for (   NamedStorages::const_iterator aIter = m_aExposedStorages.begin();
+                aIter != m_aExposedStorages.end();
+                ++aIter
+            )
+        {
+            m_pModelImplementation->commitStorageIfWriteable( aIter->second );
+        }
+    }
+    catch(const WrappedTargetException&)
+    {
+        // WrappedTargetException not allowed to leave
+        throw IOException();
+    }
+}
+
+//--------------------------------------------------------------------------
+bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
+{
+    if ( _bPreventRootCommits )
+        impl_suspendCommitPropagation();
+
+    bool bSuccess = false;
+    try
+    {
+        NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
+        if ( pos != m_aExposedStorages.end() )
+            bSuccess = m_pModelImplementation->commitStorageIfWriteable( pos->second );
+    }
+    catch( Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    if ( _bPreventRootCommits )
+        impl_resumeCommitPropagation();
+
+    return bSuccess;
+
+}
+
+//--------------------------------------------------------------------------
+Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 _nDesiredMode ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     NamedStorages::iterator pos = m_aExposedStorages.find( aStorageName );
     if ( pos == m_aExposedStorages.end() )
     {
-        Reference< XStorage > xResult = m_pModelImplementation->getStorage( aStorageName, nMode );
-        Reference< XTransactionBroadcaster > xBroadcaster( xResult, UNO_QUERY );
-        if ( xBroadcaster.is() )
-            xBroadcaster->addTransactionListener( this );
-
+        Reference< XStorage > xResult = impl_openSubStorage_nothrow( aStorageName, _nDesiredMode );
         pos = m_aExposedStorages.insert( NamedStorages::value_type( aStorageName, xResult ) ).first;
     }
 
@@ -269,8 +386,14 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     if ( m_pModelImplementation && m_bPropagateCommitToRoot )
     {
         Reference< XStorage > xStorage( aEvent.Source, UNO_QUERY );
-        if ( m_pModelImplementation->isDatabaseStorage( xStorage ) )
+
+        // check if this is the dedicated "database" sub storage
+        NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
+        if  (   ( pos != m_aExposedStorages.end() )
+            &&  ( pos->second == xStorage )
+            )
         {
+            // if so, also commit the root storage
             m_pModelImplementation->commitRootStorage();
         }
     }
@@ -291,9 +414,10 @@ void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& /*a
 //--------------------------------------------------------------------------
 void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& Source ) throw ( RuntimeException )
 {
-    ODatabaseModelImpl* pImpl = m_pModelImplementation;
-    if ( pImpl )
-        pImpl->disposing( Source );
+    OSL_ENSURE( Reference< XStorage >( Source.Source, UNO_QUERY ).is(), "DocumentStorageAccess::disposing: No storage? What's this?" );
+
+    if ( m_bDisposingSubStorages )
+        return;
 
     for (   NamedStorages::iterator find = m_aExposedStorages.begin();
             find != m_aExposedStorages.end();
@@ -318,7 +442,6 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
-            ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_pDBContext( &_rDBContext )
@@ -333,7 +456,6 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_bSuppressVersionColumns(sal_True)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
-            ,m_bDisposingSubStorages( sal_False )
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
@@ -357,7 +479,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
-            ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_pDBContext( &_rDBContext )
@@ -373,7 +494,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bSuppressVersionColumns(sal_True)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
-            ,m_bDisposingSubStorages( sal_False )
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
@@ -506,8 +626,7 @@ namespace
 
         try
         {
-            Reference< XStorage > xContainerStorage( _rModel.getStorage(
-                _rModel.getObjectContainerStorageName( _eType ), ElementModes::READWRITE ) );
+            Reference< XStorage > xContainerStorage( _rModel.getStorage( _eType, ElementModes::READWRITE ) );
             // note the READWRITE here: If the storage already existed before, then the OpenMode will
             // be ignored, anyway.
             // If the storage did not yet exist, then it will be created. If the database document
@@ -589,16 +708,9 @@ void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::Event
         if ( bStore )
             commitRootStorage();
     }
-    else // storage
+    else
     {
-        if ( !m_bDisposingSubStorages )
-        {
-            Reference<XStorage> xStorage(Source.Source,UNO_QUERY);
-            TStorages::iterator aFind = ::std::find_if(m_aStorages.begin(),m_aStorages.end(),
-                                                ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XStorage> >(),xStorage),::std::select2nd<TStorages::value_type>()));
-            if ( aFind != m_aStorages.end() )
-                m_aStorages.erase(aFind);
-        }
+        OSL_ENSURE( false, "ODatabaseModelImpl::disposing: where does this come from?" );
     }
 }
 //------------------------------------------------------------------------------
@@ -662,9 +774,11 @@ void ODatabaseModelImpl::dispose()
 
     try
     {
-        sal_Bool bStore = commitEmbeddedStorage();
+        sal_Bool bCouldStore = commitEmbeddedStorage( true );
+            // "true" means that committing the embedded storage should not trigger committing the root
+            // storage. This is because we are going to commit the root storage ourself, anyway
         disposeStorages();
-        if ( bStore )
+        if ( bCouldStore )
             commitRootStorage();
 
         impl_switchToStorage_throw( NULL );
@@ -731,27 +845,9 @@ Sequence< PropertyValue > ODatabaseModelImpl::stripLoadArguments( const ::comphe
 // -----------------------------------------------------------------------------
 void ODatabaseModelImpl::disposeStorages() SAL_THROW(())
 {
-    m_bDisposingSubStorages = sal_True;
-
-    TStorages::iterator aEnd = m_aStorages.end();
-    for ( TStorages::iterator aIter = m_aStorages.begin();
-          aIter != aEnd ;
-          ++aIter
-        )
-    {
-        try
-        {
-            ::comphelper::disposeComponent( aIter->second );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-    m_aStorages.clear();
-
-    m_bDisposingSubStorages = sal_False;
+    getDocumentStorageAccess()->disposeStorages();
 }
+
 // -----------------------------------------------------------------------------
 Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() const
 {
@@ -849,68 +945,11 @@ Reference< XDocumentSubStorageSupplier > ODatabaseModelImpl::getDocumentSubStora
 {
     return getDocumentStorageAccess();
 }
+
 // -----------------------------------------------------------------------------
-Reference<XStorage> ODatabaseModelImpl::getStorage( const ::rtl::OUString& _sStorageName, sal_Int32 _nMode )
+bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
 {
-    OSL_ENSURE(_sStorageName.getLength(),"ODatabaseModelImpl::getStorage: Invalid storage name!");
-    Reference<XStorage> xStorage;
-    TStorages::iterator aFind = m_aStorages.find(_sStorageName);
-    if ( aFind == m_aStorages.end() )
-    {
-        try
-        {
-            Reference< XStorage > xMyStorage( getOrCreateRootStorage() );
-            if ( xMyStorage.is() )
-            {
-                sal_Int32 nMode = m_bDocumentReadOnly ? ElementModes::READ : _nMode;
-                if ( nMode == ElementModes::READ )
-                {
-                    Reference< XNameAccess > xSubStorageNames( xMyStorage, UNO_QUERY );
-                    if ( xSubStorageNames.is() && !xSubStorageNames->hasByName( _sStorageName ) )
-                        return xStorage;
-                }
-
-                xStorage = xMyStorage->openStorageElement( _sStorageName, nMode );
-                Reference< XTransactionBroadcaster > xBroad( xStorage, UNO_QUERY );
-                if ( xBroad.is() )
-                    xBroad->addTransactionListener( getDocumentStorageAccess() );
-                aFind = m_aStorages.insert( TStorages::value_type( _sStorageName, xStorage ) ).first;
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-
-    if ( aFind != m_aStorages.end() )
-        xStorage = aFind->second;
-
-    return xStorage;
-}
-// -----------------------------------------------------------------------------
-sal_Bool ODatabaseModelImpl::commitEmbeddedStorage( sal_Bool _bPreventRootCommits )
-{
-    if ( _bPreventRootCommits && m_pStorageAccess )
-        m_pStorageAccess->suspendCommitPropagation();
-
-    sal_Bool bStore = sal_False;
-    try
-    {
-        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-        if ( aFind != m_aStorages.end() )
-            bStore = commitStorageIfWriteable(aFind->second);
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
-    }
-
-    if ( _bPreventRootCommits && m_pStorageAccess )
-        m_pStorageAccess->resumeCommitPropagation();
-
-    return bStore;
-
+    return getDocumentStorageAccess()->commitEmbeddedStorage( _bPreventRootCommits );
 }
 
 // -----------------------------------------------------------------------------
@@ -1072,18 +1111,13 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
 // -----------------------------------------------------------------------------
 void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeException ))
 {
-    try
-    {
-        TStorages::iterator aIter = m_aStorages.begin();
-        TStorages::iterator aEnd = m_aStorages.end();
-        for (; aIter != aEnd ; ++aIter)
-            commitStorageIfWriteable( aIter->second );
-    }
-    catch(const WrappedTargetException&)
-    {
-        // WrappedTargetException not allowed to leave
-        throw IOException();
-    }
+    getDocumentStorageAccess()->commitStorages();
+}
+
+// -----------------------------------------------------------------------------
+Reference< XStorage > ODatabaseModelImpl::getStorage( const ObjectType _eType, const sal_Int32 _nDesiredMode )
+{
+    return getDocumentStorageAccess()->getDocumentSubStorage( getObjectContainerStorageName( _eType ), _nDesiredMode );
 }
 
 // -----------------------------------------------------------------------------
@@ -1173,7 +1207,7 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
 void ODatabaseModelImpl::revokeDataSource() const
 {
     if ( m_pDBContext && m_sDocumentURL.getLength() )
-        m_pDBContext->deregisterPrivate( m_sDocumentURL );
+        m_pDBContext->revokeDatabaseDocument( *this );
 }
 
 // -----------------------------------------------------------------------------
@@ -1323,16 +1357,10 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
 void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation, const ::rtl::OUString& _rDocumentURL )
 {
     // register at the database context, or change registration
-    if ( _rDocumentURL != m_sDocumentURL )
+    const bool bURLChanged = ( _rDocumentURL != m_sDocumentURL );
+    const ::rtl::OUString sOldURL( m_sDocumentURL );
+    if ( bURLChanged )
     {
-        if ( m_pDBContext )
-        {
-            if ( m_sDocumentURL.getLength() )
-                m_pDBContext->nameChangePrivate( m_sDocumentURL, _rDocumentURL );
-            else
-                m_pDBContext->registerPrivate( _rDocumentURL, this );
-        }
-
         if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
             ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
             )
@@ -1349,19 +1377,14 @@ void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation,
     // remember both
     m_sDocFileLocation = _rDocumentLocation.getLength() ? _rDocumentLocation : _rDocumentURL;
     m_sDocumentURL = _rDocumentURL;
-}
 
-// -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::isDatabaseStorage( const Reference< XStorage >& _rxStorage ) const
-{
-    TStorages::const_iterator pos = m_aStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
-    if  (   ( pos != m_aStorages.end() )
-        &&  ( pos->second == _rxStorage )
-        )
+    if ( bURLChanged && m_pDBContext )
     {
-        return true;
+        if ( sOldURL.getLength() )
+            m_pDBContext->databaseDocumentURLChange( sOldURL, m_sDocumentURL );
+        else
+            m_pDBContext->registerDatabaseDocument( *this );
     }
-    return false;
 }
 
 // -----------------------------------------------------------------------------

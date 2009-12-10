@@ -3467,7 +3467,7 @@ sal_Bool SbaTableQueryBrowser::isHiContrast() const
 {
     sal_Bool bRet = sal_False;
     if ( m_pTreeView )
-        bRet = m_pTreeView->getListBox().GetBackground().GetColor().IsDark();
+        bRet = m_pTreeView->getListBox().GetSettings().GetStyleSettings().GetHighContrastMode();
     return bRet;
 }
 // -----------------------------------------------------------------------------
