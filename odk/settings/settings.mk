@@ -38,6 +38,7 @@ ifeq "$(PLATFORM)" "windows"
 
 OS=WIN
 PS=\\
+ICL=$$
 CC=cl
 LINK=link
 BUILDLIB=lib
@@ -79,12 +80,12 @@ PATH_SEPARATOR=;
 
 # use this for release version
 CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
-ifeq "$(CPP_VC8)" "true"
+ifeq "$(CPP_MANIFEST)" "true"
 #CC_FLAGS+=-EHa -Zc:wchar_t-
-LINK_MANIFEST_VC8_ONLY=mt -manifest $@.manifest "-outputresource:$@;2"
+LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
 #CC_FLAGS+=
-LINK_MANIFEST_VC8_ONLY=
+LINK_MANIFEST=
 endif
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-Zi
@@ -97,7 +98,7 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=msci -- windows msvc 4.x - 7.x
 
-CC_DEFINES=-DWIN32 -DWNT -DCPPU_ENV=msci
+CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_OUTPUT_SWITCH=-Fo
 
 LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL /DEBUGTYPE:cv
@@ -152,6 +153,7 @@ endif
 
 OS=SOLARIS
 PS=/
+ICL=\$$
 CC=CC
 LINK=CC
 LIB=CC
@@ -280,6 +282,7 @@ endif
 
 OS=LINUX
 PS=/
+ICL=\$$
 CC=gcc
 LINK=g++
 LIB=g++
@@ -395,11 +398,17 @@ JAVA_PROC_TYPE=ppc
 endif
 JAVABIN=Commands
 
+GCC_VERSION =$(shell gcc -dumpversion| cut -d"." -f1,2)
+ifeq "$(GCC_VERSION)" "4.2"
+GCC_ARCH_OPTION=-arch i386
+endif
+
 OS=MACOSX
 PS=/
-CC=gcc
-LINK=g++
-LIB=g++
+ICL=\$$
+CC=gcc-$(GCC_VERSION)
+LINK=g++-$(GCC_VERSION)
+LIB=g++-$(GCC_VERSION)
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
@@ -407,8 +416,6 @@ OBJ_EXT=o
 SHAREDLIB_EXT=dylib
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
-
-GCC_VERSION=$(shell $(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
@@ -452,9 +459,9 @@ PATH_SEPARATOR=:
 
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-malign-natural -c -g -fPIC -fno-common
+CC_FLAGS=-malign-natural -c -g -fPIC -fno-common $(GCC_ARCH_OPTION)
 else
-CC_FLAGS=-malign-natural -c -O -fPIC -fno-common
+CC_FLAGS=-malign-natural -c -O -fPIC -fno-common $(GCC_ARCH_OPTION)
 endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
@@ -464,13 +471,13 @@ CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_
 
 CC_OUTPUT_SWITCH=-o
 
-LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress
+LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
 #-fPIC -fno-common
 
 # install_name '@executable_path$/(@:f)'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)  -Wl,-exported_symbols_list $(COMP_MAPFILE)
 
-#EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
+EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
 LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 #LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
@@ -499,6 +506,7 @@ JAVA_PROC_TYPE=i386
 
 OS=FREEBSD
 PS=/
+ICL=\$$
 CC=gcc
 LINK=g++
 LIB=g++

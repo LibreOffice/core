@@ -42,7 +42,7 @@ var oo_sdk_ure_home=getUreHome();
 
 var oo_sdk_make_home=getMakeHome();
 var oo_sdk_zip_home=getZipHome();
-var oo_sdk_vc8_used="";
+var oo_sdk_manifest_used="";
 var oo_sdk_windowssdk="";
 var oo_sdk_cpp_home=getCppHome();
 var oo_sdk_cli_home=getCliHome();
@@ -391,6 +391,7 @@ function getCppHome()
 		// check Windows SDK if VC 9
         if (sVC.length > 0)
         {
+		    oo_sdk_manifest_used="true";	
 			try {
 				oo_sdk_windowssdk = WshShell.RegRead(regKeyWindowsSDK);
 			}catch (exc) {}
@@ -400,18 +401,16 @@ function getCppHome()
 	        try {
 				sVC = WshShell.RegRead(regKeyVCExpress80);
 			}catch (exc) {}
+	        if (sVC.length > 0)
+			   oo_sdk_manifest_used="true";
 		}        
         if (sVC.length == 0)
         {
 	        try {
 				sVC = WshShell.RegRead(regKeyVC80);
 			}catch (exc) {}
-		}        
-        if (sVC.length == 0)
-        {
-	        try {
-				sVC = WshShell.RegRead(regKeyVCExpress80);
-			}catch (exc) {}
+	        if (sVC.length > 0)
+			   oo_sdk_manifest_used="true";
 		}        
         if (sVC.length == 0)
         {
@@ -436,17 +435,17 @@ function getCppHome()
         if (sHome.length == 0)
         {
             //No user input, check OO_SDK_CPP_HOME or suggested value
-			if ( sSuggestedHome.length == 0 ) {
-			    bSkip = true;
-			} else {
-			    if ( !aFileSystemObject.FolderExists(sSuggestedHome) )
-				{
-					stdout.WriteLine("\n Error: Could not find directory \"" +
-									 sSuggestedHome + "\".");
-					sSuggestedHome = "";
-					bSkip = true;
-				}
-			}
+	    if ( sSuggestedHome.length == 0 ) {
+		bSkip = true;
+	    } else {
+	        if ( !aFileSystemObject.FolderExists(sSuggestedHome) )
+		{
+		    stdout.WriteLine("\n Error: Could not find directory \"" +
+				     sSuggestedHome + "\".");
+		    sSuggestedHome = "";
+		    bSkip = true;
+		}
+	    }
        
             sHome = sSuggestedHome;
         } else
@@ -787,6 +786,7 @@ function writeBatFile(fdir, file)
     if ( !fso.FolderExists(fdir) )
        fso.CreateFolder(fdir);
     var newFile = fso.CreateTextFile(file, true);
+
     newFile.Write(
         "@echo off\n" +
         "REM This script sets all enviroment variables, which\n" +
@@ -822,7 +822,7 @@ function writeBatFile(fdir, file)
         "REM Directory of the C++ compiler.\n" + 
         "REM Example:set OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\n" + 
         "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home + 
-		"\nset CPP_VC8=" + oo_sdk_vc8_used +
+		"\nset CPP_MANIFEST=" + oo_sdk_manifest_used +
 		"\nset CPP_WINDOWS_SDK=" + oo_sdk_windowssdk +
         "\n\n" + 
         "REM Directory of the C# and VB.NET compilers.\n" + 
@@ -931,6 +931,11 @@ function writeBatFile(fdir, file)
         "REM Add directory of the C++ compiler to the path, if necessary.\n" +
         "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" + 
         "\n" +
+        "REM Add directory of the Win SDK to the path, if necessary.\n" +
+        "if defined CPP_WINDOWS_SDK (\n" +
+		"   set PATH=%CPP_WINDOWS_SDK\\bin%;%PATH%\n" + 
+		"   set INCLUDE=%CPP_WINDOWS_SDK\\Include%;%INCLUDE%\n" + 
+        ")\n" +
         "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" + 
         "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" + 
         "\n" + 
