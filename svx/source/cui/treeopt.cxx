@@ -1078,7 +1078,7 @@ void OfaTreeOptionsDialog::DataChanged( const DataChangedEvent& rDCEvt )
         !aTreeLB.GetParent(pEntry))
     {
         OptionsGroupInfo* pInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
         for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
         {
@@ -1336,7 +1336,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pEntry->GetUserData();
         if ( pTGInfo->m_sPageURL.getLength() == 0 )
         {
-            bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
             //hier den Hilfetext anzeigen
             for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )

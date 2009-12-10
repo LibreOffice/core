@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <tools/debug.hxx>
 #include <svx/selectioncontroller.hxx>
 
 namespace sdr
@@ -99,6 +100,16 @@ bool SelectionController::GetMarkedObjModel( SdrPage* /*pNewPage*/ )
 }
 
 bool SelectionController::PasteObjModel( const SdrModel& /*rModel*/ )
+{
+    return false;
+}
+
+bool SelectionController::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
+{
+    return false;
+}
+
+bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, bool /*bNoCharacterFormats*/, bool /*bNoParagraphFormats*/ )
 {
     return false;
 }

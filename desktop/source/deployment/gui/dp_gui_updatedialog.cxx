@@ -284,8 +284,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
     std::vector< dp_gui::TUpdateListEntry > m_vExtensionList;
-    css::uno::Reference< css::deployment::XUpdateInformationProvider >
-        m_updateInformation;
+    css::uno::Reference< css::deployment::XUpdateInformationProvider > m_updateInformation;
+    css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHdl;
 
     // guarded by Application::GetSolarMutex():
     css::uno::Reference< css::task::XAbortChannel > m_abort;
@@ -302,7 +302,21 @@ UpdateDialog::Thread::Thread(
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
     m_stop(false)
-{}
+{
+    if( m_context.is() )
+    {
+        css::uno::Reference< css::lang::XMultiComponentFactory > xServiceManager( m_context->getServiceManager() );
+
+        if( xServiceManager.is() )
+        {
+            m_xInteractionHdl = css::uno::Reference< css::task::XInteractionHandler > (
+                                xServiceManager->createInstanceWithContext( OUSTR( "com.sun.star.task.InteractionHandler" ), m_context),
+                                css::uno::UNO_QUERY );
+            if ( m_xInteractionHdl.is() )
+                m_updateInformation->setInteractionHandler( m_xInteractionHdl );
+        }
+    }
+}
 
 void UpdateDialog::Thread::stop() {
     css::uno::Reference< css::task::XAbortChannel > abort;
@@ -327,7 +341,11 @@ UpdateDialog::Thread::Entry::Entry(
     version(theVersion)
 {}
 
-UpdateDialog::Thread::~Thread() {}
+UpdateDialog::Thread::~Thread()
+{
+    if ( m_xInteractionHdl.is() )
+        m_updateInformation->setInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > () );
+}
 
 void UpdateDialog::Thread::execute()
 {
@@ -1260,7 +1278,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
     {
         css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
             m_context->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ),
+                OUSTR( "com.sun.star.system.SystemShellExecute" ),
                 m_context), css::uno::UNO_QUERY_THROW);
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
         xSystemShellExecute->execute(

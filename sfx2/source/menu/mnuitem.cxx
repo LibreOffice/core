@@ -451,7 +451,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -477,7 +477,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle = rSettings.GetSymbolsStyle();
-        BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
+        BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
         BOOL bShowMenuImages = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
@@ -542,12 +542,32 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
+SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
+        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+{
+    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
+}
+
 SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
     Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
                         rMenu.GetHelpText(nSlotId), rBindings);
+    UnBind();
+    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
+    pUnoCtrl->acquire();
+    pUnoCtrl->GetNewDispatch();
+}
+
+SfxUnoMenuControl::SfxUnoMenuControl(
+    const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
+    const String& rItemText, const String& rHelpText,
+    SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+    : SfxMenuControl( nSlotId, rBindings )
+{
+    Bind( pVirt, nSlotId, rItemText, rHelpText, rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();

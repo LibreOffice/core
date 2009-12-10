@@ -329,10 +329,10 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     // now close the query
     odm = NODMQueryClose(ContentProvider::getHandle(), pQueryId);
 
-    delete lpszDMSList;
-    delete pQueryId;
-    delete lpszDocId;
-    delete lpszDocName;
+    delete [] lpszDMSList;
+    delete [] pQueryId;
+    delete [] lpszDocId;
+    delete [] lpszDocName;
 
     if ( !bFound )
         m_pImpl->m_bCountFinal = sal_True;

@@ -68,10 +68,9 @@ private:
     USHORT          mnMinLen;
     USHORT          mnExtras;
 
-//#if 0 // _SOLAR__PRIVATE
+    bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
     DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
-//#endif
 
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
@@ -84,6 +83,7 @@ public:
     void            SetMaxLen( USHORT Len );
     void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
     void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
+    void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
     virtual short   Execute();
 };
