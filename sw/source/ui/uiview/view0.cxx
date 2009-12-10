@@ -36,7 +36,7 @@
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/linguprops.hxx>

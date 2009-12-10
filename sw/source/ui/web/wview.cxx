@@ -33,7 +33,7 @@
 
 
 #include <sfx2/msg.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/templdlg.hxx>
 #include <svx/srchdlg.hxx>

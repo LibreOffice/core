@@ -46,7 +46,7 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <tools/shl.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 // --> FME 2005-01-04 #i35572#
 #include <numrule.hxx>

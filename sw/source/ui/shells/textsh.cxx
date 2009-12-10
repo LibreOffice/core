@@ -49,7 +49,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>

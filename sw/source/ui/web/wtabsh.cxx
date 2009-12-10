@@ -37,7 +37,7 @@
 #include <sfx2/app.hxx>
 #include <tools/globname.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 
 #include "cmdid.h"

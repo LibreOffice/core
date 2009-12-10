@@ -51,7 +51,7 @@
 #include <svx/SmartTagItem.hxx>
 #include <svl/ptitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/wrlmitem.hxx>
 #include <svx/protitem.hxx>

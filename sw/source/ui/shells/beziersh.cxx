@@ -34,7 +34,7 @@
 
 #include "cmdid.h"
 #include <svx/svdview.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>

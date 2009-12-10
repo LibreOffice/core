@@ -47,7 +47,7 @@
 #include <svx/sizeitem.hxx>
 #include <svx/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgcoitm.hxx>

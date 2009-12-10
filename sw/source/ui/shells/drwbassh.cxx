@@ -42,7 +42,7 @@
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>

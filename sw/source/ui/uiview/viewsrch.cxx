@@ -46,7 +46,7 @@
 #endif
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>

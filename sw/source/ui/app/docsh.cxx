@@ -54,7 +54,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/soerr.hxx>

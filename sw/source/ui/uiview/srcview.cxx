@@ -65,7 +65,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/flstitem.hxx>
 #include "svx/unolingu.hxx"

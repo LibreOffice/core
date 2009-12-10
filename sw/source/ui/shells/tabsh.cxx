@@ -40,7 +40,7 @@
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/brshitem.hxx>

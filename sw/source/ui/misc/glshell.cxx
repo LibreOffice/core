@@ -39,7 +39,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
