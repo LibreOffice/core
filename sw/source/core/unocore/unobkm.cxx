@@ -361,8 +361,6 @@ void SwXFieldmarkParameters::insertByName(const OUString& aName, const Any& aEle
     IFieldmark::parameter_map_t* pParameters = getCoreParameters();
     if(pParameters->find(aName) != pParameters->end())
         throw ElementExistException();
-    if(aElement.getValueType() != getElementType())
-        throw IllegalArgumentException();
     (*pParameters)[aName] = aElement;
 }
 
@@ -393,7 +391,7 @@ Any SwXFieldmarkParameters::getByName(const OUString& aName)
     IFieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
     if(pEntry == pParameters->end())
         throw NoSuchElementException();
-    return makeAny(pEntry->second);
+    return pEntry->second;
 }
 
 Sequence<OUString> SwXFieldmarkParameters::getElementNames()
@@ -419,7 +417,7 @@ Sequence<OUString> SwXFieldmarkParameters::getElementNames()
 Type SwXFieldmarkParameters::getElementType()
     throw (RuntimeException)
 {
-    return ::cppu::UnoType<OUString>::get();
+    return ::cppu::UnoType< ::cppu::UnoVoidType>::get();
 }
 
 ::sal_Bool SwXFieldmarkParameters::hasElements()

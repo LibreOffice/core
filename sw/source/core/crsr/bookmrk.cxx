@@ -44,11 +44,13 @@
 #include <undobj.hxx>
 #include <unoobj.hxx>
 #include <rtl/random.h>
+#include <xmloff/odffields.hxx>
 
 
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
+using namespace ::com::sun::star::uno;
 
 namespace
 {
@@ -329,10 +331,18 @@ namespace sw { namespace mark
         // want this for checkboxes
         this->GetMarkEnd( ).nContent--;
     }
-
     void CheckboxFieldmark::SetChecked(bool checked)
-        { m_isChecked = checked; }
+    {
+        (*GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
+    }
 
     bool CheckboxFieldmark::IsChecked() const
-        { return m_isChecked; }
+    {
+        bool bResult = false;
+        parameter_map_t::const_iterator pResult = GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT));
+        if(pResult != GetParameters()->end())
+            pResult->second >>= bResult;
+        return bResult;
+    }
+
 }}

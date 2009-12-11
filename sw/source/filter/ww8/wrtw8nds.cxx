@@ -106,6 +106,7 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace sw::util;

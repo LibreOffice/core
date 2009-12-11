@@ -109,7 +109,6 @@ namespace sw { namespace mark
 
     class NavigatorReminder
         : public MarkBase
-        , virtual public IMark
     {
         public:
             NavigatorReminder(const SwPaM& rPaM);
@@ -213,8 +212,6 @@ namespace sw { namespace mark
             virtual void Invalidate();
             virtual rtl::OUString ToString() const;
         private:
-            //int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List
-            //bool ffprot;
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
             IFieldmark::parameter_map_t m_vParams;
@@ -228,9 +225,6 @@ namespace sw { namespace mark
         public:
             TextFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
-        private:
-            //int fftypetxt; // Type of text field: 0 = Regular text, 1 = Number, 2 = Date, 3 = Current date, 4 = Current time, 5 = Calculation
-            //int ffmaxlen; // Number of characters for text field. Zero means unlimited.
     };
 
     class CheckboxFieldmark
@@ -242,11 +236,6 @@ namespace sw { namespace mark
             virtual void InitDoc(SwDoc* const io_pDoc);
             bool IsChecked() const;
             void SetChecked(bool checked);
-        private:
-            bool m_isChecked;
-            //bool ffsize; // 0 = Auto, 1=Exact (see ffhps)
-            //bool ffrecalc;
-            //int ffhps; // Check box size (half-point sizes).
     };
 
 }}
