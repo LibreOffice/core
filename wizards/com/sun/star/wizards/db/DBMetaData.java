@@ -597,8 +597,8 @@ public class DBMetaData
 
     public void getDataSourceInterfaces() throws Exception
     {
-        xCompleted = UnoRuntime.queryInterface(XCompletedConnection.class, getDataSource());
-        xDataSourcePropertySet = UnoRuntime.queryInterface(XPropertySet.class, getDataSource());
+        xCompleted = UnoRuntime.queryInterface( XCompletedConnection.class, getDataSource() );
+        xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
     }
 
