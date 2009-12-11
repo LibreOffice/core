@@ -3190,7 +3190,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
+void SwLayoutFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     ViewShell *pSh = GetShell();
 
@@ -3478,7 +3478,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 /*************************************************************************
 |*  SwCellFrm::Paint( const SwRect& ) const
 |*************************************************************************/
-void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
+void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrm::Paint( rRect );
@@ -3497,7 +3497,7 @@ void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                                const SwRect &rRect, const SwPageFrm *pPage );
 
-void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
+void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
     //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
@@ -3732,7 +3732,7 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) cons
 |*
 |*************************************************************************/
 
-void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
+void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
