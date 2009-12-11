@@ -308,39 +308,6 @@ String RID_RIDER_SLL_PERSONAL
     Text [ en-US ] = "Personal certificates" ;
 };
 
-// RID_OFADLG_OPTIONS_TREE_WARNING ---------------------------------------
-
-ModalDialog RID_OFADLG_OPTIONS_TREE_HINT
-{
-    OutputSize = TRUE;
-    Size = MAP_APPFONT( 240, 105 );
-    Moveable = TRUE;
-    Closeable = TRUE;
-    FixedImage IMG_HINT
-    {
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 30, 30 );
-    };
-    FixedText FT_HINT
-    {
-        Pos = MAP_APPFONT( 39, 6 );
-        Size = MAP_APPFONT( 195, 60 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "Please note: the settings displayed refer to the internal browser of %PRODUCTNAME (%PRODUCTNAME Writer/Web). In \"Tools - Options - Browser - External Browser\" the use of a different browser has been activated. In order to be able to use the same settings in other browsers you need to define these in the external browser settings.";
-    };
-    CheckBox CB_DISABLE
-    {
-        Pos = MAP_APPFONT( 39, 69 );
-        Size = MAP_APPFONT( 195, 12 );
-        Text [ en-US ] = "~Do not show information again";
-    };
-    OKButton BTN_HINT
-    {
-        Pos = MAP_APPFONT( 95, 85 );
-        Size = MAP_APPFONT( 50, 14 );
-    };
-};
-
 // ******************************************************************* EOF
 
 
