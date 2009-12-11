@@ -158,10 +158,6 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     {
         (void)rEx;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("domainmapper");
-#endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
@@ -190,10 +186,6 @@ DomainMapper::~DomainMapper()
     }
 
     delete m_pImpl;
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("domainmapper");
-#endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
@@ -204,6 +196,7 @@ void DomainMapper::attribute(Id nName, Value & val)
     dmapper_logger->startElement("attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
     dmapper_logger->attribute("value", val.toString());
+    dmapper_logger->endElement("attribute");
 #endif
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
@@ -2157,9 +2150,6 @@ void DomainMapper::attribute(Id nName, Value & val)
             }
         }
     }
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("attribute");
-#endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
@@ -2177,6 +2167,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("sprm");
     dmapper_logger->chars(rSprm.toString());
+    dmapper_logger->endElement("sprm");
 #endif
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
@@ -4173,19 +4164,13 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     break;
     default:
         {
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "DomainMapper::sprm() - Id: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 16 );
-            OSL_ENSURE( false, sMessage.getStr()); //
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->startElement("unhandled");
+            dmapper_logger->attribute("id", nSprmId);
+            dmapper_logger->endElement("unhandled");
 #endif
         }
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
-#endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
@@ -4193,7 +4178,15 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 void DomainMapper::entry(int /*pos*/,
                          writerfilter::Reference<Properties>::Pointer_t ref)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("entry");
+#endif
+
     ref->resolve(*this);
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("entry");
+#endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
@@ -4298,12 +4291,19 @@ void DomainMapper::endParagraphGroup()
 
 void DomainMapper::startShape( uno::Reference< drawing::XShape > xShape )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("shape");
+#endif
     m_pImpl->PushShapeContext( xShape );
 }
 
 void DomainMapper::endShape( )
 {
     m_pImpl->PopShapeContext( );
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("shape");
+#endif
 }
 
 /*-- 13.06.2007 16:15:55---------------------------------------------------

@@ -41,6 +41,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
+#include <dmapperLoggers.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -74,6 +75,11 @@ DomainMapperTableManager::~DomainMapperTableManager()
   -----------------------------------------------------------------------*/
 bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("tablemanager.sprm");
+    dmapper_logger->chars(rSprm.toString());
+    dmapper_logger->endElement("tablemanager.sprm");
+#endif
     bool bRet = DomainMapperTableManager_Base_t::sprm(rSprm);
     if( !bRet )
     {
@@ -242,8 +248,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
-#if DEBUG
-                clog << "GridSpan: " << nIntValue << endl;
+#if DEBUG_DOMAINMAPPER
+                dmapper_logger->startElement("tablemanager.GridSpan");
+                dmapper_logger->attribute("gridSpan", nIntValue);
+                dmapper_logger->endElement("tablemanager.GridSpan");
 #endif
                 //the cell width is determined by its position in the table grid
                 //it takes 'gridSpan' grid elements
@@ -286,6 +294,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 break;
             default:
                 bRet = false;
+
+#ifdef DEBUG_DOMAINMAPPER
+                dmapper_logger->element("unhandled");
+#endif
         }
     }
     return bRet;
@@ -303,6 +315,12 @@ boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpa
 
 void DomainMapperTableManager::startLevel( )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("tablemanager.startLevel");
+    dmapper_logger->attribute("level", m_aTableGrid.size());
+    dmapper_logger->endElement("tablemanager.startLevel");
+#endif
+
     DomainMapperTableManager_Base_t::startLevel( );
 
     IntVectorPtr pNewGrid( new vector<sal_Int32> );
@@ -318,6 +336,11 @@ void DomainMapperTableManager::endLevel( )
     m_aGridSpans.pop_back( );
 
     DomainMapperTableManager_Base_t::endLevel( );
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("tablemanager.endLevel");
+    dmapper_logger->attribute("level", m_aTableGrid.size());
+    dmapper_logger->endElement("tablemanager.endLevel");
+#endif
 }
 
 /*-- 02.05.2007 14:36:26---------------------------------------------------

@@ -33,9 +33,7 @@
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
-#if OSL_DEBUG_LEVEL > 1
-#include <iostream>
-#endif
+#include <dmapperLoggers.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -46,7 +44,7 @@ using namespace ::std;
 #define DEF_BORDER_DIST 190  //0,19cm
 #define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
-#ifdef DEBUG
+#ifdef DEBUG_DOMAINMAPPER
 static void lcl_printHandle(const Handle_t rHandle)
 {
     if (!rHandle.get())
@@ -54,13 +52,15 @@ static void lcl_printHandle(const Handle_t rHandle)
     rtl::OUString aOUStr = rHandle->getString();
     rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
 
-    clog << aOStr.getStr() << endl;
+    dmapper_logger->chars(aOStr.getStr());
 }
+
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
     if( pProps.get() )
     {
-        clog << "<properties>";
+        dmapper_logger->startElement("properties");
+
         PropertyMap::const_iterator aMapIter = pProps->begin();
         PropertyMap::const_iterator aEndIter = pProps->end();
         PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -74,18 +74,21 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
             sal_Int32 nColor;
             if ( aMapIter->second >>= aLine )
             {
-                clog << ": BorderLine ( Color: " << aLine.Color;
-                clog << ", Inner: " << aLine.InnerLineWidth;
-                clog << ", Outer: " << aLine.OuterLineWidth << ") ";
+                dmapper_logger->startElement("borderline");
+                dmapper_logger->attribute("color", aLine.Color);
+                dmapper_logger->attribute("inner", aLine.InnerLineWidth);
+                dmapper_logger->attribute("outer", aLine.OuterLineWidth);
+                dmapper_logger->endElement("borderline");
             }
             else if ( aMapIter->second >>= nColor )
             {
-                clog << ": Color ( " << nColor << " ) ";
+                dmapper_logger->startElement("color");
+                dmapper_logger->attribute("number", nColor);
+                dmapper_logger->endElement("color");
             }
-
-            clog << " - ";
         }
-        clog << endl;
+
+        dmapper_logger->endElement("properties");
     }
 }
 #endif
@@ -110,10 +113,9 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     m_pTableSeq = TableSequencePointer_t(new TableSequence_t(nRows));
     m_nRowIndex = 0;
 
-#if OSL_DEBUG_LEVEL > 1
-    char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%d", nRows);
-    clog << "<table rows=\"" << sBuffer << "\">" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("tablemanager.table");
+    dmapper_logger->attribute("rows", nRows);
     lcl_printProperties( pProps );
 #endif
 }
@@ -238,9 +240,8 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
 
 void DomainMapperTableHandler::endTable()
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 {
-    clog << "</table>" << endl;
     sal_uInt32 nCells = 0;
     sal_uInt32 nRows = m_aRowProperties.size();
     if( nRows == m_aCellProperties.size() )
@@ -263,7 +264,8 @@ void DomainMapperTableHandler::endTable()
         }
         m_aTableProperties->Invalidate();
         sNames += ::rtl::OUString(' ');
-        clog << "Props: " << rtl::OUStringToOString( sNames, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+        dmapper_logger->chars("Props: ");
+        dmapper_logger->chars(sNames);
     }
 }
 #endif
@@ -520,8 +522,11 @@ void DomainMapperTableHandler::endTable()
                 pAllCellProps->insert( *aCellIterator );
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
 
-#if DEBUG
-                clog << "Cell #" << nCell << ", Row #" << nRow << endl;
+#ifdef DEBUG_DOMAINMAPPER
+                dmapper_logger->startElement("cell");
+                dmapper_logger->attribute("cell", nCell);
+                dmapper_logger->attribute("row", nRow);
+                dmapper_logger->endElement("cell");
 #endif
 
                 lcl_computeCellBorders( pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
@@ -555,7 +560,7 @@ void DomainMapperTableHandler::endTable()
             ++nCell;
             ++aCellIterator;
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 //-->debug cell properties
         {
             ::rtl::OUString sNames;
@@ -581,7 +586,7 @@ void DomainMapperTableHandler::endTable()
         ++nRow;
         ++aRowOfCellsIterator;
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 //-->debug cell properties of all rows
     {
         ::rtl::OUString sNames;
@@ -631,7 +636,7 @@ void DomainMapperTableHandler::endTable()
     {
         try
         {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
     {
         sal_Int32 nCellPropertiesRows = aCellProperties.getLength();
         sal_Int32 nCellPropertiesCells = aCellProperties[0].getLength();
@@ -641,7 +646,6 @@ void DomainMapperTableHandler::endTable()
         (void) nCellPropertiesProperties;
         ++nCellPropertiesProperties;
     }
-            clog << "Converting table" << endl;
 #endif
 
             uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
@@ -653,14 +657,16 @@ void DomainMapperTableHandler::endTable()
         }
         catch (lang::IllegalArgumentException e)
         {
-#if OSL_DEBUG_LEVEL > 1
-            clog << "failed to import table!" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->chars("failed to import table!");
 #endif
         }
 #if OSL_DEBUG_LEVEL > 1
         catch ( uno::Exception e )
         {
-            clog << "Caught an other exception: " << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+            dmapper_logger->startElement("exception");
+            dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
+            dmapper_logger->endElement("exeception");
         }
 #endif
     }
@@ -668,6 +674,10 @@ void DomainMapperTableHandler::endTable()
     m_aTableProperties.reset();
     m_aCellProperties.clear();
     m_aRowProperties.clear();
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("tablemanager.table");
+#endif
 }
 
 void DomainMapperTableHandler::startRow(unsigned int nCells,
@@ -676,11 +686,9 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
 
-#if OSL_DEBUG_LEVEL > 1
-    char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%d", nCells);
-
-    clog << "<table.row cells=\"" << sBuffer << "\">" << endl;
+#if DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("table.row");
+    dmapper_logger->attribute("cells", nCells);
     lcl_printProperties( pProps );
 #endif
 
@@ -693,8 +701,8 @@ void DomainMapperTableHandler::endRow()
     (*m_pTableSeq)[m_nRowIndex] = *m_pRowSeq;
     ++m_nRowIndex;
     m_nCellIndex = 0;
-#if OSL_DEBUG_LEVEL > 1
-    clog << "</table.row>" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("table.row");
 #endif
 }
 
@@ -712,11 +720,10 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
         m_aCellProperties[nRow - 1].push_back( pEmptyProps );
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    clog << "<table.cell>";
+#if DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("table.cell");
     lcl_printHandle(start);
     lcl_printProperties( pProps );
-    clog << ",";
 #endif
 
     //add a new 'row' of properties
@@ -731,8 +738,9 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 
 void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
     lcl_printHandle(end);
+    dmapper_logger->endElement("table.cell");
     clog << "</table.cell>" << endl;
 #endif
 
