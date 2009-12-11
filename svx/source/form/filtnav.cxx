@@ -1897,7 +1897,6 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
             DeleteSelection();
         return;
     }
-    break;
     }
 
     SvTreeListBox::KeyInput(rKEvt);
