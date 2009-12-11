@@ -557,9 +557,9 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     }
 
     // check if URL is already loaded
-    ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
+    ObjectCacheIterator aExistent = m_aDatabaseObjects.find( sURL );
     if ( aExistent != m_aDatabaseObjects.end() )
-        m_aDatabaseObjects.erase(aExistent);
+        m_aDatabaseObjects.erase( aExistent );
 
     // notify our container listeners
     ContainerEvent aEvent( *this, makeAny( _rName ), Any(), Any() );
