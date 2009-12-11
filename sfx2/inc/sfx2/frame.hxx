@@ -219,7 +219,7 @@ public:
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 
-    SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc, const ::comphelper::NamedValueCollection& i_rArgs );
+    SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
     SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
     SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;

@@ -465,17 +465,19 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
     }
 }
 
-void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc, const ::comphelper::NamedValueCollection& i_rArgs )
+void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
 {
+    const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs() );
+
     // hidden?
     OSL_ENSURE( !pImp->bHidden, "when does this happen?" );
-    pImp->bHidden = i_rArgs.getOrDefault( "Hidden", pImp->bHidden );
+    pImp->bHidden = aDocumentArgs.getOrDefault( "Hidden", pImp->bHidden );
 
     // update our descriptor
     UpdateDescriptor( &i_rDoc );
 
     // plugin mode
-    sal_Int16 nPluginMode = i_rArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
+    sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
 }

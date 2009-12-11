@@ -1157,12 +1157,26 @@ void SAL_CALL SfxBaseModel::connectController( const uno::Reference< frame::XCon
     if ( impl_isDisposed() )
         throw lang::DisposedException();
 
+    OSL_PRECOND( xController.is(), "SfxBaseModel::connectController: invalid controller!" );
+    if ( !xController.is() )
+        return;
+
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
     uno::Sequence< uno::Reference< frame::XController > > aNewSeq( nOldCount + 1 );
     for ( sal_uInt32 n = 0; n < nOldCount; n++ )
         aNewSeq.getArray()[n] = m_pData->m_seqControllers.getConstArray()[n];
     aNewSeq.getArray()[nOldCount] = xController;
     m_pData->m_seqControllers = aNewSeq;
+
+    if ( m_pData->m_seqControllers.getLength() == 1 )
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::Get( xController, GetObjectShell() );
+        ENSURE_OR_THROW( pViewFrame, "SFX document without SFX view!?" );
+        pViewFrame->UpdateDocument_Impl();
+        const String sDocumentURL = GetObjectShell()->GetMedium()->GetName();
+        if ( sDocumentURL.Len() )
+            SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -3942,8 +3956,16 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDef
            css::lang::IllegalArgumentException,
            css::uno::Exception                )
 {
-    return createViewController( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "view0" ) ), Sequence< PropertyValue >(), i_rFrame );
-        // TODO: extend the SfxViewFactory with support for speaking view names
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
+    const ::rtl::OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetViewName();
+
+    aGuard.clear();
+
+    return createViewController( sDefaultViewName, Sequence< PropertyValue >(), i_rFrame );
 }
 
 //=============================================================================
@@ -3960,27 +3982,37 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const ::com::sun::star::
     }
     if ( !pViewFrame )
     {
-        // no view frame, yet, but perhaps a mere frame?
-        SfxFrame* pFrame = NULL;
-        for (   pFrame = SfxFrame::GetFirst();
-                pFrame;
-                pFrame = SfxFrame::GetNext( *pFrame )
-            )
+    #if OSL_DEBUG_LEVEL > 0
+        for (   SfxFrame* pCheckFrame = SfxFrame::GetFirst();
+                pCheckFrame;
+                pCheckFrame = SfxFrame::GetNext( *pCheckFrame )
+             )
         {
-            if  (   ( pFrame->GetFrameInterface() == i_rFrame )
-                &&  ( pFrame->GetCurrentViewFrame() == NULL )
-                    // TODO: this condition is somewhat hacky, as it relies on the fact that this is (usually)
-                    // the SfxFrame which is, up the stack, within its InsertDocument_Impl call.
-                    // Before the refactoring is finally done, this is to be removed.
-                )
+            if ( pCheckFrame->GetFrameInterface() == i_rFrame )
+            {
+                if  (   ( pCheckFrame->GetCurrentViewFrame() != NULL )
+                    ||  ( pCheckFrame->GetCurrentDocument() != NULL )
+                    )
+                    // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
+                    // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
+                    // destroyed later, and the new one, which we're going to create
+                    continue;
+
+                OSL_ENSURE( false, "SfxBaseModel::FindOrCreateViewFrame_Impl: there already is an SfxFrame for the given XFrame, but no view in it!" );
+                    // nowadays, we're the only instance allowed to create an SfxFrame for an XFrame, so this case here should not happen
                 break;
+            }
         }
-        if ( !pFrame )
-        {
-            pFrame = SfxFrame::Create( i_rFrame );
-            ENSURE_OR_THROW( pFrame, "no SfxFrame created for the XFrame" );
-        }
-        pViewFrame = new SfxViewFrame( pFrame, GetObjectShell() );
+    #endif
+
+        SfxFrame* pTargetFrame = SfxFrame::Create( i_rFrame );
+        ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
+
+        // prepare it
+        pTargetFrame->PrepareForDoc_Impl( *GetObjectShell() );
+
+        // create view frame
+        pViewFrame = new SfxViewFrame( pTargetFrame, GetObjectShell() );
     }
     return pViewFrame;
 }
@@ -3997,23 +4029,32 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     if ( impl_isDisposed() )
         throw lang::DisposedException();
 
+    if ( !i_rFrame.is() )
+        throw css::lang::IllegalArgumentException( ::rtl::OUString(), *this, 3 );
+
     // find the proper SFX view factory
     SfxViewFactory* pViewFactory = GetObjectShell()->GetFactory().GetViewFactoryByViewName( i_rViewName );
     if ( !pViewFactory )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
     // determine previous shell (used in some special cases)
-    ::comphelper::NamedValueCollection aCreationArgs( i_rArguments );
-    Reference< XController > xPreviousController = aCreationArgs.getOrDefault( "PreviousViewController", Reference< XController >() );
+    Reference< XController > xPreviousController( i_rFrame->getController() );
+    const Reference< XModel > xMe( this );
+    if  (   ( xPreviousController.is() )
+        &&  ( xMe != xPreviousController->getModel() )
+        )
+    {
+        xPreviousController.clear();
+    }
     SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
     OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
         "SfxBaseModel::createViewController: invalid old controller!" );
-    // now that we used that arg, remove it, so the controller will not remember it below
-    aCreationArgs.remove( "PreviousViewController" );
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );
     OSL_POSTCOND( pViewFrame, "SfxBaseModel::createViewController: no frame?" );
+        // TODO: if we created the SfxFrame, and something of the below goes wrong, then we need to properly close the
+        // Sfx(View)Frame
 
     // delegate to SFX' view factory
     pViewFrame->GetBindings().ENTERREGISTRATIONS();
@@ -4035,7 +4076,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // pass the creation arguments to the controller
     SfxBaseController* pBaseController = pViewShell->GetBaseController_Impl();
     ENSURE_OR_THROW( pBaseController, "invalid controller implementation!" );
-    pBaseController->SetCreationArguments_Impl( aCreationArgs.getPropertyValues() );
+    pBaseController->SetCreationArguments_Impl( i_rArguments );
 
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );

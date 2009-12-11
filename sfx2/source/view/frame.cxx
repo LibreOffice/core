@@ -375,7 +375,7 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
 void SfxFrame::GetViewData_Impl()
 {
     // Alle zwischen Laden und Entfernen "anderbaren Daten aktualisieren; die
-    // festen Daten werden nur einmal ( nach InsertDocument_Impl in UpdateDescriptor )
+    // festen Daten werden nur einmal ( nach PrepareForDoc_Impl in UpdateDescriptor )
     // geholt, um Zeit zu sparen.
     SfxViewFrame* pViewFrame = GetCurrentViewFrame();
     if( pViewFrame && pViewFrame->GetViewShell() )
@@ -412,7 +412,7 @@ void SfxFrame::GetViewData_Impl()
 
 void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 {
-    // Beim InsertDocument_Impl wird der Descriptor des Frames aktualisiert
+    // Beim PrepareForDoc_Impl wird der Descriptor des Frames aktualisiert
     // und sein ItemSet neu initialisiert. Alle Daten, die f"ur ein sp"ateres
     // Restaurieren der View n"otig sind, sind damit festgehalten.
     // Soll das Dokument ersetzt werden, wird durch GetViewData_Impl (s.o.)

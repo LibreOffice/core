@@ -644,14 +644,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     }
 
     sal_Bool bLoadSuccess = sal_False;
-    SfxFrameWeak wFrame;
     try
     {
         // extract view releant arguments from the loader args
         ::comphelper::NamedValueCollection aViewCreationArgs( impl_extractViewCreationArgs( aDescriptor ) );
-
-        // it's allowed to to an "in-place replace" of a view/controller in a frame
-        Reference< XController > xReplacedViewController;
 
         // no model passed from outside? => create one from scratch
         if ( !xModel.is() )
@@ -684,14 +680,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         {
             // if the existent model is to be loaded into a frame where already another view to the same model
             // exists, then preserve this info for the view factory
-            Reference< XController > xPreviousController( _rTargetFrame->getController() );
-            if  (   ( xPreviousController.is() )
-                &&  ( xModel == xPreviousController->getModel() )
-                )
-            {
-                aViewCreationArgs.put( "PreviousViewController", xPreviousController );
-                xReplacedViewController = xPreviousController;
-            }
 
             // tell the doc its (current) load args.
             impl_removeLoaderArguments( aDescriptor );
@@ -722,37 +710,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // code at the very end of this method cares for closing the XModel, which should also close the
             // ObjectShell.
 
-        // obtain/create a frame
-        SfxFrame* pTargetFrame = NULL;
-        if ( xReplacedViewController.is() )
-        {
-            SfxViewFrame* pReplacedViewFrame = SfxViewFrame::GetFirst( xDoc, false );
-            ENSURE_OR_THROW( pReplacedViewFrame, "replacing a non-SFX view of a SFX-document should is impossible" );
-            pTargetFrame = pReplacedViewFrame->GetFrame();
-            ENSURE_OR_THROW( pTargetFrame, "invalid existing view - could not obtain an SfxFrame" );
-        }
-        else
-        {
-            pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
-            wFrame = pTargetFrame;
-
-            // prepare it
-            pTargetFrame->PrepareForDoc_Impl( *xDoc, aDescriptor );
-        }
-
         // plug the document into the frame
-        const Reference< XController2 > xController = impl_createDocumentView( xModel, pTargetFrame->GetFrameInterface(),
+        const Reference< XController2 > xController = impl_createDocumentView( xModel, _rTargetFrame,
             aViewCreationArgs, sViewName );
         ENSURE_OR_THROW( xController.is(), "invalid controller" );
             // this is expected to throw in case of a failure ...
-
-        if ( !bExternalModel )
-        {
-            pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-            const String sDocumentURL = xDoc->GetMedium()->GetName();
-            if ( sDocumentURL.Len() )
-                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
-        }
 
         bLoadSuccess = sal_True;
     }
@@ -762,9 +724,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         if ( !aDescriptor.getOrDefault( "Silent", sal_False ) )
             impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
-
-    // clean up, if necessary
-    impl_cleanUp( bLoadSuccess, wFrame );
 
     // if loading was not successful, also close the document (the SfxFrame was already closed by impl_cleanUp)
     if ( !bLoadSuccess && !bExternalModel )
