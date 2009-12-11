@@ -1955,7 +1955,8 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::BOOLEAN:
                 _xParams->setBoolean(parameterIndex,_rValue);
                 break;
-            if ( _rValue.isSigned() )
+            case DataType::TINYINT:
+                if ( _rValue.isSigned() )
                     _xParams->setByte(parameterIndex,_rValue);
                 else
                     _xParams->setShort(parameterIndex,_rValue);
