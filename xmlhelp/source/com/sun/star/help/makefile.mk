@@ -36,6 +36,7 @@ LIBBASENAME = helplinker
 PACKAGE = com$/sun$/star$/help
 TARGETTYPE=CUI
 
+.IF "$(SOLAR_JAVA)"!=""
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -100,3 +101,12 @@ $(JARTARGETN) : $(ADDFILES)
 $(CLASSDIR)$/$(PACKAGE)$/%.class : $(SOLARBINDIR)$/help$/$(PACKAGE)$/%.class 
     $(MKDIRHIER) $(@:d)	
     $(COPY) $< $@
+
+fix_system_lucene:
+    @echo "Fix Java Class-Path entry for Lucene libraries from system."
+    @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
+    -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF
+.ELSE
+all:
+        @echo java disabled
+.ENDIF
