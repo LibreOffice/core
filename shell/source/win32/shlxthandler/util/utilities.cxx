@@ -32,12 +32,9 @@
 #include "precompiled_shell.hxx"
 
 
-#include "internal/utilities.hxx"
 #include "internal/config.hxx"
 #include "internal/dbgmacros.hxx"
-
-
-
+#include "internal/utilities.hxx"
 
 //-----------------------------
 // constants
@@ -87,15 +84,9 @@ std::wstring GetResString(int ResId)
 {
     wchar_t szResStr[MAX_RES_STRING];
 
-    #if OSL_DEBUG_LEVEL > 0
-    int rc =
-    #endif
-    LoadStringW(
-        GetModuleHandleW(MODULE_NAME),
-        ResId,
-        szResStr,
-        sizeof(szResStr));
+    int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
+    OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
     ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);

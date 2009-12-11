@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XGlobals.idl,v $
- * $Revision: 1.4 $
+ * $RCSfile: XTextFrame.idl,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,41 +27,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_XGlobals_idl__
-#define __ooo_vba_XGlobals_idl__
+#ifndef __ooo_vba_msforms_XTextFrame_idl__
+#define __ooo_vba_msforms_XTextFrame_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __ooo_vba_excel_XApplication_idl__
-#include <ooo/vba/excel/XApplication.idl>
-#endif
-#ifndef __ooo_vba_excel_XWorkbook_idl__
-#include <ooo/vba/excel/XWorkbook.idl>
-#endif
-#ifndef __ooo_vba_excel_XWorksheet_idl__
-#include <ooo/vba/excel/XWorksheet.idl>
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
 #endif
 
-module ooo {  module vba {
-
-interface XGlobals: com::sun::star::uno::XInterface
+module ooo {  module vba {  module msforms {
+interface XTextFrame : ooo::vba::XHelperInterface
 {
-        // FIXME, need better way to expose globals
-    sequence< any > getGlobals();
-
-    [attribute, readonly] ooo::vba::excel::XApplication Application;
-    [attribute, readonly] ooo::vba::excel::XWorkbook ActiveWorkbook;
-    [attribute, readonly] ooo::vba::excel::XWorksheet ActiveSheet;
-    any WorkSheets( [in] any aIndex );
-    any WorkBooks( [in] any aIndex );
-    any Sheets( [in] any aIndex );
-    any Range( [in] any Cell1, [in] any Cell2 );
-    any Names( [in] any Index );
+    [attribute] boolean AutoSize;
+    [attribute] float MarginBottom;
+    [attribute] float MarginTop;
+    [attribute] float MarginLeft;
+    [attribute] float MarginRight;
+    any Characters();
+    /*I don't find it in msdn
+    Range TextRange();*/
 };
-
-}; };
-
+}; }; };
 #endif
-
-
