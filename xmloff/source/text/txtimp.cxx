@@ -92,6 +92,8 @@
 // --> OD 2008-04-25 #refactorlists#
 #include <txtlists.hxx>
 // <--
+#include <xmloff/odffields.hxx>
+#include <comphelper/stlunosequence.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -112,6 +114,8 @@ using ::com::sun::star::util::DateTime;
 using namespace ::com::sun::star::ucb;
 
 using ::comphelper::UStringLess;
+
+
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -446,6 +450,70 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 // maximum allowed length of combined characters field
 #define MAX_COMBINED_CHARACTERS 6
 
+
+namespace
+{
+    class FieldParamImporter
+    {
+        public:
+            typedef pair<OUString,OUString> field_param_t;
+            typedef vector<field_param_t> field_params_t;
+            FieldParamImporter(const field_params_t* const pInParams, Reference<XNameContainer> xOutParams)
+                : m_pInParams(pInParams)
+                , m_xOutParams(xOutParams)
+            { };
+            void Import();
+
+        private:
+            const field_params_t* const m_pInParams;
+            Reference<XNameContainer> m_xOutParams;
+    };
+
+    void FieldParamImporter::Import()
+    {
+        ::std::vector<OUString> vListEntries;
+        ::std::map<OUString, Any> vOutParams;
+        for(field_params_t::const_iterator pCurrent = m_pInParams->begin();
+            pCurrent != m_pInParams->end();
+            ++pCurrent)
+        {
+            if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_RESULT))
+            {
+                // sal_Int32
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toInt32());
+            }
+            else if(pCurrent->first.equalsAscii(ODF_FORMCHECKBOX_RESULT))
+            {
+                // bool
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toBoolean());
+            }
+            else if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_LISTENTRY))
+            {
+                // sequence
+                vListEntries.push_back(pCurrent->second);
+            }
+            else
+                vOutParams[pCurrent->first] = makeAny(pCurrent->second);
+        }
+        if(!vListEntries.empty())
+        {
+            Sequence<OUString> vListEntriesSeq(vListEntries.size());
+            copy(vListEntries.begin(), vListEntries.end(), ::comphelper::stl_begin(vListEntriesSeq));
+            vOutParams[OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
+        }
+        for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
+            pCurrent != vOutParams.end();
+            ++pCurrent)
+        {
+            try
+            {
+                m_xOutParams->insertByName(pCurrent->first, pCurrent->second);
+            }
+            catch(ElementExistException)
+            { }
+        }
+    }
+}
 
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
@@ -2288,14 +2356,9 @@ bool XMLTextImportHelper::hasCurrentFieldCtx()
 void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField)
 {
     DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
-    if (!aFieldStack.empty() && xFormField.is()) {
-        field_params_t &params=aFieldStack.top().second;
-        for (field_params_t::iterator i=params.begin();i!=params.end();i++) {
-            rtl::OString aOString1 = ::rtl::OUStringToOString (i->first, RTL_TEXTENCODING_UTF8);
-            rtl::OString aOString2 = ::rtl::OUStringToOString (i->second, RTL_TEXTENCODING_UTF8);
-            /* printf("param[\"%s\"]=\"%s\"\n", aOString1.getStr(), aOString2.getStr()); */
-            xFormField->addParam(i->first, i->second, false);
-        }
+    if (!aFieldStack.empty() && xFormField.is())
+    {
+        FieldParamImporter(&aFieldStack.top().second, xFormField->getParameters()).Import();
     }
 }
 

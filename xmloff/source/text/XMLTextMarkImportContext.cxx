@@ -142,27 +142,27 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 
 static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
 {
-    static const char sCheckbox[]=ECMA_FORMCHECKBOX;
-    static const char sFormDropDown[]=ECMA_FORMDROPDOWN;
+    static const char sCheckbox[]=ODF_FORMCHECKBOX;
+    static const char sFormDropDown[]=ODF_FORMDROPDOWN;
     if (name.compareToAscii("msoffice.field.FORMCHECKBOX")==0)
-    return sCheckbox;
-    else if (name.compareToAscii(ECMA_FORMCHECKBOX)==0)
-    return sCheckbox;
-    if (name.compareToAscii(ECMA_FORMDROPDOWN)==0)
-    return sFormDropDown;
+        return sCheckbox;
+    else if (name.compareToAscii(ODF_FORMCHECKBOX)==0)
+        return sCheckbox;
+    if (name.compareToAscii(ODF_FORMDROPDOWN)==0)
+        return sFormDropDown;
     else
-    return NULL;
+        return NULL;
 }
 
 static rtl::OUString lcl_getFieldmarkName(rtl::OUString &name)
 {
-    static const char sFormtext[]=ECMA_FORMTEXT;
+    static const char sFormtext[]=ODF_FORMTEXT;
     if (name.compareToAscii("msoffice.field.FORMTEXT")==0)
-    return rtl::OUString::createFromAscii(sFormtext);
-    else if (name.compareToAscii(ECMA_FORMTEXT)==0)
-    return rtl::OUString::createFromAscii(sFormtext);
+        return rtl::OUString::createFromAscii(sFormtext);
+    else if (name.compareToAscii(ODF_FORMTEXT)==0)
+        return rtl::OUString::createFromAscii(sFormtext);
     else
-    return name;
+        return name;
 }
 
 
