@@ -436,7 +436,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             {
                 rtl::OUString aFile = queryFile( pController->getPrinter().get() );
                 if( ! aFile.getLength() )
+                {
+                    GDIMetaFile aPageFile;
+                    i_pController->setLastPage( sal_True );
+                    i_pController->getFilteredPageFile( 0, aPageFile );
                     return;
+                }
                 pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
                                      makeAny( aFile ) );
             }
