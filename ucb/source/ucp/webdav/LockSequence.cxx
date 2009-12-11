@@ -74,7 +74,7 @@ struct LockSequenceParseContext
 extern "C" int LockSequence_startelement_callback(
     void *,
     int parent,
-    const char */*nspace*/,
+    const char * /*nspace*/,
     const char *name,
     const char ** )
 {
