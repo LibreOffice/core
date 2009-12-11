@@ -737,12 +737,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         {
             // old stream is still in this file's storage - open read-only
 
-            SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
-            String aSrcURL = pSrcMed->GetOrigURL();
-
-            // SfxMedium must not be read-only, or it will create a temp file in GetStorage
-            SfxMedium aTmpMedium( aSrcURL, STREAM_READWRITE, FALSE, NULL, NULL );
-            uno::Reference<embed::XStorage> xTmpStorage = aTmpMedium.GetStorage();
+            // #i106854# use the document's storage directly, without a temporary SfxMedium
+            uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
             uno::Reference<io::XStream> xSrcStream;
             uno::Reference<io::XInputStream> xSrcInput;
             try
