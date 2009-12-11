@@ -1661,8 +1661,14 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         pProps->Name = sHeadingStyleName;
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            pProps->Value <<= sChosenStyles[i];
-            xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            // --> OD 2009-12-11 #i107610#
+            if ( bSetEmptyLevels ||
+                 sChosenStyles[i].getLength() > 0 )
+            // <--
+            {
+                pProps->Value <<= sChosenStyles[i];
+                xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            }
         }
         // <--
     }
