@@ -38,7 +38,7 @@
 #include <tools/gen.hxx>
 
 #include <svl/poolitem.hxx>
-#include "memberid.hrc"
+#include <svl/memberid.hrc>
 
 // STATIC DATA -----------------------------------------------------------
 
