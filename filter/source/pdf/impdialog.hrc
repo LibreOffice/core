@@ -79,14 +79,15 @@
 #define FL_GENERAL                  16
 #define CB_TAGGEDPDF                17
 #define CB_EXPORTNOTES              18
-#define CB_EXPORTBOOKMARKS          19
-#define CB_EXPORTFORMFIELDS         20
-#define FT_FORMSFORMAT              21
-#define LB_FORMSFORMAT              22
-#define CB_EXPORTEMPTYPAGES         23
-#define CB_ADDSTREAM                24
+#define CB_EXPORTNOTESPAGES         19
+#define CB_EXPORTBOOKMARKS          20
+#define CB_EXPORTFORMFIELDS         21
+#define FT_FORMSFORMAT              22
+#define LB_FORMSFORMAT              23
+#define CB_EXPORTEMPTYPAGES         24
+#define CB_ADDSTREAM                25
 
-#define CB_PDFA_1B_SELECT           25
+#define CB_PDFA_1B_SELECT           26
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52
