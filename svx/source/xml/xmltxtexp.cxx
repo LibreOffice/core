@@ -41,25 +41,25 @@
 #include <svl/itemprop.hxx>
 #include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmloff/xmlnmspe.hxx"
-#include "xmloff/nmspmap.hxx"
-#include "xmloff/xmlmetae.hxx"
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlmetae.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include <svx/editeng.hxx>
-#include "xmloff/xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #include <svx/unoedsrc.hxx>
 #include <svx/unofored.hxx>
 #include <svx/unotext.hxx>
-#include "editsource.hxx"
 #include <svx/unoprnms.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <svx/unofield.hxx>
+#include <svx/editeng.hxx>
+#include "editsource.hxx"
 #include "unonrule.hxx"
+#include <svx/unoipset.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;

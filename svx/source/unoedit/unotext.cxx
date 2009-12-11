@@ -37,28 +37,26 @@
 #include <com/sun/star/text/XTextField.hdl>
 #include <vos/mutex.hxx>
 #include <svl/itemset.hxx>
-
-#include <svx/eeitem.hxx>
 #include <svl/itempool.hxx>
-#include <fontitem.hxx>
-#include <svx/tstpitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
+#include <fontitem.hxx>
+#include <svx/tstpitem.hxx>
 #include <svx/unoprnms.hxx>
 #include <svx/unotext.hxx>
 #include <svx/unoedsrc.hxx>
-#include <svx/unomid.hxx>
 #include "unonrule.hxx"
 #include "unofdesc.hxx"
-#include "unoapi.hxx"
 #include <svx/unofield.hxx>
 #include <svx/flditem.hxx>
-#include <svx/unoshprp.hxx>
 #include <svx/numitem.hxx>
 #include <svx/editeng.hxx>
+#include <svx/outliner.hxx>
+#include <svx/unoipset.hxx>
+#include <svx/serviceinfohelper.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;

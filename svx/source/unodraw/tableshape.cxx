@@ -41,7 +41,6 @@
 using ::rtl::OUString;
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;

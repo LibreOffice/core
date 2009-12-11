@@ -63,6 +63,8 @@
 #include <vcl/unohelp.hxx>
 #include <svx/editeng.hxx>
 #include <svx/unoprnms.hxx>
+#include <svx/unoipset.hxx>
+#include <svx/outliner.hxx>
 
 //------------------------------------------------------------------------
 //

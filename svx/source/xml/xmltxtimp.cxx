@@ -40,18 +40,19 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svx/editeng.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemprop.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlmetae.hxx"
+#include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "editsource.hxx"
+#include <svx/editeng.hxx>
 #include <svx/unotext.hxx>
 #include <svx/unoprnms.hxx>
+#include <svx/unoipset.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::document;

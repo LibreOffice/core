@@ -58,6 +58,7 @@
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
 #include "AccessibleStringWrap.hxx"
+#include <svx/outliner.hxx>
 
 using namespace ::com::sun::star;
 

@@ -39,6 +39,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -63,15 +64,14 @@
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+
 #include <svx/editdata.hxx>
 #include <svx/unoedsrc.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoforou.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/unoipset.hxx>
-
 #include <svx/unomid.hxx>
+
+class SvxItemPropertySet;
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
