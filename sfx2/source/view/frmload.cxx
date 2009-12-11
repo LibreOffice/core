@@ -106,6 +106,7 @@ using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::frame::XController2;
 using ::com::sun::star::frame::XController;
+using ::com::sun::star::frame::XModel2;
 /** === end UNO using === **/
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
@@ -364,7 +365,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel >& i_rxDocument ) const
+SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
 {
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
     {
@@ -560,6 +561,28 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Reference< XModel2 >& i_rModel,
+        const Reference< XFrame >& i_rFrame, const ::comphelper::NamedValueCollection& i_rViewFactoryArgs,
+        const ::rtl::OUString& i_rViewName )
+{
+    // let the model create a new controller
+    const Reference< XController2 > xController( i_rModel->createViewController(
+        i_rViewName,
+        i_rViewFactoryArgs.getPropertyValues(),
+        i_rFrame
+    ), UNO_SET_THROW );
+
+    // introduce model/view/controller to each other
+    xController->attachModel( i_rModel.get() );
+    i_rModel->connectController( xController.get() );
+    i_rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachFrame( i_rFrame );
+    i_rModel->setCurrentController( xController.get() );
+
+    return xController;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
     throw( RuntimeException )
@@ -583,7 +606,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     aDescriptor.put( "Frame", _rTargetFrame );
 
     // did the caller already pass a model?
-    Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
+    Reference< XModel2 > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel2 >() );
     const bool bExternalModel = xModel.is();
 
     // check for factory URLs to create a new doc, instead of loading one
@@ -718,8 +741,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
 
         // plug the document into the frame
-        const Reference< XController2 > xController = SfxViewFrame::LoadDocument_Impl(
-            *xDoc, pTargetFrame->GetFrameInterface(), aViewCreationArgs.getPropertyValues(), sViewName );
+        const Reference< XController2 > xController = impl_createDocumentView( xModel, pTargetFrame->GetFrameInterface(),
+            aViewCreationArgs, sViewName );
         ENSURE_OR_THROW( xController.is(), "invalid controller" );
             // this is expected to throw in case of a failure ...
 

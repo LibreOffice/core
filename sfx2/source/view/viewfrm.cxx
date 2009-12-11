@@ -2008,31 +2008,6 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 }
 
 //--------------------------------------------------------------------
-Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
-        const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame, const Sequence< PropertyValue >& i_rViewFactoryArgs,
-        const ::rtl::OUString& i_rViewName )
-{
-    ENSURE_OR_THROW( i_rFrame.is(), "illegal frame" );
-    const Reference < XModel2 > xModel( i_rDoc.GetModel(), UNO_QUERY_THROW );
-
-    // let the model create a new controller
-    const Reference< XController2 > xController( xModel->createViewController(
-        i_rViewName,
-        i_rViewFactoryArgs,
-        i_rFrame
-    ), UNO_SET_THROW );
-
-    // introduce model/view/controller to each other
-    xController->attachModel( xModel.get() );
-    xModel->connectController( xController.get() );
-    i_rFrame->setComponent( xController->getComponentWindow(), xController.get() );
-    xController->attachFrame( i_rFrame );
-    xModel->setCurrentController( xController.get() );
-
-    return xController;
-}
-
-//--------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                                    const USHORT i_nViewId, const bool i_bHidden )
 {

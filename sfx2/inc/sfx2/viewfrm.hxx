@@ -307,13 +307,6 @@ public:
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >
-                        LoadDocument_Impl(
-                            const SfxObjectShell& i_rDoc,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewFactoryArgs,
-                            const ::rtl::OUString& i_rViewName
-                        );
 
 //#endif
 private:

@@ -37,6 +37,8 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/frame/XController2.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -119,7 +121,7 @@ private:
                         ) const;
 
     SfxObjectShellLock  impl_findObjectShell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel2 >& i_rxDocument
                         ) const;
 
     void                impl_lockHiddenDocument(
@@ -148,6 +150,14 @@ private:
     ::comphelper::NamedValueCollection
                         impl_extractViewCreationArgs(
                                   ::comphelper::NamedValueCollection& io_rDescriptor
+                        );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >
+                        impl_createDocumentView(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel2 >& i_rModel,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+                            const ::comphelper::NamedValueCollection& i_rViewFactoryArgs,
+                            const ::rtl::OUString& i_rViewName
                         );
 };
 
