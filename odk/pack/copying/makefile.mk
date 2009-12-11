@@ -237,31 +237,31 @@ CLEAN_DKVERSION_CHECK:
 
 $(DESTDIRBIN)$/addsym-macosx.sh : addsym-macosx.sh
     @@-rm -f $@
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+    @(COMMAND_ECHO)$(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
     -chmod 755 $@
 
 $(DESTDIRSETTINGS)$/dk.mk : dk.mk
     @@-rm -f $@
     -$(MKDIRHIER) $(@:d)
-    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
+    @tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
 
 $(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
-    $(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
+    @(COMMAND_ECHO)$(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
     @echo "tags converted" > $@
 
 $(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(IDL_SINCE_TAGS) $(PRJ)$/docs$/common$/ref$/idl.css
     @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENIDLREF)
-    $(TOUCH) $@
+    @(COMMAND_ECHO)$(TOUCH) $@
 
 $(IDL_DOCU_INDEX_FILE) : $(IDL_DOCU_CLEANUP_FLAG) 
     -$(MKDIRHIER) $(@:d) 
-    $(MY_AUTODOC) -html $(DESTDIRGENIDLREF) -dvgroot "http://wiki.services.openoffice.org/wiki" -sincefile $(IDL_SINCE_TAGS)  -name $(IDLDOCREFNAME) -lg \
-    idl -dvgfile $(IDL_CHAPTER_REFS) -t $(DESTDIRIDL)
-    -rm $(@:d)$/idl.css
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/common$/ref$/idl.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/idl.css
+    @(COMMAND_ECHO)$(MY_AUTODOC) -html $(DESTDIRGENIDLREF) -dvgroot "http://wiki.services.openoffice.org/wiki" -sincefile $(IDL_SINCE_TAGS)  -name $(IDLDOCREFNAME) -lg \
+    @(COMMAND_ECHO)idl -dvgfile $(IDL_CHAPTER_REFS) -t $(DESTDIRIDL)
+    @(COMMAND_ECHO)-rm $(@:d)$/idl.css
+    @(COMMAND_ECHO)$(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/common$/ref$/idl.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/idl.css
 
  
 .IF "$(SOLAR_JAVA)" != ""
 $(MYZIPTARGET) : $(BIN)$/unowinreg.dll $(DESTCLASSESLIST)
-    cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
+    @(COMMAND_ECHO)cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
 .ENDIF
