@@ -1113,6 +1113,13 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     // otherwise the document should be opened readonly
     // if user cancel the loading the ERROR_ABORT is set
 
+    if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+    {
+        // if the document is already locked the system locking might be temporarely off after storing
+        // check whether the system file locking should be taken again
+        GetLockingStream_Impl();
+    }
+
     sal_Bool bResult = pImp->m_bLocked;
 
     if ( !bResult )
