@@ -478,6 +478,14 @@ Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw 
 }
 
 // -----------------------------------------------------------------------
+Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments() throw (RuntimeException)
+{
+    // currently we do not support any creation args, so anything passed to XModel2::createViewController would be
+    // lost, so we can equally return an empty sequence here
+    return Sequence< PropertyValue >();
+}
+
+// -----------------------------------------------------------------------
 void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) throw( RuntimeException )
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
