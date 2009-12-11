@@ -50,7 +50,7 @@
 
     DECL_SERVICE( FmXGridControl )
     DECL_SERVICE( FormController )
-    DECL_SERVICE( LegacyFormController );
+    DECL_SERVICE( LegacyFormController )
 
 
 // ------------------------------------------------------------------------
