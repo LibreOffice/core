@@ -320,18 +320,9 @@ private:
     SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
 
-    /** loads a new view of our document into our frame
-
-        This method completely bypasses the UNO loader mechanism, it exchanges the current view on SFX level. Use
-        it for quick inplace view switches only.
-    */
-    SAL_DLLPRIVATE SfxViewShell* LoadNewSfxView_Impl( const ::rtl::OUString& i_rViewName, SfxViewShell* i_pOldShell );
-
     /** loads the given existing document into the given frame
 
-        This is done using the XComponentLoader interface of the frame, so the SFX document loader is invoked. Don't
-        use this method if you want to plug the document into the frame on SFX level only. In such a case, use
-        LoadNewSfxView_Impl instead.
+        This is done using the XComponentLoader interface of the frame, so the SFX document loader is invoked.
 
         @param i_rDoc
             the document to load
@@ -346,7 +337,7 @@ private:
         @throws Exception
             if something goes wrong. The caller is responsible for handling this.
     */
-    SAL_DLLPRIVATE static void LoadViewIntoFrame_Impl(
+    SAL_DLLPRIVATE static SfxViewShell* LoadViewIntoFrame_Impl(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rLoadArgs,
@@ -356,9 +347,7 @@ private:
 
     /** loads the given existing document into the given frame
 
-        This is done using the XComponentLoader interface of the frame, so the SFX document loader is invoked. Don't
-        use this method if you want to plug the document into the frame on SFX level only. In such a case, use
-        LoadNewSfxView_Impl instead.
+        This is done using the XComponentLoader interface of the frame, so the SFX document loader is invoked.
 
         If no frame is given, a blank top level frame is created.
 

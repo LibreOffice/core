@@ -4004,12 +4004,12 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
 
     // determine previous shell (used in some special cases)
     ::comphelper::NamedValueCollection aCreationArgs( i_rArguments );
-    Reference< XController > xPreviousController = aCreationArgs.getOrDefault( "PreviousView", Reference< XController >() );
+    Reference< XController > xPreviousController = aCreationArgs.getOrDefault( "PreviousViewController", Reference< XController >() );
     SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
     OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
         "SfxBaseModel::createViewController: invalid old controller!" );
     // now that we used that arg, remove it, so the controller will not remember it below
-    aCreationArgs.remove( "PreviousView" );
+    aCreationArgs.remove( "PreviousViewController" );
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );

@@ -2042,7 +2042,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
-    bool bSuccess = false;
+    SfxViewShell* pSuccessView = NULL;
     try
     {
         if ( !xFrame.is() )
@@ -2053,8 +2053,13 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
             bOwnFrame = true;
         }
 
-        LoadViewIntoFrame_Impl( i_rDoc, xFrame, Sequence< PropertyValue >(), i_nViewId, i_bHidden );
-        bSuccess = true;
+        pSuccessView = LoadViewIntoFrame_Impl(
+            i_rDoc,
+            xFrame,
+            Sequence< PropertyValue >(),    // means "reuse existing model's args"
+            i_nViewId,
+            i_bHidden
+        );
 
         if ( bOwnFrame && !i_bHidden )
         {
@@ -2068,8 +2073,8 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( bSuccess )
-        return SfxViewFrame::Get( xFrame->getController(), &i_rDoc );
+    if ( pSuccessView )
+        return pSuccessView->GetViewFrame();
 
     if ( bOwnFrame )
     {
@@ -2087,7 +2092,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
+SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                            const Sequence< PropertyValue >& i_rLoadArgs, const USHORT i_nViewId,
                                            const bool i_bHidden )
 {
@@ -2099,6 +2104,8 @@ void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const R
         aTransformLoadArgs.put( "ViewId", sal_Int16( i_nViewId ) );
     if ( i_bHidden )
         aTransformLoadArgs.put( "Hidden", i_bHidden );
+    else
+        aTransformLoadArgs.remove( "Hidden" );
 
     ::rtl::OUString sURL( xDocument->getURL() );
     if ( !sURL.getLength() )
@@ -2107,27 +2114,10 @@ void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const R
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
     xLoader->loadComponentFromURL( sURL, ::rtl::OUString::createFromAscii( "_self" ), 0,
         aTransformLoadArgs.getPropertyValues() );
-}
 
-//--------------------------------------------------------------------
-SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const ::rtl::OUString& i_rViewName , SfxViewShell* i_pOldShell )
-{
-    ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
-    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewSfxView_Impl: not allowed to be called with an exsiting view shell!" );
-
-    ::comphelper::NamedValueCollection aViewCreationArgs;
-    if ( i_pOldShell != NULL )
-        aViewCreationArgs.put( "PreviousView", i_pOldShell->GetController() );
-
-    const Reference< XController2 > xController = LoadDocument_Impl(
-        *GetObjectShell(),
-        GetFrame()->GetFrameInterface(),
-        aViewCreationArgs.getPropertyValues(),
-        i_rViewName
-    );
-
-    SfxViewShell* pViewShell = SfxViewShell::Get( xController.get() );
-    ENSURE_OR_THROW( pViewShell, "invalid controller returned by view factory" );
+    SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
+    ENSURE_OR_THROW( pViewShell,
+        "SfxViewFrame::LoadViewIntoFrame_Impl: loading an SFX doc into a frame resulted in a non-SFX view - quite impossible" );
     return pViewShell;
 }
 
@@ -2239,6 +2229,8 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 {
     try
     {
+        ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
+
         // if we already have a view shell, remove it
         SfxViewShell* pOldSh = GetViewShell();
         OSL_PRECOND( pOldSh, "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
@@ -2251,19 +2243,23 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
             // remove sub shells from Dispatcher before switching to new ViewShell
             PopShellAndSubShells_Impl( *pOldSh );
-
-            // reset view shell, that's a precondition for the LoadNewSfxView_Impl below
-            SetViewShell_Impl( NULL );
         }
 
         GetBindings().ENTERREGISTRATIONS();
         LockAdjustPosSizePixel();
 
-        // create and load new ViewShell
+        // ID of the new view
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
-        const sal_Int16 nViewNo = ( bIsIndex || !nViewIdOrNo ) ? nViewIdOrNo : rDocFact.GetViewNo_Impl( nViewIdOrNo, 0 );
-        const ::rtl::OUString sViewName( rDocFact.GetViewFactory( nViewNo ).GetViewName() );
-        SfxViewShell* pNewSh = LoadNewSfxView_Impl( sViewName, pOldSh );
+        const USHORT nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
+
+        // create and load new ViewShell
+        SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
+            *GetObjectShell(),
+            GetFrame()->GetFrameInterface(),
+            Sequence< PropertyValue >(),    // means "reuse existing model's args"
+            nViewId,
+            false
+        );
 
         // allow resize events to be processed
         UnlockAdjustPosSizePixel();

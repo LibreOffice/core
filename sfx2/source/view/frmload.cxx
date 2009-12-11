@@ -47,6 +47,7 @@
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/viewfrm.hxx"
+#include "sfx2/viewsh.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -104,6 +105,7 @@ using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::frame::XController2;
+using ::com::sun::star::frame::XController;
 /** === end UNO using === **/
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
@@ -580,21 +582,25 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     // then closing the first view/frame.
     aDescriptor.put( "Frame", _rTargetFrame );
 
+    // did the caller already pass a model?
+    Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
+    const bool bExternalModel = xModel.is();
+
     // check for factory URLs to create a new doc, instead of loading one
     const ::rtl::OUString sURL = aDescriptor.getOrDefault( "URL", ::rtl::OUString() );
     const bool bIsFactoryURL = ( sURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "private:factory/" ) ) == 0 );
     bool bInitNewModel = bIsFactoryURL;
-    if ( bIsFactoryURL )
+    if ( bIsFactoryURL && !bExternalModel )
     {
         const ::rtl::OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
         // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
-        USHORT nSlotParam = impl_findSlotParam( sFactory );
+        const USHORT nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
             return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame );
         }
 
-        bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );
+        const bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );
         if ( bDescribesValidTemplate )
         {
             // if the media descriptor allowed us to determine a template document to create the new document
@@ -614,14 +620,16 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         aDescriptor.put( "FileName", aDescriptor.get( "URL" ) );
     }
 
-    // did the caller already pass a model?
-    Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
-    const bool bExternalModel = xModel.is();
-
     sal_Bool bLoadSuccess = sal_False;
     SfxFrameWeak wFrame;
     try
     {
+        // extract view releant arguments from the loader args
+        ::comphelper::NamedValueCollection aViewCreationArgs( impl_extractViewCreationArgs( aDescriptor ) );
+
+        // it's allowed to to an "in-place replace" of a view/controller in a frame
+        Reference< XController > xReplacedViewController;
+
         // no model passed from outside? => create one from scratch
         if ( !xModel.is() )
         {
@@ -632,11 +640,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             }
 
             // create the new doc
-            ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
+            const ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
             xModel.set( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
 
             // load resp. init it
-            Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
+            const Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
             if ( bInitNewModel )
             {
                 xLoadable->initNew();
@@ -651,19 +659,35 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
         else
         {
-            // tell the doc its (current) load args.
-            xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
+            // if the existent model is to be loaded into a frame where already another view to the same model
+            // exists, then preserve this info for the view factory
+            Reference< XController > xPreviousController( _rTargetFrame->getController() );
+            if  (   ( xPreviousController.is() )
+                &&  ( xModel == xPreviousController->getModel() )
+                )
+            {
+                aViewCreationArgs.put( "PreviousViewController", xPreviousController );
+                xReplacedViewController = xPreviousController;
+            }
 
-            // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
-            // imagine scenarios where it is *not* correct to overrule the *existing* model args (XModel::getArgs)
-            // with the ones passed to the loader here. For instance, what about the MacroExecutionMode? The document
-            // might have a mode other than the one passed to the loader, and we always overwrite the former with
-            // the latter.
+            // tell the doc its (current) load args.
+            impl_removeLoaderArguments( aDescriptor );
+            xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
+                // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
+                // imagine scenarios where it is *not* correct to overrule the *existing* model args (XModel::getArgs)
+                // with the ones passed to the loader here. For instance, what about the MacroExecutionMode? The document
+                // might have a mode other than the one passed to the loader, and we always overwrite the former with
+                // the latter.
         }
 
         // get the SfxObjectShell (still needed at the moment)
-        SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
+        const SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
         ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
+
+        // ensure the ID of the to-be-created view is in the descriptor, if possible
+        const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
+        const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
+        const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetViewName() );
 
         // if the document is created hidden, prevent it from being deleted until it is shown or disposed
         impl_lockHiddenDocument( *xDoc, aDescriptor );
@@ -675,25 +699,26 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // code at the very end of this method cares for closing the XModel, which should also close the
             // ObjectShell.
 
-        // create a frame
-        SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
-        wFrame = pTargetFrame;
+        // obtain/create a frame
+        SfxFrame* pTargetFrame = NULL;
+        if ( xReplacedViewController.is() )
+        {
+            SfxViewFrame* pReplacedViewFrame = SfxViewFrame::GetFirst( xDoc, false );
+            ENSURE_OR_THROW( pReplacedViewFrame, "replacing a non-SFX view of a SFX-document should is impossible" );
+            pTargetFrame = pReplacedViewFrame->GetFrame();
+            ENSURE_OR_THROW( pTargetFrame, "invalid existing view - could not obtain an SfxFrame" );
+        }
+        else
+        {
+            pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
+            wFrame = pTargetFrame;
 
-        // prepare it
-        pTargetFrame->PrepareForDoc_Impl( *xDoc, aDescriptor );
-
-        // ensure the ID of the to-be-created view is in the descriptor, if possible
-        const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
-        const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
-        const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetViewName() );
-
-        // extract view releant arguments from the loader args
-        ::comphelper::NamedValueCollection aViewCreationArgs( impl_extractViewCreationArgs( aDescriptor ) );
-            // TODO: this should probably be done before the content of aDescriptor is actually passed to the
-            // XModel, i.e. before its load/initNew is called.
+            // prepare it
+            pTargetFrame->PrepareForDoc_Impl( *xDoc, aDescriptor );
+        }
 
         // plug the document into the frame
-        Reference< XController2 > xController = SfxViewFrame::LoadDocument_Impl(
+        const Reference< XController2 > xController = SfxViewFrame::LoadDocument_Impl(
             *xDoc, pTargetFrame->GetFrameInterface(), aViewCreationArgs.getPropertyValues(), sViewName );
         ENSURE_OR_THROW( xController.is(), "invalid controller" );
             // this is expected to throw in case of a failure ...
@@ -701,7 +726,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         if ( !bExternalModel )
         {
             pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-            String sDocumentURL = xDoc->GetMedium()->GetName();
+            const String sDocumentURL = xDoc->GetMedium()->GetName();
             if ( sDocumentURL.Len() )
                 SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
         }
@@ -710,7 +735,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     }
     catch ( Exception& )
     {
-        Any aError( ::cppu::getCaughtException() );
+        const Any aError( ::cppu::getCaughtException() );
         if ( !aDescriptor.getOrDefault( "Silent", sal_False ) )
             impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
@@ -723,7 +748,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     {
         try
         {
-            Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
+            const Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
             xCloseable->close( sal_True );
         }
         catch ( Exception& )
