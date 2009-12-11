@@ -170,6 +170,7 @@ common
 		PROFILE
 		profile
         PROSWITCH
+        PTHREAD_CFLAGS
 		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM
@@ -269,6 +270,7 @@ common
         NO_HIDS
         PAM_LINK
         PAM
+        PYTHONPATH
         SOLAR_PLUGIN
         URE_BOOTSTRAP
         USE_FT_EMBOLDEN
