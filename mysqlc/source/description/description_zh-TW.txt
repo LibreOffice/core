@@ -1,0 +1,1 @@
+將 OpenOffice.org 直接連線至 MySQL 伺服器
