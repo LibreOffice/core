@@ -1921,8 +1921,8 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const = 0;
         virtual Reference< XInputStream >   getBinaryStream() const = 0;
         virtual Reference< XInputStream >   getCharacterStream() const = 0;
-        virtual Reference< XClob >          getClob() const = 0;
         virtual Reference< XBlob >          getBlob() const = 0;
+        virtual Reference< XClob >          getClob() const = 0;
         virtual Any                         getObject() const = 0;
         virtual sal_Bool                    wasNull() const = 0;
 
@@ -1953,8 +1953,8 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xRow->getBytes( m_nPos ); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xRow->getBinaryStream( m_nPos ); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
-        virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
         virtual Reference< XBlob >          getBlob() const             { return m_xRow->getBlob( m_nPos ); };
+        virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
         virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos ,NULL); };
         virtual sal_Bool                    wasNull() const             { return m_xRow->wasNull( ); };
 
@@ -1986,10 +1986,10 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xColumn->getBytes(); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xColumn->getBinaryStream(); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xColumn->getCharacterStream(); };
-        virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
         virtual Reference< XBlob >          getBlob() const             { return m_xColumn->getBlob(); };
-        virtual Any                         getObject() const           { return m_xColumn->getObject(NULL); };
-        virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull( ); };
+        virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
+        virtual Any                         getObject() const           { return m_xColumn->getObject( NULL ); };
+        virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull(); };
 
     private:
         const Reference< XColumn >  m_xColumn;

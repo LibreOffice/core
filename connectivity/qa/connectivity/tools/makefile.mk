@@ -46,7 +46,7 @@ all:
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunnerLight.jar
-JAVAFILES       := $(shell @$(FIND) -name "*.java")
+JAVAFILES       := $(shell @$(FIND) . -name "*.java")
 JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:d)$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
