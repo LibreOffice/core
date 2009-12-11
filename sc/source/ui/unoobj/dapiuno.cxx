@@ -46,6 +46,7 @@
 #include "unoguard.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
+#include "dpsdbtab.hxx"
 #include "dpsave.hxx"
 #include "dbdocfun.hxx"
 #include "unonames.hxx"
@@ -55,6 +56,7 @@
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -108,9 +110,12 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
         {MAP_CHAR_LEN(SC_UNO_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNEMPROWS),   0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_RPTEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SERVICEARG),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWFILT),     0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SOURCESERV),   0,  &getCppuType((rtl::OUString*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aDataPilotDescriptorBaseMap_Impl;
@@ -264,8 +269,7 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
             for (USHORT i=0; i<nCount; i++)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() &&
-                     pDPObj->GetOutRange().aStart.Tab() == nTab &&
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
                      pDPObj->GetName() == rName )
                     return pDPObj;
             }
@@ -347,7 +351,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
             for (USHORT i=0; i<nCount; i++)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() && pDPObj->GetOutRange().aStart.Tab() == nTab )
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
                 {
                     if ( nFound == nIndex )
                     {
@@ -499,7 +503,7 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
             for (USHORT i=0; i<nCount; i++)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() && pDPObj->GetOutRange().aStart.Tab() == nTab )
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
                     ++nFound;
             }
             return nFound;
@@ -563,7 +567,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             for (i=0; i<nCount; i++)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() && pDPObj->GetOutRange().aStart.Tab() == nTab )
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
                     ++nFound;
             }
 
@@ -573,7 +577,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             for (i=0; i<nCount; i++)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() && pDPObj->GetOutRange().aStart.Tab() == nTab )
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
                     pAry[nPos++] = pDPObj->GetName();
             }
 
@@ -601,8 +605,7 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
                 //! allow all data sources!!!
 
                 ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->IsSheetData() &&
-                     pDPObj->GetOutRange().aStart.Tab() == nTab &&
+                if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
                      pDPObj->GetName() == aNamStr )
                     return TRUE;
             }
@@ -699,11 +702,12 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
     ScUnoGuard aGuard;
 
     ScDPObject* pDPObject(GetDPObject());
-    if (!pDPObject || !pDPObject->IsSheetData())
+    if (!pDPObject)
         throw RuntimeException();
 
     CellRangeAddress aRet;
-    ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
+    if (pDPObject->IsSheetData())
+        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
     return aRet;
 }
 
@@ -821,6 +825,99 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));
             }
+            else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
+            {
+                uno::Sequence<beans::PropertyValue> aArgSeq;
+                if ( aValue >>= aArgSeq )
+                {
+                    ScImportSourceDesc aImportDesc;
+
+                    const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
+                    if (pOldDesc)
+                        aImportDesc = *pOldDesc;
+
+                    ScImportParam aParam;
+                    ScImportDescriptor::FillImportParam( aParam, aArgSeq );
+
+                    USHORT nNewType = sheet::DataImportMode_NONE;
+                    if ( aParam.bImport )
+                    {
+                        if ( aParam.bSql )
+                            nNewType = sheet::DataImportMode_SQL;
+                        else if ( aParam.nType == ScDbQuery )
+                            nNewType = sheet::DataImportMode_QUERY;
+                        else
+                            nNewType = sheet::DataImportMode_TABLE;
+                    }
+                    aImportDesc.nType   = nNewType;
+                    aImportDesc.aDBName = aParam.aDBName;
+                    aImportDesc.aObject = aParam.aStatement;
+                    aImportDesc.bNative = aParam.bNative;
+
+                    pDPObject->SetImportDesc( aImportDesc );
+                }
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_SOURCESERV ) )
+            {
+                rtl::OUString aStrVal;
+                if ( aValue >>= aStrVal )
+                {
+                    String aEmpty;
+                    ScDPServiceDesc aServiceDesc(aEmpty, aEmpty, aEmpty, aEmpty, aEmpty);
+
+                    const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
+                    if (pOldDesc)
+                        aServiceDesc = *pOldDesc;
+
+                    aServiceDesc.aServiceName = aStrVal;
+
+                    pDPObject->SetServiceData( aServiceDesc );
+                }
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_SERVICEARG ) )
+            {
+                uno::Sequence<beans::PropertyValue> aArgSeq;
+                if ( aValue >>= aArgSeq )
+                {
+                    String aEmpty;
+                    ScDPServiceDesc aServiceDesc(aEmpty, aEmpty, aEmpty, aEmpty, aEmpty);
+
+                    const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
+                    if (pOldDesc)
+                        aServiceDesc = *pOldDesc;
+
+                    rtl::OUString aStrVal;
+                    sal_Int32 nArgs = aArgSeq.getLength();
+                    for (sal_Int32 nArgPos=0; nArgPos<nArgs; ++nArgPos)
+                    {
+                        const beans::PropertyValue& rProp = aArgSeq[nArgPos];
+                        String aPropName(rProp.Name);
+
+                        if (aPropName.EqualsAscii( SC_UNO_SOURCENAME ))
+                        {
+                            if ( rProp.Value >>= aStrVal )
+                                aServiceDesc.aParSource = aStrVal;
+                        }
+                        else if (aPropName.EqualsAscii( SC_UNO_OBJECTNAME ))
+                        {
+                            if ( rProp.Value >>= aStrVal )
+                                aServiceDesc.aParName = aStrVal;
+                        }
+                        else if (aPropName.EqualsAscii( SC_UNO_USERNAME ))
+                        {
+                            if ( rProp.Value >>= aStrVal )
+                                aServiceDesc.aParUser = aStrVal;
+                        }
+                        else if (aPropName.EqualsAscii( SC_UNO_PASSWORD ))
+                        {
+                            if ( rProp.Value >>= aStrVal )
+                                aServiceDesc.aParPass = aStrVal;
+                        }
+                    }
+
+                    pDPObject->SetServiceData( aServiceDesc );
+                }
+            }
             else
                 throw UnknownPropertyException();
 
@@ -870,6 +967,63 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
+            {
+                const ScImportSourceDesc* pImportDesc = pDPObject->GetImportSourceDesc();
+                if ( pImportDesc )
+                {
+                    // fill ScImportParam so ScImportDescriptor::FillProperties can be used
+                    ScImportParam aParam;
+                    aParam.bImport    = ( pImportDesc->nType != sheet::DataImportMode_NONE );
+                    aParam.aDBName    = pImportDesc->aDBName;
+                    aParam.aStatement = pImportDesc->aObject;
+                    aParam.bNative    = pImportDesc->bNative;
+                    aParam.bSql       = ( pImportDesc->nType == sheet::DataImportMode_SQL );
+                    aParam.nType      = ( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable;
+
+                    uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
+                    ScImportDescriptor::FillProperties( aSeq, aParam );
+                    aRet <<= aSeq;
+                }
+                else
+                {
+                    // empty sequence
+                    uno::Sequence<beans::PropertyValue> aEmpty(0);
+                    aRet <<= aEmpty;
+                }
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_SOURCESERV ) )
+            {
+                rtl::OUString aServiceName;
+                const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
+                if (pServiceDesc)
+                    aServiceName = pServiceDesc->aServiceName;
+                aRet <<= aServiceName;      // empty string if no ServiceDesc set
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_SERVICEARG ) )
+            {
+                const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
+                if (pServiceDesc)
+                {
+                    uno::Sequence<beans::PropertyValue> aSeq( 4 );
+                    beans::PropertyValue* pArray = aSeq.getArray();
+                    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNO_SOURCENAME );
+                    pArray[0].Value <<= rtl::OUString( pServiceDesc->aParSource );
+                    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNO_OBJECTNAME );
+                    pArray[1].Value <<= rtl::OUString( pServiceDesc->aParName );
+                    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNO_USERNAME );
+                    pArray[2].Value <<= rtl::OUString( pServiceDesc->aParUser );
+                    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNO_PASSWORD );
+                    pArray[3].Value <<= rtl::OUString( pServiceDesc->aParPass );
+                    aRet <<= aSeq;
+                }
+                else
+                {
+                    // empty sequence
+                    uno::Sequence<beans::PropertyValue> aEmpty(0);
+                    aRet <<= aEmpty;
+                }
             }
             else
                 throw UnknownPropertyException();

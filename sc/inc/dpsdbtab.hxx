@@ -53,6 +53,8 @@ struct ScImportSourceDesc
     USHORT  nType;          // enum DataImportMode
     BOOL    bNative;
 
+    ScImportSourceDesc() : nType(0), bNative(FALSE) {}
+
     BOOL operator== ( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&
                  aObject == rOther.aObject &&

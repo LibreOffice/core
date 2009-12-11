@@ -573,6 +573,15 @@
 #define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
+#define SC_UNO_IMPORTDESC           "ImportDescriptor"
+#define SC_UNO_SOURCESERV           "SourceServiceName"
+#define SC_UNO_SERVICEARG           "ServiceArguments"
+
+// properties in data pilot descriptor ServiceArguments
+#define SC_UNO_SOURCENAME           "SourceName"
+#define SC_UNO_OBJECTNAME           "ObjectName"
+#define SC_UNO_USERNAME             "UserName"
+#define SC_UNO_PASSWORD             "Password"
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
