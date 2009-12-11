@@ -493,9 +493,28 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, ::comphelper::NamedValueCollection& io_rDescriptor )
+::comphelper::NamedValueCollection SfxFrameLoader_Impl::impl_extractViewCreationArgs( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
-    sal_Int16 nViewId = io_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) );
+    const sal_Char* pKnownViewArgs[] = {
+        "JumpMark"
+    };
+
+    ::comphelper::NamedValueCollection aViewArgs;
+    for ( size_t i=0; i < sizeof( pKnownViewArgs ) / sizeof( pKnownViewArgs[0] ); ++i )
+    {
+        if ( io_rDescriptor.has( pKnownViewArgs[i] ) )
+        {
+            aViewArgs.put( pKnownViewArgs[i], io_rDescriptor.get( pKnownViewArgs[i] ) );
+            io_rDescriptor.remove( pKnownViewArgs[i] );
+        }
+    }
+    return aViewArgs;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
+{
+    sal_Int16 nViewId = i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) );
     try
     {
         if ( nViewId == 0 ) do
@@ -524,7 +543,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
 
             SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
             if ( pViewFactory )
-                io_rDescriptor.put( "ViewId", sal_Int16( pViewFactory->GetOrdinal() ) );
+                nViewId = sal_Int16( pViewFactory->GetOrdinal() );
         }
         while ( false );
     }
@@ -668,9 +687,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
         const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetViewName() );
 
+        // extract view releant arguments from the loader args
+        ::comphelper::NamedValueCollection aViewCreationArgs( impl_extractViewCreationArgs( aDescriptor ) );
+            // TODO: this should probably be done before the content of aDescriptor is actually passed to the
+            // XModel, i.e. before its load/initNew is called.
+
         // plug the document into the frame
         Reference< XController2 > xController = SfxViewFrame::LoadDocument_Impl(
-            *xDoc, pTargetFrame->GetFrameInterface(), Sequence< PropertyValue >(), sViewName );
+            *xDoc, pTargetFrame->GetFrameInterface(), aViewCreationArgs.getPropertyValues(), sViewName );
         ENSURE_OR_THROW( xController.is(), "invalid controller" );
             // this is expected to throw in case of a failure ...
 

@@ -162,6 +162,7 @@ public:
     //____________________________________________________________________________________________________
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XController
@@ -392,6 +393,7 @@ public:
     SAL_DLLPRIVATE BOOL HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE void SetCreationArguments_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 //#endif
 private:
@@ -402,7 +404,7 @@ private:
         E_RECONNECT
     };
     SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
-    SAL_DLLPRIVATE SfxViewFrame* GetViewFrame_Impl() const;
+    SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
 
 //________________________________________________________________________________________________________
 //  private variables

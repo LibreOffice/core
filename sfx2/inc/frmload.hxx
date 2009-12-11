@@ -142,6 +142,11 @@ private:
 
     sal_Int16           impl_determineEffectiveViewId_nothrow(
                             const SfxObjectShell& i_rDocument,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
+                        );
+
+    ::comphelper::NamedValueCollection
+                        impl_extractViewCreationArgs(
                                   ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 };

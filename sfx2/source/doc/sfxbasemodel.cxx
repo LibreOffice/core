@@ -4008,6 +4008,8 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
     OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
         "SfxBaseModel::createViewController: invalid old controller!" );
+    // now that we used that arg, remove it, so the controller will not remember it below
+    aCreationArgs.remove( "PreviousView" );
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );
@@ -4029,6 +4031,11 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // ensure a default controller, if the view shell did not provide an own implementation
     if ( !pViewShell->GetController().is() )
         pViewShell->SetController( new SfxBaseController( pViewShell ) );
+
+    // pass the creation arguments to the controller
+    SfxBaseController* pBaseController = pViewShell->GetBaseController_Impl();
+    ENSURE_OR_THROW( pBaseController, "invalid controller implementation!" );
+    pBaseController->SetCreationArguments_Impl( aCreationArgs.getPropertyValues() );
 
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );

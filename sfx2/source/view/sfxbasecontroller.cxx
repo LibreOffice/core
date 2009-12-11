@@ -130,6 +130,11 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::frame::XFrameActionListener;
+using ::com::sun::star::util::XCloseListener;
+using ::com::sun::star::task::XStatusIndicator;
+using ::com::sun::star::frame::XTitle;
 namespace css = ::com::sun::star;
 
 struct GroupIDToCommandGroup
@@ -448,18 +453,19 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::notifyClosing( const E
 
 struct IMPL_SfxBaseController_DataContainer
 {
-    REFERENCE < XFRAME >    m_xFrame;
-    REFERENCE < XFRAMEACTIONLISTENER >      m_xListener       ;
-    REFERENCE < XCLOSELISTENER >      m_xCloseListener       ;
+    Reference< XFrame >                     m_xFrame                ;
+    Reference< XFrameActionListener >       m_xListener             ;
+    Reference< XCloseListener >             m_xCloseListener        ;
     ::sfx2::UserInputInterception           m_aUserInputInterception;
     OMULTITYPEINTERFACECONTAINERHELPER      m_aListenerContainer    ;
-    OINTERFACECONTAINERHELPER               m_aInterceptorContainer    ;
-    REFERENCE < ::com::sun::star::task::XStatusIndicator > m_xIndicator;
+    OINTERFACECONTAINERHELPER               m_aInterceptorContainer ;
+    Reference< XStatusIndicator >           m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
-    sal_Bool                                m_bSuspendState;
-    css::uno::Reference< css::frame::XTitle > m_xTitleHelper;
+    sal_Bool                                m_bSuspendState         ;
+    Reference< XTitle >                     m_xTitleHelper          ;
+    Sequence< PropertyValue >               m_aCreationArgs         ;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
@@ -560,7 +566,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
     if ( !m_pData->m_pViewShell )
         throw DisposedException();
 
-    return Reference< XWindow >( GetViewFrame_Impl()->GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
+    return Reference< XWindow >( GetViewFrame_Impl().GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
 }
 
 ::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
@@ -570,7 +576,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
         throw DisposedException();
 
     const SfxObjectFactory& rDocFac( m_pData->m_pViewShell->GetObjectShell()->GetFactory() );
-    sal_uInt16 nViewNo = rDocFac.GetViewNo_Impl( GetViewFrame_Impl()->GetCurViewId(), rDocFac.GetViewFactoryCount() );
+    sal_uInt16 nViewNo = rDocFac.GetViewNo_Impl( GetViewFrame_Impl().GetCurViewId(), rDocFac.GetViewFactoryCount() );
     OSL_ENSURE( nViewNo < rDocFac.GetViewFactoryCount(), "SfxBaseController::getViewControllerName: view ID not found in view factories!" );
 
     ::rtl::OUString sViewName;
@@ -580,12 +586,27 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
     return sViewName;
 }
 
-SfxViewFrame* SfxBaseController::GetViewFrame_Impl() const
+Sequence< PropertyValue > SAL_CALL SfxBaseController::getCreationArguments() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
+        throw DisposedException();
+
+    return m_pData->m_aCreationArgs;
+}
+
+void SfxBaseController::SetCreationArguments_Impl( const Sequence< PropertyValue >& i_rCreationArgs )
+{
+    OSL_ENSURE( m_pData->m_aCreationArgs.getLength() == 0, "SfxBaseController::SetCreationArguments_Impl: not intended to be called twice!" );
+    m_pData->m_aCreationArgs = i_rCreationArgs;
+}
+
+SfxViewFrame& SfxBaseController::GetViewFrame_Impl() const
 {
     ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
     SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
     ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
-    return pActFrame;
+    return *pActFrame;
 }
 
 //________________________________________________________________________________________________________
@@ -1360,7 +1381,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 pViewFrame->Resize( TRUE );
 
             // if there's a JumpMark given, then, well, jump to it
-            const ::rtl::OUString sJumpMark = aDocumentArgs.getOrDefault( "JumpMark", ::rtl::OUString() );
+            ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
+            const ::rtl::OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", ::rtl::OUString() );
             const bool bHasJumpMark = ( sJumpMark.getLength() > 0 );
             OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )
                     ||  ( !sJumpMark.getLength() ),

@@ -2010,6 +2010,11 @@ Reference < XController > SfxViewShell::GetController()
     return pImp->pController;
 }
 
+SfxBaseController* SfxViewShell::GetBaseController_Impl() const
+{
+    return pImp->pController;
+}
+
 void SfxViewShell::AddContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
 {
     pImp->aInterceptorContainer.addInterface( xInterceptor );

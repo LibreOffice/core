@@ -311,6 +311,8 @@ public:
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
 
+    SAL_DLLPRIVATE SfxBaseController*   GetBaseController_Impl() const;
+
     // Shell Interface
     SAL_DLLPRIVATE void ExecPrint_Impl(SfxRequest &);
     SAL_DLLPRIVATE void ExecMisc_Impl(SfxRequest &);
