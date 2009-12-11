@@ -2140,18 +2140,6 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
 
     if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
     {
-#if 0 // some debug fun; remove this later...
-        int len=aPic.lcb-aPic.cbHeader;
-        char *pBuf=(char*)malloc(len);
-        pDataStream->Read( pBuf, len);
-    static int _h=0;
-    char fname[255];
-    sprintf(fname, "data%03i.data", _h++);
-    FILE *out=fopen(fname, "wb");
-    fwrite(pBuf, len, 1, out);
-    fclose(out);
-        pDataStream->Seek( nPicLocFc + aPic.cbHeader );
-#endif
         aFormula.FormulaRead(nWhich,pDataStream);
         bRet = true;
     }

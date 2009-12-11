@@ -828,21 +828,21 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
     }
     //FIXME FieldBk
     // TODO: Form Protection when Enhanced Fields are enabled
-     if (!bRet) {
-         const SwDoc *pDoc = GetDoc();
+    if (!bRet) {
+        const SwDoc *pDoc = GetDoc();
         sw::mark::IMark* pA = NULL;
         sw::mark::IMark* pB = NULL;
         if ( pDoc )
         {
             const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
-             pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
-             pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
-             bRet = ( pA != pB );
+            pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+            pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+            bRet = ( pA != pB );
         }
-         bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
-         if ( bProtectForm )
-             bRet |= ( pA == NULL || pB == NULL );
-     }
+        bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+        if ( bProtectForm )
+            bRet |= ( pA == NULL || pB == NULL );
+    }
     return bRet;
 }
 
