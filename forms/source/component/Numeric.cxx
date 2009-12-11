@@ -212,6 +212,13 @@ Any ONumericModel::getDefaultForReset() const
     return aValue;
 }
 
+//------------------------------------------------------------------------------
+void ONumericModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
+}
+
 //.........................................................................
 }   // namespace frm
 //.........................................................................

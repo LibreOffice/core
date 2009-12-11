@@ -32,15 +32,13 @@
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
 #ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
+#include "propctrlr.hrc"
 #endif
 #include "formstrings.hxx"
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/extract.hxx>

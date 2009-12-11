@@ -28,7 +28,11 @@
  *
  ************************************************************************/
 
-#include "../inc/extensio.hrc"
+#include "../inc/abpilot.hrc"
+#include "../inc/bibliography.hrc"
+#include "../inc/dbpilots.hrc"
+#include "../inc/propctrlr.hrc"
+#include "../inc/update.hrc"
 
 hidspecial HID_ABSPILOT                         { HelpId = HID_ABSPILOT; }
 hidspecial HID_ABSPILOT_CANCEL                  { HelpId = HID_ABSPILOT_CANCEL; }
@@ -89,13 +93,6 @@ hidspecial HID_CHECK_FOR_UPD_INSTALL            { HelpId = HID_CHECK_FOR_UPD_INS
 hidspecial HID_CHECK_FOR_UPD_PAUSE              { HelpId = HID_CHECK_FOR_UPD_PAUSE; }
 hidspecial HID_CHECK_FOR_UPD_RESUME             { HelpId = HID_CHECK_FOR_UPD_RESUME; }
 hidspecial HID_CHECK_FOR_UPD_STATUS             { HelpId = HID_CHECK_FOR_UPD_STATUS; }
-
-hidspecial HID_DBIWIZARD                        { HelpId = HID_DBIWIZARD; }
-hidspecial HID_DBIWIZARD_CANCEL                 { HelpId = HID_DBIWIZARD_CANCEL; }
-hidspecial HID_DBIWIZARD_FILESELECTION          { HelpId = HID_DBIWIZARD_FILESELECTION; }
-hidspecial HID_DBIWIZARD_FINISH                 { HelpId = HID_DBIWIZARD_FINISH; }
-hidspecial HID_DBIWIZARD_NEXT                   { HelpId = HID_DBIWIZARD_NEXT; }
-hidspecial HID_DBIWIZARD_PREVIOUS               { HelpId = HID_DBIWIZARD_PREVIOUS; }
 
 hidspecial HID_DLG_DBCHANGE                     { HelpId = HID_DLG_DBCHANGE; }
 hidspecial HID_DLG_MAPPING                      { HelpId = HID_DLG_MAPPING; }
@@ -345,7 +342,6 @@ hidspecial HID_PROP_XSD_REQUIRED                { HelpId = HID_PROP_XSD_REQUIRED
 hidspecial HID_PROP_XSD_TOTAL_DIGITS            { HelpId = HID_PROP_XSD_TOTAL_DIGITS; }
 hidspecial HID_PROP_XSD_WHITESPACES             { HelpId = HID_PROP_XSD_WHITESPACES; }
 
-hidspecial HID_PROTOCOLS                        { HelpId = HID_PROTOCOLS; }
 hidspecial HID_SELECTION_TLB                    { HelpId = HID_SELECTION_TLB; }
 
 hidspecial UID_ABSPILOT_HELP                    { HelpId = UID_ABSPILOT_HELP; }
@@ -384,13 +380,6 @@ hidspecial UID_BRWEVT_SUBMITTED                 { HelpId = UID_BRWEVT_SUBMITTED;
 hidspecial UID_BRWEVT_TEXTCHANGED               { HelpId = UID_BRWEVT_TEXTCHANGED; }
 hidspecial UID_BRWEVT_UNLOADED                  { HelpId = UID_BRWEVT_UNLOADED; }
 hidspecial UID_BRWEVT_UNLOADING                 { HelpId = UID_BRWEVT_UNLOADING; }
-
-hidspecial UID_DBIWIZARD_FORMS                  { HelpId = UID_DBIWIZARD_FORMS; }
-hidspecial UID_DBIWIZARD_FORMS_SAVETO           { HelpId = UID_DBIWIZARD_FORMS_SAVETO; }
-hidspecial UID_DBIWIZARD_HELP                   { HelpId = UID_DBIWIZARD_HELP; }
-hidspecial UID_DBIWIZARD_QUERIES                { HelpId = UID_DBIWIZARD_QUERIES; }
-hidspecial UID_DBIWIZARD_SOURCEFILE             { HelpId = UID_DBIWIZARD_SOURCEFILE; }
-hidspecial UID_DBIWIZARD_SOURCESTATS            { HelpId = UID_DBIWIZARD_SOURCESTATS; }
 
 hidspecial UID_EVT_MACRODLG                     { HelpId = UID_EVT_MACRODLG; }
 
@@ -435,3 +424,8 @@ hidspecial UID_PROP_DLG_XSD_READONLY            { HelpId = UID_PROP_DLG_XSD_READ
 hidspecial UID_PROP_DLG_XSD_RELEVANT            { HelpId = UID_PROP_DLG_XSD_RELEVANT; }
 hidspecial UID_PROP_DLG_XSD_REQUIRED            { HelpId = UID_PROP_DLG_XSD_REQUIRED; }
 hidspecial UID_PROP_REMOVE_DATA_TYPE            { HelpId = UID_PROP_REMOVE_DATA_TYPE; }
+
+hidspecial HID_FM_PROPDLG_TABCTR                { HelpId = HID_FM_PROPDLG_TABCTR; }
+hidspecial HID_FM_PROPDLG_TAB_GENERAL           { HelpId = HID_FM_PROPDLG_TAB_GENERAL; }
+hidspecial HID_FM_PROPDLG_TAB_DATA              { HelpId = HID_FM_PROPDLG_TAB_DATA; }
+hidspecial HID_FM_PROPDLG_TAB_EVT               { HelpId = HID_FM_PROPDLG_TAB_EVT; }
