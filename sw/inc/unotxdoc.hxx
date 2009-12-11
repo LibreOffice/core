@@ -602,12 +602,14 @@ class SwViewOptionAdjust_Impl
 {
     SwWrtShell &    m_rShell;
     SwViewOption    m_aOldViewOptions;
-    SwViewOption    m_aRenderViewOptions;   // view options to use when rendering for PDF export or printing
-    bool            m_bRestoreViewOptions;
+//    SwViewOption    m_aRenderViewOptions;   // view options to use when rendering for PDF export or printing
+//    bool            m_bRestoreViewOptions;
 
 public:
-    SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions );
+    SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
+
+    void AdjustViewOptions( const SwPrtOptions *pPrtOptions );
 };
 
 

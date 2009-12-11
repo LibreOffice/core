@@ -282,13 +282,19 @@ void SwRenderData::DeletePostItData()
 }
 
 
-void SwRenderData::ViewOptionAdjustStart( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions )
+void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions )
 {
     if (m_pViewOptionAdjust)
     {
-        DBG_ASSERT( 0, "error: there should be no ViewOptionAdjustStart active when calling it again" );
+        DBG_ASSERT( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
     }
-    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, pPrtOptions );
+    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
+}
+
+
+void SwRenderData::ViewOptionAdjust( const SwPrtOptions *pPrtOptions )
+{
+    m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
 }
 
 

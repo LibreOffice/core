@@ -2723,10 +2723,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (pView->IsA(aSwViewTypeId))
             {
-                // if there already is a not stopped view options adjustment we should return to
-                // the original values before calculating the new ones.
-                if (m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStop();
+                if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
+                    m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
 
             m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
@@ -2737,7 +2735,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             {
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrtOptions *pPrtOptions = bIsPDFExport? NULL : m_pRenderData->GetSwPrtOptions();
-                m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr(), pPrtOptions );
+                m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
             // since printing now also use the API for PDF export this option
@@ -3078,7 +3076,7 @@ void SAL_CALL SwXTextDocument::render(
                     // -> do clean-up of data
                     if (bLastPage)
                     {
-                        // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
+                        // #i96167# haggai: delete ViewOptionsAdjust here because it makes use
                         // of the shell, which might get destroyed in lcl_DisposeView!
                         if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
                             m_pRenderData->ViewOptionAdjustStop();
@@ -4061,12 +4059,21 @@ void SwXDocumentPropertyHelper::onChange()
 
 /*****************************************************************************/
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
-    SwWrtShell& rSh,
-    const SwPrtOptions *pPrtOptions ) :
-    m_rShell(rSh),
-    m_aOldViewOptions( *rSh.GetViewOptions() ),
-    m_bRestoreViewOptions( false )
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions ) :
+    m_rShell( rSh ),
+    m_aOldViewOptions( rViewOptions )
+{
+}
+
+
+SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
+{
+    m_rShell.ApplyViewOptions( m_aOldViewOptions );
+}
+
+
+void SwViewOptionAdjust_Impl::AdjustViewOptions(
+    const SwPrtOptions *pPrtOptions )
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
@@ -4079,55 +4086,48 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
     const bool bContainsPlaceHolders        = pFldType && pFldType->GetDepends();
     const bool bContainsFields              = m_rShell.IsAnyFieldInDoc();
 
+    SwViewOption aRenderViewOptions( m_aOldViewOptions );
+
     // disable anything in the view that should not be printed (or exported to PDF) by default
     // (see also dialog "Tools/Options - StarOffice Writer - Formatting Aids"
     // in section "Display of ...")
-    m_aRenderViewOptions = m_aOldViewOptions;
-    m_aRenderViewOptions.SetParagraph( FALSE );             // paragraph end
-    m_aRenderViewOptions.SetSoftHyph( FALSE );              // aka custom hyphens
-    m_aRenderViewOptions.SetBlank( FALSE );                 // spaces
-    m_aRenderViewOptions.SetHardBlank( FALSE );             // non-breaking spaces
-    m_aRenderViewOptions.SetTab( FALSE );                   // tabs
-    m_aRenderViewOptions.SetLineBreak( FALSE );             // breaks (type 1)
-    m_aRenderViewOptions.SetPageBreak( FALSE );             // breaks (type 2)
-    m_aRenderViewOptions.SetColumnBreak( FALSE );           // breaks (type 3)
+    aRenderViewOptions.SetParagraph( FALSE );             // paragraph end
+    aRenderViewOptions.SetSoftHyph( FALSE );              // aka custom hyphens
+    aRenderViewOptions.SetBlank( FALSE );                 // spaces
+    aRenderViewOptions.SetHardBlank( FALSE );             // non-breaking spaces
+    aRenderViewOptions.SetTab( FALSE );                   // tabs
+    aRenderViewOptions.SetLineBreak( FALSE );             // breaks (type 1)
+    aRenderViewOptions.SetPageBreak( FALSE );             // breaks (type 2)
+    aRenderViewOptions.SetColumnBreak( FALSE );           // breaks (type 3)
     BOOL bVal = pPrtOptions? pPrtOptions->bPrintHiddenText : FALSE;
     if (bContainsHiddenChars)
-        m_aRenderViewOptions.SetShowHiddenChar( bVal );     // hidden text
+        aRenderViewOptions.SetShowHiddenChar( bVal );     // hidden text
     if (bContainsHiddenFields)
-        m_aRenderViewOptions.SetShowHiddenField( bVal );
+        aRenderViewOptions.SetShowHiddenField( bVal );
     if (bContainsHiddenParagraphs)
-        m_aRenderViewOptions.SetShowHiddenPara( bVal );
+        aRenderViewOptions.SetShowHiddenPara( bVal );
 
     if (bContainsPlaceHolders)
     {
         // should always be printed in PDF export!
         bVal = pPrtOptions ? pPrtOptions->bPrintTextPlaceholder : TRUE;
-        m_aRenderViewOptions.SetShowPlaceHolderFields( bVal );
+        aRenderViewOptions.SetShowPlaceHolderFields( bVal );
     }
 
     if (bContainsFields)
-        m_aRenderViewOptions.SetFldName( FALSE );
+        aRenderViewOptions.SetFldName( FALSE );
 
-    // we don't want to print those.
-    // Also this flag has effect on printing of other content e.g. hidden text
-    m_aRenderViewOptions.SetViewMetaChars( FALSE );
+    // we need to set this flag in order to get to see the visible effect of
+    // some of the above settings (needed for correct rendering)
+    aRenderViewOptions.SetViewMetaChars( TRUE );
 
-    if (m_aOldViewOptions != m_aRenderViewOptions)  // check if reformatting is necessary
+    if (m_aOldViewOptions != aRenderViewOptions)  // check if reformatting is necessary
     {
-        m_aRenderViewOptions.SetPrinting( pPrtOptions != NULL );
-        m_bRestoreViewOptions = true;
-        SW_MOD()->ApplyUsrPref( m_aRenderViewOptions, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
+        aRenderViewOptions.SetPrinting( pPrtOptions != NULL );
+        m_rShell.ApplyViewOptions( aRenderViewOptions );
     }
-
 }
 
-
-SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
-{
-    if (m_bRestoreViewOptions)
-        SW_MOD()->ApplyUsrPref( m_aOldViewOptions, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
-}
 
 /*****************************************************************************/
 
