@@ -1,3 +1,2 @@
-c5t  cppunit   :  sal NULL
-c5t  cppunit					usr1	- all  c5t_mkout NULL
-c5t  cppunit     				nmake	- all  c5t_make NULL
+c5t cppunit : stlport NULL
+c5t cppunit nmake - all cppunit NULL
