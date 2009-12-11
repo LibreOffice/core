@@ -487,6 +487,7 @@ DBG_NAME(SbaXDataBrowserController)
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController_Base(_rM)
+    ,m_nRowSetPrivileges(0)
     ,m_pClipbordNotifier( NULL )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
@@ -1288,19 +1289,21 @@ void SbaXDataBrowserController::disposing()
             m_xRowSet           = NULL;
             m_xColumnsSupplier  = NULL;
             m_xLoadable         = NULL;
+
+            m_nRowSetPrivileges = 0;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception thrown by dispose");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     try
     {
         ::comphelper::disposeComponent(m_xParser);
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception thrown by dispose");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 //------------------------------------------------------------------------------
@@ -1529,21 +1532,39 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_INSERT_ROW:
                 {
                     // check if it is available
-                    Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
-                    if (!xDataSourceSet.is())
-                        break;  // no datasource -> no edit mode
-
-                    sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                    aReturn.bEnabled = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowInserts")));
+                    sal_Bool bInsertPrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
+                    sal_Bool bAllowInsertions = sal_True;
+                    try
+                    {
+                        Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowInserts" ) ) >>= bAllowInsertions );
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                    aReturn.bEnabled = bInsertPrivilege && bAllowInsertions;
                 }
                 break;
             case SID_FM_DELETEROWS:
                 {
-                    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                    sal_Int32 nCount = ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT));
-                    sal_Bool bNew = sal_False;
-                    xFormSet->getPropertyValue(PROPERTY_ISNEW) >>= bNew;
-                    aReturn.bEnabled = nCount != 0 && !bNew;
+                    // check if it is available
+                    sal_Bool bDeletePrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
+                    sal_Bool bAllowDeletions = sal_True;
+                    sal_Int32 nRowCount = 0;
+                    sal_Bool bInsertionRow = sal_False;
+                    try
+                    {
+                        Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowDeletes" ) ) >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                    aReturn.bEnabled = bDeletePrivilege && bAllowDeletions && ( nRowCount != 0 ) && !bInsertionRow;
                 }
                 break;
 
@@ -2574,14 +2595,28 @@ void SbaXDataBrowserController::criticalFail()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::criticalFail" );
     InvalidateAll();
+    m_nRowSetPrivileges = 0;
 }
 
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::LoadFinished" );
+    m_nRowSetPrivileges = 0;
+
     if (isValid() && !loadingCancelled())
     {
+        // obtain cached values
+        try
+        {
+            Reference< XPropertySet > xFormProps( m_xLoadable, UNO_QUERY_THROW );
+            OSL_VERIFY( xFormProps->getPropertyValue( PROPERTY_PRIVILEGES ) >>= m_nRowSetPrivileges );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
         // --------------------------------
         // switch the control to alive mode
         getBrowserView()->getGridControl()->setDesignMode(sal_False);
