@@ -64,7 +64,7 @@ namespace svxform
     //= DispatchInterceptionMultiplexer
     //========================================================================
 
-    DBG_NAME(DispatchInterceptionMultiplexer);
+    DBG_NAME(DispatchInterceptionMultiplexer)
     //------------------------------------------------------------------------
     DispatchInterceptionMultiplexer::DispatchInterceptionMultiplexer(
                 const Reference< XDispatchProviderInterception >& _rxToIntercept, DispatchInterceptor* _pMaster )
