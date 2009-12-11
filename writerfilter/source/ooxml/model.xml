@@ -22203,6 +22203,9 @@
     </resource>
     <resource name="CT_R" resource="Stream">
       <action name="start" action="startCharacterGroup"/>
+      <action name="start" action="sendTableProperties"/>
+      <action name="start" action="sendRowProperties"/>
+      <action name="start" action="sendCellProperties"/>
     </resource>
     <resource name="ST_Hint" resource="List">
       <value tokenid="ooxml:Value_ST_Hint_default">default</value>
@@ -22413,7 +22416,7 @@
     </resource>
     <resource name="CT_TcPr" resource="Properties">
       <element name="tcPrChange" tokenid="ooxml:CT_TcPr_tcPrChange"/>
-      <action name="end" action="propagateCharacterProperties"/>
+      <action name="end" action="propagateCellProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_TcPrInner" resource="Properties"/>
@@ -22444,9 +22447,13 @@
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
       <element name="del" tokenid="ooxml:CT_TrPr_del"/>
       <element name="trPrChange" tokenid="ooxml:CT_TrPr_trPrChange"/>
-      <action name="end" action="propagateTableProperties"/>
+      <action name="end" action="propagateRowProperties"/>
+      <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_Row" resource="TextTableRow"/>
+    <resource name="CT_Row" resource="TextTableRow">
+      <action name="start" action="startRow"/>
+      <action name="end" action="endRow"/>
+    </resource>
     <resource name="ST_TblLayoutType" resource="List" generated="yes">
       <value name="fixed" tokenid="ooxml:Value_wordprocessingml_ST_TblLayoutType_fixed">fixed</value>
       <value name="autofit" tokenid="ooxml:Value_wordprocessingml_ST_TblLayoutType_autofit">autofit</value>
@@ -22492,7 +22499,7 @@
     <resource name="CT_TblPr" resource="Properties">
       <kind name="table"/>
       <element name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
-      <action name="end" action="propagateCharacterProperties"/>
+      <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>

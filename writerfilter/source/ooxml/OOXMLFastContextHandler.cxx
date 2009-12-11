@@ -12,7 +12,7 @@
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
+ * it under the terms of the GNU Lesser General Public License version 3sen
  * only, as published by the Free Software Foundation.
  *
  * OpenOffice.org is distributed in the hope that it will be useful,
@@ -1924,8 +1924,6 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
         debug_logger->endElement("endcell");
 #endif
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
-
-        sendCellProperties();
     }
 }
 
@@ -1937,12 +1935,10 @@ OOXMLFastContextHandlerTextTableRow::OOXMLFastContextHandlerTextTableRow
 (OOXMLFastContextHandler * pContext)
 : OOXMLFastContextHandler(pContext)
 {
-    startRow();
 }
 
 OOXMLFastContextHandlerTextTableRow::~OOXMLFastContextHandlerTextTableRow()
 {
-    endRow();
 }
 
 void OOXMLFastContextHandlerTextTableRow::startRow()
@@ -1986,8 +1982,6 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 #endif
 
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
-        sendRowProperties();
-        sendTableProperties();
     }
 
     startCharacterGroup();
@@ -2011,6 +2005,7 @@ OOXMLFastContextHandlerTextTable::OOXMLFastContextHandlerTextTable
 
 OOXMLFastContextHandlerTextTable::~OOXMLFastContextHandlerTextTable()
 {
+    clearTableProps();
 }
 
 void OOXMLFastContextHandlerTextTable::lcl_startFastElement

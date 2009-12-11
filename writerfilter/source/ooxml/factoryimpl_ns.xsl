@@ -426,6 +426,12 @@ CreateElementMapPointer </xsl:text>
             <xsl:value-of select="@action"/>
             <xsl:text>();</xsl:text>
         </xsl:when>
+        <xsl:when test="@action='startRow' or @action='endRow'">
+            <xsl:text>
+    dynamic_cast&lt;OOXMLFastContextHandlerTextTableRow*&gt;(pHandler)-&gt;</xsl:text>
+            <xsl:value-of select="@action"/>
+            <xsl:text>();</xsl:text>
+        </xsl:when>
         <xsl:when test="@action='sendProperty' or @action='handleHyperlink'">
             <xsl:text>
     dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler)-&gt;</xsl:text>
