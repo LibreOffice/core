@@ -617,7 +617,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
 //============================================================
 //--------------------------------------------------------------------------
 OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
-            bool _bPureWrap )
+            const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
 {
     osl_incrementInterlockedCount( &m_refCount );
