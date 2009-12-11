@@ -41,6 +41,8 @@ class SdrItemPool;
 class SfxItemSet;
 class SvxShape;
 
+#define SFX_METRIC_ITEM                         (0x40)
+
 class SVX_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;

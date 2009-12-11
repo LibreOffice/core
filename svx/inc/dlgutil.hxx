@@ -31,9 +31,7 @@
 #define _SVX_DLGUTIL_HXX
 
 // include ---------------------------------------------------------------
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
@@ -45,10 +43,6 @@
 typedef long (*FUNC_CONVERT)(long);
 
 // Functions -------------------------------------------------------------
-
-// HM- und LanguageStrings aus der Resource laden
-SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang,
-                       const BOOL bNeg );
 
 // FieldUnit im MetricField oder -Box umsetzen
 SVX_DLLPUBLIC void SetFieldUnit( MetricField& rCtrl,

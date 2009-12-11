@@ -42,9 +42,7 @@
 #include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -58,7 +56,7 @@
 #include <svx/unofored.hxx>
 #include <svx/unotext.hxx>
 #include "editsource.hxx"
-
+#include <svx/unoprnms.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <svx/unofield.hxx>
 #include "unonrule.hxx"

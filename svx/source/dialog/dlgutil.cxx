@@ -33,45 +33,9 @@
 
 // include ---------------------------------------------------------------
 
-#include <limits.h>
-#include <tools/shl.hxx>
-#include <tools/urlobj.hxx>
-#include <unolingu.hxx>
-
-#include <svtools/langtab.hxx>
-#include <svl/itemset.hxx>
-#include <svx/dialogs.hrc>
-
 #include "dlgutil.hxx"
-#include <svx/dialmgr.hxx>
-
-// -----------------------------------------------------------------------
-
-String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
-{
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
-    String aTmp( aURLObj.GetBase() );
-    aTmp += sal_Unicode( ' ' );
-
-    if ( bNeg )
-    {
-        sal_Char const sTmp[] = " (-) ";
-        aTmp.AppendAscii( sTmp );
-    }
-
-    if ( LANGUAGE_NONE == nLang )
-        aTmp += String( ResId( RID_SVXSTR_LANGUAGE_ALL, DIALOG_MGR() ) );
-    else
-    {
-        aTmp += sal_Unicode( '[' );
-        aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
-        aTmp += sal_Unicode( ']' );
-    }
-
-    return aTmp;
-}
+#include <svl/itemset.hxx>
+#include <sfx2/sfxsids.hrc>
 
 // -----------------------------------------------------------------------
 
@@ -185,46 +149,6 @@ void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
     nVal = rField.Normalize( nVal );
     rField.SetValue( nVal, FUNIT_100TH_MM );
 
-/*
-    if ( SFX_MAPUNIT_100TH_MM == eUnit )
-    {
-        FieldUnit eFUnit = ( (MetricField&)rField ).GetUnit();
-        USHORT nDigits = rField.GetDecimalDigits();
-
-        if ( FUNIT_MM == eFUnit )
-        {
-            if ( 0 == nDigits )
-                lCoreValue /= 100;
-            else if ( 1 == nDigits )
-                lCoreValue /= 10;
-            else if ( nDigits > 2 )
-            {
-                DBG_ERROR( "too much decimal digits" );
-                return;
-            }
-            rField.SetValue( lCoreValue, FUNIT_MM );
-            return;
-        }
-        else if ( FUNIT_CM == eFUnit )
-        {
-            if ( 0 == nDigits )
-                lCoreValue /= 1000;
-            else if ( 1 == nDigits )
-                lCoreValue /= 100;
-            else if ( 2 == nDigits )
-                lCoreValue /= 10;
-            else if ( nDigits > 3 )
-            {
-                DBG_ERROR( "too much decimal digits" );
-                return;
-            }
-            rField.SetValue( lCoreValue, FUNIT_CM );
-            return;
-        }
-    }
-    rField.SetValue( rField.Normalize(
-        ConvertValueToUnit( lCoreValue, eUnit ) ), MapToFieldUnit( eUnit ) );
-*/
 }
 
 // -----------------------------------------------------------------------
@@ -251,59 +175,6 @@ long GetCoreValue( const MetricField& rField, SfxMapUnit eUnit )
     if( ! bRoundBefore )
         nUnitVal = rField.Denormalize( nUnitVal );
     return static_cast<long>(nUnitVal);
-
-/*
-    long nRet = rField.GetValue( MapToFieldUnit( eUnit ) );
-    FieldUnit eFUnit = ( (MetricField&)rField ).GetUnit();
-    USHORT nDigits = rField.GetDecimalDigits();
-    DBG_ASSERT( nDigits <= 2, "decimal digits > 2!" );
-
-    switch ( eUnit )
-    {
-        case SFX_MAPUNIT_100TH_MM:
-        {
-            if ( 2 == nDigits )
-                return nRet;
-            else if ( 1 == nDigits )
-                return nRet * 10;
-            else
-                return nRet * 100;
-        }
-
-        case SFX_MAPUNIT_TWIP:
-        {
-            if ( 2 == nDigits )
-            {
-                long nMod = 100;
-                long nTmp = nRet % nMod;
-
-                if ( nTmp >= 49 )
-                    nRet += 100 - nTmp;
-                return nRet / 100;
-            }
-            else if ( 1 == nDigits )
-            {
-                long nMod = 10;
-                long nTmp = nRet % nMod;
-
-                if ( nTmp >= 4 )
-                    nRet += 10 - nTmp;
-                return nRet / 10;
-            }
-            else
-                return nRet;
-        }
-
-        default:
-            DBG_ERROR( "this unit is not implemented" );
-            return 0;
-    }
-*/
-
-/*!!!
-    return ConvertValueToMap( rField.Denormalize(
-        rField.GetValue( MapToFieldUnit( eUnit ) ) ), eUnit );
-*/
 }
 
 // -----------------------------------------------------------------------

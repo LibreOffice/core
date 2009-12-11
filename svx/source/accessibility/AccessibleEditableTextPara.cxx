@@ -62,6 +62,7 @@
 // <--
 #include <vcl/unohelp.hxx>
 #include <svx/editeng.hxx>
+#include <svx/unoprnms.hxx>
 
 //------------------------------------------------------------------------
 //
@@ -70,7 +71,6 @@
 //------------------------------------------------------------------------
 
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <svx/unoshape.hxx>
 #include "unolingu.hxx"
 #include "unopracc.hxx"
 #include "AccessibleEditableTextPara.hxx"

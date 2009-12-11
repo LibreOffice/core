@@ -31,16 +31,14 @@
 #ifndef _SVX_UNOTEXT_HXX
 #define _SVX_UNOTEXT_HXX
 
-#include <tools/link.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
-#ifndef _SMART_COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
 #include <com/sun/star/text/XTextRangeMover.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -48,19 +46,6 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <svl/itemprop.hxx>
-#include <svx/editdata.hxx>
-#include <svx/unoedsrc.hxx>
-#include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoforou.hxx>
-
-#include <svx/unoprnms.hxx>
-#include <svx/eeitem.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -70,10 +55,23 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
-#include "svx/svxdllapi.h"
-
 #include <comphelper/servicehelper.hxx>
+#include <tools/link.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svx/editdata.hxx>
+#include <svx/unoedsrc.hxx>
+#include <svx/outliner.hxx>
+#include <svx/unoforou.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/svxdllapi.h>
+#include <svx/unoipset.hxx>
+
+#include <svx/unomid.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -82,9 +80,6 @@
   #define SEQTYPE(x) &(x)
  #endif
 #endif
-
-#include <svx/unoprov.hxx>
-#include <svx/unomid.hxx>
 
 #define WID_FONTDESC                3900
 #define WID_NUMLEVEL                3901

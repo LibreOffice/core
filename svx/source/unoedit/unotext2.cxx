@@ -40,10 +40,10 @@
 #include <rtl/memory.h>
 
 #include <svx/eeitem.hxx>
-
 #include <svx/flditem.hxx>
 #include <svx/unofield.hxx>
 #include <svx/unotext.hxx>
+#include <svx/serviceinfohelper.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;

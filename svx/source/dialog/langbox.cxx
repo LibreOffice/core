@@ -33,15 +33,13 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HDL_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hdl>
-#endif
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/localedatawrapper.hxx>
-
+#include <tools/urlobj.hxx>
 #include <svtools/langtab.hxx>
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
@@ -57,12 +55,37 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
+// -----------------------------------------------------------------------
+
+String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
+{
+    INetURLObject aURLObj;
+    aURLObj.SetSmartProtocol( INET_PROT_FILE );
+    aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
+    String aTmp( aURLObj.GetBase() );
+    aTmp += sal_Unicode( ' ' );
+
+    if ( bNeg )
+    {
+        sal_Char const sTmp[] = " (-) ";
+        aTmp.AppendAscii( sTmp );
+    }
+
+    if ( LANGUAGE_NONE == nLang )
+        aTmp += String( ResId( RID_SVXSTR_LANGUAGE_ALL, DIALOG_MGR() ) );
+    else
+    {
+        aTmp += sal_Unicode( '[' );
+        aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
+        aTmp += sal_Unicode( ']' );
+    }
+
+    return aTmp;
+}
 
 //========================================================================
 //  misc local helper functions
 //========================================================================
-
-
 
 static Sequence< INT16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 {

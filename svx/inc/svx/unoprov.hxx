@@ -32,7 +32,6 @@
 #define SVX_UNOPROV_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-//#include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/list.hxx>
 #include "svx/svxdllapi.h"
@@ -126,7 +125,6 @@ extern SvxUnoPropertyMapProvider aSvxMapProvider;
 extern UHashMapEntry pSdrShapeIdentifierMap[];
 extern UHashMap aSdrShapeIdentifierMap;
 
-#define SFX_METRIC_ITEM             (0x40)
 #define E3D_INVENTOR_FLAG           (0x80000000)
 
 #include <svx/unoipset.hxx>

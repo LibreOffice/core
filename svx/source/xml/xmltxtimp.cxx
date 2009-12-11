@@ -43,7 +43,6 @@
 #include <svx/editeng.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemprop.hxx>
-#include <sfx2/docfile.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlmetae.hxx"
 #include <xmloff/xmlictxt.hxx>
@@ -52,6 +51,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include "editsource.hxx"
 #include <svx/unotext.hxx>
+#include <svx/unoprnms.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::document;
