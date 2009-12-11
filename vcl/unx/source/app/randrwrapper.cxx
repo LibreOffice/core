@@ -282,6 +282,9 @@ void RandRWrapper::releaseWrapper()
 
 #include "saldisp.hxx"
 #include "salframe.h"
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
+#endif
 
 void SalDisplay::InitRandR( XLIB_Window aRoot ) const
 {
