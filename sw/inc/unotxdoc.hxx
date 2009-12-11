@@ -29,9 +29,11 @@
  ************************************************************************/
 #ifndef _UNOTXDOC_HXX
 #define _UNOTXDOC_HXX
+
 #include "swdllapi.h"
 #include <svtools/svarray.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
@@ -78,6 +80,8 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <RefreshListenerContainer.hxx>
+
+#include <viewopt.hxx>
 
 #define __IFC32 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
 Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27, Ifc28, Ifc29, Ifc30, Ifc31, Ifc32
@@ -129,7 +133,6 @@ class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
 class SwPrtOptions;
-class SwViewOption;
 class SwWrtShell;
 
 
@@ -597,20 +600,11 @@ public:
   -----------------------------------------------------------------------*/
 class SwViewOptionAdjust_Impl
 {
-    // options not available in the File/Print UI, should be turned off for
-    // printing and PDF export if they are enabled
-    bool m_bSwitchOff_IsFldName;
+    SwWrtShell &    m_rShell;
+    SwViewOption    m_aOldViewOptions;
+    SwViewOption    m_aRenderViewOptions;   // view options to use when rendering for PDF export or printing
+    bool            m_bRestoreViewOptions;
 
-    // options available in the File/Print UI, should be turned of for PDF export
-    // and otherwise set (or not) according to
-    // pPrtOptions->bPrintHiddenText  and  pPrtOptions->bPrintTextPlaceholder
-    bool m_bToggle_HiddenChar;
-    bool m_bToggle_HiddenField;
-    bool m_bToggle_HiddenParagraphs;
-    bool m_bToggle_PlaceHolderView;
-
-    SwViewOption* m_pViewOption;
-    SwWrtShell& m_rShell;
 public:
     SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions );
     ~SwViewOptionAdjust_Impl();

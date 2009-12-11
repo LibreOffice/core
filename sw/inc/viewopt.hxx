@@ -455,7 +455,8 @@ public:
     SwViewOption& operator=( const SwViewOption &rOpt );
     // Vergleichsmethoden
     BOOL IsEqualFlags ( const SwViewOption &rOpt ) const;
-    inline BOOL operator==( const SwViewOption &rOpt ) const;
+    inline BOOL operator == ( const SwViewOption &rOpt ) const;
+    inline BOOL operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------
