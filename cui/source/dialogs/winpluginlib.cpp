@@ -28,10 +28,6 @@
  *
  ************************************************************************/
 
-#ifdef SVX_DLLIMPLEMENTATION
-#undef SVX_DLLIMPLEMENTATION
-#endif
-
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
