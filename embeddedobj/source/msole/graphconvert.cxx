@@ -40,7 +40,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/link.hxx>
-#include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <unotools/streamhelper.hxx>
 #include <comphelper/processfactory.hxx>
