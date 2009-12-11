@@ -678,9 +678,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
         else
         {
-            // if the existent model is to be loaded into a frame where already another view to the same model
-            // exists, then preserve this info for the view factory
-
             // tell the doc its (current) load args.
             impl_removeLoaderArguments( aDescriptor );
             xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
@@ -711,11 +708,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // ObjectShell.
 
         // plug the document into the frame
-        const Reference< XController2 > xController = impl_createDocumentView( xModel, _rTargetFrame,
-            aViewCreationArgs, sViewName );
-        ENSURE_OR_THROW( xController.is(), "invalid controller" );
-            // this is expected to throw in case of a failure ...
-
+        impl_createDocumentView( xModel, _rTargetFrame, aViewCreationArgs, sViewName );
         bLoadSuccess = sal_True;
     }
     catch ( Exception& )
@@ -725,7 +718,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
 
-    // if loading was not successful, also close the document (the SfxFrame was already closed by impl_cleanUp)
+    // if loading was not successful, close the document
     if ( !bLoadSuccess && !bExternalModel )
     {
         try

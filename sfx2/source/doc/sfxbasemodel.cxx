@@ -3969,7 +3969,55 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDef
 }
 
 //=============================================================================
-SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame ) const
+namespace sfx { namespace intern {
+
+    /** a class which, in its dtor, cleans up variuos objects (well, at the moment only the frame) collected during
+        the creation of a document view, unless the creation was successful.
+    */
+    class SAL_DLLPRIVATE ViewCreationGuard
+    {
+    public:
+        ViewCreationGuard()
+            :m_bSuccess( false )
+        {
+        }
+
+        ~ViewCreationGuard()
+        {
+            if ( !m_bSuccess )
+                impl_closeAll();
+        }
+
+        void takeFrameOwnership( SfxFrame* i_pFrame )
+        {
+            OSL_PRECOND( !m_aWeakFrame, "ViewCreationGuard::takeFrameOwnership: already have a frame!" );
+            OSL_PRECOND( i_pFrame != NULL, "ViewCreationGuard::takeFrameOwnership: invalid frame!" );
+            m_aWeakFrame = i_pFrame;
+        }
+
+        void    releaseAll()
+        {
+            m_bSuccess = true;
+        }
+
+    private:
+        void impl_closeAll()
+        {
+            if ( m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
+            {
+                m_aWeakFrame->SetFrameInterface_Impl( NULL );
+                m_aWeakFrame->DoClose();
+            }
+        }
+
+    private:
+        bool            m_bSuccess;
+        SfxFrameWeak    m_aWeakFrame;
+    };
+} }
+
+//=============================================================================
+SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
     for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
@@ -4007,6 +4055,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const ::com::sun::star::
 
         SfxFrame* pTargetFrame = SfxFrame::Create( i_rFrame );
         ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
+        i_rGuard.takeFrameOwnership( pTargetFrame );
 
         // prepare it
         pTargetFrame->PrepareForDoc_Impl( *GetObjectShell() );
@@ -4050,11 +4099,12 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
         "SfxBaseModel::createViewController: invalid old controller!" );
 
+    // a guard which will clean up in case of failure
+    ::sfx::intern::ViewCreationGuard aViewCreationGuard;
+
     // determine the ViewFrame belonging to the given XFrame
-    SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );
+    SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame, aViewCreationGuard );
     OSL_POSTCOND( pViewFrame, "SfxBaseModel::createViewController: no frame?" );
-        // TODO: if we created the SfxFrame, and something of the below goes wrong, then we need to properly close the
-        // Sfx(View)Frame
 
     // delegate to SFX' view factory
     pViewFrame->GetBindings().ENTERREGISTRATIONS();
@@ -4098,7 +4148,11 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
     }
 
-    return Reference< XController2 >( pViewShell->GetController(), UNO_QUERY_THROW );
+    // tell the guard we were successful
+    aViewCreationGuard.releaseAll();
+
+    // outta gere
+    return pBaseController;
 }
 
 //=============================================================================
