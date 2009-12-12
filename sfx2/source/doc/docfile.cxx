@@ -3495,8 +3495,12 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
             CloseOutStream_Impl();
         }
         else
+        {
+            // Quite strange design, but currently it is expected that in this case no transfer happens
+            // TODO/LATER: get rid of this inconsistent part of the call design
+            bTransferSuccess = sal_True;
             CloseInStream();
-
+        }
 
         if ( !bTransferSuccess )
         {
