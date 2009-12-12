@@ -77,7 +77,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <svx/outliner.hxx>
 #include <svx/editview.hxx>
 #include <sfx2/docfile.hxx>
 

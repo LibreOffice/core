@@ -31,6 +31,10 @@
 #include <svx/unoedsrc.hxx>
 #include <svx/unotext.hxx>
 #include <svx/eeitem.hxx>
+#include <svx/outliner.hxx>
+#include <svx/unoipset.hxx>
+#include <svx/unoprnms.hxx>
+#include <svx/unoforou.hxx>
 
 class SwDoc;
 
