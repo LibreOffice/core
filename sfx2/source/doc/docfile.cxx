@@ -3433,13 +3433,14 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
 
     if ( !( nStorOpenMode & STREAM_TRUNC ) )
     {
+        sal_Bool bTransferSuccess = sal_False;
+
         if ( GetContent().is()
           && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
           && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             // if there is already such a document, we should copy it
             // if it is a file system use OS copy process
-            sal_Bool bTransferSuccess = sal_False;
             try
             {
                 uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
@@ -3460,16 +3461,14 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
             catch( uno::Exception& )
             {}
 
-            if ( !bTransferSuccess )
+            if ( bTransferSuccess )
             {
-                SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-                return;
+                CloseOutStream();
+                CloseInStream();
             }
-
-            CloseOutStream();
-            CloseInStream();
         }
-        else if ( pInStream )
+
+        if ( !bTransferSuccess && pInStream )
         {
             // the case when there is no URL-access available or this is a remote protocoll
             // but there is an input stream
@@ -3489,6 +3488,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                     pOutStream->Write( pBuf, nRead );
                 }
 
+                bTransferSuccess = sal_True;
                 delete[] pBuf;
                 CloseInStream();
             }
@@ -3496,6 +3496,13 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
         }
         else
             CloseInStream();
+
+
+        if ( !bTransferSuccess )
+        {
+            SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            return;
+        }
     }
 
     CloseStorage();

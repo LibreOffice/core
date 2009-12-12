@@ -1872,7 +1872,19 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
         {
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             ::rtl::OUString aBackupURL = rTargetMedium.GetBackup_Impl();
-            if ( aBackupURL.getLength() )
+            if ( !aBackupURL.getLength() )
+            {
+                // the backup could not be created, try to disconnect the storage and close the source SfxMedium
+                // in this case the optimization is not possible, connect storage to a temporary file
+                rTargetMedium.ResetError();
+                xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
+                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                rSrcMedium.Close();
+
+                // now try to create the backup
+                rTargetMedium.GetBackup_Impl();
+            }
+            else
             {
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
