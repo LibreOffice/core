@@ -60,8 +60,7 @@ SHL1STDLIBS=       \
         $(SVLLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)    \
-        $(TKLIB) \
-        $(MSFILTERLIB) 
+        $(TKLIB)
 
 SHL1DEPN=
 SHL1IMPLIB= i$(TARGET_HELPER)
