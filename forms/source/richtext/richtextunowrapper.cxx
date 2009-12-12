@@ -40,6 +40,7 @@
 #include <svx/unoipset.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/unoprnms.hxx>
 
 //........................................................................
 namespace frm

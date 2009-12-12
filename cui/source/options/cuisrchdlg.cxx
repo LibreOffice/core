@@ -54,7 +54,7 @@
 
 #define ITEMID_SETITEM      0
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
