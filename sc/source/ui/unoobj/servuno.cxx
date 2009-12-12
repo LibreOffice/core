@@ -60,6 +60,7 @@
 // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
+#include <svx/unomod.hxx>
 
 using namespace ::com::sun::star;
 

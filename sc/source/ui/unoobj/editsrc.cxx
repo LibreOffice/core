@@ -41,7 +41,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
-
+#include <svx/outliner.hxx>
 #include "textuno.hxx"
 #include "editutil.hxx"
 #include "docsh.hxx"

@@ -48,7 +48,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <svx/unoipset.hxx>
 #include "textuno.hxx"
 #include "fielduno.hxx"
 #include "servuno.hxx"
