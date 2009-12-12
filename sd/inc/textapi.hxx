@@ -35,6 +35,10 @@
 #include <svx/unotext.hxx>
 #include <svx/eeitem.hxx>
 #include <rtl/ref.hxx>
+#include <svx/outliner.hxx>
+#include <svx/unoprnms.hxx>
+#include <svx/unoforou.hxx>
+#include <svx/unoipset.hxx>
 
 class SdDrawDocument;
 
