@@ -51,7 +51,6 @@ SLOFILES=		\
                 $(SLO)$/statusbardocumenthandler.obj		\
                 $(SLO)$/toolboxconfiguration.obj			\
                 $(SLO)$/toolboxdocumenthandler.obj			\
-                $(SLO)$/toolboxlayoutdocumenthandler.obj	\
                 $(SLO)$/saxnamespacefilter.obj				\
                 $(SLO)$/xmlnamespaces.obj                   \
                 $(SLO)$/acceleratorconfigurationreader.obj  \
