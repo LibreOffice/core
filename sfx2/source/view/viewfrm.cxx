@@ -2112,20 +2112,22 @@ SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const USHORT i
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rTargetFrame, const USHORT i_nViewId )
 {
-    Reference< XFrame > xFrame;
-    if ( i_pTargetFrame )
-        xFrame = i_pTargetFrame->GetFrameInterface();
-
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, xFrame, i_nViewId, false );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, i_nViewId, false );
 }
 
 //--------------------------------------------------------------------
 
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId )
 {
-    return LoadDocumentIntoFrame( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : NULL, i_nViewId, false );
+}
+
+//--------------------------------------------------------------------
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxUnoFrameItem* i_pFrameItem, const USHORT i_nViewId )
+{
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId, false );
 }
 
 //--------------------------------------------------------------------
@@ -2386,9 +2388,9 @@ void SfxViewFrame::ExecView_Impl
 
             Reference < XFrame > xFrame;
             // the frame (optional arg. TODO: this is currently not supported in the slot definition ...)
-            SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
             if ( pFrameItem )
-                pFrameItem->GetValue() >>= xFrame;
+                xFrame = pFrameItem->GetFrame();
 
             LoadViewIntoFrame_Impl_NoThrow( *GetObjectShell(), xFrame, nViewId, false );
 

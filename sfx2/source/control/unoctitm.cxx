@@ -759,7 +759,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         }
         SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
         if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
-            aInternalSet.Put( SfxUnoAnyItem( SID_FILLFRAME, css::uno::makeAny(xFrameRef) ) );
+            aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
         sal_Bool bSuccess = sal_False;
         sal_Bool bFailure = sal_False;

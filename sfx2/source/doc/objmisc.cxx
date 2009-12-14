@@ -2137,13 +2137,11 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
     Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
+    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
     if ( pUnoItem )
     {
-        uno::Reference < frame::XFrame > xFrame;
-        pUnoItem->GetValue() >>= xFrame;
-        if ( xFrame.is() )
-            pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
+        pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
     }
 
     if ( !pWindow )

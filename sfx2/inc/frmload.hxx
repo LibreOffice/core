@@ -107,11 +107,6 @@ private:
                                   ::comphelper::NamedValueCollection& io_rDescriptor
                         ) const;
 
-    sal_Bool            impl_cleanUp(
-                            const sal_Bool i_bSuccess,
-                            const SfxFrameWeak& i_wFrame
-                        ) const;
-
     bool                impl_determineTemplateDocument(
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         ) const;
@@ -132,10 +127,6 @@ private:
     void                impl_handleCaughtError_nothrow(
                             const ::com::sun::star::uno::Any& i_rCaughtError,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
-                        ) const;
-
-    SfxFrame*           impl_getOrCreateEmptySfxFrame(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame
                         ) const;
 
     void                impl_removeLoaderArguments(

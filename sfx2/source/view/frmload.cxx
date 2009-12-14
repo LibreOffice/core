@@ -256,44 +256,11 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxFrame* SfxFrameLoader_Impl::impl_getOrCreateEmptySfxFrame( const Reference< XFrame >& i_rFrame ) const
-{
-    for (   SfxFrame* pFrame = SfxFrame::GetFirst();
-            pFrame;
-            pFrame = SfxFrame::GetNext( *pFrame )
-         )
-    {
-        if ( pFrame->GetFrameInterface() == i_rFrame )
-        {
-            if  (   ( pFrame->GetCurrentViewFrame() != NULL )
-                ||  ( pFrame->GetCurrentDocument() != NULL )
-                )
-                // an empty SfxFrame was requested, so we can't use this instance.
-                // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
-                // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
-                // destroyed later, and the new one, which we're going to create
-                continue;
-
-            return pFrame;
-        }
-    }
-
-    SfxFrame* pFrame = SfxFrame::Create( i_rFrame );
-    ENSURE_OR_THROW( pFrame, "could not create an SfxFrame" );
-    return pFrame;
-}
-
-// --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame )
 {
-    SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( i_rxFrame );
-    SfxFrameWeak wFrame = pTargetFrame;
-
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
-    aRequest.AppendItem( SfxFrameItem ( SID_DOCFRAME, pTargetFrame ) );
-
-    sal_Bool bSuccess = lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
-    return impl_cleanUp( bSuccess, wFrame );
+    aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
+    return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -377,18 +344,6 @@ SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< X
 
     DBG_ERROR( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
     return NULL;
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_cleanUp( const sal_Bool i_bSuccess, const SfxFrameWeak& i_wFrame ) const
-{
-    if ( !i_bSuccess && i_wFrame && !i_wFrame->GetCurrentDocument() )
-    {
-        i_wFrame->SetFrameInterface_Impl( NULL );
-        i_wFrame->DoClose();
-    }
-
-    return i_bSuccess;
 }
 
 // --------------------------------------------------------------------------------------------------------------------

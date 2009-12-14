@@ -1120,12 +1120,22 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         return;
     }
 
-    SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-    SfxFrame *pFrame = NULL;
-    if ( pFrmItem )
-        pFrame = pFrmItem->GetFrame();
-    else if ( SfxViewFrame::Current() )
-        pFrame = SfxViewFrame::Current()->GetFrame();
+    SfxFrame* pTargetFrame = NULL;
+    Reference< XFrame > xTargetFrame;
+
+    SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+    if ( pFrameItem )
+        pTargetFrame = pFrameItem->GetFrame();
+
+    if ( !pTargetFrame )
+    {
+        SFX_REQUEST_ARG(rReq, pUnoFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE);
+        if ( pUnoFrameItem )
+            xTargetFrame = pUnoFrameItem->GetFrame();
+    }
+
+    if ( !pTargetFrame && !xTargetFrame.is() && SfxViewFrame::Current() )
+        pTargetFrame = SfxViewFrame::Current()->GetFrame();
 
     // check if caller has set a callback
     SFX_REQUEST_ARG(rReq, pLinkItem, SfxLinkItem, SID_DONELINK, FALSE );
@@ -1202,18 +1212,24 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 //    {
         // if a frame is given, it must be used for the starting point of the targetting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
-        Reference < XFrame > xFrame;
-        if ( pFrame )
-            xFrame = pFrame->GetFrameInterface();
-        else
-            xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+        if ( !xTargetFrame.is() )
+        {
+            if ( pTargetFrame )
+            {
+                xTargetFrame = pTargetFrame->GetFrameInterface();
+            }
+            else
+            {
+                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+            }
+        }
 
         // make URL ready
         SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_FILE_NAME, FALSE );
         aFileName = pURLItem->GetValue();
         if( aFileName.Len() && aFileName.GetChar(0) == '#' ) // Mark without URL
         {
-            SfxViewFrame *pView = pFrame ? pFrame->GetCurrentViewFrame() : 0;
+            SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : 0;
             if ( !pView )
                 pView = SfxViewFrame::Current();
             pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
@@ -1231,13 +1247,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // if loading must be done synchron, we must wait for completion to get a return value
             // find frame by myself; I must konw the exact frame to get the controller for the return value from it
             //if( aTarget.getLength() )
-            //    xFrame = xFrame->findFrame( aTarget, FrameSearchFlag::ALL );
+            //    xTargetFrame = xTargetFrame->findFrame( aTarget, FrameSearchFlag::ALL );
             Reference < XComponent > xComp;
 
             try
             {
-                xComp = ::comphelper::SynchronousDispatch::dispatch( xFrame, aFileName, aTarget, 0, aArgs );
-//                Reference < XComponentLoader > xLoader( xFrame, UNO_QUERY );
+                xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
+//                Reference < XComponentLoader > xLoader( xTargetFrame, UNO_QUERY );
 //                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
             }
             catch(const RuntimeException&)
@@ -1262,7 +1278,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
             RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
             if ( xDisp.is() )

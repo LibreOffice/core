@@ -103,6 +103,7 @@ using namespace ::com::sun::star::container;
 TYPEINIT1(SfxFrame, SfxListener);
 TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SfxUnoFrameItem, SfxPoolItem);
 
 SvCompatWeakHdl* SfxFrame::GetHdl()
 {
@@ -640,11 +641,6 @@ int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
     return sal_False;
 }
 
-String SfxUsrAnyItem::GetValueText() const
-{
-    return String();
-}
-
 SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
 {
     return new SfxUsrAnyItem( Which(), aValue );
@@ -660,6 +656,39 @@ sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*n
 {
     aValue = rVal;
     return sal_True;
+}
+
+SfxUnoFrameItem::SfxUnoFrameItem()
+    : SfxPoolItem()
+    , m_xFrame()
+{
+}
+
+SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame )
+    : SfxPoolItem( nWhichId )
+    , m_xFrame( i_rFrame )
+{
+}
+
+int SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
+{
+    return i_rItem.ISA( SfxUnoFrameItem ) && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
+}
+
+SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
+{
+    return new SfxUnoFrameItem( Which(), m_xFrame );
+}
+
+sal_Bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+{
+    rVal <<= m_xFrame;
+    return sal_True;
+}
+
+sal_Bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+{
+    return ( rVal >>= m_xFrame );
 }
 
 SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecur )
@@ -959,10 +988,10 @@ SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
         return NULL;
 }
 
-const SfxPoolItem* SfxFrame::LoadDocumentSynchron( SfxItemSet& aSet )
+const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Reference< XFrame >& i_rTargetFrame )
 {
-    aSet.Put( SfxFrameItem( SID_DOCFRAME, this ) );
-    aSet.ClearItem( SID_TARGETNAME );
-    return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
+    i_rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, i_rTargetFrame ) );
+    i_rSet.ClearItem( SID_TARGETNAME );
+    return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
 }
 

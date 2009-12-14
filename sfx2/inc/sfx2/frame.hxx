@@ -157,7 +157,8 @@ public:
     static SfxFrame*    GetFirst();
     static SfxFrame*    GetNext( SfxFrame& );
 
-    const SfxPoolItem*  LoadDocumentSynchron( SfxItemSet& aSet );
+    static const SfxPoolItem*
+                        OpenDocumentSynchron( SfxItemSet& aSet, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rTargetFrame );
 
     SfxBroadcaster&     GetBroadcaster() const;
     SfxObjectShell*     GetCurrentDocument() const;
@@ -286,7 +287,24 @@ public:
     ::com::sun::star::uno::Any  GetValue() const
                                 { return aValue; }
     virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual String              GetValueText() const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+};
+
+class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                                m_xFrame;
+
+public:
+                                TYPEINFO();
+                                SfxUnoFrameItem();
+                                SfxUnoFrameItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                                GetFrame() const
+                                { return m_xFrame; }
+    virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

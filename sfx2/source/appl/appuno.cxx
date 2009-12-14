@@ -470,7 +470,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 String aName = rProp.Name;
                 if ( aName == sFrame )
-                    rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                {
+                    Reference< XFrame > xFrame;
+                    OSL_VERIFY( rProp.Value >>= xFrame );
+                    rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
+                }
                 else
                 if ( aName == sHidden )
                 {
@@ -562,11 +566,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
                 else if ( aName == sFrame )
                 {
-                    Reference< XFrame > xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    Reference< XFrame > xFrame;
+                    sal_Bool bOK = (rProp.Value >>= xFrame);
                     DBG_ASSERT( bOK, "invalid type for Frame" );
                     if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                        rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
                 }
                 else if ( aName == sAsTemplate )
                 {
@@ -1380,7 +1384,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sFrame;
-                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                if ( pItem->ISA( SfxUsrAnyItem ) )
+                {
+                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
+                }
+                else if ( pItem->ISA( SfxUnoFrameItem ) )
+                    pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
+                else
+                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {

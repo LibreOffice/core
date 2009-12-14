@@ -8038,7 +8038,7 @@ SfxVoidItem AutoPilotAddressDataSource SID_ADDRESS_DATA_SOURCE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
-( SfxFrameItem Frame SID_DOCFRAME )
+( SfxUnoFrameItem Frame SID_FILLFRAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8063,7 +8063,7 @@ SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertLabels FN_LABEL
-( SfxFrameItem Frame SID_DOCFRAME )
+( SfxUnoFrameItem Frame SID_FILLFRAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8088,7 +8088,7 @@ SfxVoidItem InsertLabels FN_LABEL
 
 //--------------------------------------------------------------------------
 SfxVoidItem NewXForms FN_XFORMS_INIT
-( SfxFrameItem Frame SID_DOCFRAME )
+( SfxUnoFrameItem Frame SID_FILLFRAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8113,7 +8113,7 @@ SfxVoidItem NewXForms FN_XFORMS_INIT
 
 //--------------------------------------------------------------------------
 SfxVoidItem AutoPilotPresentations SID_SD_AUTOPILOT
-( SfxFrameItem Frame SID_DOCFRAME )
+( SfxUnoFrameItem Frame SID_FILLFRAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8138,7 +8138,7 @@ SfxVoidItem AutoPilotPresentations SID_SD_AUTOPILOT
 
 //--------------------------------------------------------------------------
 SfxVoidItem NewPresentation SID_NEWSD
-( SfxFrameItem Frame SID_DOCFRAME )
+( SfxUnoFrameItem Frame SID_FILLFRAME )
 [
     /* flags: */
     AutoUpdate = FALSE,

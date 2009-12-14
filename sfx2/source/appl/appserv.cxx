@@ -266,9 +266,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 Reference< XFrame > xFrame;
                 const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                SFX_ITEMSET_ARG( pIntSet, pFrame, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
-                if (pFrame)
-                    pFrame->GetValue() >>= xFrame;
+                SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+                if ( pFrameItem )
+                    xFrame = pFrameItem->GetFrame();
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
                     RID_SVXDLG_CUSTOMIZE,
@@ -895,7 +895,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxPoolItem* pItem = NULL;
             Reference < XFrame > xFrame;
             if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
-                 ( (SfxUnoAnyItem*)pItem )->GetValue() >>= xFrame;
+            {
+                OSL_ENSURE( pItem->ISA( SfxUnoFrameItem ), "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
+                xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
+            }
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -1063,9 +1066,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
+            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
             if ( pFrameItem )
-                pFrameItem->GetValue() >>= xFrame;
+                xFrame = pFrameItem->GetFrame();
 
             if ( !xFrame.is() )
             {
