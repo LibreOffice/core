@@ -172,7 +172,6 @@ namespace fileaccess
 
         sal_Int32 SAL_CALL getCommandId( void );
         void SAL_CALL abort( sal_Int32 CommandId );
-        bool SAL_CALL isAborted( sal_Int32 CommandId );
 
 
         /**
