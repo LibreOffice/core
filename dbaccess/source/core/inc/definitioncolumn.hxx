@@ -186,6 +186,8 @@ namespace dbaccess
                 impl_determineOriginalTableColumn(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                 );
+
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
     // =========================================================================
