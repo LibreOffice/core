@@ -415,7 +415,7 @@ XclExpStringRef lclCreateFormattedString(
             nScript = nLastScript;
 
         // construct font from current text portion
-        SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( rItemSet, nScript ) );
+        SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, rItemSet, nScript ) );
 
         // Excel start position of this portion
         sal_uInt16 nXclPortionStart = xString->Len();
@@ -529,7 +529,7 @@ XclExpStringRef lclCreateFormattedString(
                 sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
                 if( nScript == ApiScriptType::WEAK )
                     nScript = nLastScript;
-                SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
+                SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, aItemSet, nScript ) );
                 nLastScript = nScript;
 
                 // add escapement
