@@ -556,7 +556,7 @@ namespace drawinglayer
                 const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
-                const bool bCompletelyTransparent(0xff == nStartLuminance == nEndLuminance);
+                const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
 
                 if(!bCompletelyTransparent)
                 {

@@ -837,7 +837,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
                     {
                         Size aSizePixel( aGraphic.GetSizePixel() );
-                        if ( rSettings.mnWidth && rSettings.mnHeight && ( rSettings.mnWidth != aSizePixel.Width() ) || ( rSettings.mnHeight != aSizePixel.Height() ) )
+                        if( rSettings.mnWidth && rSettings.mnHeight &&
+                            ( ( rSettings.mnWidth != aSizePixel.Width() ) ||
+                              ( rSettings.mnHeight != aSizePixel.Height() ) ) )
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
                             aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ) );

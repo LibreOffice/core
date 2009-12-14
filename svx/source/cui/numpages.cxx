@@ -311,7 +311,7 @@ SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
 
 BOOL  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if(bPreset || bModified && pSaveNum)
+    if( (bPreset || bModified) && pSaveNum)
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
@@ -513,7 +513,7 @@ SfxTabPage*  SvxBulletPickTabPage::Create( Window* pParent,
 
 BOOL  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if(bPreset || bModified && pActNum)
+    if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
@@ -750,7 +750,7 @@ SfxTabPage*  SvxNumPickTabPage::Create( Window* pParent,
 
 BOOL  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if(bPreset || bModified && pActNum)
+    if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
@@ -1110,7 +1110,7 @@ BOOL  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 //      rSet.DisableItem(SID_ATTR_NUMBERING_RULE);
         return FALSE;
     }
-    if(bPreset || bModified && pActNum)
+    if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
