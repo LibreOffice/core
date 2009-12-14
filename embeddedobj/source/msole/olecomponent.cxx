@@ -299,9 +299,11 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
         unsigned char* pBuf = NULL;
         sal_uInt32 nBufSize = 0;
+        ::rtl::OUString aFormat;
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-wmf");
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
@@ -332,6 +334,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-emf");
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
@@ -345,6 +348,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-MS-bmp");
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
@@ -364,7 +368,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
                   && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
                   && aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
             {
-                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, m_aSupportedGraphFormats[nInd].MimeType, aResult );
+                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, aFormat, aResult );
                 break;
             }
         }

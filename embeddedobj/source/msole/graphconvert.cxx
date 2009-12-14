@@ -41,8 +41,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/link.hxx>
 #include <vos/mutex.hxx>
-#include <unotools/streamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/seqstream.hxx>
+#include <tools/stream.hxx>
 
 #include "mtnotification.hxx"
 #include "oleembobj.hxx"
@@ -59,12 +61,11 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     // produces sequence with data in requested format and returns it in aResult
     if ( pBuf )
     {
-        SvMemoryStream aBufStream( pBuf, nBufSize, STREAM_READ );
-        aBufStream.ObjectOwnsMemory( sal_False );
-        uno::Reference < io::XInputStream > xIn = new utl::OInputStreamHelper( aBufStream.GetLockBytes(), nBufSize );
+        uno::Sequence < sal_Int8 > aData( (sal_Int8*)pBuf, nBufSize );
+        uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
         {
-            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.graphics.GraphicProvider") ), uno::UNO_QUERY );
+            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.graphic.GraphicProvider") ), uno::UNO_QUERY );
             if( xGraphicProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
@@ -74,12 +75,13 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 if( xGraphic.is() )
                 {
                     SvMemoryStream aNewStream( 65535, 65535 );
-                    uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
+//                  uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
+                    uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
-                    aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
-                    aMediaProperties[0].Value <<= xOut;
-                    aMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
-                    aMediaProperties[0].Value <<= aMimeType;
+                    aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                    aOutMediaProperties[0].Value <<= xOut;
+                    aOutMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                    aOutMediaProperties[1].Value <<= aMimeType;
 
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
                     aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.Seek( STREAM_SEEK_TO_END ) );
