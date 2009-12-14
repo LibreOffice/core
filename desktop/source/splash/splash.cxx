@@ -46,7 +46,6 @@
 #include <rtl/math.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
-#include <vcl/msgbox.hxx>
 
 #define NOT_LOADED  ((long)-1)
 
@@ -376,9 +375,6 @@ void SplashScreen::loadConfig()
 
 void SplashScreen::initBitmap()
 {
-    MessBox aMsgBox(0, WB_OK, String::CreateFromAscii("Oracle OpenOffice.org"), String::CreateFromAscii("Stop!"));
-    aMsgBox.Execute();
-
     if ( _bShowLogo )
     {
         OUString sExecutePath;
