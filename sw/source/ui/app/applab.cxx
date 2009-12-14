@@ -237,7 +237,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
-        SFX_REQUEST_ARG( rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *xDocSh, pFrameItem );
 
         SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();

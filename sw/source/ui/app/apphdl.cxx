@@ -959,7 +959,7 @@ void NewXForms( SfxRequest& rReq )
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
 
     // load document into frame
-    SFX_REQUEST_ARG( rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+    SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
     SfxViewFrame::LoadDocumentIntoFrame( *xDocSh, pFrameItem );
 
     // set return value
