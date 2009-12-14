@@ -350,6 +350,9 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
 void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
+    // #i105988 keep reference to this object
+    rtl::Reference< SvxTextEditSourceImpl > xThis( this );
+
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
 
