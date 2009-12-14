@@ -33,20 +33,19 @@
 
 
 #include <svx/AccessibleContextBase.hxx>
+
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-
-
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <rtl/uuid.h>
-
 #include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
+//#include <vcl/svapp.hxx>
 
 #include <utility>
 

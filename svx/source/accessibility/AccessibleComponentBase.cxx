@@ -34,17 +34,14 @@
 
 #include <svx/AccessibleComponentBase.hxx>
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_SELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#endif
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
 #include <tools/color.hxx>
 
 using namespace ::rtl;
