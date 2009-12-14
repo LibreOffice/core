@@ -124,12 +124,6 @@ using ::svx::IPropertyValueProvider;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
-const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
-{
-    static SvxItemPropertySet aTextCursorSvxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
-    return &aTextCursorSvxPropertySet;
-}
-
 class GDIMetaFile;
 class SvStream;
 sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,

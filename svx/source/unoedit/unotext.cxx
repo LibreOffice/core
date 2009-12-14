@@ -67,8 +67,12 @@ using namespace ::com::sun::star;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         return uno::makeAny(uno::Reference< xint >(this))
 
+const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
+{
+    static SvxItemPropertySet aTextCursorSvxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap(), EditEngine::GetGlobalItemPool() );
+    return &aTextCursorSvxPropertySet;
+}
 
-extern const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet();
 const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
 {
     // Propertymap fuer einen Outliner Text
