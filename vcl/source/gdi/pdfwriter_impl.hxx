@@ -683,6 +683,7 @@ private:
                 m_aOverlineColor( COL_TRANSPARENT ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
+                m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
                 m_nFlags( 0xffff ),
                 m_nUpdateFlags( 0xffff )
@@ -697,6 +698,7 @@ private:
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
+                m_aDigitLanguage( rState.m_aDigitLanguage ),
                 m_nTransparentPercent( rState.m_nTransparentPercent ),
                 m_nFlags( rState.m_nFlags ),
                 m_nUpdateFlags( rState.m_nUpdateFlags )
@@ -714,6 +716,7 @@ private:
             m_aClipRegion           = rState.m_aClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
+            m_aDigitLanguage        = rState.m_aDigitLanguage;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
             m_nFlags                = rState.m_nFlags;
             m_nUpdateFlags          = rState.m_nUpdateFlags;
