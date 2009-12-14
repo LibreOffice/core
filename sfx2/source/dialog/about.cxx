@@ -47,6 +47,8 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
 
 #include <sfx2/sfxuno.hxx>
 #include "about.hxx"
@@ -92,8 +94,15 @@ static bool impl_loadBitmap(
     SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
     if ( !aStrm.GetError() )
     {
-        Bitmap aBmp;
-        aStrm >> aBmp;
+        // Use graphic class to also support more graphic formats (bmp,png,...)
+        Graphic aGraphic;
+
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+
+        // Default case, we load the intro bitmap from a seperate file
+        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+        BitmapEx aBmp = aGraphic.GetBitmapEx();
         rLogo = Image( aBmp );
         return true;
     }
@@ -151,14 +160,14 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     {
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
     }
 
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
     }
 
     // Transparenter Font
