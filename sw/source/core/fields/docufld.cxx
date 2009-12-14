@@ -1153,11 +1153,6 @@ String SwDocInfoField::Expand() const
                     ::rtl::OUString sVal;
                     uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
-<<<<<<< local
-                    uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
-                    aNew >>= sVal;
-                    const_cast<SwDocInfoField*>(this)->aContent = sVal;
-=======
                     util::Date aDate;
                     util::DateTime aDateTime;
                     util::Duration aDuration;
@@ -1193,7 +1188,6 @@ String SwDocInfoField::Expand() const
                         aNew >>= sVal;
                     }
                     ((SwDocInfoField*)this)->aContent = sVal;
->>>>>>> other
                 }
             }
         }
