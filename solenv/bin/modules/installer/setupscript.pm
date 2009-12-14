@@ -156,10 +156,12 @@ sub add_lowercase_productname_setupscriptvariable
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
+                if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
+                if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $value =~ s/\.//g;
                 $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
