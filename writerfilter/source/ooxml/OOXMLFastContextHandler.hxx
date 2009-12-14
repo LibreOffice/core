@@ -397,14 +397,28 @@ public:
 protected:
     bool mbValue;
 
-    virtual void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual OOXMLValue::Pointer_t getValue() const;
-    void setValue(const ::rtl::OUString & rString);
+    virtual void setValue(const ::rtl::OUString & rString);
+};
+
+class OOXMLFastContextHandlerValue :
+    public OOXMLFastContextHandler
+{
+public:
+    OOXMLFastContextHandlerValue
+    (OOXMLFastContextHandler * pContext);
+    virtual ~OOXMLFastContextHandlerValue();
+
+    virtual void setValue(OOXMLValue::Pointer_t pValue);
+    virtual OOXMLValue::Pointer_t getValue() const;
+
+    virtual string getType() const { return "Value"; }
+
+protected:
+    OOXMLValue::Pointer_t mpValue;
 };
 
 class OOXMLFastContextHandlerIntegerValue :
@@ -420,9 +434,7 @@ public:
 protected:
     sal_Int32 mnValue;
 
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+    virtual void setValue(const ::rtl::OUString & sValue);
     virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -442,9 +454,7 @@ public:
 protected:
     ::rtl::OUString  msValue;
 
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+    virtual void setValue(const ::rtl::OUString & sValue);
     virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -464,9 +474,7 @@ public:
 protected:
     sal_Int32  mnValue;
 
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+    virtual void setValue(const ::rtl::OUString & sValue);
     virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 

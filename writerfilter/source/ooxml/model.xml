@@ -22360,7 +22360,9 @@
       <attribute name="w" tokenid="ooxml:CT_TblWidth_w"/>
       <attribute name="type" tokenid="ooxml:CT_TblWidth_type"/>
     </resource>
-    <resource name="CT_TblGridCol" resource="IntegerValue"/>
+    <resource name="CT_TblGridCol" resource="Value">
+      <attribute name="w" tokenid="ooxml:CT_TblGridCol_w" action="setValue"/>
+    </resource>
     <resource name="CT_TblGridBase" resource="Properties">
       <element name="gridCol" tokenid="ooxml:CT_TblGridBase_gridCol"/>
     </resource>

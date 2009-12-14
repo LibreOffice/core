@@ -64,6 +64,7 @@ enum ResourceType_t {
     RT_HexValue,
     RT_IntegerValue,
     RT_StringValue,
+    RT_Value,
     RT_XNote,
     RT_TextTableCell,
     RT_TextTableRow,

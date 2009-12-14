@@ -1581,14 +1581,6 @@ OOXMLFastContextHandlerBooleanValue::~OOXMLFastContextHandlerBooleanValue()
 {
 }
 
-void OOXMLFastContextHandlerBooleanValue::attributes
-(const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
- throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    if (Attribs->hasAttribute(NS_wordprocessingml|OOXML_val))
-        mbValue = Attribs->getValue(NS_wordprocessingml|OOXML_val).toBoolean();
-}
-
 OOXMLValue::Pointer_t OOXMLFastContextHandlerBooleanValue::getValue() const
 {
     return OOXMLValue::Pointer_t(new OOXMLBooleanValue(mbValue));
@@ -1597,6 +1589,11 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerBooleanValue::getValue() const
 void OOXMLFastContextHandlerBooleanValue::setValue
 (const ::rtl::OUString & rString)
 {
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("setValue");
+    debug_logger->attribute("string", rString);
+#endif
+
     static rtl::OUString sOn(RTL_CONSTASCII_USTRINGPARAM("on"));
     static rtl::OUString sOff(RTL_CONSTASCII_USTRINGPARAM("off"));
     static rtl::OUString sTrue(RTL_CONSTASCII_USTRINGPARAM("true"));
@@ -1606,6 +1603,11 @@ void OOXMLFastContextHandlerBooleanValue::setValue
         mbValue = true;
     else if (rString == sOff || rString == sFalse)
         mbValue = false;
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->attribute("value", mbValue);
+    debug_logger->endElement("startValue");
+#endif
 }
 
 void OOXMLFastContextHandlerBooleanValue::lcl_endFastElement
@@ -1615,6 +1617,30 @@ void OOXMLFastContextHandlerBooleanValue::lcl_endFastElement
     sendPropertyToParent();
 
     endAction(Element);
+}
+
+/*
+ class OOXMLFastContextHandlerValue
+*/
+
+OOXMLFastContextHandlerValue::OOXMLFastContextHandlerValue
+(OOXMLFastContextHandler * pContext)
+: OOXMLFastContextHandler(pContext)
+{
+}
+
+OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
+{
+}
+
+void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
+{
+    mpValue = pValue;
+}
+
+OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
+{
+    return OOXMLValue::Pointer_t();
 }
 
 /*
@@ -1631,12 +1657,19 @@ OOXMLFastContextHandlerIntegerValue::~OOXMLFastContextHandlerIntegerValue()
 {
 }
 
-void OOXMLFastContextHandlerIntegerValue::attributes
-(const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
- throw (uno::RuntimeException, xml::sax::SAXException)
+void OOXMLFastContextHandlerIntegerValue::setValue(const ::rtl::OUString & sString)
 {
-    if (Attribs->hasAttribute(NS_wordprocessingml|OOXML_val))
-        mnValue = Attribs->getValue(NS_wordprocessingml|OOXML_val).toInt32();
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("setValue");
+    debug_logger->attribute("string", sString);
+#endif
+
+    mnValue = sString.toInt32();
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->attribute("value", mnValue);
+    debug_logger->endElement("setValue");
+#endif
 }
 
 void OOXMLFastContextHandlerIntegerValue::lcl_endFastElement
@@ -1667,12 +1700,19 @@ OOXMLFastContextHandlerStringValue::~OOXMLFastContextHandlerStringValue()
 {
 }
 
-void OOXMLFastContextHandlerStringValue::attributes
-(const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
- throw (uno::RuntimeException, xml::sax::SAXException)
+void OOXMLFastContextHandlerStringValue::setValue(const ::rtl::OUString & sString)
 {
-    if (Attribs->hasAttribute(NS_wordprocessingml|OOXML_val))
-        msValue = Attribs->getValue(NS_wordprocessingml|OOXML_val);
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("setValue");
+    debug_logger->attribute("string", sString);
+#endif
+
+    msValue = sString;
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->attribute("value", sString);
+    debug_logger->endElement("setValue");
+#endif
 }
 
 void OOXMLFastContextHandlerStringValue::lcl_endFastElement
@@ -1703,12 +1743,19 @@ OOXMLFastContextHandlerHexValue::~OOXMLFastContextHandlerHexValue()
 {
 }
 
-void OOXMLFastContextHandlerHexValue::attributes
-(const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
- throw (uno::RuntimeException, xml::sax::SAXException)
+void OOXMLFastContextHandlerHexValue::setValue(const ::rtl::OUString & sString)
 {
-    if (Attribs->hasAttribute(NS_wordprocessingml|OOXML_val))
-        mnValue = Attribs->getValue(NS_wordprocessingml|OOXML_val).toInt32(16);
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("setValue");
+    debug_logger->attribute("string", sString);
+#endif
+
+    mnValue = sString.toInt32(16);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->attribute("value", mnValue);
+    debug_logger->endElement("setValue");
+#endif
 }
 
 void OOXMLFastContextHandlerHexValue::lcl_endFastElement
