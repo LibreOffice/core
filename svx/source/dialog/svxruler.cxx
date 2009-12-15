@@ -2761,8 +2761,9 @@ void SvxRuler::EvalModifier()
      case KEY_MOD1:  {
          const RulerType eType = GetDragType();
          nDragType = DRAG_OBJECT_SIZE_PROPORTIONAL;
-         if(RULER_TYPE_BORDER == eType || RULER_TYPE_TAB == eType||
-            RULER_TYPE_MARGIN1&&pColumnItem)
+         if( RULER_TYPE_TAB == eType ||
+             ( ( RULER_TYPE_BORDER == eType || RULER_TYPE_MARGIN1 == eType ) &&
+               pColumnItem ) )
              PrepareProportional_Impl(eType);
          break;
      }
