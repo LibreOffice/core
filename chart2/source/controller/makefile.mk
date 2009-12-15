@@ -85,7 +85,6 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(COMPHELPERLIB)	\
                 $(BASEGFXLIB)		\
                 $(DRAWINGLAYERLIB)	\
-                $(GOODIESLIB)		\
                 $(BASEGFXLIB) 		\
                 $(SALLIB)			\
                 $(SVLLIB)			\

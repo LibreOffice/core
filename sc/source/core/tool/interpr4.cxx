@@ -3491,19 +3491,6 @@ int main()
                             SetError( errIllegalParameter );
                     }
                     break;
-                    case SC_GAME_STARWARS :
-                    {
-                        oslModule m_tfu = osl_loadModuleRelative(&thisModule, rtl::OUString::createFromAscii( SVLIBRARY( "tfu" ) ).pData, SAL_LOADMODULE_NOW);
-                        typedef void StartInvader_Type (Window*, ResMgr*);
-
-                        StartInvader_Type *StartInvader = (StartInvader_Type *) osl_getFunctionSymbol( m_tfu, rtl::OUString::createFromAscii("StartInvader").pData );
-                        if ( StartInvader )
-                            StartInvader( Application::GetDefDialogParent(), ResMgr::CreateResMgr( "tfu" ));
-                    }
-                    break;
-                    case SC_GAME_FROGGER :
-                        //Game();
-                    break;
                     default:
                     {
                         // added to avoid warnings

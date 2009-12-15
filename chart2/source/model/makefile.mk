@@ -82,7 +82,6 @@ SHL1STDLIBS=	$(CHARTTOOLS) 		\
                 $(VCLLIB)			\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
-                $(GOODIESLIB)		\
                 $(SALLIB)			\
                 $(UCBHELPERLIB)
 

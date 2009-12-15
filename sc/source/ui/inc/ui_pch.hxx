@@ -304,7 +304,6 @@
 #include <drawview.hxx>
 #include <svx/view3d.hxx>
 #include <svx/def3d.hxx>
-#include <goodies/vector3d.hxx>
 #include <vcl/floatwin.hxx>
 #include <basic/sbxobj.hxx>
 #include <svx/svxenum.hxx>

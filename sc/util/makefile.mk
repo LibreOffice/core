@@ -85,7 +85,6 @@ SHL1STDLIBS=       \
     $(SVLLIB)		\
     $(SVXCORELIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
