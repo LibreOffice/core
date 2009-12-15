@@ -294,10 +294,10 @@ struct TypeList
     int nListLength;
 };
 
-Type typeXFixedText = GET_TYPE(awt::XFixedText);
-Type typeXTextComponent = GET_TYPE(awt::XTextComponent);
-Type typeXComboBox = GET_TYPE(awt::XComboBox);
-Type typeXRadioButton = GET_TYPE(awt::XRadioButton);
+Type typeXFixedText = GET_TYPE(awt::XFixedText)
+Type typeXTextComponent = GET_TYPE(awt::XTextComponent)
+Type typeXComboBox = GET_TYPE(awt::XComboBox)
+Type typeXRadioButton = GET_TYPE(awt::XRadioButton)
 
 
 TypeList fixedTextList = {&typeXFixedText, 1};
@@ -648,6 +648,7 @@ public:
     EventListener( const Reference< XComponentContext >& rxContext );
     // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException );
+    using cppu::OPropertySetHelper::disposing;
 
     // XScriptListener
     virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException);
