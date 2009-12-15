@@ -244,8 +244,8 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     ::FillCharStyleListBox(aNotVisitedLB, pView->GetDocShell());
 
     TargetList* pList = new TargetList;
-    const SfxFrame* pFrame = pView->GetViewFrame()->GetTopFrame();
-    pFrame->GetTargetList(*pList);
+    const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
+    rFrame.GetTargetList(*pList);
     USHORT nCount = (USHORT)pList->Count();
     if( nCount )
     {

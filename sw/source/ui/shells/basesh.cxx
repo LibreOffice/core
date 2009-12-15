@@ -192,7 +192,7 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
                         ? rSh.GetIMapInventor() : 0;
     TargetList* pList = new TargetList;
-    rSh.GetView().GetViewFrame()->GetTopFrame()->GetTargetList(*pList);
+    rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
