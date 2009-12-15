@@ -610,7 +610,7 @@ namespace drawinglayer
                     if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
                     {
                         // emulate data handling from UnoControlPDFExportContact, original see
-                        // goodies/source/graphic/grfmgr.cxx
+                        // svtools/source/graphic/grfmgr.cxx
                         const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject().GetGraphic();
 
                         if(rGraphic.IsLink())
@@ -638,7 +638,7 @@ namespace drawinglayer
                     if(bUsingPDFExtOutDevData)
                     {
                         // emulate data handling from UnoControlPDFExportContact, original see
-                        // goodies/source/graphic/grfmgr.cxx
+                        // svtools/source/graphic/grfmgr.cxx
                         const basegfx::B2DRange aCurrentRange(
                             aTranslate.getX(), aTranslate.getY(),
                             aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());

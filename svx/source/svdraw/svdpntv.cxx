@@ -34,7 +34,7 @@
 #include <svx/svdpntv.hxx>
 #include <vcl/msgbox.hxx>
 #include <sdrpaintwindow.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
 #ifdef DBG_UTIL

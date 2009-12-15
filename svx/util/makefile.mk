@@ -132,7 +132,6 @@ SHL1STDLIBS= \
              $(AVMEDIALIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \
-             $(GOODIESLIB) \
              $(BASEGFXLIB) \
              $(DRAWINGLAYERLIB) \
              $(LNGLIB) \
@@ -169,7 +168,6 @@ SHL2STDLIBS= \
             $(SVXCORELIB) \
             $(SFX2LIB) \
             $(XMLOFFLIB) \
-            $(GOODIESLIB) \
             $(BASEGFXLIB) \
             $(DRAWINGLAYERLIB) \
             $(BASICLIB) \

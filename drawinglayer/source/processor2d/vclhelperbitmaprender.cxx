@@ -37,7 +37,7 @@
 #include "precompiled_drawinglayer.hxx"
 
 #include <vclhelperbitmaprender.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>

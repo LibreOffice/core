@@ -60,7 +60,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/types.hxx>
 #include <svl/memberid.hrc>

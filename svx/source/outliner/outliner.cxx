@@ -54,7 +54,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/svxfont.hxx>
 #include <svx/brshitem.hxx>
 #include <svl/itempool.hxx>

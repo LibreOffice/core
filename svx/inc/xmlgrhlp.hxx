@@ -33,7 +33,7 @@
 
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <vector>
 #include <set>
 #include <utility>

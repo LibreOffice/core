@@ -58,7 +58,7 @@
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
-#include <goodies/b3dtrans.hxx>
+#include <tools/b3dtrans.hxx>
 #include <svx/svxids.hrc>
 #include <svx/colritem.hxx>
 #include <svx/e3ditem.hxx>

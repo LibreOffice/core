@@ -44,7 +44,7 @@
 #include <svl/style.hxx>
 #include <svtools/filter.hxx>
 #include <svl/urihelper.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>
 
 #include "linkmgr.hxx"

@@ -45,7 +45,7 @@
 #include <rsc/rscsfx.hxx>
 #include "svx/svxdllapi.h"
 
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 #include <tools/rtti.hxx>   // wegen typedef TypeId
 #include <vector>

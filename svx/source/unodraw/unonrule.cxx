@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/graph.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <toolkit/unohlp.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

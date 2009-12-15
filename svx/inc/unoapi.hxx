@@ -35,7 +35,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <sal/types.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
