@@ -844,7 +844,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
 
             case SID_RELOAD:
             {
-                SfxFrame* pFrame = GetTopFrame();
+                SfxFrame* pFrame = &GetTopFrame();
 
                 if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
                     rSet.DisableItem(nWhich);
@@ -1794,7 +1794,7 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         }
         else
         {
-            Window *pWindow = &GetFrame().GetTopFrame()->GetWindow();
+            Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
             if ( !bEnable )
                 pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
             if ( !bEnable || pImp->bWindowWasEnabled )
@@ -2598,7 +2598,7 @@ SfxFrame& SfxViewFrame::GetFrame() const
 //-------------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 {
-    return GetFrame().GetTopFrame()->GetCurrentViewFrame();
+    return GetFrame().GetTopFrame().GetCurrentViewFrame();
 }
 
 Window& SfxViewFrame::GetWindow() const
@@ -3239,7 +3239,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     {
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
             return;
-        Reference < XFrame > xFrame = GetFrame().GetTopFrame()->GetFrameInterface();
+        Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
         BOOL bShow = FALSE;
         BOOL bHasChild = xBeamer.is();
@@ -3340,7 +3340,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_BROWSER )
         {
-            Reference < XFrame > xFrame = GetFrame().GetTopFrame()->GetFrameInterface()->
+            Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface()->
                             findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
             if ( !xFrame.is() )
                 rState.DisableItem( nSID );

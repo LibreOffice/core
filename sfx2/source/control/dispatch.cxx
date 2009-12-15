@@ -1768,7 +1768,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         SetMenu_Impl();
 
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
-    SfxWorkWindow *pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow *pTaskWin = pImp->pFrame->GetTopFrame().GetWorkWindow_Impl();
     pTaskWin->ResetStatusBar_Impl();
 
     SfxDispatcher *pDispat = this;

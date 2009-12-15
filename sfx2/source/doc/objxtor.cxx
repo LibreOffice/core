@@ -573,8 +573,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
     if ( bUI && IsModified() && pFrame )
     {
         // minimierte restoren
-        SfxFrame* pTop = pFrame->GetTopFrame();
-        SfxViewFrame::SetViewFrame( pTop->GetCurrentViewFrame() );
+        SfxFrame& rTop = pFrame->GetTopFrame();
+        SfxViewFrame::SetViewFrame( rTop.GetCurrentViewFrame() );
         pFrame->GetFrame().Appear();
 
         // fragen, ob gespeichert werden soll

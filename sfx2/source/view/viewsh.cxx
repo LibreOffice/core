@@ -689,7 +689,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             // ausfuehren
             if ( !pShowItem || bActive != pImp->bPlugInsActive )
             {
-                SfxFrame* pTopFrame = GetFrame()->GetTopFrame();
+                SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
                 if ( pTopFrame != &GetFrame()->GetFrame() )
                 {
                     // FramesetDocument

@@ -72,7 +72,7 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
 {
     TargetList* pList = new TargetList;
     SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
-    SfxFrame* pFrame = pViewFrame ? pViewFrame->GetTopFrame() : 0;
+    SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
     if ( pFrame )
     {
         pFrame->GetTargetList(*pList);

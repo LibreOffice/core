@@ -986,7 +986,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             {
 
                 if ( m_pViewSh )
-                    m_pViewSh->GetViewFrame()->GetTopFrame()->LockResize_Impl(TRUE);
+                    m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
                 try
                 {
                     m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
@@ -1036,8 +1036,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 if ( m_pViewSh )
                 {
                     SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-                    pFrame->GetTopFrame()->LockResize_Impl(FALSE);
-                    pFrame->GetTopFrame()->Resize();
+                    pFrame->GetTopFrame().LockResize_Impl(FALSE);
+                    pFrame->GetTopFrame().Resize();
                 }
             }
         }
@@ -1097,7 +1097,7 @@ void SfxInPlaceClient::DeactivateObject()
             }
 
             if ( m_pViewSh )
-                m_pViewSh->GetViewFrame()->GetTopFrame()->LockResize_Impl(TRUE);
+                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
 
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
             {
@@ -1119,8 +1119,8 @@ void SfxInPlaceClient::DeactivateObject()
             {
                 SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
                 SfxViewFrame::SetViewFrame( pFrame );
-                pFrame->GetTopFrame()->LockResize_Impl(FALSE);
-                pFrame->GetTopFrame()->Resize();
+                pFrame->GetTopFrame().LockResize_Impl(FALSE);
+                pFrame->GetTopFrame().Resize();
             }
         }
         catch (com::sun::star::uno::Exception& )

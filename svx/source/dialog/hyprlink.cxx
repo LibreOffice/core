@@ -475,7 +475,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
     if (pVwFrm) // Alle moeglichen Target Frames zusammensammeln und anzeigen
     {
         TargetList aList;
-        pVwFrm->GetTopFrame()->GetTargetList(aList);
+        pVwFrm->GetTopFrame().GetTargetList(aList);
 
         USHORT nCount = (USHORT)aList.Count();
         if( nCount )

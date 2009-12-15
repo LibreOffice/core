@@ -163,7 +163,7 @@ public:
     SfxBroadcaster&     GetBroadcaster() const;
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
-    SfxFrame*           GetTopFrame() const;
+    SfxFrame&           GetTopFrame() const;
     sal_Bool            IsParent( SfxFrame* ) const;
 
     sal_uInt32          GetFrameType() const;

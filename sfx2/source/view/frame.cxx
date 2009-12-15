@@ -284,12 +284,12 @@ void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
     pChildArr->Remove( nPos );
 };
 
-SfxFrame* SfxFrame::GetTopFrame() const
+SfxFrame& SfxFrame::GetTopFrame() const
 {
     const SfxFrame* pParent = this;
     while ( pParent->pParentFrame )
         pParent = pParent->pParentFrame;
-    return const_cast< SfxFrame* >( pParent );
+    return *const_cast< SfxFrame* >( pParent );
 }
 
 sal_Bool SfxFrame::IsClosing_Impl() const

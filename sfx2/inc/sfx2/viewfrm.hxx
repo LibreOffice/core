@@ -244,7 +244,7 @@ public:
     BOOL                    DoClose();
     ULONG                   GetFrameType() const
                             { return GetFrame().GetFrameType(); }
-    SfxFrame*               GetTopFrame() const
+    SfxFrame&               GetTopFrame() const
                             { return GetFrame().GetTopFrame(); }
     void                    GetTargetList( TargetList& rList ) const
                             { GetFrame().GetTargetList( rList ); }
