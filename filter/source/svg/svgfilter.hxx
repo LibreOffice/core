@@ -77,7 +77,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdxcgv.hxx>

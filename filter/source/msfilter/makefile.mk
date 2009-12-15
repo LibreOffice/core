@@ -66,7 +66,6 @@ SHL1STDLIBS= \
              $(SVXCORELIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \
-             $(GOODIESLIB) \
              $(BASEGFXLIB) \
              $(BASICLIB) \
              $(SVTOOLLIB) \

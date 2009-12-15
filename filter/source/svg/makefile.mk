@@ -58,7 +58,7 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(SVXCORELIB)			\
     $(XMLOFFLIB)		\
-    $(GOODIESLIB)		\
+    $(SVTOOLLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\

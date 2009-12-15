@@ -65,7 +65,7 @@
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
