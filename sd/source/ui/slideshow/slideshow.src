@@ -74,13 +74,27 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         {
             Separator = TRUE;
         };
+#ifdef ENABLE_PRESENTER_EXTRA_UI
         MenuItem
         {
-                    Identifier = CM_WIDTH_PEN;
-                   Text [ en-US ] = "~Pen Width" ;
-
+            Identifier = CM_PEN_MODE;
+            Text [ en-US ] = "~Pen Mode";
+        };
+        MenuItem
+        {
+            Identifier = CM_ERASE_MODE;
+            Text [ en-US ] = "~Eraser Mode";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = CM_WIDTH_PEN;
+            Text [ en-US ] = "~Pen Width" ;
             SubMenu = Menu
-                    {
+            {
                 ItemList =
                 {
                     MenuItem
@@ -115,8 +129,8 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         {
             Separator = TRUE;
         };
-     MenuItem
-       {
+        MenuItem
+        {
             Identifier = CM_COLOR_PEN ;
             Text [ en-US ] = "~Change Pen Color" ;
         };
@@ -131,23 +145,23 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_ERASE_ALLINK ;
-            Text [ en-US ] = "~Erase All Ink" ;
+            Text [ en-US ] = "~Erase All Ink On Slide" ;
         };
-        MenuItem
-        {
-            Identifier = CM_ERASE_INK ;
-            Text [ en-US ] = "~Erase Ink Mode ON/OFF" ;
-        };
+        // MenuItem
+        // {
+        //     Identifier = CM_ERASE_INK ;
+        //     Text [ en-US ] = "~Erase Ink Mode ON/OFF" ;
+        // };
         MenuItem
         {
             Separator = TRUE;
         };
         MenuItem
         {
-                    Identifier = CM_ERASE_INK_PEN;
-                   Text [ en-US ] = "~Eraser Size" ;
+            Identifier = CM_ERASE_INK_PEN;
+            Text [ en-US ] = "~Eraser Width" ;
 
-            SubMenu = Menu
+        SubMenu = Menu
                     {
                 ItemList =
                 {
@@ -179,6 +193,7 @@ Menu RID_SLIDESHOW_CONTEXTMENU
                 };
             };
         };
+#endif
     MenuItem
     {
         Separator = TRUE;

@@ -116,6 +116,7 @@
 #include <string>
 #include <algorithm>
 #include <stdio.h>
+#include <iostream>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -367,9 +368,10 @@ private:
     boost::optional<double>                 maUserPaintStrokeWidth;
 
     //changed for the eraser project
-    boost::optional<bool>                   maEraseAllInk;
-
-    boost::optional<bool>                   maEraseInk;
+    boost::optional<bool>           maEraseAllInk;
+    boost::optional<bool>           maSwitchPenMode;
+    boost::optional<bool>           maSwitchEraserMode;
+    boost::optional<sal_Int32>          maEraseInk;
     //end changed
 
     boost::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
@@ -956,7 +958,11 @@ void SlideShowImpl::displaySlide(
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
+#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier = xDrawPages;
+#else
+    mxDrawPagesSupplier = NULL;
+#endif
 
     stopShow();  // MUST call that: results in
     // maUserEventQueue.clear(). What's more,
@@ -990,9 +996,7 @@ void SlideShowImpl::displaySlide(
             mpCurrentSlide = mpPrefetchSlide;
         }
         else
-        {
             mpCurrentSlide = makeSlide( xSlide, xDrawPages, xRootNode );
-        }
 
         OSL_ASSERT( mpCurrentSlide );
         if (mpCurrentSlide)
@@ -1399,21 +1403,65 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         }
         else
         {
-            // disable user paint
-            maEraseAllInk.reset();
-            maEventMultiplexer.notifyUserPaintDisabled();
+        // disable user paint
+        maEraseAllInk.reset();
+        maEventMultiplexer.notifyUserPaintDisabled();
         }
 
         if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
+        resetCursor();
 
         return true;
     }
 
     if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("SwitchPenMode") ))
+    {
+        bool nSwitchPenMode(false);
+        if (rProperty.Value >>= nSwitchPenMode)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+
+            if(nSwitchPenMode == true){
+            // Switch to Pen Mode
+            maSwitchPenMode.reset( nSwitchPenMode );
+            maEventMultiplexer.notifySwitchPenMode();
+            }
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
+        return true;
+    }
+
+
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("SwitchEraserMode") ))
+    {
+        bool nSwitchEraserMode(false);
+        if (rProperty.Value >>= nSwitchEraserMode)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+            if(nSwitchEraserMode == true){
+            // switch to Eraser mode
+            maSwitchEraserMode.reset( nSwitchEraserMode );
+            maEventMultiplexer.notifySwitchEraserMode();
+            }
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
+        return true;
+    }
+
+
+
+    if (rProperty.Name.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("EraseInk") ))
     {
-        double nEraseInk(0.0);
+        sal_Int32 nEraseInk(100);
         if (rProperty.Value >>= nEraseInk)
         {
             OSL_ENSURE( mbMouseVisible,
@@ -1421,7 +1469,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
             // enable user paint
             maEraseInk.reset( nEraseInk );
-            maEventMultiplexer.notifyEraseInk( *maEraseInk );
+            maEventMultiplexer.notifyEraseInkWidth( *maEraseInk );
         }
         else
         {

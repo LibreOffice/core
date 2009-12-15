@@ -87,7 +87,7 @@ extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 namespace {
     /** This local version of the work window overloads DataChanged() so that it
-        can restart the slide show when a displau is added or removed.
+        can restart the slide show when a display is added or removed.
     */
     class FullScreenWorkWindow : public WorkWindow
     {

@@ -1067,15 +1067,25 @@ bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
 bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-                                                    boost::bind(&UserPaintEventHandler::widthChanged,
-                                                    _1,
-                                                    rUserStrokeWidth));
+        boost::bind(&UserPaintEventHandler::widthChanged,
+            _1,
+                    rUserStrokeWidth));
 }
-
+//NELLE a regarder de plus près
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::disable));
+}
+
+bool EventMultiplexer::notifySwitchPenMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchPenMode));
+}
+
+bool EventMultiplexer::notifySwitchEraserMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
 }
 
 //adding erasing all ink features with UserPaintOverlay
@@ -1088,10 +1098,10 @@ bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
 }
 
 //adding erasing features with UserPaintOverlay
-bool EventMultiplexer::notifyEraseInk( double rEraseInkSize )
+bool EventMultiplexer::notifyEraseInk( sal_Int32 rEraseInkSize )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::eraseInkChanged,
+        boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
                     _1,
                     boost::cref(rEraseInkSize)));
 }

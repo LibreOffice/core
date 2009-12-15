@@ -82,7 +82,7 @@ public:
                          ::com::sun::star::drawing::XDrawPage >& xPage,
                    const ::com::sun::star::uno::Reference<
                          ::com::sun::star::drawing::XDrawPage >& xActualPage,
-                  const ::com::sun::star::uno::Reference<
+                   const ::com::sun::star::uno::Reference<
                          ::com::sun::star::drawing::XDrawPagesSupplier>& xPagesSupplier,
                    const SlideShowContext&                       rContext,
                    sal_Int32                                     nOrdNumStart,

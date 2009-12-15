@@ -637,8 +637,8 @@ namespace slideshow
                 aTransform );
         }
 
-        ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange& rUnitBounds,
-                                                const ::basegfx::B2DRange& rShapeBounds )
+        ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange&      rUnitBounds,
+                                                    const ::basegfx::B2DRange&      rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
                 lerp( rShapeBounds.getMinX(),
@@ -710,15 +710,25 @@ namespace slideshow
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
         }
 
-        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        /*sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
         {
-            return ::cppcanvas::makeColorARGB(
-                // convert from IntSRGBA color to API color
-                // (0xRRGGBBAA -> 0xAARRGGBB)
-                static_cast< sal_uInt8 >(0),
-                ::cppcanvas::getRed(aColor),
-                ::cppcanvas::getGreen(aColor),
-                ::cppcanvas::getBlue(aColor));
+            return ::cppcanvas::unMakeColor(
+                                                    // convert from IntSRGBA color to API color
+                                                    // (0xRRGGBBAA -> 0xAARRGGBB)
+                                                    static_cast< sal_uInt8 >(0),
+                                                    ::cppcanvas::getRed(aColor),
+                                                    ::cppcanvas::getGreen(aColor),
+                                                    ::cppcanvas::getBlue(aColor));
+        }*/
+
+        sal_Int8 unSignedToSigned(sal_Int8 nInt)
+        {
+            if(nInt < 0 ){
+                sal_Int8 nInt2 = nInt >> 1U;
+                return nInt2;
+            }else{
+                return nInt;
+            }
         }
 
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,

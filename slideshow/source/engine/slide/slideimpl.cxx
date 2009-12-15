@@ -81,6 +81,7 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
+#include <iostream>
 
 using namespace ::com::sun::star;
 
@@ -367,7 +368,11 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       bool                                                  bIntrinsicAnimationsAllowed,
                       bool                                                  bDisableAnimationZOrder ) :
     mxDrawPage( xDrawPage ),
-    mxDrawPagesSupplier( xDrawPages ),
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+      mxDrawPagesSupplier( xDrawPages ),
+#else
+    mxDrawPagesSupplier( NULL ),
+#endif
     mxRootNode( xRootNode ),
     mpLayerManager( new LayerManager(
                         rViewContainer,
@@ -456,7 +461,9 @@ void SlideImpl::dispose()
     mpShapeManager.reset();
     mxRootNode.clear();
     mxDrawPage.clear();
+#ifndef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier.clear();
+#endif
 }
 
 bool SlideImpl::prefetch()
@@ -906,7 +913,7 @@ void SlideImpl::drawPolygons() const
 
 void SlideImpl::addPolygons(PolyPolygonVector aPolygons)
 {
-    if(!aPolygons.empty())
+    if(!aPolygons.empty()) /* FIXME : was if(aPolygons.size() != 0) */
     {
         for( PolyPolygonVector::iterator aIter=aPolygons.begin(),
                  aEnd=aPolygons.end();
@@ -1259,7 +1266,11 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
+#ifdef ENABLE_PRESENTER_EXTRA_UI
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
+#else
+    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
+#endif
                                                       rEventMultiplexer, rScreenUpdater,
                                                       rActivitiesQueue, rUserEventQueue,
                                                       rCursorManager, rViewContainer,

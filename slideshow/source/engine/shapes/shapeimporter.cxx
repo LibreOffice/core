@@ -650,7 +650,11 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
+#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
+#else
+    mxPagesSupplier( NULL ),
+#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),

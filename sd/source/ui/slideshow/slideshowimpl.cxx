@@ -468,6 +468,8 @@ bool AnimationSlideController::previousSlide()
     return jumpToSlideIndex( getPreviousSlideIndex() );
 }
 
+
+
 void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow >& xShow, const Reference< XDrawPagesSupplier>& xDrawPages )
 {
     const sal_Int32 nCurrentSlideNumber = getCurrentSlideNumber();
@@ -525,11 +527,15 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbInputFreeze(false)
 , mbActive(sal_False)
 , maPresSettings( pDoc->getPresentationSettings() )
-, mnUserPaintColor( 0x00000000L )
+, mnUserPaintColor( 0x00000000L ) //User paint color is Black by default
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+, mbSwitchPenMode(true)
+, mbSwitchEraserMode(false)
 , mdUserPaintStrokeWidth ( 4.0 )
 , mbEraseAllInk(false)
-, mbEraseInk(false)
-, mnEraseInkSize(100.0)
+//, mbEraseInk(false)
+, mnEraseInkSize(100)
+#endif
 , mnEntryCounter(0)
 , mnLastSlideNumber(-1)
 , msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") )
@@ -1093,6 +1099,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 aProperties.push_back(
                     beans::PropertyValue(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") ),
+                        // User paint color is black by default.
                         -1, Any( static_cast<sal_Int32>(0x00000000L) ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
@@ -1418,12 +1425,14 @@ void SlideshowImpl::displayCurrentSlide()
 
 void SlideshowImpl::endPresentation()
 {
+#ifdef ENABLE_PRESENTER_EXTRA_UI
     if( maPresSettings.mbMouseAsPen)
     {
         Reference< XMultiServiceFactory > xDocFactory(mpDoc->getUnoModel(), UNO_QUERY );
         if( xDocFactory.is() )
             mxShow->registerUserPaintPolygons(xDocFactory);
     }
+#endif
     if( !mnEndShowEvent )
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
@@ -2128,7 +2137,12 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
 #ifdef ENABLE_PRESENTER_EXTRA_UI
     //adding button to contextual menu for erasing functionnalities for UserPaintOverlay
     pMenu->EnableItem( CM_ERASE_ALLINK, (maPresSettings.mbMouseAsPen));
-    pMenu->EnableItem( CM_COLOR_PEN, (maPresSettings.mbMouseAsPen));
+    // Adding button to contextual menu for changing pen color
+      pMenu->EnableItem( CM_COLOR_PEN, (maPresSettings.mbMouseAsPen));
+    // Adding button to display if in Pen  mode
+    pMenu->EnableItem( CM_PEN_MODE, (maPresSettings.mbMouseAsPen));
+    // Adding button to displau if in Erase Mode
+    pMenu->EnableItem( CM_ERASE_MODE, (maPresSettings.mbMouseAsPen));
 #endif
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
@@ -2197,6 +2211,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
             pBlankMenu->CheckItem( ( mpShowWindow->GetBlankColor() == Color( COL_WHITE ) ) ? CM_SCREEN_WHITE : CM_SCREEN_BLACK  );
         }
     }
+#ifdef ENABLE_PRESENTER_EXTRA_UI
 
     PopupMenu* pWidthMenu = pMenu->GetPopupMenu( CM_WIDTH_PEN);
 
@@ -2244,7 +2259,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
         }
     }
 
-#ifdef ENABLE_PRESENTER_EXTRA_UI
+
     PopupMenu* pEraseWidthMenu = pMenu->GetPopupMenu( CM_ERASE_INK_PEN);
 
     // populate eraser width list
@@ -2286,6 +2301,10 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
                 pEraseWidthMenu->EnableItem( (USHORT)(CM_ERASE_INK_PEN + nEIterator), TRUE);
                 if( nEWidth ==  mnEraseInkSize)
                     pEraseWidthMenu->CheckItem( (USHORT)(CM_ERASE_INK_PEN + nEIterator) );
+        if( mbSwitchPenMode )
+           pMenu->CheckItem( (USHORT)(CM_PEN_MODE));
+        if( mbSwitchEraserMode )
+           pMenu->CheckItem( (USHORT)(CM_ERASE_MODE));
 
             }
         }
@@ -2354,7 +2373,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
             }
         }
         break;
-
+#ifdef ENABLE_PRESENTER_EXTRA_UI
         if( maPresSettings.mbMouseAsPen )
         {
             case CM_COLOR_PEN:
@@ -2408,48 +2427,59 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                     mbWasPaused = false;
                 }
                 break;
-#ifdef ENABLE_PRESENTER_EXTRA_UI
             case CM_ERASE_ALLINK:
                 {
                     setEraseAllInk(true);
                     mbWasPaused = false;
                 }
                 break;
+            case CM_PEN_MODE:
+                {
+                    setPenMode(true);
+                    mbWasPaused = false;
+                }
+                  break;
+            case CM_ERASE_MODE:
+                {
+                    setEraserMode(true);
+                    mbWasPaused = false;
+                }
+                break;
             case CM_ERASE_INK_PEN_VERY_THIN:
                 {
-                    setEraseInk(100.0);
+                    setEraseInk(100);
                     mbWasPaused = false;
                 }
                 break;
 
             case CM_ERASE_INK_PEN_THIN:
                 {
-                    setEraseInk(200.0);
+                    setEraseInk(200);
                     mbWasPaused = false;
                 }
                 break;
 
             case CM_ERASE_INK_PEN_NORMAL:
                 {
-                    setEraseInk(300.0);
+                    setEraseInk(300);
                     mbWasPaused = false;
                 }
                 break;
 
             case CM_ERASE_INK_PEN_THICK:
                 {
-                    setEraseInk(400.0);
+                    setEraseInk(400);
                     mbWasPaused = false;
                 }
                 break;
             case CM_ERASE_INK_PEN_VERY_THICK:
                 {
-                    setEraseInk(500.0);
+                    setEraseInk(500);
                     mbWasPaused = false;
                 }
                 break;
-#endif
         }
+#endif
 
             case CM_ENDSHOW:
                 // in case the user cancels the presentation, switch to current slide
@@ -3058,16 +3088,16 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     maPresSettings.mbMouseAsPen = bMouseAsPen;
     if( mxShow.is() ) try
     {
+    // For Pencolor;
         Any aValue;
         if( maPresSettings.mbMouseAsPen )
-            // todo: take color from configuration
-            aValue <<= mnUserPaintColor;
-
+        // TODO: take color from configuration
+        aValue <<= mnUserPaintColor;
         beans::PropertyValue aPenProp;
         aPenProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserPaintColor" ));
         aPenProp.Value = aValue;
-
         mxShow->setProperty( aPenProp );
+#ifdef ENABLE_PRESENTER_EXTRA_UI
         //for StrokeWidth :
         Any aValueWidth;
         if( maPresSettings.mbMouseAsPen )
@@ -3079,22 +3109,25 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
 
         mxShow->setProperty( aPenPropWidth );
 
-        //for EraseAllInk :
-        Any aValueEraseAllInk;
+    // for Pen Mode
+        Any aValueSwitchPenMode;
         if( maPresSettings.mbMouseAsPen )
-            aValueEraseAllInk <<= mbEraseAllInk;
-        beans::PropertyValue aPenPropEraseAllInk;
-        aPenPropEraseAllInk.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EraseAllInk" ));
-        aPenPropEraseAllInk.Value = aValueEraseAllInk;
-        mxShow->setProperty( aPenPropEraseAllInk );
-        //for EraseInk :
-        Any aValueEraseInk;
-        if( maPresSettings.mbMouseAsPen )
-            aValueEraseInk <<= mnEraseInkSize;
-        beans::PropertyValue aPenPropEraseInk;
-        aPenPropEraseInk.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EraseInk" ));
-        aPenPropEraseInk.Value = aValueEraseInk;
-        mxShow->setProperty( aPenPropEraseInk );
+            aValueSwitchPenMode <<= mbSwitchPenMode;
+        beans::PropertyValue aPenPropSwitchPenMode;
+        aPenPropSwitchPenMode.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SwitchPenMode" ));
+        aPenPropSwitchPenMode.Value = aValueSwitchPenMode;
+        mxShow->setProperty( aPenPropSwitchPenMode );
+
+    //for EraseAllInk :
+    Any aValueEraseAllInk;
+    if( maPresSettings.mbMouseAsPen )
+        aValueEraseAllInk <<= mbEraseAllInk;
+    beans::PropertyValue aPenPropEraseAllInk;
+    aPenPropEraseAllInk.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EraseAllInk" ));
+    aPenPropEraseAllInk.Value = aValueEraseAllInk;
+    mxShow->setProperty( aPenPropEraseAllInk );
+    mbEraseAllInk = false; // sets to false so not to have it applied again
+#endif
     }
     catch( Exception& e )
     {
@@ -3108,13 +3141,51 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     }
 }
 
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+void SAL_CALL SlideshowImpl::setUseEraser( sal_Bool bMouseAsPen ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    maPresSettings.mbMouseAsPen = bMouseAsPen;
+    if( mxShow.is() ) try
+    {
+
+    //for EraseInk :
+    Any aValueEraseInk;
+    if( maPresSettings.mbMouseAsPen )
+        aValueEraseInk <<= mnEraseInkSize;
+    beans::PropertyValue aPenPropEraseInk;
+    aPenPropEraseInk.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EraseInk" ));
+    aPenPropEraseInk.Value = aValueEraseInk;
+    mxShow->setProperty( aPenPropEraseInk );
+
+    // for Erase Mode
+    Any aValueSwitchEraserMode;
+        if( maPresSettings.mbMouseAsPen )
+            aValueSwitchEraserMode <<= mbSwitchEraserMode;
+        beans::PropertyValue aPenPropSwitchEraserMode;
+        aPenPropSwitchEraserMode.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SwitchEraserMode" ));
+        aPenPropSwitchEraserMode.Value = aValueSwitchEraserMode;
+        mxShow->setProperty( aPenPropSwitchEraserMode );
+    }
+    catch( Exception& e )
+    {
+        static_cast<void>(e);
+        DBG_ERROR(
+            (OString("sd::SlideshowImpl::setUseEraser(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
+}
+
 // --------------------------------------------------------------------
+
 double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     return mdUserPaintStrokeWidth;
 }
-
 
 // --------------------------------------------------------------------
 
@@ -3122,9 +3193,12 @@ void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeEx
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mdUserPaintStrokeWidth = dStrokeWidth;
+    mbSwitchPenMode =  true;
+    mbSwitchEraserMode = !mbSwitchPenMode;
     if( maPresSettings.mbMouseAsPen )
         setUsePen( sal_True ); // update color and width
 }
+#endif
 // --------------------------------------------------------------------
 
 sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException)
@@ -3139,9 +3213,47 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeExcep
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mnUserPaintColor = nColor;
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+    mbSwitchPenMode = true;
+    mbSwitchEraserMode = !mbSwitchPenMode;
+#endif
     if( maPresSettings.mbMouseAsPen )
         setUsePen( sal_True ); // update color
 }
+
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+// --------------------------------------------------------------------
+
+void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    mbSwitchPenMode = bSwitchPenMode;
+
+    if(mbSwitchPenMode == true){
+        mbSwitchEraserMode = false;
+    }else{
+        mbSwitchEraserMode = true;
+    }
+    if( maPresSettings.mbMouseAsPen )
+        setUsePen( sal_True ); // Switch to Pen Mode
+
+}
+
+void SAL_CALL SlideshowImpl::setEraserMode(bool bSwitchEraserMode ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    mbSwitchEraserMode = bSwitchEraserMode;
+    if(mbSwitchEraserMode = true){
+        mbSwitchPenMode = false;
+    }else{
+        mbSwitchPenMode = true;
+    }
+
+    if( maPresSettings.mbMouseAsPen )
+        setUseEraser( sal_True ); // Switch to EraseMode
+
+}
+
 
 // --------------------------------------------------------------------
 
@@ -3154,13 +3266,16 @@ void SAL_CALL SlideshowImpl::setEraseAllInk( bool bEraseAllInk ) throw (RuntimeE
 }
 
 
-void SAL_CALL SlideshowImpl::setEraseInk( double nEraseInkSize ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setEraseInk( sal_Int32 nEraseInkSize ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mnEraseInkSize=nEraseInkSize;
+    mbSwitchPenMode = false;
+    mbSwitchEraserMode = true;
     if( maPresSettings.mbMouseAsPen )
         setUsePen( sal_True ); // update erase ink size
 }
+#endif
 // --------------------------------------------------------------------
 // XSlideShowController Methods
 // --------------------------------------------------------------------

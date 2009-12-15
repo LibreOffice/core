@@ -509,7 +509,9 @@ public:
      this event (and probably, nothing will happen at all)
      */
     bool notifyEraseAllInk( bool const& rEraseAllInk );
-    bool notifyEraseInk( double rEraseInkSize );
+    bool notifySwitchPenMode();
+    bool notifySwitchEraserMode();
+    bool notifyEraseInkWidth( sal_Int32 rEraseInkSize );
 
     /** Notify that user paint is disabled
 
