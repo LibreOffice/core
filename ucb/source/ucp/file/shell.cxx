@@ -312,7 +312,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
 #endif
 
 
-
     // ContentType
     uno::Any aAny;
     aAny <<= rtl::OUString();
@@ -1597,7 +1596,7 @@ shell::remove( sal_Int32 CommandId,
         nError = aDirectory.getNextItem( aItem );
         while( nError == osl::FileBase::E_None )
         {
-              nError = aItem.getFileStatus( aStatus );
+            nError = aItem.getFileStatus( aStatus );
             if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
             {
                 installError( CommandId,
@@ -1623,7 +1622,7 @@ shell::remove( sal_Int32 CommandId,
             nError = aDirectory.getNextItem( aItem );
         }
 
-          aDirectory.close();
+        aDirectory.close();
 
         if( ! whileSuccess )
             return sal_False;     // error code is installed
