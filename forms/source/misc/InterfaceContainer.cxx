@@ -163,12 +163,12 @@ OInterfaceContainer::fakeVbaEventsHack(  sal_Int32 _nIndex )
                     if ( m_xEventAttacher.is() )
                         m_xEventAttacher->registerScriptEvents( _nIndex, vbaEvents );
                 }
-                catch( Exception& e ){ OSL_TRACE("lcl_fakevbaevents - Caught Exception trying to create control eventstuff "); }
+                catch( Exception& ){ OSL_TRACE("lcl_fakevbaevents - Caught Exception trying to create control eventstuff "); }
             }
 
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
     }
 
