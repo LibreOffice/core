@@ -226,7 +226,6 @@ public:
     void                SetUsesCache( sal_Bool );
     sal_Bool            IsExpired() const;
     void                SetName( const String& rName, sal_Bool bSetOrigURL = sal_False );
-    void                SetDontCreateCancellable();
     sal_Bool            IsAllowedForExternalBrowser() const;
     long                GetFileVersion() const;
 

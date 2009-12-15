@@ -3083,13 +3083,6 @@ sal_Bool SfxMedium::IsDownloadDone_Impl()
     return pImp->bDownloadDone;
 }
 
-//----------------------------------------------------------------
-
-void SfxMedium::SetDontCreateCancellable( )
-{
-    OSL_ENSURE( false, "SfxMedium::SetDontCreateCancellable: dead code!" );
-}
-
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()
 {
     if ( !pImp->xInputStream.is() )

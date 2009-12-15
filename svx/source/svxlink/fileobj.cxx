@@ -299,8 +299,6 @@ BOOL SvFileObject::LoadFile_Impl()
         aStreamToLoadFrom.m_xInputStreamToLoadFrom,
         aStreamToLoadFrom.m_bIsReadOnly);
     // setStreamToLoadFrom(0,0);
-    // Keinen Eintrag im Roter Button Menu
-    xMed->SetDontCreateCancellable();
     if( sReferer.Len() )
         xMed->SetReferer( sReferer );
 
