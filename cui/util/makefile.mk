@@ -64,7 +64,6 @@ SHL1STDLIBS= \
             $(SVXLIB) \
             $(AVMEDIALIB) \
             $(SFX2LIB) \
-            $(GOODIESLIB) \
             $(BASEGFXLIB) \
             $(BASICLIB) \
             $(LNGLIB) \
