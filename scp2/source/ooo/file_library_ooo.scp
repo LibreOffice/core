@@ -735,14 +735,6 @@ File gid_File_Lib_Gdiplus
 End
 #endif
 
-File gid_File_Lib_Go
-    Name = LIBNAME(go);
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = SCP2_OOO_BIN_DIR;
-    RegistryID = gid_Starregistry_Services_Rdb;
-End
-
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
