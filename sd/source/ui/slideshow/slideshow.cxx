@@ -705,9 +705,9 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
         {
             PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(pFullScreenViewShellBase->GetMainViewShell().get());
 
-            if( pShell && pShell->GetViewFrame() &&  pShell->GetViewFrame()->GetTopFrame() )
+            if( pShell && pShell->GetViewFrame() )
             {
-                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame()->GetWindow().GetParent());
+                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
                     pWorkWindow->StartPresentationMode( FALSE, isAlwaysOnTop() );

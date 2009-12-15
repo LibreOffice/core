@@ -2538,12 +2538,12 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
             // this is a plugin/activex mode, no toolbars should be visible during slide show
             // after the end of slide show they should be visible again
             SfxViewFrame* pViewFrame = getViewFrame();
-            if( pViewFrame && pViewFrame->GetFrame().GetTopFrame() )
+            if( pViewFrame )
             {
                 try
                 {
                     Reference< frame::XLayoutManager > xLayoutManager;
-                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame().GetFrameInterface(), UNO_QUERY_THROW );
                     if ( ( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) )
                                 >>= xLayoutManager )
                       && xLayoutManager.is() )
