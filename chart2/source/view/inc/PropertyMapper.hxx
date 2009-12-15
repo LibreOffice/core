@@ -91,6 +91,11 @@ public:
                          , const tNameSequence& rPropNames
                          , const rtl::OUString& rPropName );
 
+    static ::com::sun::star::uno::Any*
+                getValuePointerForLimitedSpace( tAnySequence& rPropValues
+                         , const tNameSequence& rPropNames
+                         , bool bLimitedHeight );
+
     static void setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues

@@ -1024,7 +1024,7 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
             if( xCategories.is() )
             {
                 ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
-                aRet = aExplicitCategoriesProvider.getTextualData();
+                aRet = aExplicitCategoriesProvider.getSimpleCategories();
             }
         }
     }

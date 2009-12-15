@@ -168,6 +168,14 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
     return NULL;
 }
 
+uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues
+                         , const tNameSequence& rPropNames
+                         , bool bLimitedHeight)
+{
+    return PropertyMapper::getValuePointer( rPropValues, rPropNames
+        , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
+}
+
 /*
 //set some properties from service style::CharacterProperties:
 //-------- tabpage: Zeichen -----------

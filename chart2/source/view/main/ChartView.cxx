@@ -577,13 +577,13 @@ private:
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
     sal_Int32 m_nMaxAxisIndex;
-    bool m_bShiftXAxisTicks;
+    bool m_bChartTypeUsesShiftedXAxisTicksPerDefault;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
-        , m_bShiftXAxisTicks(false)
+        , m_bChartTypeUsesShiftedXAxisTicksPerDefault(false)
 {
 }
 
@@ -678,7 +678,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
             if(nT==0)
-                m_bShiftXAxisTicks = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
+                m_bChartTypeUsesShiftedXAxisTicksPerDefault = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
 
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount );
             if( !pPlotter )
@@ -932,7 +932,9 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
 
             for( nC=0; nC < aVCooSysList_X.size(); nC++)
             {
-                if( m_bShiftXAxisTicks )
+                ExplicitCategoriesProvider* pExplicitCategoriesProvider = aVCooSysList_X[nC]->getExplicitCategoriesProvider();
+
+                if( m_bChartTypeUsesShiftedXAxisTicksPerDefault || (aExplicitScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() ) )
                     aExplicitIncrement.ShiftedPosition = true;
                 aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
             }

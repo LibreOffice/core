@@ -88,7 +88,7 @@ struct AxisLabelProperties
     double               fRotationAngleDegree;
 
     sal_Int32   nRhythm; //show only each nth label with n==nRhythm
-    bool        bRhythmIsFix; //states wether the given rythm is fix or may be changed
+    bool        bRhythmIsFix; //states wether the given rhythm is fix or may be changed
 
     //methods:
     void init( const ::com::sun::star::uno::Reference<
@@ -120,7 +120,6 @@ struct AxisProperties
     double          m_fLabelDirectionSign;
     //this direction is used to indicate in which direction inner tickmarks are to be drawn
     double          m_fInnerDirectionSign;
-    bool            m_bLabelsOutside;
     LabelAlignment  m_aLabelAlignment;
     sal_Bool        m_bDisplayLabels;
 
@@ -137,13 +136,12 @@ struct AxisProperties
     VLineProperties                     m_aLineProperties;
 
     //for category axes ->
-    sal_Int32                                        m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
+    sal_Int32                           m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
+    bool                                m_bComplexCategories;
     ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XTextualDataSequence >
                                                     m_xAxisTextProvider; //for categries or series names
-    //position of main tickmarks in respect to the indicated value: at value or between neighboured indicated values
-    bool                                             m_bTickmarksAtIndicatedValue;
     //<- category axes
 
     //methods:
@@ -157,6 +155,7 @@ struct AxisProperties
     void initAxisPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp );
 
     static TickmarkProperties getBiggestTickmarkProperties();
+    TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 nTextLevel ) const;
 
 private:
     AxisProperties();

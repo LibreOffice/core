@@ -58,7 +58,7 @@ public:
 private: //methods
     bool createTextShapes_ForAngleAxis(
                        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                     , TickIter& rTickIter
+                     , EquidistantTickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
                      , double fLogicRadius, double fLogicZ );
 };

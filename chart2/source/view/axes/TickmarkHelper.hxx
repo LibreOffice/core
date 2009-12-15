@@ -62,23 +62,48 @@ struct TickInfo
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape > xTextShape;
 
+    rtl::OUString aText;//used only for complex categories so far
+    sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
+
 //methods:
     TickInfo();
     void        updateUnscaledValue( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XScaling >& xInverseScaling );
-};
 
+    sal_Int32 getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const;
+};
 class TickIter
 {
 public:
-    TickIter( const ::com::sun::star::uno::Sequence<
+    virtual ~TickIter(){};
+    virtual TickInfo* firstInfo()=0;
+    virtual TickInfo* nextInfo()=0;
+};
+
+class PureTickIter : public TickIter
+{
+public:
+    PureTickIter( ::std::vector< TickInfo >& rTickInfoVector );
+    virtual ~PureTickIter();
+    virtual TickInfo* firstInfo();
+    virtual TickInfo* nextInfo();
+
+private:
+    ::std::vector< TickInfo >& m_rTickVector;
+    ::std::vector< TickInfo >::iterator m_aTickIter;
+};
+
+class EquidistantTickIter : public TickIter
+{
+public:
+    EquidistantTickIter( const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Sequence< double > >& rTicks
                 , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
-    TickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
+    EquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
             , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
-    virtual ~TickIter();
+    virtual ~EquidistantTickIter();
 
     virtual double*     firstValue();
     virtual double*     nextValue();
@@ -174,7 +199,6 @@ protected: //methods
     bool        isWithinOuterBorder( double fScaledValue ) const; //all within the outer major tick marks
 
     virtual void updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
-    virtual void hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
 
 protected: //member
     ::com::sun::star::chart2::ExplicitScaleData     m_rScale;
@@ -214,10 +238,11 @@ public:
                             , sal_Int32 nSequenceIndex
                             , double fScaledLogicTickValue, double fInnerDirectionSign
                             , const TickmarkProperties& rTickmarkProperties, bool bPlaceAtLabels ) const;
-    ::basegfx::B2DVector  getDistanceAxisTickToText( const AxisProperties& rAxisProperties ) const;
+    ::basegfx::B2DVector  getDistanceAxisTickToText( const AxisProperties& rAxisProperties
+        , bool bIncludeFarAwayDistanceIfSo = false
+        , bool bIncludeSpaceBetweenTickAndText = true ) const;
 
     virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    virtual void        hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;

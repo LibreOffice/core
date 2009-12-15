@@ -38,8 +38,19 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
+#include <vector>
+
 namespace chart
 {
+
+struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
+{
+    rtl::OUString Text;
+    sal_Int32 Count;
+
+    ComplexCategory( const rtl::OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
+    {}
+};
 
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
@@ -49,11 +60,12 @@ public:
                        , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xChartModel
                        );
-    SAL_DLLPRIVATE virtual ~ExplicitCategoriesProvider();
+    virtual ~ExplicitCategoriesProvider();
 
-    //XTextualDataSequence
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData()
-        throw (::com::sun::star::uno::RuntimeException);
+    void init();
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > getSimpleCategories();
+    ::std::vector< ComplexCategory > getCategoriesByLevel( sal_Int32 nLevel );
 
     static ::rtl::OUString getCategoryByIndex(
           const ::com::sun::star::uno::Reference<
@@ -66,7 +78,8 @@ public:
     sal_Int32 getCategoryLevelCount() const;
 
 private: //member
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aExplicitCategories;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
+    ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
     bool volatile m_bDirty;
 
     ::com::sun::star::uno::WeakReference<

@@ -52,7 +52,6 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
 {
     m_aAxisProperties.m_fLabelDirectionSign=0.0;
     m_aAxisProperties.m_fInnerDirectionSign=0.0;
-    m_aAxisProperties.m_bLabelsOutside=true;
     m_aAxisProperties.m_bIsMainAxis=false;
     m_aAxisProperties.m_aLabelAlignment=LABEL_ALIGN_RIGHT;
     m_aAxisProperties.init();
@@ -159,7 +158,7 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
     AxisProperties aAxisProperties(m_aAxisProperties);
 
     sal_Int32 nTick = 0;
-    TickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
+    EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo; pTickInfo = aIter.nextInfo(), nTick++ )
     {

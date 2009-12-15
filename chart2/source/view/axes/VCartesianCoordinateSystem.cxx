@@ -156,7 +156,8 @@ void VCartesianCoordinateSystem::createVAxisList(
                 if( aCrossingScale.AxisType == AxisType::CATEGORY )
                 {
                     aAxisProperties.m_bCrossingAxisIsCategoryAxes = true;
-                    aAxisProperties.m_bAxisBetweenCategories = ChartTypeHelper::shiftTicksAtXAxisPerDefault( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ) );
+                    aAxisProperties.m_bAxisBetweenCategories = ChartTypeHelper::shiftTicksAtXAxisPerDefault( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ) )
+                        || ( aAxisProperties.m_pExplicitCategoriesProvider && aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() );
                 }
             }
 
@@ -171,6 +172,13 @@ void VCartesianCoordinateSystem::createVAxisList(
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
+
+            if( nDimensionIndex == 0 && aAxisProperties.m_nAxisType == AxisType::CATEGORY
+                && aAxisProperties.m_pExplicitCategoriesProvider )
+            {
+                if( aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() )
+                    aAxisProperties.m_bComplexCategories = true;
+            }
             //-------------------
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );

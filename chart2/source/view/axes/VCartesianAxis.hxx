@@ -72,6 +72,12 @@ public:
     virtual void SAL_CALL createShapes();
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
+    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
+    void createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition );
+
+    ::std::auto_ptr< TickIter > createLabelTickIterator( sal_Int32 nTextLevel );
+    ::std::auto_ptr< TickIter > createMaximumLabelTickIterator( sal_Int32 nTextLevel );
+    sal_Int32 getTextLevelCount() const;
 
     //-------------------------------------------------------------------------
     virtual TickmarkHelper* createTickmarkHelper();
@@ -117,16 +123,19 @@ protected: //methods
                        ::com::sun::star::drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickmarkHelper_2D* pTickmarkHelper );
+                     , TickmarkHelper_2D* pTickmarkHelper
+                     , sal_Int32 nScreenDistanceBetweenTicks );
+
+    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickmarkHelper_2D& rTickmarkHelper2D, bool bOnlyAtLabels );
 
     TickmarkHelper_2D* createTickmarkHelper2D();
+    void    hideIdenticalScreenValues(  ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const;
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
                             , TickmarkHelper_2D* pTickmarkHelper2D );
     bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
-                            , TickmarkHelper_2D* pTickmarkHelper);
-    bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
-                                                     , TickmarkHelper_2D* pTickmarkHelper );
+                            , bool bIsHorizontalAxis, bool bIsVerticalAxis );
+    bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis );
 
     ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
     ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;

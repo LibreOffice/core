@@ -98,13 +98,15 @@ void SAL_CALL VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::S
     else if( AxisType::CATEGORY==m_aAxisProperties.m_nAxisType )
     {
         if( m_aAxisProperties.m_pExplicitCategoriesProvider )
-            m_aTextLabels = m_aAxisProperties.m_pExplicitCategoriesProvider->getTextualData();
+            m_aTextLabels = m_aAxisProperties.m_pExplicitCategoriesProvider->getSimpleCategories();
 
         m_bUseTextLabels = true;
     }
 
     m_aAxisLabelProperties.nNumberFormatKey = m_aAxisProperties.m_nNumberFormatKey;
     m_aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
+    if( m_aAxisProperties.m_bComplexCategories && AxisType::CATEGORY == m_aAxisProperties.m_nAxisType )
+        m_aAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
 }
 
 void VAxisBase::recordMaximumTextSize( const Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
@@ -161,6 +163,12 @@ void SAL_CALL VAxisBase::setExplicitScaleAndIncrement(
     m_aIncrement = rIncrement;
 }
 
+void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
+{
+    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
+    apTickmarkHelper->getAllTicks( rAllTickInfos );
+}
+
 bool VAxisBase::prepareShapeCreation()
 {
     //returns true if all is ready for further shape creation and any shapes need to be created
@@ -171,14 +179,9 @@ bool VAxisBase::prepareShapeCreation()
     {
         //-----------------------------------------
         //create all scaled tickmark values
-        if( m_xTextTarget.is() )
-        {
-            TickIter aRemoveIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
-            removeTextShapesFromTicks( aRemoveIter, m_xTextTarget );
-        }
+        removeTextShapesFromTicks();
 
-        std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
-        apTickmarkHelper->getAllTicks( m_aAllTickInfos );
+        createAllTickInfos(m_aAllTickInfos);
         m_bReCreateAllTickInfos = false;
     }
 
@@ -212,15 +215,25 @@ sal_Int32 VAxisBase::getIndexOfLongestLabel( const uno::Sequence< rtl::OUString 
     return nRet;
 }
 
-void VAxisBase::removeTextShapesFromTicks( TickIter& rIter, const Reference< drawing::XShapes >& xTarget )
+void VAxisBase::removeTextShapesFromTicks()
 {
-    for( TickInfo* pTickInfo = rIter.firstInfo()
-        ; pTickInfo; pTickInfo = rIter.nextInfo() )
+    if( m_xTextTarget.is() )
     {
-        if(pTickInfo->xTextShape.is())
+       ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
+        const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
+        for( ; aDepthIter != aDepthEnd; aDepthIter++ )
         {
-            xTarget->remove(pTickInfo->xTextShape);
-            pTickInfo->xTextShape = NULL;
+            ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
+            const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+            for( ; aTickIter != aTickEnd; aTickIter++ )
+            {
+                TickInfo& rTickInfo = (*aTickIter);
+                if(rTickInfo.xTextShape.is())
+                {
+                    m_xTextTarget->remove(rTickInfo.xTextShape);
+                    rTickInfo.xTextShape = NULL;
+                }
+            }
         }
     }
 }
