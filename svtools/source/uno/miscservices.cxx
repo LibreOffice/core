@@ -37,12 +37,26 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <osl/diagnose.h>
+#include <uno/mapping.hxx>
+#include "provider.hxx"
+#include "renderer.hxx"
+
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include "comphelper/servicedecl.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
+using namespace unographic;
 
 using rtl::OUString;
+
+namespace sdecl = comphelper::service_decl;
+
+namespace unographic {
+extern sdecl::ServiceDecl const serviceDecl;
+}
 
 // -------------------------------------------------------------------------------------
 
@@ -60,10 +74,10 @@ using rtl::OUString;
 
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
-DECLARE_CREATEINSTANCE( PathService )
+DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicProvider )
+DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicRendererVCL )
 
 // -------------------------------------------------------------------------------------
-
 extern "C"
 {
 
@@ -74,13 +88,14 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * /* _pServiceManager */, void * _pRegistryKey )
+    void * pServiceManager, void * _pRegistryKey )
 {
     if (_pRegistryKey)
     {
         Reference< XRegistryKey > xRegistryKey (
             reinterpret_cast< XRegistryKey* >( _pRegistryKey ));
         Reference< XRegistryKey > xNewKey;
+        uno::Sequence< ::rtl::OUString >            aServices;
 
         xNewKey = xRegistryKey->createKey (
             OUString::createFromAscii( "/com.sun.star.comp.svtools.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
@@ -92,13 +107,37 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         xNewKey->createKey (
             OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
 
+        // GraphicProvider
+        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                    GraphicProvider::getImplementationName_Static() +
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+
+        aServices = GraphicProvider::getSupportedServiceNames_Static();
+        int i;
+        for( i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[ i ] );
+
+        // GraphicRendererVCL
+        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                    GraphicRendererVCL::getImplementationName_Static() +
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+
+        aServices = ( GraphicRendererVCL::getSupportedServiceNames_Static() );
+        for( i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[ i ] );
+
+        if ( !component_writeInfoHelper( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( _pRegistryKey ), serviceDecl ) )
+                return false;
+
         return sal_True;
     }
     return sal_False;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
-    const sal_Char * pImplementationName, void * _pServiceManager, void * /* _pRegistryKey */)
+    const sal_Char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
 {
     void * pResult = 0;
     if ( _pServiceManager )
@@ -130,6 +169,27 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 SvFilterOptionsDialog_CreateInstance,
                 aServiceNames);
         }
+        else if( 0 == GraphicProvider::getImplementationName_Static().compareToAscii( pImplementationName ) )
+        {
+            xFactory =  ::cppu::createOneInstanceFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
+                GraphicProvider::getImplementationName_Static(),
+                GraphicProvider_CreateInstance,
+                GraphicProvider::getSupportedServiceNames_Static() );
+        }
+        else if( 0 == GraphicRendererVCL::getImplementationName_Static().compareToAscii( pImplementationName ) )
+        {
+            xFactory = ::cppu::createOneInstanceFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
+                GraphicRendererVCL::getImplementationName_Static(),
+                GraphicRendererVCL_CreateInstance,
+                GraphicRendererVCL::getSupportedServiceNames_Static() );
+        }
+        else
+        {
+            pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
+        }
+
         if ( xFactory.is() )
         {
             xFactory->acquire();

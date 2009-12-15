@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,44 +31,40 @@
 
 PRJ=..$/..
 
-PRJNAME=tools
-TARGET=gen
+PRJNAME=svtools
+TARGET=graphic
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : settings.mk
-.INCLUDE :      $(PRJ)$/util$/makefile.pmk
+.INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
+
+.IF "$(GUI)"=="WIN"
+LINKFLAGS=$(LINKFLAGS) /PACKC:32768
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj
+SLOFILES=							\
+            $(SLO)$/grfattr.obj		\
+            $(SLO)$/grfmgr.obj		\
+            $(SLO)$/grfmgr2.obj		\
+            $(SLO)$/grfcache.obj	\
+            $(SLO)$/descriptor.obj	\
+            $(SLO)$/provider.obj	\
+            $(SLO)$/graphic.obj		\
+            $(SLO)$/renderer.obj	\
+            $(SLO)$/graphicunofactory.obj	\
+            $(SLO)$/transformer.obj
 
-SLOFILES=       $(SLO)$/toolsin.obj     \
-            $(SLO)$/b3dtrans.obj                \
-            $(SLO)$/link.obj                \
-            $(SLO)$/bigint.obj              \
-            $(SLO)$/fract.obj               \
-            $(SLO)$/color.obj               \
-            $(SLO)$/gen.obj			\
-            $(SLO)$/config.obj		\
-            $(SLO)$/poly.obj		\
-            $(SLO)$/poly2.obj		\
-            $(SLO)$/svborder.obj \
-            $(SLO)$/line.obj
+EXCEPTIONSFILES=					\
+            $(SLO)$/descriptor.obj	\
+            $(SLO)$/provider.obj	\
+            $(SLO)$/graphic.obj		\
+            $(SLO)$/renderer.obj	\
+            $(SLO)$/graphicunofactory.obj	\
+            $(SLO)$/transformer.obj
 
-OBJFILES=       $(OBJ)$/toolsin.obj     \
-            $(OBJ)$/b3dtrans.obj                \
-            $(OBJ)$/link.obj                \
-            $(OBJ)$/bigint.obj              \
-            $(OBJ)$/fract.obj               \
-            $(OBJ)$/color.obj               \
-            $(OBJ)$/gen.obj			\
-            $(OBJ)$/config.obj		\
-            $(OBJ)$/poly.obj		\
-            $(OBJ)$/poly2.obj		\
-            $(OBJ)$/svborder.obj \
-            $(OBJ)$/line.obj
+# --- Target -------------------------------------------------------
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE : target.mk
+.INCLUDE :  target.mk

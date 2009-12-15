@@ -62,6 +62,7 @@ LIB1FILES=	\
         $(SLB)$/edit.lib		\
         $(SLB)$/filter.lib		\
         $(SLB)$/filter.uno.lib	\
+        $(SLB)$/graphic.lib	\
         $(SLB)$/igif.lib		\
         $(SLB)$/jpeg.lib		\
         $(SLB)$/ixpm.lib		\
