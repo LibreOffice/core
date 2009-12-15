@@ -22467,8 +22467,6 @@
     <resource name="CT_Tc" resource="TextTableCell">
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
-      <action name="end" action="sendTableProperties"/>
-      <action name="end" action="sendRowProperties"/>
       <action name="end" action="sendCellProperties"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
@@ -22498,6 +22496,8 @@
     </resource>
     <resource name="CT_Row" resource="TextTableRow">
       <action name="start" action="startRow"/>
+      <action name="end" action="sendRowProperties"/>
+      <action name="end" action="sendTableProperties"/>
       <action name="end" action="endRow"/>
     </resource>
     <resource name="ST_TblLayoutType" resource="List" generated="yes">

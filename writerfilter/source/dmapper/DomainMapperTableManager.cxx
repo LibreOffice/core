@@ -54,6 +54,7 @@ using namespace ::std;
 DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nRow(0),
     m_nCell(0),
+    m_nGridSpan(1),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
@@ -253,15 +254,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 dmapper_logger->attribute("gridSpan", nIntValue);
                 dmapper_logger->endElement("tablemanager.GridSpan");
 #endif
-                //the cell width is determined by its position in the table grid
-                //it takes 'gridSpan' grid elements
-                IntVectorPtr pCurrentSpans = getCurrentSpans( );
-                if( pCurrentSpans->size() < m_nCell)
-                {
-                    //fill missing elements with '1'
-                    pCurrentSpans->insert( pCurrentSpans->end(), m_nCell - pCurrentSpans->size(), 1 );
-                }
-                pCurrentSpans->push_back( nIntValue );
+                m_nGridSpan = nIntValue;
             }
             break;
             /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -343,6 +336,8 @@ void DomainMapperTableManager::endLevel( )
   -----------------------------------------------------------------------*/
 void DomainMapperTableManager::endOfCellAction()
 {
+    getCurrentSpans()->push_back(m_nGridSpan);
+    m_nGridSpan = 1;
     ++m_nCell;
 }
 /*-- 02.05.2007 14:36:26---------------------------------------------------
