@@ -346,7 +346,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         xDocSh->GetDoc()->DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();
         if ( bShow )
-            pFrame->GetFrame()->Appear();
+            pFrame->GetFrame().Appear();
 
         delete pGroup;
     }

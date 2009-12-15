@@ -3186,11 +3186,11 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
         //the created window has to be located at the same position as the source window
-        Window& rTargetWindow = pTargetFrame->GetFrame()->GetWindow();
-        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame()->GetWindow();
+        Window& rTargetWindow = pTargetFrame->GetFrame().GetWindow();
+        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame().GetWindow();
         rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
 
-//        pTargetFrame->GetFrame()->Appear();
+//        pTargetFrame->GetFrame().Appear();
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
         //initiate SelectShell() to create sub shells

@@ -152,7 +152,7 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pParent, aSet,
-        rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(),
+        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         SID_EVENTCONFIG );
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {

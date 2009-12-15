@@ -173,7 +173,7 @@ inline SfxDispatcher &SwView::GetDispatcher()
 void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() &&
+    if ( !GetViewFrame()->GetFrame().IsInPlace() &&
          (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
@@ -755,7 +755,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pFormShell(0),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
@@ -939,7 +939,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pVRuler->SetActive( sal_True );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
-    if( pViewFrame->GetFrame()->GetParentFrame())
+    if( pViewFrame->GetFrame().GetParentFrame())
     {
         aUsrPref.SetViewHRuler(sal_False);
         aUsrPref.SetViewVRuler(sal_False);
@@ -1046,10 +1046,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 
     /*uno::Reference< awt::XWindow >  aTmpRef;
-    _pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
+    _pFrame->GetFrame().GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());*/
 
-   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
+   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
             OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
@@ -1611,7 +1611,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 
 ErrCode SwView::DoVerb( long nVerb )
 {
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();

@@ -695,7 +695,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     {
         SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
         uno::Reference< frame::XFrame > xFrame =
-                pSourceViewFrm->GetFrame()->GetFrameInterface();
+                pSourceViewFrm->GetFrame().GetFrameInterface();
         xFrame->getContainerWindow()->setVisible(sal_True);
         pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
@@ -859,7 +859,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
-//            pTempFrame->GetFrame()->Appear();
+//            pTempFrame->GetFrame().Appear();
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
@@ -1245,7 +1245,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
-//        pTempFrame->GetFrame()->Appear();
+//        pTempFrame->GetFrame().Appear();
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;

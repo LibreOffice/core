@@ -570,7 +570,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             SfxAllItemSet aNewSet(*aSet.GetPool());
             aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
             if ( pWrtShell )
-                rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame()->GetFrameInterface() );
+                rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
             rPage.PageCreated(aNewSet);
             break;
         }

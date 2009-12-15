@@ -218,7 +218,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
         EnableItem( MN_READONLY_LOADGRAPHIC, FALSE );
 
-    BOOL bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame()->GetParentFrame();
+    BOOL bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);

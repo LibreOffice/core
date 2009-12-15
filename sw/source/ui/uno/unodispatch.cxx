@@ -59,8 +59,7 @@ const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged"
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
 {
-    SfxFrame* pFrame = m_pView->GetViewFrame()->GetFrame();
-    uno::Reference< frame::XFrame> xUnoFrame = pFrame->GetFrameInterface();
+    uno::Reference< frame::XFrame> xUnoFrame = m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
     m_xIntercepted = uno::Reference< frame::XDispatchProviderInterception>(xUnoFrame, uno::UNO_QUERY);
     if(m_xIntercepted.is())
     {

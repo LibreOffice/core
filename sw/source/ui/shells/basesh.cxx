@@ -2548,7 +2548,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
@@ -2567,7 +2567,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetFlyFrmAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
@@ -2582,7 +2582,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetCurAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )

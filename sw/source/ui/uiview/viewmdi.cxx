@@ -181,7 +181,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     nFac = Max( long( MINZOOM ), nFac );
 
     SwViewOption aOpt( *pOpt );
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
         //View updaten.
@@ -264,7 +264,7 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
 
     ACT_KONTEXT(pWrtShell);
 
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() && !bViewOnly )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
         const BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
@@ -350,7 +350,7 @@ void SwView::CreatePageButtons(BOOL bShow)
     pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
     pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
     pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
-    Reference< XFrame > xFrame = GetViewFrame()->GetFrame()->GetFrameInterface();
+    Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
     pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
     pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );

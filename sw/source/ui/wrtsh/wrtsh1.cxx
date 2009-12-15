@@ -645,7 +645,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
     if ( GetCntType() == CNT_OLE &&
-         !GetView().GetViewFrame()->GetFrame()->IsInPlace() )
+         !GetView().GetViewFrame()->GetFrame().IsInPlace() )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         ASSERT( xRef.is(), "OLE not found" );

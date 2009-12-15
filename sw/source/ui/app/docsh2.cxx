@@ -710,7 +710,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bOnly = FALSE;
                     else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
-                        pTmpFrm->GetFrame()->Appear();
+                        pTmpFrm->GetFrame().Appear();
                         bFound = TRUE;
                     }
                     if( bFound && !bOnly )

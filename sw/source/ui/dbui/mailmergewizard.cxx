@@ -310,7 +310,7 @@ void SwMailMergeWizard::CreateTargetDocument()
                 MergeDocuments( m_rConfigItem, *GetSwView() );
     m_rConfigItem.SetMergeDone();
     if( m_rConfigItem.GetTargetView() )
-        m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame()->Appear();
+        m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();
 }
 /*-- 23.08.2004 08:51:36---------------------------------------------------
 

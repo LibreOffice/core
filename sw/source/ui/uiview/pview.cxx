@@ -1822,7 +1822,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     pPageUpBtn(0),
     pPageDownBtn(0),
     pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
-        pViewFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+        pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
     // OD 09.01.2003 #106334#
     mbResetFormDesignMode( false ),
@@ -1913,7 +1913,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         {
             // es gibt noch eine weitere Sicht auf unser Dokument, also
             // aktiviere dieses
-            pFrame->GetFrame()->Appear();
+            pFrame->GetFrame().Appear();
             break;
         }
 */}

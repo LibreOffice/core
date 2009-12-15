@@ -520,7 +520,7 @@ static USHORT nTitleNo = 0;
 
         if (nMode == ENV_NEWDOC)
         {
-            pFrame->GetFrame()->Appear();
+            pFrame->GetFrame().Appear();
 
             if ( rItem.aAddrText.indexOf('<') >= 0 )
             {

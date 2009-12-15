@@ -842,10 +842,9 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                         else
                         {
                             SfxViewFrame *pSfxViewFrame = GetViewFrame();
-                            SfxFrame *pSfxFrame = pSfxViewFrame? pSfxViewFrame->GetFrame() : 0;
                             uno::Reference< frame::XFrame > xFrame;
-                            if (pSfxFrame)
-                                xFrame = pSfxFrame->GetFrameInterface();
+                            if ( pSfxViewFrame )
+                                xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
                             com::sun::star::util::URL aURL;
                             uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
                             uno::Reference< lang::XMultiServiceFactory > xMgr( utl::getProcessServiceFactory(), uno::UNO_QUERY );

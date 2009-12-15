@@ -564,7 +564,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
-                    rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), DLG_SWDROPCAPS );
+                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {

@@ -257,7 +257,7 @@ static sal_uInt16 nBCTitleNo = 0;
         }
         xDocSh->SetTitle( aTmp );
 
-        pViewFrame->GetFrame()->Appear();
+        pViewFrame->GetFrame().Appear();
 
         // Shell ermitteln
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();

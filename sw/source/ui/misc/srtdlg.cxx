@@ -396,7 +396,7 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
         SfxAbstractDialog* pMap = pFact->CreateSfxDialog( &aDelimPB, aSet,
-            rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+            rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );

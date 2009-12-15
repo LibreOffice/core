@@ -518,7 +518,7 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
     ReleaseMouse();
     bFrmDrag = FALSE;
 
-    if ( rView.GetViewFrame() && rView.GetViewFrame()->GetFrame() )
+    if ( rView.GetViewFrame() )
     {
         bExecuteDrag = TRUE;
         StartExecuteDrag();
