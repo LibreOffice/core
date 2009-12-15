@@ -454,7 +454,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_CHART:
                 {
-                    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
+                    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }

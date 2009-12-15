@@ -338,7 +338,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 
     com::sun::star::uno::Reference < com::sun::star::frame::XFrame > xFrame;
     if (GetViewShell())
-        xFrame = GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface();
+        xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG );

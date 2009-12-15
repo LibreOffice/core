@@ -532,7 +532,7 @@ void ScDrawView::MarkListHasChanged()
     //  Verben anpassen
 
     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-    BOOL bOle = pViewSh->GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
     if ( pOle2Obj && !bOle )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
@@ -573,16 +573,13 @@ void ScDrawView::MarkListHasChanged()
 
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        uno::Reference<frame::XController> xController = rFrame.GetController();
+        if (xController.is())
         {
-            uno::Reference<frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->SelectionChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->SelectionChanged();
         }
     }
 

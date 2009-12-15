@@ -401,7 +401,7 @@ ScVbaWindow::getWindowState() throw (uno::RuntimeException)
     sal_Int32 nwindowState = xlNormal;
     ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame()->GetSystemWindow();
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
     if ( pWork )
     {
         if ( pWork -> IsMaximized())
@@ -419,7 +419,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
     _windowstate >>= nwindowState;
     ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame()->GetSystemWindow();
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
     if ( pWork )
     {
         if ( nwindowState == xlMaximized)

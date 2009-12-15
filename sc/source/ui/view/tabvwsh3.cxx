@@ -492,7 +492,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
 
                 if ( bFound )
-                    pViewFrame->GetFrame()->Appear();
+                    pViewFrame->GetFrame().Appear();
 
                 rReq.Ignore();//XXX wird von SFX erledigt
             }
@@ -503,7 +503,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_PRINTPREVIEW:
             {
-                if ( !pThisFrame->GetFrame()->IsInPlace() )          // nicht bei OLE
+                if ( !pThisFrame->GetFrame().IsInPlace() )          // nicht bei OLE
                 {
                     //  print preview is now always in the same frame as the tab view
                     //  -> always switch this frame back to normal view

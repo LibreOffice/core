@@ -435,7 +435,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
     bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );

@@ -105,7 +105,7 @@ void ScFormulaReferenceHelper::enableInput( BOOL bEnable )
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -601,7 +601,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(BOOL bFlag, BOOL bChilds)
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
@@ -641,7 +641,7 @@ void lcl_InvalidateWindows()
         while( pFrame )
         {
             //  #71577# enable everything except InPlace, including bean frames
-            if ( !pFrame->GetFrame()->IsInPlace() )
+            if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);

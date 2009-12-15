@@ -521,7 +521,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
         {
             if ( bPreview )
             {
-                if ( !pViewFrame->GetFrame()->IsInPlace() )
+                if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
                     SC_MOD()->InputEnterHandler();
                     pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );

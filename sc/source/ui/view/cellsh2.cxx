@@ -233,7 +233,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
                 BOOL bWasOpen = FALSE;
                 {
-                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                                         rtl::OUString::createFromAscii("_beamer"),
                                                         frame::FrameSearchFlag::CHILDREN);
