@@ -806,20 +806,34 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
 
         // read in more lines if necessary for multiline values
         aLine = aCurrentLine.Copy( nPos+1 );
-        while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
-               line != rLines.end() )
-            // while there is an even number of tokens; that m_eans
-            // an odd number of doubleqoutes
+        if( aLine.Len() )
         {
-            // copy the newlines also
-            aLine += '\n';
-            aLine += *line;
-            ++line;
+            while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
+                   line != rLines.end() )
+                // while there is an even number of tokens; that means
+                // an odd number of doubleqoutes
+            {
+                // copy the newlines also
+                aLine += '\n';
+                aLine += *line;
+                ++line;
+            }
         }
         aLine = WhitespaceToSpace( aLine );
 
+        // #i100644# handle a missing value (actually a broken PPD)
+        if( ! aLine.Len() )
+        {
+            pValue->m_aValue = String();
+            pValue->m_aValueTranslation = String();
+            if( pValue->m_aOption.Len() &&
+                aKey.CompareTo( "JCL", 3 ) != COMPARE_EQUAL )
+                pValue->m_eType = eInvocation;
+            else
+                pValue->m_eType = eQuoted;
+        }
         // check for invocation or quoted value
-        if( aLine.GetChar(0) == '"' )
+        else if( aLine.GetChar(0) == '"' )
         {
             aLine.Erase( 0, 1 );
             nTransPos = aLine.Search( '"' );
