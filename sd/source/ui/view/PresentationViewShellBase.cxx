@@ -92,10 +92,10 @@ PresentationViewShellBase::PresentationViewShellBase (
     GetUpdateLockManager()->Disable();
 
     // Hide the automatic (non-context sensitive) tool bars.
-    if (_pFrame!=NULL && _pFrame->GetFrame()!=NULL)
+    if (_pFrame!=NULL)
     {
         Reference<beans::XPropertySet> xFrameSet (
-            _pFrame->GetFrame()->GetFrameInterface(),
+            _pFrame->GetFrame().GetFrameInterface(),
             UNO_QUERY);
         if (xFrameSet.is())
         {

@@ -1607,9 +1607,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // view mode is allowed.
     const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase());
 
-    if (GetViewFrame()->GetFrame()->IsInPlace() || bIsRunning)
+    if (GetViewFrame()->GetFrame().IsInPlace() || bIsRunning)
     {
-        if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( !GetViewFrame()->GetFrame().IsInPlace() )
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );

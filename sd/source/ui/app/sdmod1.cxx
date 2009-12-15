@@ -553,7 +553,7 @@ SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, const Refer
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pDocShell, i_rFrame );
         OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
-        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;
@@ -639,7 +639,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             const SfxPoolItem* pRet = SfxFrame::OpenDocumentSynchron( aSet, xTargetFrame );
                             const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
                             if ( pFrameItem && pFrameItem->GetFrame() )
-                                pFrame = pFrameItem->GetFrame()->GetFrame();
+                                pFrame = &pFrameItem->GetFrame()->GetFrame();
                         }
                         else
                         {
@@ -658,7 +658,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);
                                 const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
                                 if ( pFrameItem )
-                                    pFrame = pFrameItem->GetFrame()->GetFrame();
+                                    pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
                             catch (::com::sun::star::uno::Exception e)
                             {
@@ -684,7 +684,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     {
                         pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
                         DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
-                        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+                        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
 
                         if(bNewDocDirect && !bStartWithTemplate)
                         {
@@ -789,7 +789,7 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference<
 
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
         OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
-        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;

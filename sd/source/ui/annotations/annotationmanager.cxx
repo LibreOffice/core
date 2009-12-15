@@ -1075,7 +1075,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     USHORT nId = 0;
 
     // set slot images
-    Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface() );
+    Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
         const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();

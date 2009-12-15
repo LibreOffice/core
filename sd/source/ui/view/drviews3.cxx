@@ -381,7 +381,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             try
             {
-                Reference< XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface(), UNO_SET_THROW );
+                Reference< XFrame > xFrame( pFrame->GetFrame().GetFrameInterface(), UNO_SET_THROW );
 
                 // Save the current configuration of panes and views.
                 Reference<XControllerManager> xControllerManager (
