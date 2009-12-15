@@ -411,7 +411,7 @@
 #include "cppuhelper/weakref.hxx"
 
 
-#include "goodies/grfmgr.hxx"
+#include "svtools/grfmgr.hxx"
 
 #include "helper/simplereferencecomponent.hxx"
 

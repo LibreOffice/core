@@ -73,7 +73,6 @@ SHL1STDLIBS+= \
     $(CPPCANVASLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -254,7 +253,6 @@ SHL5STDLIBS = $(ISDLIB) \
               $(SFX2LIB)          \
               $(SVTOOLLIB)        \
               $(SOTLIB)           \
-              $(GOODIESLIB)       \
               $(VCLLIB)           \
               $(SVLLIB)           \
               $(SOTLIB)           \

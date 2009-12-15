@@ -36,7 +36,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
