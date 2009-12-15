@@ -124,6 +124,8 @@ public:
     /** Converts an Excel error code to a Calc error code. */
     static USHORT       GetScErrorCode( sal_uInt8 nXclError );
 
+    /** Converts the passed BIFF error to a double containing the respective Calc error code. */
+    static double       ErrorToDouble( sal_uInt8 nXclError );
     /** Gets a translated error code or Boolean value from Excel error codes.
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
         @param bErrorOrBool  false = nError is a Boolean value; true = is an error value.
