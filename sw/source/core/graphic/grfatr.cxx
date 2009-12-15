@@ -45,7 +45,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <swtypes.hxx>
 #include <grfatr.hxx>
 #include <swunohelper.hxx>

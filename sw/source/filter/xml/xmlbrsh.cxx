@@ -42,7 +42,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/unomid.hxx>
 #include <svx/brshitem.hxx>
 #include <xmloff/xmluconv.hxx>

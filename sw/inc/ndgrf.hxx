@@ -30,7 +30,7 @@
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
 // --> OD, MAV 2005-08-17 #i53025#
 #include <com/sun/star/embed/XStorage.hpp>

@@ -514,8 +514,8 @@
 
 #include "framework/interaction.hxx"
 
-#include "goodies/grfmgr.hxx"
-#include "goodies/mailenum.hxx"
+#include "svtools/grfmgr.hxx"
+#include "svl/mailenum.hxx"
 
 #include "i18npool/lang.h"
 #include "i18npool/mslangid.hxx"

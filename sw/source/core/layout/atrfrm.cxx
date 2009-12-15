@@ -108,7 +108,7 @@
 ///     include definition of class SvxBrushItem and GraphicObject
 ///     in order to determine, if background is transparent.
 #include <svx/brshitem.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
