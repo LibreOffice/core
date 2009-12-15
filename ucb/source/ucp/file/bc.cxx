@@ -529,9 +529,9 @@ BaseContent::getContentType()
                 // Who am I ?
                 Sequence< beans::Property > seq(1);
                 seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
-                                                -1,
-                                                getCppuType( static_cast< sal_Bool* >(0) ),
-                                                0 );
+                                          -1,
+                                          getCppuType( static_cast< sal_Bool* >(0) ),
+                                          0 );
                 Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
                 sal_Bool IsDocument = xRow->getBoolean( 1 );
 
@@ -688,18 +688,18 @@ BaseContent::createNewContent(
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
-                                    -1,
-                                    getCppuType( static_cast< sal_Bool* >(0) ),
-                                    0 );
+                                  -1,
+                                  getCppuType( static_cast< sal_Bool* >(0) ),
+                                  0 );
         Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
         IsDocument = xRow->getBoolean( 1 );
 
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//          OSL_ENSURE( false,
-//                      "BaseContent::createNewContent - Property value was null!" );
-//          return Reference< XContent >();
+//              OSL_ENSURE( false,
+//                          "BaseContent::createNewContent - Property value was null!" );
+//              return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
