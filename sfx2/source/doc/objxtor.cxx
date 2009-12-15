@@ -539,7 +539,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         return sal_False;
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst( this );
-    if( pFirst && !pFirst->GetFrame()->PrepareClose_Impl( bUI, bForBrowsing ) )
+    if( pFirst && !pFirst->GetFrame().PrepareClose_Impl( bUI, bForBrowsing ) )
         return sal_False;
 
     // prepare views for closing
@@ -575,7 +575,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         // minimierte restoren
         SfxFrame* pTop = pFrame->GetTopFrame();
         SfxViewFrame::SetViewFrame( pTop->GetCurrentViewFrame() );
-        pFrame->GetFrame()->Appear();
+        pFrame->GetFrame().Appear();
 
         // fragen, ob gespeichert werden soll
         short nRet = RET_YES;
@@ -588,7 +588,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
             if (aPrintOptions.IsModifyDocumentOnPrintingAllowed() &&
                 HasName() && getDocProperties()->getPrintDate().Month > 0)
             {
-                SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
+                SfxHelp::OpenHelpAgent( &pFirst->GetFrame(), HID_CLOSE_WARNING );
             }
             const Reference< XTitle > xTitle(pImp->xModel, UNO_QUERY_THROW);
             const ::rtl::OUString     sTitle = xTitle->getTitle ();

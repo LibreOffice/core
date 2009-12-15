@@ -566,7 +566,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
     if ( !m_pData->m_pViewShell )
         throw DisposedException();
 
-    return Reference< XWindow >( GetViewFrame_Impl().GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
+    return Reference< XWindow >( GetViewFrame_Impl().GetFrame().GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
 }
 
 ::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
@@ -822,13 +822,13 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
                 else
                     pSlot = rSlotPool.GetUnoSlot( aURL.Path );
-                if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
                 else
                 {
                     // try to find parent SfxViewFrame
                     uno::Reference< frame::XFrame > xParentFrame;
-                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
                         xParentFrame = uno::Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
 
@@ -843,7 +843,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                                 pFrame;
                                 pFrame = SfxViewFrame::GetNext( *pFrame ) )
                         {
-                            if ( pFrame->GetFrame()->GetFrameInterface() == xParentFrame )
+                            if ( pFrame->GetFrame().GetFrameInterface() == xParentFrame )
                             {
                                 pParentFrame = pFrame;
                                 break;
@@ -879,13 +879,13 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
-                if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                 else
                 {
                     // try to find parent SfxViewFrame
                     uno::Reference< frame::XFrame > xParentFrame;
-                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
                         xParentFrame = uno::Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
 
@@ -900,7 +900,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                                 pFrame;
                                 pFrame = SfxViewFrame::GetNext( *pFrame ) )
                         {
-                            if ( pFrame->GetFrame()->GetFrameInterface() == xParentFrame )
+                            if ( pFrame->GetFrame().GetFrameInterface() == xParentFrame )
                             {
                                 pParentFrame = pFrame;
                                 break;
@@ -1051,7 +1051,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
     {
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
-            pFrame->GetFrame()->SetIsClosing_Impl();
+            pFrame->GetFrame().SetIsClosing_Impl();
         m_pData->m_pViewShell->DiscardClients_Impl();
         m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
 
@@ -1092,10 +1092,10 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             if ( pFrame->GetViewShell() == pShell )
             {
                 // Enter registrations only allowed if we are the owner!
-                if ( pFrame->GetFrame()->OwnsBindings_Impl() )
+                if ( pFrame->GetFrame().OwnsBindings_Impl() )
                     pFrame->GetBindings().ENTERREGISTRATIONS();
-                pFrame->GetFrame()->SetFrameInterface_Impl(  aXFrame );
-                pFrame->GetFrame()->DoClose_Impl();
+                pFrame->GetFrame().SetFrameInterface_Impl(  aXFrame );
+                pFrame->GetFrame().DoClose_Impl();
             }
         }
     }
@@ -1149,7 +1149,7 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
-        m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame()->GetWorkWindow_Impl() );
+        m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame().GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
 }
 
@@ -1327,7 +1327,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             pViewFrame->GetDispatcher()->Update_Impl( sal_True );
 
         Window* pFrameWin = &pViewFrame->GetWindow();
-        if ( pFrameWin != &pViewFrame->GetFrame()->GetWindow() )
+        if ( pFrameWin != &pViewFrame->GetFrame().GetWindow() )
             pFrameWin->Show();
 
         if ( i_eConnect == E_CONNECT )
@@ -1337,29 +1337,29 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             const sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
             const bool bHasPluginMode = ( nPluginMode != 0 );
 
-            SfxFrame* pFrame = pViewFrame->GetFrame();
+            SfxFrame& rFrame = pViewFrame->GetFrame();
             SfxObjectShell& rDoc = *m_pData->m_pViewShell->GetObjectShell();
-            if ( !pFrame->IsMarkedHidden_Impl() )
+            if ( !rFrame.IsMarkedHidden_Impl() )
             {
                 if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
                     pViewFrame->GetDispatcher()->HideUI( TRUE );
                 else
                     pViewFrame->GetDispatcher()->HideUI( FALSE );
 
-                if ( pFrame->IsInPlace() )
+                if ( rFrame.IsInPlace() )
                     pViewFrame->LockAdjustPosSizePixel();
 
                 if ( nPluginMode == 3 )
-                    pFrame->GetWorkWindow_Impl()->SetInternalDockingAllowed( FALSE );
+                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( FALSE );
 
-                if ( !pFrame->IsInPlace() )
+                if ( !rFrame.IsInPlace() )
                     pViewFrame->GetDispatcher()->Update_Impl();
                 pViewFrame->Show();
-                pFrame->GetWindow().Show();
-                if ( !pFrame->IsInPlace() || ( nPluginMode == 3 ) )
-                    pViewFrame->MakeActive_Impl( pFrame->GetFrameInterface()->isActive() );
+                rFrame.GetWindow().Show();
+                if ( !rFrame.IsInPlace() || ( nPluginMode == 3 ) )
+                    pViewFrame->MakeActive_Impl( rFrame.GetFrameInterface()->isActive() );
 
-                if ( pFrame->IsInPlace() )
+                if ( rFrame.IsInPlace() )
                 {
                     pViewFrame->UnlockAdjustPosSizePixel();
                     // force resize for OLE server to fix layout problems of writer and math
@@ -1370,14 +1370,14 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             }
             else
             {
-                DBG_ASSERT( !pFrame->IsInPlace() && !bHasPluginMode, "Special modes not compatible with hidden mode!" );
-                pFrame->GetWindow().Show();
+                DBG_ASSERT( !rFrame.IsInPlace() && !bHasPluginMode, "Special modes not compatible with hidden mode!" );
+                rFrame.GetWindow().Show();
             }
 
             // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
             pViewFrame->UpdateTitle();
 
-            if ( !pFrame->IsInPlace() )
+            if ( !rFrame.IsInPlace() )
                 pViewFrame->Resize( TRUE );
 
             // if there's a JumpMark given, then, well, jump to it

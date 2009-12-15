@@ -287,7 +287,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             USHORT nId = pIdItem ? pIdItem->GetValue() : 0;
 
             // ausfuehren
-            SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
+            SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
             if ( bShow )
             {
                 // Zuerst die Floats auch anzeigbar machen
@@ -341,7 +341,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             String aFact = String::CreateFromAscii("private:factory/");
             aFact += aFactName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
-            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
+            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
             SFX_APP()->ExecuteSlot( aReq );
             const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
@@ -353,7 +353,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_CLOSEWIN:
         {
             // disable CloseWin, if frame is not a task
-            Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+            Reference < XCloseable > xTask( GetFrame().GetFrameInterface(),  UNO_QUERY );
             if ( !xTask.is() )
                 break;
 
@@ -429,7 +429,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             case SID_CLOSEWIN:
             {
                 // disable CloseWin, if frame is not a task
-                Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+                Reference < XCloseable > xTask( GetFrame().GetFrameInterface(),  UNO_QUERY );
                 if ( !xTask.is() )
                     rSet.DisableItem(nWhich);
                 break;

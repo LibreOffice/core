@@ -1130,7 +1130,7 @@ void SfxObjectShell::SetProgress_Impl
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SFX_APP();
-    if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame()->IsClosing_Impl() )
+    if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame().IsClosing_Impl() )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
@@ -2097,9 +2097,9 @@ void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
     {
         if ( bSet )
-            pFrame->GetFrame()->GetWindow().EnterWait();
+            pFrame->GetFrame().GetWindow().EnterWait();
         else
-            pFrame->GetFrame()->GetWindow().LeaveWait();
+            pFrame->GetFrame().GetWindow().LeaveWait();
     }
 }
 
@@ -2159,7 +2159,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
                 // get any visible frame
                 pView = SfxViewFrame::GetFirst(this);
             if ( pView )
-                pFrame = pView->GetFrame();
+                pFrame = &pView->GetFrame();
         }
 
         if ( pFrame )
@@ -2228,7 +2228,7 @@ BOOL SfxObjectShell::IsInPlaceActive()
         return FALSE;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    return pFrame && pFrame->GetFrame()->IsInPlace();
+    return pFrame && pFrame->GetFrame().IsInPlace();
 }
 
 BOOL SfxObjectShell::IsUIActive()
@@ -2237,7 +2237,7 @@ BOOL SfxObjectShell::IsUIActive()
         return FALSE;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    return pFrame && pFrame->GetFrame()->IsInPlace() && pFrame->GetFrame()->GetWorkWindow_Impl()->IsVisible_Impl();
+    return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
 }
 
 void SfxObjectShell::UIActivate( BOOL )

@@ -249,7 +249,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         {
             // ggf. Recording anwerfen
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetFrame()->GetFrame()->GetFrameInterface(),
+                    GetFrame()->GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
 
             com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
@@ -298,7 +298,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             if ( !pView )
                 pView = SfxViewFrame::Current();
             if ( pView )
-              SfxHelp::OpenHelpAgent( pView->GetFrame(), rReq.GetSlot() );
+              SfxHelp::OpenHelpAgent( &pView->GetFrame(), rReq.GetSlot() );
 
             SfxExecFunc pFunc = rSlot.GetExecFnc();
             rShell.CallExec( pFunc, rReq );
@@ -801,7 +801,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         if ( pBindings )
         {
             pBindings->SetDispatcher(this);
-            pBindings->SetActiveFrame( pImp->pFrame->GetFrame()->GetFrameInterface() );
+            pBindings->SetActiveFrame( pImp->pFrame->GetFrame().GetFrameInterface() );
         }
     }
     else
@@ -821,7 +821,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
     if ( bMDI && pImp->pFrame )
     {
-        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
@@ -829,7 +829,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->HidePopups_Impl( FALSE, FALSE, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( FALSE, FALSE, 1 );
     }
 
     if ( pImp->aToDoStack.Count() )
@@ -887,7 +887,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
         if ( pImp->pFrame && !(pImp->pFrame->GetObjectShell()->IsInPlaceActive() ) )
         {
-            SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+            SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
             if ( pWorkWin )
             {
                 for (sal_uInt16 n=0; n<pImp->aChildWins.Count();)
@@ -915,10 +915,10 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
     if ( pNew && pImp->pFrame )
     {
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xOldFrame(
-            pNew->GetFrame()->GetFrameInterface()->getCreator(), com::sun::star::uno::UNO_QUERY );
+            pNew->GetFrame().GetFrameInterface()->getCreator(), com::sun::star::uno::UNO_QUERY );
 
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xMyFrame(
-            GetFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+            GetFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
 
         if ( xOldFrame == xMyFrame )
             bHidePopups = FALSE;
@@ -926,7 +926,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bHidePopups )
     {
-        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
@@ -934,7 +934,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->HidePopups_Impl( TRUE, FALSE, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( TRUE, FALSE, 1 );
     }
 
     Flush();
@@ -1680,10 +1680,10 @@ void SfxDispatcher::SetMenu_Impl()
         SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
-            SfxFrame* pFrm = pTop->GetFrame();
-            if ( pFrm->IsMenuBarOn_Impl() )
+            SfxFrame& rFrame = pTop->GetFrame();
+            if ( rFrame.IsMenuBarOn_Impl() )
             {
-                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -1716,7 +1716,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     sal_Bool bUpdate = bForce;
     while ( pDisp && pDisp->pImp->pFrame )
     {
-        SfxWorkWindow *pWork = pDisp->pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxWorkWindow *pWork = pDisp->pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
         if ( pAct == pDisp || pAct == this )
         {
@@ -1730,7 +1730,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pDisp = pDisp->pImp->pParent;
     }
 
-    if ( !bUpdate || pImp->pFrame->GetFrame()->IsClosing_Impl() )
+    if ( !bUpdate || pImp->pFrame->GetFrame().IsClosing_Impl() )
         return 0;
 
     SfxViewFrame* pTop = pImp->pFrame ? pImp->pFrame->GetTopViewFrame() : NULL;
@@ -1767,14 +1767,14 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( bUIActive && /* !bIsIPActive && */ ( !pClient || !pClient->IsObjectUIActive() ) )
         SetMenu_Impl();
 
-    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
     SfxWorkWindow *pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
     pTaskWin->ResetStatusBar_Impl();
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
     {
-        SfxWorkWindow *pWork = pDispat->pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxWorkWindow *pWork = pDispat->pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
         if ( pAct == pDispat || pAct == this )
         {
@@ -1812,7 +1812,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 {
     sal_uInt32 nHelpId = 0;
     SFX_APP();
-    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
     sal_Bool bIsActive = sal_False;
     sal_Bool bIsTaskActive = sal_False;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
@@ -1974,7 +1974,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
         {
             // internal frames also may control statusbar
             SfxBindings& rBindings = pImp->pFrame->GetBindings();
-            pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
+            pImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
         }
     }
 
@@ -2251,7 +2251,7 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
     sal_uInt16 nLevels = pImp->aStack.Count();
     while ( pParent && pParent->pImp->pFrame )
     {
-        if ( pParent->pImp->pFrame->GetFrame()->HasComponent() )
+        if ( pParent->pImp->pFrame->GetFrame().HasComponent() )
         {
             // Components d"urfen intercepten
             if ( pParent->_TryIntercept_Impl( nSlot, rServer, sal_True ) )
@@ -2745,7 +2745,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
         nShLevel = rDisp.pImp->aStack.Count();
     }
 
-    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
@@ -2785,7 +2785,7 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
         nShLevel = rDisp.pImp->aStack.Count();
     }
 
-    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
@@ -2808,7 +2808,7 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
 //----------------------------------------------------------------------
 void SfxDispatcher::ExecutePopup( const ResId &rId, Window *pWin, const Point *pPos )
 {
-    Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
 /*
     SfxPopupMenuManager aPop( rId, *GetBindings() );
     aPop.AddClipboardFunctions();
@@ -2915,10 +2915,10 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
         SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
-            SfxFrame* pFrm = pTop->GetFrame();
-            if ( pFrm->IsMenuBarOn_Impl() )
+            SfxFrame& rFrame = pTop->GetFrame();
+            if ( rFrame.IsMenuBarOn_Impl() )
             {
-                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;

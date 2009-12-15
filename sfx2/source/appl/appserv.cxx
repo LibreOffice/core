@@ -999,7 +999,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             if ( pView )
-                pView->GetFrame()->Appear();
+                pView->GetFrame().Appear();
 
             const SfxItemSet* pArgs = rReq.GetArgs();
             if ( pArgs && pView )
@@ -1073,9 +1073,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( !xFrame.is() )
             {
                 const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
-                if ( pFrame )
-                    xFrame = pFrame->GetFrameInterface();
+                if ( pViewFrame )
+                    xFrame = pViewFrame->GetFrame().GetFrameInterface();
             }
 
             do  // artificial loop for flow control

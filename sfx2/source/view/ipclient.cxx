@@ -204,7 +204,7 @@ throw (::com::sun::star::uno::RuntimeException)
             // currently needs SFX code
             SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
             SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-            SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
+            SfxWorkWindow *pWorkWin = pFrame->GetFrame().GetWorkWindow_Impl();
             pWorkWin->UpdateObjectBars_Impl();
         }
 */
@@ -234,7 +234,7 @@ uno::Reference < frame::XFrame > SfxInPlaceClient_Impl::GetFrame() const
 {
     if ( !m_pClient )
         throw uno::RuntimeException();
-    return m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface();
+    return m_pClient->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::saveObject()
@@ -736,7 +736,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         }
     }
 
-    if ( !m_pViewSh || m_pViewSh->GetViewFrame()->GetFrame()->IsClosing_Impl() )
+    if ( !m_pViewSh || m_pViewSh->GetViewFrame()->GetFrame().IsClosing_Impl() )
         // sometimes applications reconnect clients on shutting down because it happens in their Paint methods
         return;
 

@@ -240,7 +240,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq, sal_Bool bAsync )
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
-    SfxFrame *pParent = GetFrame()->GetParentFrame();
+    SfxFrame *pParent = GetFrame().GetParentFrame();
     if ( rReq.GetSlot() == SID_RELOAD )
     {
         // Bei CTRL-Reload den aktiven Frame reloaden
@@ -260,11 +260,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
         // Wenn nur ein Reload der Graphiken eines oder mehrerer ChildFrames
         // gemacht werden soll
-        SfxFrame *pFrame = GetFrame();
-        if ( pParent == pFrame && pFrame->GetChildFrameCount() )
+        SfxFrame& rFrame = GetFrame();
+        if ( pParent == &rFrame && rFrame.GetChildFrameCount() )
         {
             sal_Bool bReloadAvailable = sal_False;
-            SfxFrameIterator aIter( *pFrame, sal_False );
+            SfxFrameIterator aIter( rFrame, sal_False );
             SfxFrame *pChild = aIter.FirstFrame();
             while ( pChild )
             {
@@ -303,7 +303,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     {
         case SID_EDITDOC:
         {
-            if ( GetFrame()->HasComponent() )
+            if ( GetFrame().HasComponent() )
                 break;
 
             // Wg. Doppeltbelegung in Toolboxen (mit/ohne Ctrl) ist es auch
@@ -488,7 +488,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                         // ReloadForEdit bei Framesets schaltet auch FramesetEditmode
                         sal_Bool bIsReadonly = GetObjectShell()->IsReadOnly();
-                        if ( bIsReadonly != bWasReadonly && !GetFrame()->GetParentFrame() )
+                        if ( bIsReadonly != bWasReadonly && !GetFrame().GetParentFrame() )
                         {
                             SfxBoolItem aItem( SID_EDIT_FRAMESET, !bIsReadonly );
                             GetDispatcher()->Execute( SID_EDIT_FRAMESET,
@@ -537,7 +537,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // AutoLoad ist ggf. verboten
             SFX_REQUEST_ARG(rReq, pAutoLoadItem, SfxBoolItem, SID_AUTOLOAD, sal_False);
             if ( pAutoLoadItem && pAutoLoadItem->GetValue() &&
-                 GetFrame()->IsAutoLoadLocked_Impl() )
+                 GetFrame().IsAutoLoadLocked_Impl() )
                 return;
 
             SfxObjectShellLock xOldObj( pSh );
@@ -552,7 +552,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // ggf. beim User nachfragen
             sal_Bool bDo = ( GetViewShell()->PrepareClose() != FALSE );
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
-            if ( bDo && GetFrame()->DocIsModified_Impl() &&
+            if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
                 QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_LASTVERSION) );
@@ -582,7 +582,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxViewFrame *pView = GetFirst( xOldObj );
                 while ( pView )
                 {
-                    Reference< XFrame > xFrame( pView->GetFrame()->GetFrameInterface() );
+                    Reference< XFrame > xFrame( pView->GetFrame().GetFrameInterface() );
                     OSL_ENSURE( xFrame.is(), "SfxViewFrame::ExecReload_Impl: no XFrame?!" );
                     aViewFrames.push_back( ViewDescriptor( xFrame, pView->GetCurViewId() ) );
 
@@ -812,11 +812,11 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         // Ich bin gerade am Reloaden und Yielde so vor mich hin ...
         return;
 
-    GetFrame()->GetParentFrame();
+    GetFrame().GetParentFrame();
     SfxWhichIter aIter( rSet );
     for ( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )
     {
-        if ( GetFrame()->HasComponent() )
+        if ( GetFrame().HasComponent() )
         {
             // Wenn die Komponente es nicht selbst dispatched, dann
             // macht es auch keinen Sinn!
@@ -1027,7 +1027,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     DBG_CHKTHIS(SfxViewFrame, 0);
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
-    GetFrame()->ReleasingComponent_Impl( sal_True );
+    GetFrame().ReleasingComponent_Impl( sal_True );
     if ( GetWindow().HasChildPathFocus( sal_True ) )
     {
         DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
@@ -1081,7 +1081,7 @@ sal_Bool SfxViewFrame::Close()
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
 
-    DBG_ASSERT( GetFrame()->IsClosing_Impl() || !GetFrame()->GetFrameInterface().is(), "ViewFrame closed too early!" );
+    DBG_ASSERT( GetFrame().IsClosing_Impl() || !GetFrame().GetFrameInterface().is(), "ViewFrame closed too early!" );
 
     // Wenn bis jetzt noch nicht gespeichert wurde, sollen eingebettete Objekte
     // auch nicht mehr automatisch gespeichert werden!
@@ -1136,7 +1136,7 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
         SfxViewFrame *pFrame = GetParentViewFrame();
         while ( pFrame )
         {
-            if ( !pOldFrame || !pOldFrame->GetFrame()->IsParent( pFrame->GetFrame() ) )
+            if ( !pOldFrame || !pOldFrame->GetFrame().IsParent( &pFrame->GetFrame() ) )
                 pFrame->pDispatcher->DoParentActivate_Impl();
             pFrame = pFrame->GetParentViewFrame();
         }
@@ -1154,8 +1154,8 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
     // ViewFrames, erh"alt er ein ParentDeactivate
     if ( bUI )
     {
-//        if ( GetFrame()->GetWorkWindow_Impl() )
-//            GetFrame()->GetWorkWindow_Impl()->SaveStatus_Impl();
+//        if ( GetFrame().GetWorkWindow_Impl() )
+//            GetFrame().GetWorkWindow_Impl()->SaveStatus_Impl();
 /*
         SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
         if( pMed )
@@ -1170,7 +1170,7 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
         SfxViewFrame *pFrame = GetParentViewFrame();
         while ( pFrame )
         {
-            if ( !pNewFrame || !pNewFrame->GetFrame()->IsParent( pFrame->GetFrame() ) )
+            if ( !pNewFrame || !pNewFrame->GetFrame().IsParent( &pFrame->GetFrame() ) )
                 pFrame->pDispatcher->DoParentDeactivate_Impl();
             pFrame = pFrame->GetParentViewFrame();
         }
@@ -1187,7 +1187,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
     {
         if ( GetViewShell() && GetWindow().IsVisible() )
         {
-            if ( GetFrame()->IsInPlace() )
+            if ( GetFrame().IsInPlace() )
             {
                 /*
                 Size aSize( GetViewShell()->GetWindow()->GetSizePixel() );
@@ -1215,7 +1215,7 @@ sal_Bool SfxViewFrame::SetBorderPixelImpl
 {
     pImp->aBorder = rBorder;
 
-    if ( IsResizeInToOut_Impl() && !GetFrame()->IsInPlace() )
+    if ( IsResizeInToOut_Impl() && !GetFrame().IsInPlace() )
     {
         Size aSize = pVSh->GetWindow()->GetOutputSizePixel();
         if ( aSize.Width() && aSize.Height() )
@@ -1320,14 +1320,14 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
 
             case SFX_HINT_DEINITIALIZING:
-                GetFrame()->DoClose();
+                GetFrame().DoClose();
                 break;
             case SFX_HINT_DYING:
                 // when the Object is being deleted, destroy the view too
                 if ( xObjSh.Is() )
                     ReleaseObjectShell_Impl();
                 else
-                    GetFrame()->DoClose();
+                    GetFrame().DoClose();
                 break;
 
         }
@@ -1378,7 +1378,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
             case SFX_EVENT_TOGGLEFULLSCREENMODE:
             {
-                if ( GetFrame()->OwnsBindings_Impl() )
+                if ( GetFrame().OwnsBindings_Impl() )
                     GetBindings().GetDispatcher_Impl()->Update_Impl( sal_True );
                 break;
             }
@@ -1441,7 +1441,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 
 SfxViewFrame::SfxViewFrame
 (
-    SfxFrame*           pFrame,
+    SfxFrame&           rFrame,
     SfxObjectShell*     pObjShell
 )
 
@@ -1452,21 +1452,21 @@ SfxViewFrame::SfxViewFrame
     (default ist die zuerst registrierte SfxViewShell-Subklasse).
 */
 
-    : pImp( new SfxViewFrame_Impl( pFrame ) )
+    : pImp( new SfxViewFrame_Impl( rFrame ) )
     , pDispatcher(0)
     , pBindings( new SfxBindings )
     , nAdjustPosPixelLock( 0 )
 {
     DBG_CTOR( SfxViewFrame, NULL );
 
-    pFrame->SetCurrentViewFrame_Impl( this );
-    pFrame->SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
+    rFrame.SetCurrentViewFrame_Impl( this );
+    rFrame.SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
     Construct_Impl( pObjShell );
 
-    pImp->pWindow = new SfxFrameViewWindow_Impl( this, pFrame->GetWindow() );
-    pImp->pWindow->SetSizePixel( pFrame->GetWindow().GetOutputSizePixel() );
-    pFrame->SetOwnsBindings_Impl( sal_True );
-    pFrame->CreateWorkWindow_Impl();
+    pImp->pWindow = new SfxFrameViewWindow_Impl( this, rFrame.GetWindow() );
+    pImp->pWindow->SetSizePixel( rFrame.GetWindow().GetOutputSizePixel() );
+    rFrame.SetOwnsBindings_Impl( sal_True );
+    rFrame.CreateWorkWindow_Impl();
 }
 
 //------------------------------------------------------------------------
@@ -1481,14 +1481,14 @@ SfxViewFrame::~SfxViewFrame()
 
     ReleaseObjectShell_Impl();
 
-    if ( GetFrame()->OwnsBindings_Impl() )
+    if ( GetFrame().OwnsBindings_Impl() )
         // Die Bindings l"oscht der Frame!
         KillDispatcher_Impl();
 
     delete pImp->pWindow;
 
-    if ( GetFrame() && GetFrame()->GetCurrentViewFrame() == this )
-        GetFrame()->SetCurrentViewFrame_Impl( NULL );
+    if ( GetFrame().GetCurrentViewFrame() == this )
+        GetFrame().SetCurrentViewFrame_Impl( NULL );
 
     // von Frame-Liste abmelden
     SfxApplication *pSfxApp = SFX_APP();
@@ -1632,7 +1632,7 @@ void SfxViewFrame::ShowStatusText( const String& /*rText*/)
 /* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
              framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
              extended to support a new interface to support ShowStatusText/HideStatusText
-    SfxWorkWindow* pWorkWin = GetFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow* pWorkWin = GetFrame().GetWorkWindow_Impl();
     SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
     if ( pMgr )
     {
@@ -1648,7 +1648,7 @@ void SfxViewFrame::HideStatusText()
 /* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
              framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
              extended to support a new interface to support ShowStatusText/HideStatusText
-    SfxWorkWindow* pWorkWin = GetFrame()->GetWorkWindow_Impl();
+    SfxWorkWindow* pWorkWin = GetFrame().GetWorkWindow_Impl();
     SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
     if ( pMgr )
         pMgr->GetStatusBar()->ShowItems();
@@ -1794,7 +1794,7 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         }
         else
         {
-            Window *pWindow = &GetFrame()->GetTopFrame()->GetWindow();
+            Window *pWindow = &GetFrame().GetTopFrame()->GetWindow();
             if ( !bEnable )
                 pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
             if ( !bEnable || pImp->bWindowWasEnabled )
@@ -1855,12 +1855,12 @@ void SfxViewFrame::Show()
 
     // Frame-Window anzeigen, aber nur wenn der ViewFrame kein eigenes Window
     // hat oder wenn er keine Component enth"alt
-    if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
+    if ( &GetWindow() == &GetFrame().GetWindow() || !GetFrame().HasComponent() )
         GetWindow().Show();
-    GetFrame()->GetWindow().Show();
+    GetFrame().GetWindow().Show();
 
 /*    SfxViewFrame* pCurrent = SfxViewFrame::Current();
-    if ( GetFrame()->GetFrameInterface()->isActive() &&
+    if ( GetFrame().GetFrameInterface()->isActive() &&
             pCurrent != this &&
             ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) &&
             !GetActiveChildFrame_Impl() )
@@ -1899,7 +1899,7 @@ void SfxViewFrame::LockObjectShell_Impl( sal_Bool bLock )
 //--------------------------------------------------------------------
 void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
 {
-    if ( GetViewShell() && !GetFrame()->IsClosing_Impl() )
+    if ( GetViewShell() && !GetFrame().IsClosing_Impl() )
     {
         if ( IsVisible_Impl() )
         {
@@ -1918,7 +1918,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
                 }
 
                 SfxViewFrame* pCurrent = SfxViewFrame::Current();
-                css::uno::Reference< css::frame::XFrame > xFrame = GetFrame()->GetFrameInterface();
+                css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
                 if ( !bPreview )
                 {
                     SetViewFrame( this );
@@ -1934,7 +1934,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
                         if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
                             ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) )
-                                GetFrame()->GrabFocusOnComponent_Impl();
+                                GetFrame().GrabFocusOnComponent_Impl();
                     }
                 }
                 else
@@ -1976,10 +1976,10 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
 
         pImp->pActiveChild = pViewFrame;
 
-        Reference< XFramesSupplier > xFrame( GetFrame()->GetFrameInterface(), UNO_QUERY );
+        Reference< XFramesSupplier > xFrame( GetFrame().GetFrameInterface(), UNO_QUERY );
         Reference< XFrame >  xActive;
         if ( pViewFrame )
-            xActive = pViewFrame->GetFrame()->GetFrameInterface();
+            xActive = pViewFrame->GetFrame().GetFrameInterface();
 
         if ( xFrame.is() )  // PB: #74432# xFrame cann be NULL
             xFrame->setActiveFrame( xActive );
@@ -2232,7 +2232,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         // create and load new ViewShell
         SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
             *GetObjectShell(),
-            GetFrame()->GetFrameInterface(),
+            GetFrame().GetFrameInterface(),
             Sequence< PropertyValue >(),    // means "reuse existing model's args"
             nViewId,
             false
@@ -2313,7 +2313,7 @@ void SfxViewFrame::ExecView_Impl
                 if ( nFrame == 0 )
                     nFrame = USHRT_MAX;
 
-                SfxFrameIterator aIter( *GetFrame(), sal_False );
+                SfxFrameIterator aIter( GetFrame(), sal_False );
                 SfxFrame *pFrame = aIter.FirstFrame();
                 sal_uInt16 nActFrame = 1;
                 while ( pFrame )
@@ -2376,7 +2376,7 @@ void SfxViewFrame::ExecView_Impl
             }
 
             // ViewData bei FrameSets rekursiv holen
-            GetFrame()->GetViewData_Impl();
+            GetFrame().GetViewData_Impl();
             SfxMedium* pMed = GetObjectShell()->GetMedium();
 
             // do not open the new window hidden
@@ -2571,7 +2571,7 @@ void SfxViewFrame::StateView_Impl
 //-------------------------------------------------------------------------
 void SfxViewFrame::ToTop()
 {
-    GetFrame()->Appear();
+    GetFrame().Appear();
 }
 
 //-------------------------------------------------------------------------
@@ -2581,40 +2581,34 @@ SfxViewFrame* SfxViewFrame::GetParentViewFrame() const
     Der ParentViewFrame ist der ViewFrame des ParentFrames
 */
 {
-    SfxFrame *pFrame = GetFrame()->GetParentFrame();
+    SfxFrame *pFrame = GetFrame().GetParentFrame();
     return pFrame ? pFrame->GetCurrentViewFrame() : NULL;
 }
 
 //-------------------------------------------------------------------------
-SfxFrame* SfxViewFrame::GetFrame() const
+SfxFrame& SfxViewFrame::GetFrame() const
 /*
     Beschreibung:
     GetFrame liefert den Frame, in dem sich der ViewFrame befindet
 */
 {
-    return pImp->pFrame;
-}
-
-//-------------------------------------------------------------------------
-void SfxViewFrame::SetFrame_Impl( SfxFrame *pFrame )
-{
-    pImp->pFrame = pFrame;
+    return pImp->rFrame;
 }
 
 //-------------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 {
-    return GetFrame()->GetTopFrame()->GetCurrentViewFrame();
+    return GetFrame().GetTopFrame()->GetCurrentViewFrame();
 }
 
 Window& SfxViewFrame::GetWindow() const
 {
-    return pImp->pWindow ? *pImp->pWindow : GetFrame()->GetWindow();
+    return pImp->pWindow ? *pImp->pWindow : GetFrame().GetWindow();
 }
 
 sal_Bool SfxViewFrame::DoClose()
 {
-    return GetFrame()->DoClose();
+    return GetFrame().DoClose();
 }
 
 String SfxViewFrame::GetActualPresentationURL_Impl() const
@@ -2638,7 +2632,7 @@ void SfxViewFrame::SetModalMode( sal_Bool bModal )
 
 BOOL SfxViewFrame::IsInModalMode() const
 {
-    return pImp->bModal || GetFrame()->GetWindow().IsInModalMode();
+    return pImp->bModal || GetFrame().GetWindow().IsInModalMode();
 }
 
 void SfxViewFrame::Resize( BOOL bForce )
@@ -2650,7 +2644,7 @@ void SfxViewFrame::Resize( BOOL bForce )
         SfxViewShell *pShell = GetViewShell();
         if ( pShell )
         {
-            if ( GetFrame()->IsInPlace() )
+            if ( GetFrame().IsInPlace() )
             {
                 Point aPoint = GetWindow().GetPosPixel();
                 DoAdjustPosSizePixel( pShell, aPoint, aSize );
@@ -2930,7 +2924,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             // try to find any active recorder on this frame
             ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetFrame()->GetFrameInterface(),
+                    GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
 
             com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(xFrame,com::sun::star::uno::UNO_QUERY);
@@ -2995,7 +2989,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_TOGGLESTATUSBAR:
         {
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetFrame()->GetFrameInterface(),
+                    GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
 
             Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
@@ -3045,11 +3039,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             SfxViewFrame *pTop = GetTopViewFrame();
             if ( pTop )
             {
-                WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetTopWindow_Impl();
+                WorkWindow* pWork = (WorkWindow*) pTop->GetFrame().GetTopWindow_Impl();
                 if ( pWork )
                 {
                     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                            GetFrame()->GetFrameInterface(),
+                            GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
 
                     Reference< ::com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
@@ -3084,7 +3078,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                         }
                         pWork->ShowFullScreenMode( bNewFullScreenMode );
                         pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
-                        GetFrame()->GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
+                        GetFrame().GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
                         if ( !pItem )
                             rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
                         rReq.Done();
@@ -3138,7 +3132,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                     ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-                            GetFrame()->GetFrameInterface(),
+                            GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
 
                     com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
@@ -3161,7 +3155,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                     ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-                            GetFrame()->GetFrameInterface(),
+                            GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
 
                     com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
@@ -3175,7 +3169,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-                            GetFrame()->GetFrameInterface(),
+                            GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
                     com::sun::star::uno::Any aProp = xSet->getPropertyValue(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
@@ -3196,7 +3190,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     SfxViewFrame* pTop = GetTopViewFrame();
                     if ( pTop )
                     {
-                        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetTopWindow_Impl();
+                        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame().GetTopWindow_Impl();
                         if ( pWork )
                         {
                             rSet.Put( SfxBoolItem( nWhich, pWork->IsFullScreenMode() ) );
@@ -3245,7 +3239,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     {
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
             return;
-        Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface();
+        Reference < XFrame > xFrame = GetFrame().GetTopFrame()->GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
         BOOL bShow = FALSE;
         BOOL bHasChild = xBeamer.is();
@@ -3346,7 +3340,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_BROWSER )
         {
-            Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface()->
+            Reference < XFrame > xFrame = GetFrame().GetTopFrame()->GetFrameInterface()->
                             findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
             if ( !xFrame.is() )
                 rState.DisableItem( nSID );
@@ -3364,7 +3358,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT /*nId*/ )
 {
     SfxWorkWindow* pWork = 0;
-    pWork = GetFrame()->GetWorkWindow_Impl();
+    pWork = GetFrame().GetWorkWindow_Impl();
     return pWork;
 }
 

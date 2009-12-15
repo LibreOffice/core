@@ -39,7 +39,7 @@ struct SfxViewFrame_Impl
     String              aFrameTitle;
     TypeId              aLastType;
     String              aActualURL;
-    SfxFrame*           pFrame;
+    SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
     Window*             pWindow;
     SfxViewFrame*       pActiveChild;
@@ -57,8 +57,8 @@ struct SfxViewFrame_Impl
     sal_Bool            bActive;
     String              aFactoryName;
 
-                        SfxViewFrame_Impl( SfxFrame* i_pFrame )
-                        : pFrame( i_pFrame )
+                        SfxViewFrame_Impl( SfxFrame& i_rFrame )
+                        : rFrame( i_rFrame )
                         , pReloader(0 )
                         , pWindow( 0 )
                         , bWindowWasEnabled(sal_True)
@@ -83,7 +83,7 @@ public:
                             bActive( FALSE ),
                             pFrame( p )
                         {
-                            p->GetFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+                            p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
 
     virtual void        Resize();

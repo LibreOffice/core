@@ -392,7 +392,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_ACTIVATE_STYLE_APPLY:
         {
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    GetViewFrame()->GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
 
             Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
@@ -488,7 +488,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( pMailDocType )
                     aDocType = pMailDocType->GetValue();
 
-                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
                 SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
 
                 if ( nId == SID_MAIL_SENDDOC )
@@ -532,7 +532,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame()->GetFrameInterface() );
+            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
             const rtl::OUString aModuleManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ));
@@ -690,7 +690,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( !pShowItem || bActive != pImp->bPlugInsActive )
             {
                 SfxFrame* pTopFrame = GetFrame()->GetTopFrame();
-                if ( pTopFrame != GetFrame()->GetFrame() )
+                if ( pTopFrame != &GetFrame()->GetFrame() )
                 {
                     // FramesetDocument
                     SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
@@ -776,7 +776,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             aPrinterName = Printer::GetDefaultPrinterName();
                         if ( aPrinterName.getLength() > 0 )
                         {
-                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
                             ::rtl::OUStringBuffer aBuffer( 60 );
                             aBuffer.append( RetrieveLabelFromCommand(
@@ -874,7 +874,7 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
     if ( !bActive )
-        GetFrame()->GetFrame()->Appear();
+        GetFrame()->GetFrame().Appear();
 }
 
 //--------------------------------------------------------------------
@@ -896,7 +896,7 @@ void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
-    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
     uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
@@ -909,12 +909,12 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
-    if ( !pFrame->GetFrame()->IsClosing_Impl() ||
+    if ( !pFrame->GetFrame().IsClosing_Impl() ||
         SfxViewFrame::Current() != pFrame )
             pFrame->GetDispatcher()->Update_Impl( TRUE );
     pFrame->GetBindings().HidePopups(FALSE);
 
-    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
     // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
     // if ( xParentFrame.is() )
     //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
@@ -995,7 +995,7 @@ void SfxViewShell::Activate( BOOL bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
         if ( pSh->GetModel().is() )
-            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame()->GetController() );
+            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame().GetController() );
 
         SetCurrentDocument();
     }
@@ -1685,7 +1685,7 @@ BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     if (!pImp->pAccExec)
     {
         pImp->pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame()->GetFrameInterface());
+        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame().GetFrameInterface());
     }
 
     return pImp->pAccExec->execute(aKey.GetKeyCode());
@@ -2169,7 +2169,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
     {
         // document couldn't be closed or it shouldn't, now try at least to close the frame
         com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
-                GetViewFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                GetViewFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
         if ( xFrame.is() )
         {
             try

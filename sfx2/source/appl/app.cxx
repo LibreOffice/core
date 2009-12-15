@@ -560,11 +560,11 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
     String aMsg( SfxResId( STR_ISMODIFIED ) );
     aMsg.SearchAndReplaceAscii( "%1", rDoc.GetTitle() );
 
-    SfxFrame *pFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
-    pFrame->Appear();
+    SfxFrame& rFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
+    rFrame.Appear();
 
     WinBits nBits = WB_YES_NO_CANCEL | WB_DEF_NO;
-    QueryBox aBox( &pFrame->GetWindow(), nBits, aMsg );
+    QueryBox aBox( &rFrame.GetWindow(), nBits, aMsg );
 
     return aBox.Execute();
 }
@@ -688,7 +688,7 @@ uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() co
     while ( pTop->GetParentViewFrame_Impl() )
         pTop = pTop->GetParentViewFrame_Impl();
 
-    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusIndicator();
+    return pTop->GetFrame().GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
@@ -805,7 +805,7 @@ SfxApplication::ChooseScript()
         OSL_TRACE("create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
           AbstractScriptSelectorDialog* pDlg =

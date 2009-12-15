@@ -1327,8 +1327,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
     } while( FALSE );
 
     SfxViewFrame* pVFrame;
-    if( nRet && 0 != (pVFrame = SfxViewFrame::Current()) &&
-        pVFrame->GetFrame() )
+    if( nRet && 0 != (pVFrame = SfxViewFrame::Current()) )
     {
         ULONG nHelpId = 0;
         if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
@@ -1361,7 +1360,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( nHelpId )
         {
             nHelpId += HID_AUTOCORR_HELP_START - 1;
-            SfxHelp::OpenHelpAgent( pVFrame->GetFrame(), nHelpId );
+            SfxHelp::OpenHelpAgent( &pVFrame->GetFrame(), nHelpId );
         }
     }
 

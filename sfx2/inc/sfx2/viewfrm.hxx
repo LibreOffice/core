@@ -159,7 +159,7 @@ protected:
     virtual                 ~SfxViewFrame();
 
 public:
-                            SfxViewFrame( SfxFrame* pFrame, SfxObjectShell *pDoc = NULL );
+                            SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = NULL );
 
                             TYPEINFO();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
@@ -238,18 +238,18 @@ public:
 
     virtual SfxObjectShell* GetObjectShell();
     USHORT                  GetCurViewId() const;
-    SfxFrame*               GetFrame() const;
+    SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
 
     BOOL                    DoClose();
     ULONG                   GetFrameType() const
-                            { return GetFrame()->GetFrameType(); }
+                            { return GetFrame().GetFrameType(); }
     SfxFrame*               GetTopFrame() const
-                            { return GetFrame()->GetTopFrame(); }
+                            { return GetFrame().GetTopFrame(); }
     void                    GetTargetList( TargetList& rList ) const
-                            { GetFrame()->GetTargetList( rList ); }
+                            { GetFrame().GetTargetList( rList ); }
     void                    CancelTransfers()
-                            { GetFrame()->CancelTransfers(); }
+                            { GetFrame().CancelTransfers(); }
 
     void                    SetModalMode( BOOL );
     BOOL                    IsInModalMode() const;
@@ -266,7 +266,6 @@ public:
     void                        ChildWindowState(SfxItemSet&);
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void SetFrame_Impl( SfxFrame* );
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE BOOL IsDowning_Impl() const;

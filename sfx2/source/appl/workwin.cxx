@@ -1434,8 +1434,8 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
     if ( pDispatcher )
     {
         SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        if ( pFrame && pFrame->GetFrame() )
-           xFrame = pFrame->GetFrame()->GetFrameInterface();
+        if ( pFrame )
+           xFrame = pFrame->GetFrame().GetFrameInterface();
     }
 
     return xFrame;

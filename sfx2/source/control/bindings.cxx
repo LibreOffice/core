@@ -722,7 +722,7 @@ void SfxBindings::InvalidateAll
         pImp->pCaches->GetObject(n)->Invalidate(bWithMsg);
 /*
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
-        ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+        ( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
 
     if ( bWithMsg && xFrame.is() )
         xFrame->contextChanged();
@@ -1384,7 +1384,7 @@ void SfxBindings::UpdateSlotServer_Impl()
         if ( !nRegLevel )
         {
             ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
-                ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                ( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
             //if ( xFrame.is() )
             //    xFrame->contextChanged();
             pImp->bContextChanged = FALSE;
@@ -1923,7 +1923,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
             pImp->bContextChanged = FALSE;
             /*
             ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
-                ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                ( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
             if ( xFrame.is() )
                 xFrame->contextChanged();*/
         }
@@ -2030,7 +2030,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xProv;
         if ( pDisp )
             xProv = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider >
-                                        ( pDisp->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                                        ( pDisp->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
 
         SetDispatchProvider_Impl( xProv );
         InvalidateAll( sal_True );
@@ -2313,7 +2313,7 @@ void SfxBindings::SetActiveFrame( const ::com::sun::star::uno::Reference< ::com:
         SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > ( rFrame, ::com::sun::star::uno::UNO_QUERY ) );
     else
         SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > (
-            pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY ) );
+            pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY ) );
 }
 
 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxBindings::GetActiveFrame() const
@@ -2322,7 +2322,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxBin
     if ( xFrame.is() || !pDispatcher )
         return xFrame;
     else
-        return pDispatcher->GetFrame()->GetFrame()->GetFrameInterface();
+        return pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
 }
 
 void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & rProv )
@@ -2350,7 +2350,7 @@ SystemWindow* SfxBindings::GetSystemWindow() const
     while ( pFrame->GetParentViewFrame_Impl() )
         pFrame = pFrame->GetParentViewFrame_Impl();
     SfxViewFrame* pTop = pFrame->GetTopViewFrame();
-    return pTop->GetFrame()->GetTopWindow_Impl();
+    return pTop->GetFrame().GetTopWindow_Impl();
 }
 
 BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
@@ -2374,7 +2374,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
                     xServiceManager->createInstance(our_aModuleManagerName)
                     , ::com::sun::star::uno::UNO_QUERY_THROW);
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
-                    pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW);
+                    pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY_THROW);
                 sAppName = xModuleManager->identify(xFrame);
             } catch(::com::sun::star::uno::Exception&) {}
             Sequence<beans::PropertyValue> source;

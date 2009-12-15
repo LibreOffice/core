@@ -234,7 +234,7 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
             for ( const SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pCur );
                     !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pCur ) )
             {
-                bOther = ( pFrame->GetFrame() != this );
+                bOther = ( &pFrame->GetFrame() != this );
             }
 
             SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur) );
@@ -317,7 +317,7 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
         {
             SfxViewFrame* pFrm;
             for( pFrm = SfxViewFrame::GetFirst( pObj );
-                 pFrm && pFrm->GetFrame() == this;
+                 pFrm && &pFrm->GetFrame() == this;
                  pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
             // Keine anderer Frame mehr auf Doc -> Cancel
             if( !pFrm )
@@ -558,7 +558,7 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 }
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame *p )
-    : SfxPoolItem( nWhichId ), pFrame( p ? p->GetFrame() : NULL )
+    : SfxPoolItem( nWhichId ), pFrame( p ? &p->GetFrame() : NULL )
 {
     wFrame = pFrame;
 }
@@ -948,7 +948,7 @@ void SfxFrame::Resize()
                 if ( nHandle )
                 {
                     SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-                    pWork = SfxViewFrame::GetFirst( pDoc )->GetFrame()->GetWorkWindow_Impl();
+                    pWork = SfxViewFrame::GetFirst( pDoc )->GetFrame().GetWorkWindow_Impl();
                 }
             }
 

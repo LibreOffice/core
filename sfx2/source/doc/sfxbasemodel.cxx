@@ -374,38 +374,35 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
             pFrame = SfxViewFrame::GetNext( *pFrame, pObjectShell )
         )
     {
-        SfxFrame* pSfxFrame = pFrame->GetFrame();
-        if ( pSfxFrame )
+        SfxFrame& rSfxFrame = pFrame->GetFrame();
+        try
         {
-            try
+            // get vcl window related to the frame and lock it if it is still not locked
+            uno::Reference< frame::XFrame > xFrame = rSfxFrame.GetFrameInterface();
+            Window* pWindow = GetVCLWindow( xFrame );
+            if ( !pWindow )
+                throw uno::RuntimeException();
+
+            if ( pWindow->IsEnabled() )
             {
-                // get vcl window related to the frame and lock it if it is still not locked
-                uno::Reference< frame::XFrame > xFrame = pSfxFrame->GetFrameInterface();
-                Window* pWindow = GetVCLWindow( xFrame );
-                if ( !pWindow )
-                    throw uno::RuntimeException();
+                pWindow->Disable();
 
-                if ( pWindow->IsEnabled() )
+                try
                 {
-                    pWindow->Disable();
-
-                    try
-                    {
-                        sal_Int32 nLen = m_aLockedFrames.getLength();
-                        m_aLockedFrames.realloc( nLen + 1 );
-                        m_aLockedFrames[nLen] = xFrame;
-                    }
-                    catch( uno::Exception& )
-                    {
-                        pWindow->Enable();
-                        throw;
-                    }
+                    sal_Int32 nLen = m_aLockedFrames.getLength();
+                    m_aLockedFrames.realloc( nLen + 1 );
+                    m_aLockedFrames[nLen] = xFrame;
+                }
+                catch( uno::Exception& )
+                {
+                    pWindow->Enable();
+                    throw;
                 }
             }
-            catch( uno::Exception& )
-            {
-                OSL_ENSURE( sal_False, "Not possible to lock the frame window!\n" );
-            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Not possible to lock the frame window!\n" );
         }
     }
 }
@@ -3416,9 +3413,9 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
         throw uno::Exception(); // TODO: error handling
 
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False );
-    if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame()->IsInPlace() )
+    if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame()->GetFrameInterface()->getContainerWindow() );
+        Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame().GetFrameInterface()->getContainerWindow() );
         Size aWinSize = pWindow->GetSizePixel();
         awt::Size aCurrent = getVisualAreaSize( nAspect );
         Size aDiff( aSize.Width-aCurrent.Width, aSize.Height-aCurrent.Height );
@@ -4025,7 +4022,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
             pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
         )
     {
-        if ( pViewFrame->GetFrame()->GetFrameInterface() == i_rFrame )
+        if ( pViewFrame->GetFrame().GetFrameInterface() == i_rFrame )
             break;
     }
     if ( !pViewFrame )
@@ -4061,7 +4058,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
         pTargetFrame->PrepareForDoc_Impl( *GetObjectShell() );
 
         // create view frame
-        pViewFrame = new SfxViewFrame( pTargetFrame, GetObjectShell() );
+        pViewFrame = new SfxViewFrame( *pTargetFrame, GetObjectShell() );
     }
     return pViewFrame;
 }
@@ -4131,7 +4128,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
-        pViewFrame->GetFrame()->SetMenuBarOn_Impl( FALSE );
+        pViewFrame->GetFrame().SetMenuBarOn_Impl( FALSE );
 
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
@@ -4139,12 +4136,12 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
         pViewFrame->ForceOuterResize_Impl( FALSE );
         pViewFrame->GetBindings().HidePopups( TRUE );
 
-        SfxFrame* pFrame = pViewFrame->GetFrame();
+        SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible
-        pFrame->GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-        pFrame->GetWorkWindow_Impl()->Lock_Impl( TRUE );
+        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
+        rFrame.GetWorkWindow_Impl()->Lock_Impl( TRUE );
 
-        pFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
     }
 

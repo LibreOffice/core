@@ -220,8 +220,8 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( !pBindings->GetDispatcher_Impl() || !pBindings->GetDispatcher_Impl()->GetFrame() )
         return;
 
-    SfxFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame();
-    SfxFrame *pParent = pFrame->GetParentFrame();
+    SfxFrame& rFrame = pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame();
+    SfxFrame *pParent = rFrame.GetParentFrame();
     if ( pParent )
         // parent may intercept
         xDispatch = TryGetDispatch( pParent );
@@ -229,7 +229,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( !xDispatch.is() )
     {
         // no interception
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame = pFrame->GetFrameInterface();
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame = rFrame.GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
             xDispatch = xProv->queryDispatch( aCommand, ::rtl::OUString(), 0 );
@@ -253,7 +253,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( !xDisp.is() && pFrame->HasComponent() )
     {
         // no interception
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame = pFrame->GetFrameInterface();
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pFrame->GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aCommand, ::rtl::OUString(), 0 );
@@ -755,7 +755,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         {
             SfxViewFrame* pViewFrame = pDispatcher->GetFrame();
             if (pViewFrame)
-                xFrameRef = pViewFrame->GetFrame()->GetFrameInterface();
+                xFrameRef = pViewFrame->GetFrame().GetFrameInterface();
         }
         SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
         if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !

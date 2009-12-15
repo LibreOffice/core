@@ -1135,7 +1135,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     if ( !pTargetFrame && !xTargetFrame.is() && SfxViewFrame::Current() )
-        pTargetFrame = SfxViewFrame::Current()->GetFrame();
+        pTargetFrame = &SfxViewFrame::Current()->GetFrame();
 
     // check if caller has set a callback
     SFX_REQUEST_ARG(rReq, pLinkItem, SfxLinkItem, SID_DONELINK, FALSE );
@@ -1324,7 +1324,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             if ( pShell->GetController() == xController )
             {
-                pCntrFrame = pShell->GetViewFrame()->GetFrame();
+                pCntrFrame = &pShell->GetViewFrame()->GetFrame();
                 break;
             }
         }
