@@ -655,15 +655,15 @@ namespace fileaccess {
                 aAny <<= excep;
                 cancelCommandExecution( aAny,xEnv );
             }
-//          ioErrorCode = IOErrorCode_ALREADY_EXISTING;
-//          cancelCommandExecution(
-//              ioErrorCode,
-//              generateErrorArguments(aUncPath),
-//              xEnv,
-//              rtl::OUString(
-//                  RTL_CONSTASCII_USTRINGPARAM(
-//                      "the folder exists")),
-//              xComProc );
+//              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+//              cancelCommandExecution(
+//                  ioErrorCode,
+//                  generateErrorArguments(aUncPath),
+//                  xEnv,
+//                  rtl::OUString(
+//                      RTL_CONSTASCII_USTRINGPARAM(
+//                          "the folder exists")),
+//                  xComProc );
         }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
@@ -814,20 +814,20 @@ namespace fileaccess {
                          errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
-                         aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "source file/folder does not exist"));
                         break;
                     }
                     else
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
-                         aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "a general error during transfer command"));
                     break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
-                     aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    aMsg = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "a general error during transfer command"));
                     break;
             }
