@@ -79,7 +79,7 @@
 +SLOFILES_X64=$(SLO_X64)$/xmlparse.obj \
 +             $(SLO_X64)$/xmlrole.obj \
 +             $(SLO_X64)$/xmltok.obj
-+CDEFS_X64+=-DXML_UNICODE
++CDEFS_X64+=-DXML_UNICODE -DCOMPILED_FROM_DSP
 +CFLAGS_X64+=-I..
 +LIB1TARGET_X64=$(SLB_X64)$/$(TARGET)_xmlparse.lib
 +LIB1OBJFILES_X64=$(SLO_X64)$/xmlparse.obj
