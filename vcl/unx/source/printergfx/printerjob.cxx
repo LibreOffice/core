@@ -914,6 +914,9 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
 
 void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
 {
+    if( ! PrinterInfoManager::get().getUseJobPatch() )
+        return;
+
     const PPDKey* pKey = NULL;
 
     if( rJobData.m_pParser )
