@@ -10332,12 +10332,17 @@ void PDFWriterImpl::setFont( const Font& rFont )
 
 void PDFWriterImpl::push( sal_uInt16 nFlags )
 {
+    OSL_ENSURE( m_aGraphicsStack.size() > 0, "invalid graphics stack" );
     m_aGraphicsStack.push_front( m_aGraphicsStack.front() );
     m_aGraphicsStack.front().m_nFlags = nFlags;
 }
 
 void PDFWriterImpl::pop()
 {
+    OSL_ENSURE( m_aGraphicsStack.size() > 1, "pop without push" );
+    if( m_aGraphicsStack.size() < 2 )
+        return;
+
     GraphicsState aState = m_aGraphicsStack.front();
     m_aGraphicsStack.pop_front();
     GraphicsState& rOld = m_aGraphicsStack.front();
