@@ -345,7 +345,7 @@ void ScXMLDataPilotTableContext::EndElement()
             break;
             case SERVICE :
             {
-                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceObject, sServiceSourceName,
+                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
                                     sServiceUsername, sServicePassword);
                 pDPObject->SetServiceData(aServiceDesk);
             }
