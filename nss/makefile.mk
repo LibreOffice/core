@@ -47,9 +47,7 @@ all:
 
 TARFILE_NAME=nss_3_12_5
 TARFILE_ROOTDIR=mozilla
-PATCH_FILES=nss.patch dtoa.patch
-    # Note: dtoa.patch fixes https://bugzilla.mozilla.org/show_bug.cgi?id=516396. It can be removed as soon as
-    # we upgrade to a new NSS version which already contains this fix.
+PATCH_FILES=nss.patch
 
 .IF "$(debug)" != ""
 .ELSE
