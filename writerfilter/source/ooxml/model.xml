@@ -17360,7 +17360,7 @@
       </define>
       <define name="CT_TblGridCol">
         <attribute name="w">
-          <text/>
+          <ref name="ST_TwipsMeasure"/>
           <xs:documentation>Grid Column Width</xs:documentation>
         </attribute>
       </define>
@@ -22203,9 +22203,6 @@
     </resource>
     <resource name="CT_R" resource="Stream">
       <action name="start" action="startCharacterGroup"/>
-      <action name="start" action="sendTableProperties"/>
-      <action name="start" action="sendRowProperties"/>
-      <action name="start" action="sendCellProperties"/>
     </resource>
     <resource name="ST_Hint" resource="List">
       <value tokenid="ooxml:Value_ST_Hint_default">default</value>
@@ -22368,7 +22365,7 @@
     </resource>
     <resource name="CT_TblGrid" resource="Properties">
       <element name="tblGridChange" tokenid="ooxml:CT_TblGrid_tblGridChange"/>
-      <action name="end" action="propagateCharacterProperties"/>
+      <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_TcBorders" resource="Properties">
@@ -22425,6 +22422,9 @@
     <resource name="CT_Tc" resource="TextTableCell">
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
+      <action name="end" action="sendTableProperties"/>
+      <action name="end" action="sendRowProperties"/>
+      <action name="end" action="sendCellProperties"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_Cnf" resource="String" generated="yes"/>

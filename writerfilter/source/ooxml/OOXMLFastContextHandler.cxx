@@ -985,11 +985,14 @@ void OOXMLFastContextHandler::propagateRowProperties()
 
 void OOXMLFastContextHandler::propagateTableProperties()
 {
+    OOXMLPropertySet::Pointer_t pProps = getPropertySet();
 #ifdef DEBUG_ELEMENT
-    debug_logger->element("propagateTableProperties");
+    debug_logger->startElement("propagateTableProperties");
+    debug_logger->addTag(toPropertiesTag(pProps));
+    debug_logger->endElement("propagateTableProperties");
 #endif
 
-    mpParserState->setTableProperties(getPropertySet());
+    mpParserState->setTableProperties(pProps);
 }
 
 void OOXMLFastContextHandler::sendCellProperties()
@@ -1640,7 +1643,16 @@ void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
 
 OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
 {
-    return OOXMLValue::Pointer_t();
+    return mpValue;
+}
+
+void OOXMLFastContextHandlerValue::lcl_endFastElement
+(Token_t Element)
+throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    sendPropertyToParent();
+
+    endAction(Element);
 }
 
 /*

@@ -415,6 +415,9 @@ public:
     virtual void setValue(OOXMLValue::Pointer_t pValue);
     virtual OOXMLValue::Pointer_t getValue() const;
 
+    virtual void lcl_endFastElement(Token_t Element)
+    throw (uno::RuntimeException, xml::sax::SAXException);
+
     virtual string getType() const { return "Value"; }
 
 protected:
