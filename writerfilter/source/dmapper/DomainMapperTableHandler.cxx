@@ -299,7 +299,7 @@ void DomainMapperTableHandler::endTable()
             aTableStyleIter->second >>= sTableStyleName;
             StyleSheetTablePtr pStyleSheetTable = m_rDMapper_Impl.GetStyleSheetTable();
             const StyleSheetEntryPtr pStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( sTableStyleName );
-            pTableStyle = static_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
+            pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
             m_aTableProperties->erase( aTableStyleIter );
 
             if( pStyleSheet )
@@ -589,26 +589,42 @@ void DomainMapperTableHandler::endTable()
 #ifdef DEBUG_DOMAINMAPPER
 //-->debug cell properties of all rows
     {
+        dmapper_logger->startElement("debug.table");
         ::rtl::OUString sNames;
         for( sal_Int32  nDebugRow = 0; nDebugRow < aCellProperties.getLength(); ++nDebugRow)
         {
+            dmapper_logger->startElement("debug.row");
+            dmapper_logger->attribute("n", nDebugRow);
+
             const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nDebugRow];
             sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
             (void) nDebugCells;
             for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
             {
+                dmapper_logger->startElement("debug.cell");
+                dmapper_logger->attribute("n", nDebugCell);
+
                 const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
                 sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
                 for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
                 {
                     const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
+                    dmapper_logger->startElement("debug.property");
+                    dmapper_logger->attribute("name", sName);
+                    dmapper_logger->endElement("debug.property");
                     sNames += sName;
                     sNames += ::rtl::OUString('-');
                 }
                 sNames += ::rtl::OUString('+');
+
+                dmapper_logger->endElement("debug.cell");
             }
             sNames += ::rtl::OUString('|');
+
+            dmapper_logger->endElement("debug.row");
         }
+
+        dmapper_logger->endElement("debug.table");
         (void)sNames;
     }
 //--<
@@ -661,7 +677,7 @@ void DomainMapperTableHandler::endTable()
             dmapper_logger->chars("failed to import table!");
 #endif
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
         catch ( uno::Exception e )
         {
             dmapper_logger->startElement("exception");

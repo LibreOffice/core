@@ -422,15 +422,12 @@ DomainMapper_Impl::DomainMapper_Impl(
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
     m_TableManager.setHandler(pTableHandler);
-
-    m_TableManager.startLevel();
 }
 /*-- 01.09.2006 10:22:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::~DomainMapper_Impl()
 {
-    m_TableManager.endLevel();
 }
 /*-------------------------------------------------------------------------
 

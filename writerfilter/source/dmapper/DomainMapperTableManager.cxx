@@ -287,11 +287,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     cellProps( pProps );
                 }
                 break;
-            case NS_ooxml::LN_tblStart:
-                {
-                    startLevel( );
-                }
-                break;
             default:
                 bRet = false;
 
