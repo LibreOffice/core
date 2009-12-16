@@ -1098,7 +1098,7 @@ bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
 }
 
 //adding erasing features with UserPaintOverlay
-bool EventMultiplexer::notifyEraseInk( sal_Int32 rEraseInkSize )
+bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
         boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
