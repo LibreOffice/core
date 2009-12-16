@@ -810,7 +810,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG 
         {
             const PPDValue* pValue = pKey->getValue( nPaperBin );
             if( pValue )
-                aRet = pValue->m_aOptionTranslation.Len() ? pValue->m_aOptionTranslation : pValue->m_aOption;
+                aRet = aData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption );
         }
     }
 
