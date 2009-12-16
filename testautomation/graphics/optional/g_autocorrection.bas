@@ -52,7 +52,6 @@ sub main
 
     gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-    'qaErrorLog "#i76832# - tToolsAutocorrectCustomQuotes (x4) outcommented due to Bug."
     Call tToolsAutocorrectCustomQuotes (TRUE)
     Call tToolsAutocorrectCustomQuotes (FALSE)
     Call tToolsAutocorrectOption

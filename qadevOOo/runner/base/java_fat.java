@@ -279,7 +279,7 @@ public class java_fat implements TestBase
                         tEnv = getEnv(entry, param);
                     }
 
-                    MultiMethodTest ifc = null;
+                    // MultiMethodTest ifc = null;
                     lib.TestResult res = null;
 
                     // run the interface test twice if it failed.
@@ -319,17 +319,7 @@ public class java_fat implements TestBase
                             }
                         }
                     }
-                    if (res != null)
-                    {
-                        for (int k = 0; k < aSubEntry.SubEntryCount; k++)
-                        {
-                            DescEntry aSubSubEntry = aSubEntry.SubEntries[k];
-                            if (res.hasMethod( aSubSubEntry.entryName))
-                            {
-                                aSubSubEntry.State = res.getStatusFor(aSubSubEntry.entryName).toString();
-                            }
-                        }
-                    }
+                    setState(aSubEntry, res);
 
                     sumIt.summarizeUp(aSubEntry);
 
@@ -385,6 +375,21 @@ public class java_fat implements TestBase
             closeExistingOffice();
             return retValue;
         }
+
+    private void setState(DescEntry aSubEntry, lib.TestResult res)
+    {
+        if (res != null)
+        {
+            for (int k = 0; k < aSubEntry.SubEntryCount; k++)
+            {
+                DescEntry aSubSubEntry = aSubEntry.SubEntries[k];
+                if (res.hasMethod( aSubSubEntry.entryName))
+                {
+                    aSubSubEntry.State = res.getStatusFor(aSubSubEntry.entryName).toString();
+                }
+            }
+        }
+    }
 
     private TestEnvironment getEnv(DescEntry entry, TestParameters param)
         {

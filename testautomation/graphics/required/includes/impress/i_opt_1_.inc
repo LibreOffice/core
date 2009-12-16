@@ -189,7 +189,7 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Checking if we are on slide 3."
     i = fGetSlideNumber()
     if (i<>3) then
-                warnlog "We are on the wrong slide! Should be 2 but it is: " & i
+                warnlog "We are on the wrong slide! Should be 3 but it is: " & i
     endif
 
     printlog "Close the navigator View->Navigator."

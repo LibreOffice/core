@@ -161,13 +161,13 @@ public class TestParameters extends Hashtable {
      * This parameter contains the timeout used<br>
      * by the watcher
      */
-    public Integer TimeOut = new Integer(30000);
+    public Integer TimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the timeout used<br>
      * by the complex tests
      */
-    public Integer ThreadTimeOut = new Integer(30000);
+    public Integer ThreadTimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the time which the office could use to close for

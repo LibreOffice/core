@@ -94,7 +94,7 @@ BearbeitenImageMap SID_IMAP
 BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY
 
 ' **** Writer
-BearbeitenInhalteEinfuegenWriter FN_PASTESPECIAL
+BearbeitenInhalteEinfuegenWriter .uno:PasteSpecial
 BearbeitenAenderungenAufzeichnen FN_REDLINE_ON
 BearbeitenAenderungenAnzeigen FN_REDLINE_SHOW
 BearbeitenAenderungenAkzeptierenOderVerwerfen FN_REDLINE_ACCEPT
@@ -109,7 +109,7 @@ BearbeitenVerzeichniseintrag FN_EDIT_IDX_ENTRY_DLG
 BearbeitenHyperlink FN_EDIT_HYPERLINK
 
 ' **** Calc
-BearbeitenInhalteEinfuegenCalc FID_PASTE_CONTENTS
+BearbeitenInhalteEinfuegenCalc .uno:PasteSpecial
 BearbeitenAenderungenAufzeichnenCalc FID_CHG_RECORD
 BearbeitenAenderungenSchuetzen SID_CHG_PROTECT
 BearbeitenAenderungenKommentarCalc FID_CHG_COMMENT
@@ -133,7 +133,7 @@ BearbeitenManuellenUmbruchLoeschenSpaltenumbruch FID_DEL_COLBRK
 BearbeitenManuellenUmbruchLoeschenZeilenumbruch FID_DEL_ROWBRK
 
 ' **** Draw / Impress
-BearbeitenInhalteEinfuegenDraw SID_PASTE2
+BearbeitenInhalteEinfuegenDraw .uno:PasteSpecial
 BearbeitenVerknuepfungenDraw SID_MANAGE_LINKS
 BearbeitenDuplizieren SID_COPYOBJECTS
 BearbeitenUeberblenden SID_POLYGON_MORPHING

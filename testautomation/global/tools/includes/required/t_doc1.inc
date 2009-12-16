@@ -58,6 +58,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/swriter", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentWriter.IsMax() = false ) then		
+			DocumentWriter.Maximize()
+			Wait( 2000 )
+		end if        				
     case "CALC"
         Kontext "DocumentCalc"
         if gNoNewDoc = TRUE then
@@ -65,6 +69,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/scalc", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentCalc.IsMax() = false ) then		
+			DocumentCalc.Maximize()
+			Wait( 2000 )
+		end if        						
     case "IMPRESS"
         Kontext "DocumentImpress"
         if gNoNewDoc = TRUE then
@@ -82,6 +90,10 @@ sub hNewDocument ( optional bANewDoc )
             end if
             Kontext "DocumentImpress"
             Sleep 2
+            if ( DocumentImpress.IsMax() = false ) then		
+            	DocumentImpress.Maximize()
+            	Wait( 2000 )
+            end if        							
         end if
     case "DRAW"
         Kontext "DocumentDraw"
@@ -90,6 +102,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/sdraw", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentDraw.IsMax() = false ) then		
+			DocumentDraw.Maximize()
+			Wait( 2000 )
+		end if        									
     case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         if gNoNewDoc = TRUE then
@@ -101,15 +117,22 @@ sub hNewDocument ( optional bANewDoc )
         sleep (1)
         if Navigator.Exists(5) then Navigator.Close
         Kontext "DocumentMasterDoc"
+        if ( DocumentMasterDoc.IsMax() = false ) then		
+			DocumentMasterDoc.Maximize()
+			Wait( 2000 )
+		end if        											
     case "MATH"
         Kontext "DocumentMath"
         if gNoNewDoc = TRUE then
             FileOpen "FileName", "private:factory/smath", "SynchronMode", TRUE
         else
-            '                                             FileOpen "FileName", "private:factory/smath", "FrameName", "_blank"
             FileOpen "FileName", "private:factory/smath", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentMath"
+        if ( DocumentMath.IsMax() = false ) then		
+			DocumentMath.Maximize()
+			Wait( 2000 )
+		end if        													
     case "HTML"
         Kontext "DocumentWriterWeb"
         if gNoNewDoc = TRUE then
@@ -118,6 +141,10 @@ sub hNewDocument ( optional bANewDoc )
             FileOpen "FileName", "private:factory/swriter/web", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentWriterWeb"
+        if ( DocumentWriterWeb.IsMax() = false ) then		
+			DocumentWriterWeb.Maximize()
+			Wait( 2000 )
+		end if        															
     case "DATABASE"
         FileOpen "FileName", "private:factory/sdatabase?Interactive", "FrameName", "_default", "SynchronMode", TRUE
         Kontext "DatabaseWizard"

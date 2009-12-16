@@ -38,10 +38,10 @@
 '\***********************************************************************
 
 sub main
-    use "chart2\required\includes\ch2_flexible_source_range_selection.inc"
-    use "chart2\required\includes\ch2_flexible_source_range_selection01.inc"
-    use "chart2\tools\ch_tools_common.inc"
-    use "chart2\tools\ch_tools_chart_type.inc"
+
+    use "chart2\optional\includes\ch2_flexible_source_range_selection.inc"
+    use "chart2\optional\includes\ch2_flexible_source_range_selection01.inc"
+
     Call hStatusIn("Chart2", "ch2_flexible_source_range_selection.bas")    
         printlog "----------------------------------------------"
         printlog "Updatetest for Flexible Source Range Selection"        
@@ -66,6 +66,10 @@ end sub
 sub LoadIncludeFiles    
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"          
+
+    use "chart2\tools\ch_tools_common.inc"
+    use "chart2\tools\ch_tools_chart_type.inc"
+
     Call GetUseFiles
     gApplication = "CALC"    
 end sub

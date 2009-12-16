@@ -44,7 +44,7 @@ testcase tUpdtWizardEuroconverter
     dim cMsg as string 
     
     dim iKnownCurrencies as integer
-    const KNOWN_CURRENCIES = 13
+    const KNOWN_CURRENCIES = 16
     const TARGET_FILE = "barfly.ods"
     
     

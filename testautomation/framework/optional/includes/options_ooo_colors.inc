@@ -37,118 +37,176 @@
 '*
 '\******************************************************************************
 
-
 testcase tOOoColors
-    dim USERCOLOR as String
+
+    printlog( "OOo color palette" )
+
     dim myColor(4)      as String
     dim oldColor(4)     as String
     dim currentColor(4) as String
     dim chColor(4)      as String
-    dim iDefaultColorCount  as Integer
-    dim iModifiedColorCount as Integer
-    dim iTemp as integer
-    dim i as integer
     
-    USERCOLOR = "TT-Test" + iSprache
-    myColor(1) = USERCOLOR
+    const DEFAULT_COLOR_COUNT = 103
+    const CHANGED_COLOR_COUNT = 104
+    const USER_COLOR = "TT-Test-Color"
+    
+    myColor(1) = USER_COLOR
     myColor(2) = "255"
     myColor(3) = "245"
     myColor(4) = "200"
-    
-    printlog " testing Tools/Options -> colors"
-    '///check if all settings are saved in configuration ( StarOffice / Colors )
-    '///open Tools / Options / StarOffice / Colors
-    printlog " - Save current settings and modify/add some colors"
+
+    printlog( "Check if all settings are saved in configuration ( StarOffice / Colors )" )
+    printlog( "Open Tools / Options / StarOffice / Colors" )
     ToolsOptions
-        hToolsOptions ( "StarOffice", "Colors" )
     
-        '///determine the number of currently registered colors
-        iDefaultColorCount = Farbe.GetItemCount()
-        for i = 1 to iDefaultColorCount 
-            printlog "("+i+"/"+iDefaultColorCount +"): '"+Farbe.getItemText(i)+"'"
-        next i
-        printlog " - Currently colors are listed: '" + iDefaultColorCount + "'"
-        '///delete the userdefined color if it exists
-        call DeleteColor( USERCOLOR )
-        '///determine the number of currently registered colors
+    Kontext "ExtrasOptionenDlg"
+    if ( ExtrasOptionenDlg.exists( 1 ) ) then
+    
+        hToolsOptions ( "StarOffice", "Colors" )
+        
+        printlog( "Delete the userdefined color if it exists" )
+        if ( Farbe.GetItemCount() <> DEFAULT_COLOR_COUNT + 1 ) then
+            call DeleteColor( USER_COLOR )
+        endif
+    
+        printlog( "Check the number of currently registered colors - cancel test on error" )
         Kontext "TabFarben"
-        iDefaultColorCount = Farbe.GetItemCount
-        printlog " - Colors after deleting: '" + iDefaultColorCount + "'"
-        '///select the last color in the list
-        printlog " - jump to the last color in the list."
+        if ( Farbe.GetItemCount() <> DEFAULT_COLOR_COUNT ) then
+            warnlog( "The number of colors has changed, stopping test" )
+            printlog( "Expected: " & DEFAULT_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+            printlog( "Close the Tools/Options dialog with OK" )
+            Kontext "ExtrasOptionenDlg"
+            ExtrasOptionenDlg.OK
+            WaitSlot( 2000 )
+            goto endsub
+        else
+            printlog( "Number of colors is ok: " & DEFAULT_COLOR_COUNT )
+        endif        
+        
+        printlog( "Jump to the last color in the list." )
         Kontext "TabFarben"
-        Farbe.Select( iDefaultColorCount )
-        '///get the settings for the current selected color 
-        '(204,204,255)
-        call getColorRGB(oldColor())
-        '///change settings for last color and press 'modify' 
-        '(255,255,255)
-        call ModifyColorRGB_PGUP(iDefaultColorCount)
-        '///get the changed colors (Sun 4,255,255,255)
+        Farbe.Select( Farbe.GetItemCount() )
+        
+        printlog( "Get the settings for the current selected color" )
+        call getColorRGB(oldColor()) '(204,204,255)
+
+        printlog( "Change settings for last color and press 'modify'" )
+        call ModifyColorRGB_PGUP( DEFAULT_COLOR_COUNT ) '(255,255,255)
+        
+        printlog( "Get the changed colors (Sun 4,255,255,255)" )
         call GetColorRGB(chColor())
-        '///change the settings again and save it as TT-Test (adding to the list)
-        '(255,245,200)
-        call CreateNewColor(myColor())
-        '///get the current number of registered colors (should be 92)
+        
+        printlog( "Change the settings again and save it as TT-Test (adding to the list)" )
+        call CreateNewColor(myColor()) '(255,245,200)
+        
+        printlog( "Check the number of currently registered colors" )
         Kontext "TabFarben"
-        iModifiedColorCount = Farbe.getItemCount
-        printlog " - Currently colors are listed: '" + iModifiedColorCount + "'" 
-        '///close the options dialog with OK
-        printlog " - close extras/options"
+        if ( Farbe.getItemCount() <> CHANGED_COLOR_COUNT ) then
+            warnlog( "The number of colors has changed" )
+            printlog( "Expected: " & CHANGED_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+        else
+            printlog( "Number of colors is ok: " & DEFAULT_COLOR_COUNT )
+        endif        
+
+        printlog( "Close the Tools/Options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-    Sleep(3)
+        WaitSlot( 2000 )
+    else
+        warnlog( "Tools/Options dialog not open" )
+    endif
     
-    '///exit and restart the office
-    printlog " - exit/restart StarOffice"
+    printlog( "Exit and restart the office" )
     ExitRestartTheOffice
-    '///check the changes
-    printlog " - first check of changes (modifications)"
-    '///open tools / options / StarOffice / Colors
+    
+    printlog( "Check the changes" )
     ToolsOptions
+    
+    Kontext "ExtrasOptionenDlg"
+    if ( ExtrasOptionenDlg.exists( 1 ) ) then
+    
         hToolsOptions ( "StarOffice", "Colors" )
-        '///check the number of colors ( is the new entry saved )
-        '(92)
-        iTemp = Farbe.getItemCount
-        printlog "Current color count: '" + iTemp + "'"
-        if (iTemp <> iModifiedColorCount) then 
-            Warnlog "The number of registered colors is incorrect. Should be: '" + iModifiedColorCount + "' is: '"+ iTemp + "'" 
-        end if
-        '///select the changed color and check the changes
-        Kontext "TabFarben"   
-        Farbe.Select(iDefaultColorCount)
-        call compareTwoColorsRGB(chColor())
-        '///select the new color ( TT-Test ) and check the name and the settings
+        
+        printlog( "Check the number of colors (Plus one color)" )
         Kontext "TabFarben"
-        Farbe.Select(iModifiedColorCount)
+        if ( Farbe.getItemCount() <> CHANGED_COLOR_COUNT ) then
+            warnlog( "The number of colors has changed" )
+            printlog( "Expected: " & CHANGED_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+        else
+            printlog( "Number of colors is ok: " & DEFAULT_COLOR_COUNT )
+        endif        
+        
+        printlog( "Select the changed color and check the changes" )
+        Kontext "TabFarben"   
+        Farbe.Select( DEFAULT_COLOR_COUNT )
+        call compareTwoColorsRGB(chColor())
+        
+        printlog( "Select the new color ( TT-Test ) and check the name and the settings" )
+        Kontext "TabFarben"
+        Farbe.Select( CHANGED_COLOR_COUNT )
         call CompareTwoColorsRGB(myColor())
     
-        '///delete the new userdefined color
-        call deleteColor( USERCOLOR )
-        '///reset the modified color to default
+        printlog( "Delete the new userdefined color" )
+        call deleteColor( USER_COLOR )
+
+        printlog( "Check the number of colors (One removed)" )
         Kontext "TabFarben"
-        Farbe.Select(iDefaultColorCount)
+        if ( Farbe.getItemCount() <> DEFAULT_COLOR_COUNT ) then
+            warnlog( "The number of colors has changed" )
+            printlog( "Expected: " & DEFAULT_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+        else
+            printlog( "Number of colors is ok: " & DEFAULT_COLOR_COUNT )
+        endif        
+        
+        printlog( "reset the modified color to default" )
+        Kontext "TabFarben"
+        Farbe.Select( DEFAULT_COLOR_COUNT )
         call ModifyColorRGB(oldColor())
-        '///close options dialog with OK
+        
+        printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-    Sleep(3)
-    
-    '///reopen options dialog and check the reset
-    printlog " - Second check of changes (reset)"
+        WaitSlot( 2000 )
+        
+    else
+        warnlog( "Tools/Options dialog not open" )
+    endif
+
+    printlog( "Reopen options dialog and check the reset" )
     ToolsOptions
+    
+    Kontext "ExtrasOptionenDlg"
+    if ( ExtrasOptionenDlg.exists( 1 ) ) then
+    
         hToolsOptions ( "StarOffice", "Colors" )
-        '///check if the number of colors in the list has been restored
-        iTemp = Farbe.getItemCount
-        printlog "Current color count: '" + iTemp + "'"
-        if (iTemp <> iDefaultColorCount)  then 
-            Warnlog "The number of registered colors is incorrect. Should be: '" + iDefaultColorCount + "' is: '"+ iTemp + "'" 
-        endif
-        '///check if the last color has been reset to defaults.
+        
+        printlog( "Check if the number of colors in the list has been restored" )
         Kontext "TabFarben"
-        Farbe.Select(iDefaultColorCount)
+        if ( Farbe.getItemCount() <> DEFAULT_COLOR_COUNT ) then
+            warnlog( "The number of colors has changed" )
+            printlog( "Expected: " & DEFAULT_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+        else
+            printlog( "Number of colors is ok: " & DEFAULT_COLOR_COUNT )
+        endif        
+ 
+        
+        printlog( "Check if the last color has been reset to defaults." )
+        Kontext "TabFarben"
+        Farbe.Select( DEFAULT_COLOR_COUNT )
         call compareTwoColorsRGB(oldColor())
-        '///close options dialog with OK
+
+        printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
+        WaitSlot( 2000 )
+        
+    else
+        warnlog( "Tools/Options dialog not open" )
+    endif
+    
 endcase

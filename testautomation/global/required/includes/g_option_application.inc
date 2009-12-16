@@ -1,16 +1,16 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: g_option2.inc,v $
+'* $RCSfile: g_option.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:04 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:25:49 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,18 +35,53 @@
 '*
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
-'************************************************************************
-'*
-' #1  tToolsOptionsTextdocument
-' #1  tToolsOptionsHTMLDocument
-' #1  tToolsOptionsSpreadsheet
-' #1  tToolsOptionsPresentation
-' #1  tToolsOptionsDrawing
-' #1  tToolsOptionsFormula
-' #1  tToolsOptionsChart
-' #1  tToolsOptionsDataSources
-'*
 '\***********************************************************************
+
+global sErrMes as String
+global iSectionNumber as Integer
+
+sub tToolsOptionsTestFirst
+    dim sPreviousApplication as string
+
+    sPreviousApplication = gApplication
+
+    ' To prevent users from running just a subsection from this file, without THIS
+    ' subroutine, in every subsection the value of 'iSectionNumber' is checked.
+    ' The test will exit with warnlog, if iSectionNumber is 0
+    sErrMes = ""
+    select case uCase(gApplication)
+    case "WRITER","MASTERDOCUMENT","HTML"   : iSectionNumber = 8
+    case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
+    end select
+
+    ' these tabpages only exist in the respective application
+    gApplication = "WRITER"
+    iSectionNumber = 8
+    Call tToolsOptionsTextdocument
+
+    gApplication = "HTML"
+    Call tToolsOptionsHTMLDocument
+
+    gApplication = "CALC"
+    iSectionNumber = 7
+    Call tToolsOptionsSpreadsheet
+
+    gApplication = "IMPRESS"
+    iSectionNumber = 7
+    Call tToolsOptionsPresentation
+
+    gApplication = "DRAW"
+    iSectionNumber = 7
+    Call tToolsOptionsDrawing
+
+    gApplication = "MATH"
+    iSectionNumber = 7
+    Call tToolsOptionsFormula
+
+    gApplication = sPreviousApplication
+end sub
+
+'-------------------------------------------------------------------------
 
 testcase tToolsOptionsTextdocument
   dim EchteAnzahl as Integer, i as Integer
@@ -631,84 +666,4 @@ testcase tToolsOptionsFormula
         Call hCloseDocument
     end if
 endcase
-'-------------------------------------------------------------------------
-testcase tToolsOptionsChart
-    Dim EchteAnzahl as Integer, i as Integer
-
-    PrintLog "- Tools/Options/Chart  ( Extras/Optionen/Diagramme )"
-    if (0 = iSectionNumber) then 
-        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
-        goto endsub
-    endif    
-'/// Create a new document    
-    if gApplication <> "BACKGROUND" then 
-        Call hNewDocument
-    end if
-'/// <i>Tools</i> / <i>Options</i> / <i>Chart</i>    
-    ToolsOptions
-    ToPosInOptionlist ( iSectionNumber -1 )
-    EchteAnzahl = OptionTabPageZaehler ( 1, FALSE )
-    Kontext "OptionenDlg"
-    Optionsliste.TypeKeys "<Down>"
-'/// Default colors
-    printlog "  - Default Colors / Grundfarben"
-    Kontext "TabGrundfarben"
-    Call DialogTest ( TabGrundfarben )
-'/// Close the options dialog
-    Kontext "OptionenDlg"
-    OptionenDlg.Cancel
-    if gApplication <> "BACKGROUND" then
-'/// Close bthe document    
-        Call hCloseDocument
-    end if
-endcase
-
-'-------------------------------------------------------------------------
-
-testcase tToolsOptionsDataSources
-   Dim EchteAnzahl as Integer, i as Integer
-
-   PrintLog "- Tools/Options/Data Sources  ( Extras/Optionen/Datenbank )"
-    if (0 = iSectionNumber) then 
-        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
-        goto endsub
-    endif   
-    '/// Create a new document
-    if gApplication <> "BACKGROUND" then    
-        Call hNewDocument
-    end if
-    '/// <i>Tools</i> / <i>Options</i> / <i>Data source</i>
-    ToolsOptions
-    ToPosInOptionlist ( iSectionNumber -2)
-    EchteAnzahl = OptionTabPageZaehler ( 2 , FALSE )
-    Kontext "OptionenDlg"
-    Optionsliste.TypeKeys "<Down>"
-    printlog "  - Connections / Verbindungen"
-    Kontext "TabConnections"
-    '/// Connections
-    Call DialogTest ( TabConnections )
-    Kontext "OptionenDlg"
-    Optionsliste.TypeKeys "<Down>"
-    printlog "  - Databases / Datenbanken"   
-    Kontext "TabRegisteredDatabase"
-    '/// Databases
-    Call DialogTest ( TabRegisteredDatabase )
-    NewBtn.click
-    Kontext "CreateDatabaseLink"
-    call DialogTest( CreateDatabaseLink )
-    Browse.click
-    Kontext "OeffnenDlg"
-    OeffnenDlg.cancel
-    Kontext "CreateDatabaseLink"
-    CreateDatabaseLink.cancel
-    Kontext "OptionenDlg"
-    '/// Close the options dialog
-    OptionenDlg.Cancel
-    '/// Close the document
-    if gApplication <> "BACKGROUND" then 
-        Call hCloseDocument
-    end if
-endcase
-
-'-------------------------------------------------------------------------
 

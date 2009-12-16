@@ -324,6 +324,7 @@ SearchIn svx:ListBox:RID_SVXDLG_SEARCH:LB_CALC_SEARCHIN
 Rows svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_ROWS
 Columns svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_COLUMNS
 SearchInAllSheets svx:CheckBox:RID_SVXDLG_SEARCH:CB_ALL_SHEETS
+Notes svx:CheckBox:RID_SVXDLG_SEARCH:CB_NOTES
 
 *FormFolderNameDialog HID_DLG_SAVE_AS
 FolderName dbaccess:Edit:DLG_SAVE_AS:ET_TITLE

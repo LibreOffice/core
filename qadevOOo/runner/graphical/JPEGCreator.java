@@ -76,6 +76,8 @@ public class JPEGCreator extends EnhancedComplexTestCase
          int nPages = countPages(sJPEGNameSchema);
          if (nPages > 0)
          {
+             createSmallPictures(sJPEGNameSchema);
+
              String sIndexFile = FileHelper.appendPath(_sResult, "index.ini");
              File aIndexFile = new File(sIndexFile);
              if (aIndexFile.exists())
@@ -89,6 +91,109 @@ public class JPEGCreator extends EnhancedComplexTestCase
              }
          }
     }
+
+/**
+ * Create a lot of smaller and nicer Pictures of the big fat pages.
+ * Looks better
+ * @param _sJPEGSchema
+ */
+    public void createSmallPictures(String _sJPEGSchema)
+    {
+        int nPages = 0;
+        if (_sJPEGSchema.length() > 0)
+        {
+            // TODO: if there doesn't exists a '%04d' in the schema we will return 9999 which is a little bit wrong here.
+            for (int i=1;i<10000;i++)
+            {
+                String sJPEGFilename = getFilenameForJPEGSchema(_sJPEGSchema, i);
+                if (FileHelper.exists(sJPEGFilename))
+                {
+                    convertToNearSameFileWithWidth340(sJPEGFilename);
+                    // m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array
+                    nPages ++;
+                }
+                else
+                {
+                    break;                             // stop file check
+                }
+            }
+        }
+        // return nPages;
+    }
+
+/**
+ * convert a picture to a new picture with 340 pixel width.
+ * @param _sJPEGFilename
+ */
+public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
+{
+    String sNewJPEGFilename;
+    sNewJPEGFilename = util.utils.replaceAll13(_sJPEGFilename, ".jpg", "_w340.jpg");
+    convertToWidth340(_sJPEGFilename, sNewJPEGFilename);
+}
+
+    /**
+ * convert chart2_Regression.ods.ps_180DPI_0001.jpg -filter Catrom -resize
+340x chart2_Regression.ods.ps_180DPI_0001_w340.jpg
+
+Point wie bisher
+Cubic schlecht, weil unscharf
+...
+Triangle ganz brauchbar (default?)
+Catrom am besten
+
+ * @param _sFrom
+ * @param _To
+ */
+private static void convertToWidth340(String _sFrom, String _To)
+{
+            // int nResult = 0;
+
+            String sConvertEXE = "convert";
+            if (OSHelper.isLinuxIntel())
+            {
+                sConvertEXE = "convert";
+            }
+            if (OSHelper.isWindows())
+            {
+                sConvertEXE = "convert.exe";
+            }
+
+            String[] sCommandArray =
+                {
+                    sConvertEXE,
+                    _sFrom,
+                     "-filter", "Catrom",
+                    "-resize", "340x",
+                    _To
+                };
+            ProcessHandler aHandler = new ProcessHandler(sCommandArray);
+            boolean bBackValue = aHandler.executeSynchronously();
+            int nExitCode = aHandler.getExitCode();
+
+            String sBack = aHandler.getOutputText();
+            if (sBack.length() > 0)
+            {
+                GlobalLogWriter.get().println("'" + sBack + "'");
+            }
+            // try to interpret the result, which we get as a String
+//            try
+//            {
+//                int nIdx = sBack.indexOf("\n");
+//                if (nIdx > 0)
+//                {
+//                    sBack = sBack.substring(0, nIdx);
+//                }
+//
+//                nResult = Integer.valueOf(sBack).intValue();
+//            }
+//            catch(java.lang.NumberFormatException e)
+//            {
+//                GlobalLogWriter.get().println("Number format exception");
+//                nResult = 0;
+//            }
+            // return nResult;
+}
 
 /**
  * create out of a given Postscript/PDF _sFile a list of JPEGs, one for every page

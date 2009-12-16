@@ -63,8 +63,6 @@
 '\***********************************************************************
 
 testcase tParagraphTabs1
-Warnlog "#i102752# - tParagraphTabs1 outcommented due to bug."
-goto endsub
 
   Dim sTestFile as String
   Dim sTabs      as String
@@ -111,8 +109,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs2
-Warnlog "#i102752# - tParagraphTabs2 outcommented due to bug."
-goto endsub
 
   Dim sTestFile  as String
   Dim sTabs       as String
@@ -159,8 +155,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs3
-Warnlog "#i102752# - tParagraphTabs3 outcommented due to bug."
-goto endsub
 
   Dim sTestFile    as String
   Dim sTabs        as String
@@ -207,9 +201,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs4
-Warnlog "#i102752# - tParagraphTabs4 outcommented due to bug."
-goto endsub
-
 
   Dim sTestFile    as String
   Dim sTabs        as String
@@ -350,8 +341,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps1
-Warnlog "#i102752# - tParagraphDropCaps1 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -404,8 +393,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps2
-Warnlog "#i102752# - tParagraphDropCaps2 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -460,8 +447,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps3
-Warnlog "#i102752# - tParagraphDropCaps3 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -516,8 +501,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps4
-Warnlog "#i102752# - tParagraphDropCaps4 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -567,8 +550,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps5
-Warnlog "#i102752# - tParagraphDropCaps5 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sSpace        as String
@@ -657,8 +638,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps7
-Warnlog "#i102752# - tParagraphDropCaps7 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sTestText     as String

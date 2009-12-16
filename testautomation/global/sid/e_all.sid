@@ -77,7 +77,7 @@ EditObjectSaveCopyAs .uno:ObjectMenue?VerbID:short=-8
 
 ' **** Writer
 EditAutotext FN_GLOSSARY_DLG
-EditPasteSpecialWriter FN_PASTESPECIAL
+EditPasteSpecialWriter .uno:PasteSpecial
 EditChangesRecord FN_REDLINE_ON
 EditChangesShow FN_REDLINE_SHOW
 EditChangesAcceptOrReject FN_REDLINE_ACCEPT
@@ -96,7 +96,7 @@ EditSelectionModeStandard .uno:SelectionModeDefault
 EditSelectionModeBlock .uno:SelectionModeBlock
 
 ' **** Calc
-EditPasteSpecialCalc FID_PASTE_CONTENTS
+EditPasteSpecialCalc .uno:PasteSpecial
 EditChangesRecordCalc FID_CHG_RECORD
 EditChangesProtectTraceCalc SID_CHG_PROTECT
 EditChangesCommentsCalc FID_CHG_COMMENT
@@ -122,7 +122,7 @@ EditRemoveManualBreakRowBreak FID_DEL_ROWBRK
 EditObjectSaveCopyAsCalc .uno:ObjectMenue?VerbID:short=-8
 
 ' **** Draw / Impress
-EditPasteSpecial SID_PASTE2
+EditPasteSpecial .uno:PasteSpecial
 EditLinksDraw SID_MANAGE_LINKS
 EditDuplicate SID_COPYOBJECTS
 EditCrossFading SID_POLYGON_MORPHING
@@ -393,14 +393,14 @@ InsertSymbol SID_CHOOSE_POLYGON
 InsertSnapPointLine SID_CAPTUREPOINT
 
 ' **** Chart
-InsertTitle .uno:InsertTitle
-InsertAxes .uno:InsertAxis
-InsertGrids .uno:InsertGrids
-InsertLegend .uno:InsertLegend
-InsertDataLabels .uno:InsertDescription
-InsertTrendlines .uno:InsertTrendlines
-InsertMeanValueLines .uno:InsertMeanValues
-InsertYErrorBars .uno:InsertYErrorbars
+InsertTitle .uno:InsertMenuTitles
+InsertAxes .uno:InsertMenuAxes
+InsertGrids .uno:InsertMenuGrids
+InsertLegend .uno:InsertMenuLegend
+InsertDataLabels .uno:InsertMenuDataLabels
+InsertTrendlines .uno:InsertMenuTrendlines
+InsertMeanValueLines .uno:InsertMenuMeanValues
+InsertYErrorBars .uno:InsertMenuYErrorBars
 
 ' ***********************************
 ' *********** Format Menu ***********
@@ -643,6 +643,7 @@ FormatChartArea .uno:DiagramArea
 FormatChartType .uno:DiagramType
 FormatDataRanges .uno:DataRanges
 Format3DView .uno:View3D
+FormatSelection .uno:FormatSelection
 ' **** Math
 FormatFonts SID_FONT
 FormatFontSize SID_FONTSIZE

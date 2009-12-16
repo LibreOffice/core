@@ -70,8 +70,7 @@ sub main
 
     Call tInsertFloatingFrame
     Call tInsertFields
-    QaErrorLog "#79794 - tdInsertObjectOleObjects outcommented due to bug."
-    '    Call tdInsertObjectOleObjects
+    Call tdInsertObjectOleObjects
 
     Printlog "Disabled SnappPointLine test, because of unpredictable mouse moves (07/2002 TBO)"
     'Call tdInsertSnappoint_Line

@@ -39,23 +39,23 @@
 
 sub w_fields4
 
-    Call tDocInformation_1   'Doc Information - Title
-    Call tDocInformation_2   'Doc Information - Subject
-    Call tDocInformation_3   'Doc Information - Keywords
-    Call tDocInformation_4   'Doc Information - Description
-    Call tDocInformation_5   'Doc Information - User Defined
-    Call tDocInformation_6   'Doc Information - Created
-    Call tDocInformation_7_1 'Doc Information - Modified
-    Call tDocInformation_7_2 'Doc Information - Modified (Save file)
-    Call tDocInformation_8   'Doc Information - Printed
-    Call tDocInformation_9   'Doc Information - Revision number
-    Call tDocInformation_10  'Doc Information - Tatal editing time
+    Call tDocInformationTitle
+    Call tDocInformationSubject
+    Call tDocInformationKeywords
+    Call tDocInformationDescription
+    Call tDocInformationUserDefined
+    Call tDocInformationCreated
+    Call tDocInformationModified
+    Call tDocInformationModifiedSavefile
+    Call tDocInformationPrinted
+    Call tDocInformationRevisionnumber
+    Call tDocInformationTotaleditingtime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_1
+testcase tDocInformationTitle
 
   Dim sTitle     as String
   Dim sTestFile  as String
@@ -107,7 +107,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_2
+testcase tDocInformationSubject
 
   Dim sSubject   as String
   Dim sTestFile  as String
@@ -159,7 +159,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_3
+testcase tDocInformationKeywords
 
   Dim sKeywords  as String
   Dim sTestFile  as String
@@ -211,7 +211,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_4
+testcase tDocInformationDescription
 
   Dim sDescription as String
   Dim sTestFile    as String
@@ -266,7 +266,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_5
+testcase tDocInformationUserDefined
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -340,7 +340,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_6
+testcase tDocInformationCreated
 
   Dim sTestFile     as String
   Dim sFirstName    as String
@@ -444,7 +444,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_7_1
+testcase tDocInformationModified
 
   Dim sTestFile     as String
   Dim sSaveasFile   as String
@@ -571,8 +571,8 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_7_2
-    QaErrorLog "#i102792# - tDocInformation_7_2 outcommented due to issue."
+testcase tDocInformationModifiedSavefile
+    QaErrorLog "#i102792# - tDocInformationModifiedSavefile outcommented due to issue."
     goto endsub
 
   Dim sTestFile     as String
@@ -685,7 +685,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_8
+testcase tDocInformationPrinted
 
   Dim sTestFile     as String
   Dim sFirstName    as String
@@ -803,7 +803,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_9
+testcase tDocInformationRevisionnumber
 
   Dim sTestFile   as String
   Dim sSaveasFile as String
@@ -817,7 +817,7 @@ testcase tDocInformation_9
   sFirstName1 = "Test1" : sLastName1 = "Test2"
   sVarResult  = "17"    : sFixResult = "4"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-  sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformation_9.sxw" )
+  sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 
   if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 
@@ -899,7 +899,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tDocInformation_10
+testcase tDocInformationTotaleditingtime
 
   Dim sTestFile   as String
   Dim sSaveasFile as String
@@ -908,7 +908,7 @@ testcase tDocInformation_10
 
   sFixResult  = "00:29:05"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-  sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformation_9.sxw" )
+  sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 
   if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 

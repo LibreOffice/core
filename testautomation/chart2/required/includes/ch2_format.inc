@@ -70,30 +70,39 @@ testcase tFormatObjectProperties
     if fSelectFirstOLE = 0 then        
         printlog "Edit / Object / Edit"
         EditObjectEdit        
-        printlog "Move to third object in Chart using TAB key (data series)"
-        Kontext "DocumentChart"
-        DocumentChart.TypeKeys "<TAB>" , 3        
-        printlog "Invoke Format::ObjectProperties"
-        FormatObjectProperties        
-        printlog "Select tab page Aligment"
+		printlog "Select DataSeries A by toolbar selectorbox"
+		call fChartSelectElement (8)        
+		printlog "Open the properties dialog by using the FormatSelection button in the toolbar"
+		FormatSelection.Click        
+        printlog "Select tab page Options"
         Kontext
         iCountTabPg = Active.GetPageCount
-        if iCountTabPg <> 7 then
-            warnlog "Edit::Properties on a data series should have 7 tab pages but has " & iCountTabPg & "."            
+        if iCountTabPg <> 4 then
+            warnlog "Edit::Properties on a data series should have 4 tab pages but has " & iCountTabPg & "."            
         else             
-            printlog "Edit::Properties on a data series has 7 tab pages."
+            printlog "Edit::Properties on a data series has 4 tab pages."
         endif
-        Active.SetPage TabDataSeriesLabels
-        '/// Check if tab page series labels exists
-        Kontext "TabDataSeriesLabels"
-        call DialogTest ( TabDataSeriesLabels )
+        Active.SetPage TabDataSeriesOptions
         '/// Check if tab page data series options exists
-        Kontext
-		Active.SetPage TabDataSeriesOptions
         Kontext "TabDataSeriesOptions"
-        call DialogTest ( TabDataSeriesOptions )        
+        call DialogTest ( TabDataSeriesOptions )
+        '/// Check if tab page area exists
+        Kontext
+		Active.SetPage TabArea
+        Kontext "TabArea"
+        call DialogTest ( TabArea )
+		'/// Check if tab page transparency exists
+        Kontext
+		Active.SetPage TabTransparency
+        Kontext "TabTransparency"
+        call DialogTest ( TabTransparency )
+		'/// Check if tab page borders exists
+        Kontext
+		Active.SetPage TabFormatChartBorders
+        Kontext "TabFormatChartBorders"
+        call DialogTest ( TabFormatChartBorders )
         '/// Close dialog with Cancel-button
-        TabDataSeriesOptions.Cancel
+        TabFormatChartBorders.Cancel
         '/// Close document
         Kontext "DocumentCalc"
         DocumentCalc.TypeKeys "<Escape>"
@@ -138,25 +147,24 @@ testcase tFormatObjectPropertiesPieChart
             Call hCloseDocument
             goto endsub
         endif        
-        '/// Move to third object in Chart using TAB key (data series)
-        Kontext "DocumentChart"
-        DocumentChart.TypeKeys "<TAB>" , 3
-        '/// Invoke Format::ObjectProperties
-        FormatObjectProperties
+        '/// Move to data series in Chart
+		call fChartSelectElement (5)
+		printlog "Open the properties dialog by using the FormatSelection button in the toolbar"
+		FormatSelection.Click   
         '/// Select tab page Aligment
         Kontext
         iCountTabPg = Active.GetPageCount
-        if iCountTabPg <> 7 then
-            warnlog "Edit::Properties on a data series of a pie chart should have 7 tab pages but has " & iCountTabPg & "."
+        if iCountTabPg <> 4 then
+            warnlog "Edit::Properties on a data series of a pie chart should have 4 tab pages but has " & iCountTabPg & "."
         else
-            printlog "Edit::Properties on a data series on a pie chart has 7 tab pages."
+            printlog "Edit::Properties on a data series on a pie chart has 4 tab pages."
         endif
-        Active.SetPage TabChartPieOpetions
+        Active.SetPage TabChartPieOptions
         '/// Check if tab page Options exists
-        Kontext "TabChartPieOpetions"
-        call DialogTest ( TabChartPieOpetions )        
+        Kontext "TabChartPieOptions"
+        call DialogTest ( TabChartPieOptions )        
         '/// Close dialog with Cancel-button
-        TabChartPieOpetions.Cancel
+        TabChartPieOptions.Cancel
         '/// Close document
         Kontext "DocumentCalc"
         DocumentCalc.TypeKeys "<ESCAPE>"

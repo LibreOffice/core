@@ -39,24 +39,24 @@
 
 sub w_fields2
 
-    Call tFieldsOther_0      'NON modal
-    Call tFieldsOther_1_1    'Insert/Fields/Other/Document / Author
-    Call tFieldsOther_1_2    'Insert/Fields/Other/Document / Author - Fixed
-    Call tFieldsOther_2      'Insert/Fields/Other/Document / Chapter
-    Call tFieldsOther_3      'Insert/Fields/Other/Document / Date
-    Call tFieldsOther_4      'Insert/Fields/Other/Document / File name
-    Call tFieldsOther_5      'Insert/Fields/Other/Document / Page
-    Call tFieldsOther_6_1    'Insert/Fields/Other/Document / Sender
-    Call tFieldsOther_6_2    'Insert/Fields/Other/Document / Sender - Fixed
-    Call tFieldsOther_7      'Insert/Fields/Other/Document / Statistics
-    Call tFieldsOther_8      'Insert/Fields/Other/Document / Template
-    Call tFieldsOther_9      'Insert/Fields/Other/Document / Time
+    Call tDialogNonModal
+    Call tDocumentAuthor
+    Call tDocumentAuthorFixed
+    Call tDocumentChapter
+    Call tDocumentDate
+    Call tDocumentFilename
+    Call tDocumentPage
+    Call tDocumentSender
+    Call tDocumentSenderFixed
+    Call tDocumentStatistics
+    Call tDocumentTemplate
+    Call tDocumentTime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_0
+testcase tDialogNonModal
 
   Dim sTest as String
 
@@ -90,7 +90,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_1
+testcase tDocumentAuthor
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -196,7 +196,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_2
+testcase tDocumentAuthorFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -304,7 +304,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_2
+testcase tDocumentChapter
 
   Dim sTestFile  as String
   Dim sChapter() as String
@@ -360,7 +360,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_3
+testcase tDocumentDate
 
     Dim sDate as String
     
@@ -391,7 +391,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_4
+testcase tDocumentFilename
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
         exit sub
@@ -450,7 +450,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_5
+testcase tDocumentPage
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -509,7 +509,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_1
+testcase tDocumentSender
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -686,7 +686,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_2
+testcase tDocumentSenderFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -866,7 +866,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_7
+testcase tDocumentStatistics
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -929,7 +929,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_8
+testcase tDocumentTemplate
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -999,7 +999,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_9
+testcase tDocumentTime
 
     Dim sTime1 as String
     Dim sTime2 as String

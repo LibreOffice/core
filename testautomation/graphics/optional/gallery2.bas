@@ -43,7 +43,7 @@ sub main
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
-    use "graphics\required\includes\global\gallery2.inc"
+    use "graphics\optional\includes\global\gallery2.inc"
 
     printlog "------------------------------- T h e m e s -----------------------------"
     call tSettingsToCM

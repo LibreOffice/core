@@ -43,7 +43,7 @@ sub main
     call hStatusIn ( "Graphics", "gallery.bas")
 
     use "graphics\tools\id_tools_2.inc"
-    use "graphics\required\includes\global\gallery.inc"
+    use "graphics\optional\includes\global\gallery.inc"
 
     printlog "------------------------ F u n c t i o n a l i t y ----------------------"
     call tGallery_DialogTest                           ' open gallery, pin - unpin, dock - undock, close gallery

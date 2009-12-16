@@ -64,12 +64,13 @@ testcase tPlotOptions
 	printlog "Edit / Object / Edit"
 	EditObjectEdit        
 
-	printlog "Move to third object in Chart using TAB key (data series)"
+    printlog "Select DataSeries A by toolbar selectorbox"
 	Kontext "DocumentChart"
-	DocumentChart.TypeKeys "<TAB>" , 3        
+	call fChartSelectElement (8)        
 
 	printlog "Invoke Format::ObjectProperties"
-	FormatObjectProperties        
+	Kontext "Toolbar"
+	FormatSelection.Click        
 
 	printlog "Select tab page Options"
 	Kontext
@@ -85,8 +86,9 @@ testcase tPlotOptions
 	endcatch
 		
 	printlog "Close and reopen data series dialog - checkbox should be still activated"
-	TabDataSeriesOptions.Ok	
-	FormatObjectProperties        
+	TabDataSeriesOptions.Ok
+	Kontext "DocumentChart"
+	FormatSelection
 	printlog "Select tab page Options"
 	Kontext
 	Active.SetPage TabDataSeriesOptions
@@ -119,12 +121,14 @@ testcase tPlotOptions
 		goto endsub
 	endif	
 
-
 	EditObjectEdit        
-	Kontext "DocumentChart"
-	DocumentChart.TypeKeys "<TAB>" , 3        
+
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8)        
+
 	printlog "Invoke Format::ObjectProperties"
-	FormatObjectProperties        	
+	Kontext "Toolbar"
+	FormatSelection.Click    	
 	Kontext
 	Active.SetPage TabDataSeriesOptions
 	Kontext "TabDataSeriesOptions"

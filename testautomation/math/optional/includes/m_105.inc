@@ -389,6 +389,7 @@ testcase tToolsCatalog
                 catch
                     qaErrorLog "Can not leave object selection"
                     ' somehow not triggerable on macos
+                    call hCloseDocument
                     goto endsub
                 endcatch
                 Kontext "DocumentMath"

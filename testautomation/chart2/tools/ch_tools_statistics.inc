@@ -87,8 +87,10 @@ function fInvokeTrendlinesDialog() as INTEGER
     endcatch
     
     '/// Lookup if call was successful
-    Kontext "InsertTrendlinesDialog"
-    if InsertTrendlinesDialog.exists(2) then
+	Kontext
+	active.SetPage "TabTrendLineType"
+    Kontext "TabTrendLineType"
+    if TabTrendLineType.exists(2) then
         printlog ">> Trend lines dialog is visible now."
         fInvokeTrendlinesDialog = 0
     else
@@ -171,7 +173,7 @@ function fInsertMeanValueLines() as INTEGER
     DocumentChart.TypeKeys "<F3>"
     '/// Open the context menu
     DocumentChart.OpenContextMenu TRUE     
-    if hMenuItemGetCount = 10 then       
+    if hMenuItemGetCount = 6 then       
         '/// Select the first entry (properties)
         hMenuSelectNr (1)
     else

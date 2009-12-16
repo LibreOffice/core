@@ -45,35 +45,15 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim iCount2 as integer
     dim sUnitOptions as string
     dim sUnitDialog as string
-    dim gApplicationTemp as string
-
-    gApplicationTemp = gApplication
-    gApplication = "WRITER"
-    printlog "Take Measurement Units from Writer "
-    hNewDocument
-    ToolsOptions
-    ' Take General Measurement units from writer, there are only 5!
-    hToolsOptions ("WRITER","General")
-
-    iCount2 = Masseinheit.GetItemCount
-    for i=1 to iCount2
-        Masseinheit.select i
-        printlog "(" + i + "/" + iCount2 + "): '" + Masseinheit.getSelText + "' - " + GetMeasUnit(Tabulatorenabstand.getText)
-    next i
-    Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-    hCloseDocument()
-    gApplication = gApplicationTemp
-
-	sleep 1
+   
     hNewDocument
 	sleep 1
     ToolsOptions
     hToolsOptions (sApplication,"General")
+    iCount2 = Masseinheit.GetSelIndex
+    printlog "current measurement unit is: " & iCount2
     iCount = Masseinheit.GetItemCount
-    if (iCount <> iCount2) then
-        'warnlog "Inconsistence between Writer: '" + iCount2 + "' and " + sApplication + ": '" + iCount + "'"
-    endif
+   
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     printlog "----------------------"
@@ -149,6 +129,13 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
         TabEinzuegeUndAbstaende.cancel
 
     next i
+    
+    printlog "Setting back measurement to " & iCount2
+    ToolsOptions
+    hToolsOptions (sApplication,"General")
+    Masseinheit.Select(iCount2)
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
 
     hCloseDocument
 endcase 'tToolsOptionsMeasurementUnit 

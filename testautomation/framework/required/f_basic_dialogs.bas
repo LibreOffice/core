@@ -43,12 +43,14 @@ sub main
     use "framework\required\includes\basic_dialog_i18n.inc"
     use "framework\required\includes\basic_organizer.inc"
     use "framework\required\includes\basic_dialog_export.inc"
+    use "framework\required\includes\basic_dialog_i18n_import.inc"
 
     call hStatusIn( "framework" , "f_basic_dialogs.bas" )
     call tUpdtMacroAssignment()
     call tUpdtBasicDialogI18n()
     call tUpdtBasicOrganizer()
     call tUpdtDialogExport()
+    call tBasicDialogI18nImport()
     call hStatusOut()
 
 end sub

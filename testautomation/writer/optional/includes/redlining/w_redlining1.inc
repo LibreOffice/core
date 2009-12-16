@@ -523,9 +523,6 @@ endcase
 
 testcase tRedlining_8
 
-    warnlog "#i102093# - Crash with Edit-Change-Record."
-    goto endsub
-
   '/// Test searched and replaced text
   printlog "searched and replaced text"
 

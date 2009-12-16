@@ -39,180 +39,114 @@
 
 testcase tWindowFunctions
 
+    printlog( "Update test for window functions" )
+
     if ( gtSysName = "Mac OS X" ) then
         printlog( "No testing for Mac as some Window attributes do not exist" )
         goto endsub
     endif
 
-    '///<h1>Update test for window functionality</h1>
-    '///<ul>
-    dim brc as boolean
     
-    '///+<li>Verify that we have one initial document open</li>
     printlog( "Create initial document" )
     gApplication = "WRITER"
     hInitSingleDoc()
     hInitWriteDocIdentifier( "F_updt_windowfuncs.bas" )
     
-    '///+<li>Create a new document</li>
     printlog( "New document" )
-    hCreateDocument()
+    hNewDocument()
     if ( getDocumentCount <> 2 ) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
     endif    
 
-    DocumentWriter.restore()
-
-    '///+<li>Use .close()-method to close document</li>
-    kontext "documentwriter"
+    kontext "DocumentWriter"
     printlog( "Close document" )
     DocumentWriter.close()
 
-    '///+<li>Verify that the document is closed</li>
     if ( getDocumentCount <> 1 ) then
         warnlog( "One open document was expected, found " & getDocumentCount )
     endif
 
-    '///+<li>Create a new document</li>
     printlog( "New document" )
-    hCreateDocument()
+    hNewDocument()
     if ( getDocumentCount <> 2) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
     endif    
 
-    '///+<li>Write some text into the second writer document</li>
-    '///+<li>Use .close()-method to close document</li>
     printlog( "Enter some text into the second writer document" )
-    kontext "documentwriter"
+    kontext "DocumentWriter"
     DocumentWriter.TypeKeys( "test" )
     DocumentWriter.close()
 
-    '///+<li>Close the message (Document changed)</li>
     kontext "active"
     if ( Active.exists() ) then
+        printlog( "Close messagebox with Cancel (leaves the document open)" )
         Active.Cancel()
-        printlog( "Close messagebox" )
     else
         warnlog( "No warning that data will be lost on close of this document" )
     endif
     
-    '///+<li>Verify that exactly two documents are open</li>
+    kontext "DocumentWriter"    
     if ( getDocumentCount = 2 ) then
-        printlog( "One document open. Good." )
+        printlog( "Two documents open. Good." )
     else
         warnlog( "Incorrect document count. Expected two, found " & getDocumentCount )
     endif
 
-    '///+<li>Close the document using FileClose</li>
-    hDestroyDocument() ' note tha hCloseDoc/hDestroyDocument use FileClose
+    kontext "DocumentWriter"
+    printlog( "Close the document" )
+    FileClose()
     
-    '///+<li>Verify that exactly one document is open</li>
+    kontext "Active"
+    if ( Active.exists() ) then  
+        printlog( "Do not save the document" )
+        Active.No()
+    else
+        warnlog( "Warning: No data loss warning" )
+    endif
+    
+    kontext "DocumentWriter"
     if ( getDocumentCount = 1 ) then
         printlog( "One document open. Good." )
     else
         warnlog( "Incorrect document count. Expected one, found " & getDocumentCount )
     endif    
 
-    '///+<li>Create a new document</li>
-    printlog( "New document" )
-    brc = hCreateDocument()
-    if ( not brc ) then
-        warnlog( "Two open documents were expected, found " & getDocumentCount() )
-    endif    
-
-
-    kontext "documentwriter"
-    '///+<li>Maximize Window</li>
-    '///<ul>
-    printlog( "Maximize window" )
-    DocumentWriter.Maximize()
-    sleep( 2 )
-    
-    '///+<li>Verify state: Maximized (true)</li>
-    if ( DocumentWriter.IsMax() ) then
-        printlog( " * Window is maximized" )
-    else
-        warnlog( " * Window not maximized" )
-    endif
-
-
-    '///+<li>Verify state: Minimized (false)</li>
-    if ( DocumentWriter.IsMin() ) then
-        warnlog( " * Window is minimized" )
-    else
-        printlog( " * Window not minimized" )
-    endif
-
-    '///+<li>Verify state: Restored (false)</li>
-    if ( DocumentWriter.IsRestore() ) then
-        warnlog( " * Window is Restored" )
-    else
-        printlog( " * Window not Restored" )
-    endif
-    '///</ul>
-
-    '///<li>Minimize Window</li>
-    '///<ul>
+    Kontext "DocumentWriter"
     printlog( "Minimize window" )
     DocumentWriter.Minimize()
-    sleep( 2 )
+    Wait( 2000 )
 
-    '///+<li>Verify state: Minimized (true)</li>
+    kontext "DocumentWriter"
     if ( DocumentWriter.IsMin() ) then
-        printlog( " * Window is minimized" )
+        printlog( "Window is minimized" )
     else
         qaerrorlog( "#i32672# Window not minimized" )
     endif
 
-    '///+<li>Verify state: Maximized (false)</li>
-    if ( DocumentWriter.IsMax() ) then
-        warnlog( " * Window is maximized" )
-    else
-        printlog( " * Window not maximized" )
-    endif
-
-    '///+<li>Verify state: Restored (false)</li>
-    if ( DocumentWriter.IsRestore() ) then
-        qaerrorlog( "#i32672# Window is Restored" )
-    else
-        printlog( " * Window not Restored" )
-    endif
-    '///</ul>
-
-    '///<li>Restore Window</li>
-    '///<ul>
+    kontext "DocumentWriter"
     printlog( "Restore window" )
     DocumentWriter.Restore()
-    sleep( 2 )
+    Wait( 2000 )
 
-    '///+<li>Verify state: Restored (true)</li>
     if ( DocumentWriter.IsRestore() ) then
-        printlog( " * Window is Restored" )
+        printlog( "Window is Restored" )
     else
         warnlog( " * Window not Restored" )
     endif
 
-    '///+<li>Verify state: Maximized (false)</li>
-    if ( DocumentWriter.IsMax() ) then
-        warnlog( " * Window is maximized" )
-    else
-        printlog( " * Window not maximized" )
-    endif
-
-    '///+<li>Verify state: Minimized (false)</li>
-    if ( DocumentWriter.IsMin() ) then
-        warnlog( " * Window is minimized" )
-    else
-        printlog( " * Window not minimized" )
-    endif
-
-    '///</ul>
+    kontext "DocumentWriter"
+    printlog( "Maximize window" )
+    DocumentWriter.Maximize()
+    Wait( 2000 )
     
-    '///+<li>Close the documents</li>
-    brc = hDestroyDocument()
-    brc = hDestroyDocument()
+    kontext "DocumentWriter"
+    if ( DocumentWriter.IsMax() ) then
+        printlog( "Window is maximized" )
+    else
+        warnlog( " * Window not maximized" )
+    endif
 
-    '///</ul>
+    hDestroyDocument()
 
 endcase
 

@@ -473,10 +473,15 @@ testcase tLineConnect
     '/// Go through the different Corner-styles ///'
     
     hOpenContextMenu
+    sleep 1
     hMenuSelectNr(2) 'Choose "Line"
     
     Kontext "TabLinie"
-    cfirst = CornerStyle.GetSelIndex
+    if TabLinie.Exists(2) then
+        cfirst = CornerStyle.GetSelIndex
+    else
+        sleep 1
+    endif
     
     For i = 1 to CornerStyle.GetItemCount
       Kontext "TabLinie"

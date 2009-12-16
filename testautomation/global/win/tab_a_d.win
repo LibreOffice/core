@@ -58,6 +58,8 @@ IconsInMenueAnzeigen svx:ListBox:OFA_TP_VIEW:LB_MENU_ICONS
 MausAktion svx:ListBox:OFA_TP_VIEW:LB_MOUSEMIDDLE
 MousePositioning svx:ListBox:OFA_TP_VIEW:LB_MOUSEPOS
 UseSystemFont svx:CheckBox:OFA_TP_VIEW:CB_SYSTEM_FONT
+Transparency svx:CheckBox:OFA_TP_VIEW:CB_SELECTION
+SelectionOpacity svx:MetricField:OFA_TP_VIEW:MF_SELECTION
 
 *TabAusnahmen HID_OFAPAGE_AUTOCORR_EXCEPT
 Abkuerzungen svx:Edit:RID_OFAPAGE_AUTOCORR_EXCEPT:ED_ABBREV

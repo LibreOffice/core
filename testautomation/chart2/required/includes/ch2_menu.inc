@@ -149,7 +149,7 @@ testcase tMainMenu
         printlog "check if there are 6 items in the FORMAT/AXIS menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(5) ' AXIS        
+        hMenuSelectNr(6) ' AXIS        
         iCount = hMenuItemGetCount()        
         if (iCount <> 6) then
             warnlog "There should 6 items in the FORMAT/AXIS menu but there are " + iCount + " items."
@@ -158,7 +158,7 @@ testcase tMainMenu
         printlog "check if there are 7 items in the FORMAT/GRID menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(6) ' GRID        
+        hMenuSelectNr(7) ' GRID        
         iCount = hMenuItemGetCount()        
         if (iCount <> 7) then
             warnlog "There should 7 items in the FORMAT/GRID menu but there are " + iCount + " items."
@@ -173,12 +173,12 @@ testcase tMainMenu
             warnlog "There should 8 items in the FORMAT/Title menu but there are " + iCount + " items."
         end if
 
-        printlog "check if there are 13 items in the TOOLS menu."        
+        printlog "check if there are 4 items in the TOOLS menu."        
         DocumentCalc.UseMenu 
-        hMenuSelectNr(5)        
+        hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 13) then
-            warnlog "There should 13 items in the tools menu but there are " + iCount + " items."
+        if (iCount <> 4) then
+            warnlog "There should 4 items in the tools menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         

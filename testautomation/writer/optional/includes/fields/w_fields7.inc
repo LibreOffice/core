@@ -39,15 +39,15 @@
 
 sub w_fields7
 
-    Call tL10N_1             'L10N test - above/below
-    Call tL10N_2             'L10N test - date
-    Call tL10N_3             'L10N test - time
+    Call tL10NtestAboveBelow
+    Call tL10NtestDate
+    Call tL10NtestTime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tL10N_1
+testcase tL10NtestAboveBelow
 
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
@@ -181,7 +181,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tL10N_2
+testcase tL10NtestDate
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -293,7 +293,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tL10N_3
+testcase tL10NtestTime
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub

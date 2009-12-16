@@ -447,9 +447,6 @@ endcase
 
 testcase tZORest
 
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
-
     printlog "- Draw Functions-Objectbar: Rest"
     if gApplication = "HTML" then
         printlog "This test does not apply to HTML documents"

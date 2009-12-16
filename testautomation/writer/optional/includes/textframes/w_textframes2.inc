@@ -81,7 +81,7 @@ testcase tTextframes_17
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(15,15)
+    Call gMouseClick(40,40)
     Wait 500
     
     '/// check if contents can be inserted into frame
@@ -125,7 +125,7 @@ testcase tTextframes_18
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(15,15)
+    Call gMouseClick(40,40)
     Sleep 2
     
     '/// check if the frame is moved
@@ -872,15 +872,15 @@ testcase tTextframes_28
     
     Call hNewDocument
     
-    '/// Insert a frame
+    printlog "Insert a frame"
     Call fInsertFrame(30, 30, 60, 60)
     
-    '/// + Naming the frame
+    printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName1
     TabZusaetze.OK
     
-    '/// + Set the frame's wrap
+    printlog "Set the frame's wrap"
     Call fFormatFrame("TabUmlauf")
     Kein.Check
     Sleep 1
@@ -889,19 +889,15 @@ testcase tTextframes_28
     Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
-    '/// Insert another frame
+    printlog "Insert another frame"
     Call fInsertFrame(50, 50, 80, 80)
     
-    printlog "Move second frame away from the first frame."
-    Call wTypeKeys "<RIGHT>", 10
-    Call wTypeKeys "<DOWN>", 7
-    
-    '/// + Naming the frame
+    printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName2
     TabZusaetze.OK
     
-    '/// + Set the frame's wrap
+    printlog "Set the frame's wrap"
     Call fFormatFrame("TabUmlauf")
     Sleep 1
     Durchlauf.Check
@@ -911,31 +907,32 @@ testcase tTextframes_28
     Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
-    '/// Set focus to second frame
-    Call wTypeKeys ( "<Shift F4>" )
+    printlog "Set focus to second frame"
+    Call gMouseClick(60,60) ' Click into frame
+    wait 500
+    Call wTypeKeys "<ESCAPE>" ' Selects frame holding the cursor
     wait 500
     
-    '/// Check second frame's name
+    printlog "Check second frame's name"
     Call fFormatFrame("TabZusaetze")
     if ObjektName.GetText <> sFrameName2 then Warnlog "The 2nd frame's name is wrong ! Get " +ObjektName.GetText
     TabZusaetze.Cancel
     
-    '/// Check second frame's wrap status
+    printlog "Check second frame's wrap status"
     Call fFormatFrame("TabUmlauf")
     if Durchlauf.IsChecked <> TRUE then Warnlog "The 2nd frame's wrap status is wrong ! "
     TabUmlauf.Cancel
     
-    '/// Set focus to first frame
+    printlog "Set focus to first frame"
     Call wTypeKeys "<TAB>"
     Sleep 2
     
-    '/// Check the frame's name and warp status
-    'Check first frame's name
+    printlog "Check first frame's name"
     Call fFormatFrame("TabZusaetze")
     if ObjektName.GetText <> sFrameName1 then Warnlog "The 1st frame's name is wrong ! Get " +ObjektName.GetText
     TabZusaetze.Cancel
     
-    'Check first frame's wrap status
+    printlog "Check first frame's wrap status"
     Call fFormatFrame("TabUmlauf")
     if Kein.IsChecked <> TRUE then Warnlog "The 1st frame's wrap status is wrong ! "
     TabUmlauf.Cancel

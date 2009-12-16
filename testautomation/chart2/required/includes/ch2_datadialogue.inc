@@ -63,7 +63,7 @@ testcase tChartDataDialogueButtons
         DocumentChart.OpenContextMenu
         '/// Select the third entry
         printlog "Select the third entry"
-        hMenuSelectNr (3)
+        hMenuSelectNr (6)
         sleep (1)
         Kontext "Diagramdata"
         call DialogTest ( Diagramdata )
@@ -240,7 +240,7 @@ testcase tChartDataDialogueFieldsUndo
         DocumentChart.OpenContextMenu
         '/// Select third entry
         printlog "Select third entry"
-        hMenuSelectNr (3)
+        hMenuSelectNr (6)
         sleep (1)
         Kontext "Diagramdata"
         call DialogTest ( Diagramdata )
@@ -308,7 +308,7 @@ testcase tChartDataDialogueFieldsUndo
         DocumentChart.OpenContextMenu
         '/// Select third entry
         printlog "Select third entry"
-        hMenuSelectNr (3)        
+        hMenuSelectNr (6)        
         sleep (1)
         Kontext "Diagramdata"
         '/// Inside the Tables: Press the 'TAB'-key 14 times.
