@@ -36,12 +36,15 @@
 #include "updatehdl.hxx"
 #include "updateprotocol.hxx"
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
+#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/XTerminateListener.hpp"
 #include <com/sun/star/task/XJob.hpp>
 
 namespace beans = com::sun::star::beans ;
+namespace frame = com::sun::star::frame ;
 namespace lang = com::sun::star::lang ;
 namespace task = com::sun::star::task ;
 namespace uno = com::sun::star::uno ;
@@ -61,6 +64,7 @@ public:
     virtual void SAL_CALL onTerminated();
 
     void    showDialog();
+    void    setTerminating() { m_bTerminating = true; }
 
 protected:
     ~InitUpdateCheckJobThread();
@@ -70,10 +74,11 @@ private:
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Sequence<beans::NamedValue> m_xParameters;
     bool m_bShowDialog;
+    bool m_bTerminating;
 };
 
 class UpdateCheckJob :
-    public ::cppu::WeakImplHelper2< task::XJob, lang::XServiceInfo >
+    public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, frame::XTerminateListener >
 {
     virtual ~UpdateCheckJob();
 
@@ -100,8 +105,19 @@ public:
     virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
+    // XEventListener
+    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination( lang::EventObject const & evt )
+        throw ( frame::TerminationVetoException, uno::RuntimeException );
+    virtual void SAL_CALL notifyTermination( lang::EventObject const & evt )
+        throw ( uno::RuntimeException );
+
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;
+    uno::Reference< frame::XDesktop >       m_xDesktop;
     InitUpdateCheckJobThread               *m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
@@ -115,7 +131,8 @@ InitUpdateCheckJobThread::InitUpdateCheckJobThread(
             const uno::Sequence< beans::NamedValue > &xParameters ) :
     m_xContext( xContext ),
     m_xParameters( xParameters ),
-    m_bShowDialog( false )
+    m_bShowDialog( false ),
+    m_bTerminating( false )
 {
     create();
 }
@@ -131,6 +148,9 @@ void SAL_CALL InitUpdateCheckJobThread::run()
     TimeValue tv = { 25, 0 };
 
     m_aCondition.wait( &tv );
+
+    if ( m_bTerminating )
+        return;
 
     rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
     aController->initialize( m_xParameters, m_xContext );
@@ -156,10 +176,13 @@ void InitUpdateCheckJobThread::showDialog()
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-UpdateCheckJob::UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext) :
+UpdateCheckJob::UpdateCheckJob( const uno::Reference<uno::XComponentContext>& xContext ) :
     m_xContext(xContext),
     m_pInitThread( NULL )
 {
+    m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext( UNISTRING("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
+    if ( m_xDesktop.is() )
+        m_xDesktop->addTerminateListener( this );
 }
 
 //------------------------------------------------------------------------------
@@ -299,6 +322,37 @@ UpdateCheckJob::supportsService( rtl::OUString const & serviceName ) throw (uno:
             return sal_True;
 
     return sal_False;
+}
+
+//------------------------------------------------------------------------------
+// XEventListener
+void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
+    throw ( uno::RuntimeException )
+{
+    bool shutDown = ( rEvt.Source == m_xDesktop );
+
+    if ( shutDown && m_xDesktop.is() )
+    {
+        m_xDesktop->removeTerminateListener( this );
+        m_xDesktop.clear();
+    }
+}
+
+//------------------------------------------------------------------------------
+// XTerminateListener
+void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
+    throw ( frame::TerminationVetoException, uno::RuntimeException )
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & rEvt )
+    throw ( uno::RuntimeException )
+{
+    if ( m_pInitThread )
+        m_pInitThread->setTerminating();
+
+    disposing( rEvt );
 }
 
 } // anonymous namespace

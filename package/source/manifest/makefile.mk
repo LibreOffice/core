@@ -42,6 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+.IF "$(L10N_framework)"==""
+
 SLOFILES= \
         $(SLO)$/ManifestReader.obj	\
         $(SLO)$/ManifestWriter.obj \
@@ -49,6 +51,8 @@ SLOFILES= \
         $(SLO)$/ManifestExport.obj \
         $(SLO)$/Base64Codec.obj \
         $(SLO)$/UnoRegister.obj
+
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 

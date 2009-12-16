@@ -68,6 +68,9 @@ Public sCurrAUSTRIAN as String
 Public sCurrFINNISH as String
 Public sCurrGREEK as String
 Public sCurrSLOVENIAN as String
+Public sCurrCYPRIOT as String
+Public sCurrMALTESE as String
+Public sCurrSLOVAK as String
 Public sCurrUNKNOWN as String
 Public sCurrSYSUNKNOWN as String
 
@@ -76,7 +79,7 @@ Public sPrgsCONVERTING as String
 Public sPrgsUNPROTECT as String
 Public sInclusiveSubDir as String
 
-Public Const SBCOUNTRYCOUNT = 12
+Public Const SBCOUNTRYCOUNT = 15
 Public CurMimeType as String
 Public CurCellCount as Long
 Public oSheets as Object
@@ -112,8 +115,8 @@ Public CurExtension(2) as String
 Public Currfactor as Double
 Public CurrSymbolList(2) as String
 Public CurrLanguage as String
-Public CurrValue(12,5)
-Public LangIDValue(12,2,2) as String
+Public CurrValue(15,5)
+Public LangIDValue(15,2,2) as String
 Public PreName as String
 Public Separator as String
 Public BitmapDir as String
@@ -189,8 +192,11 @@ Dim LocWorkPath as String
 		sCurrFINNISH = GetResText(1510)
 		sCurrGREEK = GetResText(1511)
 		sCurrSLOVENIAN = GetResText(1512)
-		sCurrUNKNOWN = GetResText(1513)
-		sCurrSYSUNKNOWN = GetResText(1514)
+		sCurrCYPRIOT = GetResText(1513)
+		sCurrMALTESE = GetResText(1514)
+		sCurrSLOVAK = GetResText(1515)
+		sCurrUNKNOWN = GetResText(1516)
+		sCurrSYSUNKNOWN = GetResText(1517)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(1002)
@@ -299,6 +305,10 @@ Sub InitializeLanguages()
 	LangIDValue(7,0,1) = &quot;IE&quot;
 	LangIDValue(7,0,2) = &quot;-1809&quot;
 
+	LangIDValue(7,1,0) = &quot;ga&quot;
+	LangIDValue(7,1,1) = &quot;IE&quot;
+	LangIDValue(7,1,2) = &quot;-83C&quot;
+
 &apos; CURRENCIES_LUXEMBOURG
 	LangIDValue(8,0,0) = &quot;fr&quot;
 	LangIDValue(8,0,1) = &quot;LU&quot;
@@ -330,7 +340,23 @@ Sub InitializeLanguages()
 &apos; CURRENCIES_SLOVENIAN
 	LangIDValue(12,0,0) = &quot;sl&quot;
 	LangIDValue(12,0,1) = &quot;SI&quot;
-	LangIDValue(12,0,2) = &quot;-408&quot;
+	LangIDValue(12,0,2) = &quot;-424&quot;
+
+&apos; CURRENCIES_CYPRIOT
+	LangIDValue(13,0,0) = &quot;el&quot;
+	LangIDValue(13,0,1) = &quot;CY&quot;
+	LangIDValue(13,0,2) = &quot;-408&quot;
+
+&apos; CURRENCIES_MALTESE
+	LangIDValue(14,0,0) = &quot;mt&quot;
+	LangIDValue(14,0,1) = &quot;MT&quot;
+	LangIDValue(14,0,2) = &quot;-43A&quot;
+
+&apos; CURRENCIES_SLOVAK
+	LangIDValue(15,0,0) = &quot;sk&quot;
+	LangIDValue(15,0,1) = &quot;SK&quot;
+	LangIDValue(15,0,2) = &quot;-41B&quot;
+
 End Sub
 
 
@@ -455,6 +481,33 @@ Dim i as Integer
 	CurrValue(12,3) = &quot;SIT&quot;
 	CurrValue(12,4) = &quot;SIT&quot;
 	CurrValue(12,5) = &quot;SIT&quot;
+
+	CurrValue(13,0) = sCurrCYPRIOT
+	&apos; real conversion rate
+	CurrValue(13,1) = 0.585274
+	&apos; rounded conversion rate
+	CurrValue(13,2) = 0.6
+	CurrValue(13,3) = &quot;£C&quot;
+	CurrValue(13,4) = &quot;£&quot;
+	CurrValue(13,5) = &quot;CYP&quot;
+
+	CurrValue(14,0) = sCurrMALTESE
+	&apos; real conversion rate
+	CurrValue(14,1) = 0.429300
+	&apos; rounded conversion rate
+	CurrValue(14,2) = 0.4
+	CurrValue(14,3) = chr(8356)
+	CurrValue(14,4) = &quot;Lm&quot;
+	CurrValue(14,5) = &quot;MTL&quot;
+
+	CurrValue(15,0) = sCurrSLOVAK
+	&apos; real conversion rate
+	CurrValue(15,1) = 30.1260
+	&apos; rounded conversion rate
+	CurrValue(15,2) = 30
+	CurrValue(15,3) = &quot;Sk&quot;
+	CurrValue(15,4) = &quot;Sk&quot;
+	CurrValue(15,5) = &quot;SKK&quot;
 
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;

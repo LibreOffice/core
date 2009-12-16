@@ -36,16 +36,11 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
-#ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
-#endif
-#ifndef _INFLATER_HXX
 #include <Inflater.hxx>
-#endif
 #include <ZipEntry.hxx>
-#ifndef _CRC32_HXX_
 #include <CRC32.hxx>
-#endif
+#include <mutexholder.hxx>
 
 #define UNBUFF_STREAM_DATA          0
 #define UNBUFF_STREAM_RAW           1
@@ -59,6 +54,8 @@ class XUnbufferedStream : public cppu::WeakImplHelper1
 >
 {
 protected:
+    SotMutexHolderRef maMutexHolder;
+
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
     com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
@@ -73,7 +70,9 @@ protected:
     sal_Bool mbCheckCRC;
 
 public:
-    XUnbufferedStream( ZipEntry & rEntry,
+    XUnbufferedStream(
+                 SotMutexHolderRef aMutexHolder,
+                 ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  const vos::ORef < EncryptionData > &rData,
                  sal_Int8 nStreamMode,

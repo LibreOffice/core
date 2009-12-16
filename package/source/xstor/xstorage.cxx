@@ -3224,7 +3224,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -3293,7 +3293,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a storage" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "can't detect whether it is a storage" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -4804,6 +4804,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             m_pImpl->m_bIsModified = sal_True;
         }
         else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "URL" )
                                     || aPropertyName.equalsAscii( "RepairPackage" ) )
            || aPropertyName.equalsAscii( "IsRoot" )
@@ -4937,7 +4938,8 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
-        else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "HasEncryptedEntries" ) )
+        else if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" ) || aPropertyName.equalsAscii( "HasNonEncryptedEntries" ) ) )
         {
             try {
                 m_pImpl->ReadContents();

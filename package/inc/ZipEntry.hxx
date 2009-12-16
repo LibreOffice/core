@@ -42,8 +42,8 @@ struct ZipEntry
     sal_Int32 nCompressedSize;
     sal_Int32 nSize;
     sal_Int32 nOffset;
-    sal_Int16 nNameLen;
+    sal_Int16 nPathLen;
     sal_Int16 nExtraLen;
-    ::rtl::OUString sName;
+    ::rtl::OUString sPath;
 };
 #endif

@@ -62,24 +62,6 @@ public:
     Accelerator&    GetAccelerator()                        { return aAcc; }
 };
 
-class ExtendedMultiLineEdit : public MultiLineEdit
-{
-private:
-    Accelerator     aAcc;
-    Link            aAccHdl;
-
-protected:
-    DECL_LINK( EditAccHdl, Accelerator * );
-    DECL_LINK( ImplGetFocusHdl, Control* );
-    DECL_LINK( ImplLoseFocusHdl, Control* );
-
-public:
-                    ExtendedMultiLineEdit( Window* pParent, IDEResId nRes );
-
-    void            SetAccHdl( const Link& rLink )          { aAccHdl = rLink; }
-    Accelerator&    GetAccelerator()                        { return aAcc; }
-};
-
 #endif  //NO_SPECIALEDIT
 
 #endif  // _BASTYPE3_HXX

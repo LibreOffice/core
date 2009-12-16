@@ -51,7 +51,6 @@ CDEFS+=-DDISABLE_XAW
 .IF "$(WITH_MOZILLA)" != "NO"
 
 .IF "$(GUIBASE)"=="aqua"
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
 

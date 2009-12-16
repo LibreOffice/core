@@ -35,19 +35,19 @@
 #include <cstdarg>
 #endif
 
-#include <plugin/impl.hxx>
+#include "plugin/impl.hxx"
 
-#ifndef _OSL_MUTEX_HXX
-#include <osl/mutex.hxx>
-#endif
-#include <svtools/pathoptions.hxx>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XElementAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include "osl/mutex.hxx"
+#include "svtools/pathoptions.hxx"
+#include "vcl/configsettings.hxx"
+
+#include "com/sun/star/container/XEnumerationAccess.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/container/XEnumeration.hpp"
+#include "com/sun/star/container/XElementAccess.hpp"
+#include "com/sun/star/container/XIndexAccess.hpp"
+#include "com/sun/star/loader/XImplementationLoader.hpp"
+#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
 PluginManager* PluginManager::pManager = NULL;
 
@@ -163,6 +163,20 @@ XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< ::c
     }
 
     return NULL;
+}
+
+Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
+{
+    Sequence<com::sun::star::plugin::PluginDescription> aRet;
+
+    vcl::SettingsConfigItem* pCfg = vcl::SettingsConfigItem::get();
+    rtl::OUString aVal( pCfg->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowserPlugins" ) ),
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Disabled" ) ) ) );
+    if( ! aVal.toBoolean() )
+    {
+        aRet = impl_getPluginDescriptions();
+    }
+    return aRet;
 }
 
 Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, INT16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)

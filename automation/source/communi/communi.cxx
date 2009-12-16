@@ -260,7 +260,7 @@ long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
 
 IMPL_LINK( CommunicationLinkViaSocket, PutDataReceivedHdl, CommunicationLinkViaSocket*, EMPTYARG )
 {
-    nDataReceivedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLinkViaSocket, DataReceived ) );
+    nDataReceivedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLink, DataReceived ) );
     return 0;
 }
 

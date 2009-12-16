@@ -9,3 +9,9 @@ ac  accessibility\source\helper                             nmake   -   all ac_h
 ac  accessibility\source\standard                           nmake   -   all ac_standard ac_helper ac_inc NULL
 ac  accessibility\source\extended                           nmake   -   all ac_extended ac_inc NULL
 ac  accessibility\util                                      nmake   -   all ac_util ac_helper ac_standard ac_extended NULL
+ac accessibility\workben\org\openoffice\accessibility\awb           nmake   -   all ac_awb_main ac_awb_misc ac_awb_canvas ac_awb_view ac_awb_tree NULL
+ac accessibility\workben\org\openoffice\accessibility\misc          nmake   -   all ac_awb_misc NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\canvas    nmake   -   all ac_awb_canvas ac_awb_tree NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\tree      nmake   -   all ac_awb_tree ac_awb_misc NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\view      nmake   -   all ac_awb_view ac_awb_view_text NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\view\text nmake   -   all ac_awb_view_text NULL

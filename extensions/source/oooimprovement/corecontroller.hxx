@@ -54,8 +54,8 @@ namespace oooimprovement
             // css::lang::XServiceInfo - static version
             static ::rtl::OUString SAL_CALL getImplementationName_static();
             static css::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames_static();
-            static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
-                const css::uno::Reference<css::uno::XComponentContext>& context);
+            //static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
+            //    const css::uno::Reference<css::uno::XComponentContext>& context);
 
             static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
                 const css::uno::Reference< css::lang::XMultiServiceFactory>& sm);
