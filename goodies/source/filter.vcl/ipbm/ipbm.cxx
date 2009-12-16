@@ -106,7 +106,7 @@ BOOL PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
     if ( ( mbStatus = ImplReadHeader() ) == FALSE )
         return FALSE;
 
-    if ( mnWidth == 0 || mnHeight == 0 )
+    if ( ( mnMaxVal == 0 ) || ( mnWidth == 0 ) || ( mnHeight == 0 ) )
         return FALSE;
 
     // 0->PBM, 1->PGM, 2->PPM
@@ -466,7 +466,9 @@ BOOL PBMReader::ImplReadBody()
                 if ( nCount == 3 )
                 {
                     nCount = 0;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( (BYTE)nRGB[ 0 ], (BYTE)nRGB[ 1 ], (BYTE)nRGB[ 2 ] ) );
+                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast< BYTE >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
+                                                                     static_cast< BYTE >( ( nRGB[ 1 ] * 255 ) / mnMaxVal ),
+                                                                     static_cast< BYTE >( ( nRGB[ 2 ] * 255 ) / mnMaxVal ) ) );
                     nCount = 0;
                     nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;
                     if ( nWidth == mnWidth )
