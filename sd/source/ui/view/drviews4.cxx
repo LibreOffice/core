@@ -502,6 +502,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if ( !IsInputLocked() )
     {
+        if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
+            return;
+
         const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
 
         if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
@@ -658,7 +661,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     UnlockInput();
                                 }
                                 else
-                                    nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                {
+                                    if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                    {
+                                        nSdResId = RID_DRAW_TABLEOBJ_INSIDE_POPUP;
+                                    }
+                                    else
+                                    {
+                                        nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                    }
+                                }
                             }
                         }
                         else

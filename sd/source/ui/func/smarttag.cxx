@@ -68,6 +68,18 @@ bool SmartTag::KeyInput( const KeyEvent& /*rKEvt*/ )
     return false;
 }
 
+/** returns true if the SmartTag consumes this event. */
+bool SmartTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
+{
+    return false;
+}
+
+/** returns true if the SmartTag consumes this event. */
+bool SmartTag::Command( const CommandEvent& /*rCEvt*/ )
+{
+    return false;
+}
+
 // --------------------------------------------------------------------
 
 void SmartTag::addCustomHandles( SdrHdlList& /*rHandlerList*/ )
@@ -162,6 +174,7 @@ SmartTagSet::~SmartTagSet()
 void SmartTagSet::add( const SmartTagReference& xTag )
 {
     maSet.insert( xTag );
+    mrView.InvalidateAllWin();
 }
 
 // --------------------------------------------------------------------
@@ -171,6 +184,7 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
     std::set< SmartTagReference >::iterator aIter( maSet.find( xTag ) );
     if( aIter != maSet.end() )
         maSet.erase( aIter );
+    mrView.InvalidateAllWin();
 }
 
 // --------------------------------------------------------------------
@@ -181,6 +195,7 @@ void SmartTagSet::Dispose()
     aSet.swap( maSet );
     for( std::set< SmartTagReference >::iterator aIter( aSet.begin() ); aIter != aSet.end(); )
         (*aIter++)->Dispose();
+    mrView.InvalidateAllWin();
 }
 
 // --------------------------------------------------------------------
@@ -247,8 +262,72 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->KeyInput( rKEvt );
+    else if( rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
+    {
+        SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( mrView.GetHdlList().GetFocusHdl() );
+        if( pSmartHdl )
+        {
+            const_cast< SdrHdlList& >( mrView.GetHdlList() ).ResetFocusHdl();
+            SmartTagReference xTag( pSmartHdl->getTag() );
+            select( xTag );
+            return true;
+        }
+    }
+
+
+    return false;
+}
+
+// --------------------------------------------------------------------
+
+bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
+{
+    Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rHEvt.GetMousePosPixel() ) );
+    SdrHdl* pHdl = mrView.PickHandle(aMDPos);
+
+    if( pHdl )
+    {
+        // if a smart tag handle is hit, foreward event to its smart tag
+        SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
+        if(pSmartHdl && pSmartHdl->getTag().is() )
+        {
+            SmartTagReference xTag( pSmartHdl->getTag() );
+            return xTag->RequestHelp( rHEvt );
+        }
+    }
+
+    return false;
+}
+
+// --------------------------------------------------------------------
+
+/** returns true if the SmartTag consumes this event. */
+bool SmartTagSet::Command( const CommandEvent& rCEvt )
+{
+    if( rCEvt.IsMouseEvent() )
+    {
+        Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() ) );
+        SdrHdl* pHdl = mrView.PickHandle(aMDPos);
+
+        if( pHdl )
+        {
+            // if a smart tag handle is hit, foreward event to its smart tag
+            SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
+            if(pSmartHdl && pSmartHdl->getTag().is() )
+            {
+                SmartTagReference xTag( pSmartHdl->getTag() );
+                return xTag->Command( rCEvt );
+            }
+        }
+    }
     else
-        return false;
+    {
+        if( mxSelectedTag.is() )
+            return mxSelectedTag->Command( rCEvt );
+
+    }
+
+    return false;
 }
 
 // --------------------------------------------------------------------

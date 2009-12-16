@@ -809,7 +809,7 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -1557,8 +1557,8 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     // Pruefen und Unterscheiden von CursorBewegungs- oder Eingabe-Keys
     KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
-    if( aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS ||
-        GetActualPage() != pLastPage )
+    if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
+        (GetActualPage() != pLastPage) )
     {
         Invalidate( SID_PREVIEW_STATE );
     }

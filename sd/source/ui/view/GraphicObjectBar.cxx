@@ -173,8 +173,10 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
                     mpView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
-                    mpView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    mpView->EndUndo();
+                    ::sd::View* const pView = mpView;
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                    pView->EndUndo();
+                    return;
                 }
             }
         }

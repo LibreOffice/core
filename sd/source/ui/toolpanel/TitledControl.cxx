@@ -292,7 +292,7 @@ bool TitledControl::Expand (bool bExpanded)
 {
     bool bExpansionStateChanged (false);
 
-    if (IsExpandable())
+    if (IsExpandable() && IsEnabled())
     {
         if (GetTitleBar()->IsExpanded() != bExpanded)
             bExpansionStateChanged |= GetTitleBar()->Expand (bExpanded);
@@ -338,6 +338,27 @@ bool TitledControl::IsExpanded (void) const
         return false;
 }
 
+void TitledControl::SetEnabledState(bool bFlag) 
+{
+    if (!bFlag)
+    {
+        GetParentNode()->GetControlContainer().SetExpansionState (
+            this,
+            ControlContainer::ES_COLLAPSE);
+        Disable();
+    }
+    else 
+    {
+/*    
+        GetParentNode()->GetControlContainer().SetExpansionState (
+            this,
+            ControlContainer::ES_EXPAND);
+*/         
+        Enable();
+    }
+
+    GetTitleBar()->SetEnabledState(bFlag);
+}
 
 
 
@@ -406,7 +427,8 @@ IMPL_LINK(TitledControl, WindowEventListener,
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
-                (*mpClickHandler)(*this);
+                if (IsEnabled())
+                    (*mpClickHandler)(*this);
                 break;
         }
     }

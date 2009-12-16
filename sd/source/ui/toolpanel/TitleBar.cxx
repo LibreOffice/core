@@ -216,6 +216,14 @@ bool TitleBar::IsExpanded (void) const
 }
 
 
+void TitleBar::SetEnabledState(bool bFlag)
+{
+    if(bFlag)
+        Enable();
+    else
+        Disable();
+    Invalidate ();
+}
 
 
 void TitleBar::SetFocus (bool bFlag)
@@ -454,12 +462,18 @@ void TitleBar::PaintText (const Rectangle& rTextBox)
 
 USHORT TitleBar::GetTextStyle (void)
 {
-    return TEXT_DRAW_LEFT
-        | TEXT_DRAW_TOP
-        | TEXT_DRAW_MULTILINE
-        | TEXT_DRAW_WORDBREAK;
+     if(IsEnabled())
+     {
+         return TEXT_DRAW_LEFT 
+             | TEXT_DRAW_TOP
+             | TEXT_DRAW_MULTILINE 
+             | TEXT_DRAW_WORDBREAK;
+     }
+     else
+     {
+         return TEXT_DRAW_DISABLE;
+     }
 }
-
 
 
 

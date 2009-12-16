@@ -1007,6 +1007,9 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
         if( pParaObj )
         {
             delete pParaObj;
+        }
+        else
+        {
             return sal_True;
         }
     }

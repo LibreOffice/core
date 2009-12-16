@@ -988,22 +988,26 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return sd::DocumentSettings_createInstance( this );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
+    if( ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) ) ||
+        ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime") ) ) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header") ) )
+    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header"))) ||
+        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Header"))) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_HEADERFIELD );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Footer") ) )
+    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Footer"))) ||
+        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Footer"))) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_FOOTERFIELD );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.DateTime") ) )
+    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.DateTime"))) ||
+        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.DateTime"))) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_DATETIMEFIELD );
     }
@@ -3022,6 +3026,17 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEvent
     if( xModel.is() )
     {
         uno::Reference< uno::XInterface > xSource( static_cast<uno::XWeak*>( xModel.get() ) );
+        ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
+        xModel->notifyEvent(aEvent );
+    }
+}
+
+void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+{
+    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
+
+    if( xModel.is() )
+    {
         ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
         xModel->notifyEvent(aEvent );
     }

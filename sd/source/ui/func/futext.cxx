@@ -659,7 +659,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if( mpView && mpView->MouseButtonUp(rMEvt, mpWindow) || rMEvt.GetClicks() == 2 )
+    if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow)) || rMEvt.GetClicks() == 2 )
         return (TRUE); // Event von der SdrView ausgewertet
 
     BOOL bEmptyTextObj = FALSE;

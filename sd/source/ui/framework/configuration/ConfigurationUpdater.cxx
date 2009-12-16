@@ -49,7 +49,7 @@ using ::rtl::OUString;
 using ::std::vector;
 
 #undef VERBOSE
-//#define VERBOSE 2
+#define VERBOSE 2
 
 namespace {
 static const sal_Int32 snShortTimeout (100);
