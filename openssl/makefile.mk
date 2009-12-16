@@ -65,7 +65,7 @@ OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
-.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8k.map \

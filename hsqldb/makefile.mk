@@ -53,7 +53,8 @@ TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
 TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml \
-            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java
+            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java \
+            src$/org$/hsqldb$/Library.java
 
 PATCH_FILES=patches$/accumulated_patches.patch
 

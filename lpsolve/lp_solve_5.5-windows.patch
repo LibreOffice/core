@@ -1,5 +1,5 @@
 *** misc/lp_solve_5.5/lpsolve55/cgcc.bat	Sun Jun 12 04:27:28 2005
---- misc/build/lp_solve_5.5/lpsolve55/cgcc.bat	Sun Feb 10 07:55:19 2008
+--- misc/build/lp_solve_5.5/lpsolve55/cgcc.bat	Sun Dec 14 07:55:19 2008
 ***************
 *** 7,14 ****
   
@@ -15,7 +15,7 @@
   set c=gcc
   
 ! windres lpsolve.rc lpsolve_res.obj
-! %c% -DINLINE=static -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -s -O3 -shared -mno-cygwin -enable-stdcall-fixup -D_USRDLL -DWIN32 -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine %src% lpsolve_res.obj ..\lp_solve.def -o lpsolve55.dll
+! %c% -DINLINE=static -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -s -O3 -shared -mno-cygwin -enable-stdcall-fixup -mthreads %lpsolve_LDFLAGS% -D_USRDLL -DWIN32 -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine %src% lpsolve_res.obj ..\lp_solve.def %lpsolve_LIBS% -o lpsolve55.dll
   
   %c% -DINLINE=static -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -s -O3 -shared -D_USRDLL -DWIN32 -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine %src% -o liblpsolve55.so
   

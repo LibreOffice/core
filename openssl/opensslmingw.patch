@@ -38,9 +38,20 @@
  		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
  		link_app.$${shlib_target}
  	-(cd ..; \
+--- misc/openssl-0.9.8k/e_os2.h	2005-12-19 03:57:07.000000000 +0900
++++ misc/build/openssl-0.9.8k/e_os2.h	2009-04-04 23:07:15.324250000 +0900
+@@ -264,7 +264,7 @@
+ # define OPENSSL_IMPLEMENT_GLOBAL(type,name)			     \
+ 	extern type _hide_##name;				     \
+ 	type *_shadow_##name(void) { return &_hide_##name; }	     \
+-	static type _hide_##name
++	type _hide_##name
+ # define OPENSSL_DECLARE_GLOBAL(type,name) type *_shadow_##name(void)
+ # define OPENSSL_GLOBAL_REF(name) (*(_shadow_##name()))
+ #else
 --- misc/openssl-0.9.8k/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
 +++ misc/build/openssl-0.9.8k/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
-@@ -79,13 +79,19 @@
+@@ -79,15 +79,41 @@
  rem copy ms\tlhelp32.h outinc
  
  echo Building the libraries
@@ -56,13 +67,35 @@
  if errorlevel 1 goto end
 -dllwrap --dllname libssl32.dll --output-lib out/libssl32.a --def ms/ssleay32.def out/libssl.a out/libeay32.a
 +gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32
-+if errorlevel 1 goto end
+ if errorlevel 1 goto end
 +dlltool --dllname ssleay32.dll --output-lib out/libssl.a --input-def ms/ssleay32.def
 +if errorlevel 1 goto end
-+gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto
- if errorlevel 1 goto end
++if "%MINGW_SHARED_GXXLIB%"=="YES" goto shared_gxxlib
++if "%MINGW_SHARED_GCCLIB%"=="YES" goto shared_gcclib
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++if errorlevel 1 goto end
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++if errorlevel 1 goto end
++goto finished
++
++:shared_gcclib
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++if errorlevel 1 goto end
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++if errorlevel 1 goto end
++goto finished
++
++:shared_gxxlib
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 -lstdc++_s 
++if errorlevel 1 goto end
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto -lstdc++_s
++if errorlevel 1 goto end
++goto finished
  
++:finished
  echo Done compiling OpenSSL
+ 
+ :end
 --- misc/openssl-0.9.8k/test/Makefile	2009-03-25 19:59:22.000000000 +0900
 +++ misc/build/openssl-0.9.8k/test/Makefile	2009-04-10 20:07:21.522500000 +0900
 @@ -402,13 +402,13 @@
