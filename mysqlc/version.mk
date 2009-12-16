@@ -27,7 +27,7 @@
 
 MYSQLC_VERSION_MAJOR=1
 MYSQLC_VERSION_MINOR=0
-MYSQLC_VERSION_MICRO=0
+MYSQLC_VERSION_MICRO=1
 
 # the title, as displayed in the Extension Manager
 MYSQLC_TITLE=MySQL Connector for OpenOffice.org
@@ -35,4 +35,4 @@ MYSQLC_TITLE=MySQL Connector for OpenOffice.org
 # the status of the extension
 # if this is different from "final", it will be appended to the title displayed in the Extension Manager
 # and also added to the file name of the resulting .oxt file
-MYSQLC_STATUS=final
+MYSQLC_STATUS=Alpha
