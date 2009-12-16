@@ -289,7 +289,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         return bIsSuccessfull;
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         super.switchToStep(super.getCurrentStep(), SOFINALPAGE);
         tablename = curFinalizer.getTableName(curScenarioSelector.getFirstTableName());
@@ -314,6 +314,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
                         components = curTableDescriptor.switchtoDataViewmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE, CurFrame);
                     }
                     super.xDialog.endExecute();
+                    return true;
                 }
             }
             else
@@ -323,6 +324,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
                 curFinalizer.setFocusToTableNameControl();
             }
         }
+        return false;
     }
 
     private void callFormWizard()
