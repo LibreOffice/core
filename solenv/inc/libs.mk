@@ -270,7 +270,11 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(OS)" == "WNT"
+CPPUNITLIB = -lcygcppunit-1-12-1
+.ELSE
 CPPUNITLIB = -lcppunit
+.ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
