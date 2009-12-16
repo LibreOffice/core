@@ -3261,6 +3261,8 @@ void SAL_CALL SlideshowImpl::setEraseAllInk( bool bEraseAllInk ) throw (RuntimeE
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mbEraseAllInk=bEraseAllInk;
+    mbSwitchPenMode = true;
+    mbSwitchEraserMode = false;
     if( maPresSettings.mbMouseAsPen )
         setUsePen( sal_True ); // update erase all ink bool
 }
