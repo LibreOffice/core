@@ -30,15 +30,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include <tools/shl.hxx>
 #include <svtools/lngmisc.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/svtreebx.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
+
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
@@ -54,6 +54,7 @@
 #include "thesdlg.hrc"
 #include <unolingu.hxx>
 #include <svx/langbox.hxx>
+#include <svx/checklbx.hxx>
 
 
 using namespace ::com::sun::star;
@@ -67,6 +68,7 @@ using namespace ::com::sun::star::linguistic2;
 //#define S2U(s)                        StringToOUString(s, CHARSET_SYSTEM)
 //#define U2S(s)                        OUStringToString(s, CHARSET_SYSTEM)
 
+#define A2S(x)          String::CreateFromAscii( x )
 
 // GetReplaceEditString -------------------------------
 
@@ -96,6 +98,116 @@ static void GetReplaceEditString( String &rText )
     // when it gets called with the text
     rText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
 }
+
+// class ThesaurusAlternativesCtrl_Impl ----------------------------------
+
+class AlternativesUserData_Impl
+{
+    String  sText;
+    bool    bHeader;
+
+public:
+    AlternativesUserData_Impl( const String &rText, bool bIsHeader ) :
+        sText(rText),
+        bHeader(bIsHeader)
+        {
+        }
+    
+    bool IsHeader() const           { return bHeader; }
+    const String& GetText() const   { return sText; }
+};
+
+
+class AlternativesString_Impl : public SvLBoxString
+{
+public:
+
+    AlternativesString_Impl( SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr )
+        : SvLBoxString( pEntry, nFlags, rStr ) {}
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry);
+};
+
+
+void AlternativesString_Impl::Paint( 
+    const Point& rPos, 
+    SvLBox& rDev, USHORT,
+    SvLBoxEntry* pEntry )
+{
+    AlternativesUserData_Impl* pData = (AlternativesUserData_Impl*)pEntry->GetUserData();
+    Point aPos( rPos );
+    Font aOldFont( rDev.GetFont());
+    if (pData && pData->IsHeader())
+    {
+        Font aFont( aOldFont );
+        aFont.SetWeight( WEIGHT_BOLD );
+        rDev.SetFont( aFont );
+        aPos.X() = 0;
+    }
+    else
+        aPos.X() += 5;
+    rDev.DrawText( aPos, GetText() );
+    rDev.SetFont( aOldFont );
+}
+
+
+class ThesaurusAlternativesCtrl_Impl :
+    public SvxCheckListBox
+{
+    std::vector< SvLBoxEntry * >    m_aEntries;
+
+
+    SvLBoxEntry *   AddEntry( const String &rText, bool bIsHeader );
+
+    // disable copy c-tor and assignment operator
+    ThesaurusAlternativesCtrl_Impl( const ThesaurusAlternativesCtrl_Impl & );
+    ThesaurusAlternativesCtrl_Impl & operator = ( const ThesaurusAlternativesCtrl_Impl & );
+
+public:
+    ThesaurusAlternativesCtrl_Impl( Window* pParent );
+    virtual ~ThesaurusAlternativesCtrl_Impl();
+};
+
+
+ThesaurusAlternativesCtrl_Impl::ThesaurusAlternativesCtrl_Impl(
+        Window* pParent ) :
+    SvxCheckListBox( pParent, SVX_RES( CT_THES_ALTERNATIVES ) )
+{
+    FreeResource();
+
+    SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+    SetHighlightRange();
+//  SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
+//  SetCheckButtonHdl( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl) );
+
+//    AddEntry( A2S("klein"), true );
+//    AddEntry( A2S("1. alpha"), false );
+//    AddEntry( A2S("2. beta"), false );
+
+//    AddEntry( A2S("gross"), true );
+//    AddEntry( A2S("1. ALPHA"), false );
+//    AddEntry( A2S("2. BETA"), false );
+//    AddEntry( A2S("3. GAMMA"), false );
+}
+
+
+ThesaurusAlternativesCtrl_Impl::~ThesaurusAlternativesCtrl_Impl()
+{
+}
+
+
+SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( const String &rText, bool bIsHeader )
+{
+    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    String sEmpty;
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+//  pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new AlternativesString_Impl( pEntry, 0, rText ) );
+
+    m_aEntries.push_back( pEntry );
+    return pEntry;
+}
+
 
 // struct ThesDlg_Impl ---------------------------------------------------
 
@@ -203,6 +315,8 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
     aSynonymText( this, SVX_RES( FT_SYNON ) ),
     aSynonymLB  ( this, SVX_RES( LB_SYNON ) ),
     aVarFL      ( this, SVX_RES( FL_VAR ) ),
+    m_aAlternativesText  ( this, SVX_RES( FT_THES_ALTERNATIVES ) ),
+    m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( this ) ),
     aOkBtn      ( this, SVX_RES( BTN_THES_OK ) ),
     aCancelBtn  ( this, SVX_RES( BTN_THES_CANCEL ) ),
     aLookUpBtn  ( this, SVX_RES( BTN_LOOKUP ) ),

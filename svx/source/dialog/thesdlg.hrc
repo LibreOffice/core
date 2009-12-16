@@ -45,14 +45,16 @@
 #define LB_SYNON                20
 #define FT_REPL                 21
 #define ED_REPL                 22
-#define FL_VAR                                  23
+#define FL_VAR                  23
+#define FT_THES_ALTERNATIVES    24
+#define CT_THES_ALTERNATIVES    25
 
 #define STR_ERR_WORDNOTFOUND    30
 
 // LanguageDialog --------------------------------------------------------
 
 #define LB_THES_LANGUAGE        10
-#define FL_THES_LANGUAGE                11
+#define FL_THES_LANGUAGE        11
 #define BTN_LANG_OK             12
 #define BTN_LANG_CANCEL         12
 #define BTN_LANG_HELP           13

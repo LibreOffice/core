@@ -450,6 +450,8 @@
 
 #define HID_GRFFILTER_EMBOSS_LIGHT              (HID_SVX_START + 408)
 
+#define HID_CT_THES_ALTERNATIVES                (HID_SVX_START + 409)
+
 #define HID_GALLERY_NEWTHEME                    (HID_SVX_START + 410)
 #define HID_GALLERY_THEMELIST                   (HID_SVX_START + 411)
 

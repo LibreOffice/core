@@ -31,29 +31,26 @@
 #define _SVX_THESDLG_HXX
 // include ---------------------------------------------------------------
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svx/stddlg.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
+
+#include <boost/shared_ptr.hpp>
+
 #include "svx/svxdllapi.h"
+
 
 // forward ---------------------------------------------------------------
 
 struct ThesDlg_Impl;
 
 class SvxThesaurusLanguageDlg_Impl;
+class ThesaurusAlternativesCtrl_Impl;
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -91,6 +88,8 @@ private:
     ListBox         aMeanLB;
     FixedText       aSynonymText;
     ListBox         aSynonymLB;
+    FixedText       m_aAlternativesText;
+    boost::shared_ptr< ThesaurusAlternativesCtrl_Impl > m_pAlternativesCT;
     FixedLine       aVarFL;
 
     OKButton        aOkBtn;
