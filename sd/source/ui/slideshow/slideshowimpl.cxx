@@ -3273,7 +3273,7 @@ void SAL_CALL SlideshowImpl::setEraseInk( sal_Int32 nEraseInkSize ) throw (Runti
     mbSwitchPenMode = false;
     mbSwitchEraserMode = true;
     if( maPresSettings.mbMouseAsPen )
-        setUsePen( sal_True ); // update erase ink size
+        setUseEraser( sal_True ); // update erase ink size
 }
 #endif
 // --------------------------------------------------------------------
