@@ -52,7 +52,9 @@ ADDITIONAL_FILES=\
 CONVERTFILES=\
                 cppconn$/build_config.h
 
-PATCH_FILES=$(TARFILE_NAME).patch
+PATCH_FILES=\
+    $(TARFILE_NAME).patch \
+    patches/default_to_protocol_tcp.patch
 
 BUILD_DIR=driver
 BUILD_ACTION = \
