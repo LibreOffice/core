@@ -511,8 +511,6 @@
 #include "cppuhelper/weak.hxx"
 #include "cppuhelper/weakref.hxx"
 
-#include "cppunit/simpleheader.hxx"
-
 #include "framework/interaction.hxx"
 
 #include "goodies/grfmgr.hxx"
