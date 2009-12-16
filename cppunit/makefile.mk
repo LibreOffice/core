@@ -77,9 +77,12 @@ $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
 .IF "$(USE_SYSTEM_STL)" != "YES"
 
 OOO_STLPORT_CXXFLAGS = -I$(SOLARINCDIR)/stl
+.IF "$(USE_STLP_DEBUG)" == "TRUE"
+OOO_STLPORT_CXXFLAGS += -D_STLP_DEBUG
+.END
 .IF "$(COM)" == "GCC"
 OOO_STLPORT_CXXFLAGS += -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
-.ENDIF
+.END
 
 OOO_STLPORT_LDFLAGS = -L$(SOLARLIBDIR)
 OOO_STLPORT_LIBS = $(LIBSTLPORT)
@@ -91,7 +94,7 @@ OOO_STLPORT_LIBS = $(LIBSTLPORT)
 # reference to `_rtld_global_ro@GLIBC_PRIVATE'" unless -lm is also specified:
 .IF "$(OS)" == "LINUX" && "$(COM)" == "GCC" && "$(CPU)" == "I"
 OOO_STLPORT_LIBS += -lm
-.ENDIF
+.END
 
 # And later, when "checking whether the C compiler works" configure tries to
 # execute that program; however, the program would fail to locate the STLport
@@ -104,7 +107,7 @@ LD_LIBRARY_PATH := $(SOLARLIBDIR)
     # variable is set to the empty string
 .ELSE
 LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(SOLARLIBDIR)
-.ENDIF
+.END
 .EXPORT: LD_LIBRARY_PATH
 .END
 
@@ -116,7 +119,7 @@ LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(SOLARLIBDIR)
 # better fix):
 .IF "$(OS)" == "SOLARIS" && "$(COM)" == "C52"
 MY_LIBS = -lm
-.ENDIF
+.END
 
 CONFIGURE_ACTION = ./configure
 CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
@@ -132,16 +135,20 @@ BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
+.IF "$(OS)" == "WNT"
+OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
+    ooo-install/bin/cygcppunit-1-12-1.dll
+.ELSE
+OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
-.ENDIF
-
-OUT2BIN = ooo-install/bin/DllPlugInTester
+.END
+.END
 
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
 .INCLUDE: tg_ext.mk
 
-.ENDIF
+.END
