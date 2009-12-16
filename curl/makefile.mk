@@ -87,10 +87,18 @@ OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).3
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+curl_CC=$(CC)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+curl_CC+=-shared-libgcc
+.ENDIF
+curl_LIBS=-lws2_32 -lwinmm -lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+curl_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 OBJDUMP="$(WRAPCMD) objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lwinmm -lmingwthrd"
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" OBJDUMP="$(WRAPCMD) objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll

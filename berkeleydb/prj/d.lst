@@ -1,17 +1,15 @@
 mkdir: %_DEST%\inc%_EXT%\berkeleydb
 
-..\%__SRC%\inc\db_cxx.h %_DEST%\inc%_EXT%\berkeleydb\db_cxx.h
-..\%__SRC%\inc\db_185.h %_DEST%\inc%_EXT%\berkeleydb\db_185.h
 ..\%__SRC%\inc\db.h %_DEST%\inc%_EXT%\berkeleydb\db.h
 
-..\%__SRC%\lib\libdb42.lib %_DEST%\lib%_EXT%\libdb42.lib
+..\%__SRC%\lib\libdb47.lib %_DEST%\lib%_EXT%\libdb47.lib
 
-..\%__SRC%\lib\libdb-4.2.so %_DEST%\lib%_EXT%\libdb-4.2.so
+..\%__SRC%\lib\libdb-4.7.so %_DEST%\lib%_EXT%\libdb-4.7.so
 
-..\%__SRC%\lib\libdb-4.2.dylib %_DEST%\lib%_EXT%\libdb-4.2.dylib
+..\%__SRC%\lib\libdb-4.7.dylib %_DEST%\lib%_EXT%\libdb-4.7.dylib
 
-..\%__SRC%\lib\libdb42.a %_DEST%\lib%_EXT%\libdb-4.2.a
+..\%__SRC%\lib\libdb47.dll.a %_DEST%\lib%_EXT%\libdb-4.7.a
 
-..\%__SRC%\bin\libdb42.dll %_DEST%\bin%_EXT%\libdb42.dll
-..\%__SRC%\bin\libdb_cxx42.dll %_DEST%\bin%_EXT%\libdb_cxx42.dll
+..\%__SRC%\bin\libdb47.dll %_DEST%\bin%_EXT%\libdb47.dll
+
 
