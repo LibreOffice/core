@@ -710,6 +710,17 @@ namespace slideshow
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
         }
 
+        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        {
+            return ::cppcanvas::makeColorARGB(
+                // convert from IntSRGBA color to API color
+                // (0xRRGGBBAA -> 0xAARRGGBB)
+                static_cast< sal_uInt8 >(0),
+                ::cppcanvas::getRed(aColor),
+                ::cppcanvas::getGreen(aColor),
+                ::cppcanvas::getBlue(aColor));
+        }
+
         /*sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
         {
             return ::cppcanvas::unMakeColor(
