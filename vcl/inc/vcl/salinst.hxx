@@ -31,6 +31,8 @@
 #ifndef _SV_SALINST_HXX
 #define _SV_SALINST_HXX
 
+#include "com/sun/star/uno/Reference.hxx"
+
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 
@@ -176,6 +178,12 @@ public:
     // this is only necessary because PrintFontManager is an exported vcl API and therefore
     // needs to be in libvcl while libvclplug_* do not contain exported C++ API
     virtual void        FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+
+    // dtrans implementation
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
 };
 
 // called from SVMain

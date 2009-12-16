@@ -1,0 +1,2 @@
+RegistrationClassName: com.sun.star.help.HelpComponent
+Class-Path: lucene-core-2.3.jar lucene-analyzers-2.3.jar

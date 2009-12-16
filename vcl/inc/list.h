@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: list.h,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: list.h,v 1.4 2008-06-25 14:20:01 kz Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/

@@ -32,10 +32,6 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #if OSL_DEBUG_LEVEL == 0
 #  ifndef NDEBUG
 #    define NDEBUG
@@ -45,6 +41,7 @@
 
 #include "ttcr.hxx"
 #include "list.h"
+#include "string.h"
 
 
 
@@ -96,7 +93,7 @@ _inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
 }
 
 /*- Data access macros for data stored in big-endian or little-endian format */
-_inline sal_Int16 GetInt16(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+_inline sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_Int16 t;
     assert(ptr != 0);
@@ -110,7 +107,7 @@ _inline sal_Int16 GetInt16(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendia
     return t;
 }
 
-_inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+_inline sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_uInt16 t;
     assert(ptr != 0);
@@ -124,7 +121,7 @@ _inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, sal_uInt32 offset, int bigend
     return t;
 }
 
-_inline sal_Int32  GetInt32(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+_inline sal_Int32 GetInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_Int32 t;
     assert(ptr != 0);
@@ -140,7 +137,7 @@ _inline sal_Int32  GetInt32(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendi
     return t;
 }
 
-_inline sal_uInt32 GetUInt32(const sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+_inline sal_uInt32 GetUInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_uInt32 t;
     assert(ptr != 0);
@@ -968,7 +965,7 @@ static struct {
 
 TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
                                 sal_uInt32 nbytes,
-                                sal_uInt8 *ptr)
+                                const sal_uInt8* ptr)
 {
     TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     tdata_generic* pdata = (tdata_generic*)smalloc(sizeof(tdata_generic));
@@ -991,7 +988,7 @@ TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
 TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
                                      sal_uInt16 flags,
                                      sal_uInt16 unitsPerEm,
-                                     sal_uInt8  *created,
+                                     const sal_uInt8* created,
                                      sal_uInt16 macStyle,
                                      sal_uInt16 lowestRecPPEM,
                                      sal_Int16  fontDirectionHint)
@@ -1064,7 +1061,7 @@ TrueTypeTable *TrueTypeTableNew_loca(void)
     return table;
 }
 
-TrueTypeTable *TrueTypeTableNew_maxp(sal_uInt8 *maxp, int size)
+TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
 {
     TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     table->data = ttmalloc(TABLESIZE_maxp);

@@ -90,6 +90,10 @@ ENVCFLAGS+=-DUSE_CDE
 CFLAGS+=-DXRENDER_LINK
 .ENDIF
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
+
 .ENDIF	# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------

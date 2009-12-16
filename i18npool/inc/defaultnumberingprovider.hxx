@@ -53,6 +53,7 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper4
     void GetCharStrN( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
     void GetCharStr( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
     void GetRomanString( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
+    void impl_loadTranslit();
 public:
     DefaultNumberingProvider(
         const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xMSF );

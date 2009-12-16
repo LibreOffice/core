@@ -41,7 +41,7 @@ TARGET4=dnd
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 
 # --- mcnttype dynlib ----------------------------------------------
 
@@ -180,6 +180,7 @@ DEF3NAME=		$(SHL3TARGET)
 DEF3EXPORTFILE=	exports.dxp
 
 .ENDIF			# "$(GUI)"=="OS2"
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
 

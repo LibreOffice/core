@@ -51,20 +51,23 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR ::com::sun::star::uno::RuntimeException()
 
-#define ImplementName "com.sun.star.i18n.BreakIterator_Unicode";
+//#define ImplementName "com.sun.star.i18n.BreakIterator_Unicode";
 
 
-BreakIterator_Unicode::BreakIterator_Unicode()
+BreakIterator_Unicode::BreakIterator_Unicode() :
+    cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" ),    // implementation name
+    wordRule( "word" ),
+    lineRule( "line" ),
+    result(),
+    character(),
+    word(),
+    sentence(),
+    line(),
+    icuBI( NULL ),
+    aLocale(),
+    aBreakType(),
+    aWordType()
 {
-        wordRule="word";
-        lineRule="line";
-        character.aBreakIterator=word.aBreakIterator=sentence.aBreakIterator=line.aBreakIterator=NULL;
-        character.aICUText=UnicodeString();
-        word.aICUText=UnicodeString();
-        sentence.aICUText=UnicodeString();
-        line.aICUText=UnicodeString();
-        cBreakIterator = ImplementName;
-        icuBI=NULL;
 }
 
 

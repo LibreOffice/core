@@ -134,6 +134,16 @@ extern "C"
 
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         #if OSL_DEBUG_LEVEL > 1
         int nFd = open( "/home/pl93762/log.txt", O_CREAT | O_TRUNC | O_WRONLY, 0755 );
         dup2( nFd, STDERR_FILENO );

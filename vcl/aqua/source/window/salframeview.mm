@@ -184,6 +184,8 @@ static AquaSalFrame* getMouseContainerFrame()
         return YES;
     if( mpFrame->mbFullScreen )
         return YES;
+    if( (mpFrame->mnStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+        return YES;
     return [super canBecomeKeyWindow];
 }
 
@@ -1420,7 +1422,7 @@ private:
     return 0;
 }
 
-#ifdef MAC_OS_X_VERSION_10_5
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
 /* build target 10.5 or greater */
 - (NSInteger)conversationIdentifier
 #else

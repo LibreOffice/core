@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
@@ -65,12 +65,13 @@ SHL1VERSIONMAP = export.map
 SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
-
+.IF "$(L10N_framework)"==""
 unittest : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
@@ -78,3 +79,5 @@ unittest : $(SHL1TARGETN)
         $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
 
 ALLTAR : unittest
+.ENDIF 		# L10N_framework
+

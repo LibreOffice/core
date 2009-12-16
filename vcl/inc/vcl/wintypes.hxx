@@ -194,6 +194,7 @@ typedef sal_Int64 WinBits;
 #define WB_TOOLTIPWIN           ((WinBits)SAL_CONST_INT64(0x800000000))
 #define WB_OWNERDRAWDECORATION  ((WinBits)SAL_CONST_INT64(0x2000000000))
 #define WB_DEFAULTWIN           ((WinBits)SAL_CONST_INT64(0x4000000000))
+#define WB_NEEDSFOCUS           ((WinBits)SAL_CONST_INT64(0x1000000000))
 
 #define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
 #define WB_HSCROLL              WB_HORZ

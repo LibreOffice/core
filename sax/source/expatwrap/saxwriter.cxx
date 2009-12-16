@@ -208,6 +208,8 @@ public:
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
     inline sal_Bool comment(const rtl::OUString& rComment) throw( SAXException );
+
+    inline void clearBuffer() throw( SAXException );
 };
 
 const sal_Bool g_bValidCharsBelow32[32] =
@@ -434,7 +436,7 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             OSL_ENSURE( nSurrogate != 0, "lone 2nd Unicode surrogate" );
 
             nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
-            if( nSurrogate > 0x00010000  &&  nSurrogate <= 0x001FFFFF )
+            if( nSurrogate >= 0x00010000  &&  nSurrogate <= 0x0010FFFF )
             {
                 sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
                                       sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
@@ -693,6 +695,17 @@ inline void SaxWriterHelper::endDocument() throw( SAXException )
     }
 }
 
+inline void SaxWriterHelper::clearBuffer() throw( SAXException )
+{
+    FinishStartElement();
+    if (nCurrentPos > 0)
+    {
+        m_Sequence.realloc(nCurrentPos);
+        nCurrentPos = writeSequence();
+        m_Sequence.realloc(SEQUENCESIZE);
+    }
+}
+
 inline sal_Bool SaxWriterHelper::processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException )
 {
     FinishStartElement();
@@ -851,7 +864,7 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
         {
             // 2. surrogate: write as UTF-8 (if range is OK
             nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
-            if( nSurrogate > 0x00010000  &&  nSurrogate <= 0x001FFFFF )
+            if( nSurrogate >= 0x00010000  &&  nSurrogate <= 0x0010FFFF )
                 nOutputLength += 4;
             nSurrogate = 0;
         }
@@ -927,12 +940,20 @@ public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException)
             {
+                // temporary: set same stream again to clear buffer
+                if ( m_out == aStream && mp_SaxWriterHelper && m_bDocStarted )
+                    mp_SaxWriterHelper->clearBuffer();
+                else
+                {
+
                 m_out = aStream;
                 delete mp_SaxWriterHelper;
                 mp_SaxWriterHelper = new SaxWriterHelper(m_out);
                 m_bDocStarted = sal_False;
                 m_nLevel = 0;
                 m_bIsCDATA = sal_False;
+
+                }
             }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
         throw(RuntimeException)

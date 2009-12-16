@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.95.14.5 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -47,6 +44,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/font.hxx"
+#include "vcl/fontsubset.hxx"
 #include "vcl/sallayout.hxx"
 
 #include "rtl/logfile.hxx"
@@ -72,6 +70,11 @@
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
+#endif
+
+#ifdef ENABLE_GRAPHITE
+#include <graphite/GrClient.h>
+#include <graphite/WinFont.h>
 #endif
 
 #include <vector>
@@ -551,13 +554,10 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
 
     aDFA.mbEmbeddable   = false;
     aDFA.mbSubsettable  = false;
-    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
-        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            // TODO: implement type1 or CFF subsetting
-            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
-                aDFA.mbSubsettable = true;
-    // for now we can only embed Type1 fonts
-    if( 0 != (rMetric.ntmFlags & NTM_TYPE1 ) )
+    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
+     || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
+        aDFA.mbSubsettable = true;
+    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
@@ -566,7 +566,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     aDFA.mnQuality = 0;
     if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
         aDFA.mnQuality += 50;
-    if( rMetric.ntmFlags & NTM_TT_OPENTYPE )
+    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE)) )
         aDFA.mnQuality += 10;
     if( aDFA.mbSubsettable )
         aDFA.mnQuality += 200;
@@ -633,13 +633,10 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
 
     aDFA.mbEmbeddable   = false;
     aDFA.mbSubsettable  = false;
-    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
-        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            // TODO: implement type1 or CFF subsetting
-            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
-                aDFA.mbSubsettable = true;
-    // for now we can only embed Type1 fonts
-    if( rMetric.ntmFlags & NTM_TYPE1 )
+    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
+     || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
+        aDFA.mbSubsettable = true;
+    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
@@ -648,7 +645,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.mnQuality = 0;
     if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
         aDFA.mnQuality += 50;
-    if( rMetric.ntmFlags & NTM_TT_OPENTYPE )
+    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE)) )
         aDFA.mnQuality += 10;
     if( aDFA.mbSubsettable )
         aDFA.mnQuality += 200;
@@ -807,6 +804,9 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
+#ifdef ENABLE_GRAPHITE
+    mbHasGraphiteSupport( false ),
+#endif
     mbHasArabicSupport ( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
@@ -865,6 +865,13 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 
     ReadCmapTable( hDC );
     ReadOs2Table( hDC );
+#ifdef ENABLE_GRAPHITE
+    static const char* pDisableGraphiteText = getenv( "SAL_DISABLE_GRAPHITE" );
+    if( !pDisableGraphiteText || (pDisableGraphiteText[0] == '0') )
+    {
+        mbHasGraphiteSupport = gr::WinFont::FontHasGraphiteTables(hDC);
+    }
+#endif
 
     // even if the font works some fonts have problems with the glyph API
     // => the heuristic below tries to figure out which fonts have the problem
@@ -993,27 +1000,25 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 
 void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 {
-    CmapResult aResult;
-    aResult.mnPairCount   = 0;
-    aResult.mpPairCodes   = NULL;
-    aResult.mpStartGlyphs = NULL;
-    aResult.mbSymbolic    = (meWinCharSet == SYMBOL_CHARSET);
-    aResult.mbRecoded     = true;
+    if( mpUnicodeMap != NULL )
+        return;
 
+    bool bIsSymbolFont = (meWinCharSet == SYMBOL_CHARSET);
     // get the CMAP table from the font which is selected into the DC
     const DWORD nCmapTag = CalcTag( "cmap" );
     const RawFontData aRawFontData( hDC, nCmapTag );
     // parse the CMAP table if available
-    if( aRawFontData.get() )
+    if( aRawFontData.get() ) {
+        CmapResult aResult;
         ParseCMAP( aRawFontData.get(), aRawFontData.size(), aResult );
+        mbDisableGlyphApi |= aResult.mbRecoded;
+        aResult.mbSymbolic = bIsSymbolFont;
+        if( aResult.mnRangeCount > 0 )
+            mpUnicodeMap = new ImplFontCharMap( aResult );
+    }
 
-    mbDisableGlyphApi |= aResult.mbRecoded;
-
-    if( aResult.mnPairCount > 0 )
-        mpUnicodeMap = new ImplFontCharMap( aResult.mnPairCount,
-            aResult.mpPairCodes, aResult.mpStartGlyphs );
-    else
-        mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    if( !mpUnicodeMap )
+        mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
 }
 
 // =======================================================================
@@ -2547,6 +2552,8 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
+    // TODO: use more of the central font-subsetting code, move stuff there if needed
+
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
     // use height=1000 for easier debugging (to match psprint's font units)
@@ -2554,9 +2561,13 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
-    float fScale = 0.0;
+    float fScale = 1.0;
     HFONT hOldFont = 0;
     ImplDoSetFont( &aIFSD, fScale, hOldFont );
+
+    ImplWinFontData* pWinFontData = (ImplWinFontData*)aIFSD.mpFontData;
+    pWinFontData->UpdateFromHDC( mhDC );
+/*const*/ ImplFontCharMap* pImplFontCharMap = pWinFontData->GetImplFontCharMap();
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
@@ -2568,8 +2579,42 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
 #endif
 
+    rtl::OUString aSysPath;
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
+        return FALSE;
+    const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
+    const ByteString aToFile( aSysPath.getStr(), (xub_StrLen)aSysPath.getLength(), aThreadEncoding );
+
+    // check if the font has a CFF-table
+    const DWORD nCffTag = CalcTag( "CFF " );
+    const RawFontData aRawCffData( mhDC, nCffTag );
+    if( aRawCffData.get() )
+    {
+        long nRealGlyphIds[ 256 ];
+        for( int i = 0; i < nGlyphCount; ++i )
+        {
+            // TODO: remap notdef glyph if needed
+            // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
+            sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
+            if( pGlyphIDs[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
+                nGlyphIdx = pImplFontCharMap->GetGlyphIndex( nGlyphIdx );
+            if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
+                {/*####*/}
+
+            nRealGlyphIds[i] = nGlyphIdx;
+        }
+
+        // provide a font subset from the CFF-table
+        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
+        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
+                nRealGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
+        fclose( pOutFile );
+        return bRC;
+    }
+
     // get raw font file data
-    const RawFontData xRawFontData( mhDC );
+    const RawFontData xRawFontData( mhDC, NULL );
     if( !xRawFontData.get() )
         return FALSE;
 
@@ -2585,7 +2630,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
-    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
+    rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
     rInfo.m_nAscent     = +aTTInfo.winAscent;
     rInfo.m_nDescent    = -aTTInfo.winDescent;
@@ -2593,7 +2638,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
 
-    // subset glyphs and get their properties
+    // subset TTF-glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphCount;
     USHORT    aShortIDs[ 256 ];
@@ -2649,11 +2694,6 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     free( pMetrics );
 
     // write subset into destination file
-    rtl::OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return FALSE;
-    rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
             aTempEncs, nGlyphCount, 0, NULL, 0 );
     return (nRC == SF_OK);
@@ -2683,7 +2723,7 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     TEXTMETRICA aTm;
     if( !::GetTextMetricsA( mhDC, &aTm ) )
         *pDataLen = 0;
-    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TYPE1;
+    rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1;
     WCHAR aFaceName[64];
     int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
     // #i59854# strip eventual null byte
@@ -2876,3 +2916,4 @@ SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
 }
 
 //--------------------------------------------------------------------------
+

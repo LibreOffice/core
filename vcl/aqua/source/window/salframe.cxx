@@ -43,6 +43,7 @@
 #include "aqua11yfactory.h"
 #include "vcl/salwtype.hxx"
 #include "vcl/window.hxx"
+#include "vcl/timer.hxx"
 
 #include "premac.h"
 // needed for theming
@@ -749,16 +750,37 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 // -----------------------------------------------------------------------
 
+class PreventSleepTimer : public AutoTimer
+{
+public:
+    PreventSleepTimer()
+    {
+        SetTimeout( 30000 );
+        Start();
+    }
+
+    virtual ~PreventSleepTimer()
+    {
+    }
+
+    virtual void Timeout()
+    {
+        UpdateSystemActivity(OverallAct);
+    }
+};
+
 void AquaSalFrame::StartPresentation( BOOL bStart )
 {
     if( bStart )
     {
+        mpActivityTimer.reset( new PreventSleepTimer() );
         [mpWindow setLevel: NSScreenSaverWindowLevel];
         if( mbShown )
             [mpWindow makeMainWindow];
     }
     else
     {
+        mpActivityTimer.reset();
         [mpWindow setLevel: NSNormalWindowLevel];
     }
 }
@@ -1173,6 +1195,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuTextColor( getColor( [NSColor textColor],
                                     aStyleSettings.GetMenuTextColor(), mpWindow ) );
     aStyleSettings.SetMenuTextColor( aMenuTextColor );
+    aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 

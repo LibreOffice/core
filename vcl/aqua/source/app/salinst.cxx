@@ -815,6 +815,18 @@ bool AquaSalInstance::AnyInput( USHORT nType )
             return false;
     }
 
+    if( nType & INPUT_TIMER )
+    {
+        if( AquaSalTimer::pRunningTimer )
+        {
+            NSDate* pDt = [AquaSalTimer::pRunningTimer fireDate];
+            if( pDt && [pDt timeIntervalSinceNow] < 0 )
+            {
+                return true;
+            }
+        }
+    }
+
     unsigned/*NSUInteger*/ nEventMask = 0;
     if( nType & INPUT_MOUSE)
         nEventMask |=
@@ -828,7 +840,7 @@ bool AquaSalInstance::AnyInput( USHORT nType )
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & INPUT_OTHER)
         nEventMask |= NSTabletPoint;
-    // TODO: INPUT_PAINT / INPUT_TIMER / more INPUT_OTHER
+    // TODO: INPUT_PAINT / more INPUT_OTHER
     if( !nType)
         return false;
 

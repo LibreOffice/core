@@ -674,11 +674,11 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
         ImplSVData* pSVData = ImplGetSVData();
         if ( !pSVData->maAppData.mbSettingsInit )
         {
-            pWindow->ImplGetFrame()->UpdateSettings( *pSVData->maAppData.mpSettings );
+            // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = TRUE;
         }
-        pWindow->ImplGetFrame()->UpdateSettings( rSettings );
+        // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
         pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
     }
 }

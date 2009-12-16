@@ -49,6 +49,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleSelection;
     class XAccessibleTable;
     class XAccessibleText;
+    class XAccessibleTextMarkup;
     class XAccessibleTextAttributes;
     class XAccessibleValue;
 } } } }
@@ -69,6 +70,7 @@ struct _AtkObjectWrapper
     ::com::sun::star::accessibility::XAccessibleSelection      *mpSelection;
     ::com::sun::star::accessibility::XAccessibleTable          *mpTable;
     ::com::sun::star::accessibility::XAccessibleText           *mpText;
+    ::com::sun::star::accessibility::XAccessibleTextMarkup     *mpTextMarkup;
     ::com::sun::star::accessibility::XAccessibleTextAttributes *mpTextAttributes;
     ::com::sun::star::accessibility::XAccessibleValue          *mpValue;
 
