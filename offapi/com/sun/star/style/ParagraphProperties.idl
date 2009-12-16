@@ -448,6 +448,15 @@ published service ParagraphProperties
          */
         [optional, property] string ListId;
 
+        //-------------------------------------------------------------------------
+        /** specifies the outline level to which the paragraph belongs
+
+            @since OOo 3.1
+
+            <p>Value 0 indicates that the paragraph belongs to the body text.</p>
+            <p>Values [1..10] indicates that the paragraph belongs to the corresponding outline level.</p>
+         */
+        [optional, property] short OutlineLevel;
 };
 
 //=============================================================================

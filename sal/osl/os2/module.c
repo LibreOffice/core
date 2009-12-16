@@ -109,7 +109,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
                     pModule = (oslModule)hModule;
                 else
                 {
-                    sal_Char szError[ 120 ];
+                    sal_Char szError[ PATH_MAX*2 ];
                     sprintf( szError, "Module: %s; rc: %d;\nReason: %s;\n"
                             "Please contact technical support and report above informations.\n\n",
                             buffer, rc, szErrorMessage );

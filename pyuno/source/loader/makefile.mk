@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 DLLPRE = 
 
 #-------------------------------------------------------------------
@@ -101,18 +101,16 @@ COMPONENTS= \
 ALL : ALLTAR \
     $(DLLDEST)$/pythonloader.py	\
     $(DLLDEST)$/pyuno_services.rdb
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
 $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
-.IF "$(GUI)$(COM)"=="WNTGCC"
-    cd $(DLLDEST) && sh -c "export PATH='$(PATH):$(OUT)$/bin'; $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))"
-.ELSE
     cd $(DLLDEST) && $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))
-.ENDIF    # "$(GUI)$(COM)"=="WNTGCC" 
     cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
+.ENDIF # L10N_framework
 

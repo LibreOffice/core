@@ -67,5 +67,8 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\%__SRC%\bin\affine_u*.dll   %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\libaffine_uno_uno.*   %_DEST%\lib%_EXT%\*
 
+..\%__SRC%\bin\log_u*.dll   %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\liblog_uno_uno.*   %_DEST%\lib%_EXT%\*
+
 linklib: libuno_cppu.*.*
 linklib: libuno_purpenvhelper*.*.*

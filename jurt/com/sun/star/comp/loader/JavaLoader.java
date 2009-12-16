@@ -102,7 +102,7 @@ public class JavaLoader implements XImplementationLoader,
             {
                 if (m_xMacroExpander == null)
                 {
-                    XPropertySet xProps = (XPropertySet)
+                    XPropertySet xProps =
                         UnoRuntime.queryInterface(
                             XPropertySet.class, multiServiceFactory );
                     if (xProps == null)

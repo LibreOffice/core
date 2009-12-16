@@ -67,7 +67,7 @@ import java.util.Random;
     Other services can be inserted into the service manager by
     using its XSet interface:
     <pre>
-        XSet xSet = (XSet)UnoRuntime.queryInterface( XSet.class, aMultiComponentFactory );
+        XSet xSet = UnoRuntime.queryInterface( XSet.class, aMultiComponentFactory );
         // insert the service manager
         xSet.insert( aSingleComponentFactory );
     </pre>
@@ -108,20 +108,20 @@ public class Bootstrap {
     static public XComponentContext createInitialComponentContext( Hashtable context_entries )
         throws Exception
     {
-        XImplementationLoader xImpLoader = (XImplementationLoader)UnoRuntime.queryInterface(
+        XImplementationLoader xImpLoader = UnoRuntime.queryInterface(
             XImplementationLoader.class, new JavaLoader() );
 
         // Get the factory of the ServiceManager
-        XSingleComponentFactory smgr_fac = (XSingleComponentFactory)UnoRuntime.queryInterface(
+        XSingleComponentFactory smgr_fac = UnoRuntime.queryInterface(
             XSingleComponentFactory.class, xImpLoader.activate(
                 "com.sun.star.comp.servicemanager.ServiceManager", null, null, null ) );
 
         // Create an instance of the ServiceManager
-        XMultiComponentFactory xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
+        XMultiComponentFactory xSMgr = UnoRuntime.queryInterface(
             XMultiComponentFactory.class, smgr_fac.createInstanceWithContext( null ) );
 
         // post init loader
-        XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(
+        XInitialization xInit = UnoRuntime.queryInterface(
             XInitialization.class, xImpLoader );
         Object[] args = new Object [] { xSMgr };
         xInit.initialize( args );
@@ -137,12 +137,12 @@ public class Bootstrap {
         XComponentContext xContext = new ComponentContext( context_entries, null );
 
         // post init smgr
-        xInit = (XInitialization)UnoRuntime.queryInterface(
+        xInit = UnoRuntime.queryInterface(
             XInitialization.class, xSMgr );
         args = new Object [] { null, xContext }; // no registry, default context
         xInit.initialize( args );
 
-        XSet xSet = (XSet)UnoRuntime.queryInterface( XSet.class, xSMgr );
+        XSet xSet = UnoRuntime.queryInterface( XSet.class, xSMgr );
         // insert the service manager
         xSet.insert( smgr_fac );
         // and basic jurt factories
@@ -159,7 +159,7 @@ public class Bootstrap {
      */
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
-        return (XMultiServiceFactory)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
             XMultiServiceFactory.class, createInitialComponentContext( null ).getServiceManager() );
     }
 
@@ -206,7 +206,7 @@ public class Bootstrap {
             NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
             m_loaded_juh = true;
         }
-        return (XComponentContext)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
             XComponentContext.class,
             cppuhelper_bootstrap(
                 ini_file, pairs, Bootstrap.class.getClassLoader() ) );
@@ -283,7 +283,7 @@ public class Bootstrap {
                 try {
                     // try to connect to office
                     Object context = xUrlResolver.resolve( sConnect );
-                    xContext = (XComponentContext) UnoRuntime.queryInterface(
+                    xContext = UnoRuntime.queryInterface(
                         XComponentContext.class, context);
                     if ( xContext == null )
                         throw new BootstrapException( "no component context!" );

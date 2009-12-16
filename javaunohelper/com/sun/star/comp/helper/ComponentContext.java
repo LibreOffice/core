@@ -101,7 +101,7 @@ public class ComponentContext implements XComponentContext, XComponent
             {
                 o = ((ComponentContextEntry)o).m_value;
             }
-            m_xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
+            m_xSMgr = UnoRuntime.queryInterface(
                 XMultiComponentFactory.class, o );
         }
         if (m_xSMgr != null)
@@ -114,7 +114,7 @@ public class ComponentContext implements XComponentContext, XComponent
         }
 
         // listen for delegate
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
             XComponent.class, m_xDelegate );
         if (xComp != null)
         {
@@ -154,7 +154,7 @@ public class ComponentContext implements XComponentContext, XComponent
                         else
                         {
                             XSingleComponentFactory xCompFac =
-                                (XSingleComponentFactory)UnoRuntime.queryInterface(
+                                UnoRuntime.queryInterface(
                                     XSingleComponentFactory.class, entry.m_lateInit );
                             if (xCompFac != null)
                             {
@@ -185,7 +185,7 @@ public class ComponentContext implements XComponentContext, XComponent
                             else // inited in the meantime
                             {
                                 // dispose fresh service instance
-                                XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+                                XComponent xComp = UnoRuntime.queryInterface(
                                     XComponent.class, xInstance );
                                 if (xComp != null)
                                 {
@@ -253,7 +253,7 @@ public class ComponentContext implements XComponentContext, XComponent
                     o = ((ComponentContextEntry)o).m_value;
                 }
 
-                XComponent xComp = (XComponent)UnoRuntime.queryInterface( XComponent.class, o );
+                XComponent xComp = UnoRuntime.queryInterface( XComponent.class, o );
                 if (xComp != null)
                 {
                     if (name.equals( TDMGR_NAME ))
@@ -272,7 +272,7 @@ public class ComponentContext implements XComponentContext, XComponent
         // smgr
         if (m_bDisposeSMgr)
         {
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+            XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, m_xSMgr );
             if (xComp != null)
             {

@@ -7,10 +7,10 @@
 
  <vendorInfos>
   <vendor name="Sun Microsystems Inc.">
-    <minVersion>1.5.0</minVersion>
+    <minVersion>1.4.2</minVersion>
   </vendor>
   <vendor name="IBM Corporation">
-    <minVersion>1.5.0</minVersion>
+    <minVersion>1.4.2</minVersion>
   </vendor>
  </vendorInfos>
 
