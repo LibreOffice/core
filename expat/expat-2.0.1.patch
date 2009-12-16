@@ -1,6 +1,6 @@
 --- misc/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:33:55 2008
 +++ misc/build/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:26:42 2008
-@@ -1 +1,89 @@
+@@ -1 +1,93 @@
 -dummy
 +#*************************************************************************
 +#
@@ -50,6 +50,10 @@
 +.ELSE
 +CDEFS+=-DHAVE_EXPAT_CONFIG_H
 +.ENDIF
++
++.IF "$(OS)"=="MACOSX" && "$(SYSBASE)"!=""
++CDEFS+=-DHAVE_MEMMOVE -DHAVE_BCOPY
++.ENDIF # "$(OS)"=="MACOSX"
 +
 +SLOFILES=$(SLO)$/xmlparse.obj \
 +         $(SLO)$/xmlrole.obj \
