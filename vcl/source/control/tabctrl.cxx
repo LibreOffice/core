@@ -1601,7 +1601,7 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long TabControl::Notify( NotifyEvent& rNEvt )
+bool TabControl::ImplHandleNotifyEvent( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && (GetPageCount() > 1) )
     {
@@ -1629,8 +1629,16 @@ long TabControl::Notify( NotifyEvent& rNEvt )
             }
         }
     }
+    return false;
+}
 
-    return Control::Notify( rNEvt );
+
+// -----------------------------------------------------------------------
+
+long TabControl::Notify( NotifyEvent& rNEvt )
+{
+
+    return ImplHandleNotifyEvent( rNEvt ) ? TRUE : Control::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
