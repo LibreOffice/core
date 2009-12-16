@@ -492,12 +492,13 @@ BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     return TRUE;
 }
 
+#ifdef OLD_SELECTION_PAINT
 BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont )
 {
     rCont = FALSE;
 
-    if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
-         nNewStartY == nOldStartY && nNewEndY == nOldEndY )
+    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
+        nNewStartY == nOldStartY && nNewEndY == nOldEndY)
     {
         rX1 = nNewStartX;
         rY1 = nNewStartY;
@@ -511,14 +512,14 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
     rX2 = Max(nNewEndX,nOldEndX);
     rY2 = Max(nNewEndY,nOldEndY);
 
-    if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX )             // nur vertikal
+    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX)             // nur vertikal
     {
-        if ( nNewStartY == nOldStartY )
+        if (nNewStartY == nOldStartY)
         {
             rY1 = Min( nNewEndY, nOldEndY ) + 1;
             rY2 = Max( nNewEndY, nOldEndY );
         }
-        else if ( nNewEndY == nOldEndY )
+        else if (nNewEndY == nOldEndY)
         {
             rY1 = Min( nNewStartY, nOldStartY );
             rY2 = Max( nNewStartY, nOldStartY ) - 1;
@@ -534,14 +535,14 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
             nContX2 = rX2;
         }
     }
-    else if ( nNewStartY == nOldStartY && nNewEndY == nOldEndY )        // nur horizontal
+    else if (nNewStartY == nOldStartY && nNewEndY == nOldEndY)        // nur horizontal
     {
-        if ( nNewStartX == nOldStartX )
+        if (nNewStartX == nOldStartX)
         {
             rX1 = Min( nNewEndX, nOldEndX ) + 1;
             rX2 = Max( nNewEndX, nOldEndX );
         }
-        else if ( nNewEndX == nOldEndX )
+        else if (nNewEndX == nOldEndX)
         {
             rX1 = Min( nNewStartX, nOldStartX );
             rX2 = Max( nNewStartX, nOldStartX ) - 1;
@@ -557,9 +558,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
             nContY2 = rY2;
         }
     }
-    else if ( nNewEndX == nOldEndX && nNewEndY == nOldEndY )            // links oben
+    else if (nNewEndX == nOldEndX && nNewEndY == nOldEndY)            // links oben
     {
-        if ( (nNewStartX<nOldStartX) == (nNewStartY<nOldStartY) )
+        if ((nNewStartX<nOldStartX) == (nNewStartY<nOldStartY))
             rX1 = Min( nNewStartX, nOldStartX );
         else
             rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
@@ -572,9 +573,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewStartX, nOldStartX );            // links
         nContX2 = Max( nNewStartX, nOldStartX ) - 1;
     }
-    else if ( nNewStartX == nOldStartX && nNewEndY == nOldEndY )        // rechts oben
+    else if (nNewStartX == nOldStartX && nNewEndY == nOldEndY)        // rechts oben
     {
-        if ( (nNewEndX<nOldEndX) != (nNewStartY<nOldStartY) )
+        if ((nNewEndX<nOldEndX) != (nNewStartY<nOldStartY))
             rX2 = Max( nNewEndX, nOldEndX );
         else
             rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
@@ -587,9 +588,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewEndX, nOldEndX ) + 1;            // rechts
         nContX2 = Max( nNewEndX, nOldEndX );
     }
-    else if ( nNewEndX == nOldEndX && nNewStartY == nOldStartY )        // links unten
+    else if (nNewEndX == nOldEndX && nNewStartY == nOldStartY)        // links unten
     {
-        if ( (nNewStartX<nOldStartX) != (nNewEndY<nOldEndY) )
+        if ((nNewStartX<nOldStartX) != (nNewEndY<nOldEndY))
             rX1 = Min( nNewStartX, nOldStartX );
         else
             rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
@@ -602,9 +603,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewStartX, nOldStartX );            // links
         nContX2 = Max( nNewStartX, nOldStartX ) - 1;
     }
-    else if ( nNewStartX == nOldStartX && nNewStartY == nOldStartY )    // rechts unten
+    else if (nNewStartX == nOldStartX && nNewStartY == nOldStartY)    // rechts unten
     {
-        if ( (nNewEndX<nOldEndX) == (nNewEndY<nOldEndY) )
+        if ((nNewEndX<nOldEndX) == (nNewEndY<nOldEndY))
             rX2 = Max( nNewEndX, nOldEndX );
         else
             rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
@@ -640,6 +641,7 @@ void ScUpdateRect::GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     rX2 = nContX2;
     rY2 = nContY2;
 }
+#endif
 
 
 

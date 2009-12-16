@@ -413,7 +413,8 @@ Image SeriesHeader::GetChartTypeImage(
     {
         aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET ))
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
+          || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
         aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
     }

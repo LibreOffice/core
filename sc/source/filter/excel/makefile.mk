@@ -103,7 +103,6 @@ SLOFILES =	\
         $(SLO)$/xlpage.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstream.obj				\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xltracer.obj				\
@@ -153,6 +152,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlchart.obj					\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlpivot.obj					\
+        $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xlview.obj
 

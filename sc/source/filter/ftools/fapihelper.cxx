@@ -35,9 +35,8 @@
 #include <algorithm>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
@@ -45,7 +44,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svtools/stritem.hxx>
 #include <svtools/itemset.hxx>
-#include <svtools/docpasswdrequest.hxx>
 #include "miscuno.hxx"
 
 using ::rtl::OUString;
@@ -55,14 +53,14 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::TypeClass_BOOLEAN;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertyState;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::task::XInteractionRequest;
+using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
 
 // Static helper functions ====================================================
 
@@ -141,40 +139,25 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
     return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
 }
 
-String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium )
+String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium,
+        ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {
-    String aPassw;
-    const SfxItemSet* pSet = rMedium.GetItemSet();
+    OUString aMediaPassword;
+    SfxItemSet* pItemSet = rMedium.GetItemSet();
     const SfxPoolItem *pPasswordItem;
+    if( pItemSet && (SFX_ITEM_SET == pItemSet->GetItemState( SID_PASSWORD, TRUE, &pPasswordItem )) )
+        aMediaPassword = static_cast< const SfxStringItem* >( pPasswordItem )->GetValue();
+    OUString aDocName = INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
 
-    if( pSet && (SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, TRUE, &pPasswordItem )) )
-    {
-        aPassw = static_cast< const SfxStringItem* >( pPasswordItem )->GetValue();
-    }
-    else
-    {
-        try
-        {
-            Reference< XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
-            if( xHandler.is() )
-            {
-                RequestDocumentPassword* pRequest = new RequestDocumentPassword(
-                    ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
-                    INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
-                Reference< XInteractionRequest > xRequest( pRequest );
+    bool bIsDefaultPassword = false;
+    OUString aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        rVerifier, aMediaPassword, rMedium.GetInteractionHandler(), aDocName,
+        ::comphelper::DocPasswordRequestType_MS, pDefaultPasswords, &bIsDefaultPassword );
 
-               xHandler->handle( xRequest );
+    if( !bIsDefaultPassword && (aPassword.getLength() > 0) && pItemSet )
+        pItemSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
 
-               if( pRequest->isPassword() )
-                   aPassw = pRequest->getPassword();
-            }
-        }
-        catch( Exception& )
-        {
-        }
-    }
-
-    return aPassw;
+    return aPassword;
 }
 
 // Property sets ==============================================================

@@ -206,20 +206,20 @@ public:
 private:
     /** Returns the specified SUPBOOK (external document). */
     const XclImpSupbook* GetSupbook( sal_uInt32 nXtiIndex ) const;
-    /** Returns the SUPBOOK (external workbook) specified by its URL. */
-    const XclImpSupbook* GetSupbook( const String& rUrl ) const;
+//UNUSED2009-05 /** Returns the SUPBOOK (external workbook) specified by its URL. */
+//UNUSED2009-05 const XclImpSupbook* GetSupbook( const String& rUrl ) const;
 
     void                LoadCachedValues();
 
-    /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
-        @param rnSBTabFirst  (out-param) The first sheet index of the range in SUPBOOK is returned here.
-        @param rnSBTabLast  (out-param) The last sheet index of the range in SUPBOOK is returned here (inclusive).
-        @param nSupbook  The list index of the SUPBOOK.
-        @param nSBTabStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
-        @return  true = the return values are valid; false = nothing found. */
-    bool                FindNextTabRange(
-                            sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-                            sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
+//UNUSED2009-05 /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
+//UNUSED2009-05     @param rnSBTabFirst  (out-param) The first sheet index of the range in SUPBOOK is returned here.
+//UNUSED2009-05     @param rnSBTabLast  (out-param) The last sheet index of the range in SUPBOOK is returned here (inclusive).
+//UNUSED2009-05     @param nSupbook  The list index of the SUPBOOK.
+//UNUSED2009-05     @param nSBTabStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
+//UNUSED2009-05     @return  true = the return values are valid; false = nothing found. */
+//UNUSED2009-05 bool                FindNextTabRange(
+//UNUSED2009-05                         sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+//UNUSED2009-05                         sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
 
 private:
     typedef ScfDelList< XclImpXti >     XclImpXtiList;
@@ -677,13 +677,13 @@ const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt32 nXtiIndex ) c
     return pXti ? maSupbookList.GetObject( pXti->mnSupbook ) : 0;
 }
 
-const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( const String& rUrl ) const
-{
-    for( const XclImpSupbook* pSupbook = maSupbookList.First(); pSupbook; pSupbook = maSupbookList.Next() )
-        if( pSupbook->GetXclUrl() == rUrl )
-            return pSupbook;
-    return 0;
-}
+//UNUSED2009-05 const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( const String& rUrl ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     for( const XclImpSupbook* pSupbook = maSupbookList.First(); pSupbook; pSupbook = maSupbookList.Next() )
+//UNUSED2009-05         if( pSupbook->GetXclUrl() == rUrl )
+//UNUSED2009-05             return pSupbook;
+//UNUSED2009-05     return 0;
+//UNUSED2009-05 }
 
 void XclImpLinkManagerImpl::LoadCachedValues()
 {
@@ -698,21 +698,21 @@ void XclImpLinkManagerImpl::LoadCachedValues()
     }
 }
 
-bool XclImpLinkManagerImpl::FindNextTabRange(
-        sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-        sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const
-{
-    rnSBTabFirst = rnSBTabLast = EXC_NOTAB;
-    for( const XclImpXti* pXti = maXtiList.First(); pXti; pXti = maXtiList.Next() )
-    {
-        if( (nSupbook == pXti->mnSupbook) && (nSBTabStart <= pXti->mnSBTabLast) && (pXti->mnSBTabFirst < rnSBTabFirst) )
-        {
-            rnSBTabFirst = ::std::max( nSBTabStart, pXti->mnSBTabFirst );
-            rnSBTabLast = pXti->mnSBTabLast;
-        }
-    }
-    return rnSBTabFirst != EXC_NOTAB;
-}
+//UNUSED2009-05 bool XclImpLinkManagerImpl::FindNextTabRange(
+//UNUSED2009-05         sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+//UNUSED2009-05         sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     rnSBTabFirst = rnSBTabLast = EXC_NOTAB;
+//UNUSED2009-05     for( const XclImpXti* pXti = maXtiList.First(); pXti; pXti = maXtiList.Next() )
+//UNUSED2009-05     {
+//UNUSED2009-05         if( (nSupbook == pXti->mnSupbook) && (nSBTabStart <= pXti->mnSBTabLast) && (pXti->mnSBTabFirst < rnSBTabFirst) )
+//UNUSED2009-05         {
+//UNUSED2009-05             rnSBTabFirst = ::std::max( nSBTabStart, pXti->mnSBTabFirst );
+//UNUSED2009-05             rnSBTabLast = pXti->mnSBTabLast;
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return rnSBTabFirst != EXC_NOTAB;
+//UNUSED2009-05 }
 
 // ============================================================================
 

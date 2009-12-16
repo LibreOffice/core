@@ -485,7 +485,7 @@ XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_u
     String aPass = rRoot.GetPassword();
     if (aPass.Len() == 0)
         // Empty password.  Get the default biff8 password.
-        aPass = XclCryptoHelper::GetBiff8WbProtPassword();
+        aPass = rRoot.GetDefaultPassword();
     Init(aPass, nDocId, nSalt);
 }
 
@@ -983,11 +983,6 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
 bool XclExpXmlStream::importDocument() throw()
 {
     return false;
-}
-
-sal_Int32 XclExpXmlStream::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
-{
-    return -1;
 }
 
 oox::vml::Drawing* XclExpXmlStream::getVmlDrawing()

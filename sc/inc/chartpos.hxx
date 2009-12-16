@@ -100,8 +100,8 @@ public:
                                             return ppRowHeader[ nChartRow ];
                                         return NULL;
                                     }
-            ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
-            ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
+//UNUSED2009-05 ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
+//UNUSED2009-05 ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
 };
 
 
@@ -114,7 +114,6 @@ enum ScChartGlue {
 };
 
 class ScDocument;
-class ScMultipleReadHeader;
 
 class ScChartPositioner             // nur noch Parameter-Struct
 {

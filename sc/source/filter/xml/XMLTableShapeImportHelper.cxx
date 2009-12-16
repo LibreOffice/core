@@ -36,6 +36,8 @@
 #include "drwlayer.hxx"
 #include "xmlannoi.hxx"
 #include "rangeutl.hxx"
+#include "docuno.hxx"
+#include "sheetdata.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -80,9 +82,11 @@ void XMLTableShapeImportHelper::finishShape(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes )
 {
+    bool bNote = false;
     XMLShapeImportHelper::finishShape( rShape, xAttrList, rShapes );
     static_cast<ScXMLImport&>(mrImporter).LockSolarMutex();
-    if (rShapes == static_cast<ScXMLImport&>(mrImporter).GetTables().GetCurrentXShapes())
+    ScMyTables& rTables = static_cast<ScXMLImport&>(mrImporter).GetTables();
+    if (rShapes == rTables.GetCurrentXShapes())
     {
         if (!pAnnotationContext)
         {
@@ -126,7 +130,7 @@ void XMLTableShapeImportHelper::finishShape(
 
             if (!bOnTable)
             {
-                static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
+                rTables.AddShape(rShape,
                     pRangeList, aStartCell, aEndCell, nEndX, nEndY);
                 SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
                 if (pShapeImp)
@@ -145,7 +149,7 @@ void XMLTableShapeImportHelper::finishShape(
                     // -> call AddShape with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
 
                     table::CellAddress aInvalidPos( -1, -1, -1 );
-                    static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
+                    rTables.AddShape(rShape,
                         pRangeList, aInvalidPos, aInvalidPos, 0, 0);
                 }
 
@@ -160,7 +164,26 @@ void XMLTableShapeImportHelper::finishShape(
         }
         else // shape is annotation
         {
-            pAnnotationContext->SetShape(rShape, rShapes);
+            // get the style names for stream copying
+            rtl::OUString aStyleName;
+            rtl::OUString aTextStyle;
+            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            for( sal_Int16 i=0; i < nAttrCount; ++i )
+            {
+                const rtl::OUString& rAttrName(xAttrList->getNameByIndex( i ));
+                rtl::OUString aLocalName;
+                sal_uInt16 nPrefix(static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
+                if(nPrefix == XML_NAMESPACE_DRAW)
+                {
+                    if (IsXMLToken(aLocalName, XML_STYLE_NAME))
+                        aStyleName = xAttrList->getValueByIndex( i );
+                    else if (IsXMLToken(aLocalName, XML_TEXT_STYLE_NAME))
+                        aTextStyle = xAttrList->getValueByIndex( i );
+                }
+            }
+
+            pAnnotationContext->SetShape(rShape, rShapes, aStyleName, aTextStyle);
+            bNote = true;
         }
     }
     else //#99532# this are grouped shapes which should also get the layerid
@@ -183,5 +206,13 @@ void XMLTableShapeImportHelper::finishShape(
         }
         SetLayer(rShape, nLayerID, rShape->getShapeType());
     }
+
+    if (!bNote)
+    {
+        // any shape other than a note prevents copying the sheet
+        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(mrImporter.GetModel())->GetSheetSaveData();
+        pSheetData->BlockSheet( rTables.GetCurrentSheet() );
+    }
+
     static_cast<ScXMLImport&>(mrImporter).UnlockSolarMutex();
 }

@@ -71,7 +71,6 @@ class ScStyleSheet;
 class ScTableLink;
 class ScTableProtection;
 class ScUserListData;
-class ScIndexMap;
 struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
@@ -127,6 +126,7 @@ private:
 
                                             //  interne Verwaltung  ------------------
     BOOL            bVisible;
+    BOOL            bStreamValid;
     BOOL            bPendingRowHeights;
 
     SCTAB           nTab;
@@ -193,6 +193,9 @@ public:
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
 
+    BOOL        IsStreamValid() const                        { return bStreamValid; }
+    void        SetStreamValid( BOOL bSet, BOOL bIgnoreLock = FALSE );
+
     BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
     void        SetPendingRowHeights( BOOL bSet );
 
@@ -256,7 +259,7 @@ public:
     BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
-    void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
+//UNUSED2009-05 void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
@@ -318,6 +321,8 @@ public:
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nDelFlag);
     void        CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
                             BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions);
+    void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
+                           bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
@@ -435,7 +440,7 @@ public:
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<USHORT>& rIndexes) const;
     void        ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                      const ScIndexMap& rMap );
+                                      const ScRangeData::IndexMap& rMap );
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         ULONG nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue);
@@ -459,7 +464,7 @@ public:
                                 const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
-    BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
+//UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
     BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
@@ -542,8 +547,8 @@ public:
     void            ClearPrintRanges();
     /** Adds a new print ranges. */
     void            AddPrintRange( const ScRange& rNew );
-    /** Removes all old print ranges and sets the passed print ranges. */
-    void            SetPrintRange( const ScRange& rNew );
+//UNUSED2009-05 /** Removes all old print ranges and sets the passed print ranges. */
+//UNUSED2009-05 void            SetPrintRange( const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges! */
     void            SetPrintEntireSheet();
 
@@ -726,7 +731,7 @@ private:
     BOOL        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, BOOL bInSel,
                                     const ScMarkData& rMark) const;
     BOOL        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    void        SetDrawPageSize();
+    void        SetDrawPageSize(bool bResetStreamValid = true);
     BOOL        TestTabRefAbs(SCTAB nTable);
     void        CompileDBFormula();
     void        CompileDBFormula( BOOL bCreateFormulaString );

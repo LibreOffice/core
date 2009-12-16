@@ -139,6 +139,10 @@ String STR_DEEP
 {
     Text [ en-US ] = "Deep" ;
 };
+String STR_FILLED
+{
+    Text [ en-US ] = "Filled" ;
+};
 //-----------------------------------------------------------------------------
 String STR_TYPE_BUBBLE
 {

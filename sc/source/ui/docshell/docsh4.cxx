@@ -1300,6 +1300,13 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
     aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
+    // use hard recalc also to disable stream-copying of all sheets
+    // (somewhat consistent with charts)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if (aDocument.IsStreamValid(nTab))
+            aDocument.SetStreamValid(nTab, FALSE);
+
     PostPaintGridAll();
 }
 

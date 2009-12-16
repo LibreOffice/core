@@ -1302,8 +1302,8 @@ void __EXPORT ScUndoImportData::Undo()
             for (SCCOL nCopyCol = nCol1; nCopyCol <= nCol2; nCopyCol++)
             {
                 pDoc->CopyToDocument( nCopyCol,nRow1,nTab, nCopyCol,nRow2,nTab,
-                                        IDF_CONTENTS, FALSE, pRedoDoc );
-                pDoc->DeleteAreaTab( nCopyCol,nRow1, nCopyCol,nRow2, nTab, IDF_CONTENTS );
+                                        IDF_CONTENTS & ~IDF_NOTE, FALSE, pRedoDoc );
+                pDoc->DeleteAreaTab( nCopyCol,nRow1, nCopyCol,nRow2, nTab, IDF_CONTENTS & ~IDF_NOTE );
                 pDoc->DoColResize( nTab, nCopyCol, nCopyCol, 0 );
             }
             pDoc->SetAutoCalc( bOldAutoCalc );
@@ -1321,7 +1321,7 @@ void __EXPORT ScUndoImportData::Undo()
         pRedoDBData->GetArea( aNew );
 
         pDoc->DeleteAreaTab( aNew.aStart.Col(), aNew.aStart.Row(),
-                                aNew.aEnd.Col(), aNew.aEnd.Row(), nTab, IDF_ALL );
+                                aNew.aEnd.Col(), aNew.aEnd.Row(), nTab, IDF_ALL & ~IDF_NOTE );
 
         aOld.aEnd.SetCol( aOld.aEnd.Col() + nFormulaCols );     // FitBlock auch fuer Formeln
         aNew.aEnd.SetCol( aNew.aEnd.Col() + nFormulaCols );
@@ -1329,11 +1329,11 @@ void __EXPORT ScUndoImportData::Undo()
     }
     else
         pDoc->DeleteAreaTab( aImportParam.nCol1,aImportParam.nRow1,
-                                nEndCol,nEndRow, nTab, IDF_ALL );
+                                nEndCol,nEndRow, nTab, IDF_ALL & ~IDF_NOTE );
 
     pUndoDoc->CopyToDocument( aImportParam.nCol1,aImportParam.nRow1,nTab,
                                 nEndCol+nFormulaCols,nEndRow,nTab,
-                                IDF_ALL, FALSE, pDoc );
+                                IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
 
     if (pCurrentData)
     {
@@ -1395,16 +1395,16 @@ void __EXPORT ScUndoImportData::Redo()
         pDoc->FitBlock( aOld, aNew );
 
         pDoc->DeleteAreaTab( aNew.aStart.Col(), aNew.aStart.Row(),
-                                aNew.aEnd.Col(), aNew.aEnd.Row(), nTab, IDF_ALL );
+                                aNew.aEnd.Col(), aNew.aEnd.Row(), nTab, IDF_ALL & ~IDF_NOTE );
 
-        pRedoDoc->CopyToDocument( aNew, IDF_ALL, FALSE, pDoc );     // incl. Formeln
+        pRedoDoc->CopyToDocument( aNew, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );        // incl. Formeln
     }
     else
     {
         pDoc->DeleteAreaTab( aImportParam.nCol1,aImportParam.nRow1,
-                                nEndCol,nEndRow, nTab, IDF_ALL );
+                                nEndCol,nEndRow, nTab, IDF_ALL & ~IDF_NOTE );
         pRedoDoc->CopyToDocument( aImportParam.nCol1,aImportParam.nRow1,nTab,
-                                nEndCol,nEndRow,nTab, IDF_ALL, FALSE, pDoc );
+                                nEndCol,nEndRow,nTab, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
     }
 
     if (pCurrentData)

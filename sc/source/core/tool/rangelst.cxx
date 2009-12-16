@@ -624,7 +624,7 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     {
         ps1->pDoc->GetName( rStartPos1.Tab(), aStr1 );
         ps2->pDoc->GetName( rStartPos2.Tab(), aStr2 );
-        nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
+        nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
     }
     switch ( nComp )
     {
@@ -655,7 +655,7 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
                 {
                     ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
                     ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
-                    nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
+                    nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
                 }
                 switch ( nComp )
                 {

@@ -84,9 +84,9 @@ String STR_PAGE_TRANSPARENCY
     Text [ en-US ] = "Transparency";
 };
 
-String STR_PAGE_CHARACTERS
+String STR_PAGE_FONT
 {
-    Text [ en-US ] = "Characters" ;
+    Text [ en-US ] = "Font" ;
 };
 
 String STR_PAGE_FONT_EFFECTS
@@ -182,6 +182,14 @@ String STR_OBJECT_AXIS_Y
 String STR_OBJECT_AXIS_Z
 {
     Text [ en-US ] = "Z Axis" ;
+};
+String STR_OBJECT_SECONDARY_X_AXIS
+{
+    Text [ en-US ] = "Secondary X Axis" ;
+};
+String STR_OBJECT_SECONDARY_Y_AXIS
+{
+    Text [ en-US ] = "Secondary Y Axis" ;
 };
 
 String STR_OBJECT_AXES
@@ -312,18 +320,18 @@ String STR_OBJECT_CURVE_EQUATION
     Text[ en-US ] = "Equation";
 };
 
-String STR_OBJECT_ERROR_INDICATOR
+String STR_OBJECT_ERROR_BARS
 {
-    Text [ en-US ] = "Error Indicator";
+    Text [ en-US ] = "Error Bars";
 };
 String STR_OBJECT_STOCK_LOSS
 {
-    Text [ en-US ] = "Negative Deviation";
+    Text [ en-US ] = "Stock Loss";
 };
 
 String STR_OBJECT_STOCK_GAIN
 {
-    Text [ en-US ] = "Positive Deviation";
+    Text [ en-US ] = "Stock Gain";
 };
 
 String STR_OBJECT_PAGE
@@ -401,6 +409,18 @@ String STR_STATUS_OBJECT_MARKED
 String STR_STATUS_PIE_SEGMENT_EXPLODED
 {
     Text [ en-US ] = "Pie exploded by %PERCENTVALUE percent";
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+String STR_OBJECT_FOR_SERIES
+{
+    Text [ en-US ] = "%OBJECTNAME for Data Series '%SERIESNAME'" ;
+};
+
+String STR_OBJECT_FOR_ALL_SERIES
+{
+    Text [ en-US ] = "%OBJECTNAME for all Data Series" ;
 };
 
 //-----------------------------------------------------------------------------

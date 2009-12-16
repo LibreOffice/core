@@ -181,9 +181,6 @@ private:
     BOOL                bMoveIsShift;
     BOOL                bNewStartIfMarking;
 
-    BOOL                bOldSelection;          // old style (inverting) of selection
-
-
     void            Init();
 
     void            DoAddWin( ScGridWindow* pWin );
@@ -227,7 +224,7 @@ protected:
 
 public:
                     ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-                    ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
+//UNUSED2009-05     ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
     void            MakeDrawLayer();
@@ -528,9 +525,6 @@ public:
     void            SetBrushDocument( ScDocument* pNew, BOOL bLock );
     void            SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock );
     void            ResetBrushDocument();
-
-    void            UpdateSelectionType();
-    BOOL            IsOldSelection() const          { return bOldSelection; }
 };
 
 

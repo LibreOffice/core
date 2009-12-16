@@ -377,6 +377,29 @@ void DataSourceTabPage::initializePage()
 {
 }
 
+void DataSourceTabPage::DeactivatePage()
+{
+    commitPage();
+    svt::OWizardPage::DeactivatePage();
+}
+
+void DataSourceTabPage::commitPage()
+{
+    commitPage(eFinish);
+}
+
+sal_Bool DataSourceTabPage::commitPage( CommitPageReason /*eReason*/ )
+{
+    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    if( isValid() )
+    {
+        updateModelFromControl( 0 /*update all*/ );
+        return sal_True;//return false if this page should not be left
+    }
+    else
+        return sal_False;
+}
+
 bool DataSourceTabPage::isRangeFieldContentValid( Edit & rEdit )
 {
     OUString aRange( rEdit.GetText());

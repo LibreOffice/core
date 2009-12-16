@@ -160,13 +160,15 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 
 // *** conversion of names *** ------------------------------------------------
 
+/* XXX As in sc/source/core/tool/rangenam.cxx ScRangeData::IsValidName() */
+
 void ScfTools::ConvertToScDefinedName( String& rName )
 {
     xub_StrLen nLen = rName.Len();
-    if( nLen && !ScCompiler::IsCharWordChar( rName, 0 ) )
+    if( nLen && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
         rName.SetChar( 0, '_' );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
-        if( !ScCompiler::IsWordChar( rName, nPos ) )
+        if( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME ) )
             rName.SetChar( nPos, '_' );
 }
 

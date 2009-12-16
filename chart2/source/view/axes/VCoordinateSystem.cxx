@@ -112,7 +112,8 @@ VCoordinateSystem::~VCoordinateSystem()
 
 void SAL_CALL VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes >& xLogicTarget
        , const Reference< drawing::XShapes >& xFinalTarget
-       , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
+       , const Reference< lang::XMultiServiceFactory >& xShapeFactory
+       , Reference< drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
             throw (uno::RuntimeException)
 {
     DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
@@ -125,12 +126,14 @@ void SAL_CALL VCoordinateSystem::initPlottingTargets(  const Reference< drawing:
     {
         //create and add to target
         m_xLogicTargetForGrids = aShapeFactory.createGroup2D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = aShapeFactory.createGroup2D( xLogicTarget );
         m_xLogicTargetForAxes = aShapeFactory.createGroup2D( xLogicTarget );
     }
     else
     {
         //create and added to target
         m_xLogicTargetForGrids = aShapeFactory.createGroup3D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = aShapeFactory.createGroup3D( xLogicTarget );
         m_xLogicTargetForAxes = aShapeFactory.createGroup3D( xLogicTarget );
     }
     m_xFinalTarget  = xFinalTarget;

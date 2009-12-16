@@ -32,8 +32,8 @@
 #define SC_XLFORMULA_HXX
 
 #include <map>
+#include <formula/opcode.hxx>
 #include "address.hxx"
-#include "formula/opcode.hxx"
 #include "ftools.hxx"
 
 // Constants ==================================================================
@@ -43,17 +43,10 @@ const size_t EXC_TOKARR_MAXLEN              = 4096;     /// Maximum size of a to
 // Token class flags ----------------------------------------------------------
 
 const sal_uInt8 EXC_TOKCLASS_MASK           = 0x60;
-const sal_uInt8 EXC_TOKCLASS_INOP_FLAG      = 0x80;     /// Used in operators (internal flag).
-
 const sal_uInt8 EXC_TOKCLASS_NONE           = 0x00;     /// 00-1F: Base tokens.
 const sal_uInt8 EXC_TOKCLASS_REF            = 0x20;     /// 20-3F: Reference class tokens.
 const sal_uInt8 EXC_TOKCLASS_VAL            = 0x40;     /// 40-5F: Value class tokens.
 const sal_uInt8 EXC_TOKCLASS_ARR            = 0x60;     /// 60-7F: Array class tokens.
-
-const sal_uInt8 EXC_TOKCLASS_ANY_IN_REFOP   = EXC_TOKCLASS_INOP_FLAG | EXC_TOKCLASS_NONE;
-const sal_uInt8 EXC_TOKCLASS_REF_IN_VALOP   = EXC_TOKCLASS_INOP_FLAG | EXC_TOKCLASS_REF;
-const sal_uInt8 EXC_TOKCLASS_VAL_IN_VALOP   = EXC_TOKCLASS_INOP_FLAG | EXC_TOKCLASS_VAL;
-const sal_uInt8 EXC_TOKCLASS_ARR_IN_VALOP   = EXC_TOKCLASS_INOP_FLAG | EXC_TOKCLASS_ARR;
 
 // Base tokens ----------------------------------------------------------------
 
@@ -183,15 +176,120 @@ enum XclFormulaType
     EXC_FMLATYPE_LISTVAL        /// List (cell range) validation.
 };
 
+// Function parameter info ====================================================
+
+/** Enumerates validity modes for a function parameter. */
+enum XclFuncParamValidity
+{
+    EXC_PARAM_NONE = 0,         /// Default for an unspecified entry in a C-array.
+    EXC_PARAM_REGULAR,          /// Parameter supported by Calc and Excel.
+    EXC_PARAM_CALCONLY,         /// Parameter supported by Calc only.
+    EXC_PARAM_EXCELONLY         /// Parameter supported by Excel only.
+};
+
+/** Enumerates different types of token class conversion in function parameters. */
+enum XclFuncParamConv
+{
+    EXC_PARAMCONV_ORG,          /// Use original class of current token.
+    EXC_PARAMCONV_VAL,          /// Convert tokens to VAL class.
+    EXC_PARAMCONV_ARR,          /// Convert tokens to ARR class.
+    EXC_PARAMCONV_RPT,          /// Repeat parent conversion in VALTYPE parameters.
+    EXC_PARAMCONV_RPX,          /// Repeat parent conversion in REFTYPE parameters.
+    EXC_PARAMCONV_RPO           /// Repeat parent conversion in operands of operators.
+};
+
+/** Structure that contains all needed information for a parameter in a
+    function.
+
+    The member meValid specifies which application supports the parameter. If
+    set to CALCONLY, import filters have to insert a default value for this
+    parameter, and export filters have to skip the parameter. If set to
+    EXCELONLY, import filters have to skip the parameter, and export filters
+    have to insert a default value for this parameter.
+
+    The member mbValType specifies whether the parameter requires tokens to be
+    of value type (VAL or ARR class).
+
+        If set to false, the parameter is called to be REFTYPE. Tokens with REF
+        default class can be inserted for the parameter (e.g. tAreaR tokens).
+
+        If set to true, the parameter is called to be VALTYPE. Tokens with REF
+        class need to be converted to VAL tokens first (e.g. tAreaR will be
+        converted to tAreaV), and further conversion is done according to this
+        new token class.
+
+    The member meConv specifies how to convert the current token class of the
+    token inserted for the parameter. If the token class is still REF this
+    means that the token has default REF class and the parameter is REFTYPE
+    (see member mbValType), the token will not be converted at all and remains
+    in REF class. Otherwise, token class conversion is depending on the actual
+    token class of the return value of the function containing this parameter.
+    The function may return REF class (tFuncR, tFuncVarR, tFuncCER), or it may
+    return VAL or ARR class (tFuncV, tFuncA, tFuncVarV, tFuncVarA, tFuncCEV,
+    tFuncCEA). Even if the function is able to return REF class, it may return
+    VAL or ARR class instead due to the VALTYPE data type of the parent
+    function parameter that calls the own function. Example: The INDIRECT
+    function returns REF class by default. But if called from a VALTYPE
+    function parameter, e.g. in the formula =ABS(INDIRECT("A1")), it returns
+    VAL or ARR class instead. Additionally, the repeating conversion types RPT
+    and RPX rely on the conversion executed for the function token class.
+
+        1) ORG:
+        Use the original class of the token (VAL or ARR), regardless of any
+        conversion done for the function return class.
+
+        2) VAL:
+        Convert ARR tokens to VAL class, regardless of any conversion done for
+        the function return class.
+
+        3) ARR:
+        Convert VAL tokens to ARR class, regardless of any conversion done for
+        the function return class.
+
+        4) RPT:
+        If the own function returns REF class (thus it is called from a REFTYPE
+        parameter, see above), and the parent conversion type (for the function
+        return class) was ORG, VAL, or ARR, ignore that conversion and always
+        use VAL conversion for the own token instead. If the parent conversion
+        type was RPT or RPX, repeat the conversion that would have been used if
+        the function would return value type.
+        If the own function returns value type (VAL or ARR class, see above),
+        and the parent conversion type (for the function return class) was ORG,
+        VAL, ARR, or RPT, repeat this conversion for the own token. If the
+        parent conversion type was RPX, always use ORG conversion type for the
+        own token instead.
+
+        5) RPX:
+        This type of conversion only occurs in functions returning VAL class by
+        default. If the own token is value type, and the VAL return class of
+        the own function has been changed to ARR class (due to direct ARR
+        conversion, or due to ARR conversion repeated by RPT or RPX), set the
+        own token to ARR type. Otherwise use the original token type (VAL
+        conversion from parent parameter will not be repeated at all). If
+        nested functions have RPT or value-type RPX parameters, they will not
+        repeat this conversion type, but will use ORG conversion instead (see
+        description of RPT above).
+
+        6) RPO:
+        This type of conversion is only used for the operands of all operators
+        (unary and binary arithmetic operators, comparison operators, and range
+        operators). It is not used for function parameters. On conversion, it
+        will be replaced by the last conversion type that was not the RPO
+        conversion. This leads to a slightly different behaviour than the RPT
+        conversion for operands in conjunction with a parent RPX conversion.
+ */
+struct XclFuncParamInfo
+{
+    XclFuncParamValidity meValid;       /// Parameter validity.
+    XclFuncParamConv    meConv;         /// Token class conversion type.
+    bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
+};
+
 // Function data ==============================================================
 
 const sal_uInt8 EXC_FUNC_MAXPARAM           = 30;       /// Maximum parameter count.
 
-const sal_uInt8 EXC_FUNC_PAR_CALCONLY       = 0xFD;     /// Placeholder for a parameter existing in Calc, but not in Excel.
-const sal_uInt8 EXC_FUNC_PAR_EXCELONLY      = 0xFE;     /// Placeholder for a parameter existing in Excel, but not in Calc.
-const sal_uInt8 EXC_FUNC_PAR_INVALID        = 0xFF;     /// Placeholder for an invalid token class.
-
-const sal_uInt8 EXC_FUNCINFO_CLASSCOUNT     = 5;        /// Number of token class entries.
+const size_t EXC_FUNCINFO_PARAMINFO_COUNT   = 5;        /// Number of parameter info entries.
 
 const sal_uInt8 EXC_FUNCFLAG_VOLATILE       = 0x01;     /// Result is volatile (e.g. NOW() function).
 const sal_uInt8 EXC_FUNCFLAG_IMPORTONLY     = 0x02;     /// Only used in import filter.
@@ -207,14 +305,11 @@ const sal_uInt16 EXC_FUNCID_EXTERNCALL      = 255;
 
 /** Represents information for a spreadsheet function for import and export.
 
-    The member mpnParamClass contains an array of token classes for each
-    parameter of the function. The last existing (non-null) value in this array
-    is used for all following parameters used in a function. Additionally to
-    the three actual token classes, this array may contain the special values
-    EXC_FUNC_PAR_CALCONLY, EXC_FUNC_PAR_EXCELONLY, and EXC_FUNC_PAR_INVALID.
-    The former two specify parameters only existing in one of the applications.
-    EXC_FUNC_PAR_INVALID is simply a terminator for the array to prevent that
-    the last token class or special value is repeated for additional parameters.
+    The member mpParamInfos points to an array of type information structures
+    for all parameters of the function. The last initialized structure
+    describing a regular parameter (member meValid == EXC_PARAMVALID_ALWAYS) in
+    this array is used repeatedly for all following parameters supported by a
+    function.
  */
 struct XclFunctionInfo
 {
@@ -223,12 +318,14 @@ struct XclFunctionInfo
     sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// Token class of the return value.
-    sal_uInt8           mpnParamClass[ EXC_FUNCINFO_CLASSCOUNT ]; /// Expected token classes of parameters.
-    sal_uInt8           mnFlags;            /// Additional flags.
+    XclFuncParamInfo    mpParamInfos[ EXC_FUNCINFO_PARAMINFO_COUNT ]; /// Information for all parameters.
+    sal_uInt8           mnFlags;            /// Additional flags (EXC_FUNCFLAG_* constants).
     const sal_Char*     mpcMacroName;       /// Function name, if simulated by a macro call (UTF-8).
 
     /** Returns true, if the function is volatile. */
     inline bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
+    /** Returns true, if the function parameter count is fixed. */
+    inline bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
     /** Returns true, if the function is simulated by a macro call. */
     inline bool         IsMacroFunc() const { return mpcMacroName != 0; }
     /** Returns the name of the external function as string. */
@@ -278,8 +375,9 @@ public:
     /** Creates an empty token array. */
     explicit            XclTokenArray( bool bVolatile = false );
     /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false,
-                                       ScfUInt8Vec* pExtensionTokens = NULL);
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false );
+    /** Creates a token array, swaps passed token vectors into own data. */
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bool bVolatile = false );
 
     /** Returns true, if the token array is empty. */
     inline bool         Empty() const { return maTokVec.empty(); }
@@ -309,7 +407,7 @@ public:
 
 private:
     ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
-    ScfUInt8Vec         maExtensions;   /// Byte vector of extensions (eg inline arrays)
+    ScfUInt8Vec         maExtDataVec;   /// Byte vector containing extended data (arrays, stacked NLRs).
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
@@ -326,10 +424,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr 
 
 // ----------------------------------------------------------------------------
 
-namespace formula
-{
-    class FormulaToken;
-}
+namespace formula { class FormulaToken; }
 class ScTokenArray;
 
 /** Special token array iterator for the Excel filters.
@@ -347,7 +442,7 @@ class XclTokenArrayIterator
 public:
     explicit            XclTokenArrayIterator();
     explicit            XclTokenArrayIterator( const ScTokenArray& rScTokArr, bool bSkipSpaces );
-    /** Copy constructor that allowa to change the skip-spaces mode. */
+    /** Copy constructor that allows to change the skip-spaces mode. */
     explicit            XclTokenArrayIterator( const XclTokenArrayIterator& rTokArrIt, bool bSkipSpaces );
 
     void                Init();
@@ -355,9 +450,9 @@ public:
 
     inline bool         Is() const { return mppScToken != 0; }
     inline bool         operator!() const { return !Is(); }
-    inline const formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : 0; }
-    inline const formula::FormulaToken* operator->() const { return Get(); }
-    inline const formula::FormulaToken& operator*() const { return *Get(); }
+    inline const ::formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : 0; }
+    inline const ::formula::FormulaToken* operator->() const { return Get(); }
+    inline const ::formula::FormulaToken& operator*() const { return *Get(); }
 
     XclTokenArrayIterator& operator++();
 
@@ -366,9 +461,9 @@ private:
     void                SkipSpaces();
 
 private:
-    const formula::FormulaToken*const* mppScTokenBeg;     /// Pointer to first token pointer of token array.
-    const formula::FormulaToken*const* mppScTokenEnd;     /// Pointer behind last token pointer of token array.
-    const formula::FormulaToken*const* mppScToken;        /// Pointer to current token pointer of token array.
+    const ::formula::FormulaToken*const* mppScTokenBeg;     /// Pointer to first token pointer of token array.
+    const ::formula::FormulaToken*const* mppScTokenEnd;     /// Pointer behind last token pointer of token array.
+    const ::formula::FormulaToken*const* mppScToken;        /// Pointer to current token pointer of token array.
     bool                mbSkipSpaces;       /// true = Skip whitespace tokens.
 };
 
@@ -407,14 +502,14 @@ public:
     /** Returns the token class of the passed token ID. */
     inline static sal_uInt8 GetTokenClass( sal_uInt8 nTokenId ) { return nTokenId & EXC_TOKCLASS_MASK; }
     /** Changes the token class in the passed classified token ID. */
-    inline static void ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass );
+    inline static void  ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass );
 
     // strings and string lists -----------------------------------------------
 
     /** Tries to extract a string from the passed token.
         @param rString  (out-parameter) The string contained in the token.
         @return  true = Passed token is a string token, rString parameter is valid. */
-    static bool         GetTokenString( String& rString, const formula::FormulaToken& rScToken );
+    static bool         GetTokenString( String& rString, const ::formula::FormulaToken& rScToken );
 
     /** Parses the passed formula and tries to find a single string token, i.e. "abc".
         @param rString  (out-parameter) The string contained in the formula.

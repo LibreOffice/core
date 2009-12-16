@@ -393,8 +393,8 @@ void InternalData::swapAllDataAtIndexWithNext( sal_Int32 nAtIndex, bool bDataInC
 
 bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 {
-    sal_Int32 nNewColumnCount( ::std::max<sal_Int32>(1, ::std::max<sal_Int32>( m_nColumnCount, nColumnCount )));
-    sal_Int32 nNewRowCount( ::std::max<sal_Int32>(1, ::std::max<sal_Int32>( m_nRowCount, nRowCount )));
+    sal_Int32 nNewColumnCount( ::std::max<sal_Int32>( m_nColumnCount, nColumnCount ) );
+    sal_Int32 nNewRowCount( ::std::max<sal_Int32>( m_nRowCount, nRowCount ) );
     sal_Int32 nNewSize( nNewColumnCount*nNewRowCount );
 
     bool bGrow = (nNewSize > m_nColumnCount*m_nRowCount);
@@ -412,9 +412,9 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 
         m_aData.resize( nNewSize );
         m_aData = aNewData;
-        m_nColumnCount = nNewColumnCount;
-        m_nRowCount = nNewRowCount;
     }
+    m_nColumnCount = nNewColumnCount;
+    m_nRowCount = nNewRowCount;
     return bGrow;
 }
 
@@ -739,6 +739,8 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
         {
             ::std::vector< OUString > aLabels( rInternalData.getColumnLabels());
             OSL_ASSERT( static_cast< size_t >( nNewIndex ) < aLabels.size());
+            if( aLabels.size() <= static_cast< size_t >( nNewIndex ) )
+                aLabels.resize( nNewIndex+1 );
             aLabels[nNewIndex] = impl::FlattenStringSequence( xLabel->getTextualData());
             rInternalData.setColumnLabels( aLabels );
             Reference< chart2::data::XDataSequence > xNewLabel(

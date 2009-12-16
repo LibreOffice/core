@@ -31,12 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <vcl/virdev.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/mnemonic.hxx>
+#include <vcl/help.hxx>
 #include <tools/debug.hxx>
 
 #include "fieldwnd.hxx"
@@ -44,10 +43,7 @@
 #include "pvglob.hxx"
 #include "AccessibleDataPilotControl.hxx"
 #include "scresid.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
-#include <vcl/mnemonic.hxx>
 
 const size_t INVALID_INDEX = static_cast< size_t >( -1 );
 
@@ -238,27 +234,44 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
 }
 
 void ScDPFieldWindow::DrawField(
-        OutputDevice& rDev, const Rectangle& rRect, const String& rText, bool bFocus )
+        OutputDevice& rDev, const Rectangle& rRect, FieldString& rText, bool bFocus )
 {
     VirtualDevice aVirDev( rDev );
     // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
     aVirDev.EnableRTL( IsRTLEnabled() );
 
+    String aText = rText.first;
     Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
     long    nHeight      = aDevSize.Height();
-    long    nLabelWidth  = rDev.GetTextWidth( rText );
+    long    nLabelWidth  = rDev.GetTextWidth( aText );
     long    nLabelHeight = rDev.GetTextHeight();
-    Point   aLabelPos(
-        ((nWidth > nLabelWidth + 6) ? (nWidth - nLabelWidth) / 2 : 3),
-        ((nHeight > nLabelHeight + 6) ? (nHeight - nLabelHeight) / 2 : 3) );
+
+    // #i31600# if text is too long, cut and add ellipsis
+    rText.second = nLabelWidth + 6 <= nWidth;
+    if( !rText.second )
+    {
+        xub_StrLen nMinLen = 0;
+        xub_StrLen nMaxLen = aText.Len();
+        bool bFits = false;
+        do
+        {
+            xub_StrLen nCurrLen = (nMinLen + nMaxLen) / 2;
+            aText = String( rText.first, 0, nCurrLen ).AppendAscii( "..." );
+            nLabelWidth = rDev.GetTextWidth( aText );
+            bFits = nLabelWidth + 6 <= nWidth;
+            (bFits ? nMinLen : nMaxLen) = nCurrLen;
+        }
+        while( !bFits || (nMinLen + 1 < nMaxLen) );
+    }
+    Point aLabelPos( (nWidth - nLabelWidth) / 2, ::std::max< long >( (nHeight - nLabelHeight) / 2, 3 ) );
 
     aVirDev.SetOutputSizePixel( aDevSize );
     aVirDev.SetFont( rDev.GetFont() );
     DecorationView aDecoView( &aVirDev );
     aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bFocus ? BUTTON_DRAW_DEFAULT : 0 );
     aVirDev.SetTextColor( aTextColor );
-    aVirDev.DrawText( aLabelPos, rText );
+    aVirDev.DrawText( aLabelPos, aText );
     rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point( 0, 0 ), aDevSize ) );
 }
 
@@ -292,7 +305,7 @@ void ScDPFieldWindow::Redraw()
     if( HasFocus() && (nFieldSelected < aFieldArr.size()) )
     {
         long nFieldWidth = aFieldRect.GetWidth();
-        long nSelectionWidth = Min( GetTextWidth( aFieldArr[ nFieldSelected ] ) + 4, nFieldWidth - 6 );
+        long nSelectionWidth = Min( GetTextWidth( aFieldArr[ nFieldSelected ].first ) + 4, nFieldWidth - 6 );
         Rectangle aSelection(
             GetFieldPosition( nFieldSelected ) + Point( (nFieldWidth - nSelectionWidth) / 2, 3 ),
             Size( nSelectionWidth, aFieldRect.GetHeight() - 6 ) );
@@ -318,6 +331,11 @@ bool ScDPFieldWindow::IsValidIndex( size_t nIndex ) const
 bool ScDPFieldWindow::IsExistingIndex( size_t nIndex ) const
 {
     return nIndex < aFieldArr.size();
+}
+
+bool ScDPFieldWindow::IsShortenedText( size_t nIndex ) const
+{
+    return (nIndex < aFieldArr.size()) && !aFieldArr[ nIndex ].second;
 }
 
 size_t ScDPFieldWindow::CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const
@@ -513,6 +531,14 @@ void __EXPORT ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
         PointerStyle ePtr = pDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
         SetPointer( Pointer( ePtr ) );
     }
+    size_t nIndex = 0;
+    if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsShortenedText( nIndex ) )
+    {
+        Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
+        Rectangle   aRect( aPos, GetSizePixel() );
+        String aHelpText = GetFieldText(nIndex);
+        Help::ShowQuickHelp( this, aRect, aHelpText );
+    }
 }
 
 void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
@@ -598,7 +624,7 @@ void ScDPFieldWindow::AddField( const String& rText, size_t nNewIndex )
     DBG_ASSERT( nNewIndex == aFieldArr.size(), "ScDPFieldWindow::AddField - invalid index" );
     if( IsValidIndex( nNewIndex ) )
     {
-        aFieldArr.push_back( rText );
+        aFieldArr.push_back( FieldString( rText, true ) );
         if (pAccessible)
         {
             com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
@@ -646,7 +672,7 @@ void ScDPFieldWindow::SetFieldText( const String& rText, size_t nIndex )
 {
     if( IsExistingIndex( nIndex ) )
     {
-        aFieldArr[ nIndex ] = rText;
+        aFieldArr[ nIndex ] = FieldString( rText, true );
         Redraw();
 
         if (pAccessible)
@@ -663,7 +689,7 @@ void ScDPFieldWindow::SetFieldText( const String& rText, size_t nIndex )
 const String& ScDPFieldWindow::GetFieldText( size_t nIndex ) const
 {
     if( IsExistingIndex( nIndex ) )
-        return aFieldArr[ nIndex ];
+        return aFieldArr[ nIndex ].first;
     return EMPTY_STRING;
 }
 
@@ -680,7 +706,7 @@ bool ScDPFieldWindow::AddField( const String& rText, const Point& rPos, size_t& 
         if( nNewIndex > aFieldArr.size() )
             nNewIndex = aFieldArr.size();
 
-        aFieldArr.insert( aFieldArr.begin() + nNewIndex, rText );
+        aFieldArr.insert( aFieldArr.begin() + nNewIndex, FieldString( rText, true ) );
         nFieldSelected = nNewIndex;
         Redraw();
         rnIndex = nNewIndex;

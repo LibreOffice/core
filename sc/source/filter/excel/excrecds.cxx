@@ -218,12 +218,6 @@ UINT16 ExcDummyRec::GetNum( void ) const
 
 //------------------------------------------------------- class ExcBoolRecord -
 
-ExcBoolRecord::ExcBoolRecord( SfxItemSet* pItemSet, USHORT nWhich, BOOL bDefault )
-{
-    bVal = pItemSet? ( ( const SfxBoolItem& ) pItemSet->Get( nWhich ) ).GetValue() : bDefault;
-}
-
-
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (UINT16)(bVal ? 0x0001 : 0x0000);

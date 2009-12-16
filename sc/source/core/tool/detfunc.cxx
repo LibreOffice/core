@@ -290,6 +290,12 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 
 //------------------------------------------------------------------------
 
+void ScDetectiveFunc::Modified()
+{
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
+}
+
 inline BOOL Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
                         SCCOL nStartCol2, SCROW nStartRow2, SCCOL nEndCol2, SCROW nEndRow2 )
 {
@@ -547,6 +553,7 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
     pData->maEnd.Set( nCol, nRow, nTab);
 
+    Modified();
     return TRUE;
 }
 
@@ -609,6 +616,7 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
+    Modified();
     return TRUE;
 }
 
@@ -676,6 +684,8 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, TRUE );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
+
+    Modified();
 }
 
 void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
@@ -716,6 +726,8 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 }
 
@@ -791,6 +803,8 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 }
 
@@ -1333,6 +1347,8 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 
     return ( nDelCount != 0 );

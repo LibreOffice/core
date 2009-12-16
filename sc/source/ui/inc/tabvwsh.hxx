@@ -418,7 +418,7 @@ public:
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, USHORT nTabPage = 0xffff );
 
-    BOOL    GetFunction( String& rFuncStr );
+    BOOL    GetFunction( String& rFuncStr, sal_uInt16 nErrCode = 0 );
 
     void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
                                     BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );

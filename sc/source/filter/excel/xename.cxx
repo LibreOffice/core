@@ -720,10 +720,10 @@ sal_uInt16 XclExpNameManager::InsertDBRange( USHORT nScDBRangeIdx )
     return mxImpl->InsertDBRange( nScDBRangeIdx );
 }
 
-sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
-{
-    return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, nScTab );
-}
+//UNUSED2009-05 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
+//UNUSED2009-05 {
+//UNUSED2009-05     return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, nScTab );
+//UNUSED2009-05 }
 
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange )
 {

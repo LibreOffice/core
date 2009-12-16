@@ -34,6 +34,7 @@
 #include <rtl/ref.hxx>
 #include <vos/refernce.hxx>
 #include <tools/link.hxx>
+#include "docoptio.hxx"
 
 class ScDocument;
 class ScDocumentPool;
@@ -45,11 +46,13 @@ class SfxItemPool;
 class ScPoolHelper : public vos::OReference
 {
 private:
+    ScDocOptions        aOpt;
     ScDocumentPool*     pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
-    SvNumberFormatter*  pFormTable;
-    SfxItemPool*        pEditPool;                      // EditTextObjectPool
-    SfxItemPool*        pEnginePool;                    // EditEnginePool
+    mutable SvNumberFormatter*  pFormTable;
+    mutable SfxItemPool*        pEditPool;                      // EditTextObjectPool
+    mutable SfxItemPool*        pEnginePool;                    // EditEnginePool
+    ScDocument*         m_pSourceDoc;
 
 public:
                 ScPoolHelper( ScDocument* pSourceDoc );
@@ -61,9 +64,11 @@ public:
                 // access to pointers (are never 0):
     ScDocumentPool*     GetDocPool() const      { return pDocPool; }
     ScStyleSheetPool*   GetStylePool() const    { return mxStylePool.get(); }
-    SvNumberFormatter*  GetFormTable() const    { return pFormTable; }
-    SfxItemPool*        GetEditPool() const     { return pEditPool; }
-    SfxItemPool*        GetEnginePool() const   { return pEnginePool; }
+    SvNumberFormatter*  GetFormTable() const;
+    SfxItemPool*        GetEditPool() const;
+    SfxItemPool*        GetEnginePool() const;
+
+    void                SetFormTableOpt(const ScDocOptions& rOpt) { aOpt = rOpt; }
 };
 
 #endif

@@ -57,6 +57,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
+#include "clipparam.hxx"
 
 using namespace com::sun::star;
 
@@ -175,9 +176,8 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aSourceMark;
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
-    pSrcDoc->CopyToClip( rSrcRange.aStart.Col(),rSrcRange.aStart.Row(),
-                         rSrcRange.aEnd.Col(),rSrcRange.aEnd.Row(),
-                         FALSE, pClipDoc, FALSE, &aSourceMark );
+    ScClipParam aClipParam(rSrcRange, false);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false);
 
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                 HASATTR_MERGED | HASATTR_OVERLAPPED ) )

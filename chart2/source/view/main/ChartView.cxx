@@ -1377,12 +1377,13 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     drawing::Direction3D aPreferredAspectRatio(
         rSeriesPlotterContainer.getPreferredAspectRatio() );
 
-    uno::Reference< drawing::XShapes > xCoordinateRegionTarget(0);
+    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(0);
+    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(0);
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     {//create diagram
         aVDiagram.init(xDiagramPlusAxes_Shapes,xDiagramPlusAxes_Shapes,m_xShapeFactory);
         aVDiagram.createShapes(rAvailablePos,rAvailableSize);
-        xCoordinateRegionTarget = aVDiagram.getCoordinateRegion();
+        xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
         aVDiagram.reduceToMimimumSize();
     }
 
@@ -1394,7 +1395,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     for( nC=0; nC < rVCooSysList.size(); nC++)
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[nC];
-        pVCooSys->initPlottingTargets(xCoordinateRegionTarget,xTextTargetShapes,m_xShapeFactory);
+        pVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis,xTextTargetShapes,m_xShapeFactory,xSeriesTargetBehindAxis);
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
@@ -1469,7 +1470,15 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         rtl::OUString aCID; //III
-        pSeriesPlotter->initPlotter(xCoordinateRegionTarget,xTextTargetShapes,m_xShapeFactory,aCID);
+        uno::Reference< drawing::XShapes > xSeriesTarget(0);
+        if( pSeriesPlotter->WantToPlotInFrontOfAxisLine() )
+            xSeriesTarget = xSeriesTargetInFrontOfAxis;
+        else
+        {
+            xSeriesTarget = xSeriesTargetBehindAxis;
+            DBG_ASSERT( !lcl_resizeAfterCompleteCreation(xDiagram), "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
+        }
+        pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
         if(2==nDimensionCount)
@@ -1503,7 +1512,8 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         }
 
         //clear and recreate
-        ShapeFactory::removeSubShapes( xCoordinateRegionTarget );
+        ShapeFactory::removeSubShapes( xSeriesTargetInFrontOfAxis ); //xSeriesTargetBehindAxis is a sub shape of xSeriesTargetInFrontOfAxis and will be removed here
+        xSeriesTargetBehindAxis.clear();
         ShapeFactory::removeSubShapes( xTextTargetShapes );
 
         //set new transformation

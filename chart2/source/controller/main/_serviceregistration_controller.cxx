@@ -36,6 +36,7 @@
 #include "dlg_ChartType_UNO.hxx"
 #include "ChartDocumentWrapper.hxx"
 #include "AccessibleChartView.hxx"
+#include "ElementSelector.hxx"
 #include <cppuhelper/implementationentry.hxx>
 
 static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
@@ -84,6 +85,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
           ::chart::AccessibleChartView::create
         , ::chart::AccessibleChartView::getImplementationName_Static
         , ::chart::AccessibleChartView::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::ElementSelectorToolbarController::create
+        , ::chart::ElementSelectorToolbarController::getImplementationName_Static
+        , ::chart::ElementSelectorToolbarController::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0

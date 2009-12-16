@@ -45,6 +45,7 @@
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
 #include "Stripe.hxx"
+#include "PolarLabelPositionHelper.hxx"
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -84,6 +85,7 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
+        , m_bIsPolarCooSys( bConnectLastToFirstPoint )
         , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
         , m_bAddOneToXMax(bAddOneToXMax)
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
@@ -230,7 +232,7 @@ bool AreaChart::keepAspectRatio() const
 
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
-    if( m_bArea && pSeries )
+    if( m_bArea && !m_bIsPolarCooSys && pSeries )
     {
         sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
         if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP  )
@@ -432,7 +434,12 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
-    if(!pPreviousSeriesPoly)
+    if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+    {
+        if( pPreviousSeriesPoly )
+            addPolygon( aPoly, *pPreviousSeriesPoly );
+    }
+    else if(!pPreviousSeriesPoly)
     {
         double fMinX = pSeries->m_fLogicMinX;
         double fMaxX = pSeries->m_fLogicMaxX;
@@ -726,6 +733,22 @@ void AreaChart::createShapes()
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
+                    if( m_bIsPolarCooSys && m_bArea &&
+                        ( ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY) ) )
+                    {
+                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
+                        {
+                            if( pSeriesList->size() == 1 || nSeriesIndex == 0 )
+                            {
+                                fLogicY = pPosHelper->getLogicMinY();
+                                if( !pPosHelper->isMathematicalOrientationY() )
+                                    fLogicY = pPosHelper->getLogicMaxY();
+                            }
+                            else
+                                fLogicY = 0.0;
+                        }
+                    }
+
                     if( m_nDimension==3 && m_bArea && pSeriesList->size()!=1 )
                         fLogicY = fabs( fLogicY );
 
@@ -797,7 +820,21 @@ void AreaChart::createShapes()
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)
                     if( isValidPosition(aScaledLogicPosition) )
+                    {
                         AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
+
+                        //prepare clipping for filled net charts
+                        if( !bIsVisible && m_bIsPolarCooSys && m_bArea )
+                        {
+                            drawing::Position3D aClippedPos(aScaledLogicPosition);
+                            pPosHelper->clipScaledLogicValues( 0, &aClippedPos.PositionY, 0 );
+                            if( pPosHelper->isLogicVisible( aClippedPos.PositionX, aClippedPos.PositionY, aClippedPos.PositionZ ) )
+                            {
+                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aClippedPos, (*aSeriesIter)->m_nPolygonIndex );
+                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
+                            }
+                        }
+                    }
 
                     //create a single datapoint if point is visible
                     //apply clipping:
@@ -909,12 +946,29 @@ void AreaChart::createShapes()
                                 break;
                             }
 
+                            awt::Point aScreenPosition2D;//get the screen position for the labels
+                            sal_Int32 nOffset = 100; //todo maybe calculate this font height dependent
+                            if( m_bIsPolarCooSys && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
+                            {
+                                PolarPlottingPositionHelper* pPolarPosHelper = dynamic_cast<PolarPlottingPositionHelper*>(pPosHelper);
+                                if( pPolarPosHelper )
+                                {
+                                    PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
+                                    aScreenPosition2D = awt::Point( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
+                                        eAlignment, fLogicX, fLogicY, fLogicZ, nOffset ));
+                                }
+                            }
+                            else
+                            {
+                                if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
+                                    nOffset = 0;
+                                aScreenPosition2D = awt::Point( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                    .transformSceneToScreenPosition( aScenePosition3D ) );
+                            }
 
-                            awt::Point aScreenPosition2D( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
-                                .transformSceneToScreenPosition( aScenePosition3D ) );
                             this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
                                             , fLogicValueForLabeDisplay
-                                            , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment );
+                                            , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }
                     }
 

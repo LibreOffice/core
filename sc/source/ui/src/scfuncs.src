@@ -2691,7 +2691,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Raises a number to the power of another." ;
+            Text [ en-US ] = "Returns a^b, base a raised to the power of exponent b." ;
         };
         ExtraData =
         {
@@ -2707,15 +2707,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The number that is to be raised to the power of another." ;
+            Text [ en-US ] = "The base a of the power a^b." ;
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Power" ;
+            Text [ en-US ] = "Exponent" ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The power by which the number is to be raised." ;
+            Text [ en-US ] = "The exponent b of the power a^b." ;
         };
     };
      // -=*# Resource for function ANZAHLLEEREZELLEN #*=-
@@ -5718,7 +5718,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_NORMVERT );
-            4;  0;  0;  0;  0;
+            4;  0;  0;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -5731,7 +5731,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "mean" ;
+            Text [ en-US ] = "Mean" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -5751,7 +5751,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function NORMINV #*=-
@@ -5854,7 +5854,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_LOGNORMVERT );
-            3;  0;  0;  0;
+            4;  0;  1;  1;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -5871,7 +5871,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "Mean value. The mean value of the log normal distribution." ;
+            Text [ en-US ] = "The mean value of the log normal distribution. It is set to 0 if omitted." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -5879,7 +5879,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Standard deviation. The standard deviation of the log normal distribution." ;
+            Text [ en-US ] = "The standard deviation of the log normal distribution. It is set to 1 if omitted." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US] = "Cumulative";
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function LOGINV #*=-
@@ -6758,7 +6766,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the two-tailed P value of a z test." ;
+            Text [ en-US ] = "Calculates the probability of observing a z-statistic greater than the one computed based on a sample." ;
         };
         ExtraData =
         {
@@ -6774,15 +6782,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The data array." ;
+            Text [ en-US ] = "The given sample, drawn from a normally distributed population." ;
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "mu" ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The value to be tested." ;
+            Text [ en-US ] = "The known mean of the population." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -6790,7 +6798,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "The standard deviation of the population." ;
+            Text [ en-US ] = "The known standard deviation of the population. If omitted, the standard deviation of the given sample is used." ;
         };
     };
      // -=*# Resource for function CHITEST #*=-
@@ -8906,7 +8914,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            1;  // TODO: implementation and unsuppress
+            0;
             ID_FUNCTION_GRP_TEXT;
             U2S( HID_FUNC_UNICODE );
             1;  0;
@@ -8929,7 +8937,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            1;  // TODO: implementation and unsuppress
+            0;
             ID_FUNCTION_GRP_TEXT;
             U2S( HID_FUNC_UNICHAR );
             1;  0;

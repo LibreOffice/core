@@ -511,7 +511,8 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
 
 // built-in style names -------------------------------------------------------
 
-const String XclTools::maStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+const String XclTools::maStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+const String XclTools::maStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "Excel Built-in " ) );
 
 static const sal_Char* const ppcStyleNames[] =
 {
@@ -534,12 +535,17 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
     if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
         aStyleName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
     else if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
-        aStyleName.Assign( maStyleNamePrefix ).AppendAscii( ppcStyleNames[ nStyleId ] );
+        aStyleName.Assign( maStyleNamePrefix1 ).AppendAscii( ppcStyleNames[ nStyleId ] );
 
     if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
         aStyleName.Append( String::CreateFromInt32( nLevel + 1 ) );
 
     return aStyleName;
+}
+
+String XclTools::GetBuiltInStyleName( const String& rStyleName )
+{
+    return String( maStyleNamePrefix1 ).Append( rStyleName );
 }
 
 bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId, xub_StrLen* pnNextChar )
@@ -553,10 +559,15 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     }
 
     // try the other built-in styles
-    xub_StrLen nPrefixLen = maStyleNamePrefix.Len();
     sal_uInt8 nFoundId = 0;
     xub_StrLen nNextChar = 0;
-    if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix, 0, nPrefixLen ) )
+
+    xub_StrLen nPrefixLen = 0;
+    if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix1, 0, maStyleNamePrefix1.Len() ) )
+        nPrefixLen = maStyleNamePrefix1.Len();
+    else if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix2, 0, maStyleNamePrefix2.Len() ) )
+        nPrefixLen = maStyleNamePrefix2.Len();
+    if( nPrefixLen > 0 )
     {
         String aShortName;
         for( sal_uInt8 nId = 0; nId < STATIC_TABLE_SIZE( ppcStyleNames ); ++nId )
@@ -583,14 +594,14 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
 
     if( pnStyleId ) *pnStyleId = EXC_STYLE_USERDEF;
     if( pnNextChar ) *pnNextChar = 0;
-    return false;
+    return nPrefixLen > 0;  // also return true for unknown built-in styles
 }
 
 bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, const String& rStyleName )
 {
     sal_uInt8 nStyleId;
     xub_StrLen nNextChar;
-    if( IsBuiltInStyleName( rStyleName, &nStyleId, &nNextChar ) )
+    if( IsBuiltInStyleName( rStyleName, &nStyleId, &nNextChar ) && (nStyleId != EXC_STYLE_USERDEF) )
     {
         if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
         {
@@ -617,24 +628,25 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 // conditional formatting style names -----------------------------------------
 
-const String XclTools::maCFStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
+const String XclTools::maCFStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
+const String XclTools::maCFStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "ConditionalStyle_" ) );
 
 String XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
-    return String( maCFStyleNamePrefix ).Append( String::CreateFromInt32( nScTab + 1 ) ).
+    return String( maCFStyleNamePrefix1 ).Append( String::CreateFromInt32( nScTab + 1 ) ).
                 Append( '_' ).Append( String::CreateFromInt32( nFormat + 1 ) ).
                 Append( '_' ).Append( String::CreateFromInt32( nCondition + 1 ) );
 }
 
 bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar )
 {
-    xub_StrLen nPrefixLen = maCFStyleNamePrefix.Len();
-    if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix, 0, nPrefixLen ) )
-    {
-        if( pnNextChar ) *pnNextChar = nPrefixLen;
-        return true;
-    }
-    return false;
+    xub_StrLen nPrefixLen = 0;
+    if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix1, 0, maCFStyleNamePrefix1.Len() ) )
+        nPrefixLen = maCFStyleNamePrefix1.Len();
+    else if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix2, 0, maCFStyleNamePrefix2.Len() ) )
+        nPrefixLen = maCFStyleNamePrefix2.Len();
+    if( pnNextChar ) *pnNextChar = nPrefixLen;
+    return nPrefixLen > 0;
 }
 
 // stream handling ------------------------------------------------------------

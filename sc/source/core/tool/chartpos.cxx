@@ -616,34 +616,34 @@ ScChartPositionMap::~ScChartPositionMap()
 }
 
 
-ScRangeListRef ScChartPositionMap::GetColRanges( SCCOL nChartCol ) const
-{
-    ScRangeListRef xRangeList = new ScRangeList;
-    if ( nChartCol < nColCount )
-    {
-        ULONG nStop = GetIndex( nChartCol, nRowCount );
-        for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
-        {
-            if ( ppData[ nIndex ] )
-                xRangeList->Join( *ppData[ nIndex ] );
-        }
-    }
-    return xRangeList;
-}
+//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetColRanges( SCCOL nChartCol ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
+//UNUSED2009-05     if ( nChartCol < nColCount )
+//UNUSED2009-05     {
+//UNUSED2009-05         ULONG nStop = GetIndex( nChartCol, nRowCount );
+//UNUSED2009-05         for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
+//UNUSED2009-05         {
+//UNUSED2009-05             if ( ppData[ nIndex ] )
+//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return xRangeList;
+//UNUSED2009-05 }
 
 
-ScRangeListRef ScChartPositionMap::GetRowRanges( SCROW nChartRow ) const
-{
-    ScRangeListRef xRangeList = new ScRangeList;
-    if ( nChartRow < nRowCount )
-    {
-        ULONG nStop = GetIndex( nColCount, nChartRow );
-        for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
-                nIndex += nRowCount )
-        {
-            if ( ppData[ nIndex ] )
-                xRangeList->Join( *ppData[ nIndex ] );
-        }
-    }
-    return xRangeList;
-}
+//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetRowRanges( SCROW nChartRow ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
+//UNUSED2009-05     if ( nChartRow < nRowCount )
+//UNUSED2009-05     {
+//UNUSED2009-05         ULONG nStop = GetIndex( nColCount, nChartRow );
+//UNUSED2009-05         for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
+//UNUSED2009-05                 nIndex += nRowCount )
+//UNUSED2009-05         {
+//UNUSED2009-05             if ( ppData[ nIndex ] )
+//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return xRangeList;
+//UNUSED2009-05 }

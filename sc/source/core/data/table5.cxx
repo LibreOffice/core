@@ -353,6 +353,9 @@ void ScTable::SetPageStyle( const String& rName )
 
             if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
                 aPageStyle = aStrNew;
+
+            if (IsStreamValid())
+                SetStreamValid(FALSE);
         }
     }
 }

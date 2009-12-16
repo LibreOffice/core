@@ -120,7 +120,7 @@ struct ControllerState
 
     // -- State variables -------
     bool bHasSelectedObject;
-    bool bIsDraggableObject;
+    bool bIsPositionableObject;
     bool bIsTextObject;
     bool bIsDeleteableObjectSelected;
     bool bIsFormateableObjectSelected;
@@ -133,18 +133,26 @@ struct ControllerState
     // trendlines
     bool bMayAddTrendline;
     bool bMayAddTrendlineEquation;
+    bool bMayAddR2Value;
     bool bMayAddMeanValue;
     bool bMayAddYErrorBars;
 
     bool bMayDeleteTrendline;
+    bool bMayDeleteTrendlineEquation;
+    bool bMayDeleteR2Value;
     bool bMayDeleteMeanValue;
     bool bMayDeleteYErrorBars;
+
+    bool bMayFormatTrendline;
+    bool bMayFormatTrendlineEquation;
+    bool bMayFormatMeanValue;
+    bool bMayFormatYErrorBars;
 };
 
 
 ControllerState::ControllerState() :
         bHasSelectedObject( false ),
-        bIsDraggableObject( false ),
+        bIsPositionableObject( false ),
         bIsTextObject(false),
         bIsDeleteableObjectSelected(false),
         bIsFormateableObjectSelected(false),
@@ -152,11 +160,18 @@ ControllerState::ControllerState() :
         bMayMoveSeriesBackward( false ),
         bMayAddTrendline( false ),
         bMayAddTrendlineEquation( false ),
+        bMayAddR2Value( false ),
         bMayAddMeanValue( false ),
         bMayAddYErrorBars( false ),
         bMayDeleteTrendline( false ),
+        bMayDeleteTrendlineEquation( false ),
+        bMayDeleteR2Value( false ),
         bMayDeleteMeanValue( false ),
-        bMayDeleteYErrorBars( false )
+        bMayDeleteYErrorBars( false ),
+        bMayFormatTrendline( false ),
+        bMayFormatTrendlineEquation( false ),
+        bMayFormatMeanValue( false ),
+        bMayFormatYErrorBars( false )
 {}
 
 void ControllerState::update(
@@ -175,9 +190,9 @@ void ControllerState::update(
 
         bHasSelectedObject = ((aSelObj >>= aSelObjCID) && aSelObjCID.getLength() > 0);
 
-        bIsDraggableObject = ObjectIdentifier::isDragableObject( aSelObjCID );
-
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
+
+        bIsPositionableObject = (OBJECTTYPE_DATA_POINT != aObjectType) && ObjectIdentifier::isDragableObject( aSelObjCID );
         bIsTextObject = OBJECTTYPE_TITLE == aObjectType;
 
         uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
@@ -191,23 +206,30 @@ void ControllerState::update(
 
         bIsDeleteableObjectSelected = ChartController::isObjectDeleteable( aSelObj );
 
-        bMayMoveSeriesForward = DiagramHelper::isSeriesMoveable(
+        bMayMoveSeriesForward = (OBJECTTYPE_DATA_POINT!=aObjectType) && DiagramHelper::isSeriesMoveable(
             ChartModelHelper::findDiagram( xModel ),
             xGivenDataSeries,
             MOVE_SERIES_FORWARD );
 
-        bMayMoveSeriesBackward = DiagramHelper::isSeriesMoveable(
+        bMayMoveSeriesBackward = (OBJECTTYPE_DATA_POINT!=aObjectType) && DiagramHelper::isSeriesMoveable(
             ChartModelHelper::findDiagram( xModel ),
             xGivenDataSeries,
             MOVE_SERIES_BACKWARD );
 
         bMayAddTrendline = false;
         bMayAddTrendlineEquation = false;
+        bMayAddR2Value = false;
         bMayAddMeanValue = false;
         bMayAddYErrorBars = false;
         bMayDeleteTrendline = false;
+        bMayDeleteTrendlineEquation = false;
+        bMayDeleteR2Value = false;
         bMayDeleteMeanValue = false;
         bMayDeleteYErrorBars = false;
+        bMayFormatTrendline = false;
+        bMayFormatTrendlineEquation = false;
+        bMayFormatMeanValue = false;
+        bMayFormatYErrorBars = false;
         if( bHasSelectedObject )
         {
             if( xGivenDataSeries.is())
@@ -217,46 +239,63 @@ void ControllerState::update(
                     DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ));
 
                 // trend lines/mean value line
-                if( ChartTypeHelper::isSupportingRegressionProperties(
-                        xFirstChartType, nDimensionCount ))
+                if( (OBJECTTYPE_DATA_SERIES == aObjectType || OBJECTTYPE_DATA_POINT == aObjectType)
+                    && ChartTypeHelper::isSupportingRegressionProperties( xFirstChartType, nDimensionCount ))
                 {
                     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                         xGivenDataSeries, uno::UNO_QUERY );
                     if( xRegCurveCnt.is())
                     {
-                        bMayDeleteTrendline = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
-                        bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
+                        uno::Reference< chart2::XRegressionCurve > xRegCurve( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
+                        bMayFormatTrendline = bMayDeleteTrendline = xRegCurve.is();
+                        bMayFormatMeanValue = bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
                         bMayAddTrendline = ! bMayDeleteTrendline;
                         bMayAddMeanValue = ! bMayDeleteMeanValue;
+                        bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
+                        bMayAddTrendlineEquation = !bMayDeleteTrendlineEquation;
                     }
                 }
 
                 // error bars
-                if( ChartTypeHelper::isSupportingStatisticProperties(
-                        xFirstChartType, nDimensionCount ))
+                if( (OBJECTTYPE_DATA_SERIES == aObjectType || OBJECTTYPE_DATA_POINT == aObjectType)
+                    && ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount ))
                 {
-                    bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries );
+                    bMayFormatYErrorBars = bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries );
                     bMayAddYErrorBars = ! bMayDeleteYErrorBars;
                 }
             }
 
+            if( aObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
+                bMayFormatMeanValue = true;
+
+            if( aObjectType == OBJECTTYPE_DATA_ERRORS_Y || aObjectType == OBJECTTYPE_DATA_ERRORS )
+                bMayFormatYErrorBars = true;
+
             if( aObjectType == OBJECTTYPE_DATA_CURVE )
             {
+                bMayFormatTrendline = true;
                 uno::Reference< chart2::XRegressionCurve > xRegCurve(
                     ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
-                if( xRegCurve.is())
+                bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
+                bMayAddTrendlineEquation = !bMayDeleteTrendlineEquation;
+            }
+            else if( aObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
+            {
+                bMayFormatTrendlineEquation = true;
+                bool bHasR2Value = false;
+                try
                 {
-                    uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
-                    bool bShowEq = false;
-                    bool bShowCorr = false;
+                    uno::Reference< beans::XPropertySet > xEqProp(
+                        ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
                     if( xEqProp.is())
-                    {
-                        xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
-                        xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCorr;
-
-                        bMayAddTrendlineEquation = ! (bShowEq || bShowCorr);
-                    }
+                        xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient") ) >>= bHasR2Value;
                 }
+                catch( uno::RuntimeException& e)
+                {
+                    ASSERT_EXCEPTION( e );
+                }
+                bMayAddR2Value = !bHasR2Value;
+                bMayDeleteR2Value = bHasR2Value;
             }
         }
     }
@@ -504,31 +543,51 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:DefaultColors")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:BarWidth")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:NumberOfLines")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] = m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward;
 
     // insert objects
-    m_aCommandAvailability[ C2U(".uno:InsertTitle")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertLegend")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertDescription")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertAxis")] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ C2U(".uno:InsertGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
-//     m_aCommandAvailability[ C2U(".uno:InsertStatistics")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertTrendlines")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertMeanValues")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertYErrorbars")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertTitles")] = m_aCommandAvailability[ C2U(".uno:InsertMenuTitles")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertLegend")] = m_aCommandAvailability[ C2U(".uno:InsertMenuLegend")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteLegend")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuDataLabels")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertRemoveAxes")] = m_aCommandAvailability[ C2U(".uno:InsertMenuAxes")] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuTrendlines")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuMeanValues")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuYErrorBars")] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ C2U(".uno:InsertSymbol")] = bIsWritable && m_apControllerState->bIsTextObject;
 
     // format objects
-    m_aCommandAvailability[ C2U(".uno:DiagramObjects")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
+    bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
+    m_aCommandAvailability[ C2U(".uno:FormatSelection")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatAxis")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatTitle")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatDataSeries")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatDataPoint")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatDataLabels")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatDataLabel")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatYErrorBars;
+    m_aCommandAvailability[ C2U(".uno:FormatMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatMeanValue;
+    m_aCommandAvailability[ C2U(".uno:FormatTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendline;
+    m_aCommandAvailability[ C2U(".uno:FormatTrendlineEquation")] = bFormatObjectAvailable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendlineEquation;
+    m_aCommandAvailability[ C2U(".uno:FormatStockLoss")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatStockGain")] = bFormatObjectAvailable;
+
     m_aCommandAvailability[ C2U(".uno:DiagramType")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:Legend")] = bIsWritable && m_apModelState->bHasLegend;
     m_aCommandAvailability[ C2U(".uno:DiagramWall")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
     m_aCommandAvailability[ C2U(".uno:DiagramArea")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject;
+    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsPositionableObject;
 
     // 3d commands
     m_aCommandAvailability[ C2U(".uno:View3D")] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;
     m_aCommandAvailability[ C2U(".uno:DiagramFloor")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor;
+
+    //some mor format commands with different ui text
+    m_aCommandAvailability[ C2U(".uno:FormatWall")] = m_aCommandAvailability[ C2U(".uno:DiagramWall")];
+    m_aCommandAvailability[ C2U(".uno:FormatFloor")] = m_aCommandAvailability[ C2U(".uno:DiagramFloor")];
+    m_aCommandAvailability[ C2U(".uno:FormatChartArea")] = m_aCommandAvailability[ C2U(".uno:DiagramArea")];
+    m_aCommandAvailability[ C2U(".uno:FormatLegend")] = m_aCommandAvailability[ C2U(".uno:Legend")];
 
     // depending on own data
     m_aCommandAvailability[ C2U(".uno:DataRanges")] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
@@ -570,14 +629,36 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:Forward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward;
     m_aCommandAvailability[ C2U(".uno:Backward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward;
 
+    m_aCommandAvailability[ C2U(".uno:InsertDataLabels")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertDataLabel")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:InsertMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
     m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
-    m_aCommandAvailability[ C2U(".uno:InsertYErrorbar")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
+    m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquationAndR2")] = m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")];
+    m_aCommandAvailability[ C2U(".uno:InsertR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value;
+    m_aCommandAvailability[ C2U(".uno:DeleteR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
 
-    m_aCommandAvailability[ C2U(".uno:DeleteTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
-    m_aCommandAvailability[ C2U(".uno:DeleteMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
-    m_aCommandAvailability[ C2U(".uno:DeleteYErrorbar")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
+    m_aCommandAvailability[ C2U(".uno:InsertYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
+
+    m_aCommandAvailability[ C2U(".uno:DeleteDataLabels")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteDataLabel") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteTrendline") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
+    m_aCommandAvailability[ C2U(".uno:DeleteTrendlineEquation") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendlineEquation;
+    m_aCommandAvailability[ C2U(".uno:DeleteMeanValue") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
+    m_aCommandAvailability[ C2U(".uno:DeleteYErrorBars") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
+
+    m_aCommandAvailability[ C2U(".uno:ResetDataPoint") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:ResetAllDataPoints") ] = bIsWritable;
+
+    m_aCommandAvailability[ C2U(".uno:InsertAxis") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteAxis") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertAxisTitle") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:FormatMajorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertMajorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteMajorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:FormatMinorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertMinorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DeleteMinorGrid") ] = bIsWritable;
 }
 
 bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
@@ -593,11 +674,19 @@ void ControllerCommandDispatch::fireStatusEvent(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
+    bool bIsChartSelectorURL = rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:ChartElementSelector") );
+    if( rURL.getLength() == 0 || bIsChartSelectorURL )
+    {
+        uno::Any aArg;
+        aArg <<= m_xController;
+        fireStatusEventForURL( C2U(".uno:ChartElementSelector"), aArg, true, xSingleListener );
+    }
+
     if( rURL.getLength() == 0 )
         for( ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
              aIt != m_aCommandAvailability.end(); ++aIt )
             fireStatusEventForURLImpl( aIt->first, xSingleListener );
-    else
+    else if( !bIsChartSelectorURL )
         fireStatusEventForURLImpl( rURL, xSingleListener );
 
     // statusbar. Should be handled by base implementation

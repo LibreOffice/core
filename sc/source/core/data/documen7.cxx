@@ -125,6 +125,13 @@ void ScDocument::Broadcast( const ScHint& rHint )
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
+
+    if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+    {
+        SCTAB nTab = rHint.GetAddress().Tab();
+        if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+            pTab[nTab]->SetStreamValid(FALSE);
+    }
 }
 
 

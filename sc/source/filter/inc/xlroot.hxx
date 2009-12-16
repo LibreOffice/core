@@ -36,6 +36,8 @@
 #include "xlconst.hxx"
 #include "xltools.hxx"
 
+namespace comphelper { class IDocPasswordVerifier; }
+
 // Forward declarations of objects in public use ==============================
 
 class DateTime;
@@ -92,6 +94,7 @@ struct XclRootData
     ScDocument&         mrDoc;              /// The source or destination document.
     String              maDocUrl;           /// Document URL of imported/exported file.
     String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
+    const String        maDefPassword;      /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
@@ -182,6 +185,11 @@ public:
     inline const String& GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
     inline const String& GetBasePath() const { return mrData.maBasePath; }
+
+    /** Returns the default password used for stream encryption. */
+    inline const String& GetDefaultPassword() const { return mrData.maDefPassword; }
+    /** Requests and verifies a password from the medium or the user. */
+    String              RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */

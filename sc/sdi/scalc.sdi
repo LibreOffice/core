@@ -2705,81 +2705,6 @@ SfxVoidItem FunctionDialog SID_OPENDLG_FUNCTION
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt32Item GetClipboardFormat SID_GET_CLPBRD_FORMAT_BY_IDX
-(SfxUInt16Item Index SID_GET_CLPBRD_FORMAT_BY_IDX)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxUInt16Item GetClipboardFormatCount SID_GET_CLPBRD_FORMAT_COUNT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem GetClipboardFormatName SID_GET_CLPBRD_FORMAT_NAME
-(SfxUInt32Item Format SID_GET_CLPBRD_FORMAT_NAME)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem GoalSeek SID_SOLVE
 ()
 [
@@ -4982,31 +4907,6 @@ SfxVoidItem PageFormatDialog SID_FORMATPAGE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxInt16Item PasteSpecial FID_PASTE_CONTENTS
-(SfxUInt32Item Format FID_PASTE_CONTENTS)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
 ]
 
 //--------------------------------------------------------------------------

@@ -1026,11 +1026,11 @@ short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
     ((ScAutoFormatData*)pKey1)->GetName(aStr1);
     ((ScAutoFormatData*)pKey2)->GetName(aStr2);
     String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    if ( ScGlobal::pTransliteration->isEqual( aStr1, aStrStandard ) )
+    if ( ScGlobal::GetpTransliteration()->isEqual( aStr1, aStrStandard ) )
         return -1;
-    if ( ScGlobal::pTransliteration->isEqual( aStr2, aStrStandard ) )
+    if ( ScGlobal::GetpTransliteration()->isEqual( aStr2, aStrStandard ) )
         return 1;
-    return (short) ScGlobal::pTransliteration->compareString( aStr1, aStr2 );
+    return (short) ScGlobal::GetpTransliteration()->compareString( aStr1, aStr2 );
 }
 
 BOOL ScAutoFormat::Load()

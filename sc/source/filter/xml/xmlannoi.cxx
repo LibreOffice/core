@@ -207,9 +207,17 @@ void ScXMLAnnotationContext::EndElement()
     pTableShapeImport->SetAnnotation(NULL);
 }
 
-void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& rxShape, const uno::Reference< drawing::XShapes >& rxShapes )
+void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& rxShape, const uno::Reference< drawing::XShapes >& rxShapes,
+                                       const rtl::OUString& rStyleName, const rtl::OUString& rTextStyle )
 {
     mrAnnotationData.mxShape = rxShape;
     mrAnnotationData.mxShapes = rxShapes;
+    mrAnnotationData.maStyleName = rStyleName;
+    mrAnnotationData.maTextStyle = rTextStyle;
+}
+
+void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection )
+{
+    mrAnnotationData.maContentStyles.push_back( ScXMLAnnotationStyleEntry( nFamily, rName, rSelection ) );
 }
 

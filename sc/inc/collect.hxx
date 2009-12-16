@@ -80,7 +80,7 @@ public:
 
     ScDataObject*   At(USHORT nIndex) const;
     virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
-    USHORT GetCount() const { return nCount; }
+    USHORT GetCount() const;
 
             ScDataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
@@ -143,9 +143,6 @@ public:
     virtual ScDataObject*   Clone() const;
             StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-
-            void        Load( SvStream& );
-            void        Store( SvStream& ) const;
 };
 
 //------------------------------------------------------------------------
@@ -178,9 +175,6 @@ public:
 
 private:
     friend class TypedScStrCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    friend class PivotScStrCollection;
-#endif
 
     String  aStrValue;
     double  nValue;
@@ -198,6 +192,7 @@ public:
 
             TypedScStrCollection( const TypedScStrCollection& rCpy )
                 : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+            ~TypedScStrCollection();
 
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;

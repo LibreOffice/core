@@ -223,6 +223,29 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
     return aRet;
 }
 
+void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
+{
+    sal_Int32 nAddOuterCount = rAdd.SequenceX.getLength();
+    sal_Int32 nOuterCount = rRet.SequenceX.getLength() + nAddOuterCount;
+    rRet.SequenceX.realloc( nOuterCount );
+    rRet.SequenceY.realloc( nOuterCount );
+    rRet.SequenceZ.realloc( nOuterCount );
+
+    sal_Int32 nIndex = 0;
+    sal_Int32 nOuter = nOuterCount - nAddOuterCount;
+    for( ; nOuter < nOuterCount; nOuter++ )
+    {
+        if( nIndex >= nAddOuterCount )
+            break;
+
+        rRet.SequenceX[nOuter] = rAdd.SequenceX[nIndex];
+        rRet.SequenceY[nOuter] = rAdd.SequenceY[nIndex];
+        rRet.SequenceZ[nOuter] = rAdd.SequenceZ[nIndex];
+
+        nIndex++;
+    }
+}
+
 void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
 {
     sal_Int32 nOuterCount = Max( rRet.SequenceX.getLength(), rAdd.SequenceX.getLength() );

@@ -371,6 +371,16 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
 }
 
+void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
+                         bool bKeepScenarioFlags, bool bCloneNoteCaptions)
+{
+    ScRangeList aRanges(rRanges);
+    for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+    {
+        CopyToClip(p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
+                   pTable, bKeepScenarioFlags, bCloneNoteCaptions);
+    }
+}
 
 void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, USHORT nInsFlag,
@@ -837,13 +847,13 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 }
 
 
-void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
-{
-    if (pCell)
-        aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
-    else
-        aCol[rPos.Col()].Delete( rPos.Row() );
-}
+//UNUSED2009-05 void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
+//UNUSED2009-05 {
+//UNUSED2009-05     if (pCell)
+//UNUSED2009-05         aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
+//UNUSED2009-05     else
+//UNUSED2009-05         aCol[rPos.Col()].Delete( rPos.Row() );
+//UNUSED2009-05 }
 
 
 BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
@@ -1182,22 +1192,22 @@ BOOL ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 }
 
 
-BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
-{
-    SCCOL nCol1 = rRange.aStart.Col();
-    SCROW nRow1 = rRange.aStart.Row();
-    SCCOL nCol2 = rRange.aEnd.Col();
-    SCROW nRow2 = rRange.aEnd.Row();
-    PutInOrder( nCol1, nCol2 );
-    PutInOrder( nRow1, nRow2 );
-
-    BOOL bFound = FALSE;
-    for (SCCOL i=nCol1; i<=nCol2; i++)
-        if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
-            bFound = TRUE;
-
-    return bFound;
-}
+//UNUSED2009-05 BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     SCCOL nCol1 = rRange.aStart.Col();
+//UNUSED2009-05     SCROW nRow1 = rRange.aStart.Row();
+//UNUSED2009-05     SCCOL nCol2 = rRange.aEnd.Col();
+//UNUSED2009-05     SCROW nRow2 = rRange.aEnd.Row();
+//UNUSED2009-05     PutInOrder( nCol1, nCol2 );
+//UNUSED2009-05     PutInOrder( nRow1, nRow2 );
+//UNUSED2009-05
+//UNUSED2009-05     BOOL bFound = FALSE;
+//UNUSED2009-05     for (SCCOL i=nCol1; i<=nCol2; i++)
+//UNUSED2009-05         if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
+//UNUSED2009-05             bFound = TRUE;
+//UNUSED2009-05
+//UNUSED2009-05     return bFound;
+//UNUSED2009-05 }
 
 
 BOOL ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
@@ -2837,7 +2847,7 @@ void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr)
 
 // Berechnen der Groesse der Tabelle und setzen der Groesse an der DrawPage
 
-void ScTable::SetDrawPageSize()
+void ScTable::SetDrawPageSize(bool bResetStreamValid)
 {
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
@@ -2852,6 +2862,11 @@ void ScTable::SetDrawPageSize()
 
         pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ) );
     }
+
+    // #i102616# actions that modify the draw page size count as sheet modification
+    // (exception: InitDrawLayer)
+    if (bResetStreamValid && IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 

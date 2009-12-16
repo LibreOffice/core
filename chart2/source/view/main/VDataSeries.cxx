@@ -151,7 +151,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
 {
     if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO
-        && ::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue) )
+        && (::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue)) )
             rfValue = 0.0;
 }
 
@@ -620,24 +620,33 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fY = getYValue( index );
-    double fY_Min = getY_Min( index );
-    double fY_Max = getY_Max( index );
-    double fY_First = getY_First( index );
-    double fY_Last = getY_Last( index );
-
     double fMin=0.0;
     ::rtl::math::setInf(&fMin, false);
-    if(fMin>fY)
-        fMin=fY;
-    if(fMin>fY_First)
-        fMin=fY_First;
-    if(fMin>fY_Last)
-        fMin=fY_Last;
-    if(fMin>fY_Min)
-        fMin=fY_Min;
-    if(fMin>fY_Max)
-        fMin=fY_Max;
+
+    if( !m_aValues_Y.is() &&
+        (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
+        || m_aValues_Y_First.is() || m_aValues_Y_Last.is() ) )
+    {
+        double fY_Min = getY_Min( index );
+        double fY_Max = getY_Max( index );
+        double fY_First = getY_First( index );
+        double fY_Last = getY_Last( index );
+
+        if(fMin>fY_First)
+            fMin=fY_First;
+        if(fMin>fY_Last)
+            fMin=fY_Last;
+        if(fMin>fY_Min)
+            fMin=fY_Min;
+        if(fMin>fY_Max)
+            fMin=fY_Max;
+    }
+    else
+    {
+        double fY = getYValue( index );
+        if(fMin>fY)
+            fMin=fY;
+    }
 
     if( ::rtl::math::isInf(fMin) )
         ::rtl::math::setNan(&fMin);
@@ -647,24 +656,33 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 
 double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fY = getYValue( index );
-    double fY_Min = getY_Min( index );
-    double fY_Max = getY_Max( index );
-    double fY_First = getY_First( index );
-    double fY_Last = getY_Last( index );
-
     double fMax=0.0;
     ::rtl::math::setInf(&fMax, true);
-    if(fMax<fY)
-        fMax=fY;
-    if(fMax<fY_First)
-        fMax=fY_First;
-    if(fMax<fY_Last)
-        fMax=fY_Last;
-    if(fMax<fY_Min)
-        fMax=fY_Min;
-    if(fMax<fY_Max)
-        fMax=fY_Max;
+
+    if( !m_aValues_Y.is() &&
+        (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
+        || m_aValues_Y_First.is() || m_aValues_Y_Last.is() ) )
+    {
+        double fY_Min = getY_Min( index );
+        double fY_Max = getY_Max( index );
+        double fY_First = getY_First( index );
+        double fY_Last = getY_Last( index );
+
+        if(fMax<fY_First)
+            fMax=fY_First;
+        if(fMax<fY_Last)
+            fMax=fY_Last;
+        if(fMax<fY_Min)
+            fMax=fY_Min;
+        if(fMax<fY_Max)
+            fMax=fY_Max;
+    }
+    else
+    {
+        double fY = getYValue( index );
+        if(fMax<fY)
+            fMax=fY;
+    }
 
     if( ::rtl::math::isInf(fMax) )
         ::rtl::math::setNan(&fMax);

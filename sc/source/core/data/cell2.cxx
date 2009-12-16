@@ -53,7 +53,6 @@
 #include "scmatrix.hxx"
 #include "editutil.hxx"
 #include "chgtrack.hxx"
-#include "indexmap.hxx"
 #include "externalrefmgr.hxx"
 
 using namespace formula;
@@ -135,8 +134,8 @@ void ScEditCell::GetString( String& rString ) const
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
         rString = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
-        // kurze Strings fuer Formeln merken
-        if ( rString.Len() < MAXSTRLEN )
+        // cache short strings for formulas
+        if ( rString.Len() < 256 )
             ((ScEditCell*)this)->pString = new String( rString );   //! non-const
     }
     else
@@ -1067,7 +1066,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             pCode = new ScTokenArray( *pRangeData->GetCode() );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateInsertTab( nTable, FALSE );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -1103,7 +1102,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bRefChanged );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -1140,7 +1139,7 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateMoveTab( nOldPos, nNewPos, TRUE );
             bCompile = TRUE;
         }
@@ -1480,14 +1479,15 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<USHORT>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-void ScFormulaCell::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScFormulaCell::ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if( p->GetOpCode() == ocName )
         {
-            USHORT nIndex = p->GetIndex();
-            USHORT nNewIndex = rMap.Find( nIndex );
+            sal_uInt16 nIndex = p->GetIndex();
+            ScRangeData::IndexMap::const_iterator itr = rMap.find(nIndex);
+            sal_uInt16 nNewIndex = itr == rMap.end() ? nIndex : itr->second;
             if ( nIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );

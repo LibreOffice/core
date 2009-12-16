@@ -46,6 +46,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/colritem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/zforlist.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -174,6 +175,15 @@ ImportExcel::~ImportExcel( void )
     delete pFormConv;
 }
 
+
+void ImportExcel::ReadFileSharing()
+{
+    sal_uInt16 nRecommendReadOnly, nPasswordHash;
+    maStrm >> nRecommendReadOnly >> nPasswordHash;
+    if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
+        if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
+            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+}
 
 sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
 {
@@ -604,7 +614,6 @@ void ImportExcel::DocPasssword( void )
 
 void ImportExcel::Codepage( void )
 {
-    maStrm.EnableDecryption();
     SetCodePage( maStrm.ReaduInt16() );
 }
 

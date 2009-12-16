@@ -51,7 +51,8 @@ DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, 
     m_rInAttrs(rInAttrs)
 {
     FreeResource();
-    SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
+    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_LABELS ) );
+
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     Reset();
 }

@@ -37,6 +37,7 @@
 
 #include <memory>
 #include "AccessibleText.hxx"
+#include "AccessibleCell.hxx"
 #include "tabvwsh.hxx"
 #include "editutil.hxx"
 #include "document.hxx"
@@ -54,6 +55,7 @@
 #include <svx/editobj.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/algitem.hxx>
 
 
 // ============================================================================
@@ -753,13 +755,14 @@ void ScEditViewForwarder::SetInvalid()
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
-                            const ScAddress& rP, ScSplitPos eSplitPos)
+        const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewForwarder(NULL),
     mpEditViewForwarder(NULL),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mbViewEditEngine(sal_False)
+    mbViewEditEngine(sal_False),
+    mpAccessibleCell( pAccCell )
 {
 }
 
@@ -792,7 +795,7 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 
 ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
 {
-    return new ScAccessibleCellTextData(mpViewShell, aCellPos, meSplitPos);
+    return new ScAccessibleCellTextData( mpViewShell, aCellPos, meSplitPos, mpAccessibleCell );
 }
 
 void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
@@ -866,7 +869,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
     if (!bHasForwarder)*/
         ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 
-    if (pEditEngine && mpViewShell)
+    ScDocument* pDoc = ( pDocShell ? pDocShell->GetDocument() : NULL );
+    if ( pDoc && pEditEngine && mpViewShell )
     {
         long nSizeX, nSizeY;
         mpViewShell->GetViewData()->GetMergeSizePixel(
@@ -874,9 +878,39 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 
         Size aSize(nSizeX, nSizeY);
 
-        Window* pWin = mpViewShell->GetWindowByPos(meSplitPos);
-        if (pWin)
-            aSize = pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+        // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
+        long nIndent = 0;
+        const SvxHorJustifyItem* pHorJustifyItem = static_cast< const SvxHorJustifyItem* >(
+            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ) );
+        SvxCellHorJustify eHorJust = ( pHorJustifyItem ? static_cast< SvxCellHorJustify >( pHorJustifyItem->GetValue() ) : SVX_HOR_JUSTIFY_STANDARD );
+        if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
+        {
+            const SfxUInt16Item* pIndentItem = static_cast< const SfxUInt16Item* >(
+                pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_INDENT ) );
+            if ( pIndentItem )
+            {
+                nIndent = static_cast< long >( pIndentItem->GetValue() );
+            }
+        }
+
+        const SvxMarginItem* pMarginItem = static_cast< const SvxMarginItem* >(
+            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_MARGIN ) );
+        ScViewData* pViewData = mpViewShell->GetViewData();
+        double nPPTX = ( pViewData ? pViewData->GetPPTX() : 0 );
+        double nPPTY = ( pViewData ? pViewData->GetPPTY() : 0 );
+        long nLeftM = ( pMarginItem ? static_cast< long >( ( pMarginItem->GetLeftMargin() + nIndent ) * nPPTX ) : 0 );
+        long nTopM = ( pMarginItem ? static_cast< long >( pMarginItem->GetTopMargin() * nPPTY ) : 0 );
+        long nRightM = ( pMarginItem ? static_cast< long >( pMarginItem->GetRightMargin() * nPPTX ) : 0 );
+        long nBottomM = ( pMarginItem ? static_cast< long >( pMarginItem->GetBottomMargin() * nPPTY ) : 0 );
+        long nWidth = aSize.getWidth() - nLeftM - nRightM;
+        aSize.setWidth( nWidth );
+        aSize.setHeight( aSize.getHeight() - nTopM - nBottomM );
+
+        Window* pWin = mpViewShell->GetWindowByPos( meSplitPos );
+        if ( pWin )
+        {
+            aSize = pWin->PixelToLogic( aSize, pEditEngine->GetRefMapMode() );
+        }
 
         /*  #i19430# Gnopernicus reads text partly if it sticks out of the cell
             boundaries. This leads to wrong results in cases where the cell text
@@ -888,20 +922,94 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             return the size of the complete text then, which is used to expand
             the cell bounding box in ScAccessibleCell::GetBoundingBox()
             (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
-        if (pDocShell && pDocShell->GetDocument())
+        const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
+            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
+        if( pItem && (pItem->GetValue() != 0) )
         {
-            const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
-                pDocShell->GetDocument()->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
-            if( pItem && (pItem->GetValue() != 0) )
+            pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
+            long nTxtWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
+            aSize.setWidth( std::max( aSize.getWidth(), nTxtWidth + 2 ) );
+        }
+        else
+        {
+            // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
+            const SfxBoolItem* pLineBreakItem = static_cast< const SfxBoolItem* >(
+                pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_LINEBREAK ) );
+            bool bLineBreak = ( pLineBreakItem && pLineBreakItem->GetValue() );
+            if ( !bLineBreak )
             {
-                pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
-                long nTextWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
-                aSize.setWidth( std::max( aSize.getWidth(), nTextWidth + 2 ) );
+                long nTxtWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
+                aSize.setWidth( ::std::max( aSize.getWidth(), nTxtWidth ) );
             }
         }
 
-        // #i70916# Text in spread sheet cells return the wrong extents
-        pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
+        pEditEngine->SetPaperSize( aSize );
+
+        // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
+        if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD && pDoc->HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
+        {
+            pEditEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+        }
+
+        Size aTextSize;
+        if ( pWin )
+        {
+            aTextSize = pWin->LogicToPixel( Size( pEditEngine->CalcTextWidth(), pEditEngine->GetTextHeight() ), pEditEngine->GetRefMapMode() );
+        }
+        long nTextWidth = aTextSize.Width();
+        long nTextHeight = aTextSize.Height();
+
+        long nOffsetX = nLeftM;
+        long nDiffX = nTextWidth - nWidth;
+        if ( nDiffX > 0 )
+        {
+            switch ( eHorJust )
+            {
+                case SVX_HOR_JUSTIFY_RIGHT:
+                    {
+                        nOffsetX -= nDiffX;
+                    }
+                    break;
+                case SVX_HOR_JUSTIFY_CENTER:
+                    {
+                        nOffsetX -= nDiffX / 2;
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
+        }
+
+        long nOffsetY = 0;
+        const SvxVerJustifyItem* pVerJustifyItem = static_cast< const SvxVerJustifyItem* >(
+            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_VER_JUSTIFY ) );
+        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? static_cast< SvxCellVerJustify >( pVerJustifyItem->GetValue() ) : SVX_VER_JUSTIFY_STANDARD );
+        switch ( eVerJust )
+        {
+            case SVX_VER_JUSTIFY_STANDARD:
+            case SVX_VER_JUSTIFY_BOTTOM:
+                {
+                    nOffsetY = nSizeY - nBottomM - nTextHeight;
+                }
+                break;
+            case SVX_VER_JUSTIFY_CENTER:
+                {
+                    nOffsetY = ( nSizeY - nTopM - nBottomM - nTextHeight ) / 2 + nTopM;
+                }
+                break;
+            default:
+                {
+                    nOffsetY = nTopM;
+                }
+                break;
+        }
+
+        if ( mpAccessibleCell )
+        {
+            mpAccessibleCell->SetOffset( Point( nOffsetX, nOffsetY ) );
+        }
 
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
     }

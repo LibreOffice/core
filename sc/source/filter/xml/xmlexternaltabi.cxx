@@ -100,6 +100,32 @@ SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
+/**
+ * Make sure the URL is a valid relative URL, mainly to avoid storing
+ * absolute URL as relative URL by accident.  For now, we only check the first
+ * three characters which are assumed to be always '../', because the relative
+ * URL for an external document is always in reference to the content.xml
+ * fragment of the original document.
+ */
+static bool lcl_isValidRelativeURL(const OUString& rUrl)
+{
+    sal_Int32 n = ::std::min( rUrl.getLength(), static_cast<sal_Int32>(3));
+    if (n < 3)
+        return false;
+    const sal_Unicode* p = rUrl.getStr();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode c = p[i];
+        if (i < 2 && c != '.')
+            // the path must begin with '..'
+            return false;
+        else if (i == 2 && c != '/')
+            // a '/' path separator must follow
+            return false;
+    }
+    return true;
+}
+
 void ScXMLExternalRefTabSourceContext::EndElement()
 {
     ScDocument* pDoc = mrScImport.GetDocument();
@@ -107,7 +133,7 @@ void ScXMLExternalRefTabSourceContext::EndElement()
         return;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-    if (!maRelativeUrl.equals(mrExternalRefInfo.maFileUrl))
+    if (lcl_isValidRelativeURL(maRelativeUrl))
         pRefMgr->setRelativeFileName(mrExternalRefInfo.mnFileId, maRelativeUrl);
     pRefMgr->setFilterData(mrExternalRefInfo.mnFileId, maFilterName, maFilterOptions);
 }

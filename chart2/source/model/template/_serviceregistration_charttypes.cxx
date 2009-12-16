@@ -39,6 +39,7 @@
 #include "ColumnChartType.hxx"
 #include "LineChartType.hxx"
 #include "NetChartType.hxx"
+#include "FilledNetChartType.hxx"
 #include "PieChartType.hxx"
 #include "ScatterChartType.hxx"
 #include "BubbleChartType.hxx"
@@ -91,6 +92,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
           ::chart::NetChartType::create
         , ::chart::NetChartType::getImplementationName_Static
         , ::chart::NetChartType::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::FilledNetChartType::create
+        , ::chart::FilledNetChartType::getImplementationName_Static
+        , ::chart::FilledNetChartType::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0

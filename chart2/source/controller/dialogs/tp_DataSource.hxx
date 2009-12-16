@@ -87,8 +87,15 @@ public:
         bool bHideDescription = false );
     virtual ~DataSourceTabPage();
 
+    void commitPage();
+
+protected:
     // OWizardPage
     virtual void ActivatePage();
+    virtual sal_Bool commitPage( CommitPageReason eReason );
+
+    //TabPage
+    virtual void DeactivatePage();
 
     virtual void        initializePage();
 
