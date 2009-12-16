@@ -3810,7 +3810,7 @@ void SelectionManager::shutdown() throw()
          */
         aGuard.clear();
         while (osl_isThreadRunning(m_aThread))
-            Application::Yield();
+            Application::Reschedule();
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
         m_aThread = NULL;
