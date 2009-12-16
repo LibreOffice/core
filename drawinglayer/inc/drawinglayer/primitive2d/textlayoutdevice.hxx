@@ -41,6 +41,7 @@
 #include <tools/poly.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
+#include <com/sun/star/lang/Locale.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -75,8 +76,11 @@ namespace drawinglayer
             ~TextLayouterDevice();
 
             void setFont(const Font& rFont);
-            void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
-            void setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY);
+            void setFontAttributes(
+                const FontAttributes& rFontAttributes,
+                double fFontScaleX,
+                double fFontScaleY,
+                const ::com::sun::star::lang::Locale & rLocale);
 
             double getTextHeight() const;
             double getOverlineHeight() const;
@@ -84,9 +88,6 @@ namespace drawinglayer
             double getUnderlineHeight() const;
             double getUnderlineOffset() const;
             double getStrikeoutOffset() const;
-#ifdef WIN32
-            double getCurrentFontRelation() const;
-#endif
 
             double getTextWidth(
                 const String& rText,
@@ -98,9 +99,7 @@ namespace drawinglayer
                 const String& rText,
                 xub_StrLen nIndex,
                 xub_StrLen nLength,
-                // #i89784# added suppirt for DXArray for justified text
-                const ::std::vector< double >& rDXArray,
-                double fFontScaleWidth);
+                const ::std::vector< double >& rDXArray);
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,
@@ -111,25 +110,33 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
+// helper methods for vcl font handling
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        // helper methods for vcl font handling
+        // Create a VCL-Font based on the definitions in FontAttributes
+        // and the given FontScaling. The FontScaling defines the FontHeight
+        // (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
+        // both defines FontStretching, where no stretching happens at
+        // fFontScaleY == fFontScaleX
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
-            const OutputDevice& rOutDev);
+            const ::com::sun::star::lang::Locale & rLocale);
 
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
-            const basegfx::B2DHomMatrix& rTransform,
-            const OutputDevice& rOutDev);
-
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong);
+        // Generate FontAttributes DataSet derived from the given VCL-Font.
+        // The FontScaling with fFontScaleY, fFontScaleX relationship (see
+        // above) will be set in return parameter o_rSize to allow further
+        // processing
+        FontAttributes getFontAttributesFromVclFont(
+            basegfx::B2DVector& o_rSize,
+            const Font& rFont,
+            bool bRTL,
+            bool bBiDiStrong);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

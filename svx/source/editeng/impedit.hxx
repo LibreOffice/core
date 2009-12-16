@@ -813,6 +813,8 @@ public:
     sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace );
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
     sal_uInt16      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
+    void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
+    USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
     sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
     sal_uInt32      GetParaHeight( sal_uInt16 nParagraph );
 

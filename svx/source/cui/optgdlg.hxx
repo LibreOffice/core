@@ -129,6 +129,11 @@ private:
     FixedText       aMouseMiddleFT;
     ListBox         aMouseMiddleLB;
 
+    // #i97672#
+    FixedLine       maSelectionFL;
+    CheckBox        maSelectionCB;
+    MetricField     maSelectionMF;
+
     UINT16          nSizeLB_InitialSelection;
     UINT16          nStyleLB_InitialSelection;
     BOOL            bSfxSymbolsAuto;
@@ -140,6 +145,9 @@ private:
 #if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, void* );
 #endif
+    // #i97672#
+    DECL_LINK( OnSelectionToggled, void* );
+
 public:
     OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaViewTabPage();

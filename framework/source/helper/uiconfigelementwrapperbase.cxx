@@ -38,6 +38,8 @@
 #include <general.h>
 #include <properties.h>
 #include <threadhelp/resetableguard.hxx>
+#include <uielement/constitemcontainer.hxx>
+#include <uielement/rootitemcontainer.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -46,11 +48,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
+#include <rtl/logfile.hxx>
 
 const int UIELEMENT_PROPHANDLE_CONFIGSOURCE     = 1;
 const int UIELEMENT_PROPHANDLE_FRAME            = 2;
@@ -75,6 +79,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
 namespace framework
@@ -110,7 +115,7 @@ DEFINE_XTYPEPROVIDER_10 (   UIConfigElementWrapperBase                          
                             ::com::sun::star::ui::XUIConfigurationListener
                         )
 
-UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
+UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory )
     :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
@@ -122,6 +127,7 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     ,   m_bConfigListening          ( sal_False                                         )
     ,   m_bDisposed                 ( sal_False                                         )
     ,   m_bNoClose                  ( sal_False                                         )
+    ,   m_xServiceFactory           ( _xServiceFactory                                  )
     ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
 {
 }
@@ -492,6 +498,59 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
     static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
     // Return static "PropertyDescriptor"
     return lPropertyDescriptor;
+}
+void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException )
+{
+    ResetableGuard aLock( m_aLock );
+
+    //if ( m_bDisposed )
+    //    throw DisposedException();
+
+    if ( xSettings.is() )
+    {
+        // Create a copy of the data if the container is not const
+        Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
+        if ( xReplace.is() )
+            m_xConfigData = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
+        else
+            m_xConfigData = xSettings;
+
+        if ( m_xConfigSource.is() && m_bPersistent )
+        {
+            ::rtl::OUString aResourceURL( m_aResourceURL );
+            Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
+
+            aLock.unlock();
+
+            try
+            {
+                xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
+            }
+            catch( NoSuchElementException& )
+            {
+            }
+        }
+        else if ( !m_bPersistent )
+        {
+            // Transient menubar => Fill menubar with new data
+            impl_fillNewData();
+        }
+    }
+}
+void UIConfigElementWrapperBase::impl_fillNewData()
+{
+}
+Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException )
+{
+    ResetableGuard aLock( m_aLock );
+
+    //if ( m_bDisposed )
+    //    throw DisposedException();
+
+    if ( bWriteable )
+        return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
+
+    return m_xConfigData;
 }
 
 }

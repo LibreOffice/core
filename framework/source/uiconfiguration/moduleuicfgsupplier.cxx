@@ -50,7 +50,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/logfile.hxx>
-
+#include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
@@ -65,15 +65,10 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 
-class RootStorageWrapper :  public com::sun::star::lang::XTypeProvider      ,
-                            public com::sun::star::embed::XTransactedObject ,
-                            public ::cppu::OWeakObject
+class RootStorageWrapper :  public ::cppu::WeakImplHelper1< com::sun::star::embed::XTransactedObject >
 {
     public:
         //  XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-      FWK_DECLARE_XTYPEPROVIDER
-
         RootStorageWrapper( const Reference< XTransactedObject >& xRootCommit ) : m_xRootCommit( xRootCommit ) {}
         virtual ~RootStorageWrapper() {}
 
@@ -91,17 +86,6 @@ class RootStorageWrapper :  public com::sun::star::lang::XTypeProvider      ,
     private:
         Reference< XTransactedObject > m_xRootCommit;
 };
-
-DEFINE_XINTERFACE_2                    (    RootStorageWrapper                                          ,
-                                            OWeakObject                                                 ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                 ),
-                                            DIRECT_INTERFACE( com::sun::star::embed::XTransactedObject )
-                                        )
-
-DEFINE_XTYPEPROVIDER_2                  (   RootStorageWrapper              ,
-                                            css::lang::XTypeProvider        ,
-                                            css::embed::XTransactedObject
-                                        )
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
@@ -133,6 +117,7 @@ DEFINE_INIT_SERVICE                     (   ModuleUIConfigurationManagerSupplier
 /*TODO_AS
 void ModuleUIConfigurationManagerSupplier::impl_initStorages()
 {
+RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::impl_initStorages" );
     if ( !m_bInit )
     {
         RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ModuleUIConfigurationManagerSupplier::impl_initStorages" );
@@ -232,6 +217,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     , m_xServiceManager( xServiceManager )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier" );
     // Retrieve known modules and insert them into our hash_map to speed-up access time.
     Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY );
     const Sequence< ::rtl::OUString >     aNameSeq   = xNameAccess->getElementNames();
@@ -273,6 +259,7 @@ ModuleUIConfigurationManagerSupplier::~ModuleUIConfigurationManagerSupplier()
 void SAL_CALL ModuleUIConfigurationManagerSupplier::dispose()
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::dispose" );
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     css::lang::EventObject aEvent( xThis );
@@ -287,6 +274,7 @@ throw ( RuntimeException )
 void SAL_CALL ModuleUIConfigurationManagerSupplier::addEventListener( const Reference< XEventListener >& xListener )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::addEventListener" );
     {
         ResetableGuard aGuard( m_aLock );
 
@@ -301,6 +289,7 @@ throw ( RuntimeException )
 void SAL_CALL ModuleUIConfigurationManagerSupplier::removeEventListener( const Reference< XEventListener >& xListener )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::removeEventListener" );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
@@ -309,6 +298,7 @@ throw ( RuntimeException )
 Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const ::rtl::OUString& ModuleIdentifier )
 throw ( NoSuchElementException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::getUIConfigurationManager" );
     ResetableGuard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -318,30 +308,6 @@ throw ( NoSuchElementException, RuntimeException)
     ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.find( ModuleIdentifier );
     if ( pIter == m_aModuleToModuleUICfgMgrMap.end() )
         throw NoSuchElementException();
-
-    ::rtl::OUString sShort;
-    try
-    {
-        Sequence< PropertyValue > lProps;
-        Reference< XNameAccess > xCont(m_xModuleMgr, UNO_QUERY);
-        xCont->getByName(ModuleIdentifier) >>= lProps;
-        for (sal_Int32 i=0; i<lProps.getLength(); ++i)
-        {
-            if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
-            {
-                lProps[i].Value >>= sShort;
-                break;
-            }
-        }
-    }
-    catch( Exception& )
-    {
-        sShort = ::rtl::OUString();
-    }
-
-    if (!sShort.getLength())
-        throw NoSuchElementException();
-
 //TODO_AS    impl_initStorages();
 
     // Create instance on demand
@@ -394,6 +360,28 @@ throw ( NoSuchElementException, RuntimeException)
         aArg.Value <<= m_xUserRootCommit;
         aArgs[3] <<= aArg;
         */
+        ::rtl::OUString sShort;
+        try
+        {
+            Sequence< PropertyValue > lProps;
+            Reference< XNameAccess > xCont(m_xModuleMgr, UNO_QUERY);
+            xCont->getByName(ModuleIdentifier) >>= lProps;
+            for (sal_Int32 i=0; i<lProps.getLength(); ++i)
+            {
+                if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
+                {
+                    lProps[i].Value >>= sShort;
+                    break;
+                }
+            }
+        }
+        catch( Exception& )
+        {
+            sShort = ::rtl::OUString();
+        }
+
+        if (!sShort.getLength())
+            throw NoSuchElementException();
         PropertyValue   aArg;
         Sequence< Any > aArgs( 2 );
         aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
@@ -403,9 +391,7 @@ throw ( NoSuchElementException, RuntimeException)
         aArg.Value <<= ModuleIdentifier;
         aArgs[1] <<= aArg;
 
-        pIter->second = Reference< XUIConfigurationManager >( m_xServiceManager->createInstanceWithArguments(
-                                                                SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs ),
-                                                              UNO_QUERY );
+        pIter->second.set( m_xServiceManager->createInstanceWithArguments(SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs ),UNO_QUERY );
     }
 
     return pIter->second;

@@ -347,6 +347,13 @@ public:
     virtual sal_Int32 getColumns() const = 0;
 };
 
+class SvxAbstractInsRowColDlg : public VclAbstractDialog
+{
+public:
+    virtual bool isInsertBefore() const = 0;
+    virtual sal_uInt16 getInsertCount() const = 0;
+};
+
 //-------------------------------------------------------------
 
 class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory
@@ -543,6 +550,8 @@ public:
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
 
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) = 0;
+
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId ) = 0;
 };
 
 #endif

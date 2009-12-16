@@ -54,6 +54,7 @@ namespace connectivity
         {
         protected:
             ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
+            ::std::map<sal_Int32,sal_Int32> m_aColumnTypes;
 
             SQLHANDLE       m_aStatementHandle;
             OConnection*    m_pConnection;

@@ -100,7 +100,8 @@ SRC1FILES =  \
         textattr.src \
         treeopt.src \
         webconninfo.src \
-        zoom.src
+        zoom.src \
+        insrc.src
 
 SRS2NAME=cuidrawdlgs
 SRC2FILES =  \
@@ -221,7 +222,8 @@ SLOFILES+=\
         $(SLO)$/macroass.obj \
         $(SLO)$/cfg.obj \
         $(SLO)$/cfgutil.obj \
-        $(SLO)$/optchart.obj
+        $(SLO)$/optchart.obj \
+        $(SLO)$/insrc.obj
 
 .IF "$(GUI)"=="WNT"
 SLOFILES+=$(SLO)$/winpluginlib.obj

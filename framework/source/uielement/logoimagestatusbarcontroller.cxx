@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 #include <uielement/logoimagestatusbarcontroller.hxx>
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
 #include <vos/mutex.hxx>
@@ -64,7 +64,7 @@ DEFINE_INIT_SERVICE                     (   LogoImageStatusbarController, {} )
 LogoImageStatusbarController::LogoImageStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
 {
-    Image aImage( FwkResId( RID_IMAGE_STATUSBAR_LOGO ));
+    Image aImage( FwlResId( RID_IMAGE_STATUSBAR_LOGO ));
     m_aLogoImage = aImage;
 }
 

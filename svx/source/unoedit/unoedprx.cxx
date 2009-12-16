@@ -1044,6 +1044,16 @@ USHORT SvxAccessibleTextAdapter::GetLineLen( USHORT nPara, USHORT nLine ) const
         return static_cast< USHORT >(aEndIndex.GetIndex());
 }
 
+void SvxAccessibleTextAdapter::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
+{
+    mrTextForwarder->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
+}
+
+USHORT SvxAccessibleTextAdapter::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    return mrTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
+}
+
 sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");

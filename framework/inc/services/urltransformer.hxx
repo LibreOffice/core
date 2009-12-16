@@ -54,7 +54,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -84,11 +84,7 @@ namespace framework{
                 OWeakObject
 *//*-*************************************************************************************************************/
 
-class URLTransformer    :   public css::lang::XTypeProvider     ,
-                            public css::lang::XServiceInfo      ,
-                            public css::util::XURLTransformer   ,
-                            public ThreadHelpBase                   ,
-                            public ::cppu::OWeakObject
+class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::util::XURLTransformer, css::lang::XServiceInfo>
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -132,8 +128,6 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
         //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------

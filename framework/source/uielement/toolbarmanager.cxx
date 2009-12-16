@@ -60,7 +60,6 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
@@ -101,6 +100,7 @@
 #include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/cmdoptions.hxx>
+#include <boost/bind.hpp>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -200,8 +200,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     {
         try
         {
-            Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) );
-            a >>= xLayoutManager;
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
         }
         catch ( RuntimeException& )
         {
@@ -244,7 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( sal_False ),
-    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ),
+    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -269,9 +268,15 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
     if ( m_xServiceManager.is() )
+    {
         m_xToolbarControllerRegistration = Reference< XUIControllerRegistration >(
                                                     m_xServiceManager->createInstance( SERVICENAME_TOOLBARCONTROLLERFACTORY ),
                                                 UNO_QUERY );
+
+        m_xURLTransformer.set( m_xServiceManager->createInstance(
+                                                                SERVICENAME_URLTRANSFORMER),
+                                                             UNO_QUERY );
+    }
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
     m_pToolBar->SetActivateHdl( LINK( this, ToolBarManager, Activate) );
@@ -366,7 +371,7 @@ void ToolBarManager::CheckAndUpdateImages()
     sal_Bool bRefreshImages = sal_False;
 
     // Check if high contrast/normal mode have changed
-    if ( m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if ( m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         if ( !m_bIsHiContrast )
         {
@@ -681,108 +686,14 @@ void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListen
 // XUIConfigurationListener
 void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aGuard( m_aLock );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    if ( m_bDisposed )
-        return;
-
-    Reference< XNameAccess > xNameAccess;
-    sal_Int16                nImageType = sal_Int16();
-    sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
-                                                    m_bIsHiContrast );
-
-    if (( Event.aInfo >>= nImageType ) &&
-        ( nImageType == nCurrentImageType ) &&
-        ( Event.Element >>= xNameAccess ))
-    {
-        sal_Int16 nImageInfo( 1 );
-        Reference< XInterface > xIfacDocImgMgr( m_xDocImageManager, UNO_QUERY );
-        if ( xIfacDocImgMgr == Event.Source )
-            nImageInfo = 0;
-
-        Sequence< rtl::OUString > aSeq = xNameAccess->getElementNames();
-        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
-        {
-            // Check if we have commands which have an image. We stored for every command
-            // from which image manager it got its image. Use only images from this
-            // notification if stored nImageInfo >= current nImageInfo!
-            rtl::OUString aCommandURL = aSeq[i];
-            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
-            if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
-            {
-                Reference< XGraphic > xGraphic;
-                if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
-                {
-                    Image aImage( xGraphic );
-                    m_pToolBar->SetItemImage( pIter->second.nId, aImage );
-                    if ( pIter->second.aIds.size() > 0 )
-                    {
-                        for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
-                            m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
-                    }
-                }
-                pIter->second.nImageInfo = nImageInfo;
-            }
-        }
-    }
+    impl_elementChanged(false,Event);
 }
 
 void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aGuard( m_aLock );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    if ( m_bDisposed )
-        return;
-
-    Reference< XNameAccess > xNameAccess;
-    sal_Int16                nImageType = sal_Int16();
-    sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
-                                                    m_bIsHiContrast );
-
-    if (( Event.aInfo >>= nImageType ) &&
-        ( nImageType == nCurrentImageType ) &&
-        ( Event.Element >>= xNameAccess ))
-    {
-        sal_Int16 nImageInfo( 1 );
-        Reference< XInterface > xIfacDocImgMgr( m_xDocImageManager, UNO_QUERY );
-        if ( xIfacDocImgMgr == Event.Source )
-            nImageInfo = 0;
-
-        Sequence< rtl::OUString > aSeq = xNameAccess->getElementNames();
-        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
-        {
-            CommandToInfoMap::const_iterator pIter = m_aCommandMap.find( aSeq[i] );
-            if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
-            {
-                Image aImage;
-                if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
-                {
-                    // Special case: An image from the document image manager has been removed.
-                    // It is possible that we have a image at our module image manager. Before
-                    // we can remove our image we have to ask our module image manager.
-                    Sequence< rtl::OUString > aCmdURLSeq( 1 );
-                    Sequence< Reference< XGraphic > > aGraphicSeq;
-                    aCmdURLSeq[0] = pIter->first;
-                    aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
-                    aImage = Image( aGraphicSeq[0] );
-                }
-
-                m_pToolBar->SetItemImage( pIter->second.nId, aImage );
-                if ( pIter->second.aIds.size() > 0 )
-                {
-                    for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
-                        m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
-                }
-            }
-        }
-    }
+    impl_elementChanged(true,Event);
 }
-
-void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -808,27 +719,50 @@ void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::Confi
         Sequence< rtl::OUString > aSeq = xNameAccess->getElementNames();
         for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
         {
-            // Check if we have commands which have an image. We stored for every command
-            // from which image manager it got its image. Use only images from this
-            // notification if stored nImageInfo >= current nImageInfo!
             CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
             if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
             {
-                Reference< XGraphic > xGraphic;
-                if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
+                if ( _bRemove )
                 {
-                    Image aImage( xGraphic );
-                    m_pToolBar->SetItemImage( pIter->second.nId, aImage );
-                    if ( pIter->second.aIds.size() > 0 )
+                    Image aImage;
+                    if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
                     {
-                        for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
-                            m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+                        // Special case: An image from the document image manager has been removed.
+                        // It is possible that we have a image at our module image manager. Before
+                        // we can remove our image we have to ask our module image manager.
+                        Sequence< rtl::OUString > aCmdURLSeq( 1 );
+                        Sequence< Reference< XGraphic > > aGraphicSeq;
+                        aCmdURLSeq[0] = pIter->first;
+                        aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
+                        aImage = Image( aGraphicSeq[0] );
                     }
+
+                    setToolBarImage(aImage,pIter);
+                } // if ( _bRemove )
+                else
+                {
+                    Reference< XGraphic > xGraphic;
+                    if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
+                    {
+                        Image aImage( xGraphic );
+                        setToolBarImage(aImage,pIter);
+                    }
+                    pIter->second.nImageInfo = nImageInfo;
                 }
-                pIter->second.nImageInfo = nImageInfo;
             }
         }
     }
+}
+void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter)
+{
+    const ::std::vector< USHORT >& _rIDs = _pIter->second.aIds;
+    m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
+    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBar::SetItemImage,m_pToolBar,_1,_aImage));
+}
+
+void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+{
+    impl_elementChanged(false,Event);
 }
 
 void ToolBarManager::RemoveControllers()
@@ -887,9 +821,7 @@ void ToolBarManager::RemoveControllers()
                 Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
                 if ( xNameAccess.is() )
                 {
-                    Any a = xNameAccess->getByName( m_aModuleIdentifier );
-                    Reference< XNameAccess > xUICommands;
-                    a >>= m_xUICommandLabels;
+                    xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
                 }
             }
         }
@@ -906,8 +838,7 @@ void ToolBarManager::RemoveControllers()
             {
                 rtl::OUString aStr;
                 Sequence< PropertyValue > aPropSeq;
-                Any a( m_xUICommandLabels->getByName( aCmdURL ));
-                if ( a >>= aPropSeq )
+                if ( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
@@ -937,8 +868,6 @@ void ToolBarManager::CreateControllers()
     Reference< XComponentContext > xComponentContext;
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
-    Reference< css::util::XURLTransformer > xTrans( m_xServiceManager->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), css::uno::UNO_QUERY );
 
     css::util::URL      aURL;
     sal_Bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
@@ -966,7 +895,7 @@ void ToolBarManager::CreateControllers()
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
-            xTrans->parseStrict( aURL );
+            m_xURLTransformer->parseStrict( aURL );
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aURL.Path ))
             {
                 m_aControllerMap[ nId ] = xController;
@@ -984,22 +913,22 @@ void ToolBarManager::CreateControllers()
                 std::vector< Any > aPropertyVector;
 
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                aPropValue.Value    = makeAny( m_aModuleIdentifier );
+                aPropValue.Value    <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                aPropValue.Value    = makeAny( m_xFrame );
+                aPropValue.Value    <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                aPropValue.Value    = makeAny( m_xServiceManager );
+                aPropValue.Value    <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                aPropValue.Value    = makeAny( xToolbarWindow );
+                aPropValue.Value    <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
-                    aPropValue.Value    = makeAny( nWidth );
+                    aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
 
@@ -1082,21 +1011,21 @@ void ToolBarManager::CreateControllers()
                 std::vector< Any > aPropertyVector;
 
                 aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                aPropValue.Value = makeAny( m_xFrame );
+                aPropValue.Value <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-                aPropValue.Value = makeAny( aCommandURL );
+                aPropValue.Value <<= aCommandURL;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                aPropValue.Value = makeAny( m_xServiceManager );
+                aPropValue.Value <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                aPropValue.Value = makeAny( xToolbarWindow );
+                aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
-                    aPropValue.Value    = makeAny( nWidth );
+                    aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
 
@@ -1340,10 +1269,11 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     AddonsOptions().GetMergeToolbarInstructions( aToolbarName, aMergeInstructionContainer );
 
-    if ( aMergeInstructionContainer.size() > 0 )
+    if ( !aMergeInstructionContainer.empty() )
     {
         sal_uInt16 nItemId( TOOLBAR_ITEM_STARTID );
-        for ( sal_uInt32 i = 0; i < aMergeInstructionContainer.size(); i++ )
+        const sal_uInt32 nCount = aMergeInstructionContainer.size();
+        for ( sal_uInt32 i=0; i < nCount; i++ )
         {
             MergeToolbarInstruction& rInstruction = aMergeInstructionContainer[i];
             if ( ToolBarMerger::IsCorrectContext( rInstruction.aMergeContext, m_aModuleIdentifier ))
@@ -1403,7 +1333,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     Reference< XPropertySet > xPropSet( rItemContainer, UNO_QUERY );
     if ( xPropSet.is() )
     {
-        Any a;
         try
         {
             rtl::OUString aUIName;
@@ -1428,14 +1357,15 @@ void ToolBarManager::RequestImages()
 
     sal_uInt32 i = 0;
     CommandToInfoMap::iterator pIter = m_aCommandMap.begin();
-    while ( pIter != m_aCommandMap.end() )
+    CommandToInfoMap::iterator pEnd = m_aCommandMap.end();
+    while ( pIter != pEnd )
     {
         aCmdURLSeq[i++] = pIter->first;
         ++pIter;
     }
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode();
     sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
@@ -1444,7 +1374,7 @@ void ToolBarManager::RequestImages()
 
     i = 0;
     pIter = m_aCommandMap.begin();
-    while ( pIter != m_aCommandMap.end() )
+    while ( pIter != pEnd )
     {
         rtl::OUString aCommandURL = aCmdURLSeq[i];
 
@@ -1458,24 +1388,14 @@ void ToolBarManager::RequestImages()
             // empty image.
             if ( !aImage )
                 aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages, m_bIsHiContrast );
-            m_pToolBar->SetItemImage( pIter->second.nId, aImage );
-            if ( pIter->second.aIds.size() > 0 )
-            {
-                for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
-                    m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
-            }
+
             pIter->second.nImageInfo = 1; // mark image as module based
         }
         else
         {
-            m_pToolBar->SetItemImage( pIter->second.nId, aImage );
-            if ( pIter->second.aIds.size() > 0 )
-            {
-                for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
-                    m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
-            }
             pIter->second.nImageInfo = 0; // mark image as document based
         }
+        setToolBarImage(aImage,pIter);
         ++pIter;
         ++i;
     }
@@ -1484,7 +1404,7 @@ void ToolBarManager::RequestImages()
 void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand )
 {
     ResetableGuard aGuard( m_aLock );
-    if ( m_aSubToolBarControllerMap.size() > 0 )
+    if ( !m_aSubToolBarControllerMap.empty() )
     {
         SubToolBarToSubToolBarControllerMap::const_iterator pIter =
             m_aSubToolBarControllerMap.find( aUIElementName );
@@ -1492,12 +1412,13 @@ void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElemen
         if ( pIter != m_aSubToolBarControllerMap.end() )
         {
             const SubToolBarControllerVector& rSubToolBarVector = pIter->second;
-            if ( rSubToolBarVector.size() > 0 )
+            if ( !rSubToolBarVector.empty() )
             {
                 SubToolBarControllerVector aNotifyVector = rSubToolBarVector;
                 aGuard.unlock();
 
-                for ( sal_uInt32 i = 0; i < aNotifyVector.size(); i++ )
+                const sal_uInt32 nCount = aNotifyVector.size();
+                for ( sal_uInt32 i=0; i < nCount; i++ )
                 {
                     try
                     {
@@ -1517,8 +1438,7 @@ void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElemen
         }
     }
 }
-
-IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
+long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )())
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1532,10 +1452,14 @@ IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
         Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
-            xController->click();
-    }
-
+            (xController.get()->*_pClick)( );
+    } // if ( pIter != m_aControllerMap.end() )
     return 1;
+}
+
+IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
+{
+    return HandleClick(&XToolbarController::click);
 }
 
 IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
@@ -1554,28 +1478,12 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
         if ( xController.is() )
             xController->createPopupWindow();
     }
-
     return 1;
 }
 
 IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
 {
-    ResetableGuard aGuard( m_aLock );
-
-    if ( m_bDisposed )
-        return 1;
-
-    USHORT nId( m_pToolBar->GetCurItemId() );
-    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
-    if ( pIter != m_aControllerMap.end() )
-    {
-        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
-
-        if ( xController.is() )
-            xController->doubleClick();
-    }
-
-    return 1;
+    return HandleClick(&XToolbarController::doubleClick);
 }
 
 void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
@@ -1668,11 +1576,8 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-        Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
         aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
-        xTrans->parseStrict( aURL );
+        m_xURLTransformer->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
@@ -1841,11 +1746,8 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-                    Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                            "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
-                    xTrans->parseStrict( aURL );
+                    m_xURLTransformer->parseStrict( aURL );
                     if ( xProv.is() )
                         xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
                 }
@@ -1965,9 +1867,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                             if ( xPropSet.is() )
                                             {
                                                 Reference< XUIConfigurationPersistence > xUICfgMgr;
-                                                Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                                                        "ConfigurationSource" )));
-                                                if (( a >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                                                if (( xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ConfigurationSource" ))) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
                                                     xUICfgMgr->store();
                                             }
                                         }

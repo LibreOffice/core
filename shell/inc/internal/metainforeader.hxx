@@ -45,6 +45,9 @@ public:
     virtual ~CMetaInfoReader();
 
     CMetaInfoReader( const std::string& DocumentName );
+
+    CMetaInfoReader( void* stream, zlib_filefunc_def* fa);
+
     /** check if the Tag is in the target meta.xml file.
 
         @param TagName

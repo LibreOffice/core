@@ -60,197 +60,176 @@ namespace sdr
             return static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).GetOle2Obj();
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
+            const DisplayInfo& /*rDisplayInfo*/) const
         {
             // this method is overloaded to do some things the old SdrOle2Obj::DoPaintObject did.
-                // In the future, some of these may be solved different, but ATM try to stay compatible
-                // with the old behaviour
-                drawinglayer::primitive2d::Primitive2DSequence xRetval;
-                const SdrOle2Obj& rSdrOle2 = getSdrOle2Object();
-                sal_Int32 nState = -1;
-                {
-                    const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
-                    if ( xObjRef.is() )
-                        nState = xObjRef->getCurrentState();
-                }
-                const bool bIsOutplaceActive = (nState == embed::EmbedStates::ACTIVE);
-                const bool bIsInplaceActive = (nState == embed::EmbedStates::INPLACE_ACTIVE) || (nState == embed::EmbedStates::UI_ACTIVE);
-                const bool bIsChart = rSdrOle2.IsChart();
+            // In the future, some of these may be solved different, but ATM try to stay compatible
+            // with the old behaviour
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const SdrOle2Obj& rSdrOle2 = getSdrOle2Object();
+            sal_Int32 nState(-1);
 
-                bool bDone = false;
-                if( !bDone && bIsInplaceActive )
+            {
+                const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
+                if ( xObjRef.is() )
+                    nState = xObjRef->getCurrentState();
+            }
+
+            const bool bIsOutplaceActive(nState == embed::EmbedStates::ACTIVE);
+            const bool bIsInplaceActive((nState == embed::EmbedStates::INPLACE_ACTIVE) || (nState == embed::EmbedStates::UI_ACTIVE));
+            const bool bIsChart(rSdrOle2.IsChart());
+            bool bDone(false);
+
+            if(!bDone && bIsInplaceActive)
+            {
+                if( !GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile() )
                 {
-                    if( !GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile() )
+                    //no need to create a primitive sequence here as the OLE object does render itself
+                    //in case of charts the superfluous creation of a metafile is strongly performance relevant!
+                    bDone = true;
+                }
+            }
+
+            if( !bDone )
+            {
+                const Rectangle& rObjectRectangle(rSdrOle2.GetGeoRect());
+                const basegfx::B2DRange aObjectRange(rObjectRectangle.Left(), rObjectRectangle.Top(), rObjectRectangle.Right(), rObjectRectangle.Bottom());
+
+                // create object transform
+                basegfx::B2DHomMatrix aObjectTransform;
+                aObjectTransform.set(0, 0, aObjectRange.getWidth());
+                aObjectTransform.set(1, 1, aObjectRange.getHeight());
+                aObjectTransform.set(0, 2, aObjectRange.getMinX());
+                aObjectTransform.set(1, 2, aObjectRange.getMinY());
+
+                if(bIsChart)
+                {
+                    //charts must be painted resolution dependent!! #i82893#, #i75867#
+
+                    // for chart, to not lose the current better quality visualisation which
+                    // uses a direct paint, use a primtive wrapper for that exceptional case. The renderers
+                    // will then ATM paint it to an OutputDevice directly.
+                    // In later versions this should be replaced by getting the Primitive2DSequnce from
+                    // the chart and using it.
+                    // to be able to render something in non-VCL using renderers, the wrapper is a
+                    // GroupPrimitive2D which automatically decomposes to the already created Metafile
+                    // content.
+                    // For being completely compatible, ATM Window and VDEV PrettyPrinting is suppressed.
+                    // It works in the VCL renderers, though. So for activating again with VCL primitive
+                    // renderers, change conditions here.
+
+                    // determine if embedding and PrettyPrinting shall be done at all
+                    uno::Reference< frame::XModel > xChartModel;
+                    bool bDoChartPrettyPrinting(true);
+
+                    // the original ChartPrettyPainter does not do it for Window
+                    if(bDoChartPrettyPrinting && GetObjectContact().isOutputToWindow())
                     {
+                        bDoChartPrettyPrinting = false;
+                    }
+
+                    // the original ChartPrettyPainter does not do it for VDEV
+                    if(bDoChartPrettyPrinting && GetObjectContact().isOutputToVirtualDevice())
+                    {
+                        if(GetObjectContact().isOutputToPDFFile())
+                        {
+                            // #i97982#
+                            // For PDF files, allow PrettyPrinting
+                        }
+                        else
+                        {
+                            bDoChartPrettyPrinting = false;
+                        }
+                    }
+
+                    // the chart model is needed. Check if it's available
+                    if(bDoChartPrettyPrinting)
+                    {
+                        // get chart model
+                        xChartModel = rSdrOle2.getXModel();
+
+                        if(!xChartModel.is())
+                        {
+                            bDoChartPrettyPrinting = false;
+                        }
+                    }
+
+                    if(bDoChartPrettyPrinting)
+                    {
+                        // embed MetaFile data in a specialized Wrapper Primitive which holds also the ChartModel needed
+                        // for PrettyPrinting
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ChartPrimitive2D(
+                            xChartModel, aObjectTransform, xRetval));
+                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                         bDone = true;
-                        //no need to create a primitive sequence here as the OLE object does render itself
-                        //in case of charts the superfluous creation of a metafile is strongly performance relevant!
                     }
                 }
 
                 if( !bDone )
                 {
-                    const Rectangle& rObjectRectangle(rSdrOle2.GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(rObjectRectangle.Left(), rObjectRectangle.Top(), rObjectRectangle.Right(), rObjectRectangle.Bottom());
-
-                    // create object transform
-                    basegfx::B2DHomMatrix aObjectTransform;
-                    aObjectTransform.set(0, 0, aObjectRange.getWidth());
-                    aObjectTransform.set(1, 1, aObjectRange.getHeight());
-                    aObjectTransform.set(0, 2, aObjectRange.getMinX());
-                    aObjectTransform.set(1, 2, aObjectRange.getMinY());
-
-                    if(bIsChart)
+                    //old stuff that should be reworked
                     {
-                        //charts must be painted resolution dependent!! #i82893#, #i75867#
-
-                        // for chart, to not lose the current better quality visualisation which
-                        // uses a direct paint, use a primtive wrapper for that exceptional case. The renderers
-                        // will then ATM paint it to an OutputDevice directly.
-                        // In later versions this should be replaced by getting the Primitive2DSequnce from
-                        // the chart and using it.
-                        // to be able to render something in non-VCL using renderers, the wrapper is a
-                        // GroupPrimitive2D which automatically decomposes to the already created Metafile
-                        // content.
-                        // For being completely compatible, ATM Window and VDEV PrettyPrinting is suppressed.
-                        // It works in the VCL renderers, though. So for activating again with VCL primitive
-                        // renderers, change conditions here.
-
-                        // determine if embedding and PrettyPrinting shall be done at all
-                        uno::Reference< frame::XModel > xChartModel;
-                        bool bDoChartPrettyPrinting(true);
-
-                        // the original ChartPrettyPainter does not do it for Window
-                        if(bDoChartPrettyPrinting && GetObjectContact().isOutputToWindow())
+                        //if no replacement image is available load the OLE object
+                        if(!rSdrOle2.GetGraphic()) //try to fetch the metafile - this can lead to the actual creation of the metafile what can be extremely expensive (e.g. for big charts)!!! #i101925#
                         {
-                            bDoChartPrettyPrinting = false;
+                            // try to create embedded object
+                            rSdrOle2.GetObjRef(); //this loads the OLE object if it is not loaded already
                         }
-
-                        // the original ChartPrettyPainter does not do it for VDEV
-                        if(bDoChartPrettyPrinting && GetObjectContact().isOutputToVirtualDevice())
+                        const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
+                        if(xObjRef.is())
                         {
-                            if(GetObjectContact().isOutputToPDFFile())
+                            const sal_Int64 nMiscStatus(xObjRef->getStatus(rSdrOle2.GetAspect()));
+
+                            // this hack (to change model data during PAINT argh(!)) should be reworked
+                            if(!rSdrOle2.IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
                             {
-                                // #i97982#
-                                // For PDF files, allow PrettyPrinting
+                                const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
                             }
-                            else
+
+                            SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+                            if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
                             {
-                                bDoChartPrettyPrinting = false;
+                                // connect plugin object
+                                pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
                             }
                         }
+                    }//end old stuff to rework
 
-                        // the chart model is needed. Check if it's available
-                        if(bDoChartPrettyPrinting)
-                        {
-                            // get chart model
-                            xChartModel = rSdrOle2.getXModel();
-
-                            if(!xChartModel.is())
-                            {
-                                bDoChartPrettyPrinting = false;
-                            }
-                        }
-
-                        if(bDoChartPrettyPrinting)
-                        {
-                            // embed MetaFile data in a specialized Wrapper Primitive which holds also the ChartModel needed
-                            // for PrettyPrinting
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ChartPrimitive2D(
-                                xChartModel, aObjectTransform, xRetval));
-                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                            bDone = true;
-                        }
-                    }
-
-                    if( !bDone )
-                    {
-                        //old stuff that should be reworked
-                        {
-                            //if no replacement image is available load the OLE object
-                            if(!rSdrOle2.GetGraphic()) //try to fetch the metafile - this can lead to the actual creation of the metafile what can be extremely expensive (e.g. for big charts)!!! #i101925#
-                            {
-                                // try to create embedded object
-                                rSdrOle2.GetObjRef(); //this loads the OLE object if it is not loaded already
-                            }
-                            const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
-                            if(xObjRef.is())
-                            {
-                                const sal_Int64 nMiscStatus(xObjRef->getStatus(rSdrOle2.GetAspect()));
-
-                                // this hack (to change model data during PAINT argh(!)) should be reworked
-                                if(!rSdrOle2.IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
-                                {
-                                    const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
-                                }
-
-                                SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-                                if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
-                                {
-                                    // connect plugin object
-                                    pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
-                                }
-                            }
-                        }//end old stuff to rework
-
-                        if(GetObjectContact().isDrawModeHighContrast())
-                        {
-                            // directly call at the corresponding VC and force OLE Graphic to HighContrast
-                            const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-                            Graphic* pOLEHighContrastGraphic = rSdrOle2.getEmbeddedObjectRef().GetHCGraphic();
-
-                            if(pOLEHighContrastGraphic)
-                            {
-                                // there is a graphic set, use it
-                                xRetval = rVC.createPrimitive2DSequenceWithGivenGraphic(*pOLEHighContrastGraphic, rSdrOle2.IsEmptyPresObj());
-                            }
-                            else
-                            {
-                                // no HighContrast graphic, use default empty OLE bitmap
-                                const Bitmap aEmptyOLEBitmap(rSdrOle2.GetEmtyOLEReplacementBitmap());
-                                const Graphic aEmtyOLEGraphic(aEmptyOLEBitmap);
-
-                                xRetval = rVC.createPrimitive2DSequenceWithGivenGraphic(aEmtyOLEGraphic, true);
-                            }
-                        }
-                        else
-                        {
-                            // call parent which will use the regular createViewIndependentPrimitive2DSequence
-                            // at the corresponding VC
-                            xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
-                        }
-
-                    }
-
-                    if(bIsOutplaceActive)
-                    {
-                        // do not shade when printing or PDF exporting
-                        if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
-                        {
-                            // shade the representation if the object is activated outplace
-                            basegfx::B2DPolygon aObjectOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                            aObjectOutline.transform(aObjectTransform);
-
-                            // Use a FillHatchPrimitive2D with necessary attributes
-                            const drawinglayer::attribute::FillHatchAttribute aFillHatch(
-                                drawinglayer::attribute::HATCHSTYLE_SINGLE, // single hatch
-                                125.0, // 1.25 mm
-                                45.0 * F_PI180, // 45 degree diagonal
-                                Color(COL_BLACK).getBColor(), // black color
-                                false); // no filling
-
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
-                                basegfx::B2DPolyPolygon(aObjectOutline),
-                                Color(COL_BLACK).getBColor(),
-                                aFillHatch));
-
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReference);
-                        }
-                    }
-
+                    // create OLE primitive stuff directly at VC with HC as parameter
+                    const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
+                    xRetval = rVC.createPrimitive2DSequenceWithParameters(GetObjectContact().isDrawModeHighContrast());
                 }
 
-                return xRetval;
+                if(bIsOutplaceActive)
+                {
+                    // do not shade when printing or PDF exporting
+                    if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
+                    {
+                        // shade the representation if the object is activated outplace
+                        basegfx::B2DPolygon aObjectOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        aObjectOutline.transform(aObjectTransform);
+
+                        // Use a FillHatchPrimitive2D with necessary attributes
+                        const drawinglayer::attribute::FillHatchAttribute aFillHatch(
+                            drawinglayer::attribute::HATCHSTYLE_SINGLE, // single hatch
+                            125.0, // 1.25 mm
+                            45.0 * F_PI180, // 45 degree diagonal
+                            Color(COL_BLACK).getBColor(), // black color
+                            false); // no filling
+
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
+                            basegfx::B2DPolyPolygon(aObjectOutline),
+                            Color(COL_BLACK).getBColor(),
+                            aFillHatch));
+
+                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReference);
+                    }
+                }
+
+            }
+
+            return xRetval;
         }
 
         ViewObjectContactOfSdrOle2Obj::ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact)

@@ -36,6 +36,7 @@
 //_________________________________________________________________________________________________________________
 #include <uielement/toolbar.hxx>
 #include <uielement/toolbarmanager.hxx>
+#include <rtl/logfile.hxx>
 
 namespace framework
 {

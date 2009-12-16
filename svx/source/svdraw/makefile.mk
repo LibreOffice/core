@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=svdraw
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,11 +43,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=\
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
          $(SLO)$/svdxcgv.obj		 \
          $(SLO)$/svdmodel.obj		\
          $(SLO)$/svdpage.obj         \
-         $(SLO)$/svdoimp.obj         \
          $(SLO)$/svdobj.obj          \
          $(SLO)$/svdedtv1.obj        \
          $(SLO)$/svdcrtv.obj         \
@@ -59,7 +60,6 @@ SLOFILES=\
          $(SLO)$/svdotextdecomposition.obj		\
          $(SLO)$/svdotextpathdecomposition.obj	\
          $(SLO)$/svdouno.obj         \
-         $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj		 \
          $(SLO)$/svddrgmt.obj        \
          $(SLO)$/svdpntv.obj         \
@@ -96,7 +96,6 @@ SLOFILES=\
          $(SLO)$/svdglev.obj         \
          $(SLO)$/svdglue.obj         \
          $(SLO)$/svdhlpln.obj        \
-         $(SLO)$/svdibrow.obj        \
          $(SLO)$/svditer.obj         \
          $(SLO)$/svdlayer.obj        \
          $(SLO)$/svdmark.obj         \
@@ -106,17 +105,28 @@ SLOFILES=\
          $(SLO)$/sdrpagewindow.obj         \
          $(SLO)$/sdrpaintwindow.obj         \
          $(SLO)$/svdpoev.obj         \
-         $(SLO)$/svdscrol.obj        \
          $(SLO)$/svdtrans.obj        \
          $(SLO)$/svdundo.obj         \
          $(SLO)$/svdviter.obj        \
          $(SLO)$/clonelist.obj		 \
-         $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/svdedtv.obj         \
          $(SLO)$/selectioncontroller.obj \
          $(SLO)$/polypolygoneditor.obj \
-         $(SLO)$/svdomedia.obj			\
+         $(SLO)$/svdibrow.obj        \
+         $(SLO)$/svdomedia.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+         $(SLO)$/svdoimp.obj         \
+         $(SLO)$/svdscrol.obj        \
+         $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/impgrfll.obj
+
+LIB3TARGET= $(SLB)$/$(TARGET)-msfilter.lib
+LIB3OBJFILES= \
+         $(SLO)$/svdfppt.obj         \
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES) $(LIB3OBJFILES)
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src

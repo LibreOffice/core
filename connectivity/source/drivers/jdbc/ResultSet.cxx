@@ -116,7 +116,7 @@ void java_sql_ResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_xMetaData     = NULL;
+m_xMetaData.clear();
     if( object )
     {
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");

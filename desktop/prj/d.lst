@@ -134,3 +134,12 @@ mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 ..\scripts\basis-link %_DEST%\bin%_EXT%\c08\basis-link
 ..\scripts\so-basis-link %_DEST%\bin%_EXT%\so\basis-link
 ..\scripts\odf-basis-link %_DEST%\bin%_EXT%\odf4ms\basis-link
+
+mkdir: %_DEST%\xml%_EXT%\registry\spool
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs

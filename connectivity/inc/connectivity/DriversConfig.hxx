@@ -73,6 +73,10 @@ namespace connectivity
         const ::comphelper::NamedValueCollection& impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const;
     public:
         DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        ~DriversConfig();
+
+        DriversConfig( const DriversConfig& );
+        DriversConfig& operator=( const DriversConfig& );
 
         ::rtl::OUString getDriverFactoryName(const ::rtl::OUString& _sUrl) const;
         ::rtl::OUString getDriverTypeDisplayName(const ::rtl::OUString& _sUrl) const;

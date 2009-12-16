@@ -3180,15 +3180,13 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
     {
         case AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA :
                 {
-                    css::uno::Any aSessionVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                    sal_Bool bSessionData  = sal_False;
+                    ::comphelper::ConfigurationHelper::readDirectKey(
                                                     m_xSMGR,
                                                     CFG_PACKAGE_RECOVERY,
                                                     CFG_PATH_RECOVERYINFO,
                                                     CFG_ENTRY_SESSIONDATA,
-                                                    ::comphelper::ConfigurationHelper::E_READONLY);
-
-                    sal_Bool bSessionData  = sal_False;
-                    aSessionVal >>= bSessionData;
+                                                    ::comphelper::ConfigurationHelper::E_READONLY) >>= bSessionData;
 
                     sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
 

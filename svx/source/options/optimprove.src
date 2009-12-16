@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ en-US ] = "Number of reports send:" ;
+        Text [ en-US ] = "Number of reports sent:" ;
     };
     FixedText FT_NR_REPORTS_VALUE
     {

@@ -69,6 +69,7 @@ namespace com { namespace sun { namespace star
     namespace container { class XEnumerationAccess; class XEnumeration; class XIndexAccess; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
+                     class XTextField;
                      class XDocumentIndex; class XTextShapesSupplier; }
 } } }
 
@@ -123,7 +124,11 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 protected:
 
     const ::rtl::OUString sActualSize;
-    const ::rtl::OUString sAlternativeText;
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
+    const ::rtl::OUString sTitle;
+    const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sAnchorCharStyleName;
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sAnchorType;
@@ -326,6 +331,12 @@ protected:
             ::com::sun::star::text::XTextRange > & rTextRange,
         sal_Bool bAutoStyles, sal_Bool bProgress );
 
+    void exportTextField(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextField> & xTextField,
+        const sal_Bool bAutoStyles, const sal_Bool bProgress,
+        const sal_Bool bRecursive );
+
     void exportAnyTextFrame(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
@@ -486,7 +497,7 @@ protected:
     /// export a text:meta
     void exportMeta(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & i_xMeta,
+            ::com::sun::star::beans::XPropertySet> & i_xPortion,
         sal_Bool i_bAutoStyles, sal_Bool i_isProgress );
 
 public:
@@ -605,8 +616,12 @@ public:
     virtual void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
-    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
-                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+//    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+//                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    void exportTitleAndDescription( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+                                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // <--
 
     // This method exports the given XText
     void exportText(

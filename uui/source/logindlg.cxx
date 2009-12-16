@@ -55,6 +55,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
     FASTBOOL bPathHide = FALSE;
     FASTBOOL bErrorHide = FALSE;
     FASTBOOL bAccountHide = FALSE;
+    FASTBOOL bUseSysCredsHide = FALSE;
 
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
     {
@@ -104,6 +105,12 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         bAccountHide = TRUE;
     }
 
+    if ( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS )
+    {
+        aUseSysCredsCB.Hide();
+        bUseSysCredsHide = TRUE;
+    }
+
     if ( bErrorHide )
     {
         long nOffset = aLoginGB.GetPosPixel().Y() -
@@ -147,6 +154,9 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         aNewPnt = aSavePasswdBtn.GetPosPixel();
         aNewPnt.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aNewPnt );
+        aNewPnt = aUseSysCredsCB.GetPosPixel();
+        aNewPnt.Y() -= nOffset;
+        aUseSysCredsCB.SetPosPixel( aNewPnt );
         aNewPnt = aLoginGB.GetPosPixel();
         aNewPnt.Y() -= nOffset;
         aLoginGB.SetPosPixel( aNewPnt );
@@ -174,6 +184,9 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         aTmpPnt1 = aSavePasswdBtn.GetPosPixel();
         aTmpPnt1.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt1 );
+        aTmpPnt1 = aUseSysCredsCB.GetPosPixel();
+        aTmpPnt1.Y() -= nOffset;
+        aUseSysCredsCB.SetPosPixel( aTmpPnt1 );
         Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
@@ -186,11 +199,43 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         Point aTmpPnt = aSavePasswdBtn.GetPosPixel();
         aTmpPnt.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt );
+        aTmpPnt = aUseSysCredsCB.GetPosPixel();
+        aTmpPnt.Y() -= nOffset;
+        aUseSysCredsCB.SetPosPixel( aTmpPnt );
+        Size aNewSz = GetSizePixel();
+        aNewSz.Height() -= nOffset;
+        SetSizePixel( aNewSz );
+    }
+
+    if ( bUseSysCredsHide )
+    {
+        long nOffset = aUseSysCredsCB.GetPosPixel().Y() -
+                       aSavePasswdBtn.GetPosPixel().Y();
+
         Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
     }
 };
+
+// -----------------------------------------------------------------------
+void LoginDialog::EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled )
+{
+    aErrorInfo.Enable( !bUseSysCredsEnabled );
+    aErrorGB.Enable( !bUseSysCredsEnabled );
+    aRequestInfo.Enable( !bUseSysCredsEnabled );
+    aPathFT.Enable( !bUseSysCredsEnabled );
+    aPathED.Enable( !bUseSysCredsEnabled );
+    aPathInfo.Enable( !bUseSysCredsEnabled );
+    aPathBtn.Enable( !bUseSysCredsEnabled );
+    aNameFT.Enable( !bUseSysCredsEnabled );
+    aNameED.Enable( !bUseSysCredsEnabled );
+    aNameInfo.Enable( !bUseSysCredsEnabled );
+    aPasswordFT.Enable( !bUseSysCredsEnabled );
+    aPasswordED.Enable( !bUseSysCredsEnabled );
+    aAccountFT.Enable( !bUseSysCredsEnabled );
+    aAccountED.Enable( !bUseSysCredsEnabled );
+}
 
 // -----------------------------------------------------------------------
 
@@ -216,6 +261,14 @@ IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
         aPathED.SetText( pDlg->GetPath() );
 
     delete pDlg;
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( LoginDialog, UseSysCredsHdl_Impl, CheckBox *, EMPTYARG )
+{
+    EnableUseSysCredsControls_Impl( aUseSysCredsCB.IsChecked() );
     return 1;
 }
 
@@ -247,6 +300,7 @@ LoginDialog::LoginDialog
     aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
     aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
     aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
+    aUseSysCredsCB  ( this, ResId( CB_LOGIN_USESYSCREDS, *pResMgr ) ),
     aLoginGB        ( this, ResId( GB_LOGIN_LOGIN, *pResMgr ) ),
     aOKBtn          ( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
     aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
@@ -261,6 +315,10 @@ LoginDialog::LoginDialog
     }
     else
         aRequest = aRequestInfo.GetText();
+
+    if ( !( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS ) )
+      EnableUseSysCredsControls_Impl( aUseSysCredsCB.IsChecked() );
+
     aRequest.SearchAndReplaceAscii("%1", rServer);
     aRequestInfo.SetText(aRequest);
 
@@ -271,6 +329,7 @@ LoginDialog::LoginDialog
 
     aOKBtn.SetClickHdl( LINK( this, LoginDialog, OKHdl_Impl ) );
     aPathBtn.SetClickHdl( LINK( this, LoginDialog, PathHdl_Impl ) );
+    aUseSysCredsCB.SetClickHdl( LINK( this, LoginDialog, UseSysCredsHdl_Impl ) );
 
     HideControls_Impl( nFlags );
 };
@@ -281,6 +340,17 @@ void LoginDialog::SetName( const String& rNewName )
 {
     aNameED.SetText( rNewName );
     aNameInfo.SetText( rNewName );
+}
+
+// -----------------------------------------------------------------------
+
+void LoginDialog::SetUseSystemCredentials( BOOL bUse )
+{
+    if ( aUseSysCredsCB.IsVisible() )
+    {
+        aUseSysCredsCB.Check( bUse );
+        EnableUseSysCredsControls_Impl( bUse );
+    }
 }
 
 // -----------------------------------------------------------------------

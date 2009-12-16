@@ -68,6 +68,7 @@
 #include <sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
+#include <vcl/lazydelete.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
@@ -275,9 +276,23 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UIN
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrHdlBitmapSet* SdrHdl::pSimpleSet = NULL;
-SdrHdlBitmapSet* SdrHdl::pModernSet = NULL;
-SdrHdlBitmapSet* SdrHdl::pHighContrastSet = NULL;
+SdrHdlBitmapSet& getSimpleSet()
+{
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aSimpleSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    return *aSimpleSet.get();
+}
+
+SdrHdlBitmapSet& getModernSet()
+{
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    return *aModernSet.get();
+}
+
+SdrHdlBitmapSet& getHighContrastSet()
+{
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    return *aHighContrastSet.get();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -296,18 +311,6 @@ SdrHdl::SdrHdl():
     bPlusHdl(FALSE),
     mbMoveOutside(false)
 {
-    if(!pSimpleSet)
-        pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
-    DBG_ASSERT(pSimpleSet, "Could not construct SdrHdlBitmapSet()!");
-
-    if(!pModernSet)
-        pModernSet = new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS);
-    DBG_ASSERT(pModernSet, "Could not construct SdrHdlBitmapSet()!");
-
-    // #101928#
-    if(!pHighContrastSet)
-        pHighContrastSet = new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS);
-    DBG_ASSERT(pHighContrastSet, "Could not construct SdrHdlBitmapSet()!");
 }
 
 SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
@@ -326,18 +329,6 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     bPlusHdl(FALSE),
     mbMoveOutside(false)
 {
-    if(!pSimpleSet)
-        pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
-    DBG_ASSERT(pSimpleSet, "Could not construct SdrHdlBitmapSet()!");
-
-    if(!pModernSet)
-        pModernSet = new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS);
-    DBG_ASSERT(pModernSet, "Could not construct SdrHdlBitmapSet()!");
-
-    // #101928#
-    if(!pHighContrastSet)
-        pHighContrastSet = new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS);
-    DBG_ASSERT(pHighContrastSet, "Could not construct SdrHdlBitmapSet()!");
 }
 
 SdrHdl::~SdrHdl()
@@ -670,17 +661,17 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
 {
     if(bIsHighContrast)
     {
-        return pHighContrastSet->GetBitmapEx(eKindOfMarker, nInd);
+        return getHighContrastSet().GetBitmapEx(eKindOfMarker, nInd);
     }
     else
     {
         if(bFine)
         {
-            return pModernSet->GetBitmapEx(eKindOfMarker, nInd);
+            return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
         }
         else
         {
-            return pSimpleSet->GetBitmapEx(eKindOfMarker, nInd);
+            return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
         }
     }
 }

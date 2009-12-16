@@ -56,7 +56,9 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -189,6 +191,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
         Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
+        long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
+        void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
+        void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
 
     protected:
         typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
@@ -210,6 +215,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ToolBar*                                                                               m_pToolBar;
         rtl::OUString                                                                          m_aModuleIdentifier;
         rtl::OUString                                                                          m_aResourceName;
+        com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >              m_xURLTransformer;
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;
         ToolBarControllerMap                                                                   m_aControllerMap;

@@ -127,8 +127,8 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
 void SAL_CALL OResultSetPrivileges::disposing(void)
 {
     ODatabaseMetaDataResultSet::disposing();
-    m_xTables = NULL;
-    m_xRow = NULL;
+m_xTables.clear();
+m_xRow.clear();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeException)

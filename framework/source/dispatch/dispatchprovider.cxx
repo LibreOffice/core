@@ -226,17 +226,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 //_________________________________________________________________________________________________________________
 
-::sal_Bool lcl_isCloseDispatch (const css::util::URL& aURL)
-{
-    return (
-            (aURL.Complete.equals(CMD_UNO_CLOSEDOC  )) ||
-            (aURL.Complete.equals(CMD_UNO_CLOSEWIN  )) ||
-            (aURL.Complete.equals(CMD_UNO_CLOSEFRAME))
-           );
-}
-
-//_________________________________________________________________________________________________________________
-
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
     return (aURL.Complete.equals(CMD_UNO_SHOWSTARTMODULE));
@@ -297,7 +286,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     {
         if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
-        
+
         if (lcl_isStartModuleDispatch(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_STARTMODULEDISPATCHER, xDesktop );
     }

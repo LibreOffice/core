@@ -223,10 +223,7 @@ Reference< XPreparedStatement > SAL_CALL OAdabasConnection::prepareStatement( co
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE2::rBHelper.bDisposed);
 
-    if(m_aTypeInfo.empty())
-        buildTypeInfo();
-
-    Reference< XPreparedStatement > xReturn = new OAdabasPreparedStatement(this,m_aTypeInfo,sql);
+    Reference< XPreparedStatement > xReturn = new OAdabasPreparedStatement(this,sql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }

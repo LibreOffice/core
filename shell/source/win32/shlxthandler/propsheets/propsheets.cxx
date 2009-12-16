@@ -177,14 +177,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
-    try
-    {
-        m_pMetaInfo = std::auto_ptr<CMetaInfoReader>(new CMetaInfoReader(m_szFileName));
-    }
-    catch (const std::exception&)
-    {
-        return E_FAIL;
-    }
 
     PROPSHEETPAGE psp;
 
@@ -317,14 +309,17 @@ BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPAR
 //##################################
 void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
-    SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    m_pMetaInfo->getTagData( META_INFO_TITLE ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   m_pMetaInfo->getTagData( META_INFO_AUTHOR ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  m_pMetaInfo->getTagData( META_INFO_SUBJECT ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), m_pMetaInfo->getTagData( META_INFO_KEYWORDS ).c_str() );
+
+    CMetaInfoReader metaInfo(m_szFileName);
+
+    SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
+    SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
+    SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
+    SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
 
     // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
     // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
-    std::wstring tempStr = m_pMetaInfo->getTagData( META_INFO_DESCRIPTION ).c_str();
+    std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION ).c_str();
     std::wstring::size_type itor = tempStr.find ( L"\n" , 0 );
     while (itor != std::wstring::npos)
     {
@@ -332,6 +327,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
         itor = tempStr.find(L"\n", itor + 2);
     }
     SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
+
 }
 
 //---------------------------------
@@ -339,7 +335,10 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 */
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
-    document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, m_pMetaInfo.get());
+
+    CMetaInfoReader metaInfo(m_szFileName);
+
+    document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, &metaInfo);
 
     statistic_group_list_t sgl;
     doc_stat_reader->read(&sgl);
@@ -350,6 +349,7 @@ void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/
         GetResString(IDS_PROPERTY_VALUE));
 
     lv_builder->build(sgl);
+
 }
 
 
