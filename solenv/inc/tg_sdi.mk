@@ -38,11 +38,7 @@ $(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
     @echo ------------------------------
     @echo Making: $@
     @-$(RM) $@.$(ROUT).tmp $@
-.IF "$(USE_SHELL)"=="4nt"
-    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
-.ELSE
-    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
-.ENDIF
+    @$(TYPE) $(MISC)/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
     @-$(RM) $@
     @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
@@ -53,12 +49,12 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     @echo Making: $@
     @-$(RM) $@
     $(SVIDL) @$(mktmp \
-    -fs$(INCCOMX)$/$(SDI$(TNR)NAME).hxx	\
-    -fd$(INCCOMX)$/$(SDI$(TNR)NAME).ilb	\
-    -fm$(MISC)$/$(SDI$(TNR)NAME).don	\
-    -fl$(MISC)$/$(SDI$(TNR)NAME).lst         \
+    -fs$(INCCOMX)/$(SDI$(TNR)NAME).hxx	\
+    -fd$(INCCOMX)/$(SDI$(TNR)NAME).ilb	\
+    -fm$(MISC)/$(SDI$(TNR)NAME).don	\
+    -fl$(MISC)/$(SDI$(TNR)NAME).lst         \
     -fx$(SDI$(TNR)EXPORT).sdi		\
-    -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
+    -fz$(MISC)/$(SDI$(TNR)NAME).sid	\
     $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI$(TNR)TARGET)"!=""
 

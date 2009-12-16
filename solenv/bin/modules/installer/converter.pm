@@ -92,12 +92,10 @@ sub convert_stringlist_into_array_without_linebreak_and_quotes
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         $first =~ s/\"//g;
         push(@newarray, $first);
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     $last =~ s/\"//g;
     push(@newarray, $last);
 
@@ -121,13 +119,11 @@ sub convert_stringlist_into_array
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         # Problem with two directly following listseparators. For example a path with two ";;" directly behind each other
         $first =~ s/^$listseparator//;
         push(@newarray, "$first\n");
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last\n");
 
     return \@newarray;
@@ -150,11 +146,9 @@ sub convert_stringlist_into_array_without_newline
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         push(@newarray, "$first");
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last");
 
     return \@newarray;
@@ -177,11 +171,9 @@ sub convert_stringlist_into_hash
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         $newhash{$first} = 1;
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     $newhash{$last} = 1;
 
     return \%newhash;
@@ -204,11 +196,9 @@ sub convert_whitespace_stringlist_into_array
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         push(@newarray, "$first\n");
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last\n");
 
     return \@newarray;

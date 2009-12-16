@@ -50,7 +50,7 @@ JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
 #not needed at the moment
-#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 .IF "$(ttt)"!=""
 CDEFS+=-E
@@ -245,7 +245,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=stdc432 gcc432
 
 # default objectfilenames to link
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=

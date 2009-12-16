@@ -77,6 +77,6 @@ End
 File gid_File_Lib_Shlxtmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "shlxtmsi.dll";
 End

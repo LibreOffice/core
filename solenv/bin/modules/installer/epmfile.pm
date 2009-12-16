@@ -453,8 +453,9 @@ sub create_epm_header
 
         if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
 
-        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile
-        if ( $installer::globals::issolarispkgbuild )
+        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile. But not for all products
+
+        if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
             if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
 
@@ -3113,7 +3114,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {

@@ -33,21 +33,21 @@
 File gid_File_Lib_Soactivex
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "so_activex.dll";
 End
 
 File gid_File_Lib_Regactivex_Msi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "regactivex.dll";
 End
 
 File gid_File_Lib_Regpatchactivex_Msi
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "regpatchactivex.dll";
 End
 

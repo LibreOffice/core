@@ -120,8 +120,13 @@ if ( $ENV{NO_HID_FILES} ) {
     $no_hid_files = $ENV{"NO_HID_FILES"};
 }
 $solarincludes = $ENV{SOLARINCLUDES};
-$tmpdir = $ENV{TMP};
-die "ERROR - \"TMP\" environment variable not set\n" if ( !defined $tmpdir );
+if (defined $ENV{TMPDIR}) {
+    $tmpdir = $ENV{TMPDIR};
+} elsif (defined $ENV{TMP}) {
+    $tmpdir = $ENV{TMP};
+} else {
+    die "ERROR - \"TMPDIR\" & \"TMP\" environment variables not set\n";
+};
 die "ERROR - \"$tmpdir\" doesn't exist\n" if ( ! -d $tmpdir );
 
 setcompiler();
@@ -138,10 +143,6 @@ $workfile = "$tmpdir/${filebase}_".$$;
 
 # now get $workfile ready for shell usage...
 $shell_workfile = $workfile;
-$shell_workfile =~ s/\//\\/g if ( "$ENV{USE_SHELL}" eq "4nt" );
-if (( "$ENV{USE_SHELL}" eq "4nt" ) && ( "$^O" eq "cygwin" )) {
-    $shell_workfile =~ s/\//\\\\/;
-}
 
 print "workfile: $workfile\n";
 

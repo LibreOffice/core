@@ -45,7 +45,7 @@ sub usage
 {
     print <<Ende;
 ---------------------------------------------------------
-$pre2par::globals::prog V1.0 (c) Ingo Schmidt 2003
+$pre2par::globals::prog
 The following parameter are needed:
 -s: path to the pre file
 -o: path to the par file

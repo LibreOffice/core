@@ -92,7 +92,7 @@ CFLAGS+= -Ob1
 .ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
-#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
 CFLAGSENABLESYMBOLS=-Z7 -Yd
 
 .IF "$(bndchk)" != ""
@@ -115,6 +115,9 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-EHa
 CFLAGS_NO_EXCEPTIONS=
 
+# enable boost support for __cdecl (SAL_CALL) C++-UNO interface methods
+CDEFS+=-DBOOST_MEM_FN_ENABLE_CDECL
+
 # with the current debug switches PCH won't work
 # anyway. so keep the existing .pch intact and don't
 # touch it
@@ -122,9 +125,9 @@ CFLAGS_NO_EXCEPTIONS=
 ENABLE_PCH:=
 .ENDIF "$(debug)"!=""
 
-CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
@@ -149,8 +152,8 @@ CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
-CFLAGSDEBUG=-Zi -Fd$(MISC)$/$(@:b).pdb
+CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
+CFLAGSDEBUG=-Zi -Fd$(MISC)/$(@:b).pdb
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
@@ -186,6 +189,8 @@ CFLAGSOUTOBJ=-Fo
 # - "warning C4820: padding added after member".
 # - "warning C4503: 'identifier' : decorated name length exceeded, name was truncated"
 #   (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx)
+# - "warning C4180: qualifier applied to function type has no meaning; ignored"
+#   (frequently seen with a recent boost)
 # For C, certain warnings from system headers (stdlib.h etc.) have to be
 # disabled globally (for C++, this is not necessary, as the system headers are
 # wrapped by STLport):
@@ -196,7 +201,8 @@ CFLAGSOUTOBJ=-Fo
 CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4250 -wd4251 -wd4275 \
     -wd4290 -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 \
     -wd4640 -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 \
-    -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005
+    -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005 \
+    -wd4180
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
@@ -206,7 +212,6 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    fpicker \
     soldep
 
 CDEFS+=-DSTLPORT_VERSION=400 -D_MT
@@ -280,7 +285,7 @@ LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -300,15 +305,15 @@ LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
 .IF "$(PROF_EDITION)" == ""
-ATL_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/atl
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
-MFC_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/mfc
-MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/PlatformSDK/include/atl
+ATL_LIB*=$(COMPATH)/atlmfc/lib
+MFC_INCLUDE*=$(COMPATH)/PlatformSDK/include/mfc
+MFC_LIB*=$(COMPATH)/atlmfc/lib
 .ELSE
-ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
-MFC_INCLUDE*=$(COMPATH)$/atlmfc$/include
-MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/atlmfc/include
+ATL_LIB*=$(COMPATH)/atlmfc/lib
+MFC_INCLUDE*=$(COMPATH)/atlmfc/include
+MFC_LIB*=$(COMPATH)/atlmfc/lib
 .ENDIF
 
 LIBMGR=lib $(NOLOGO)

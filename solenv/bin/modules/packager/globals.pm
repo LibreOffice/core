@@ -49,18 +49,9 @@ BEGIN
 
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $separator = "\\";
-        $iswin = 1;
-        $isunix = 0;
-    }
-    else
-    {
-        $separator = "/";
-        $iswin = 0;
-        $isunix = 1;
-    }
+    $separator = "/";
+    $iswin = 0;
+    $isunix = 1;
 
 }
 

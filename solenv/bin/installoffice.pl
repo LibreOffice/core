@@ -115,7 +115,7 @@ our $bootstrapiniTemp ;
 our $packpackage ;
 our $user;
 
-if (($gui eq "WNT") and ($ENV{USE_SHELL} ne "4nt")) {
+if ($gui eq "WNT") {
     $gui = $cygwin;
 }
 

@@ -85,6 +85,12 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
+#if defined WNT
+#define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
+#else
+#define SCP2_OOO_BIN_DIR gid_Dir_Program
+#endif
+
 #define BIN_FILE_BODY \
         UnixRights   = 555
 
@@ -121,12 +127,12 @@
 #define PACKED_LIB_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED); \
-        Dir    = gid_Dir_Program
+        Dir    = SCP2_OOO_BIN_DIR
 
 #define PACKED_LIB_FILE_BODY_PATCH \
         TXT_FILE_BODY; \
         Styles = (PACKED,PATCH); \
-        Dir    = gid_Dir_Program
+        Dir    = SCP2_OOO_BIN_DIR
 
 #define PACKED_FILTER_FILE_BODY \
         TXT_FILE_BODY; \
@@ -307,13 +313,13 @@
 #define PACKED_UNO_LIB_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED,UNO_COMPONENT); \
-        Dir    = gid_Dir_Program; \
+        Dir    = SCP2_OOO_BIN_DIR; \
         RegistryID = gid_Starregistry_Services_Rdb
 
 #define PACKED_UNO_LIB_FILE_BODY_PATCH \
         TXT_FILE_BODY; \
         Styles = (PACKED,UNO_COMPONENT,PATCH); \
-        Dir    = gid_Dir_Program; \
+        Dir    = SCP2_OOO_BIN_DIR; \
         RegistryID = gid_Starregistry_Services_Rdb
 
 #define STD_UNO_LIB_FILE(id,name) \
@@ -374,7 +380,7 @@
     File id \
         TXT_FILE_BODY; \
         Name = LIBNAME(name); \
-        Dir = gid_Dir_Program; \
+        Dir = SCP2_OOO_BIN_DIR; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS); \
     End
 
@@ -382,7 +388,7 @@
     File id \
         TXT_FILE_BODY; \
         Name = LIBNAME(name); \
-        Dir = gid_Dir_Program; \
+        Dir = SCP2_OOO_BIN_DIR; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS, UNO_COMPONENT); \
         RegistryID = gid_Starregistry_Services_Rdb; \
     End

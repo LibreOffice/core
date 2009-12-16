@@ -21,11 +21,15 @@ int
         if (optind >= argc ||
             argv[optind][0] != '-' || argv[optind][1] == '\0')
             return -1;
-        else
-            if (strcmp(argv[optind], "--") == 0)
+        else if (strcmp(argv[optind], "--") == 0)
             {
                 optind++;
                 return -1;
+            }
+        else if (strcmp(argv[optind], "-isysroot") == 0)
+            {
+                // skip Mac OS X SDK selection flags
+                optind++; optind++;
             }
     }
     optopt = c = argv[optind][sp];
