@@ -37,6 +37,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
+#include <i18npool/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
 #include <svtools/zforlist.hxx>
@@ -58,6 +59,7 @@
 #endif
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/logfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/xtable.hxx>
@@ -791,9 +793,9 @@ void SwDocShell::SubInitNew()
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
-                eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    sal_Int16   nVal = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
     aDfltSet.Put( SvxLanguageItem( nVal, RES_CHRATR_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCJK, RES_CHRATR_CJK_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCTL, RES_CHRATR_CTL_LANGUAGE ) );

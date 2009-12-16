@@ -918,33 +918,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
-                    else
-                    {
-                        // try to store the document
-                        sal_uInt32 nErrorCode = ERRCODE_NONE;
-                        try
-                        {
-                            uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
-                            xStorable->store();
-                        }
-                        catch( task::ErrorCodeIOException& aErrEx )
-                        {
-                            nErrorCode = (sal_uInt32)aErrEx.ErrCode;
-                        }
-                        catch( uno::Exception& )
-                        {
-                            nErrorCode = ERRCODE_IO_GENERAL;
-                        }
-
-                        if ( nErrorCode != ERRCODE_NONE )
-                        {
-                            // if the saving has failed show the error and break the action
-                            if ( nErrorCode != ERRCODE_ABORT )
-                                ErrorHandler::HandleError( nErrorCode );
-
-                            break;
-                        }
-                    }
                 }
 #ifdef DBG_UTIL
                 {
@@ -970,10 +943,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bDone = TRUE;
                         SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
                         SvxMacro aMac(aEmptyStr, aEmptyStr, STARBASIC);
-                        pEvent->ConfigureEvent(SFX_EVENT_OPENDOC,       aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_CLOSEDOC,      aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_ACTIVATEDOC,   aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_DEACTIVATEDOC, aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ),    aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ), aMac, this);
                         ReloadFromHtml(aTempFile.GetURL(), pSrcView);
                         nSlot = 0;
                     }
@@ -1010,6 +983,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     //pSavePrinter darf nicht wieder geloescht werden
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
+                pViewFrm->GetBindings().Invalidate( SID_BROWSER_MODE );
+                pViewFrm->GetBindings().Invalidate( FN_PRINT_LAYOUT );
             }
             break;
             case SID_GET_COLORTABLE:
@@ -1807,7 +1782,10 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
     SwView* pTempView = _pView ? _pView : (SwView*)GetView();
     if( pTempView )
     {
-        pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
+        SfxBindings& rBind = pTempView->GetViewFrame()->GetBindings();
+        rBind.Invalidate(FN_SHADOWCURSOR);
+        rBind.Invalidate(SID_BROWSER_MODE);
+        rBind.Invalidate(FN_PRINT_LAYOUT);
 
         if( !GetDoc()->getPrinter( false ) )
         {
@@ -1820,8 +1798,8 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
         GetDoc()->CheckDefaultPageFmt();
         // <--
 
-        //Wenn wir die BrowseView einschalten, darf es nur diese eine
-        //Sicht auf das Dokument geben, alle anderen werden geschlossen.
+        // Currently there can be only one view (layout) if the document is viewed in Web layout
+        // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )

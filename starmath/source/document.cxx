@@ -1176,9 +1176,21 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     (pTmpUndoMgr->*fnDo)( 0 );
             }
             Repaint();
+            SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+            while( pFrm )
+            {
+                SfxBindings& rBind = pFrm->GetBindings();
+                rBind.Invalidate(SID_UNDO);
+                rBind.Invalidate(SID_REDO);
+                rBind.Invalidate(SID_REPEAT);
+                rBind.Invalidate(SID_CLEARHISTORY);
+                pFrm = SfxViewFrame::GetNext( *pFrm, this );
+            }
         }
         break;
     }
+
+    rReq.Done();
 }
 
 

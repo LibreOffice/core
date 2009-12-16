@@ -226,7 +226,7 @@ String STR_CONTENT_TYPE_DRAWOBJECT
 };
 String STR_CONTENT_TYPE_POSTIT
 {
-    Text [ en-US ] = "Notes" ;
+    Text [ en-US ] = "Comments" ;
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
@@ -270,7 +270,7 @@ String STR_CONTENT_TYPE_SINGLE_INDEX
 };
 String STR_CONTENT_TYPE_SINGLE_POSTIT
 {
-    Text [ en-US ] = "Note" ;
+    Text [ en-US ] = "Comment" ;
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 {

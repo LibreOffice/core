@@ -1369,7 +1369,7 @@ void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( uno:
             aPam.GetPoint()->nContent++;
 
         //die alte Marke loeschen
-        m_pDoc->Delete(m_pTOXMark);
+        m_pDoc->DeleteTOXMark(m_pTOXMark);
         m_pTOXMark = 0;
 
         SwTxtAttr* pTxtAttr = 0;
@@ -1379,13 +1379,14 @@ void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( uno:
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
-            m_pDoc->Insert( aTmp, aMark, 0 );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+            m_pDoc->InsertPoolItem( aTmp, aMark, 0 );
+            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                         pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK);
         }
         else if( *pEnd != *pStt )
         {
-            m_pDoc->Insert( aPam, aMark, nsSetAttrMode::SETATTR_DONTEXPAND );
+            m_pDoc->InsertPoolItem( aPam, aMark,
+                        nsSetAttrMode::SETATTR_DONTEXPAND );
             pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
                                 pStt->nContent, RES_TXTATR_TOXMARK);
         }
@@ -1501,7 +1502,17 @@ void SwXDocumentIndexMark::attachToRange(const uno::Reference< text::XTextRange 
         // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
         if(!bMark && !aMark.GetAlternativeText().Len())
             aMark.SetAlternativeText( String(' ') );
-        pDoc->Insert(aPam, aMark, nsSetAttrMode::SETATTR_DONTEXPAND);
+
+        SwXTextCursor const*const pTextCursor(
+                dynamic_cast<SwXTextCursor*>(pCursor));
+        const bool bForceExpandHints( (!bMark && pTextCursor)
+                ? pTextCursor->IsAtEndOfMeta() : false );
+        const SetAttrMode nInsertFlags = (bForceExpandHints)
+            ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+                | nsSetAttrMode::SETATTR_DONTEXPAND)
+            : nsSetAttrMode::SETATTR_DONTEXPAND;
+
+        pDoc->InsertPoolItem(aPam, aMark, nInsertFlags);
         if( bMark && *aPam.GetPoint() > *aPam.GetMark())
             aPam.Exchange();
 
@@ -1510,8 +1521,10 @@ void SwXDocumentIndexMark::attachToRange(const uno::Reference< text::XTextRange 
             pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
                             aPam.GetPoint()->nContent, RES_TXTATR_TOXMARK );
         else
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+        {
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                 aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
+        }
 
         if(pTxtAttr)
         {
@@ -1571,7 +1584,7 @@ void SwXDocumentIndexMark::dispose(void) throw( uno::RuntimeException )
     SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
     if(pType && m_pTOXMark)
     {
-        m_pDoc->Delete(m_pTOXMark);
+        m_pDoc->DeleteTOXMark(m_pTOXMark);
     }
     else
         throw uno::RuntimeException();
@@ -1681,7 +1694,7 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             aPam.GetPoint()->nContent++;
 
         //delete the old mark
-        pLocalDoc->Delete(m_pTOXMark);
+        pLocalDoc->DeleteTOXMark(m_pTOXMark);
         m_pTOXMark = 0;
 
         sal_Bool bInsAtPos = aMark.IsAlternativeText();
@@ -1692,13 +1705,14 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
-            pLocalDoc->Insert( aTmp, aMark, 0 );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+            pLocalDoc->InsertPoolItem( aTmp, aMark, 0 );
+            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                     pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
         }
         else if( *pEnd != *pStt )
         {
-            pLocalDoc->Insert( aPam, aMark, nsSetAttrMode::SETATTR_DONTEXPAND );
+            pLocalDoc->InsertPoolItem( aPam, aMark,
+                    nsSetAttrMode::SETATTR_DONTEXPAND );
             pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
                             pStt->nContent, RES_TXTATR_TOXMARK );
         }

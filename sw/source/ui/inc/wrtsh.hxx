@@ -157,12 +157,15 @@ public:
     void    SetInsMode( BOOL bOn = TRUE );
     void    ToggleInsMode() { SetInsMode( !bIns ); }
     BOOL    IsInsMode() const { return bIns; }
+    void    SetRedlineModeAndCheckInsMode( USHORT eMode );
 
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();
     BOOL    IsSelFrmMode() const { return bLayoutMode; }
         // Selektion von Rahmen aufheben
     void    UnSelectFrm();
+
+    void    Invalidate();
 
     // Tabellenzellen selektieren fuer Bearbeiten von Formeln in der Ribbonbar
     inline void SelTblCells( const Link &rLink, BOOL bMark = TRUE );

@@ -811,7 +811,8 @@ public:
 
 
 
-
+/** FIB - File Information Block
+*/
 class WW8Fib
 {
 public:
@@ -1267,7 +1268,9 @@ public:
 };
 
 
-class WW8Dop            // Document Properties
+/** Document Properties
+*/
+class WW8Dop
 {
 public:
     /*

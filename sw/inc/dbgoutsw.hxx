@@ -54,6 +54,7 @@ class SwNumRuleTbl;
 class SwNumRule;
 class SwOutlineNodes;
 class SwTxtFmtColl;
+class SwNodeRange;
 
 #define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
 #define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
@@ -88,6 +89,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
 SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
+SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
 String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
@@ -118,7 +120,7 @@ const char * dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }
-const char * dbg_out(const SwFormToken & rToken);
-const char * dbg_out(const SwFormTokens & rTokens);
+SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
+SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
 #endif // DEBUG
 #endif // __DBGOUTSW_HXX

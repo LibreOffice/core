@@ -820,7 +820,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
     rSh.Push();
     const BOOL bCrsrInHidden = rSh.SelectHiddenRange();
-    rSh.Pop(FALSE);
+    // --> OD 2009-08-05 #i103839#, #b6855246#
+    // Do not call method <SwCrsrShell::Pop(..)> with 1st parameter = <FALSE>
+    // in order to avoid that the view jumps to the visible cursor.
+    rSh.Pop();
+    // <--
 
     while ( nWhich )
     {
@@ -828,8 +832,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         {
             case SID_INSERT_SOUND:
             case SID_INSERT_VIDEO:
+                /*!SvxPluginFileDlg::IsAvailable( nWhich ) ||
+
+                discussed with mba: for performance reasons we skip the IsAvailable call here
+                */
                 if ( GetShell().IsSelFrmMode() ||
-                     !SvxPluginFileDlg::IsAvailable( nWhich ) ||
                      SFX_CREATE_MODE_EMBEDDED == eCreateMode || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );

@@ -93,7 +93,6 @@ interface _Annotation
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -101,7 +100,6 @@ interface _Annotation
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
     ]
 
     SID_PASTE   // api:
@@ -111,7 +109,7 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_PASTESPECIAL  // api:
+    SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
         ExecMethod = ExecClpbrd ;

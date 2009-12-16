@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: insrc.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: SwUndoPageDesc.hxx,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,59 +27,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INSRC_HXX
-#define _INSRC_HXX
+#ifndef _UNDO_FLY_STR_ATTR_HXX
+#define _UNDO_FLY_STR_ATTR_HXX
 
-#include <svx/stddlg.hxx>
+#include <undobj.hxx>
+#include <swundo.hxx>
 
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
+class SwFlyFrmFmt;
+class String;
 
-#ifndef _FIELD_HXX //autogen
-#include <vcl/field.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#include <tools/string.hxx>
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-class SwView;
-class SwInsRowColDlg : public SvxStandardDialog
+class SwUndoFlyStrAttr : public SwUndo
 {
-    FixedText       aCount;
-    NumericField    aCountEdit;
-    FixedLine        aInsFL;
+    public:
+        SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
+                          const SwUndoId eUndoId,
+                          const String& sOldStr,
+                          const String& sNewStr );
+        virtual ~SwUndoFlyStrAttr();
 
-    RadioButton     aBeforeBtn;
-    RadioButton     aAfterBtn;
-    FixedLine        aPosFL;
+        virtual void Undo( SwUndoIter & rIt );
+        virtual void Redo( SwUndoIter & rIt );
+        virtual void Repeat( SwUndoIter & rIt );
 
-    String          aRow;
-    String          aCol;
+        virtual SwRewriter GetRewriter() const;
 
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-
-    SwView&         rView;
-    BOOL            bColumn;
-
-protected:
-    virtual void Apply();
-
-public:
-    SwInsRowColDlg( SwView& rView, BOOL bCol );
+    private:
+        SwFlyFrmFmt& mrFlyFrmFmt;
+        const String msOldStr;
+        const String msNewStr;
 };
 
-#endif
-
+#endif // _UNDO_FLY_STR_ATTR_HXX

@@ -627,7 +627,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
 {
     SwCntntNode *pNode = rPos.nNode.GetNode().GetCntntNode();
     if(0 == pNode)
-        return FALSE;
+        return false;
 
     {
         // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
@@ -642,7 +642,10 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         ClearRedo();
         // einfuegen vom Undo-Object, z.Z. nur beim TextNode
         if( pNode->IsTxtNode() )
-            AppendUndo( pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart  ));
+        {
+            pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
+            AppendUndo(pUndo);
+        }
     }
 
     //JP 28.01.97: Sonderfall fuer SplitNode am Tabellenanfang:
@@ -712,7 +715,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                     if( pUndo )
                         pUndo->SetTblFlag();
                     SetModified();
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -721,7 +724,10 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     SvULongs aBkmkArr( 15, 15 );
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                     aBkmkArr, SAVEFLY_SPLIT );
-    if( 0 != ( pNode = pNode->SplitCntntNode( rPos ) ))
+    // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
+    ASSERT(pNode->IsTxtNode(), "splitting non-text node?");
+    pNode = pNode->SplitCntntNode( rPos );
+    if (pNode)
     {
         // verschiebe noch alle Bookmarks/TOXMarks/FlyAtCnt
         if( aBkmkArr.Count() )
@@ -740,7 +746,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     }
 
     SetModified();
-    return TRUE;
+    return true;
 }
 
 bool SwDoc::AppendTxtNode( SwPosition& rPos )
@@ -783,73 +789,86 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     return TRUE;
 }
 
-bool SwDoc::Insert( const SwPaM &rRg, const String &rStr, bool bHintExpand )
+bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
+        const enum InsertFlags nInsertMode )
 {
     if( DoesUndo() )
+    {
         ClearRedo();
+    }
 
-    const SwPosition* pPos = rRg.GetPoint();
+    const SwPosition& rPos = *rRg.GetPoint();
 
     if( pACEWord )                  // Aufnahme in die Autokorrektur
     {
         if( 1 == rStr.Len() && pACEWord->IsDeleted() )
-            pACEWord->CheckChar( *pPos, rStr.GetChar( 0 ) );
+        {
+            pACEWord->CheckChar( rPos, rStr.GetChar( 0 ) );
+        }
         delete pACEWord, pACEWord = 0;
     }
 
-    SwTxtNode *pNode = pPos->nNode.GetNode().GetTxtNode();
+    SwTxtNode *const pNode = rPos.nNode.GetNode().GetTxtNode();
     if(!pNode)
-        return FALSE;
+    {
+        return false;
+    }
 
-    const USHORT nInsMode = bHintExpand ? INS_EMPTYEXPAND
-                                     : INS_NOHINTEXPAND;
     SwDataChanged aTmp( rRg, 0 );
 
     if( !DoesUndo() || !DoesGroupUndo() )
     {
-        pNode->Insert( rStr, pPos->nContent, nInsMode );
+        pNode->InsertText( rStr, rPos.nContent, nInsertMode );
 
         if( DoesUndo() )
-            AppendUndo( new SwUndoInsert( pPos->nNode,
-                                    pPos->nContent.GetIndex(), rStr.Len() ));
+        {
+            SwUndoInsert * const pUndo( new SwUndoInsert(
+                rPos.nNode, rPos.nContent.GetIndex(), rStr.Len(), nInsertMode));
+            AppendUndo(pUndo);
+        }
     }
     else
     {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
-        USHORT nUndoSize = pUndos->Count();
-        xub_StrLen nInsPos = pPos->nContent.GetIndex();
         SwUndoInsert * pUndo = NULL; // #111827#
-        CharClass& rCC = GetAppCharClass();
 
+        // don't group the start if hints at the start should be expanded
+        if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
         // -> #111827#
-        bool bNewUndo = false;
-        if( 0 == nUndoSize)
-            bNewUndo = true;
-        else
         {
-            pUndo = (SwUndoInsert*)(*pUndos)[ --nUndoSize ];
-
-            switch (pUndo->GetId())
+            USHORT const nUndoSize = pUndos->Count();
+            if (0 != nUndoSize)
             {
-            case UNDO_INSERT:
-            case UNDO_TYPING:
-                bNewUndo = !pUndo->CanGrouping( *pPos );
+                SwUndo * const pLastUndo = (*pUndos)[ nUndoSize - 1 ];
 
-                break;
+                switch (pLastUndo->GetId())
+                {
+                    case UNDO_INSERT:
+                    case UNDO_TYPING:
+                        if (static_cast<SwUndoInsert*>(pLastUndo)
+                                ->CanGrouping( rPos ))
+                        {
+                            pUndo = static_cast<SwUndoInsert*>(pLastUndo);
+                        }
+                        break;
 
-            default:
-                bNewUndo = true;
+                    default:
+                        break;
+                }
             }
         }
         // <- #111827#
 
-        if (bNewUndo)
+        CharClass const& rCC = GetAppCharClass();
+        xub_StrLen nInsPos = rPos.nContent.GetIndex();
+
+        if (!pUndo)
         {
-            pUndo = new SwUndoInsert( pPos->nNode, nInsPos, 0,
+            pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
                             !rCC.isLetterNumeric( rStr, 0 ) );
             AppendUndo( pUndo );
         }
 
-        pNode->Insert( rStr, pPos->nContent, nInsMode );
+        pNode->InsertText( rStr, rPos.nContent, nInsertMode );
 
         for( xub_StrLen i = 0; i < rStr.Len(); ++i )
         {
@@ -857,7 +876,7 @@ bool SwDoc::Insert( const SwPaM &rRg, const String &rStr, bool bHintExpand )
             // wenn CanGrouping() TRUE returnt, ist schon alles erledigt
             if( !pUndo->CanGrouping( rStr.GetChar( i ) ))
             {
-                pUndo = new SwUndoInsert( pPos->nNode, nInsPos,  1,
+                pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 1, nInsertMode,
                             !rCC.isLetterNumeric( rStr, i ) );
                 AppendUndo( pUndo );
             }
@@ -866,16 +885,21 @@ bool SwDoc::Insert( const SwPaM &rRg, const String &rStr, bool bHintExpand )
 
     if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
     {
-        SwPaM aPam( pPos->nNode, aTmp.GetCntnt(),
-                    pPos->nNode, pPos->nContent.GetIndex());
+        SwPaM aPam( rPos.nNode, aTmp.GetCntnt(),
+                    rPos.nNode, rPos.nContent.GetIndex());
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+        {
+            AppendRedline(
+                new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+        }
         else
+        {
             SplitRedline( aPam );
+        }
     }
 
     SetModified();
-    return TRUE;
+    return true;
 }
 
 SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
@@ -1506,7 +1530,7 @@ BOOL SwDoc::RemoveInvisibleContent()
                      ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
                        !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
                 {
-                    Delete( aPam );
+                    DeleteRange( aPam );
                 }
                 else
                 {
@@ -1542,7 +1566,7 @@ BOOL SwDoc::RemoveInvisibleContent()
                      ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
                        !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
                 {
-                    Delete( aPam );
+                    DeleteRange( aPam );
                 }
                 else
                 {
@@ -1628,7 +1652,7 @@ BOOL SwDoc::RemoveInvisibleContent()
                                                 &aPam.GetPoint()->nNode );
                         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-                        Delete( aPam );
+                        DeleteRange( aPam );
                     }
                     else
                     {
@@ -1710,11 +1734,14 @@ BOOL SwDoc::ConvertFieldsToText()
                         sText.Erase();
 
                     //now remove the field and insert the string
-                    SwPaM aPam(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
-                    aPam.SetMark();
-                    aPam.Move();
-                    DeleteAndJoin(aPam);
-                    Insert( aPam, sText, true );
+                    SwPaM aPam1(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                    aPam1.Move();
+                    //insert first to keep the field's attributes
+                    InsertString( aPam1, sText );
+                    SwPaM aPam2(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                    aPam2.SetMark();
+                    aPam2.Move();
+                    DeleteAndJoin(aPam2);//remove the field
                 }
             }
             ++aBegin;
@@ -1916,24 +1943,19 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 // -> #111840#
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
-    SwField * pResult = NULL;
+    SwTxtFld * const pAttr = GetTxtFld(rPos);
 
-    SwTxtFld * pAttr = rPos.nNode.GetNode().GetTxtNode()->
-        GetTxtFld(rPos.nContent);
-
-    if (pAttr)
-        pResult = (SwField *) pAttr->GetFld().GetFld();
-
-    return pResult;
+    return (pAttr) ? const_cast<SwField *>( pAttr->GetFld().GetFld() ) : 0;
 }
 
 SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
 {
-    SwTxtNode *pNode = rPos.nNode.GetNode().GetTxtNode();
-    if( pNode )
-        return pNode->GetTxtFld( rPos.nContent );
-    else
-        return 0;
+    SwTxtNode * const pNode = rPos.nNode.GetNode().GetTxtNode();
+
+    return (pNode)
+        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
+                    rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
+        : 0;
 }
 // <- #111840#
 

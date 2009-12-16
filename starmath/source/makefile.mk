@@ -99,7 +99,6 @@ EXCEPTIONSFILES =   \
         $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
         $(SLO)$/view.obj \
-        $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
         $(SLO)$/symbol.obj \

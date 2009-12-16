@@ -63,6 +63,7 @@
 #include "docufld.hxx"
 #include "pagedesc.hxx"  // NewFldPortion, GetNum()
 #include <pormulti.hxx>     // SwMultiPortion
+#include "fmtmeta.hxx" // lcl_NewMetaPortion
 
 
 /*************************************************************************
@@ -257,11 +258,64 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     return pRet;
 }
 
+/*************************************************************************
+ *                      SwTxtFormatter::TryNewNoLengthPortion()
+ *************************************************************************/
+
+SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
+{
+    ::sw::Meta *const pMeta(
+        static_cast<SwFmtMeta &>(rHint.GetAttr()).GetMeta() );
+    ::rtl::OUString fix;
+    ::sw::MetaField *const pField( dynamic_cast< ::sw::MetaField * >(pMeta) );
+    OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
+    if (pField)
+    {
+        pField->GetPrefixAndSuffix((bPrefix) ? &fix : 0, (bPrefix) ? 0 : &fix);
+    }
+    return new SwFldPortion( fix );
+}
+
+/** Try to create a new portion with zero length, for an end of a hint
+    (where there is no CH_TXTATR). Because there may be multiple hint ends at a
+    given index, m_nHintEndIndex is used to keep track of the already created
+    portions. But the portions created here may actually be deleted again,
+    due to UnderFlow. In that case, m_nHintEndIndex must be decremented,
+    so the portion will be created again on the next line.
+ */
+SwExpandPortion *
+SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
+{
+    if (pHints)
+    {
+        const xub_StrLen nIdx(rInfo.GetIdx());
+        while (m_nHintEndIndex < pHints->GetEndCount())
+        {
+            SwTxtAttr & rHint( *pHints->GetEnd(m_nHintEndIndex) );
+            xub_StrLen const nEnd( *rHint.GetAnyEnd() );
+            if (nEnd > nIdx)
+            {
+                break;
+            }
+            ++m_nHintEndIndex;
+            if (nEnd == nIdx)
+            {
+                if (RES_TXTATR_METAFIELD == rHint.Which())
+                {
+                    SwFldPortion *const pPortion(
+                            lcl_NewMetaPortion(rHint, false));
+                    pPortion->SetNoLength(); // no CH_TXTATR at hint end!
+                    return pPortion;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 /*************************************************************************
  *                      SwTxtFormatter::NewExtraPortion()
  *************************************************************************/
-
 
 SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
 {
@@ -290,16 +344,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
             pRet = NewFtnPortion( rInf, pHint );
             break;
         }
-        case RES_TXTATR_SOFTHYPH :
-        {
-            pRet = new SwSoftHyphPortion;
-            break;
-        }
-        case RES_TXTATR_HARDBLANK :
-        {
-            pRet = new SwBlankPortion( ((SwTxtHardBlank*)pHint)->GetChar() );
-            break;
-        }
         case RES_TXTATR_FIELD :
         {
             pRet = NewFldPortion( rInf, pHint );
@@ -313,6 +357,11 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
         case RES_TXTATR_TOXMARK :
         {
             pRet = new SwIsoToxPortion;
+            break;
+        }
+        case RES_TXTATR_METAFIELD:
+        {
+            pRet = lcl_NewMetaPortion( *pHint, true );
             break;
         }
         default: ;

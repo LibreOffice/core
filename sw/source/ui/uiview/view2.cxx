@@ -584,7 +584,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? nsRedlineMode_t::REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
             }
         }
         break;
@@ -624,7 +624,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     nOn = 0;
                 }
                 USHORT nMode = pIDRA->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
             else
@@ -641,7 +641,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 if( ((const SfxBoolItem*)pItem)->GetValue() )
                     nMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
 
-                pWrtShell->SetRedlineMode( nMode );
+                pWrtShell->SetRedlineModeAndCheckInsMode( nMode );
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
@@ -1233,7 +1233,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (nPageCnt != nCnt)   // Basic benachrichtigen
                 {
                     nPageCnt = nCnt;
-                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, GetViewFrame()->GetObjectShell()), FALSE);
+                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), FALSE);
                 }
             }
             break;

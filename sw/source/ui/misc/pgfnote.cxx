@@ -48,6 +48,7 @@
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svtools/syslocale.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svtools/eitem.hxx>
@@ -183,7 +184,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     SetMetric( aMaxHeightEdit,  aMetric );
     SetMetric( aDistEdit,       aMetric );
     SetMetric( aLineDistEdit,   aMetric );
-    MeasurementSystem eSys = GetAppLocaleData().getMeasurementSystemEnum();
+    MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
     aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(nHeightValue),FUNIT_TWIP);;
 }

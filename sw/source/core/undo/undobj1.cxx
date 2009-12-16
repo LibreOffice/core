@@ -123,9 +123,9 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     {
         // es muss mindestens das Attribut im TextNode stehen
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
-        ASSERT( pCNd->IsTxtNode(), "Kein Textnode an dieser Position" );
-        ((SwTxtNode*)pCNd)->InsertItem( SwFmtFlyCnt(
-                                (SwFlyFrmFmt*)pFrmFmt ), nCntPos, nCntPos );
+        ASSERT( pCNd->IsTxtNode(), "no Text Node at position." );
+        SwFmtFlyCnt aFmt( pFrmFmt );
+        static_cast<SwTxtNode*>(pCNd)->InsertItem( aFmt, nCntPos, nCntPos );
     }
 
     pFrmFmt->MakeFrms();
@@ -199,14 +199,15 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nCntPos = pPos->nContent.GetIndex();
         SwTxtNode *pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
         ASSERT( pTxtNd, "Kein Textnode gefunden" );
-        SwTxtFlyCnt* pAttr = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr( nCntPos );
+        SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
+            pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
         // Attribut steht noch im TextNode, loeschen
         if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFrmFmt )
         {
             // Pointer auf 0, nicht loeschen
             ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
             SwIndex aIdx( pPos->nContent );
-            pTxtNd->Erase( aIdx, 1 );
+            pTxtNd->EraseText( aIdx, 1 );
         }
     }
     else if( FLY_AUTO_CNTNT == nRndId )
@@ -558,18 +559,17 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
-                SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
-#ifndef PRODUCT
+                SwTxtAttr * pHnt = pTxtNode->GetTxtAttrForCharAt(
+                        nIdx, RES_TXTATR_FLYCNT );
                 ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                             "Missing FlyInCnt-Hint." );
                 ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
                             "Wrong TxtFlyCnt-Hint." );
-#endif
-                ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
                 // Die Verbindung ist geloest, jetzt muss noch das Attribut
                 // vernichtet werden.
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
 
             // Anker umsetzen
@@ -580,8 +580,9 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
             if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
             {
                 SwPosition* pPos = (SwPosition*)aNewAnchor.GetCntntAnchor();
-                pPos->nNode.GetNode().GetTxtNode()->InsertItem(
-                        SwFmtFlyCnt( (SwFlyFrmFmt*)pFrmFmt ), nOldCntnt, 0 );
+                SwFmtFlyCnt aFmt( pFrmFmt );
+                pPos->nNode.GetNode().GetTxtNode()->InsertItem( aFmt,
+                    nOldCntnt, 0 );
             }
 
             pFrmFmt->MakeFrms();

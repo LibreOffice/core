@@ -249,7 +249,8 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = FALSE;
         }
 
-        if( !GetDoc()->Copy( *PCURCRSR, *pPos, false ))
+        const bool bSuccess( GetDoc()->CopyRange( *PCURCRSR, *pPos, false ) );
+        if (!bSuccess)
             continue;
 
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
@@ -319,7 +320,8 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
-                bRet = GetDoc()->Replace( *PCURCRSR, rNewStr, bRegExpRplc ) || bRet;
+                bRet = GetDoc()->ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )
+                    || bRet;
                 SaveTblBoxCntnt( PCURCRSR->GetPoint() );
             }
         FOREACHPAM_END()

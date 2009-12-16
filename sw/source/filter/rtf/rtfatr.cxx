@@ -102,7 +102,6 @@
 #include <fmtfld.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtcntnt.hxx>
@@ -230,6 +229,8 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
                 ( *pItem != rPool.GetDefaultItem( nWhich )
                     || ( rSet.GetParent() &&
                         *pItem != rSet.GetParent()->Get( nWhich ) )
+                    || ( rWrt.GetAttrSet() &&
+                        *pItem != rWrt.GetAttrSet()->Get( nWhich ) )
               ) )
                 ;
             else
@@ -1760,17 +1761,29 @@ static void OutSwTblBorder(SwRTFWriter& rWrt, const SvxBoxItem& rBox,
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
+#ifdef __MINGW32__
+    static const char* aBorderNames[] __attribute__((section(".data"))) =
+#else
     static const char* aBorderNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL, OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR
     };
     //Yes left and top are swapped with eachother for cell padding! Because
     //that's what the thunderingly annoying rtf export/import word xp does.
+#ifdef __MINGW32__
+    static const char* aCellPadNames[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT, OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR
     };
+#ifdef __MINGW32__
+    static const char* aCellPadUnits[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadUnits[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT, OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR
     };
@@ -1895,7 +1908,12 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         const SwWriteTableCells& rCells = pRow->GetCells();
 
         BOOL bFixRowHeight = false;
-        for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
+
+        USHORT nBoxes = rCells.Count();
+        if (nColCnt < nBoxes)
+            nBoxes = nColCnt;
+
+        for( nColCnt = 0, nBox = 0; nBox < rCells.Count() && nColCnt < nBoxes; ++nColCnt )
         {
             SwWriteTableCell* pCell = rCells[ nBox ];
             const bool bProcessCoveredCell = bNewTableModel && 0 == pCell->GetRowSpan();
@@ -1972,7 +1990,11 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
             {
                 BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
             };
+#ifdef __MINGW32__
+            static const char* aRowPadNames[] __attribute__((section(".data"))) =
+#else
             static const char* aRowPadNames[] =
+#endif
             {
                 OOO_STRING_SVTOOLS_RTF_TRPADDT, OOO_STRING_SVTOOLS_RTF_TRPADDL, OOO_STRING_SVTOOLS_RTF_TRPADDB, OOO_STRING_SVTOOLS_RTF_TRPADDR
             };
@@ -1994,7 +2016,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         for( nBox = 0; nBox < nColCnt; ++nBox )
         {
             SwWriteTableCell* pCell = pBoxArr[ nBox ];
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || (pCell == NULL) )
                 continue;
 
             const SwFrmFmt& rFmt = *pCell->GetBox()->GetFrmFmt();
@@ -2045,15 +2067,17 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
 
         // Inhalt der Boxen ausgeben
         rWrt.Strm() << SwRTFWriter::sNewLine << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
-        for( nBox = 0; nBox < nColCnt; ++nBox )
+        for( nBox = 0; nBox < nBoxes; ++nBox )
         {
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            SwWriteTableCell * pCell = pBoxArr[nBox];
+
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || pCell == NULL)
                 continue;
 
-            if( pBoxArr[ nBox ]->GetRowSpan() == pRowSpans[ nBox ] )
+            if( pCell->GetRowSpan() == pRowSpans[ nBox ] )
             {
                 // new Box
-                const SwStartNode* pSttNd = pBoxArr[ nBox ]->GetBox()->GetSttNd();
+                const SwStartNode* pSttNd = pCell->GetBox()->GetSttNd();
                 RTFSaveData aSaveData( rRTFWrt,
                         pSttNd->GetIndex()+1, pSttNd->EndOfSectionIndex() );
                 rRTFWrt.bOutTable = TRUE;
@@ -2765,8 +2789,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             */
             const String& rFldPar1 = pFld->GetPar1();
             USHORT nScript;
-            if( pBreakIt->xBreak.is() )
-                nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
+            if( pBreakIt->GetBreakIter().is() )
+                nScript = pBreakIt->GetBreakIter()->getScriptType( rFldPar1, 0);
             else
                 nScript = i18n::ScriptType::ASIAN;
 
@@ -3023,14 +3047,6 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
-{
-    RTFOutFuncs::Out_String(rWrt.Strm(),
-        String(((SwFmtHardBlank&)rHt).GetChar()), ((SwRTFWriter&)rWrt).eDefaultEncoding,
-        ((SwRTFWriter&)rWrt).bWriteHelpFmt);
-    return rWrt;
-}
-
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
@@ -3085,8 +3101,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         defaulting to asian.
         */
     USHORT nScript;
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nScript = i18n::ScriptType::ASIAN;
 
@@ -3128,8 +3144,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << "\\\\a" << cDirective;
     rWrt.Strm() << "(\\\\s\\\\up ";
 
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( pNd->GetTxt(),
                                                    *pRubyTxt->GetStart() );
     else
         nScript = i18n::ScriptType::ASIAN;
@@ -4250,7 +4266,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
 /* RES_TXTATR_FTN */                OutRTF_SwFtn,
 /* RES_TXTATR_SOFTHYPH */           0,  // old attr. - coded now by character
-/* RES_TXTATR_HARDBLANK*/           OutRTF_SwHardBlank,
+/* RES_TXTATR_HARDBLANK*/           0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

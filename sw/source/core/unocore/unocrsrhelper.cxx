@@ -343,20 +343,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    const SwFmtFld& rFld = pTxtAttr->GetFld();
-                    SwClientIter aIter(*rFld.GetFld()->GetTyp());
-                    SwXTextField* pFld = 0;
-                    SwXTextField* pTemp = (SwXTextField*)aIter.First(TYPE(SwXTextField));
-                    while(pTemp && !pFld)
-                    {
-                        if(pTemp->GetFldFmt() == &rFld)
-                            pFld = pTemp;
-                        pTemp = (SwXTextField*)aIter.Next();
-                    }
-                    if(!pFld)
-                        pFld = new SwXTextField( rFld, rPam.GetDoc());
-                    uno::Reference< XTextField >  xRet = pFld;
-                    pAny->setValue(&xRet, ::getCppuType((uno::Reference<XTextField>*)0));
+                    SwXTextField* pField = CreateSwXTextField(*rPam.GetDoc(),
+                           pTxtAttr->GetFld());
+                    *pAny <<= uno::Reference< XTextField >( pField );
                 }
             }
             else
@@ -585,9 +574,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
         if(pSwNum)
         {
+            SwDoc* pDoc = rPam.GetDoc();
             if(pSwNum->GetNumRule())
             {
-                SwDoc* pDoc = rPam.GetDoc();
                 SwNumRule aRule(*pSwNum->GetNumRule());
                 const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
                 const String* pBulletFontNames = pSwNum->GetBulletFontNames();
@@ -680,7 +669,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             }
             else if(pSwNum->GetCreatedNumRuleName().Len())
             {
-                SwDoc* pDoc = rPam.GetDoc();
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
@@ -690,6 +678,17 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 pDoc->SetNumRule( rPam, *pRule, false );
                 // <--
             }
+            // --> OD 2009-08-18 #i103817#
+            // outline numbering
+            else
+            {
+                UnoActionContext aAction(pDoc);
+                SwNumRule* pRule = pDoc->GetOutlineNumRule();
+                if(!pRule)
+                    throw RuntimeException();
+                pDoc->SetNumRule( rPam, *pRule, false );
+            }
+            // <--
         }
     }
     else if(rValue.getValueType() == ::getVoidCppuType())
@@ -933,25 +932,37 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 // paragraph breaks at those positions by calling SplitNode
 sal_Bool DocInsertStringSplitCR(
         SwDoc &rDoc,
-        const SwPaM &rNewCursor, const String &rText )
+        const SwPaM &rNewCursor, const String &rText,
+        const bool bForceExpandHints )
 {
     sal_Bool bOK = sal_True;
 
+        const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+            (bForceExpandHints)
+            ? static_cast<IDocumentContentOperations::InsertFlags>(
+                    IDocumentContentOperations::INS_FORCEHINTEXPAND |
+                    IDocumentContentOperations::INS_EMPTYEXPAND)
+            : IDocumentContentOperations::INS_EMPTYEXPAND;
+
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
-    xub_StrLen nMaxLength = STRING_LEN;
-    SwTxtNode* pTxtNd = rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
-    if( pTxtNd )
-        nMaxLength = STRING_LEN - pTxtNd->GetTxt().Len();
+    SwTxtNode* const pTxtNd =
+        rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
+    const xub_StrLen nMaxLength = ( pTxtNd )
+        ? STRING_LEN - pTxtNd->GetTxt().Len()
+        : STRING_LEN;
     xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
     if( ( nIdx == STRING_NOTFOUND && nMaxLength < rText.Len() ) ||
         ( nIdx != STRING_NOTFOUND && nMaxLength < nIdx ) )
+    {
         nIdx = nMaxLength;
+    }
     while (nIdx != STRING_NOTFOUND )
     {
         DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
-        if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt, true ))
+        if (aTxt.getLength() &&
+            !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
             DBG_ERROR( "Doc->Insert(Str) failed." );
             bOK = sal_False;
@@ -965,7 +976,8 @@ sal_Bool DocInsertStringSplitCR(
         nIdx = rText.Search( '\r', nStartIdx );
     }
     aTxt = rText.Copy( nStartIdx );
-    if (aTxt.getLength() && !rDoc.Insert( rNewCursor, aTxt, true ))
+    if (aTxt.getLength() &&
+        !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
         DBG_ERROR( "Doc->Insert(Str) failed." );
         bOK = sal_False;

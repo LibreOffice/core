@@ -43,7 +43,6 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -51,7 +50,6 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
     ]
 
     SID_PASTE   // api:
@@ -61,7 +59,7 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_PASTESPECIAL  // api:
+    SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

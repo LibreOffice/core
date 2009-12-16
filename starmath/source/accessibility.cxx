@@ -1444,6 +1444,18 @@ USHORT SmTextForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return pEditEngine ? pEditEngine->GetLineLen(nPara, nLine) : 0;
 }
 
+void SmTextForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+{
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
+}
+
+USHORT SmTextForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    return pEditEngine ? pEditEngine->GetLineNumberAtIndex(nPara, nIndex) : 0;
+}
+
 sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
 {
     sal_Bool bRes = sal_False;

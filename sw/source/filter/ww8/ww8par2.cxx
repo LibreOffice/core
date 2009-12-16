@@ -381,7 +381,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         sChar.Append(pTxt->GetTxt().GetChar(--nPos));
         pPaM->SetMark();
         pPaM->GetMark()->nContent--;
-        rDoc.Delete( *pPaM );
+        rDoc.DeleteRange( *pPaM );
         pPaM->DeleteMark();
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
         pFN = pTxt->InsertItem(aFtn, nPos, nPos);
@@ -435,7 +435,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pReffingStck->Delete(*pPaM);
-                rDoc.Delete( *pPaM );
+                rDoc.DeleteRange( *pPaM );
                 pPaM->DeleteMark();
             }
         }
@@ -2382,7 +2382,8 @@ void WW8TabDesc::CalcDefaults()
         }
     } */
 
-    if (nMinLeft && ((!bIsBiDi && text::HoriOrientation::LEFT == eOri) || (bIsBiDi && text::HoriOrientation::RIGHT == eOri)))
+    if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) ||
+        (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) // Word sets the first nCenter value to -108 when no indent is used
         eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
 
     nDefaultSwCols = nMinCols;  // da Zellen einfuegen billiger ist als Mergen
@@ -2553,7 +2554,12 @@ void WW8TabDesc::CreateSwTable()
             if (!bIsBiDi)
                 nLeft = GetMinLeft();
             else
-                nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+            {
+                if (nPreferredWidth)
+                    nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+                else
+                    nLeft = -GetMinLeft();
+            }
 
             aL.SetLeft(nLeft);
 
@@ -3573,6 +3579,45 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     return bSuccess;
 }
 
+bool lcl_PamContainsFly(SwPaM & rPam)
+{
+    bool bResult = false;
+    SwNodeRange aRg( rPam.Start()->nNode, rPam.End()->nNode );
+    SwDoc * pDoc = rPam.GetDoc();
+
+    sal_uInt16 n = 0;
+    SwSpzFrmFmts * pSpzFmts = pDoc->GetSpzFrmFmts();
+    sal_uInt16 nCount = pSpzFmts->Count();
+    while (!bResult && n < nCount)
+    {
+        SwFrmFmt* pFly = (*pSpzFmts)[n];
+        const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
+
+        switch (pAnchor->GetAnchorId())
+        {
+            case FLY_AT_CNTNT:
+            case FLY_AUTO_CNTNT:
+            {
+                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+
+                if (pAPos != NULL &&
+                    aRg.aStart <= pAPos->nNode &&
+                    pAPos->nNode <= aRg.aEnd)
+                {
+                    bResult = true;
+                }
+            }
+                break;
+            default:
+                break;
+        }
+
+        ++n;
+    }
+
+    return bResult;
+}
+
 void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
@@ -3583,12 +3628,12 @@ void SwWW8ImplReader::TabCellEnd()
             && pWFlyPara == NULL
             && mpTableEndPaM.get() != NULL
             && (! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
-            && SwPaM::LessThan(*mpTableEndPaM, *pPaM))
+            && SwPaM::LessThan(*mpTableEndPaM, *pPaM)
+            && mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode()
+            && !lcl_PamContainsFly(*mpTableEndPaM)
+            )
         {
-            if (mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode())
-            {
-                rDoc.DelFullPara(*mpTableEndPaM);
-            }
+            rDoc.DelFullPara(*mpTableEndPaM);
         }
     }
 
@@ -4678,6 +4723,13 @@ CharSet SwWW8StyInf::GetCharSet() const
     if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eLTRFontSrcCharSet;
+}
+
+CharSet SwWW8StyInf::GetCJKCharSet() const
+{
+    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return eRTLFontSrcCharSet;
+    return eCJKFontSrcCharSet;
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
