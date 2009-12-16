@@ -1860,10 +1860,14 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
 
 void XclImpChSeries::FillAllSourceLinks(vector<ScSharedTokenRef>& rTokens) const
 {
-    mxValueLink->FillSourceLink(rTokens);
-    mxCategLink->FillSourceLink(rTokens);
-    mxTitleLink->FillSourceLink(rTokens);
-    mxBubbleLink->FillSourceLink(rTokens);
+    if (mxValueLink.is())
+        mxValueLink->FillSourceLink(rTokens);
+    if (mxCategLink.is())
+        mxCategLink->FillSourceLink(rTokens);
+    if (mxTitleLink.is())
+        mxTitleLink->FillSourceLink(rTokens);
+    if (mxBubbleLink.is())
+        mxBubbleLink->FillSourceLink(rTokens);
 }
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
