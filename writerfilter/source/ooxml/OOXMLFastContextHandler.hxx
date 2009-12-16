@@ -234,6 +234,11 @@ public:
     void clearTableProps();
     void clearProps();
 
+    virtual void setDefaultBooleanValue();
+    virtual void setDefaultIntegerValue();
+    virtual void setDefaultHexValue();
+    virtual void setDefaultStringValue();
+
     const ::rtl::OUString & getText() const;
 
     void sendPropertyToParent();
@@ -419,6 +424,11 @@ public:
     throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual string getType() const { return "Value"; }
+
+    virtual void setDefaultBooleanValue();
+    virtual void setDefaultIntegerValue();
+    virtual void setDefaultHexValue();
+    virtual void setDefaultStringValue();
 
 protected:
     OOXMLValue::Pointer_t mpValue;

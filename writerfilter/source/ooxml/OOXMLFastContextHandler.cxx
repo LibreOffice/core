@@ -1095,6 +1095,22 @@ void OOXMLFastContextHandler::clearProps()
     setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl()));
 }
 
+void OOXMLFastContextHandler::setDefaultBooleanValue()
+{
+}
+
+void OOXMLFastContextHandler::setDefaultIntegerValue()
+{
+}
+
+void OOXMLFastContextHandler::setDefaultHexValue()
+{
+}
+
+void OOXMLFastContextHandler::setDefaultStringValue()
+{
+}
+
 const ::rtl::OUString & OOXMLFastContextHandler::getText() const
 {
     return aEmptyStr;
@@ -1653,6 +1669,58 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     sendPropertyToParent();
 
     endAction(Element);
+}
+
+void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("setDefaultBooleanValue");
+#endif
+
+    if (mpValue.get() == NULL)
+    {
+        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
+        setValue(pValue);
+    }
+}
+
+void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("setDefaultIntegerValue");
+#endif
+
+    if (mpValue.get() == NULL)
+    {
+        OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(0));
+        setValue(pValue);
+    }
+}
+
+void OOXMLFastContextHandlerValue::setDefaultHexValue()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("setDefaultHexValue");
+#endif
+
+    if (mpValue.get() == NULL)
+    {
+        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(0));
+        setValue(pValue);
+    }
+}
+
+void OOXMLFastContextHandlerValue::setDefaultStringValue()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->element("setDefaultStringValue");
+#endif
+
+    if (mpValue.get() == NULL)
+    {
+        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(::rtl::OUString()));
+        setValue(pValue);
+    }
 }
 
 /*
