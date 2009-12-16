@@ -2422,6 +2422,12 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                     {
                         xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
                         xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
+                        if ( bDoEscapeProcessing != m_bUseEscapeProcessing )
+                        {
+                            sal_Bool bOldValue = m_bUseEscapeProcessing;
+                            m_bUseEscapeProcessing = bDoEscapeProcessing;
+                            fireProperty(PROPERTY_ID_ESCAPE_PROCESSING,bOldValue,bDoEscapeProcessing);
+                        }
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;

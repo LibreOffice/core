@@ -41,15 +41,6 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 
-#include <comphelper/documentconstants.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/numberedcollection.hxx>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/property.hxx>
-#include <svtools/saveopt.hxx>
-
-#include <framework/titlehelper.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XExporter.hpp>
@@ -80,6 +71,13 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/property.hxx>
+
+#include <connectivity/dbtools.hxx>
+
+#include <svtools/saveopt.hxx>
+
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
 #include <tools/debug.hxx>
@@ -1151,8 +1149,25 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     Reference< XNameAccess > xContainer = rContainerRef;
     if ( !xContainer.is() )
     {
-        TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
-        rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, bFormsContainer );
+        Any aValue;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "FormSupplier" : "ReportSupplier",aValue) )
+        {
+            ::rtl::OUString sSupportService;
+            aValue >>= sSupportService;
+            if ( sSupportService.getLength() )
+            {
+                Sequence<Any> aArgs(1);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+                rContainerRef = xContainer;
+            }
+        }
+        if ( !xContainer.is() )
+        {
+            TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
+            rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, bFormsContainer );
+        }
         impl_reparent_nothrow( xContainer );
     }
     return xContainer;

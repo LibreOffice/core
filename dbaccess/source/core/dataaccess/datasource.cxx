@@ -42,6 +42,7 @@
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
 
+
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -70,6 +71,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -1357,8 +1359,24 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     Reference< XNameAccess > xContainer = m_pImpl->m_xCommandDefinitions;
     if ( !xContainer.is() )
     {
-        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
-        xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
+        Any aValue;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitionSupplier",aValue) )
+        {
+            ::rtl::OUString sSupportService;
+            aValue >>= sSupportService;
+            if ( sSupportService.getLength() )
+            {
+                Sequence<Any> aArgs(1);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+            }
+        }
+        if ( !xContainer.is() )
+        {
+            TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
+            xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
+        }
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
     return xContainer;
