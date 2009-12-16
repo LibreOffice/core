@@ -1,9 +1,9 @@
 cu	cui	: svx NULL
-cu	cui										usr1	-	all	cu_mkout NULL
-cu	cui\inc									nmake	-	all	cu_inc NULL
-cu	cui\source\options						nmake	-	all	cu_options cu_inc NULL
-cu	cui\source\customize					nmake	-	all	cu_customize cu_inc NULL
-cu	cui\source\dialogs						nmake	-	all	cu_dialogs cu_inc NULL
-cu	cui\source\tabpages						nmake	-	all	cu_tabpages cu_inc NULL
-cu	cui\source\factory						nmake	-	all	cu_factory cu_inc NULL
-cu 	cui\util								nmake	-	all cu_util cu_factory cu_tabpages cu_dialogs cu_customize cu_options NULL
+cu	cui										usr1	-	all	cui_mkout NULL
+cu	cui\inc									nmake	-	all	cui_inc NULL
+cu	cui\source\options						nmake	-	all	cui_options cui_inc NULL
+cu	cui\source\customize					nmake	-	all	cui_customize cui_inc NULL
+cu	cui\source\dialogs						nmake	-	all	cui_dialogs cui_inc NULL
+cu	cui\source\tabpages						nmake	-	all	cui_tabpages cui_inc NULL
+cu	cui\source\factory						nmake	-	all	cui_factory cui_inc NULL
+cu 	cui\util								nmake	-	all cui_util cui_factory cui_tabpages cui_dialogs cui_customize cui_options NULL
