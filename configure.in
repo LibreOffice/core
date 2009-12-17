@@ -3773,7 +3773,7 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
 	test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
-    PKG_CHECK_MODULES_MACHACK(LIBXML, xml2-config, libxml-2.0 >= 2.0)
+    PKG_CHECK_MODULES_MACHACK(LIBXML, xml2-config, libxml-2.0 >= 2.7.6)
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
 else
     AC_MSG_RESULT([internal])
