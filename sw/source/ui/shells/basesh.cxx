@@ -517,6 +517,9 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
+    // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
+    SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
+
     switch( nId )
     {
         case SID_UNDO:
@@ -538,7 +541,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             DBG_ERROR("falscher Dispatcher");
     }
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
 }
 
 /*--------------------------------------------------------------------
