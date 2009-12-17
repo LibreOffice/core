@@ -38,7 +38,7 @@
     xmlns:xalan="http://xml.apache.org/xalan"
     exclude-result-prefixes = "xalan"
     xml:indent="true">
-  <xsl:output method="xml" />
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="no"/>
 
 
   <xsl:key name="resources"
