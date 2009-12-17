@@ -21022,7 +21022,10 @@
     </resource>
     <resource name="ST_DateTime" resource="String" generated="yes"/>
     <resource name="ST_MacroName" resource="String" generated="yes"/>
-    <resource name="CT_MacroName" resource="StringValue" generated="yes"/>
+    <resource name="CT_MacroName" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MacroName_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_EighthPointMeasure" resource="Integer"/>
     <resource name="ST_PointMeasure" resource="Integer"/>
     <resource name="ST_String" resource="String"/>
@@ -21378,7 +21381,10 @@
       <value name="superscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_superscript">superscript</value>
       <value name="subscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_subscript">subscript</value>
     </resource>
-    <resource name="CT_VerticalAlignRun" resource="StringValue" generated="yes"/>
+    <resource name="CT_VerticalAlignRun" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_VerticalAlignRun_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_FitText" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_FitText_val"/>
       <attribute name="id" tokenid="ooxml:CT_FitText_id"/>
@@ -21624,7 +21630,10 @@
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDocType" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMergeDocType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MailMergeDocType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_MailMergeDataType" resource="List" generated="yes">
       <value name="textFile" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_textFile">textFile</value>
       <value name="database" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_database">database</value>
@@ -21633,19 +21642,28 @@
       <value name="odbc" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_odbc">odbc</value>
       <value name="native" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_native">native</value>
     </resource>
-    <resource name="CT_MailMergeDataType" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMergeDataType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MailMergeDataType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_MailMergeDest" resource="List" generated="yes">
       <value name="newDocument" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_newDocument">newDocument</value>
       <value name="printer" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_printer">printer</value>
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDest" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMergeDest" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MailMergeDest_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_MailMergeOdsoFMDFieldType" resource="List" generated="yes">
       <value name="null" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_null">null</value>
       <value name="dbColumn" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_dbColumn">dbColumn</value>
     </resource>
-    <resource name="CT_MailMergeOdsoFMDFieldType" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MailMergeOdsoFMDFieldType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_TrackChangesView" resource="Properties">
       <attribute name="markup" tokenid="ooxml:CT_TrackChangesView_markup"/>
       <attribute name="comments" tokenid="ooxml:CT_TrackChangesView_comments"/>
@@ -21782,7 +21800,10 @@
       <value name="firstLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_firstLineOnly">firstLineOnly</value>
       <value name="lastLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_lastLineOnly">lastLineOnly</value>
     </resource>
-    <resource name="CT_TextboxTightWrap" resource="StringValue" generated="yes"/>
+    <resource name="CT_TextboxTightWrap" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_TextboxTightWrap_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_PPrBase" resource="Properties">
       <kind name="paragraph"/>
       <element name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
@@ -21887,8 +21908,14 @@
       <value name="currentDate" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_currentDate">currentDate</value>
       <value name="calculated" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_calculated">calculated</value>
     </resource>
-    <resource name="CT_FFTextType" resource="StringValue" generated="yes"/>
-    <resource name="CT_FFName" resource="StringValue" generated="yes"/>
+    <resource name="CT_FFTextType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FFTextType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
+    <resource name="CT_FFName" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FFName_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_FldChar" resource="Stream">
       <element name="fldData" tokenid="ooxml:CT_FldChar_fldData"/>
       <element name="ffData" tokenid="ooxml:CT_FldChar_ffData"/>
@@ -22362,20 +22389,29 @@
       <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_right">right</value>
       <value name="rightVertical" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_rightVertical">rightVertical</value>
     </resource>
-    <resource name="CT_RubyAlign" resource="StringValue" generated="yes"/>
+    <resource name="CT_RubyAlign" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_RubyAlign_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_Lock" resource="List" generated="yes">
       <value name="sdtLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_sdtLocked">sdtLocked</value>
       <value name="contentLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_contentLocked">contentLocked</value>
       <value name="unlocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_unlocked">unlocked</value>
       <value name="sdtContentLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_sdtContentLocked">sdtContentLocked</value>
     </resource>
-    <resource name="CT_Lock" resource="StringValue" generated="yes"/>
+    <resource name="CT_Lock" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Lock_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_SdtDateMappingType" resource="List" generated="yes">
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_text">text</value>
       <value name="date" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_date">date</value>
       <value name="dateTime" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_dateTime">dateTime</value>
     </resource>
-    <resource name="CT_SdtDateMappingType" resource="StringValue" generated="yes"/>
+    <resource name="CT_SdtDateMappingType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_SdtDateMappingType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_CalendarType" resource="List" generated="yes">
       <value name="gregorian" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorian">gregorian</value>
       <value name="hijri" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_hijri">hijri</value>
@@ -22388,7 +22424,10 @@
       <value name="gregorianXlitEnglish" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitEnglish">gregorianXlitEnglish</value>
       <value name="gregorianXlitFrench" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitFrench">gregorianXlitFrench</value>
     </resource>
-    <resource name="CT_CalendarType" resource="StringValue" generated="yes"/>
+    <resource name="CT_CalendarType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_SdtContentRun" resource="Properties"/>
     <resource name="CT_Attr" resource="Properties">
       <attribute name="uri" tokenid="ooxml:CT_Attr_uri"/>
@@ -22654,7 +22693,10 @@
       <value name="legacy" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_legacy">legacy</value>
       <value name="master" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_master">master</value>
     </resource>
-    <resource name="CT_MailMergeSourceType" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMergeSourceType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_MailMergeSourceType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_MailMerge" resource="Properties">
       <element name="mainDocumentType" tokenid="ooxml:CT_MailMerge_mainDocumentType"/>
       <element name="linkToQuery" tokenid="ooxml:CT_MailMerge_linkToQuery"/>
@@ -22686,7 +22728,10 @@
       <value name="1800x1440" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1800x1440">1800x1440</value>
       <value name="1920x1200" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1920x1200">1920x1200</value>
     </resource>
-    <resource name="CT_TargetScreenSz" resource="StringValue" generated="yes"/>
+    <resource name="CT_TargetScreenSz" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_TargetScreenSz_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_Compat" resource="Properties">
       <element name="useSingleBorderforContiguousCells" tokenid="ooxml:CT_Compat_useSingleBorderforContiguousCells"/>
       <element name="wpJustification" tokenid="ooxml:CT_Compat_wpJustification"/>
@@ -22767,7 +22812,10 @@
       <value name="compressPunctuation" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuation">compressPunctuation</value>
       <value name="compressPunctuationAndJapaneseKana" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuationAndJapaneseKana">compressPunctuationAndJapaneseKana</value>
     </resource>
-    <resource name="CT_CharacterSpacing" resource="StringValue" generated="yes"/>
+    <resource name="CT_CharacterSpacing" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_CharacterSpacing_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_SaveThroughXslt" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_SaveThroughXslt_r_id"/>
       <attribute name="solutionID" tokenid="ooxml:CT_SaveThroughXslt_solutionID"/>
@@ -22909,19 +22957,28 @@
       <value name="off" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_off">off</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_auto">auto</value>
     </resource>
-    <resource name="CT_FrameScrollbar" resource="StringValue" generated="yes"/>
+    <resource name="CT_FrameScrollbar" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FrameScrollbar_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_FrameLayout" resource="List" generated="yes">
       <value name="rows" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_rows">rows</value>
       <value name="cols" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_cols">cols</value>
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_none">none</value>
     </resource>
-    <resource name="CT_FrameLayout" resource="StringValue" generated="yes"/>
+    <resource name="CT_FrameLayout" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FrameLayout_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_LevelSuffix" resource="List" generated="yes">
       <value name="tab" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_tab">tab</value>
       <value name="space" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_space">space</value>
       <value name="nothing" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_nothing">nothing</value>
     </resource>
-    <resource name="CT_LevelSuffix" resource="StringValue" generated="yes"/>
+    <resource name="CT_LevelSuffix" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_LevelSuffix_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_LevelText" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_LevelText_val"/>
       <attribute name="null" tokenid="ooxml:CT_LevelText_null"/>
@@ -23172,7 +23229,10 @@
       <value name="p" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_p">p</value>
       <value name="pg" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_pg">pg</value>
     </resource>
-    <resource name="CT_DocPartBehavior" resource="StringValue" generated="yes"/>
+    <resource name="CT_DocPartBehavior" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_DocPartBehavior_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_DocPartType" resource="List" generated="yes">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_none">none</value>
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_normal">normal</value>
@@ -23182,7 +23242,10 @@
       <value name="formFld" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_formFld">formFld</value>
       <value name="bbPlcHdr" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_bbPlcHdr">bbPlcHdr</value>
     </resource>
-    <resource name="CT_DocPartType" resource="StringValue" generated="yes"/>
+    <resource name="CT_DocPartType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_DocPartType_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_DocPartGallery" resource="List" generated="yes">
       <value name="placeholder" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_placeholder">placeholder</value>
       <value name="any" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_any">any</value>
@@ -23223,7 +23286,10 @@
       <value name="custom4" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom4">custom4</value>
       <value name="custom5" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom5">custom5</value>
     </resource>
-    <resource name="CT_DocPartGallery" resource="StringValue" generated="yes"/>
+    <resource name="CT_DocPartGallery" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_DocPartGallery_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_DocPartName" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocPartName_val"/>
       <attribute name="decorated" tokenid="ooxml:CT_DocPartName_decorated"/>
