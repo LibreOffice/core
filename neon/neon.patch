@@ -1,5 +1,5 @@
---- misc/neon-0.28.2/src/config.h	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/config.h	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/config.h	2009-09-29 10:28:26.750000000 +0200
++++ misc/build/neon-0.28.2/src/config.h	2009-09-29 10:22:51.890625000 +0200
 @@ -1 +1,484 @@
 -dummy
 +
@@ -486,15 +486,16 @@
 +#else
 +#define HAVE_NTLM 1
 +#endif
---- misc/neon-0.28.2/src/makefile.mk	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/makefile.mk	2009-08-11 09:48:54.000000000 +0200
-@@ -1 +1,59 @@
+--- misc/neon-0.28.2/src/makefile.mk	2009-09-29 10:28:26.687500000 +0200
++++ misc/build/neon-0.28.2/src/makefile.mk	2009-09-17 13:04:18.031250000 +0200
+@@ -1 +1,91 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
 +PRJNAME=neon
 +TARGET=neon
 +LIBTARGET=NO
++USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
 +# --- Settings -----------------------------------------------------
@@ -506,9 +507,15 @@
 +CDEFS+=-DHAVE_CONFIG_H
 +
 +.IF "$(SYSTEM_LIBXML)" == "YES"
-+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
++CFLAGS+= -DSYSTEM_LIBXML $(LIBXML_CFLAGS)
++.ELSE
++LIBXMLINCDIR=external$/libxml
++CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 +.ENDIF
 +
++.IF "$(SYSTEM_OPENSSL)" == "YES"
++CFLAGS+= $(OPENSSL_CFLAGS)
++.ENDIF
 +
 +SLOFILES= \
 +        $(SLO)$/ne_207.obj \
@@ -542,15 +549,40 @@
 +#       $(SLO)$/ne_gnutls.obj \
 +#       $(SLO)$/ne_stubssl.obj 
 +
-+LIB1TARGET=$(SLB)$/$(TARGET).lib
-+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-+LIB1OBJFILES=$(SLOFILES)
++SHL1OBJS=$(SLOFILES)
++SHL1TARGET=$(TARGET)
++SHL1VERSIONMAP=exports.map
++SHL1IMPLIB=i$(TARGET)
++
++SHL1STDLIBS+= $(LIBXML2LIB)
++
++.IF "$(GUI)"=="WNT"
++	SHL1STDLIBS+= $(WSOCK32LIB)
++	.IF "$(WINDOWS_VISTA_PSDK)" != ""
++		SHL1STDLIBS+= $(WS2_32LIB)
++	.ENDIF
++	SHL1STDLIBS+= $(OPENSSLLIB)
++.ELSE # WNT
++	.IF "$(OS)"=="SOLARIS"
++		SHL1STDLIBS+= -lnsl -lsocket -ldl
++	.ENDIF # SOLARIS
++	.IF "$(OS)"=="OS2"
++		SHL1STDLIBS+= pthread.lib libz.lib
++	.ENDIF # OS2
++	.IF "$(SYSTEM_OPENSSL)"=="YES"
++		SHL1STDLIBS+= $(OPENSSLLIB)
++	.ELSE
++		SHL1STDLIBS+= $(OPENSSLLIBST)
++	.ENDIF
++.ENDIF # WNT
++
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +
 +# --- Targets ------------------------------------------------------
-+
++DEF1NAME=$(SHL1TARGET) 
 +.INCLUDE :  target.mk
 --- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.c	2009-08-24 15:41:32.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_auth.c	2009-09-29 10:22:51.906250000 +0200
 @@ -77,6 +77,10 @@
  #include "ne_sspi.h"
  #endif
@@ -714,7 +746,7 @@
      return ret;
  }
 --- misc/neon-0.28.2/src/ne_auth.h	2007-12-05 17:39:58.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.h	2009-08-24 15:16:22.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_auth.h	2009-09-29 10:22:51.921875000 +0200
 @@ -47,8 +47,8 @@
   * Hint: if you just wish to attempt authentication just once (even if
   * the user gets the username/password wrong), have the callback
@@ -727,7 +759,7 @@
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
 --- misc/neon-0.28.2/src/ne_defs.h	2006-10-24 21:40:09.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_defs.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_defs.h	2009-09-29 10:22:51.921875000 +0200
 @@ -41,7 +41,7 @@
  #endif
  
@@ -738,7 +770,7 @@
  #endif
  
 --- misc/neon-0.28.2/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_locks.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_locks.h	2009-09-29 10:22:51.921875000 +0200
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -750,8 +782,8 @@
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
  
---- misc/neon-0.28.2/src/ne_ntlm.c	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/ne_ntlm.c	2009-09-29 10:28:26.875000000 +0200
++++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-09-29 10:22:51.937500000 +0200
 @@ -1 +1,700 @@
 -dummy
 +/* 
@@ -1454,8 +1486,8 @@
 +
 +#endif /* HAVE_OPENSSL */
 +#endif /* HAVE_NTLM */
---- misc/neon-0.28.2/src/ne_ntlm.h	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/ne_ntlm.h	2009-09-29 10:28:26.812500000 +0200
++++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-09-29 10:22:51.937500000 +0200
 @@ -1 +1,44 @@
 -dummy
 +/* 
@@ -1503,7 +1535,7 @@
 +
 +#endif /* NE_NTLM_H */
 --- misc/neon-0.28.2/src/ne_socket.c	2008-02-28 14:19:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_socket.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_socket.c	2009-09-29 10:22:51.953125000 +0200
 @@ -60,6 +60,7 @@
  #include <stddef.h>
  #ifdef USE_GETADDRINFO
@@ -1513,7 +1545,7 @@
  #endif
  
 --- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-09-29 10:22:51.953125000 +0200
 @@ -202,9 +202,48 @@
          return -1;
      }
@@ -1604,7 +1636,7 @@
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
 --- misc/neon-0.28.2/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_sspi.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_sspi.h	2009-09-29 10:22:51.968750000 +0200
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -1615,7 +1647,7 @@
  #endif /* HAVE_SSPI */
  
 --- misc/neon-0.28.2/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_uri.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_uri.c	2009-09-29 10:22:51.968750000 +0200
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -1662,7 +1694,7 @@
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
 --- misc/neon-0.28.2/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_utils.c	2009-08-30 18:55:04.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_utils.c	2009-09-29 10:22:51.984375000 +0200
 @@ -118,6 +118,9 @@
  #ifdef HAVE_GNUTLS
      ", GNU TLS " LIBGNUTLS_VERSION
@@ -1693,7 +1725,7 @@
  #endif /* NE_HAVE_* */
      default:
 --- misc/neon-0.28.2/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_utils.h	2009-08-24 15:47:03.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_utils.h	2009-09-29 10:22:51.984375000 +0200
 @@ -54,6 +54,7 @@
  #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
  #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
