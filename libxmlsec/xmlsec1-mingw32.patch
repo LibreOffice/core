@@ -1,57 +1,6 @@
---- misc/xmlsec1-1.2.12/aclocal.m4	2009-06-25 22:53:24.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/aclocal.m4	2009-09-29 15:49:39.550158665 +0200
-@@ -6219,6 +6219,10 @@
- AC_SUBST(LIBADD_DL)
- AC_LANG_PUSH([C])
- 
-+case $host_os in
-+mingw*)
-+;;
-+*)
- AC_CHECK_FUNC([shl_load],
-       [AC_DEFINE([HAVE_SHL_LOAD], [1],
- 		 [Define if you have the shl_load function.])],
-@@ -6254,6 +6258,8 @@
-     ])
-   ])
- ])
-+;;
-+esac
- 
- if test x"$libltdl_cv_func_dlopen" = xyes || test x"$libltdl_cv_lib_dl_dlopen" = xyes
- then
---- misc/xmlsec1-1.2.12/configure	2009-09-29 15:55:33.269924586 +0200
-+++ misc/build/xmlsec1-1.2.12/configure	2009-09-29 15:55:08.838176411 +0200
-@@ -21883,6 +21883,10 @@
- ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- 
-+case $host_os in
-+mingw*)
-+;;
-+*)
- echo "$as_me:$LINENO: checking for shl_load" >&5
- echo $ECHO_N "checking for shl_load... $ECHO_C" >&6
- if test "${ac_cv_func_shl_load+set}" = set; then
-@@ -22434,6 +22438,8 @@
- 
- fi
- 
-+;;
-+esac
- 
- if test x"$libltdl_cv_func_dlopen" = xyes || test x"$libltdl_cv_lib_dl_dlopen" = xyes
- then
-@@ -22614,7 +22620,7 @@
-   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
-   lt_status=$lt_dlunknown
-   cat > conftest.$ac_ext <<EOF
--#line 22617 "configure"
-+#line 22623 "configure"
- #include "confdefs.h"
- 
- #if HAVE_DLFCN_H
-@@ -26178,7 +26184,9 @@
+--- misc/xmlsec1-1.2.14/configure	2009-09-29 15:55:33.269924586 +0200
++++ misc/build/xmlsec1-1.2.14/configure	2009-09-29 15:55:08.838176411 +0200
+@@ -13184,7 +13184,9 @@
  	done
  
  	for dir in $ac_nss_lib_dir ; do
@@ -62,7 +11,7 @@
  		        	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
      		else
-@@ -26191,6 +26199,25 @@
+@@ -13197,6 +13199,25 @@
  		NSPR_LIBS_FOUND="yes"
  		break
  	    fi
@@ -88,7 +37,7 @@
  	done
      fi
  
-@@ -26264,6 +26291,24 @@
+@@ -13266,6 +13287,24 @@
          done
  
          for dir in $ac_nss_lib_dir ; do
@@ -113,7 +62,7 @@
              if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
          	    		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
-@@ -26277,6 +26322,8 @@
+@@ -13279,6 +13318,8 @@
      		NSS_LIBS_FOUND="yes"
      		break
  	    fi
@@ -122,16 +71,16 @@
  	done
      fi
  
-@@ -26769,7 +26816,7 @@
- echo "${ECHO_T}$MSCRYPTO_ENABLE" >&6
+@@ -13684,7 +13725,7 @@
+ $as_echo "$MSCRYPTO_ENABLE" >&6; }
  else
      LIBS_SAVE="$LIBS"
 -    LIBS="$LIBS -lcrypt32"
 +    LIBS="$LIBS ${PSDK_HOME}/lib/crypt32.lib"
-     echo "$as_me:$LINENO: checking for mscrypto libraries" >&5
- echo $ECHO_N "checking for mscrypto libraries... $ECHO_C" >&6
-     cat >conftest.$ac_ext <<_ACEOF
-@@ -26819,13 +26866,7 @@
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mscrypto libraries" >&5
+ $as_echo_n "checking for mscrypto libraries... " >&6; }
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -13711,13 +13752,7 @@
      XMLSEC_NO_MSCRYPTO="0"
  
      MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
@@ -146,9 +95,9 @@
          if test "z$XMLSEC_CRYPTO" = "z" ; then
  	XMLSEC_CRYPTO="mscrypto"
      	XMLSEC_CRYPTO_LIB="$MSCRYPTO_CRYPTO_LIB"
---- misc/xmlsec1-1.2.12/configure.in	2009-09-29 15:55:33.282288142 +0200
-+++ misc/build/xmlsec1-1.2.12/configure.in	2009-09-29 15:49:39.614223428 +0200
-@@ -606,7 +606,9 @@
+--- misc/xmlsec1-1.2.14/configure.in	2009-09-29 15:55:33.282288142 +0200
++++ misc/build/xmlsec1-1.2.14/configure.in	2009-09-29 15:49:39.614223428 +0200
+@@ -671,7 +671,9 @@
  	done
  	
  	for dir in $ac_nss_lib_dir ; do
@@ -159,7 +108,7 @@
  		dnl do not add -L/usr/lib because compiler does it anyway
          	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -620,6 +622,26 @@
+@@ -685,6 +687,26 @@
  		NSPR_LIBS_FOUND="yes"
  		break
  	    fi
@@ -186,7 +135,7 @@
  	done
      fi
  
-@@ -677,6 +699,25 @@
+@@ -742,6 +764,25 @@
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -212,7 +161,7 @@
              if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
-@@ -691,6 +732,8 @@
+@@ -756,6 +797,8 @@
      		NSS_LIBS_FOUND="yes"
      		break
  	    fi
@@ -221,7 +170,7 @@
  	done
      fi
  
-@@ -861,7 +904,7 @@
+@@ -926,7 +969,7 @@
  dnl cannot detect __stdcall functions
  dnl    AC_CHECK_LIB(crypt32, CertOpenStore, ....
      LIBS_SAVE="$LIBS"
@@ -230,7 +179,7 @@
      AC_MSG_CHECKING(for mscrypto libraries)
      AC_LINK_IFELSE([
  	#include <windows.h>
-@@ -878,15 +921,7 @@
+@@ -943,15 +986,7 @@
      XMLSEC_NO_MSCRYPTO="0"
  
      MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
@@ -247,9 +196,9 @@
      dnl first crypto library is default one
      if test "z$XMLSEC_CRYPTO" = "z" ; then
  	XMLSEC_CRYPTO="mscrypto"
---- misc/xmlsec1-1.2.12/ltmain.sh	2009-06-25 22:53:19.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/ltmain.sh	2009-09-29 15:49:39.628349554 +0200
-@@ -1661,6 +1661,11 @@
+--- misc/xmlsec1-1.2.14/ltmain.sh	2009-06-25 22:53:19.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/ltmain.sh	2009-09-29 15:49:39.628349554 +0200
+@@ -4868,6 +4868,11 @@
  	fi
  	;;
  
@@ -261,7 +210,7 @@
        *.$libext)
  	# An archive.
  	deplibs="$deplibs $arg"
-@@ -1974,6 +1979,10 @@
+@@ -5213,6 +5218,10 @@
  	  continue
  	  ;;
  	*.la) lib="$deplib" ;;
@@ -272,9 +221,9 @@
  	*.$libext)
  	  if test "$pass" = conv; then
  	    deplibs="$deplib $deplibs"
---- misc/xmlsec1-1.2.12/src/mscrypto/certkeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/certkeys.c	2009-09-29 15:49:39.643186151 +0200
-@@ -938,7 +938,11 @@
+--- misc/xmlsec1-1.2.14/src/mscrypto/certkeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/certkeys.c	2009-09-29 15:49:39.643186151 +0200
+@@ -947,7 +947,11 @@
  static void	            xmlSecMSCryptoKeyDataRsaDebugDump(xmlSecKeyDataPtr data, FILE* output);
  static void	            xmlSecMSCryptoKeyDataRsaDebugXmlDump(xmlSecKeyDataPtr data, FILE* output);
  
@@ -286,7 +235,7 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecMSCryptoKeyDataSize,
  
-@@ -1649,7 +1653,11 @@
+@@ -1658,7 +1662,11 @@
  static void		xmlSecMSCryptoKeyDataDsaDebugXmlDump(xmlSecKeyDataPtr data,
  							 FILE* output);
  
@@ -298,8 +247,8 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecMSCryptoKeyDataSize,
  
---- misc/xmlsec1-1.2.12/src/mscrypto/ciphers.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/ciphers.c	2009-09-29 15:49:39.652528324 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/ciphers.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/ciphers.c	2009-09-29 15:49:39.652528324 +0200
 @@ -802,7 +802,11 @@
   * AES CBC cipher transforms
   *
@@ -348,8 +297,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),	/* size_t klassSize */
      xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
---- misc/xmlsec1-1.2.12/src/mscrypto/digests.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/digests.c	2009-09-29 15:49:39.660554904 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/digests.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/digests.c	2009-09-29 15:49:39.660554904 +0200
 @@ -329,7 +329,11 @@
   * SHA1
   *
@@ -362,8 +311,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* size_t klassSize */
      xmlSecMSCryptoDigestSize,			/* size_t objSize */
---- misc/xmlsec1-1.2.12/src/mscrypto/keysstore.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/keysstore.c	2009-09-29 15:49:39.667289994 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/keysstore.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/keysstore.c	2009-09-29 15:49:39.667289994 +0200
 @@ -66,7 +66,11 @@
  								     const xmlChar* name, 
  								     xmlSecKeyInfoCtxPtr keyInfoCtx);
@@ -376,8 +325,8 @@
      sizeof(xmlSecKeyStoreKlass),
      xmlSecMSCryptoKeysStoreSize,
  
---- misc/xmlsec1-1.2.12/src/mscrypto/kt_rsa.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/kt_rsa.c	2009-09-29 15:49:39.674284044 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/kt_rsa.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/kt_rsa.c	2009-09-29 15:49:39.674284044 +0200
 @@ -66,7 +66,11 @@
  static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
  								 xmlSecTransformCtxPtr transformCtx);
@@ -390,8 +339,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/mscrypto/signatures.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/signatures.c	2009-09-29 15:49:39.682580497 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/signatures.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/signatures.c	2009-09-29 15:49:39.682580497 +0200
 @@ -524,7 +524,11 @@
   * RSA-SHA1 signature transform
   *
@@ -416,8 +365,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/mscrypto/symkeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/symkeys.c	2009-09-29 15:49:39.691081347 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/symkeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/symkeys.c	2009-09-29 15:49:39.691081347 +0200
 @@ -72,7 +72,11 @@
   * <xmlsec:AESKeyValue> processing
   *
@@ -442,8 +391,8 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecKeyDataBinarySize,
  
---- misc/xmlsec1-1.2.12/src/mscrypto/x509.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/x509.c	2009-09-29 15:49:39.699931741 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/x509.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/x509.c	2009-09-29 15:49:39.699931741 +0200
 @@ -243,7 +243,11 @@
  
  
@@ -456,7 +405,7 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecMSCryptoX509DataSize,
  
-@@ -2148,7 +2152,11 @@
+@@ -2159,7 +2163,11 @@
  								 xmlSecSize bufSize,
  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
  
@@ -468,8 +417,8 @@
      sizeof(xmlSecKeyDataKlass),
      sizeof(xmlSecKeyData),
  
---- misc/xmlsec1-1.2.12/src/mscrypto/x509vfy.c	2009-09-29 15:55:33.502779834 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/x509vfy.c	2009-09-29 15:49:39.708831697 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/x509vfy.c	2009-09-29 15:55:33.502779834 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/x509vfy.c	2009-09-29 15:49:39.708831697 +0200
 @@ -67,7 +67,11 @@
  static int         xmlSecMSCryptoX509StoreInitialize    (xmlSecKeyDataStorePtr store);
  static void        xmlSecMSCryptoX509StoreFinalize      (xmlSecKeyDataStorePtr store);
@@ -482,8 +431,8 @@
      sizeof(xmlSecKeyDataStoreKlass),
      xmlSecMSCryptoX509StoreSize,
  
---- misc/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-29 15:55:33.488430535 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-29 15:49:39.717511164 +0200
+--- misc/xmlsec1-1.2.14/src/nss/ciphers.c	2009-09-29 15:55:33.488430535 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/ciphers.c	2009-09-29 15:49:39.717511164 +0200
 @@ -777,7 +777,11 @@
   * AES CBC cipher transforms
   *
@@ -532,8 +481,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/nss/digests.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/digests.c	2009-09-29 15:49:39.725650968 +0200
+--- misc/xmlsec1-1.2.14/src/nss/digests.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/digests.c	2009-09-29 15:49:39.725650968 +0200
 @@ -285,7 +285,11 @@
   * SHA1 Digest transforms
   *
@@ -546,9 +495,9 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssDigestSize,			/* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/nss/hmac.c	2009-09-29 15:55:33.409285968 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/hmac.c	2009-09-29 15:49:39.733673690 +0200
-@@ -502,7 +502,11 @@
+--- misc/xmlsec1-1.2.14/src/nss/hmac.c	2009-09-29 15:55:33.409285968 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/hmac.c	2009-09-29 15:49:39.733673690 +0200
+@@ -504,7 +504,11 @@
  /** 
   * HMAC SHA1
   */
@@ -560,7 +509,7 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssHmacSize,				/* xmlSecSize objSize */
-@@ -544,7 +548,11 @@
+@@ -546,7 +550,11 @@
  /** 
   * HMAC Ripemd160
   */
@@ -572,7 +521,7 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssHmacSize,				/* xmlSecSize objSize */
-@@ -586,7 +594,11 @@
+@@ -588,7 +596,11 @@
  /** 
   * HMAC Md5
   */
@@ -584,9 +533,9 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssHmacSize,				/* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/nss/keysstore.c	2009-09-29 15:55:33.422265895 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/keysstore.c	2009-09-29 15:49:39.741628057 +0200
-@@ -489,7 +489,11 @@
+--- misc/xmlsec1-1.2.14/src/nss/keysstore.c	2009-09-29 15:55:33.422265895 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/keysstore.c	2009-09-29 15:49:39.741628057 +0200
+@@ -487,7 +487,11 @@
      return NULL ;
  }
  
@@ -598,8 +547,8 @@
         sizeof( xmlSecKeyStoreKlass ) ,
         xmlSecNssKeysStoreSize ,
         BAD_CAST "implicit_nss_keys_store" ,
---- misc/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-29 15:55:33.430875248 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-29 15:49:39.749963247 +0200
+--- misc/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-29 15:55:33.430875248 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-29 15:49:39.749963247 +0200
 @@ -1126,6 +1126,7 @@
      NULL,					/* void* reserved1; */
  };
@@ -632,8 +581,8 @@
  
  #endif /* XMLSEC_NO_DES */
  
---- misc/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-09-29 15:55:33.440002568 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-09-29 15:49:39.757984523 +0200
+--- misc/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-09-29 15:55:33.440002568 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-09-29 15:49:39.757984523 +0200
 @@ -491,7 +491,11 @@
  static void		xmlSecNssKeyDataDsaDebugXmlDump	(xmlSecKeyDataPtr data,
  							 FILE* output);
@@ -658,8 +607,8 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecNssPKIKeyDataSize,
  
---- misc/xmlsec1-1.2.12/src/nss/signatures.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/signatures.c	2009-09-29 15:49:39.765851110 +0200
+--- misc/xmlsec1-1.2.14/src/nss/signatures.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/signatures.c	2009-09-29 15:49:39.765851110 +0200
 @@ -459,7 +459,11 @@
   *
   ***************************************************************************/
@@ -684,8 +633,8 @@
      /* klass/object sizes */
      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
      xmlSecNssSignatureSize,		/* xmlSecSize objSize */
---- misc/xmlsec1-1.2.12/src/nss/symkeys.c	2009-09-29 15:55:33.448817761 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/symkeys.c	2009-09-29 15:49:39.773211741 +0200
+--- misc/xmlsec1-1.2.14/src/nss/symkeys.c	2009-09-29 15:55:33.448817761 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/symkeys.c	2009-09-29 15:49:39.773211741 +0200
 @@ -856,7 +856,11 @@
   * <xmlsec:AESKeyValue> processing
   *
@@ -722,8 +671,8 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecNssSymKeyDataSize,
  
---- misc/xmlsec1-1.2.12/src/nss/x509.c	2009-09-29 15:55:33.465839785 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/x509.c	2009-09-29 15:49:39.784408301 +0200
+--- misc/xmlsec1-1.2.14/src/nss/x509.c	2009-09-29 15:55:33.465839785 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/x509.c	2009-09-29 15:49:39.784408301 +0200
 @@ -235,7 +235,11 @@
  
  
@@ -736,7 +685,7 @@
      sizeof(xmlSecKeyDataKlass),
      xmlSecNssX509DataSize,
  
-@@ -1779,7 +1783,11 @@
+@@ -1785,7 +1789,11 @@
  								 xmlSecSize bufSize,
  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
  
@@ -748,8 +697,8 @@
      sizeof(xmlSecKeyDataKlass),
      sizeof(xmlSecKeyData),
  
---- misc/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-09-29 15:55:33.510337681 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-09-29 15:49:39.791239957 +0200
+--- misc/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-29 15:55:33.510337681 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-29 15:49:39.791239957 +0200
 @@ -64,7 +64,11 @@
  static void		xmlSecNssX509StoreFinalize	(xmlSecKeyDataStorePtr store);
  static int		xmlSecNssIntegerToItem( const xmlChar* integer , SECItem *it ) ;
