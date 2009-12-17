@@ -39,9 +39,7 @@
 
 #include "osl/doublecheckedlocking.h"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
@@ -50,14 +48,10 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#endif
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKGENBERALEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkGeneralException.hpp>
-#endif
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
@@ -79,9 +73,7 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
-#endif
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 
@@ -98,10 +90,10 @@ extern "C" { // missing in the header: doh.
 #  include <libgnomevfs/gnome-vfs-module-callback.h>
 }
 
-#include "content.hxx"
-#include "provider.hxx"
-#include "directory.hxx"
-#include "stream.hxx"
+#include "gvfs_content.hxx"
+#include "gvfs_provider.hxx"
+#include "gvfs_directory.hxx"
+#include "gvfs_stream.hxx"
 
 using namespace gvfs;
 using namespace com::sun::star;
@@ -487,7 +479,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     bool create_document;
     const char *name;
 
-          if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GVFS_FILE_TYPE ) ) )
+        if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GVFS_FILE_TYPE ) ) )
         create_document = true;
     else if ( Info.Type.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( GVFS_FOLDER_TYPE ) ) )
         create_document = false;
@@ -515,11 +507,11 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         uno::Reference< ucb::XContentIdentifier > xId
         ( new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
 
-          try {
+        try {
         return new ::gvfs::Content( m_xSMgr, m_pProvider, xId, !create_document );
     } catch ( ucb::ContentCreationException & ) {
         return uno::Reference< ucb::XContent >();
-          }
+        }
 }
 
 rtl::OUString Content::getParentURL()
@@ -757,7 +749,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     getInfo( xEnv );
 
-      osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     gnome_vfs_file_info_copy( &newInfo, &m_info );
 
@@ -769,16 +761,16 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-      aEvent.Further        = sal_False;
-      aEvent.PropertyHandle = -1;
-      // aEvent.PropertyName = fill in later ...
-      // aEvent.OldValue     =
-      // aEvent.NewValue     =
+    aEvent.Further        = sal_False;
+    aEvent.PropertyHandle = -1;
+    // aEvent.PropertyName = fill in later ...
+    // aEvent.OldValue     =
+    // aEvent.NewValue     =
 
-      int nCount = rValues.getLength();
+    int nCount = rValues.getLength();
     const beans::PropertyValue* pValues = rValues.getConstArray();
 
-      for ( sal_Int32 n = 0; n < nCount; ++n ) {
+    for ( sal_Int32 n = 0; n < nCount; ++n ) {
         const beans::PropertyValue& rValue = pValues[ n ];
 
 #ifdef DEBUG
@@ -919,7 +911,7 @@ void Content::insert(
         const uno::Reference< ucb::XCommandEnvironment > &xEnv )
         throw( uno::Exception )
 {
-      osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
 #ifdef DEBUG
     g_warning( "Insert '%s' (%d) (0x%x:%d)", getURI(), bReplaceExisting,
@@ -1004,9 +996,9 @@ void Content::insert(
     }
 
     if (m_bTransient) {
-          m_bTransient = sal_False;
+        m_bTransient = sal_False;
         aGuard.clear();
-          inserted();
+        inserted();
     }
 }
 
@@ -1380,7 +1372,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     };
     int num = 7;
 
-       if ( isFolder( xEnv ) )
+        if ( isFolder( xEnv ) )
          num += 1;
 
     return uno::Sequence< ucb::CommandInfo >(aDocumentCommandInfoTable, num );
