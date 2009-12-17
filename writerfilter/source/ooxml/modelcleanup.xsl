@@ -89,6 +89,53 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template name="generatevalueresource">
+    <xsl:variable name="name" select="@name"/>
+    <resource>
+      <xsl:attribute name="name">
+	<xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:attribute name="resource">Value</xsl:attribute>
+      <xsl:attribute name="generated">yes</xsl:attribute>
+      <xsl:for-each select=".//rng:attribute">
+	<xsl:variable name="type">
+	  <xsl:choose>
+	    <xsl:when test="rng:ref[@name='ST_OnOff']">
+	      <xsl:text>Boolean</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="rng:text">
+	      <xsl:text>String</xsl:text>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:call-template name="typeofattribute"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
+	<attribute>
+	  <xsl:attribute name="name">
+	    <xsl:value-of select="@name"/>
+	  </xsl:attribute>
+	  <xsl:attribute name="tokenid">
+	    <xsl:text>ooxml:</xsl:text>
+	    <xsl:value-of select="$name"/>
+	    <xsl:text>_</xsl:text>
+	    <xsl:value-of select="@name"/>
+	  </xsl:attribute>	  
+	  <xsl:attribute name="action">
+	    <xsl:text>setValue</xsl:text>
+	  </xsl:attribute>
+	</attribute>
+	<action name="start">
+	  <xsl:attribute name="action">
+	    <xsl:text>setDefault</xsl:text>
+	    <xsl:value-of select="$type"/>
+	    <xsl:text>Value</xsl:text>
+	  </xsl:attribute>
+	</action>
+      </xsl:for-each>
+    </resource>
+  </xsl:template>
+
   <xsl:template match="namespace">
     <xsl:variable name="nsid" select="generate-id(.)"/>
     <xsl:element name="namespace">
@@ -102,9 +149,7 @@
         <xsl:if test="count($resources) = 0">
           <xsl:if test="substring(@name, 1, 3) = 'CT_'">
             <xsl:if test="./rng:attribute[@name='val']/rng:text">
-              <xsl:call-template name="generateresource">
-                <xsl:with-param name="resource">StringValue</xsl:with-param>
-              </xsl:call-template>
+              <xsl:call-template name="generatevalueresource"/>
             </xsl:if>
           </xsl:if>
           <xsl:if test="substring(@name, 1, 3) = 'ST_'">
