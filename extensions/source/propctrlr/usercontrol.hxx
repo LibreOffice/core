@@ -90,6 +90,9 @@ namespace pcr
         * \return current date or time or the value 1234.56789
         */
         static double getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey);
+
+    private:
+        static double getPreviewValue( const SvNumberformat& i_rEntry );
     };
 
     //========================================================================

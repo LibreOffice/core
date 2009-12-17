@@ -2710,7 +2710,7 @@ namespace pcr
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
             double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);
-            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO );
+            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, String( PcrRes( RID_STR_TEXT_FORMAT ) ), SID_ATTR_NUMBERFORMAT_INFO );
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
