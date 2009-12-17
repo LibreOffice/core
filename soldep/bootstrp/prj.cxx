@@ -1639,7 +1639,8 @@ void Star::InsertToken ( char *yytext )
                 pStaticDepList = 0;
                 break;
         case 1:
-                    aDirName = yytext;
+                aDirName = yytext;
+                aProjectName = aDirName.GetToken ( 0, 0x5c);
                 break;
         case 2:
                 if ( !strcmp( yytext, ":" ))
@@ -1674,7 +1675,6 @@ void Star::InsertToken ( char *yytext )
                 }
                 if (bPrjDep)
                 {
-                    aProjectName = aDirName.GetToken ( 0, 0x5c);
                     if ( HasProject( aProjectName ))
                     {
                         RemovePrj(GetPrj(aProjectName));
@@ -1708,7 +1708,7 @@ void Star::InsertToken ( char *yytext )
         case 5:
                 if ( !bPrjDep )
                 {
-                    aLogFileName = yytext;
+                    aLogFileName = (ByteString(aProjectName).Append("_")).Append(yytext);
                 }
                 break;
         default:
@@ -1725,7 +1725,8 @@ void Star::InsertToken ( char *yytext )
                         // ggfs. Dependency liste anlegen und ergaenzen
                         if ( !pStaticDepList )
                             pStaticDepList = new SByteStringList;
-                        pStaticDepList->PutString( new ByteString( aItem ));
+                        ByteString* pStr = new ByteString ((ByteString (aProjectName).Append("_")).Append(aItem));
+                        pStaticDepList->PutString( pStr );
                     }
                 }
                 else
@@ -1748,7 +1749,6 @@ void Star::InsertToken ( char *yytext )
                             bHasModes = TRUE;
                         }
 
-                        aProjectName = aDirName.GetToken ( 0, 0x5c);
                         if ( HasProject( aProjectName ))
                         {
                             pPrj = GetPrj( aProjectName );
@@ -1782,7 +1782,6 @@ void Star::InsertToken ( char *yytext )
        der Solar-Projekte einfuegen */
     if ( i == -1 )
     {
-        aProjectName = aDirName.GetToken ( 0, 0x5c);
         if ( HasProject( aProjectName ))
         {
             pPrj = GetPrj( aProjectName );
