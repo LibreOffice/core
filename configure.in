@@ -4571,12 +4571,6 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" 
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
         PKG_CHECK_MODULES( GRAPHITE, silgraphite )
-	AC_MSG_CHECKING([STL compatibility])
-	if test "$WITH_STLPORT" != "no"; then
-		AC_MSG_ERROR([to use system graphite you need to use --without-stlport])
-	else
-		AC_MSG_RESULT([OK])	
-	fi
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
