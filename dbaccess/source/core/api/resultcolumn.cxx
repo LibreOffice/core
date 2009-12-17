@@ -110,19 +110,25 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         getPropertyValue( PROPERTY_TABLENAME ) >>= sTable;
         getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
 
-        Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
-            makeAny( sCatalog ), sSchema, sTable );
-        if ( xVersionColumns.is() ) // allowed to be NULL
+        try
         {
-            Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
-            while ( xVersionColumns->next() )
+            Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
+                makeAny( sCatalog ), sSchema, sTable );
+            if ( xVersionColumns.is() ) // allowed to be NULL
             {
-                if ( xResultRow->getString( 2 ) == sColumnName )
+                Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
+                while ( xVersionColumns->next() )
                 {
-                    m_aIsRowVersion <<= (sal_Bool)(sal_True);
-                    break;
+                    if ( xResultRow->getString( 2 ) == sColumnName )
+                    {
+                        m_aIsRowVersion <<= (sal_Bool)(sal_True);
+                        break;
+                    }
                 }
             }
+        }
+        catch(const SQLException&)
+        {
         }
     }
     catch( const Exception& )

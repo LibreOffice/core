@@ -31,77 +31,33 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_CORE_TABLE_HXX_
 #include "table.hxx"
-#endif
-#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include <definitioncolumn.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
-#include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _COMPHELPER_CONTAINER_HXX_
-#include <comphelper/container.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHLISTENER_HPP_
-#include <com/sun/star/util/XRefreshListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#include <connectivity/TKeys.hxx>
-#ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef DBACORE_SDBCORETOOLS_HXX
-#include "sdbcoretools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
+
+#include <tools/debug.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/container.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+//#include <comphelper/extract.hxx>
+#include <com/sun/star/util/XRefreshListener.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef DBA_CONTAINERMEDIATOR_HXX
+
+#include <connectivity/TKeys.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
+
+#include "sdbcoretools.hxx"
 #include "ContainerMediator.hxx"
-#endif
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;
@@ -152,6 +108,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
+    DBG_CTOR(ODBTable, NULL);
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
 }
 // -------------------------------------------------------------------------
@@ -311,18 +268,18 @@ void ODBTable::construct()
     describeProperties(aProps);
     if(!_nId)
     {
-        Property* pBegin    = aProps.getArray();
-        Property* pEnd      = pBegin + aProps.getLength();
-        for(;pBegin != pEnd;++pBegin)
+        Property* pIter = aProps.getArray();
+        Property* pEnd  = pIter + aProps.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            if (0 == pBegin->Name.compareToAscii(PROPERTY_CATALOGNAME))
-                pBegin->Attributes = PropertyAttribute::READONLY;
-            else if (0 == pBegin->Name.compareToAscii(PROPERTY_SCHEMANAME))
-                pBegin->Attributes = PropertyAttribute::READONLY;
-            else if (0 == pBegin->Name.compareToAscii(PROPERTY_DESCRIPTION))
-                pBegin->Attributes = PropertyAttribute::READONLY;
-            else if (0 == pBegin->Name.compareToAscii(PROPERTY_NAME))
-                pBegin->Attributes = PropertyAttribute::READONLY;
+            if (0 == pIter->Name.compareToAscii(PROPERTY_CATALOGNAME))
+                pIter->Attributes = PropertyAttribute::READONLY;
+            else if (0 == pIter->Name.compareToAscii(PROPERTY_SCHEMANAME))
+                pIter->Attributes = PropertyAttribute::READONLY;
+            else if (0 == pIter->Name.compareToAscii(PROPERTY_DESCRIPTION))
+                pIter->Attributes = PropertyAttribute::READONLY;
+            else if (0 == pIter->Name.compareToAscii(PROPERTY_NAME))
+                pIter->Attributes = PropertyAttribute::READONLY;
         }
     }
 
@@ -340,14 +297,11 @@ IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getInfoHelper" );
-    Any aRet;
-    if(rType == getCppuType( (Reference<XRename>*)0))
+    if(rType == getCppuType( (Reference<XRename>*)0) && !getRenameService().is() )
         return Any();
-    if(rType == getCppuType( (Reference<XAlterTable>*)0))
+    if(rType == getCppuType( (Reference<XAlterTable>*)0) && !getAlterService().is() )
         return Any();
-    aRet = OTable_Base::queryInterface( rType);
-
-    return aRet;
+    return OTable_Base::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
@@ -360,12 +314,12 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
     ::std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(;pBegin != pEnd ;++pBegin)
+    const Type* pIter = aTypes.getConstArray();
+    const Type* pEnd = pIter + aTypes.getLength();
+    for(;pIter != pEnd ;++pIter)
     {
-        if(*pBegin != aRenameType && *pBegin != aAlterType)
-            aOwnTypes.push_back(*pBegin);
+        if( (*pIter != aRenameType || getRenameService().is()) && (*pIter != aAlterType || getAlterService().is()))
+            aOwnTypes.push_back(*pIter);
     }
 
     Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
@@ -373,10 +327,17 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 }
 // XRename,
 //------------------------------------------------------------------------------
-void SAL_CALL ODBTable::rename( const ::rtl::OUString& /*_rNewName*/ ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::rename" );
-    throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
+    if ( !getRenameService().is() )
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+
+    Reference<XPropertySet> xTable(this);
+    getRenameService()->rename(xTable,_rNewName);
+    ::connectivity::OTable_TYPEDEF::rename(_rNewName);
 }
 
 // XAlterTable,
@@ -385,55 +346,15 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(
-        connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
-    if(m_pColumns->hasByName(_rName))
-    {
-        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote;
-        Reference<XDatabaseMetaData> xMeta = getMetaData();
-        if ( xMeta.is() )
-            aQuote = xMeta->getIdentifierQuoteString(  );
-        ::rtl::OUString sComposedName;
+    checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
+    if ( !getAlterService().is() )
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 
-        sComposedName = ::dbtools::composeTableName( xMeta, m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions );
-        if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(*this);
+    if ( !m_pColumns->hasByName(_rName) )
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
-        sSql += sComposedName;
-        sSql += ::rtl::OUString::createFromAscii(" ALTER ");
-        sSql += ::dbtools::quoteName(aQuote,_rName);
-
-        ::rtl::OUString sNewDefaultValue,sDefaultValue;
-
-        Reference<XPropertySet> xColumn;
-        m_pColumns->getByName(_rName) >>= xColumn;
-        if(_rxDescriptor->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-            _rxDescriptor->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sNewDefaultValue;
-        if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-            xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
-
-        if(sNewDefaultValue != sDefaultValue && getMetaData().is() )
-        {
-            if(sNewDefaultValue.getLength())
-            {
-                sSql += ::rtl::OUString::createFromAscii(" SET DEFAULT ");
-                sSql += sNewDefaultValue;
-            }
-            else
-                sSql += ::rtl::OUString::createFromAscii(" DROP DEFAULT");
-            OSL_ENSURE(getMetaData()->getConnection().is(),"Connection is null!");
-            Reference< XStatement > xStmt = getMetaData()->getConnection()->createStatement(  );
-            if(xStmt.is())
-                xStmt->execute(sSql);
-        }
-        else
-            // not supported
-            throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ALTER_COLUMN_DEF),*this,SQLSTATE_GENERAL,1000,Any() );
-    }
-    else
-        // not supported
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
+    Reference<XPropertySet> xTable(this);
+    getAlterService()->alterColumnByName(xTable,_rName,_rxDescriptor);
     m_pColumns->refresh();
 }
 // -----------------------------------------------------------------------------
@@ -476,8 +397,8 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumns" );
     Reference<XDatabaseMetaData> xMeta = getMetaData();
     OColumns* pCol = new OColumns(*this, m_aMutex, NULL, isCaseSensitive(), _rNames, this,this,
-                                    xMeta.is() && xMeta->supportsAlterTableWithAddColumn(),
-                                    xMeta.is() && xMeta->supportsAlterTableWithDropColumn());
+                                    getAlterService().is() || (xMeta.is() && xMeta->supportsAlterTableWithAddColumn()),
+                                    getAlterService().is() || (xMeta.is() && xMeta->supportsAlterTableWithDropColumn()));
     static_cast<OColumnsHelper*>(pCol)->setParent(this);
     pCol->setParent(*this);
     m_pColumnMediator = new OContainerMediator( pCol, m_xColumnDefinitions, getConnection(), OContainerMediator::eColumns );
@@ -497,7 +418,3 @@ sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
     return new OIndexes(this,m_aMutex,_rNames,NULL);
 }
 // -----------------------------------------------------------------------------
-
-
-
-
