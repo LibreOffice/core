@@ -3583,7 +3583,7 @@ AC_SUBST(BUILD_QADEVOOO)
 dnl ===================================================================
 dnl Check for prelinked libgcc_s.so.1
 dnl ===================================================================
-if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
+if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
   if test -n "$checkforstdlibproblems"; then
     if test -f /etc/rpm/macros.prelink; then
       with_system_stdlibs=yes
