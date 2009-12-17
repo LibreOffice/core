@@ -111,6 +111,7 @@ ArrangeSlides .HelpId:vcl:PrintDialog:SlidesPerPageOrder:ListBox
 *TabApplication .HelpId:vcl:PrintDialog:TabPage:10
 PrintPageBackground .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
 PrintGraphicsAndDiagrams .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
+PrintPicturesAndObjects .HelpId:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox
 PrintHiddenText .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
 PrintTextPlaceholder .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
 PrintFormControls .HelpId:vcl:PrintDialog:PrintControls:CheckBox

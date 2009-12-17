@@ -179,8 +179,8 @@ testcase tPrintGeneral()
                 warnlog( "Pages setting disabled" )
             endif
             
-            Selection.check()
-            AllPages.check()
+            'Selection.check()
+            'AllPages.check()
             
         case "CALC"
         
@@ -290,7 +290,8 @@ testcase tPrintApplication()
         case "WRITER", "HTML", "MASTERDOCUMENT"
         
             cb_test( PrintPageBackground, true, "" )
-            cb_test( PrintGraphicsAndDiagrams, true, "" )
+            'cb_test( PrintGraphicsAndDiagrams, true, "" )
+            cb_test( PrintPicturesAndObjects, true, "" )
             cb_test( PrintTextInBlack, false, "" )
             cb_test( PrintBlankPages, true, "" )
 
@@ -375,69 +376,84 @@ testcase tPrintLayout()
     
     kontext "Printing"
     if ( Printing.exists( 2 ) ) then
-    
-        PrintingTabControl.setPage( TabLayout )
-        
-        kontext "TabLayout"
-        call DialogTest( TabLayout )
-        
-        printlog( "Controls common for all applications" )
-        if ( NOT PagesPerSheet.isChecked() ) then
-            warnlog( MSG1 & "<Pages per sheet> should be selected" )
-        endif
 
-        lb_test( NumberOfPages, 7, 1, "" )
-        NumberOfPages.select( 7 )
-       
-        if ( NumberOfColumns.getText() <> "1" ) then
-            warnlog( MSG1 & "<Pages> has incorrect default: " & NumberOfColumns.getText() )
-        endif
+        ' Math does not have a layout page as it does not have any layout options
+        if ( gApplication <> "MATH" ) then    
         
-        if ( NumberOfRows.getText() <> "1" ) then
-            warnlog( MSG1 & "<by> has incorrect default: " & NumberOfRows.getText() )
-        endif
-        
-        NumberOfColumns.typeKeys( "<UP>" )
-        NumberOfRows.typeKeys( "<UP>" )
-        DistanceBetweenPages.typeKeys( "<UP>" )
-        MarginToSheetBorder.typeKeys( "<UP>" )
-        
-        lb_test( PaperOrientation, 3, 1, "" )
-        lb_test( PrintOrder, 2, 1, "" )
-        cb_test( BorderAroundPages, false, "" )
-        
-        select case( gApplication )
-        case "WRITER", "HTML", "MASTERDOCUMENT"
+            PrintingTabControl.setPage( TabLayout )
+            
+            kontext "TabLayout"
+            call DialogTest( TabLayout )
+            
+            printlog( "Controls common for (almost) all applications" )
+            if ( gApplication <> "CALC" ) then
+                if ( NOT PagesPerSheet.isChecked()) then
+                    warnlog( MSG1 & "<Pages per sheet> should be selected" )
+                endif
 
-            if ( NOT PrintBrochureRTL.isEnabled() ) then
-                warnlog( "<Brochure> listbox should be enabled" )
+                lb_test( NumberOfPages, 7, 1, "" )
+                NumberOfPages.select( 7 )
+               
+                if ( NumberOfColumns.getText() <> "1" ) then
+                    warnlog( MSG1 & "<Pages> has incorrect default: " & NumberOfColumns.getText() )
+                endif
+                
+                if ( NumberOfRows.getText() <> "1" ) then
+                    warnlog( MSG1 & "<by> has incorrect default: " & NumberOfRows.getText() )
+                endif
+                
+                NumberOfColumns.typeKeys( "<UP>" )
+                NumberOfRows.typeKeys( "<UP>" )
+                DistanceBetweenPages.typeKeys( "<UP>" )
+                MarginToSheetBorder.typeKeys( "<UP>" )
+            
+                lb_test( PaperOrientation, 3, 1, "" )
+            else
+                if ( PagesPerSheet.isVisible() ) then
+                    warnlog( "<Pages per Sheet> should not be visible for spreadsheet documents" )
+                endif
             endif
             
-            Brochure.check()
+            lb_test( PrintOrder, 2, 1, "" )
+            cb_test( BorderAroundPages, false, "" )
             
-            lb_test( PrintBrochureRTL, 2, 1, "#i105265#" )
-        
-        case "CALC"
-        
-            printlog( "Calc does not have any options in this section" )
-            
-        case "IMPRESS", "DRAW"
+            select case( gApplication )
+            case "WRITER", "HTML", "MASTERDOCUMENT"
 
-            if ( Not BrochurePageSides.isEnabled() ) then
-                warnlog( "#i106426# <Page sides> listbox should be enabled" )
-            endif
-            Brochure.check()
-            lb_test( BrochurePageSides, 3, 1, "" )
+                'if ( NOT PrintBrochureRTL.isEnabled() ) then
+                '    warnlog( "<Brochure> listbox should be enabled" )
+                'endif
+                
+                Brochure.check()
+                
+                'lb_test( PrintBrochureRTL, 2, 1, "#i105265#" )
+            
+            case "CALC"
+            
+                printlog( "Calc does not have any options in this section" )
+                
+            case "IMPRESS", "DRAW"
 
-        case "MATH"
-        
-            printlog( "Math does not have any options in the section" )
+                if ( BrochurePageSides.isEnabled() ) then
+                    warnlog( "<Page sides> listbox should be disabled" )
+                endif
+                Brochure.check()
+                lb_test( BrochurePageSides, 3, 1, "" )
+
+            case default
             
-        case default
-        
-            warnlog( "Invalid gApplication: " & gApplication )
+                warnlog( "Invalid gApplication: " & gApplication )
+                
+            end select
             
-        end select
+        else ' What we do if gApplication = MATH
+            try
+                PrintingTabControl.setPage( TabLayout )
+                warnlog( "Math should not have a layout page as no layout options exist" )
+            catch
+                printlog( "Math has no layout page. Good." )
+            endcatch
+        endif
         
         kontext "Printing"
         printlog( "Close print dialog" )
@@ -485,7 +501,7 @@ testcase tPrintOptions()
 
         case "CALC", "MATH"
         
-            printlog( "Calc and Math do not have any options in this section" )
+            printlog( "Calc does not have any program specific options." )
             
         case default
         
@@ -502,7 +518,7 @@ testcase tPrintOptions()
     endif
     
     printlog( "Close document" )
-    hDestroyDocument()        
+    hDestroyDocument()
             
 endcase
 
