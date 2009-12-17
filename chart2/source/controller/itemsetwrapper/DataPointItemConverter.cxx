@@ -49,15 +49,15 @@
 
 // header for class XFillColorItem
 #include <svx/xflclit.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/sizeitem.hxx>
 // header for class SfxStringItem
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/brshitem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 

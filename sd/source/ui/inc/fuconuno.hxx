@@ -31,7 +31,7 @@
 #ifndef SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 #define SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "fuconstr.hxx"
 
 namespace sd {

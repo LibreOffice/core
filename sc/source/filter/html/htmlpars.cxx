@@ -50,7 +50,7 @@
 #include <svx/wghtitem.hxx>
 #include <svx/boxitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>

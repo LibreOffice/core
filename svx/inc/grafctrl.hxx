@@ -31,8 +31,8 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #define _SVX_GRAFCTRL_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/lstner.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 

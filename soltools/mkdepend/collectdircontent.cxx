@@ -64,7 +64,7 @@ bool IncludesCollection::exists(string filePath) {
     } else {
         return true;
     };
-    return false;
+    //return false;
 };
 
 extern "C" {

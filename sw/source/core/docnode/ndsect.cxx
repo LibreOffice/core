@@ -34,7 +34,7 @@
 
 #include <hintids.hxx>
 #include <svx/linkmgr.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <tools/resid.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>

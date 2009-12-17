@@ -34,7 +34,7 @@
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>
 #include <svtools/rtfkeywd.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/rtfout.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/fontitem.hxx>
@@ -734,7 +734,7 @@ void SwRTFParser::RemoveUnusedNumRule( SwNumRule* pRule )
         }
         pDoc->DelNumRule( pRule->GetName() );
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         ASSERT( pRule, "NumRulePointer 0 kann nicht geloescht werden" );

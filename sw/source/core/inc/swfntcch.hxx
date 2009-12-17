@@ -49,7 +49,7 @@ class SwFontCache : public SwCache
 public:
 
     inline SwFontCache() : SwCache(50,50
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , "Globaler AttributSet/Font-Cache pSwFontCache"
 #endif
     ) {}

@@ -49,7 +49,7 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <tools/gen.hxx>
 #include <tools/weakbase.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/unoipset.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>

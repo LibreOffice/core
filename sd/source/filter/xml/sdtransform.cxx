@@ -32,10 +32,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svtools/style.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/style.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/whiter.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/xmlcnitm.hxx>

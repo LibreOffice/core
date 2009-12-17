@@ -40,7 +40,7 @@
 #include "svx/svdmodel.hxx"
 #include "svx/fhgtitem.hxx"
 #include <svx/eeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
 : mpOutlinerParaObject( pOutlinerParaObject )

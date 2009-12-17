@@ -38,7 +38,7 @@ PACKAGE = oooapplet
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = officebean.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar 
+JARFILES = officebean.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar 
 JAVAFILES       = OOoViewer.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

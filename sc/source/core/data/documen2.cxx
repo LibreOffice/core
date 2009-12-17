@@ -45,11 +45,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/list.hxx>
 #include <rtl/crc.h>

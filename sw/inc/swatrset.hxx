@@ -31,8 +31,8 @@
 #define _SWATRSET_HXX
 #include <tools/solar.h>
 #include <tools/mempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <swdllapi.h>
 
 class SwModify;

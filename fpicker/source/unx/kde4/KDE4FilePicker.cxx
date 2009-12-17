@@ -65,7 +65,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #include <vos/mutex.hxx>
 

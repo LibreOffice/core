@@ -36,7 +36,7 @@ TARGET  = examples_java_converterbridge
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar ridl.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar ridl.jar
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 JARCOMPRESS 	= TRUE
 CUSTOMMANIFESTFILE = manifest

@@ -848,7 +848,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     {
         return REG_DELETE_KEY_FAILED;
     }
-    sFile.flush();
+    //sFile.flush();
 
     // set flag deleted !!!
     ((ORegKey*)hOldKey)->setDeleted(sal_True);
@@ -894,7 +894,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
             {
                 return REG_DELETE_VALUE_FAILED;
             }
-        ((OStoreFile&)pKey->getStoreFile()).flush();
+        //((OStoreFile&)pKey->getStoreFile()).flush();
         }
 
         _err = rStoreDir.next(iter);
@@ -1065,7 +1065,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     {
         return REG_VALUE_NOT_EXISTS;
     }
-    pSourceKey->getStoreFile().flush();
+    //pSourceKey->getStoreFile().flush();
 
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE);
 
@@ -1137,7 +1137,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
         rtl_freeMemory(pBuffer);
         return REG_INVALID_VALUE;
     }
-    rTargetFile.flush();
+    //rTargetFile.flush();
 
     if (rwBytes != nSize)
     {
@@ -1480,6 +1480,20 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     }
 
     return REG_NO_ERROR;
+}
+
+RegError ORegistry::flush()
+{
+    REG_GUARD(m_mutex);
+
+    if (m_file.isValid())
+    {
+        m_file.flush();
+        return REG_NO_ERROR;
+    } else
+    {
+        return REG_REGISTRY_NOT_EXISTS;
+    }
 }
 
 

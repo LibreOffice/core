@@ -33,7 +33,7 @@
 
 
 #include <vcl/timer.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "collect.hxx"
 #include "rangelst.hxx"
 #include "token.hxx"

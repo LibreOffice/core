@@ -38,7 +38,7 @@
 #include <sfx2/bindings.hxx>
 #endif
 #include <svx/eeitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/fontitem.hxx>
 #include "OutlineViewShell.hxx"
 #include "DrawViewShell.hxx"
@@ -49,8 +49,8 @@
 #include <svx/svdoutl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/ctloptions.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/ctloptions.hxx>
+#include <svl/itempool.hxx>
 
 #ifdef IRIX
 #include <basic/sbx.hxx>

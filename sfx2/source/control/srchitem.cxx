@@ -36,7 +36,7 @@
 #ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
 #endif
-#include <svtools/searchopt.hxx>
+#include <unotools/searchopt.hxx>
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XSearchable.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
@@ -44,7 +44,7 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <i18npool/mslangid.hxx>
 
 #ifndef GCC
@@ -359,6 +359,9 @@ void SvxSearchItem::Notify( const Sequence< ::rtl::OUString > & )
     SetTransliterationFlags( SvtSearchOptions().GetTransliterationFlags() );
 }
 
+void SvxSearchItem::Commit()
+{
+}
 
 void SvxSearchItem::SetMatchFullHalfWidthForms( sal_Bool bVal )
 {

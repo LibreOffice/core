@@ -36,7 +36,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 class SwDoc;
 

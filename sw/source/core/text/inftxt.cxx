@@ -33,8 +33,8 @@
 
 
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/hyznitem.hxx>
@@ -114,13 +114,13 @@ namespace numfunc
 }
 // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
 static sal_Bool bDbgLow = sal_False;
 #endif
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
 
@@ -236,7 +236,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -288,7 +288,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 }
@@ -325,7 +325,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 
@@ -412,7 +412,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
@@ -570,7 +570,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pGrammarCheckList = NULL;
     pSmartTags = NULL;  // SMARTTAGS
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     pBrushItem = 0;
 #else
     pBrushItem = ((SvxBrushItem*)-1);

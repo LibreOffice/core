@@ -36,7 +36,7 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/langitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/tstpitem.hxx>

@@ -49,14 +49,14 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/lckbitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/eitem.hxx>
 /*
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 */
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
@@ -180,8 +180,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-//  const SfxDocumentInfoItem& rItem = (const SfxDocumentInfoItem&)rSet.Get(SID_DOCINFO);
-//  if(rItem.IsOwnFormat())
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();

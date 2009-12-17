@@ -32,7 +32,7 @@
 #define SC_FORBIUNO_HXX
 
 #include <svx/UnoForbiddenCharsTable.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 class ScDocShell;
 

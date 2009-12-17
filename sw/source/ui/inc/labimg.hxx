@@ -31,7 +31,7 @@
 #ifndef _LABIMG_HXX
 #define _LABIMG_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 
@@ -126,7 +126,8 @@ public:
 
     SwLabItem&              GetItem() {return aItem;}
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 
 #endif

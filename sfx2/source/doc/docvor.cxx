@@ -44,17 +44,17 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/print.hxx>
-#include <svtools/style.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/style.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/color.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -81,7 +81,7 @@
 #endif
 #include <comphelper/processfactory.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 static const char cDelim = ':';
 BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;

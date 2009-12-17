@@ -40,9 +40,9 @@
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 

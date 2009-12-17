@@ -37,7 +37,7 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <vector>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/xit.hxx>
 
 #include <svx/xdef.hxx>

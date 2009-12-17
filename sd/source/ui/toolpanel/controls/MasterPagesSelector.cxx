@@ -62,12 +62,12 @@
 #include "drawview.hxx"
 #endif
 #include <vcl/image.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/mnumgr.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
@@ -76,7 +76,7 @@
 #include "stlpool.hxx"
 #include "unmovss.hxx"
 #include <sfx2/request.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 using namespace ::sd::toolpanel::controls;
 #define MasterPagesSelector

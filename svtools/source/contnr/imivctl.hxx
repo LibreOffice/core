@@ -45,7 +45,7 @@
 #include <limits.h>
 
 #include "ivctrl.hxx"
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;

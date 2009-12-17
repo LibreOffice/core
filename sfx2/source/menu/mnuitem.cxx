@@ -51,8 +51,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>

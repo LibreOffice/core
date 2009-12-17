@@ -47,7 +47,7 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include <svx/fmpage.hxx>
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -56,7 +56,7 @@
 #include <svx/dialmgr.hxx>
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>

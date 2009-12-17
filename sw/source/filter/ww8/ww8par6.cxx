@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
 
 
@@ -4673,7 +4673,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
 
 sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     bool
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bVer67
 #endif
     )

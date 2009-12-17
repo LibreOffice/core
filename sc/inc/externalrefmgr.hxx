@@ -37,7 +37,7 @@
 #include "sfx2/lnkbase.hxx"
 #include "tools/time.hxx"
 #include "vcl/timer.hxx"
-#include "svtools/zforlist.hxx"
+#include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
 
 #include <hash_map>

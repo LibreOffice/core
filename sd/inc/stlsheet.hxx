@@ -44,7 +44,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <svx/unoipset.hxx>
 

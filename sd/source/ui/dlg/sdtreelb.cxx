@@ -35,7 +35,7 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>

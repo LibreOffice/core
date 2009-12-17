@@ -34,13 +34,13 @@
 
 #include <hintids.hxx>
 #include <uitool.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sot/formats.hxx>
 #ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>

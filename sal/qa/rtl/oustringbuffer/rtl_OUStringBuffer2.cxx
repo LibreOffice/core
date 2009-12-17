@@ -31,7 +31,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include "stringhelper.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>

@@ -37,7 +37,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <i18npool/lang.h>
 #include <tools/stream.hxx>
 

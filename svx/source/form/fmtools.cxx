@@ -36,7 +36,7 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include "fmservs.hxx"
 #include <svx/fmglob.hxx>
@@ -91,8 +91,8 @@
 #include "fmprop.hrc"
 #endif
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

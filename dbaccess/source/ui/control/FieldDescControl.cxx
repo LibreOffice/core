@@ -53,12 +53,12 @@
 #include <svx/numfmtsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/algitem.hxx>
-#include <svtools/itempool.hxx>
-#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svtools/zforlist.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/rngitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/itempool.hxx>
+#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svl/zforlist.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/rngitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/numuno.hxx>
 #include <svtools/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

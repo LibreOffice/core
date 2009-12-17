@@ -319,6 +319,11 @@ void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< 
     // NOT implemented yet!
 }
 
+void SubstitutePathVariables_Impl::Commit()
+{
+}
+
+
 //_________________________________________________________________________________________________________________
 //  private methods
 //_________________________________________________________________________________________________________________

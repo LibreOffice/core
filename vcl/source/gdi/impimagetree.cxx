@@ -46,6 +46,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "comphelper/processfactory.hxx"
+#include "osl/file.hxx"
 #include "osl/diagnose.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.h"
@@ -118,12 +119,43 @@ ImplImageTree::ImplImageTree() {}
 
 ImplImageTree::~ImplImageTree() {}
 
+bool ImplImageTree::checkStyle(rtl::OUString const & style)
+{
+    bool exists;
+
+    // using cache because setStyle is an expensive operation
+    // setStyle calls resetZips => closes any opened zip files with icons, cleans the icon cache, ...
+    if (checkStyleCacheLookup(style, exists)) {
+        return exists;
+    }
+
+    setStyle(style);
+
+    exists = false;
+    const rtl::OUString sBrandURLSuffix(RTL_CONSTASCII_USTRINGPARAM("_brand.zip"));
+    for (Zips::iterator i(m_zips.begin()); i != m_zips.end() && !exists;) {
+        ::rtl::OUString aZipURL = i->first;
+        sal_Int32 nFromIndex = aZipURL.getLength() - sBrandURLSuffix.getLength();
+        // skip brand-specific icon themes; they are incomplete and thus not useful for this check
+        if (nFromIndex < 0 || !aZipURL.match(sBrandURLSuffix, nFromIndex)) {
+            osl::File aZip(aZipURL);
+            if (aZip.open(OpenFlag_Read) == ::osl::FileBase::E_None) {
+                aZip.close();
+                exists = true;
+            }
+        }
+        ++i;
+    }
+    m_checkStyleCache[style] = exists;
+    return exists;
+}
+
 bool ImplImageTree::loadImage(
     rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
     bool localized)
 {
     setStyle(style);
-    if (cacheLookup(name, localized, bitmap)) {
+    if (iconCacheLookup(name, localized, bitmap)) {
         return true;
     }
     if (!bitmap.IsEmpty()) {
@@ -164,7 +196,7 @@ bool ImplImageTree::loadImage(
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
     if (found) {
-        m_cache[name.intern()] = std::make_pair(localized, bitmap);
+        m_iconCache[name.intern()] = std::make_pair(localized, bitmap);
     }
     return found;
 }
@@ -173,7 +205,8 @@ void ImplImageTree::shutDown() {
     m_style = rtl::OUString();
         // for safety; empty m_style means "not initialized"
     m_zips.clear();
-    m_cache.clear();
+    m_iconCache.clear();
+    m_checkStyleCache.clear();
 }
 
 void ImplImageTree::setStyle(rtl::OUString const & style) {
@@ -181,7 +214,7 @@ void ImplImageTree::setStyle(rtl::OUString const & style) {
     if (style != m_style) {
         m_style = style;
         resetZips();
-        m_cache.clear();
+        m_iconCache.clear();
     }
 }
 
@@ -241,6 +274,7 @@ void ImplImageTree::resetZips() {
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
     }
+    if ( m_style.equals(::rtl::OUString::createFromAscii("default")) )
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -252,11 +286,23 @@ void ImplImageTree::resetZips() {
     }
 }
 
-bool ImplImageTree::cacheLookup(
+bool ImplImageTree::checkStyleCacheLookup(
+    rtl::OUString const & style, bool &exists)
+{
+    CheckStyleCache::iterator i(m_checkStyleCache.find(style));
+    if (i != m_checkStyleCache.end()) {
+        exists = i->second;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool ImplImageTree::iconCacheLookup(
     rtl::OUString const & name, bool localized, BitmapEx & bitmap)
 {
-    Cache::iterator i(m_cache.find(name));
-    if (i != m_cache.end() && i->second.first == localized) {
+    IconCache::iterator i(m_iconCache.find(name));
+    if (i != m_iconCache.end() && i->second.first == localized) {
         bitmap = i->second.second;
         return true;
     } else {

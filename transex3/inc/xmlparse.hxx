@@ -32,11 +32,7 @@
 #define BOOTSTRP_XMLPARSE_HXX
 
 #include <signal.h>
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <external/expat/xmlparse.h>
-#endif
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "tools/string.hxx"

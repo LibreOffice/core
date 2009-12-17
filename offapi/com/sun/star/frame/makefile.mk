@@ -142,6 +142,7 @@ IDLFILES=\
     XRecordableDispatch.idl\
     XSessionManagerClient.idl\
     XSessionManagerListener.idl\
+    XSessionManagerListener2.idl\
     XStatusListener.idl\
     XStatusbarController.idl\
     XStorable.idl\

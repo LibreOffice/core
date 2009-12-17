@@ -38,7 +38,7 @@
 #endif
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 class ChannelItem;
 class ChannelList;

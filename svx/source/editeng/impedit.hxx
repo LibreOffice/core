@@ -42,7 +42,7 @@
 #include <vcl/cursor.hxx>
 
 #include <vcl/dndhelp.hxx>
-#include <svtools/ondemand.hxx>
+#include <svl/ondemand.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>

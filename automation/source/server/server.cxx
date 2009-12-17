@@ -55,7 +55,7 @@
 #if 1
 #include <svtools/ttprops.hxx>
 #include <basic/ttstrhlp.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/sound.hxx>
 #include "testtool.hrc"

@@ -34,7 +34,7 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 

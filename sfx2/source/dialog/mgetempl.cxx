@@ -37,9 +37,9 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <vcl/field.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/style.hxx>
 #ifndef GCC
 #endif
 
@@ -57,7 +57,7 @@
 #include "mgetempl.hrc"
 
 #ifndef _SFX_STYLE_HRC
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #endif
 
 // SfxManageStyleSheetPage -----------------------------------------------

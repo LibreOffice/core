@@ -34,12 +34,12 @@
 #include <tools/string.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <pam.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 class SfxItemSet;
 class SwView;

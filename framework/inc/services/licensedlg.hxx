@@ -42,7 +42,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 namespace framework {
 

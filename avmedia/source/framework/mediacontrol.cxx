@@ -37,7 +37,7 @@
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <math.h>
 #include <algorithm>

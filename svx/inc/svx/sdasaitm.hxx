@@ -31,7 +31,7 @@
 #ifndef _SDASAITM_HXX
 #define _SDASAITM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/list.hxx>
 
 class SdrCustomShapeAdjustmentValue

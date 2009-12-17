@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "dpgroup.hxx"
 #include "collect.hxx"

@@ -55,8 +55,8 @@
 #include <svx/udlnitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/wghtitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>

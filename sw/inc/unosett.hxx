@@ -44,7 +44,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <tools/string.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 class SwDoc;
 class SwFmtCol;

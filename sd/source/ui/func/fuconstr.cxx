@@ -34,7 +34,7 @@
 #include "fuconstr.hxx"
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>

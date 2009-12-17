@@ -56,8 +56,8 @@
 
 #include <rtl/logfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svtools/wmf.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>

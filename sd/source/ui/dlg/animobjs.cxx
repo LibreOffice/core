@@ -39,7 +39,7 @@
 #include <svx/xoutbmp.hxx>
 
 #include <time.h>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <sfx2/dispatch.hxx>

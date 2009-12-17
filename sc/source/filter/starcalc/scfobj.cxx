@@ -41,7 +41,7 @@ using namespace com::sun::star;
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>

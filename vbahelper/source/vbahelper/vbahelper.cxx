@@ -47,11 +47,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
-//#include <svtools/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfac.hxx>
 

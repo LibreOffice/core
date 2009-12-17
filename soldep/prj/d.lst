@@ -27,7 +27,6 @@ mkdir: %COMMON_DEST%\res%_EXT%\img\additional
 ..\inc\soldep\prj.hxx %_DEST%\inc%_EXT%\soldep\prj.hxx
 ..\inc\dep.hxx %_DEST%\inc%_EXT%\soldep\dep.hxx
 ..\inc\prodmap.hxx %_DEST%\inc%_EXT%\soldep\prodmap.hxx
-..\inc\soldep\XmlBuildList.hxx %_DEST%\inc%_EXT%\soldep\XmlBuildList.hxx
 ..\inc\appdef.hxx %_DEST%\inc%_EXT%\soldep\appdef.hxx
 ..\inc\soldep\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
 

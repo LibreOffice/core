@@ -58,7 +58,7 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 
 #include "editwin.hxx"

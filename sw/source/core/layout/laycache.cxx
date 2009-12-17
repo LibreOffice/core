@@ -348,7 +348,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     sal_Bool bRet = sal_True;

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_codemaker_cppumaker.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)

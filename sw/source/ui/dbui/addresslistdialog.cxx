@@ -67,8 +67,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <swunohelper.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
 

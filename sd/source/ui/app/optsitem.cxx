@@ -36,7 +36,7 @@
 #ifndef _SV_SALBTYPE_HRC //autogen
 #include <vcl/salbtype.hxx>
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "app.hxx"
 #include "optsitem.hxx"
@@ -73,6 +73,10 @@ void SdOptionsItem::Commit()
     if( IsModified() )
         mrParent.Commit( *this );
 };
+
+void SdOptionsItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{}
+
 
 // -----------------------------------------------------------------------------
 

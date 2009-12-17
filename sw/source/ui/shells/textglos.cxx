@@ -33,8 +33,8 @@
 
 
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 
 #include "errhdl.hxx"
 #include "view.hxx"

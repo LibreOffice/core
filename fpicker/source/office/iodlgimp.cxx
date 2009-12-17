@@ -43,9 +43,9 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 // #97148# ---------------
-#include "svtools/ctypeitm.hxx"
-#include "svtools/eitem.hxx"
-#include "svtools/viewoptions.hxx"
+#include "svl/ctypeitm.hxx"
+#include "svl/eitem.hxx"
+#include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
 #include "svtools/inettbc.hxx"
 #include "iodlg.hxx"
@@ -54,7 +54,7 @@
 #endif
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
-#include "svtools/useroptions.hxx"
+#include "unotools/useroptions.hxx"
 #ifndef _RTL_INSTANCE_HXX_
 #include "rtl/instance.hxx"
 #endif
@@ -62,7 +62,7 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_USHORTS
-#include "svtools/svstdarr.hxx"
+#include "svl/svstdarr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

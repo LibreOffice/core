@@ -54,7 +54,7 @@ class Timer;
 
 class TextLine;
 class TETextPortion;
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/link.hxx>
 #include <vcl/font.hxx>
 #include <tools/string.hxx>

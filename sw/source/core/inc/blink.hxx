@@ -37,7 +37,7 @@ class SwTxtFrm;
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SwBlinkPortion
 {

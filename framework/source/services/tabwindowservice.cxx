@@ -75,18 +75,20 @@ namespace framework{
 //  css::uno::XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XINTERFACE_5                 (   TabWindowService                                ,
+DEFINE_XINTERFACE_6                 (   TabWindowService                                ,
                                         OWeakObject                                     ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider      ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo       ),
+                                        DIRECT_INTERFACE(css::lang::XComponent),
                                         DIRECT_INTERFACE(css::awt::XSimpleTabController),
                                         DIRECT_INTERFACE(css::beans::XPropertySet      ),
                                         DIRECT_INTERFACE(css::beans::XPropertySetInfo  )
                                     )
 
-DEFINE_XTYPEPROVIDER_5              (   TabWindowService               ,
+DEFINE_XTYPEPROVIDER_6              (   TabWindowService               ,
                                         css::lang::XTypeProvider       ,
                                         css::lang::XServiceInfo        ,
+                                        css::lang::XComponent          ,
                                         css::awt::XSimpleTabController ,
                                         css::beans::XPropertySet       ,
                                         css::beans::XPropertySetInfo
@@ -142,6 +144,11 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
 //*****************************************************************************************************************
 TabWindowService::~TabWindowService()
 {
+    // SAFE->
+    ResetableGuard aGuard(m_aLock);
+
+    if (m_pTabWin)
+        m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 }
 
 //*****************************************************************************************************************
@@ -286,8 +293,11 @@ void SAL_CALL TabWindowService::dispose()
 
     m_lListener.disposeAndClear (aEvent);
 
+    if (m_pTabWin)
+        m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
+
     m_pTabWin = NULL;
-    m_xTabWin.clear ();
+    m_xTabWin.clear();
 }
 
 //*****************************************************************************************************************
@@ -357,6 +367,7 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const ::rtl::OUSt
 //*****************************************************************************************************************
 IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 {
+
     if ( !pEvent && !pEvent->ISA(VclWindowEvent))
         return 0;
 
@@ -369,6 +380,11 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     if (nEventId == VCLEVENT_OBJECT_DYING)
     {
         m_lListener.disposeAndClear (aEvent);
+
+        m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
+        m_pTabWin = NULL;
+        m_xTabWin.clear();
+
         return 0;
     }
 
@@ -456,7 +472,7 @@ FwkTabWindow* TabWindowService::mem_TabWin ()
     if ( ! m_xTabWin.is ())
     {
         Window* pFakeParent = dynamic_cast< Window* >(Application::GetDefaultDevice ());
-    
+
         m_pTabWin = new FwkTabWindow (pFakeParent);
         m_xTabWin = VCLUnoHelper::GetInterface (m_pTabWin);
 

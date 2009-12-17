@@ -39,11 +39,11 @@
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include "globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/xlnclit.hxx>
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 

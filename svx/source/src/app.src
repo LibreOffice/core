@@ -28,16 +28,7 @@
  *
  ************************************************************************/
 
-#ifndef _GLOBLMN_HRC
-#include "globlmn_tmpl.hrc"
-#endif
-#ifndef _GLOBALACC_SRC
-#include "globlac.hrc"
-#endif
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
 #include "app.hrc"
 
  //----------------------------------------------------------------------------
@@ -49,8 +40,6 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
     Buttons = WB_OK ;
     Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
 };
-
- // Image-Listen ----------------------------------------------------------
 
 #define IMAGE_ID_LIST\
     IdList = {\
@@ -110,29 +99,8 @@ ImageList RID_DEFAULTIMAGELIST_LCH
 
 // Strings ---------------------------------------------------------------
 
-#define MN_EDIT 20
-#define MN_VIEW 21
-#define MN_EXTRA 22
-#define MN_WIN 30
-#define MN_HELP 31
-#define MN_TEMPLATES 11
-
-#define  ACC Accelerator
-#define ACCK AcceleratorItem
-
- // die Acceleratoren
-
 String RID_DESKTOP
 {
     Text = "%PRODUCTNAME" ;
 };
 
-String STR_SD_STAROFFICE_XML_DRAW
-{
-    Text [ en-US ] = "%PRODUCTNAME XML (Draw)";
-};
-
-String STR_SD_STAROFFICE_XML_IMPRESS
-{
-    Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
-};

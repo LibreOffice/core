@@ -35,8 +35,8 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/controldims.hrc>
 
 //.............................................................................

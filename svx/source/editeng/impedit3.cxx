@@ -36,7 +36,7 @@
 #include <vcl/gdimtf.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -68,7 +68,7 @@
 #include <svx/numitem.hxx>
 
 #include <svtools/colorcfg.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 
 #include <forbiddencharacterstable.hxx>
 

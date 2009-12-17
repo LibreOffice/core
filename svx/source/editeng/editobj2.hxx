@@ -34,7 +34,7 @@
 #include <svx/editobj.hxx>
 #include <editdoc.hxx>
 
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 
 
 class SfxStyleSheetPool;

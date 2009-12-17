@@ -50,7 +50,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svtools/colorcfg.hxx>
 

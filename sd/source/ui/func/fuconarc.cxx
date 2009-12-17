@@ -35,8 +35,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdocirc.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -45,7 +45,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
 

@@ -41,9 +41,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/adjitem.hxx>
@@ -3582,7 +3582,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,

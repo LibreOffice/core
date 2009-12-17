@@ -41,9 +41,9 @@
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/unoevent.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/event.hxx>
 #include <swtypes.hxx>
 #include <glosdoc.hxx>
@@ -61,8 +61,8 @@
 #include <docsh.hxx>
 #include <swunodef.hxx>
 #include <swmodule.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/macitem.hxx>
 
 #include <svx/acorrcfg.hxx>
 

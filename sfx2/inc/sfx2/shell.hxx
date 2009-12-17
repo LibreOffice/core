@@ -36,7 +36,7 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <tools/debug.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 #include <tools/ownlist.hxx>
 #include <tools/unqid.hxx>

@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnedwit.hxx>

@@ -38,7 +38,7 @@
 
 #include "hintids.hxx"
 #include <tools/string.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif

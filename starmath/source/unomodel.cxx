@@ -37,7 +37,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/processfactory.hxx>
 #include <svx/paperinf.hxx>

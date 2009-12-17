@@ -37,8 +37,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/viewoptions.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/fixedhyper.hxx>
 #include <svtools/controldims.hrc>
 

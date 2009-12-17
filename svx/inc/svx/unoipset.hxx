@@ -34,7 +34,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "svx/svxdllapi.h"
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 class SvxIDPropertyCombineList;
 class SdrItemPool;

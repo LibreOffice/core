@@ -32,7 +32,7 @@
 #define SC_DRDEFUNO_HXX
 
 #include <svx/unopool.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 class ScDocShell;
 

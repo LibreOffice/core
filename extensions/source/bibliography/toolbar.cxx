@@ -238,7 +238,7 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     aLBSource.Show();
     aLBSource.SetSelectHdl(LINK( this, BibToolBar, SelHdl));
 
-    SvtMiscOptions().AddListener( LINK( this, BibToolBar, OptionsChanged_Impl ) );
+    SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
     aTimer.SetTimeoutHdl(LINK( this, BibToolBar, SendSelHdl));
@@ -271,7 +271,7 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
 
 BibToolBar::~BibToolBar()
 {
-    SvtMiscOptions().RemoveListener( LINK( this, BibToolBar, OptionsChanged_Impl ) );
+    SvtMiscOptions().RemoveListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::RemoveEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
     ::bib::RemoveFromTaskPaneList( this );
 }

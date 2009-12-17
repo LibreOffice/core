@@ -34,10 +34,8 @@
 #include "futext.hxx"
 
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <boost/scoped_ptr.hpp>
-
-class SfxItemSet;
 
 namespace sd {
 

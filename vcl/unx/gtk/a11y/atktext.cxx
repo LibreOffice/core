@@ -187,8 +187,16 @@ static accessibility::XAccessibleTextMarkup*
         if( !pWrap->mpTextMarkup && pWrap->mpContext )
         {
             uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextMarkup::static_type(NULL) );
-            pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
-            pWrap->mpTextMarkup->acquire();
+            /* Since this not a dedicated interface in Atk and thus has not
+             * been queried during wrapper initialization, we need to check
+             * the return value here.
+             */
+            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
+            {
+                pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
+                if( pWrap->mpTextMarkup )
+                    pWrap->mpTextMarkup->acquire();
+            }
         }
 
         return pWrap->mpTextMarkup;

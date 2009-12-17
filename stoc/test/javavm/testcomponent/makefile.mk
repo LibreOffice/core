@@ -40,7 +40,7 @@ TARGET  = JavaTestComponent
 #.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
 # Files --------------------------------------------------------
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES = ridl.jar jurt.jar unoil.jar
 
 CUSTOMMANIFESTFILE= manifest
 

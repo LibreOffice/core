@@ -34,10 +34,10 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "svtools/svldllapi.h"
+#include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -67,7 +67,7 @@ class SvtMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtMenuOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -98,8 +98,8 @@ class SVL_DLLPUBLIC SvtMenuOptions: public svt::detail::Options
          SvtMenuOptions();
         virtual ~SvtMenuOptions();
 
-        void AddListener( const Link& rLink );
-        void RemoveListener( const Link& rLink );
+        void AddListenerLink( const Link& rLink );
+        void RemoveListenerLink( const Link& rLink );
         //---------------------------------------------------------------------------------------------------------
         //  interface
         //---------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ class SVL_DLLPUBLIC SvtMenuOptions: public svt::detail::Options
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

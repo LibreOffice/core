@@ -34,7 +34,7 @@
 #include "KDatabaseMetaData.hxx"
 #include "kfields.hxx"
 #include "KDEInit.h"
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "OTypeInfo.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>

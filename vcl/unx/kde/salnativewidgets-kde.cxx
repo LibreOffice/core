@@ -32,7 +32,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
-#include "kde_headers.h"
+#include <shell/kde_headers.h>
 
 #include <salunx.h>
 #include <saldata.hxx>
@@ -2073,12 +2073,13 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     }
 }
 
-void KDESalFrame::updateGraphics()
+void KDESalFrame::updateGraphics( bool bClear )
 {
+    Drawable aDrawable = bClear ? None : GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
     {
         if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( GetWindow(), GetScreenNumber() );
+            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );
     }
 }
 

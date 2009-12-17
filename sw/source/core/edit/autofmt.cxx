@@ -38,7 +38,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/lrspitem.hxx>

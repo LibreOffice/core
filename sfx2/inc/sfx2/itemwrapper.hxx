@@ -33,10 +33,10 @@
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 
 // ============================================================================
 

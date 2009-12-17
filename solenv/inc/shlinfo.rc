@@ -29,7 +29,7 @@
 #define LG_D 					// generate always german version
 #endif
 
-#define VER_FIRSTYEAR	2008
+#define VER_FIRSTYEAR	2010
 
 
 #if defined(OS2)

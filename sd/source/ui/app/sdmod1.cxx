@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svtools/lckbitem.hxx>
+#include <svl/lckbitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include "framework/FrameworkHelper.hxx"
 
 #include <svx/dialogs.hrc>
@@ -49,7 +49,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"

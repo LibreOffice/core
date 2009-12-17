@@ -45,9 +45,9 @@
 #include "AxisHelper.hxx"
 
 // header for class SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 // header for class SvNumberFormatsSupplierObj
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/component_context.hxx>
 

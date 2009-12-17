@@ -39,14 +39,14 @@
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _SVDOGROUP_HXX //autogen
 #include <svx/svdogrp.hxx>
 #endif
 #include <svx/flditem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

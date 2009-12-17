@@ -185,14 +185,14 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
 
-    StartListening( maAccessibilityOptions );
+    maAccessibilityOptions.AddListener(this);
 
     onAccessibilityOptionsChanged();
 }
 
 SdrView::~SdrView()
 {
-    EndListening( maAccessibilityOptions );
+    maAccessibilityOptions.RemoveListener(this);
 }
 
 BOOL SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
@@ -1298,7 +1298,7 @@ XubString SdrView::GetStatusText()
         aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
         aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
         aStr += UniString::CreateFromInt32( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
@@ -1560,14 +1560,10 @@ BOOL SdrView::IsDeleteMarkedPossible() const
     return IsDeleteMarkedObjPossible();
 }
 
-void SdrView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, sal_uInt32 nHint)
 {
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_ACCESSIBILITY_CHANGED )
-    {
-        onAccessibilityOptionsChanged();
-    }
-
-     SdrCreateView::Notify(rBC, rHint);
+    onAccessibilityOptionsChanged();
+     SdrCreateView::ConfigurationChanged(p, nHint);
 }
 
 SvtAccessibilityOptions& SdrView::getAccessibilityOptions()

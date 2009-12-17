@@ -371,11 +371,18 @@ testcase tExtensionsFunction
             kontext
             if active.exists(5) then
                 sTemp = active.getText
-                try
-                    active.yes
-                catch
-                    warnlog( "Try...catch: Failed to click Yes-button" )
-                endcatch
+                printlog "Messagebox: " + sTemp
+                ' We only want to handle the installation target here which only 
+                ' pops up if we have the choice (rights to write to shared layer)
+                if active.getButtonCount = 3 then 
+                    try
+                        active.yes
+                    catch
+                        warnlog( "Try...catch: Failed to click Yes-button" )
+                    endcatch
+                else
+                    printlog "No installation target message (this is probably a root-installation)" 
+                endif
             endif
 
             '/// Progress dialog comes up ///'

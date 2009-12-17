@@ -47,7 +47,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include "strings.hrc"
 #include "dlgeos2.hxx"
 

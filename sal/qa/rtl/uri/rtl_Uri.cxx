@@ -38,7 +38,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // -----------------------------------------------------------------------------
 

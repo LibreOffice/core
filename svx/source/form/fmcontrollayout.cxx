@@ -47,7 +47,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

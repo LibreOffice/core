@@ -36,7 +36,7 @@
 #include <vector>
 #include <algorithm>
 #include <basic/sbx.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <iderdll.hxx>
 #include <iderdll2.hxx>

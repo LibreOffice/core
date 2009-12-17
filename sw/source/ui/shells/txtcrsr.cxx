@@ -33,7 +33,7 @@
 
 
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif

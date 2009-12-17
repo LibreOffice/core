@@ -53,7 +53,7 @@ class KeyTester : public osl::Thread
     virtual ~KeyTester ()
     {
     }
-    virtual void run ()
+    virtual void SAL_CALL run ()
     {
         testIteration();
         while (!m_pCond->check())

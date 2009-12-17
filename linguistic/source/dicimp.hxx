@@ -42,6 +42,7 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
+#include "defs.hxx"
 #include "misc.hxx"
 
 
@@ -49,7 +50,7 @@
 
 #define DIC_MAX_ENTRIES     30000
 
-INT16           ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg );
+INT16           ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg );
 const String    GetDicExtension();
 
 ///////////////////////////////////////////////////////////////////////////

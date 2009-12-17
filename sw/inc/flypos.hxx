@@ -31,7 +31,7 @@
 #define _FLYPOS_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <swdllapi.h>
 
 class SwFrmFmt;

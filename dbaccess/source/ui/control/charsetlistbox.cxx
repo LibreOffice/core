@@ -36,8 +36,8 @@
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 
 //........................................................................
 namespace dbaui

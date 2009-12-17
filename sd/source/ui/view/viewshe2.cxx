@@ -59,7 +59,7 @@
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif

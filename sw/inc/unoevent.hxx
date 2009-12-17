@@ -31,7 +31,7 @@
 #define _UNOEVENT_HXX
 
 #include <svtools/unoevent.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 
 class SvxMacroItem;

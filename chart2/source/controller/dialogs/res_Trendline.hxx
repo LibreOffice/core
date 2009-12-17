@@ -34,7 +34,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 
 namespace chart

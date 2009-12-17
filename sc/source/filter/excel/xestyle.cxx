@@ -37,8 +37,8 @@
 #include <set>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/font.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/printer.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
@@ -823,6 +823,120 @@ void XclExpPalette::WriteBody( XclExpStream& rStrm )
 
 namespace {
 
+typedef ::std::pair< USHORT, sal_Int16 > WhichAndScript;
+
+sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
+        const WhichAndScript& rWAS1, const WhichAndScript& rWAS2, const WhichAndScript& rWAS3 )
+{
+    if( ScfTools::CheckItem( rItemSet, rWAS1.first, false ) ) return rWAS1.second;
+    if( ScfTools::CheckItem( rItemSet, rWAS2.first, false ) ) return rWAS2.second;
+    if( ScfTools::CheckItem( rItemSet, rWAS3.first, false ) ) return rWAS3.second;
+    return 0;
+};
+
+} // namespace
+
+/*static*/ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const SfxItemSet& rItemSet )
+{
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+
+    /*  #i17050# #i107170# We need to determine which font items are set in the
+        item set, and which script type we should prefer according to the
+        current language settings. */
+
+    static const WhichAndScript WAS_LATIN( ATTR_FONT, ::com::sun::star::i18n::ScriptType::LATIN );
+    static const WhichAndScript WAS_ASIAN( ATTR_CJK_FONT, ::com::sun::star::i18n::ScriptType::ASIAN );
+    static const WhichAndScript WAS_CMPLX( ATTR_CTL_FONT, ::com::sun::star::i18n::ScriptType::COMPLEX );
+
+    /*  #114008# do not let a font from a parent style override an explicit
+        cell font. */
+
+    sal_Int16 nDefScript = rRoot.GetDefApiScript();
+    sal_Int16 nScript = 0;
+    const SfxItemSet* pCurrSet = &rItemSet;
+
+    while( (nScript == 0) && pCurrSet )
+    {
+        switch( nDefScript )
+        {
+            case ApiScriptType::LATIN:
+                nScript = lclCheckFontItems( *pCurrSet, WAS_LATIN, WAS_CMPLX, WAS_ASIAN );
+            break;
+            case ApiScriptType::ASIAN:
+                nScript = lclCheckFontItems( *pCurrSet, WAS_ASIAN, WAS_CMPLX, WAS_LATIN );
+            break;
+            case ApiScriptType::COMPLEX:
+                nScript = lclCheckFontItems( *pCurrSet, WAS_CMPLX, WAS_ASIAN, WAS_LATIN );
+            break;
+            default:
+                DBG_ERRORFILE( "XclExpFontHelper::GetFirstUsedScript - unknown script type" );
+                nScript = ApiScriptType::LATIN;
+        };
+        pCurrSet = pCurrSet->GetParent();
+    }
+
+    return nScript;
+}
+
+/*static*/ Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
+{
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+
+    // if WEAK is passed, guess script type from existing items in the item set
+    if( nScript == ApiScriptType::WEAK )
+        nScript = GetFirstUsedScript( rRoot, rItemSet );
+
+    // convert to core script type constants
+    BYTE nScScript = SCRIPTTYPE_LATIN;
+    switch( nScript )
+    {
+        case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
+        case ApiScriptType::ASIAN:      nScScript = SCRIPTTYPE_ASIAN;   break;
+        case ApiScriptType::COMPLEX:    nScScript = SCRIPTTYPE_COMPLEX; break;
+        default:    DBG_ERRORFILE( "XclExpFontHelper::GetFontFromItemSet - unknown script type" );
+    }
+
+    // fill the font object
+    Font aFont;
+    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
+    return aFont;
+}
+
+/*static*/ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
+{
+    static const USHORT pnCommonIds[] = {
+        ATTR_FONT_UNDERLINE, ATTR_FONT_CROSSEDOUT, ATTR_FONT_CONTOUR,
+        ATTR_FONT_SHADOWED, ATTR_FONT_COLOR, ATTR_FONT_LANGUAGE, 0 };
+    static const USHORT pnLatinIds[] = {
+        ATTR_FONT, ATTR_FONT_HEIGHT, ATTR_FONT_WEIGHT, ATTR_FONT_POSTURE, 0 };
+    static const USHORT pnAsianIds[] = {
+        ATTR_CJK_FONT, ATTR_CJK_FONT_HEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CJK_FONT_POSTURE, 0 };
+    static const USHORT pnComplexIds[] = {
+        ATTR_CTL_FONT, ATTR_CTL_FONT_HEIGHT, ATTR_CTL_FONT_WEIGHT, ATTR_CTL_FONT_POSTURE, 0 };
+
+    bool bUsed = ScfTools::CheckItems( rItemSet, pnCommonIds, bDeep );
+    if( !bUsed )
+    {
+        namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+        // if WEAK is passed, guess script type from existing items in the item set
+        if( nScript == ApiScriptType::WEAK )
+            nScript = GetFirstUsedScript( rRoot, rItemSet );
+        // check the correct items
+        switch( nScript )
+        {
+            case ApiScriptType::LATIN:      bUsed = ScfTools::CheckItems( rItemSet, pnLatinIds, bDeep );    break;
+            case ApiScriptType::ASIAN:      bUsed = ScfTools::CheckItems( rItemSet, pnAsianIds, bDeep );    break;
+            case ApiScriptType::COMPLEX:    bUsed = ScfTools::CheckItems( rItemSet, pnComplexIds, bDeep );  break;
+            default:    DBG_ERRORFILE( "XclExpFontHelper::CheckItems - unknown script type" );
+        }
+    }
+    return bUsed;
+}
+
+// ----------------------------------------------------------------------------
+
+namespace {
+
 sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 {
     sal_uInt32 nHash = rFontData.maName.Len();
@@ -993,7 +1107,8 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
         sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
     // #i17050# #114008# #115495# script type now provided by caller
-    return Insert( GetFontFromItemSet( rItemSet, nScript ), eColorType, bAppFont );
+    Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
+    return Insert( aFont, eColorType, bAppFont );
 }
 
 sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern,
@@ -1020,90 +1135,6 @@ void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
     maFontList.SaveXml( rStrm );
 
     rStyleSheet->endElement( XML_fonts );
-}
-
-sal_Int16 XclExpFontBuffer::GetFirstUsedScript( const SfxItemSet& rItemSet )
-{
-    /*  #i17050# We need to determine if a CJK or CTL font item is set in the
-        item set. It is possible that both may be present. In this case,
-        we will choose CJK. Either option is equally correct. */
-
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-    sal_Int16 nScript = ApiScriptType::LATIN;
-
-    // #114008# do not let a font from a parent style override an explicit cell font
-    const SfxItemSet* pCurrSet = &rItemSet;
-    bool bFound = false;
-    while( !bFound && pCurrSet )
-    {
-        bFound = true;
-        if( ScfTools::CheckItem( *pCurrSet, ATTR_CJK_FONT, false ) )
-            nScript = ApiScriptType::ASIAN;
-        else if( ScfTools::CheckItem( *pCurrSet, ATTR_CTL_FONT, false ) )
-            nScript = ApiScriptType::COMPLEX;
-        else if( ScfTools::CheckItem( *pCurrSet, ATTR_FONT, false ) )
-            nScript = ApiScriptType::LATIN;
-        else
-            bFound = false;
-        pCurrSet = pCurrSet->GetParent();
-    }
-
-    return nScript;
-}
-
-Font XclExpFontBuffer::GetFontFromItemSet( const SfxItemSet& rItemSet, sal_Int16 nScript )
-{
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-
-    // if WEAK is passed, guess script type from existing items in the item set
-    if( nScript == ApiScriptType::WEAK )
-        nScript = GetFirstUsedScript( rItemSet );
-
-    // convert to core script type constants
-    BYTE nScScript = SCRIPTTYPE_LATIN;
-    switch( nScript )
-    {
-        case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
-        case ApiScriptType::ASIAN:      nScScript = SCRIPTTYPE_ASIAN;   break;
-        case ApiScriptType::COMPLEX:    nScScript = SCRIPTTYPE_COMPLEX; break;
-        default:    DBG_ERRORFILE( "XclExpFontBuffer::GetFontFromItemSet - unknown script type" );
-    }
-
-    // fill the font object
-    Font aFont;
-    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
-    return aFont;
-}
-
-bool XclExpFontBuffer::CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
-{
-    static const USHORT pnCommonIds[] = {
-        ATTR_FONT_UNDERLINE, ATTR_FONT_CROSSEDOUT, ATTR_FONT_CONTOUR,
-        ATTR_FONT_SHADOWED, ATTR_FONT_COLOR, ATTR_FONT_LANGUAGE, 0 };
-    static const USHORT pnLatinIds[] = {
-        ATTR_FONT, ATTR_FONT_HEIGHT, ATTR_FONT_WEIGHT, ATTR_FONT_POSTURE, 0 };
-    static const USHORT pnAsianIds[] = {
-        ATTR_CJK_FONT, ATTR_CJK_FONT_HEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CJK_FONT_POSTURE, 0 };
-    static const USHORT pnComplexIds[] = {
-        ATTR_CTL_FONT, ATTR_CTL_FONT_HEIGHT, ATTR_CTL_FONT_WEIGHT, ATTR_CTL_FONT_POSTURE, 0 };
-
-    bool bUsed = ScfTools::CheckItems( rItemSet, pnCommonIds, bDeep );
-    if( !bUsed )
-    {
-        namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
-        // if WEAK is passed, guess script type from existing items in the item set
-        if( nScript == ApiScriptType::WEAK )
-            nScript = GetFirstUsedScript( rItemSet );
-        // check the correct items
-        switch( nScript )
-        {
-            case ApiScriptType::LATIN:      bUsed = ScfTools::CheckItems( rItemSet, pnLatinIds, bDeep );    break;
-            case ApiScriptType::ASIAN:      bUsed = ScfTools::CheckItems( rItemSet, pnAsianIds, bDeep );    break;
-            case ApiScriptType::COMPLEX:    bUsed = ScfTools::CheckItems( rItemSet, pnComplexIds, bDeep );  break;
-            default:    DBG_ERRORFILE( "XclExpFontBuffer::CheckItems - unknown script type" );
-        }
-    }
-    return bUsed;
 }
 
 // private --------------------------------------------------------------------
@@ -1885,7 +1916,8 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
     bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
-    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), ::com::sun::star::i18n::ScriptType::WEAK,
+    sal_Int16 nScript = bDefStyle ? GetDefApiScript() : ::com::sun::star::i18n::ScriptType::WEAK;
+    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), nScript,
         NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false, bDefStyle );
 }
 
@@ -1947,7 +1979,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     if( nForceXclFont == EXC_FONT_NOTFOUND )
     {
         mnXclFont = GetFontBuffer().Insert( rItemSet, nScript, EXC_COLOR_CELLTEXT, bDefStyle );
-        mbFontUsed = XclExpFontBuffer::CheckItems( rItemSet, nScript, IsStyleXF() );
+        mbFontUsed = XclExpFontHelper::CheckItems( GetRoot(), rItemSet, nScript, IsStyleXF() );
     }
     else
     {

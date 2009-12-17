@@ -357,4 +357,8 @@ void HandlerCFGAccess::Notify(const css::uno::Sequence< rtl::OUString >& /*lProp
     }
 }
 
+void HandlerCFGAccess::Commit()
+{
+}
+
 } // namespace framework

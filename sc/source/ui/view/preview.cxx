@@ -47,7 +47,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/sound.hxx>

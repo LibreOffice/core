@@ -200,6 +200,7 @@ public:
 protected:
     // ____ ::utl::ConfigItem ____
     virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & aPropertyNames );
+    virtual void Commit();
 
 private:
     ConfigItemListener &    m_rListener;

@@ -191,7 +191,6 @@ CDEFSPROF=
 CDEFSDEBUG=
 CDEFSDBGUTIL=
 CDEFSOPT=
-HDEFS=
 
 CFLAGS=
 CFLAGSCALL=
@@ -849,12 +848,7 @@ LOCALIZESDF:=$(COMMONMISC)$/$(PRJNAME)$/dummy$/localize.sdf
 .ENDIF			# "$(LOCALIZESDF)"==""
 .ENDIF			# "$(WITH_LANG)"!=""
 
-.IF "$(PRE)"==""
-#JARDIR=$(CLASSDIR)
 JARDIR=$(OUT)/class
-.ELSE
-JARDIR=$(PRE)/class
-.ENDIF
 
 # needs to be expanded!!!
 
@@ -897,9 +891,6 @@ UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
 UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
-.IF "$(PRE)"!=""
-UNOIDLINC!:=-I$(PRE)/idl $(UNOIDLINC)
-.ENDIF
 UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
@@ -928,7 +919,6 @@ CDEFSDEBUG=-DDEBUG
 .ENDIF
 CDEFSDBGUTIL=-DDBG_UTIL
 CDEFSOPT=-DOPTIMIZE
-HDEFS=-D:$(GUI) -D:$(COM)
 
 MKDEPFLAGS+=-I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
 MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
@@ -1136,11 +1126,8 @@ RSCDEFS+=-DDBG_UTIL
 
 .IF "$(product)"!=""
 CDEFS+= -DPRODUCT -DNDEBUG
-HDEFS+= -D:PRODUCT
 RSCDEFS+= -DPRODUCT 
-CDEFS+=-DPRODUCT_FULL
-HDEFS+=-D:PRODUCT_FULL
-RSCDEFS+= -DPRODUCT_FULL -DNDEBUG
+RSCDEFS+= -DNDEBUG
 .ENDIF
 
 .IF "$(DBG_LEVEL)"!=""
@@ -1231,26 +1218,9 @@ STDLIB+=$(FILLUPARC)
 STDSHL+=$(FILLUPARC)
 .ENDIF			# "$(FILUPARC)"!=""
 
-.IF "$(DISABLE_JAVA)"==""
 .IF "$(SOLAR_JAVA)"!=""
 CDEFS+=$(JAVADEF)
 .ENDIF          # "$(SOLAR_JAVA)"!=""
-.ELSE           # "$(DISABLE_JAVA)"==""
-SOLAR_JAVA!:=
-.EXPORT : SOLAR_JAVA
-.IF "$(JDKPATH)"!=""
-environment_confusion:
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - Error!
-    @echo -
-    @echo - $$JDKPATH and $$DISABLE_JAVA are set. this will lead
-    @echo - to impropper results.
-    @echo -
-    @echo ----------------------------------------------------------
-    force_dmake_to_error
-.ENDIF          # "$(JDKPATH)"!=""
-.ENDIF          # "$(DISABLE_JAVA)"==""
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
 

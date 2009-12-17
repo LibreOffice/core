@@ -57,13 +57,13 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
 #endif
-#include <svtools/svstdarr.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
@@ -88,7 +88,7 @@
 
 #include <svx/flditem.hxx>
 #include <svx/borderline.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 
 // ohne sc.hrc: error C2679: binary '=' : no operator defined which takes a

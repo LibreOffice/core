@@ -49,10 +49,10 @@
 #include <svx/postitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 

@@ -34,7 +34,7 @@
 #include <tools/list.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>

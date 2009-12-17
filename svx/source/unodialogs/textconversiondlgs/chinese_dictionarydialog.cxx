@@ -47,8 +47,8 @@
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 // header for class SvtLinguConfigItem
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 // header for class IntlWrapper
 #include <unotools/intlwrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX

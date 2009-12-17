@@ -39,7 +39,7 @@
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/outlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 #include <tools/list.hxx>
@@ -60,7 +60,7 @@
 
 // #90477#
 #include <tools/tenccvt.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

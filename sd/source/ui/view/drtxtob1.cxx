@@ -46,9 +46,9 @@
 #endif
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/style.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/style.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -65,14 +65,14 @@
 #include <svx/outlobj.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/editeng.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
 #include <svx/scripttypeitem.hxx>
 #endif
 #include <svx/svdoutl.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <svx/frmdiritem.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 
 #include "app.hrc"

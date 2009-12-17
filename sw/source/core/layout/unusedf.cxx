@@ -67,7 +67,7 @@ BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
     return FALSE;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwRootFrm::Cut()
 {

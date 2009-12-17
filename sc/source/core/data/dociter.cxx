@@ -33,7 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "scitems.hxx"
 #include "global.hxx"

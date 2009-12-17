@@ -36,8 +36,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/itempool.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 
 #include "notemark.hxx"

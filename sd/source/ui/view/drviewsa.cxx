@@ -42,14 +42,14 @@
 #include <svx/zoomitem.hxx>
 #endif
 #include <svx/svdpagv.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>

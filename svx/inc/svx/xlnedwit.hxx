@@ -31,7 +31,7 @@
 #ifndef _SVX_XLNEDWIT_HXX
 #define _SVX_XLNEDWIT_HXX
 
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include "svx/svxdllapi.h"
 
 #define LINE_END_WIDTH_DEFAULT      (200)

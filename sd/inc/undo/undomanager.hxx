@@ -32,7 +32,7 @@
 #define _SD_UNDOMANAGER_HXX
 
 #include "misc/scopelock.hxx"
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 namespace sd
 {

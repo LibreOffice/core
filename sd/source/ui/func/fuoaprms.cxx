@@ -46,7 +46,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"

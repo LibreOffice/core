@@ -51,7 +51,7 @@
 #define TEST_VOLUME "c:/"
 #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 namespace osl_test_file
 {

@@ -43,7 +43,7 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <unotools/configitem.hxx>
 
-#include <vcl/timer.hxx>
+//#include <vcl/timer.hxx>
 
 #include "misc.hxx"
 #include "defs.hxx"

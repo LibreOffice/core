@@ -32,7 +32,7 @@
 #define _SVX_TEXTIT0_HXX
 
 #include <svx/xenum.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

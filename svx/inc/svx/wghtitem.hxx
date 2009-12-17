@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <vcl/vclenum.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif

@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/mnuitem.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "svx/svxdllapi.h"
 
 

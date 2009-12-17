@@ -33,7 +33,7 @@
 
 #include "sal/config.h"
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/conditn.hxx"
 #include "osl/thread.hxx"
 #include "osl/time.h"

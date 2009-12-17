@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #ifndef _FONT_HXX //autogen
 #include <vcl/font.hxx>

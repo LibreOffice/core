@@ -45,7 +45,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sot/formats.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 #include "sc.hrc"
 #include "drtxtob.hxx"

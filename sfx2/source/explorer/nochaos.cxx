@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <svtools/itempool.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
 #include <nochaos.hxx>
 #include <sfx2/sfxuno.hxx>
 

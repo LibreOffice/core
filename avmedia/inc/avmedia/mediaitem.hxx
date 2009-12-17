@@ -33,7 +33,7 @@
 
 #include <tools/rtti.hxx>
 #ifndef _POOLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #endif
 #include <com/sun/star/media/ZoomLevel.hpp>
 

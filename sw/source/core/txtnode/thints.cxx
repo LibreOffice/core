@@ -35,9 +35,9 @@
 #include <hintids.hxx>
 #include <sot/factory.hxx>
 #include <svx/xmlcnitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/stylepool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/stylepool.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/emphitem.hxx>
@@ -84,11 +84,11 @@
 // OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <docsh.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK    Check();
 #else
 #define CHECK
@@ -660,7 +660,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -1412,11 +1412,11 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     const BOOL bSuccess =
 #endif
                         pDoc->GetFtnIdxs().Insert( pTxtFtn );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( bSuccess, "FtnIdx nicht eingetragen." );
 #endif
                 }
@@ -2616,7 +2616,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     {
         SwpHintsArray::Insert( pHint );
         CalcFlags();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
@@ -2709,7 +2709,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         rNode.Modify( 0, &aHint );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif

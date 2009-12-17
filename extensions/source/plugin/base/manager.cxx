@@ -38,7 +38,7 @@
 #include "plugin/impl.hxx"
 
 #include "osl/mutex.hxx"
-#include "svtools/pathoptions.hxx"
+#include "unotools/pathoptions.hxx"
 #include "vcl/configsettings.hxx"
 
 #include "com/sun/star/container/XEnumerationAccess.hpp"

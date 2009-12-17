@@ -39,8 +39,8 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"

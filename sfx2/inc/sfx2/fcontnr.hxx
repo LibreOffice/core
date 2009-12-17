@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/window.hxx>
 
 #include <sfx2/docfilt.hxx>

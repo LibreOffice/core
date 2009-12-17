@@ -763,7 +763,6 @@ keyChangedCallback(GConfClient* aClient,
     aGconfBe->notifyListeners(aGconfKey);
 
 }
-#endif
 
 //------------------------------------------------------------------------------
 
@@ -827,7 +826,7 @@ void GconfBackend::notifyListeners(const rtl::OUString& /*aGconfKey*/)
     }
 */
 }
-
+#endif
 
 //------------------------------------------------------------------------------
 void SAL_CALL GconfBackend::addChangesListener(

@@ -33,8 +33,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/objsh.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/zforlist.hxx>
 
 #include "cellform.hxx"
 #include "cell.hxx"

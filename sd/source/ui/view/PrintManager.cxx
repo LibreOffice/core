@@ -52,7 +52,7 @@
 #include <sfx2/progress.hxx>
 #include <svtools/printdlg.hxx>
 #include <tools/multisel.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/prtqry.hxx>
 #include "WindowUpdater.hxx"
@@ -71,7 +71,7 @@
 #include "printdlg.hrc"
 #include "prntopts.hrc"
 #include "app.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/xlnclit.hxx>
 #include "printdialog.hxx"
@@ -368,7 +368,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
         if( pPrintOpts )
         {
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            ::utl::MiscCfg aMisc;
 
             if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
@@ -398,9 +398,9 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 ePageKind = PK_NOTES;
             }
 
-            pPrintOpts->GetOptionsPrint().SetWarningPrinter( pMisc->IsNotFoundWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningSize( pMisc->IsPaperSizeWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningPrinter( aMisc.IsNotFoundWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningSize( aMisc.IsPaperSizeWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningOrientation( aMisc.IsPaperOrientationWarning() );
 
             UINT16  nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
             ULONG   nMode = DRAWMODE_DEFAULT;

@@ -38,7 +38,7 @@
 #include "chartview/ChartSfxItemIds.hxx"
 
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 // header for class Svx3DHorizontalSegmentsItem
 #include <svx/svx3ditems.hxx>
 

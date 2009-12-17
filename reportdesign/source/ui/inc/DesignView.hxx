@@ -41,8 +41,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/hint.hxx>
+#include <svl/brdcst.hxx>
 #include <comphelper/stl_types.hxx>
 #include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>

@@ -35,9 +35,9 @@
 #include <svx/srchitem.hxx>
 
 
-#include <svtools/itempool.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 
 //#include <dbitems.hxx>
 #include "uiitems.hxx"

@@ -35,8 +35,8 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svtools/style.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/style.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>

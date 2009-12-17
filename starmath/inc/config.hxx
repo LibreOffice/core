@@ -30,8 +30,8 @@
 #ifndef CONFIG_HXX
 #define CONFIG_HXX
 
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include "format.hxx"
 
 #include "cfgitem.hxx"

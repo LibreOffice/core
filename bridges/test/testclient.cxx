@@ -32,11 +32,6 @@
 #include "precompiled_bridges.hxx"
 #include <string.h>
 
-#if OSL_DEBUG_LEVEL == 0
-#undef NDEBUG
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <osl/time.h>
 
 #include <osl/mutex.hxx>
@@ -193,10 +188,10 @@ int main( int argc, char *argv[] )
                         {
                             // test the factory
                               Reference < XBridge > rBridge2 = rFactory->getBridge( OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")) );
-                              assert( rBridge2.is() );
-                              assert( rBridge2->getDescription() == rBridge->getDescription( ) );
-                              assert( rBridge2->getName() == rBridge->getName() );
-                              assert( rBridge2 == rBridge );
+                              OSL_ASSERT( rBridge2.is() );
+                              OSL_ASSERT( rBridge2->getDescription() == rBridge->getDescription( ) );
+                              OSL_ASSERT( rBridge2->getName() == rBridge->getName() );
+                              OSL_ASSERT( rBridge2 == rBridge );
                         }
 
 
@@ -230,7 +225,7 @@ int main( int argc, char *argv[] )
                     }
 
                     Reference < XBridge > rBridge = rFactory->getBridge( OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")) );
-//                      assert( ! rBridge.is() );
+//                      OSL_ASSERT( ! rBridge.is() );
                 }
 
             }

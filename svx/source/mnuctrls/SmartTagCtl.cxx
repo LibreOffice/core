@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XStringKeyMap.hpp>
 #endif
 #include <svtools/stdmenu.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

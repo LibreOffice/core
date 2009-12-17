@@ -40,7 +40,7 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/chrtitem.hxx>
 
 #include <functional>

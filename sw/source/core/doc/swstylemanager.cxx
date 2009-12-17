@@ -34,7 +34,7 @@
 
 #include "swstylemanager.hxx"
 #include <hash_map>
-#include <svtools/stylepool.hxx>
+#include <svl/stylepool.hxx>
 #include <doc.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>

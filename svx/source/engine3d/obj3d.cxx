@@ -52,7 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/xlnclit.hxx>
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -68,7 +68,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/xgrscit.hxx>

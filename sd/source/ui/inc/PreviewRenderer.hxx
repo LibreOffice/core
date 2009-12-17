@@ -34,7 +34,7 @@
 #include "drawview.hxx"
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include <memory>
 
 

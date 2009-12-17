@@ -33,7 +33,7 @@
 
 
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>

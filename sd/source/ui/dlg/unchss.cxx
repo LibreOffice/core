@@ -32,9 +32,9 @@
 #include "precompiled_sd.hxx"
 
 
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/svdobj.hxx>
 
 #include "unchss.hxx"

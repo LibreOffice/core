@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-interface BaseTextDocument : OfficeDocument
+interface BaseTextDocument
 [
     Automation = FALSE;
 ]

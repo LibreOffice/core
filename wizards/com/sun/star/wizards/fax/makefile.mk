@@ -39,7 +39,7 @@ PACKAGE = com$/sun$/star$/wizards$/fax
 .INCLUDE : settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-JARFILES= unoil.jar jurt.jar ridl.jar sandbox.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar
 
 CUSTOMMANIFESTFILE= MANIFEST.MF
 

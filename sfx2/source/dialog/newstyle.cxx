@@ -32,7 +32,7 @@
 #include "precompiled_sfx2.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #ifndef GCC
 #endif
 

@@ -32,7 +32,7 @@
 #define SC_XISTREAM_HXX
 
 #include <comphelper/docpasswordhelper.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include "xlstream.hxx"
 #include "xlconst.hxx"
 
@@ -121,7 +121,7 @@ private:
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes );
 
 private:
-    ::svx::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
+    ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
     ::std::vector< sal_uInt8 > maPassword;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
@@ -155,7 +155,7 @@ private:
     sal_uInt16          GetOffset( sal_Size nStrmPos ) const;
 
 private:
-    ::svx::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
+    ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
     ::std::vector< sal_uInt16 > maPassword;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;

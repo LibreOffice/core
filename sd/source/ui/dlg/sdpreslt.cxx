@@ -36,7 +36,7 @@
 #endif
 
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/new.hxx>
 #include <vcl/msgbox.hxx>
 

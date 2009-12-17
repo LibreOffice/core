@@ -37,8 +37,8 @@
 
 #include <stdio.h>
 #include <tools/urlobj.hxx>
-#include <svtools/converter.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/converter.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/sharedunocomponent.hxx>

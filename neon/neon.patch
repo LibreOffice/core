@@ -488,7 +488,7 @@
 +#endif
 --- misc/neon-0.28.2/src/makefile.mk	2009-09-29 10:28:26.687500000 +0200
 +++ misc/build/neon-0.28.2/src/makefile.mk	2009-09-17 13:04:18.031250000 +0200
-@@ -1 +1,91 @@
+@@ -1 +1,92 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
@@ -497,6 +497,7 @@
 +LIBTARGET=NO
 +USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++ UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +

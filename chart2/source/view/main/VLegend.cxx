@@ -49,7 +49,7 @@
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <vector>
 #include <algorithm>

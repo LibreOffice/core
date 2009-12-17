@@ -34,7 +34,7 @@
 
 
 #include <sot/clsids.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <unomid.h>
 

@@ -1,7 +1,7 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

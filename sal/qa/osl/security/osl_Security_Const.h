@@ -57,7 +57,7 @@
 #include <pwd.h>
 #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 // LLA: #include <testshl2/cmdlinebits.hxx>
 
 

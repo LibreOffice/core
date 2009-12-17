@@ -46,8 +46,8 @@
 
 //#include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -85,6 +85,7 @@ public:
     virtual ~SdOptionsItem();
 
     virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );

@@ -70,7 +70,7 @@
 #include "browserids.hxx"
 #endif
 #ifndef _URLBMK_HXX
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

@@ -104,11 +104,7 @@ LanguageType MsLangId::getPlatformSystemUILanguage()
 {
     // TODO: this could be distinguished, #if(WINVER >= 0x0500)
     // needs _run_ time differentiation though, not at compile time.
-#if 0
     getPlatformSystemLanguageImpl( nImplSystemUILanguage,
             &GetUserDefaultUILanguage, &GetSystemDefaultUILanguage);
-#endif
-    getPlatformSystemLanguageImpl( nImplSystemUILanguage,
-            &GetUserDefaultLangID, &GetSystemDefaultLangID);
     return nImplSystemUILanguage;
 }

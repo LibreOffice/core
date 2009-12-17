@@ -56,15 +56,16 @@ testcase tExtensionPublisher
         cBasePath = convertpath( cBasePath )
     
     ' Modify this file to add test cases or attributes
-    dim cInfoFile as string
-        cinfoFile = cBasePath & "extension.info"
+    dim cInfoFile as string : cinfoFile = cBasePath & "extension.info"
         
     ' The number of files to test. Information about this is stored in the file
     ' specified by cInfoFile
     dim iFileCount as integer
     dim iCurrentFile as integer
-    dim iExitCounter as integer
     dim iExtensionCount as integer
+    dim iExitCounter as integer
+    dim iCurrentExtensionCount as integer : iCurrentExtensionCount = 0
+    dim iTry as integer
     
     ' This is the data we get from the configuration file
     dim cCurrentFileName as string
@@ -78,6 +79,7 @@ testcase tExtensionPublisher
     dim cConfigArray( 60 ) as string
     
     dim cTestString as string
+    dim bInstallationComplete as boolean : bInstallationComplete = false
     
     iExtensionCount = hGetExtensionCount()
     
@@ -85,6 +87,9 @@ testcase tExtensionPublisher
     hGetDataFileSection( cInfoFile, cConfigArray(), "info", "", "" )
     iFileCount = int( hGetValueForKeyAsString( cConfigArray() , "filecount" ) )
     printlog( cInfoFile & " specifies " & iFileCount & " documents to load" )
+    
+    iExtensionCount = iExtensionCount + iFileCount
+    printlog( "Expected number of extensions after installation: " & iExtensionCount )
 
     printlog( "Installing extensions" )
     for iCurrentFile = 1 to iFileCount
@@ -93,41 +98,51 @@ testcase tExtensionPublisher
         cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "file" )
         cCurrentFileName = cBasePath & cCurrentFileName
         sExtensionCLI( "add" , cCurrentFileName )
-        WaitSlot( 5000 )
+        wait 1000 ' This is required, sExtensionCLI is asynchronous.
         
     next iCurrentFile
-    printlog( "Finished installing extensions" )
-
+    printlog( "Finished installing extensions, now verifying..." )
+    
+    hNewDocument()
+    ToolsPackageManager
+   
     kontext "PackageManager"
-    if ( not PackageManager.exists() ) then
-        ToolsPackageManager
-        kontext "PackageManager"
-        if ( PackageManager.exists( 2 ) ) then
-            printlog( "Extension Manager UI has been opened" )
-        else
-            warnlog( "Failed to open Extension Manager UI" )
+    if ( PackageManager.exists( 3 ) ) then
+    
+        for iTry = 1 to 30 
+        
+            iCurrentExtensionCount = BrowsePackages.getItemCount()
+            
+            if ( iCurrentExtensionCount = iExtensionCount ) then
+                printlog( "All extensions have been installed, good." )
+                bInstallationComplete = true
+                exit for
+            endif
+            
+            printlog( "Waiting for listbox: Number of extensions: " & iCurrentExtensionCount )
+            
+        next iTry
+        
+        ' If one or more extensions have not been added to the list we better abort the
+        ' test as the remaining parts need all extensions to be installed causing
+        ' lots of cryptig errors to appear in the log.
+        if ( not bInstallationComplete ) then
+            warnlog( "Not all extensions have been installed. Aborting test." )
+            kontext "PackageManager" 
+            if ( PackageManager.exists() ) then
+                PackageManager.cancel()
+                PackageManager.notExists( 2 ) 
+            endif
             goto endsub
         endif
     else
-        warnlog( "#i84786# Unopkg processes block UI" )
+        warnlog( "The Extension Manager did not open, Aborting test" )
         goto endsub
     endif
+            
     
-    iExitCounter = 0
     kontext "PackageManager"
-    WaitSlot()
-    do while ( BrowsePackages.getItemCount() < ( iExtensionCount + iFileCount ) )
-        printlog( "Waiting for Extensions List to populate..." )
-        Wait( 1000 )
-        iExitCounter = iExitCounter + 1
-        if ( iExitCounter = 30 ) then
-            kontext "PackageManager"
-            PackageManager.cancel()
-            goto endsub
-        endif
-    loop
- 
-    kontext "PackageManager"
+    printlog( "Going for the update-dialog" )
     if ( Updates.isEnabled() ) then
     
         printlog( "Updates-button is enabled" )
@@ -142,11 +157,14 @@ testcase tExtensionPublisher
                 wait( 1000 )
                 iExitCounter = iExitCounter + 1
                 if ( iExitCounter = 200 ) then 
-                    warnlog( "Update list for extensions is stalled (expected: 7), found: " & AvailableUpdatesList.getItemCount() )
+                    warnlog( "Update list for extensions is stalled (expected: 7), " & _
+                             "found: " & AvailableUpdatesList.getItemCount() )
                     kontext "ExtensionUpdate"
                     ExtensionUpdate.cancel()
+                    ExtensionUpdate.notExists( 2 )
                     kontext "PackageManager"
                     PackageManager.cancel()
+                    PackageManager.notExists( 2 )
                     goto endsub
                 endif
             loop
@@ -246,6 +264,7 @@ testcase tExtensionPublisher
 
             kontext "ExtensionUpdate"
             ExtensionUpdate.cancel()
+            ExtensionUpdate.notExists( 2 )
         else
             warnlog( "Extension Update dialog is not open" )
         endif
@@ -256,6 +275,7 @@ testcase tExtensionPublisher
     
     kontext "PackageManager"
     PackageManager.close()
+    PackageManager.notExists( 2 )
     
     printlog( "Removing extensions" )
     for iCurrentFile = 1 to iFileCount
@@ -264,6 +284,8 @@ testcase tExtensionPublisher
         sExtensionCLI( "remove" , cCurrentFileName )
     next iCurrentFile
     printlog( "Finished removing extensions" )
+    
+    hFileCloseAll()
 
 endcase
 

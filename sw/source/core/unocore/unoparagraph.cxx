@@ -48,7 +48,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>

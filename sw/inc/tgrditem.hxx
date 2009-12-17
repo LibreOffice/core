@@ -31,7 +31,7 @@
 #define SW_TGRDITEM_HXX
 
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>

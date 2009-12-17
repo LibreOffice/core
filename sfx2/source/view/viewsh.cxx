@@ -30,12 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -55,12 +55,12 @@
 #include <vos/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/internaloptions.hxx>
 
-#include <svtools/javaoptions.hxx>
+#include <unotools/javaoptions.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>

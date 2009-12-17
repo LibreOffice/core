@@ -39,6 +39,8 @@
 #define CUSTOM_TYPE_NUMBER      2
 #define CUSTOM_TYPE_DATE        3
 #define CUSTOM_TYPE_BOOLEAN     4
+#define CUSTOM_TYPE_DURATION    5
+#define CUSTOM_TYPE_DATETIME    6
 
 // 4 TP_DOCINFORELOAD
 #define PAGE_WIDTH          260
@@ -153,6 +155,26 @@
 #define STR_HEADER_TYPE     91
 #define STR_HEADER_VALUE    92
 #define STR_HEADER_ACTION   93
+
+#define PB_OK                   100
+#define PB_CANCEL               101
+#define PB_HELP                 102
+#define CB_NEGATIVE             103
+#define FT_YEAR                 104
+#define ED_YEAR                 105
+#define FT_MONTH                106
+#define ED_MONTH                107
+#define FT_DAY                  108
+#define ED_DAY                  109
+#define FT_HOUR                 110
+#define ED_HOUR                 111
+#define FT_MINUTE               112
+#define ED_MINUTE               113
+#define FT_SECOND               114
+#define ED_SECOND               115
+#define FT_HSECOND              116
+#define ED_HSECOND              117
+#define FL_DURATION             118
 
 #endif
 

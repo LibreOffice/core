@@ -38,13 +38,13 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <ctype.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "global.hxx"
 #include "rangeutl.hxx"

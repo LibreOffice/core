@@ -37,11 +37,11 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/linkmgr.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/wghtitem.hxx>

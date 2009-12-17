@@ -32,9 +32,9 @@
 #include "precompiled_svx.hxx"
 
 #include <set>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
 #include <comphelper/stl_types.hxx>
 
 #include <svx/svdmodel.hxx>

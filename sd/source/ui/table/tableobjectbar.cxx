@@ -39,8 +39,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svxdlg.hxx>

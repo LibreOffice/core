@@ -41,7 +41,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
 #include <svx/drawitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/tabline.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/eeitem.hxx>
@@ -49,7 +49,7 @@
 #include <vcl/graph.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/numitem.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"
 #include "glob.hrc"
@@ -59,7 +59,7 @@
 #include "enumdlg.hrc"
 //#include "enumdlg.hxx"
 #include "bulmaper.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/flagsdef.hxx>
 #include "drawdoc.hxx"

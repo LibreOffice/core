@@ -218,13 +218,13 @@ class SwLayIdle
     BOOL        bPageValid;     // Konnte die Seite alles validiert werden?
     BOOL        bAllValid;      // Konnte alles validiert werden?
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL bIndicator;
 #endif
 
 #ifdef _LAYACT_CXX
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void ShowIdle( ColorData eName );
 #endif
 

@@ -46,9 +46,9 @@
 // header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 // header for class WarningBox
 #include <vcl/msgbox.hxx>
@@ -58,7 +58,7 @@
 #ifndef _ZFORLIST_DECLARE_TABLE
 #define _ZFORLIST_DECLARE_TABLE
 #endif
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #endif
 
 #include <svtools/controldims.hrc>

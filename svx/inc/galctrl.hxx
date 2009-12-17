@@ -41,12 +41,12 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/sound.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
 #include <goodies/grfmgr.hxx>
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "svx/svxdllapi.h"
 
 // ------------
@@ -95,6 +95,7 @@ public:
                         ~GalleryPreview();
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    bool                SetGraphic( const INetURLObject& );
     void                PreviewMedia( const INetURLObject& rURL );
 };
 

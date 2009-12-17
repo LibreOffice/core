@@ -31,7 +31,7 @@
 #ifndef _COMMUNI_HXX
 #define _COMMUNI_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vos/thread.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/timer.hxx>

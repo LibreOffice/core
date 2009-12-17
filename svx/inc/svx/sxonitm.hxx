@@ -31,7 +31,7 @@
 #define _SXONITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 //------------------------------
 // class SdrObjectNameItem

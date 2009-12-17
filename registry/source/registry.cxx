@@ -430,6 +430,8 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
     */
     _ret = pKey->closeKey(pNewKey);
 
+    if (_ret == REG_NO_ERROR )
+        _ret = pReg->flush();
     return _ret;
 }
 

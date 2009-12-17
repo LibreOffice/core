@@ -52,10 +52,6 @@
 #include <vos/mutex.hxx>
 #include <vos/thread.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <string.h>
 
 #include "testfactreg.hxx"
@@ -206,13 +202,13 @@ INT32 ODataStreamTest::test(    const UString& TestName,
                     x->queryInterface( XActiveDataSource::getSmartUik() , rSource );
                 }
 
-                assert( rPipeInput.is() );
-                assert( rPipeOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
                 rSink->setInputStream( rPipeInput );
                 rSource->setOutputStream( rPipeOutput );
 
-                assert( rSink->getInputStream().is() );
-                assert( rSource->getOutputStream().is() );
+                OSL_ASSERT( rSink->getInputStream().is() );
+                OSL_ASSERT( rSource->getOutputStream().is() );
 
                 if( 1 == hTestHandle ) {
                     testSimple( rInput , rOutput );
@@ -767,10 +763,10 @@ INT32 OObjectStreamTest::test(  const UString& TestName,
                 XOutputStreamRef    markableOutput( x , USR_QUERY );
                 XActiveDataSourceRef    markableSource( x , USR_QUERY );
 
-                assert( markableInput.is()  );
-                assert( markableOutput.is() );
-                assert( markableSink.is()   );
-                assert( markableSource.is() );
+                OSL_ASSERT( markableInput.is()  );
+                OSL_ASSERT( markableOutput.is() );
+                OSL_ASSERT( markableSink.is()   );
+                OSL_ASSERT( markableSource.is() );
 
                 markableSink->setInputStream( rPipeInput );
                 markableSource->setOutputStream( rPipeOutput );
@@ -786,14 +782,14 @@ INT32 OObjectStreamTest::test(  const UString& TestName,
                     x->queryInterface( XActiveDataSource::getSmartUik() , rSource );
                 }
 
-                assert( rPipeInput.is() );
-                assert( rPipeOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
 
                 rSink->setInputStream( markableInput );
                 rSource->setOutputStream( markableOutput );
 
-                assert( rSink->getInputStream().is() );
-                assert( rSource->getOutputStream().is() );
+                OSL_ASSERT( rSink->getInputStream().is() );
+                OSL_ASSERT( rSource->getOutputStream().is() );
 
                 if( 1 + DATASTREAM_TEST_MAX_HANDLE == hTestHandle ) {
                     testObject( rOutput , rInput);

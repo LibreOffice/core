@@ -30,7 +30,7 @@
 #ifndef _UINUMS_HXX
 #define _UINUMS_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <numrule.hxx>
 #include "swdllapi.h"
 

@@ -43,7 +43,7 @@
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>

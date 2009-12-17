@@ -30,7 +30,7 @@
 #ifndef _TBLSEL_HXX
 #define _TBLSEL_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <swtable.hxx>
 #include <swrect.hxx>
 #include "swdllapi.h"

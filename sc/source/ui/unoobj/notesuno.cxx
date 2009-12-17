@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 #include "rangelst.hxx"

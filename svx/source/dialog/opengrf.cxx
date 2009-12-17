@@ -46,7 +46,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -58,7 +58,7 @@
 #endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/dialmgr.hxx>
 #include "opengrf.hxx"
 

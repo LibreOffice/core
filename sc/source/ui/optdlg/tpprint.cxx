@@ -33,7 +33,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include "tpprint.hxx"
 #include "printopt.hxx"

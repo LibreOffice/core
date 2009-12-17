@@ -54,7 +54,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/fontitem.hxx>
 
 //.............................................................................

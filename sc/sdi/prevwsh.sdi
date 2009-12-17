@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-interface TablePrintPreview : View
+interface TablePrintPreview
 {
     //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
 
@@ -166,7 +166,7 @@ interface TablePrintPreview : View
 
 
  // ===========================================================================
-shell ScPreviewShell : SfxViewShell
+shell ScPreviewShell
 {
     import TablePrintPreview;
 }

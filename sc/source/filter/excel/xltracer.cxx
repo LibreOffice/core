@@ -33,7 +33,7 @@
 
 // ============================================================================
 #include "xltracer.hxx"
-#include <svx/msfiltertracer.hxx>
+#include <filter/msfilter/msfiltertracer.hxx>
 #include "address.hxx"
 
 using ::rtl::OUString;

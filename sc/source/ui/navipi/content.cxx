@@ -46,7 +46,7 @@
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <stdlib.h>
 
 #include "content.hxx"

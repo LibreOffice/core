@@ -30,7 +30,7 @@
 #ifndef _CALC_HXX
 #define _CALC_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #ifndef __SBX_SBXVALUE //autogen
 #include <basic/sbxvar.hxx>

@@ -34,7 +34,7 @@
 #include <sot/object.hxx>
 #include <tools/stream.hxx>
 #include <vcl/splitwin.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #ifndef GCC
 #endif
 

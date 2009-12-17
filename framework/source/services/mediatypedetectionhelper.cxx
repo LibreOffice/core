@@ -36,7 +36,7 @@
 //_________________________________________________________________________________________________________________
 #include <services/mediatypedetectionhelper.hxx>
 #include <services.h>
-#include <svtools/inettype.hxx>
+#include <svl/inettype.hxx>
 #include <tools/string.hxx>
 #include <rtl/logfile.hxx>
 

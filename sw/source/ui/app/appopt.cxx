@@ -38,12 +38,12 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
@@ -87,14 +87,14 @@
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/unolingu.hxx>
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
 #include <globals.h>        // globale Konstanten z.B.
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
 
@@ -151,7 +151,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
                                     0);
@@ -285,7 +285,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /*-----------------01.02.97 13.02-------------------
         Test-Optionen
     --------------------------------------------------*/
@@ -491,7 +491,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /*--------------------------------------------------------------------------
                 Writer Testseite auswerten
     ----------------------------------------------------------------------------*/
@@ -614,7 +614,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             }
         }
         break;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         case  RID_SW_TP_OPTTEST_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

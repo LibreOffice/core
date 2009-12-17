@@ -30,7 +30,7 @@
 #ifndef _BASIC_TESTTOOL_HXX_
 #define _BASIC_TESTTOOL_HXX_
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/string.hxx>
 
 #define TESTTOOL_DEFAULT_PORT 12479

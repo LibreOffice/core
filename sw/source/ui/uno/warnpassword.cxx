@@ -33,7 +33,7 @@
 // ============================================================================
 #include "warnpassword.hxx"
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <ucbhelper/simpleinteractionrequest.hxx>

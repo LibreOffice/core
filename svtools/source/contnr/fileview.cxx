@@ -37,7 +37,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -78,8 +78,8 @@
 #include <vcl/sound.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/urlfilter.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/urlfilter.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;

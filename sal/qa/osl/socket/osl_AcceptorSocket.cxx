@@ -61,7 +61,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"

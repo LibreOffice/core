@@ -80,6 +80,7 @@ SLOFILES =  \
 EXCEPTIONSFILES =  \
         $(SLO)$/fldtdlg.obj \
         $(SLO)$/fldedt.obj \
+        $(SLO)$/flddinf.obj \
         $(SLO)$/xfldui.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib

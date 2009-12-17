@@ -56,8 +56,8 @@
 #include <cppcanvas/spritecanvas.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

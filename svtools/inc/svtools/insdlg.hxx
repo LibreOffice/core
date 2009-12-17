@@ -38,7 +38,7 @@
 #include <sot/formats.hxx>
 
 #ifndef _OWNCONT_HXX
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #endif
 #include <svtools/transfer.hxx>
 

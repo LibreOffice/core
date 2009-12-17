@@ -48,7 +48,7 @@
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/zoomslideritem.hxx>

@@ -42,12 +42,12 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <vcl/cvtgrf.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/rtfout.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hyznitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen

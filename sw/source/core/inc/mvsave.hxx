@@ -35,7 +35,7 @@
 #ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
 

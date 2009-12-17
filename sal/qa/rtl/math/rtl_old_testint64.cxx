@@ -49,7 +49,7 @@
 // #define TEST_ENSURE(c, m)   OSL_VERIFY(c)
 // #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // -----------------------------------------------------------------------------
 namespace rtl_math

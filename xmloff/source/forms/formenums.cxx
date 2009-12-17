@@ -46,7 +46,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-#include <vcl/wintypes.hxx>     // for check states
+#include <tools/wintypes.hxx>       // for check states
 #include <xmloff/xmltoken.hxx>
 
 //.........................................................................

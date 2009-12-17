@@ -39,7 +39,7 @@
 #include <com/sun/star/i18n/CharType.hdl>
 
 #include <unotools/charclass.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <fmtcntnt.hxx>
 #include <swtblfmt.hxx>

@@ -56,7 +56,7 @@
 #
 #*************************************************************************
 
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar
+JARFILES = jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar
 JAVAFILES = 					\
 	AccessibleEventMulticaster.java \
 	InformationWriter.java  \

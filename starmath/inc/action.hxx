@@ -30,7 +30,7 @@
 #ifndef ACTION_HXX
 #define ACTION_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "format.hxx"
 
 class SmDocShell;

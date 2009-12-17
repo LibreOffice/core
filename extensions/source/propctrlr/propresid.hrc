@@ -31,7 +31,7 @@
 #ifndef EXTENSIONS_PROPRESID_HRC
 #define EXTENSIONS_PROPRESID_HRC
 
-// TODO: create a new resource range in <svtools/solar.hrc>
+// TODO: create a new resource range in <svl/solar.hrc>
 
 #define RID_PROPCONTROLLER_START        1000
     // arbitrary at the moment

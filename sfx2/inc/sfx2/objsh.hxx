@@ -58,7 +58,7 @@
 //#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
 //#endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>

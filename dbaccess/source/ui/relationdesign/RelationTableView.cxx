@@ -78,7 +78,7 @@
 #include <connectivity/dbexception.hxx>
 #include "RTableWindow.hxx"
 #include "JAccess.hxx"
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 using namespace dbaui;

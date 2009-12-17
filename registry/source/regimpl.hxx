@@ -113,6 +113,8 @@ public:
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
+    RegError    flush();
+
     ~ORegistry();
 
     sal_Bool            isReadOnly() const

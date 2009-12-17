@@ -34,14 +34,14 @@
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
 
 #include <sot/storage.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring.h>

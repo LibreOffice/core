@@ -48,7 +48,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>

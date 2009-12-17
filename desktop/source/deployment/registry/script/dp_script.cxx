@@ -40,7 +40,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/script/XLibraryContainer.hpp"
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>

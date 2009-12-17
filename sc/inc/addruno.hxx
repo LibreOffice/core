@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "global.hxx"
 #include "address.hxx"
 

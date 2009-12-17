@@ -41,8 +41,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <cppuhelper/implbase5.hxx> // helper for implementations

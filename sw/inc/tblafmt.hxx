@@ -47,7 +47,7 @@ JP 20.07.95:
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 **************************************************************************/
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "hintids.hxx"          //_immmer_ vor den solar-items!
 #include <svx/algitem.hxx>
 #include <svx/fontitem.hxx>
@@ -65,7 +65,7 @@ JP 20.07.95:
 #include <svx/brshitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/bolnitem.hxx>
 #include "swdllapi.h"
 

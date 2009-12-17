@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,7 @@ SHL1OBJS= \
     $(SLO)$/rtl_String_Utils.obj
 
 SHL1TARGET= rtl_OStringBuffer
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
-
-# .IF "$(GUI)" == "WNT"
-# SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-# .ENDIF
-# .IF "$(GUI)" == "UNX"
-# SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-# .ENDIF
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def

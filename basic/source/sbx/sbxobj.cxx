@@ -35,7 +35,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxbase.hxx>
 #include "sbxres.hxx"
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 TYPEINIT1(SbxMethod,SbxVariable)
 TYPEINIT1(SbxProperty,SbxVariable)

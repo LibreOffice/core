@@ -31,7 +31,7 @@
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #define _LINGUISTIC_LNGPROPS_HHX_
 
-#include <svtools/linguprops.hxx>
+#include <unotools/linguprops.hxx>
 
 // maximal number of suggestions to be returned in spelling  context-menu
 // (may not include results added by looking up user dictionaries)

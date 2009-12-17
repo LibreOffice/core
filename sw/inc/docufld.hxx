@@ -35,7 +35,7 @@
 #include <tools/datetime.hxx>
 
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 #include "fldbas.hxx"
 #include "numrule.hxx"

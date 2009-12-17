@@ -101,7 +101,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -419,7 +419,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
     m_pMiscOptions = new SvtMiscOptions();
 
-    m_pMiscOptions->AddListener( LINK( this, LayoutManager, OptionsChanged ) );
+    m_pMiscOptions->AddListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_eSymbolsSize = m_pMiscOptions->GetSymbolsSize();
     m_eSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
@@ -442,7 +442,7 @@ LayoutManager::~LayoutManager()
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     if ( m_pMiscOptions )
     {
-        m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+        m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
         delete m_pMiscOptions;
         m_pMiscOptions = 0;
     }
@@ -7191,7 +7191,7 @@ throw( RuntimeException )
         Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
         if ( m_pMiscOptions )
         {
-            m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+            m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
             delete m_pMiscOptions;
             m_pMiscOptions = 0;
         }

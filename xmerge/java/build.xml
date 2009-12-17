@@ -63,7 +63,6 @@
         <pathelement location="${solar.jar}/jurt.jar"/>
         <pathelement location="${solar.jar}/unoil.jar"/>
         <pathelement location="${solar.jar}/ridl.jar"/>
-        <pathelement location="${solar.jar}/sandbox.jar"/>
         <pathelement location="${solar.jar}/juh.jar"/>
         <pathelement location="${solar.jar}/jmc.jar"/>
     </path>

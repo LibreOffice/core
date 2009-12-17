@@ -69,7 +69,7 @@ public:
     static bool checkDocumentsSaved();
     static bool queryInteraction();
     static void saveDone();
-    static void interactionDone();
+    static void interactionDone( bool bCancelShutdown );
 
     static String getExecName();
     static VCL_DLLPUBLIC const ByteString&  getSessionID();

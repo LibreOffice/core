@@ -34,9 +34,9 @@
 #ifndef GCC
 #endif
 #include <vcl/msgbox.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 
 
 #include "printopt.hrc"

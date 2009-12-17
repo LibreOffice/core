@@ -33,8 +33,8 @@
 #include "global.hxx"
 #include "address.hxx"
 #include <tools/rtti.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/hint.hxx>
+#include <svl/smplhint.hxx>
 class ScBaseCell;
 
 #define SC_HINT_DYING       SFX_HINT_DYING

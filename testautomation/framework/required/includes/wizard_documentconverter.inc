@@ -46,7 +46,6 @@ testcase tUpdtWizardDocumentConverter
     dim iDialog as integer
     dim iDocumentType as integer
     dim iWait as integer
-    dim sKeys as string
     dim sSourcePathWriter as string
         sSourcePathWriter = gTesttoolpath & "framework\required\input\document_converter\"
         sSourcePathWriter = convertpath( sSourcePathWriter )
@@ -132,12 +131,14 @@ testcase tUpdtWizardDocumentConverter
     Kontext "DocumentConverter"
     printlog( "Page 7" )
     
-    sKeys = hGetAccel( "DocumentConverter_ShowLog" )
     qaerrorlog( "#i54265# Show Logfile button has no HID, using accelerator instead" )
     
     iWait = 0
     do while ( DocumentConverter.exists() )
-        DocumentConverter.TypeKeys( sKeys )
+        try
+            ContinueButton.click()
+        catch
+        endcatch
         Wait( 1 )
         iWait = iWait + 1
         if ( iWait = 20000 ) then

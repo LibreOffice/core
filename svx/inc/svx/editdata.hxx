@@ -35,7 +35,7 @@
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SfxItemSet;
 class SfxPoolItem;

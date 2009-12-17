@@ -37,7 +37,7 @@
 
 
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif

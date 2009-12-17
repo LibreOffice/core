@@ -37,7 +37,7 @@
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 

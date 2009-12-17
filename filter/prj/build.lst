@@ -4,6 +4,7 @@ fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
 fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	fl_inc NULL
 fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	fl_inc NULL
+fl	filter\source\msfilter					nmake	-	all	fl_msfilter			fl_inc NULL
 fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		fl_inc NULL
 fl	filter\source\pdf						nmake	-	all	fl_pdf fl_svg		fl_inc NULL
 fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL

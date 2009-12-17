@@ -90,7 +90,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "fubullet.hxx"

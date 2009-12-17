@@ -46,11 +46,11 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/style.hxx>
+#include <svl/itempool.hxx>
+#include <svl/style.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdundo.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/tstpitem.hxx>

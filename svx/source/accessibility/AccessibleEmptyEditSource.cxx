@@ -36,7 +36,7 @@
 // Global header
 //
 //------------------------------------------------------------------------
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/editdata.hxx>
 #include <svx/outliner.hxx>
 #include <svx/svdmodel.hxx>

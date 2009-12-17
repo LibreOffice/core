@@ -69,6 +69,7 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
+#include <vcl/timer.hxx>
 
 #include "sfxresid.hxx"
 
@@ -186,6 +187,23 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     return true;
 }
 
+class IdleUnloader : Timer
+{
+    ::osl::Module *m_pModule;
+public:
+    IdleUnloader (::osl::Module **pModule) :
+        m_pModule (*pModule)
+    {
+        *pModule = NULL;
+        Start();
+    }
+    virtual void Timeout()
+    {
+        delete m_pModule;
+        delete this;
+    }
+};
+
 void ShutdownIcon::initSystray()
 {
     if (m_bInitialized)
@@ -201,15 +219,15 @@ void ShutdownIcon::deInitSystray()
 {
     if (!m_bInitialized)
         return;
+
     if (m_pDeInitSystray)
         m_pDeInitSystray();
 
     m_bVeto = false;
     m_pInitSystray = 0;
     m_pDeInitSystray = 0;
-    if (m_pPlugin)
-        delete m_pPlugin;
-    m_pPlugin = 0;
+    new IdleUnloader (&m_pPlugin);
+
     delete m_pFileDlg;
     m_pFileDlg = NULL;
     m_bInitialized = false;
@@ -233,6 +251,7 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
 ShutdownIcon::~ShutdownIcon()
 {
     deInitSystray();
+    new IdleUnloader (&m_pPlugin);
 }
 
 // ---------------------------------------------------------------------------
@@ -853,9 +872,11 @@ void ShutdownIcon::SetAutostart( bool bActivate )
         ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
         ::osl::File::remove( aShortcutUrl );
 #ifdef UNX
-        ShutdownIcon *pIcon = getInstance();
-        if( pIcon )
+        if (pShutdownIcon)
+        {
+            ShutdownIcon *pIcon = getInstance();
             pIcon->deInitSystray();
+        }
 #endif
     }
 #elif defined OS2

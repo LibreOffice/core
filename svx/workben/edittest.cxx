@@ -89,10 +89,10 @@
 #include <fwdtitem.hxx>
 
 // SVTOOLS
-#include <svtools/undo.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/undo.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/printdlg.hxx>
 
 #include <osl/file.hxx>

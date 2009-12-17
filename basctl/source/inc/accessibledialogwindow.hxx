@@ -37,7 +37,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <tools/link.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <vector>
 

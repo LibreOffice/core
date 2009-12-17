@@ -36,7 +36,7 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // -----------------------------------------------------------------------------
 

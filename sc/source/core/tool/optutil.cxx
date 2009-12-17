@@ -37,7 +37,7 @@
 
 #include "optutil.hxx"
 #include "global.hxx"       // for pSysLocale
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 //------------------------------------------------------------------
 

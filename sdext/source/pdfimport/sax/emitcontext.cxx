@@ -37,7 +37,6 @@
 #include "saxattrlist.hxx"
 
 #include <rtl/strbuf.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -62,12 +61,6 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     }
     catch( xml::sax::SAXException& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     static const char* pDir = getenv( "DBG_PDFIMPORT_DIR" );
@@ -99,12 +92,6 @@ SaxEmitter::~SaxEmitter()
     }
     catch( xml::sax::SAXException& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     if( pStream )
@@ -127,12 +114,6 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     }
     catch( xml::sax::SAXException& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     if( pStream )
@@ -167,12 +148,6 @@ void SaxEmitter::write( const rtl::OUString& rText )
     }
     catch( xml::sax::SAXException& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     if( pStream )
@@ -193,12 +168,6 @@ void SaxEmitter::endTag( const char* pTag )
     }
     catch( xml::sax::SAXException& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     if( pStream )

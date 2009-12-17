@@ -83,7 +83,7 @@ void SbiCodeGen::GenStmnt()
 
 UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( eOpcode < SbOP0_START || eOpcode > SbOP0_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE1" );
 #endif
@@ -94,7 +94,7 @@ UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 
 UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( eOpcode < SbOP1_START || eOpcode > SbOP1_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE2" );
 #endif
@@ -107,7 +107,7 @@ UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd )
 
 UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd1, UINT32 nOpnd2 )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( eOpcode < SbOP2_START || eOpcode > SbOP2_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE3" );
 #endif

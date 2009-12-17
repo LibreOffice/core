@@ -56,7 +56,7 @@
 #include <svx/tbxcolorupdate.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/imgdef.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
 #include <tools/diagnose_ex.h>

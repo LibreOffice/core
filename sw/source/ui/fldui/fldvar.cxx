@@ -52,7 +52,7 @@
 #include <fldvar.hxx>
 #endif
 #include <calc.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif

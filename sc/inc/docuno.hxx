@@ -33,7 +33,7 @@
 
 #include "address.hxx"
 #include <sfx2/sfxbasemodel.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/fmdmod.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -61,7 +61,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include "drwlayer.hxx"
 
 class ScDocShell;

@@ -38,7 +38,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <comphelper/servicedecl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

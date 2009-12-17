@@ -34,7 +34,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/svparser.hxx>
 
 

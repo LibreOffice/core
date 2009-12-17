@@ -38,7 +38,7 @@
 #include "address.hxx"
 #include "formula/errorcodes.hxx"
 #include "interpre.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 

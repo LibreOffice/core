@@ -34,7 +34,7 @@
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {

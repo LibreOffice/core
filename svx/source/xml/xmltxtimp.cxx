@@ -44,7 +44,7 @@
 #ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
 #endif
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <sfx2/docfile.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlmetae.hxx"

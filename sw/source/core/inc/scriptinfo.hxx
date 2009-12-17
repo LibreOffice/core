@@ -34,7 +34,7 @@
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <i18npool/lang.h>
 #include <list>

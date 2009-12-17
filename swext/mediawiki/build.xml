@@ -147,8 +147,8 @@
             <file file="${commons-httpclient-jar}"/>
             <file file="${commons-lang-jar}"/>
             <file file="${commons-logging-jar}"/>
-            <zipfileset file="${solar.bin}/xslt/export/wiki/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
-            <zipfileset file="${solar.bin}/xslt/export/wiki/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
+            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
+            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
             <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
@@ -170,6 +170,8 @@
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
          -->
             <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
+            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
             <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp,component.txt" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>

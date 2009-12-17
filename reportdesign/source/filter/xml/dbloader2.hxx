@@ -69,7 +69,7 @@
 #include <osl/file.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/task/XJobExecutor.hpp>

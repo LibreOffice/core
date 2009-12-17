@@ -53,7 +53,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/types.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "rtl/ustrbuf.hxx"
 

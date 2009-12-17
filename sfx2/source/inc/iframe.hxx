@@ -45,8 +45,8 @@
 #include <cppuhelper/implbase6.hxx>
 
 #include <rtl/ustring.hxx>
-#include <svtools/ownlist.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/ownlist.hxx>
+#include <svl/itemprop.hxx>
 
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/frmdescr.hxx>

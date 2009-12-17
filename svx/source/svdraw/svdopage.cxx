@@ -41,7 +41,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/sdr/properties/pageproperties.hxx>
 
 // #111111#

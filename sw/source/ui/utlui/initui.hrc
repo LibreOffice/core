@@ -64,5 +64,6 @@
 #define STR_PAGEDESC_FOLLOWNAME     27
 #define STR_HYPERLINK_CLICK         28
 #define STR_GETREFFLD_REFITEMNOTFOUND   29
+#define STR_DURATION_FORMAT             30
 #endif
 

@@ -299,44 +299,6 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase tUserDefineLayout_1
-   Dim sLinesPerPage       , sCharsPerLine          as String
-   Dim sExpectLinesPerPage , sExpectLinesPerPage1   as String
-
-   sLinesPerPage  = "20"
-   sCharsPerLine  = "2"
-   sExpectLinesPerPage   = "2"
-   sExpectLinesPerPage1  = "3"
-
-  Call hNewDocument
-
-   FormatPageWriter
-   Kontext
-   if active.exists(5) then
-       Active.SetPage TabGrid
-   endif
-   Kontext "TabGrid"
-   CharsGrid.Check
-
-    LinesPerPage.SetText sLinesPerPage
-    Sleep 2
-    CharsPerLine.SetText sCharsPerLine
-    Sleep 2
-
-   'This step is no use, just let the LinesPerPage change the number
-    CharsGrid.Check
-
-    if LinesPerPage.GetText <> sExpectLinesPerPage AND LinesPerPage.GetText <> sExpectLinesPerPage1 then
-         Warnlog "The lines per page should be"  + sExpectLinesPerPage + " OR " + sExpectLinesPerPage1 +" but get " +LinesPerPage.GetText
-    end if
-
-   TabGrid.Cancel
-
-  Call hCloseDocument
-endcase
-
-'-------------------------------------------------------------------------
-
 testcase tFontSizeChanges_1
     Dim testFile      , sCorrectResult as String
     Dim sLinesPerPage , sCharsPerLine  as String
@@ -488,51 +450,3 @@ testcase tIndentsTest_1
 endcase
 
 '-------------------------------------------------------------------------
-
-testcase tObjectsTest_1
-   Dim testFile , sCorrectPage1 , sCorrectPage2 as String
-
-   testFile       = "objectsTest.sxw"
-   sCorrectPage1  = "1"
-   sCorrectPage2  = "2"
-
-   Call hNewDocument
-
-   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
-    fStartupNavigator( "OLEObject" , 1 )
-    Sleep 1
-    Auswahlliste.TypeKeys "<Return>"
-    Sleep 1
-    fCloseNavigator
-    Sleep 2
-
-    Kontext
-    FormatAnchorAsCharacter
-    Sleep 1
-
-    ViewNavigator
-     Kontext "NavigatorWriter"
-     Seitennummer.SetText   sCorrectPage2
-     Sleep 5
-     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
-    fCloseNavigator
-
-    fStartupNavigator( "OLEObject" , 1 )
-    Auswahlliste.TypeKeys "<Return>"
-    fCloseNavigator
-
-    Kontext
-    FormatAnchorToCharacter
-
-    ViewNavigator
-     Kontext "NavigatorWriter"
-     Seitennummer.SetText   sCorrectPage2
-     Sleep 5
-     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "Something wrong when object is anchored to Character!"
-    fCloseNavigator
-   Kontext
-
-   Call hCloseDocument
-endcase
-

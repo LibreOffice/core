@@ -77,7 +77,6 @@ SLOFILES=\
         $(SLO)$/calendar.obj \
         $(SLO)$/filectrl.obj \
         $(SLO)$/scrwin.obj       \
-        $(SLO)$/reginfo.obj     \
         $(SLO)$/collatorres.obj \
         $(SLO)$/indexentryres.obj \
         $(SLO)$/hyperlabel.obj  \

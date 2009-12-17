@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -57,7 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <i18npool/mslangid.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>

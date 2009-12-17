@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 
 // class SvxFontWidthItem -----------------------------------------------

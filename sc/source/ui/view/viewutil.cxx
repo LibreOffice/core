@@ -43,17 +43,17 @@
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 

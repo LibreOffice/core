@@ -32,7 +32,7 @@
 #define _SC_DRAWMODELBROADCASTER_HXX
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>

@@ -31,7 +31,7 @@
 #define _FMTPDSC_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>

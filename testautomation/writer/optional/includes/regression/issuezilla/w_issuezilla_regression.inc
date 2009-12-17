@@ -451,6 +451,7 @@ testcase i103265
 	Call hNewDocument
     printlog "- Open test document"
 	Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i103265.odt" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Update TOC"
 	ToolsUpdateAllIndexes
 	
@@ -483,7 +484,7 @@ testcase i103265
 
 	printlog "- Save as HTML"
 	gApplication = "HTML"	
-	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html", "HTML" )
+	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html", "HTML (StarWriter)" )
     Call hCloseDocument
 	
     printlog "- Reload"

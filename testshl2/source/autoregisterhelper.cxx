@@ -38,10 +38,10 @@
 
 #include <rtl/ustring.hxx>
 
-#include <cppunit/autoregister/registerfunc.h>
-#include <cppunit/autoregister/callbackstructure.h>
-#include <cppunit/result/callbackfunc.h>
-#include <cppunit/autoregister/testfunc.h>
+#include <testshl/autoregister/registerfunc.h>
+#include <testshl/autoregister/callbackstructure.h>
+#include <testshl/result/callbackfunc.h>
+#include <testshl/autoregister/testfunc.h>
 #include "testshl/filehelper.hxx"
 
 FunctionList m_Functions;

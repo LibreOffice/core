@@ -34,7 +34,7 @@
 #include <ViewShellManager.hxx>
 
 #include <tools/link.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 class VclWindowEvent;
 class FmFormShell;

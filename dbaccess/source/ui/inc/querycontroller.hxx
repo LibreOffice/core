@@ -54,7 +54,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 class VCLXWindow;
 namespace dbaui

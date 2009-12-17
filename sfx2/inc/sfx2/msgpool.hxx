@@ -36,7 +36,7 @@
 
 #include <sfx2/msg.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SfxInterface;
 class SfxSlot;

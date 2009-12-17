@@ -48,7 +48,7 @@
 #include "svditer.hxx"
 #include "fmservs.hxx"
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
@@ -3917,6 +3917,10 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >&
             implAdjustConfigCache();
             InvalidateSlot( SID_FM_USE_WIZARDS, sal_True );
         }
+}
+
+void FmXFormShell::Commit()
+{
 }
 
 //------------------------------------------------------------------------

@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-interface DrawDocument : OfficeDocument
+interface DrawDocument
 {
     SID_PACKNGO // ole : ?, status : ?
     [

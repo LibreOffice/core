@@ -38,7 +38,7 @@
 #define _MATH_H
 #endif
 #include <tools/bigint.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
@@ -56,8 +56,8 @@
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include <svx/eeitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/e3dsceneupdater.hxx>

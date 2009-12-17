@@ -37,7 +37,7 @@
 #include <svx/editeng.hxx>
 #include <editdbg.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 #include <svx/lrspitem.hxx>

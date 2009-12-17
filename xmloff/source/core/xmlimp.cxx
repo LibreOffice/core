@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -69,7 +69,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
@@ -764,7 +764,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 }
 
 void SAL_CALL SvXMLImport::endElement( const OUString&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 rName
 #endif
 )
@@ -778,7 +778,7 @@ rName
         SvXMLImportContext *pContext = (*mpContexts)[nCount-1];
         mpContexts->Remove( nCount-1, 1 );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
         OUString aLocalName;
         USHORT nPrefix =

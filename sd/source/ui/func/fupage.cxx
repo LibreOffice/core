@@ -40,14 +40,14 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/prntypes.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <stlsheet.hxx>
 #ifndef _SVX_SVDORECT_HXX
 #include <svx/svdorect.hxx>
@@ -59,7 +59,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
 

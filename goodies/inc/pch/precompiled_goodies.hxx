@@ -96,13 +96,13 @@
 #include "rtl/uuid.h"
 
 #include "svtools/FilterConfigItem.hxx"
-#include "svtools/cacheoptions.hxx"
+#include "unotools/cacheoptions.hxx"
 #include "svtools/fltcall.hxx"
-#include "svtools/itemprop.hxx"
-#include "svtools/lstner.hxx"
-#include "svtools/solar.hrc"
+#include "svl/itemprop.hxx"
+#include "svl/lstner.hxx"
+#include "svl/solar.hrc"
 #include "svtools/stdctrl.hxx"
-#include "svtools/svarray.hxx"
+#include "svl/svarray.hxx"
 
 #include "toolkit/helper/vclunohelper.hxx"
 

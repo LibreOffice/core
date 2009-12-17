@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -48,17 +48,10 @@ CXXFLAGS+= $(LFS_CFLAGS)
 #----------------------------------- OStringBuffer -----------------------------------
 
 SHL1OBJS= \
-    $(SLO)$/test_rtl_math.obj 
+    $(SLO)$/test_rtl_math.obj
 
 SHL1TARGET= rtl_math
-SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -71,9 +64,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 SHL2OBJS=  \
     $(SLO)$/rtl_math.obj
 SHL2TARGET= rtl_math2
-SHL2STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME=    $(SHL2TARGET)
@@ -90,14 +81,12 @@ SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 # SHL3OBJS=  \
 # 	$(SLO)$/rtl_old_testint64.obj
 # SHL3TARGET= rtl_old_testint64
-# SHL3STDLIBS=\
-# 	$(SALLIB) \
-# 	$(CPPUNITLIB)
-# 
+# SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+#
 # SHL3IMPLIB= i$(SHL3TARGET)
 # DEF3NAME=    $(SHL3TARGET)
 # SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
-# 
+#
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies

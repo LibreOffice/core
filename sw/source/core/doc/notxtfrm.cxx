@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imap.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/soerr.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/docfile.hxx>

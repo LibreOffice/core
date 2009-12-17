@@ -32,7 +32,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 

@@ -51,7 +51,7 @@
 #include <svx/editobj.hxx>
 #include <svx/outliner.hxx>
 #include <svx/fhgtitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/xftouit.hxx>
@@ -59,9 +59,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/editeng.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/sdr/properties/textproperties.hxx>
 
 // #110496#

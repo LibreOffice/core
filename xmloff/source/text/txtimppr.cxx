@@ -218,7 +218,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontStyleName )
         {
             aAny <<= sEmpty;
-    #ifndef PRODUCT
+    #ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 1 );
                 DBG_ASSERT( nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL,
@@ -232,7 +232,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= (sal_Int16)com::sun::star::awt::FontFamily::DONTKNOW;
 
-    #ifndef PRODUCT
+    #ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 2 );
                 DBG_ASSERT( nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL,
@@ -245,7 +245,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontPitch )
         {
             aAny <<= (sal_Int16)com::sun::star::awt::FontPitch::DONTKNOW;
-    #ifndef PRODUCT
+    #ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );
                 DBG_ASSERT( nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL,
@@ -258,7 +258,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontCharSet )
         {
             aAny <<= (sal_Int16)gsl_getSystemTextEncoding();
-    #ifndef PRODUCT
+    #ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );
                 DBG_ASSERT( nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL,
@@ -408,7 +408,7 @@ void XMLTextImportPropertyMapper::finished(
     {
         if( pAllBorderDistance && !pBorderDistances[i] )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllBorderDistance->mnIndex + i + 1 );
             DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&
@@ -422,7 +422,7 @@ void XMLTextImportPropertyMapper::finished(
         }
         if( pAllBorder && !pBorders[i] )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                             pAllBorder->mnIndex + i + 1 );
             DBG_ASSERT( nTmp >= CTF_LEFTBORDER && nTmp <= CTF_BOTTOMBORDER,
@@ -461,7 +461,7 @@ void XMLTextImportPropertyMapper::finished(
         {
             if( !pBorderDistances[i] )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pBorders[i]->mnIndex + 5 );
                 DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&

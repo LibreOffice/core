@@ -34,7 +34,7 @@
 #include "postit.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>

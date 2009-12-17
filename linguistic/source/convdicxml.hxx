@@ -79,7 +79,7 @@ public:
     void _ExportContent();
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
 
-    sal_Bool    Export( SfxMedium &rMedium );
+    sal_Bool    Export();
 };
 
 

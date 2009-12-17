@@ -66,7 +66,7 @@
 #define VALID_STYLE         0x0040
 #define VALID_PREVTEXT      0x0080
 #define VALID_FOLLOWTEXT    0x0100
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/font.hxx>
 #include <goodies/grfmgr.hxx>
 

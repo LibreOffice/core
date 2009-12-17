@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>

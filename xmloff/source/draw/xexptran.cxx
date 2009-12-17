@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/gen.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>

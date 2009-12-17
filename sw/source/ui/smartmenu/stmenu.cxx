@@ -34,7 +34,7 @@
 #include "precompiled_sw.hxx"
 #include <stmenu.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <SwSmartTagMgr.hxx>

@@ -38,7 +38,7 @@
 #include "excrecds.hxx"
 
 #include <map>
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -62,13 +62,13 @@
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/escpitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <string.h>
 
@@ -456,7 +456,7 @@ XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     /*  #i31530# set document country as UI country too -
         needed for correct behaviour of number formats. */
     mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+        ::msfilter::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
 void XclExpCountry::WriteBody( XclExpStream& rStrm )

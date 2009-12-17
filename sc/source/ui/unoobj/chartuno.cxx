@@ -44,7 +44,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/clsids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

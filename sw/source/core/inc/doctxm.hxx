@@ -31,7 +31,7 @@
 #define _DOCTXM_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 #include <tox.hxx>
 #include <section.hxx>

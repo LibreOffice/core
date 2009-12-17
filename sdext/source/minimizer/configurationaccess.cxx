@@ -33,7 +33,6 @@
 #include "precompiled_sdext.hxx"
 
 #include "configurationaccess.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>

@@ -44,7 +44,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/component_context.hxx"
 #include "cppuhelper/servicefactory.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/file.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"

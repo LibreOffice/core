@@ -102,7 +102,7 @@
 #include <svx/unolingu.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/langitem.hxx>
@@ -119,7 +119,7 @@
 #include "shapelist.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

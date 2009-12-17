@@ -58,7 +58,7 @@
 #include <svx/dialogs.hrc>
 #include "xoutbmp.hxx"
 #include "opengrf.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -391,7 +391,7 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     if( pStream && ERRCODE_IO_PENDING == pStream->GetError() )
         pStream->ResetError();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( nRes )
     {
         if( xMed.Is() && !pStream )

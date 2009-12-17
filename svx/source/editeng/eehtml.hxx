@@ -31,7 +31,7 @@
 #ifndef _EEHTML_HXX
 #define _EEHTML_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <editdoc.hxx>
 #include <sfx2/sfxhtml.hxx>

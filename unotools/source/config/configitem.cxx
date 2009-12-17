@@ -33,6 +33,7 @@
 #include "unotools/configitem.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/configpathes.hxx"
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -43,12 +44,13 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XRequestCallback.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XStringEscape.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <osl/diagnose.h>
-
+#include <tools/solarmutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace utl;
@@ -81,15 +83,22 @@ catch(Exception& rEx)   \
     #define CATCH_INFO(a) catch(Exception& ){}
 #endif
 
+/*
+    The ConfigChangeListener_Impl receives notifications from the configuration about changes that
+    have happened. It forwards this notification to the ConfigItem it knows a pParent by calling its
+    "CallNotify" method. As ConfigItems are most probably not thread safe, the SolarMutex is acquired
+    before doing so.
+*/
+
 namespace utl{
     class ConfigChangeListener_Impl : public cppu::WeakImplHelper1
     <
         com::sun::star::util::XChangesListener
     >
     {
+        public:
             ConfigItem*                 pParent;
             const Sequence< OUString >  aPropertyNames;
-        public:
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
@@ -98,7 +107,6 @@ namespace utl{
 
         //XEventListener
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
-
     };
 /* -----------------------------12.02.01 11:38--------------------------------
 
@@ -208,12 +216,17 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
         if(lcl_Find(sTemp, pCheckPropertyNames, aPropertyNames.getLength()))
             pNames[nNotify++] = sTemp;
     }
-    if(nNotify)
+    if( nNotify )
     {
-        aChangedNames.realloc(nNotify);
-        pParent->CallNotify(aChangedNames);
+        if ( ::tools::SolarMutex::Acquire() )
+        {
+            aChangedNames.realloc(nNotify);
+            pParent->CallNotify(aChangedNames);
+            ::tools::SolarMutex::Release();
+        }
     }
 }
+
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -274,13 +287,6 @@ ConfigItem::~ConfigItem()
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    ConfigItem::Commit()
-{
-    OSL_ENSURE(sal_False, "Base class called");
-}
-/* -----------------------------29.08.00 12:52--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    ConfigItem::ReleaseConfigMgr()
 {
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
@@ -302,16 +308,13 @@ void    ConfigItem::ReleaseConfigMgr()
  ---------------------------------------------------------------------------*/
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
+    // the call is forwarded to the virtual Notify() method
+    // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
+    // want to notify listeners
     if(!IsInValueChange() || pImpl->bEnableInternalNotification)
         Notify(rPropertyNames);
 }
-/* -----------------------------29.08.00 12:52--------------------------------
 
- ---------------------------------------------------------------------------*/
-void ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /*rPropertyNames*/)
-{
-    OSL_ENSURE(sal_False, "Base class called");
-}
 /* -----------------------------12.12.00 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1418,6 +1421,5 @@ void ConfigItem::UnlockTree()
     if(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE))
         m_xHierarchyAccess = 0;
 }
-
 
 

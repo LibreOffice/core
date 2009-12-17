@@ -36,7 +36,7 @@
 #include <tools/gen.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <map>
@@ -44,7 +44,7 @@
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"

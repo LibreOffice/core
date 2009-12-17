@@ -86,7 +86,7 @@
 #include <comphelper/extract.hxx>
 #include "PropertySetMerger.hxx"
 
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include "xformsexport.hxx"
 
 #include <unotools/docinfohelper.hxx>
@@ -1055,7 +1055,7 @@ void SvXMLExport::ClearAttrList()
     mpAttrList->Clear();
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void SvXMLExport::CheckAttrList()
 {
     DBG_ASSERT( !mpAttrList->getLength(),

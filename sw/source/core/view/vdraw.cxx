@@ -45,7 +45,7 @@
 /// include <svx/svdoutl.hxx>
 #include <svx/svdoutl.hxx>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif

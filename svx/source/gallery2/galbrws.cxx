@@ -33,12 +33,12 @@
 
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "gallery.hrc"
-#include "galmisc.hxx"
-#include "gallery1.hxx"
+#include "svx/galmisc.hxx"
+#include "svx/gallery1.hxx"
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
 #include "galbrws.hxx"

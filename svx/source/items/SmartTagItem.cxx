@@ -40,7 +40,7 @@
 #endif
 
 
-//#include <svtools/memberid.hrc>
+//#include <svl/memberid.hrc>
 //#include "svxids.hrc"
 //#include "svxitems.hrc"
 

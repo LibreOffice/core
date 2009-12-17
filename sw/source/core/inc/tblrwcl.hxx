@@ -31,7 +31,7 @@
 #define _TBLRWCL_HXX
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <vector>
 #include <swtypes.hxx>
@@ -69,7 +69,7 @@ BOOL lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 BOOL lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 

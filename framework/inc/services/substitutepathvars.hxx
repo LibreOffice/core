@@ -139,6 +139,7 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         /** is called from the ConfigManager before application ends or from the
             PropertyChangeListener if the sub tree broadcasts changes. */
         virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+        virtual void    Commit();
 
     private:
         // Wrapper methods for low-level functions

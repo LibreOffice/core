@@ -40,7 +40,7 @@ PACKAGE = complex$/toolkit
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar 
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar 
 JAVAFILES       = CheckAccessibleStatusBar.java CheckAccessibleStatusBarItem.java CheckAsyncCallback.java CallbackClass.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 SUBDIRS		= interface_tests

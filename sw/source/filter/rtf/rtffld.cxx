@@ -41,9 +41,9 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/langitem.hxx>

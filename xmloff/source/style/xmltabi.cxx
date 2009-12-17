@@ -44,7 +44,7 @@
 #include "xmltabi.hxx"
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

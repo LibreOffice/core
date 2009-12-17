@@ -36,7 +36,7 @@
 #include <cstddef>
 #include <cstring>
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/string.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textcvt.h"

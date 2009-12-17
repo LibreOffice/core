@@ -36,9 +36,9 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <uno/environment.h>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif

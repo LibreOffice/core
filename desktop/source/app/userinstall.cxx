@@ -50,9 +50,9 @@
 #include <tools/resmgr.hxx>
 #endif
 #include <unotools/bootstrap.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _SVTOOLS_SYSLOCALEOPTIONSOPTIONS_HXX
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -31,7 +31,7 @@
 #ifndef _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
 #define _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include "svx/svxdllapi.h"
 

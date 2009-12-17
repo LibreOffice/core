@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 #include <tools/shl.hxx>
 
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <svtools/svtdllapi.h>
 
 
@@ -60,7 +60,7 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 // Token-Typen TT_...
@@ -137,7 +137,7 @@ class SimpleTokenizer_Impl
 
     String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // TEST: Token ausgeben
     String getFullTokenStr( /*out*/TokenTypes eType,
         /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );

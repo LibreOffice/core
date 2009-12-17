@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
-#include <svtools/zformat.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/zformat.hxx>
+#include <svl/numuno.hxx>
 #include <rtl/math.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>

@@ -36,7 +36,7 @@
 //------------------------------------------------------------------------
 #include <osl_Socket_Const.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <osl/socket.hxx>
 //------------------------------------------------------------------------
 // helper functions

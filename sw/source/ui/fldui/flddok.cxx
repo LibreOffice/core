@@ -56,7 +56,7 @@
 #include <view.hxx>
 #endif
 #include <wrtsh.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <index.hrc>
 

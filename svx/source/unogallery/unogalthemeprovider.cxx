@@ -33,13 +33,13 @@
 
 #include "unogalthemeprovider.hxx"
 #include "unogaltheme.hxx"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
 #endif
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

@@ -37,7 +37,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/kde_headers.h>
+#include "kde_headers.h"
 
 #include "uno/current_context.hxx"
 

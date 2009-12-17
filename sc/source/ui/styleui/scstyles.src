@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "sc.hrc"
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #define IMPL_FAMILY(family,filter) \
     StyleFamily = family;                       \
     FilterList = { filter }

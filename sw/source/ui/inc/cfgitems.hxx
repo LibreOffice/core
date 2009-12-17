@@ -31,7 +31,7 @@
 #define _CFGITEMS_HXX
 
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <printdata.hxx>
 
@@ -39,7 +39,7 @@
 
 class SwWriterApp;
 class SwModule;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
@@ -207,7 +207,7 @@ public:
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */

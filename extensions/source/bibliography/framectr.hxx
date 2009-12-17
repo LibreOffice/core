@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <cppuhelper/implbase5.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "bibmod.hxx"
 class BibDataManager;

@@ -33,7 +33,7 @@
 #include "KDEInit.h"
 #include <osl/diagnose.h>
 #include <osl/process.h>
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 
 namespace connectivity
 {

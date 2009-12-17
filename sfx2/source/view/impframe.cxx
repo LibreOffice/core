@@ -36,7 +36,7 @@
 
 #include "impframe.hxx"
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <sfx2/frame.hxx>
 #include <sfx2/bindings.hxx>

@@ -42,8 +42,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>

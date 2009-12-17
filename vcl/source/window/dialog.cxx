@@ -453,6 +453,14 @@ Dialog::~Dialog()
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( Dialog, ImplAsyncCloseHdl, void*, EMPTYARG )
+{
+    Close();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 long Dialog::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
@@ -468,7 +476,11 @@ long Dialog::Notify( NotifyEvent& rNEvt )
             if ( (nKeyCode == KEY_ESCAPE) &&
                  ((GetStyle() & WB_CLOSEABLE) || ImplGetCancelButton( this ) || ImplGetOKButton( this )) )
             {
-                Close();
+                // #i89505# for the benefit of slightly mentally challenged implementations
+                // like e.g. SfxModelessDialog which destroy themselves inside Close()
+                // post this Close asynchronous so we can leave our key handler before
+                // we get destroyed
+                PostUserEvent( LINK( this, Dialog, ImplAsyncCloseHdl ), this );
                 return TRUE;
             }
         }

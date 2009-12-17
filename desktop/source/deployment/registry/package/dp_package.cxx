@@ -44,7 +44,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/makesequence.hxx"
 #include "comphelper/sequence.hxx"

@@ -32,8 +32,8 @@
 #define _SVX_XTEXTITEM_HXX
 
 #include <svx/xenum.hxx>
-#include <svtools/metitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/metitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>
 

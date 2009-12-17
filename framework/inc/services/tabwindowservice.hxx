@@ -90,14 +90,14 @@ struct TTabPageInfo
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
-    
+
         TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
             , m_bCreated    (sal_False)
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
-    
+
     public:
 
         ::sal_Int32                                   m_nIndex;
@@ -118,6 +118,7 @@ typedef ::std::hash_map< ::sal_Int32                    ,
 class TabWindowService :  public css::lang::XTypeProvider
                          ,  public css::lang::XServiceInfo
                          ,  public css::awt::XSimpleTabController
+                         ,  public css::lang::XComponent
                          ,  public ThreadHelpBase
                          ,  public TransactionBase
                          ,  public PropertySetHelper
@@ -204,25 +205,25 @@ class TabWindowService :  public css::lang::XTypeProvider
 
         /// reference to factory, which has created this instance
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
-    
+
         /// the tab window as XWindow ( to hold window* alive !)
         css::uno::Reference< css::awt::XWindow > m_xTabWin;
-    
+
         /// the VCL tab window
         FwkTabWindow* m_pTabWin;
-    
+
         /// container of inserted tab pages
         TTabPageInfoHash m_lTabPageInfos;
-    
+
         /// container of the added TabListener
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
-    
+
         /// counter of the tabpage indexes
         ::sal_Int32 m_nPageIndexCounter;
-    
+
         /// index of the current active page
         ::sal_Int32 m_nCurrentPageIndex;
-    
+
         /// title of the tabcontrolled window
         ::rtl::OUString m_sTitle;
 

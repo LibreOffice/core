@@ -46,8 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=fmcomp
 SRC1FILES= \
-    gridctrl.src	\
-    showcols.src
+    gridctrl.src	
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \

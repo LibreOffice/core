@@ -37,8 +37,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/itemiter.hxx>
+#include "svl/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 
@@ -49,7 +49,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/shaditem.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>

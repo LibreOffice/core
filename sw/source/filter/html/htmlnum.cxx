@@ -37,7 +37,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <vcl/svapp.hxx>

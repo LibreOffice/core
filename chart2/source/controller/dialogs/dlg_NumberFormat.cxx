@@ -34,7 +34,7 @@
 #include "dlg_NumberFormat.hxx"
 
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 // header for class SvxNumberInfoItem
 #define ITEMID_NUMBERINFO SID_ATTR_NUMBERFORMAT_INFO
@@ -45,7 +45,7 @@
 #include <sfx2/tabdlg.hxx>
 
 // header for SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 //.............................................................................
 namespace chart

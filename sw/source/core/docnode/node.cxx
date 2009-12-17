@@ -341,7 +341,7 @@ USHORT SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long SwNode::nSerial = 0;
 #endif
 
@@ -373,7 +373,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -406,7 +406,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -1479,7 +1479,6 @@ SwCntntNode *SwCntntNode::JoinPrev()
     // erfrage vom Modify Informationen
 BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
-    const SwNumRuleItem* pItem;
     switch( rInfo.Which() )
     {
     case RES_AUTOFMT_DOCNODE:
@@ -1508,18 +1507,6 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 
 //        return TRUE;
     // <--
-
-    case RES_GETLOWERNUMLEVEL:
-        if( IsTxtNode() &&
-            0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
-            RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
-            pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            ((SwTxtNode*)this)->GetActualListLevel()
-                > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
-        {
-            return FALSE;
-        }
-        break;
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
@@ -1572,7 +1559,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     }
     return bRet;
 }
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {

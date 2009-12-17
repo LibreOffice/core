@@ -74,7 +74,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

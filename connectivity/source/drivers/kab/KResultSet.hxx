@@ -33,7 +33,7 @@
 
 #include "KStatement.hxx"
 #include "KResultSetMetaData.hxx"
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>

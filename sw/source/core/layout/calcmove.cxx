@@ -851,7 +851,7 @@ void SwPageFrm::MakeAll()
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Der Upper (Root) muss mindestens so breit
     //sein, dass er die breiteste Seite aufnehmen kann.
     if ( GetUpper() )
@@ -1139,7 +1139,7 @@ void SwCntntFrm::MakeAll()
     // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
@@ -1695,7 +1695,7 @@ void SwCntntFrm::MakeAll()
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
                     bMoveOrFit = TRUE;
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 ASSERT( FALSE, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );

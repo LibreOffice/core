@@ -60,13 +60,13 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/stritem.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/numinf.hxx>

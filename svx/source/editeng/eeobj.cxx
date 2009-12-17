@@ -38,7 +38,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svx/editeng.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star;

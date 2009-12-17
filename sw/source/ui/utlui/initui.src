@@ -112,6 +112,10 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "(fixed)" ;
     };
+    String STR_DURATION_FORMAT
+    {
+        Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";
+    };
     String STR_TOI
     {
         Text [ en-US ] = "Alphabetical Index" ;

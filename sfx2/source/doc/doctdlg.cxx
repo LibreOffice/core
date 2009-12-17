@@ -34,7 +34,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef GCC
 #endif
 

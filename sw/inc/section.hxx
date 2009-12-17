@@ -38,7 +38,7 @@
 #ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <frmfmt.hxx>
 
 // Forward Deklaration

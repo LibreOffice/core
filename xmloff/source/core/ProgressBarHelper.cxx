@@ -56,7 +56,7 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
 , fOldPercent(0.0)
 , bStrict(bTempStrict)
 , bRepeat(sal_True)
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 , bFailure(sal_False)
 #endif
 {
@@ -130,7 +130,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 //              fOldPercent = fPercent;
 //          }
         }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         else if (!bFailure)
         {
             DBG_ERROR("tried to set a wrong value on the progressbar");

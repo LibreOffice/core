@@ -144,6 +144,9 @@ namespace dxcanvas
         }
     }
 
+    void DXCanvasItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& ) {}
+    void DXCanvasItem::Commit() {}
+
     bool DXCanvasItem::isDeviceUsable( const DeviceInfo& rDeviceInfo ) const
     {
         return maValues.find(rDeviceInfo) == maValues.end();

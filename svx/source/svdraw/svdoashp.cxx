@@ -46,7 +46,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include "unopolyhelper.hxx"
 #include <comphelper/processfactory.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
 #include <vcl/salbtype.hxx>     // FRound
@@ -80,7 +80,7 @@
 #include <svx/writingmodeitem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/xlnclit.hxx>

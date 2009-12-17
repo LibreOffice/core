@@ -34,8 +34,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 
 //-----------------------------------------------------------------------------
 namespace svtools{

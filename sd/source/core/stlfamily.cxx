@@ -37,7 +37,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <svx/unoprov.hxx>
 

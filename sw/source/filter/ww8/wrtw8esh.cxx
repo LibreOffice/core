@@ -2,6 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +39,14 @@
 
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
 #include <sot/storage.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
@@ -2018,7 +2019,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         if (bSwapInPage)
                             (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     else
                         ASSERT( !this, "Where is the SDR-Object?" );
 #endif

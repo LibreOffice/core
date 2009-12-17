@@ -32,9 +32,9 @@
 #define _MSGNODEI_HXX
 
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/list.hxx>
 struct SfxMsgAttachFile {
     String  aFile;

@@ -31,7 +31,7 @@
 #ifndef _TEXTDOC_HXX
 #define _TEXTDOC_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/textdata.hxx>
 #include <txtattr.hxx>
 

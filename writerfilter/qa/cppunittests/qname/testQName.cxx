@@ -1,6 +1,6 @@
 /*  Copyright 2005 Sun Microsystems, Inc. */
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <odiapi/qname/QName.hxx>
 #include <stdio.h>
 #include <rtl/string.hxx>

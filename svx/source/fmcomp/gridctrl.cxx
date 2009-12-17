@@ -37,7 +37,7 @@
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 
 #ifndef _SVX_FMPROP_HRC

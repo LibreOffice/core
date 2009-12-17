@@ -34,7 +34,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vector>
 

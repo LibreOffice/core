@@ -125,6 +125,7 @@ public:
     ~FwkTabWindow();
 
     void            AddEventListener( const Link& rEventListener );
+    void            RemoveEventListener( const Link& rEventListener );
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );

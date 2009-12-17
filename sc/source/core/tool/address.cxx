@@ -365,7 +365,10 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         {
             p = lcl_ParseQuotedName(p, rExternDocName);
             if (!*p || *p != ']' || !rExternDocName.Len())
+            {
+                rExternDocName.Erase();
                 return start;
+            }
         }
         else
         {
@@ -418,7 +421,10 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Excel does not allow [ and ] characters in sheet names though.
         p = lcl_ParseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
+        {
+            rExternDocName.Erase();
             return start;
+        }
         if (rExternDocName.Len())
         {
             xub_StrLen nOpen = rExternDocName.Search( '[');

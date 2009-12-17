@@ -34,7 +34,7 @@
 #include <memory>
 #include <tools/solar.h>
 #include <svtools/textdata.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 

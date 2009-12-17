@@ -38,15 +38,15 @@
 #include <stdio.h>
 #include "hintids.hxx"
 #include <tools/resid.hxx>
-#include <svtools/macitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/macitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #ifndef _SVSTDARR_USHORTS_DECL
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svx/lrspitem.hxx>
 #include <svx/tstpitem.hxx>

@@ -65,9 +65,9 @@
 //  something else header
 //____________________________________________________________________________________________________________________________________
 #include <tools/errcode.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/sfxuno.hxx>
 
 //____________________________________________________________________________________________________________________________________

@@ -50,7 +50,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/unofdesc.hxx>
 #include <svx/outliner.hxx>
 #include <svx/svdoutl.hxx>

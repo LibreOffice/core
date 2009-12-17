@@ -39,7 +39,7 @@
 #include <dllapi.h>
 #include <vector>
 
-// #include <svtools/lstner.hxx>
+// #include <svl/lstner.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
 

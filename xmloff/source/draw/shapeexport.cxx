@@ -559,7 +559,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // ---------------------------------------
     // check if this is the correct ShapesInfo
     // ---------------------------------------

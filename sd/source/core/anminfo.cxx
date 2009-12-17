@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <tools/urlobj.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include "svx/xtable.hxx"
 #include <svx/svdopath.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/flditem.hxx>
 #include <svx/eeitem.hxx>
 

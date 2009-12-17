@@ -37,15 +37,15 @@
 #include "ChartItemPool.hxx"
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
 #include <svx/eeitem.hxx>
 // header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 // header E3dObjFactory
 #include <svx/objfac3d.hxx>
 // header for class SdrObjList

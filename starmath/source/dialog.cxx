@@ -34,9 +34,9 @@
 
 #define SMDLL 1
 #include "tools/rcid.h"
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>

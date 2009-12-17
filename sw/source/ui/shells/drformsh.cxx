@@ -36,7 +36,7 @@
 #include <hintids.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
@@ -59,7 +59,7 @@
 #include "shells.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <view.hxx>
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>

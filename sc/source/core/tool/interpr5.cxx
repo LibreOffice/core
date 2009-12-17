@@ -45,7 +45,7 @@
 #include <stdio.h>
 #endif
 #include <unotools/bootstrap.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "interpre.hxx"
 #include "global.hxx"

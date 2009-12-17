@@ -33,8 +33,8 @@
 // include ---------------------------------------------------------------
 
 #include <svx/svxids.hrc>
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxenum.hxx>
 #include "svx/svxdllapi.h"
 

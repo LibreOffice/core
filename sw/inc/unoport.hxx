@@ -48,7 +48,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <memory>
 #include <deque>

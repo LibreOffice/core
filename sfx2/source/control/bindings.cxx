@@ -32,13 +32,13 @@
 #include "precompiled_sfx2.hxx"
 
 #include <hash_map>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,7 @@ SHL1OBJS=  \
     $(SLO)$/osl_old_testprofile.obj
 
 SHL1TARGET= osl_old_testprofile
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -61,7 +59,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 SLOFILES=\
-    $(SHL1OBJS) 
+    $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

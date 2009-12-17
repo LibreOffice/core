@@ -42,11 +42,8 @@
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
-#ifndef _OFA_MISCCFG_HXX
-#include <svtools/misccfg.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
@@ -57,30 +54,30 @@
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/xtable.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/outlobj.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PATHOPTIONS_HXX_
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -262,7 +259,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     // DefTab und SpellOptions setzen
-    //OfaMiscCfg* pOfaMiscCfg = SFX_APP()->GetMiscConfig();
     // Jetzt am Modul (SD)
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );

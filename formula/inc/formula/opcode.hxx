@@ -401,7 +401,7 @@ enum OpCodeEnum
         ocNone              = SC_OPCODE_NONE
 };
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 // save memory since compilers tend to int an enum
 typedef USHORT OpCode;
 #else

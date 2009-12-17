@@ -30,7 +30,7 @@
 #ifndef _FMTFORDR_HXX
 #define _FMTFORDR_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 

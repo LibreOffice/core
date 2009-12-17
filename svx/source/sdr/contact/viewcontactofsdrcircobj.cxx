@@ -37,7 +37,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrellipseprimitive2d.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/sxciaitm.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

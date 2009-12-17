@@ -1657,7 +1657,7 @@ Resource RID_GLOBSTR
 
     String STR_UNDO_CHINESE_TRANSLATION
     {
-        Text [ en-US ] = "Chinese translation";
+        Text [ en-US ] = "Chinese conversion";
     };
 
     String STR_ERR_DATAPILOT_INPUT

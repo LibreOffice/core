@@ -43,6 +43,8 @@ TARGET=jpeg
 CFLAGS+=-DSYSTEM_JPEG
 .ENDIF
 
+SOLARINC+=-I../../inc
+
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/jpegc.obj \

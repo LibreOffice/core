@@ -32,7 +32,7 @@
 #define _SD_DIACTRL_HXX
 
 #include "dlgctrls.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/itemwin.hxx>
 #include <vcl/fixed.hxx>

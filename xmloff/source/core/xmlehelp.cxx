@@ -34,7 +34,6 @@
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/outdev.hxx>
 #include "xmlehelp.hxx"
 
 #ifndef _XMLOFF_XMTOKEN_HXX
@@ -228,82 +227,6 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
 
     if( eUnit != XML_TOKEN_INVALID )
         rOut.append( GetXMLToken(eUnit) );
-#if 0
-    enum XMLTokenEnum eUnit;
-    sal_Int32 nFac = 1;
-    switch( eOutUnit )
-    {
-    case MAP_100TH_MM:
-        nFac *= 10L;
-    case MAP_10TH_MM:
-        nFac *= 10L;
-        eOutUnit = MAP_MM;
-    case MAP_MM:
-        // 0.01mm
-        nFac *= 100L;
-        eUnit = XML_UNIT_MM;
-        break;
-
-    case MAP_CM:
-#ifdef EXACT_VALUES
-        // 0.001cm
-        nFac *= 1000L;
-#else
-        // 0.01cm
-        nFac *= 100L;
-#endif
-        eUnit = XML_UNIT_CM;
-        break;
-
-    case MAP_TWIP:
-    case MAP_POINT:
-#ifdef EXACT_VALUES
-        // 0.01pt
-        nFac *= 100L;
-#else
-        // 0.1pt
-        nFac *= 10L;
-#endif
-        eUnit = XML_UNIT_PT;
-        break;
-
-    case MAP_1000TH_INCH:
-        nFac *= 10L;
-    case MAP_100TH_INCH:
-        nFac *= 10L;
-    case MAP_10TH_INCH:
-        nFac *= 10L;
-    case MAP_INCH:
-    default:
-        eOutUnit = MAP_INCH;
-#ifdef EXACT_VALUES
-        // 0.0001in
-        nFac *= 10000L;
-#else
-        // 0.01in
-        nFac *= 100L;
-#endif
-        eUnit = XML_UNIT_INCH;
-        break;
-    }
-
-    if( eValueUnit != eOutUnit )
-        nValue = OutputDevice::LogicToLogic( nValue, eValueUnit, eOutUnit );
-
-    rOut.append( nValue / nFac );
-    if( nFac > 1 && (nValue % nFac) != 0 )
-    {
-        rOut.append( sal_Unicode('.') );
-        while( nFac > 1 && (nValue % nFac) != 0 )
-        {
-            nFac /= 10L;
-            rOut.append( (nValue / nFac) % 10L );
-        }
-    }
-
-    rOut.append( GetXMLToken(eUnit) );
-#endif
-
 }
 
 void SvXMLExportHelper::AddPercentage( sal_Int32 nValue, OUStringBuffer& rOut )

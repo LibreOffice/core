@@ -33,8 +33,8 @@
 
 #include <memory>
 #include <vcl/svapp.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <svx/unoedsrc.hxx>
 #include <svx/editdata.hxx>
 #include <svx/unoforou.hxx>

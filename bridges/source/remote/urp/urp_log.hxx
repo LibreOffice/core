@@ -29,7 +29,7 @@
  ************************************************************************/
 namespace bridges_urp
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define BRIDGES_URP_PROT
 #endif
 

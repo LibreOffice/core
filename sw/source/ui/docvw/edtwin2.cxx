@@ -34,26 +34,26 @@
 #include <hintids.hxx>
 
 #include <doc.hxx>
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #include <stdio.h>
 #endif
 
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
 #include <svx/outliner.hxx>
 #endif
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
@@ -162,7 +162,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -176,7 +176,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = UniString(

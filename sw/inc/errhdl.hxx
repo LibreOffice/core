@@ -30,7 +30,7 @@
 #ifndef _ERRHDL_HXX
 #define _ERRHDL_HXX
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 #include <tools/solar.h>
 #include <sal/types.h>

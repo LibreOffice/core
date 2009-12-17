@@ -36,12 +36,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/lstner.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/svdmodel.hxx>

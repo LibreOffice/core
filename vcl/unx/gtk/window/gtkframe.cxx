@@ -2377,6 +2377,11 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         }
     }
 
+    // free xrender resources
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+
     // first deinit frame
     if( m_pIMHandler )
     {

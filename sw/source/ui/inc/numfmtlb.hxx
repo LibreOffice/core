@@ -31,7 +31,7 @@
 #define _SWNUMFMTLB_HXX
 
 #include <vcl/lstbox.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "swdllapi.h"
 
 class SwView;

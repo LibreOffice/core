@@ -41,7 +41,7 @@
 #include "com/sun/star/uno/XWeak.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 

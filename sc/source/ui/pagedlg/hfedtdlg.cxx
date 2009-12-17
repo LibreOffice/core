@@ -38,7 +38,7 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include "hfedtdlg.hxx"
 #include "global.hxx"

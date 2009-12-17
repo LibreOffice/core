@@ -31,7 +31,7 @@
 #define _FMTFLCNT_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SwFrmFmt;
 class SwTxtFlyCnt;

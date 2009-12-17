@@ -33,11 +33,11 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/menu.hxx>
 
-#include <svtools/svarray.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/svarray.hxx>
+#include <svl/itemset.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>

@@ -30,7 +30,7 @@
 #ifndef _SVX_BOXITEM_HXX
 #define _SVX_BOXITEM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/borderline.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

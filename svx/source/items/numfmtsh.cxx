@@ -40,8 +40,8 @@
 #include <i18npool/mslangid.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <svtools/langtab.hxx>
 #include <vcl/svapp.hxx>

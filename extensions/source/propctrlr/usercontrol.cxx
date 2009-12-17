@@ -36,10 +36,10 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 /** === end UNO includes === **/
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include "modulepcr.hxx"

@@ -73,7 +73,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/fixed.hxx       \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/font.hxx        \
-            $(INC)$/vcl$/fontcvt.hxx     \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/graph.hxx       \
             $(INC)$/vcl$/group.hxx       \

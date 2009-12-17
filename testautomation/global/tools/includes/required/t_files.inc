@@ -64,7 +64,7 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     if ( GrafikEinfuegenDlg.exists( 2 ) ) then
 
         Vorschau.Uncheck
-        if gApplication <> "HTML" AND gApplication <> "HTML" then
+        if gApplication <> "HTML" then
             Verknuepfen.UnCheck
         end if
 
@@ -87,13 +87,15 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
             Kontext "GrafikEinfuegenDlg"
             if GrafikEinfuegenDlg.Exists then
                 GrafikEinfuegenDlg.Cancel
+                GarfikEinfuegenDlg.notExists( 4 )
             endif
         else
             hGrafikEinfuegen = IsImageLoaded
         end if
     else
-        'GrafikEinfuegeDlg not open
+        warnlog( "Insert graphics dialog not open" )
     endif
+    
 end function
 '
 '-------------------------------------------------------------------------------

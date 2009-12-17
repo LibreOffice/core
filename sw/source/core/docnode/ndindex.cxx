@@ -37,7 +37,7 @@
 #include "error.h"              // fuers ASSERT
 #include "ndindex.hxx"
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 int SwNodeIndex::nSerial = 0;
 #endif
 
@@ -71,7 +71,7 @@ SwNodeIndex::SwNodeIndex( SwNodes& rNds, ULONG nIdx )
 {
     rNds.RegisterIndex( *this );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
@@ -86,7 +86,7 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
         pNd = rIdx.pNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
@@ -101,7 +101,7 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
         pNd = (SwNode*)&rNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }

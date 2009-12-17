@@ -36,7 +36,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltertabpagexslt.hrc"

@@ -44,7 +44,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/sizeitem.hxx>
 #include "svx/frmdiritem.hxx"
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>

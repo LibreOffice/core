@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 #include <vcl/salgtype.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 
@@ -48,14 +49,6 @@ typedef BYTE*       HPBYTE;
 typedef HPBYTE      Scanline;
 typedef const BYTE* ConstHPBYTE;
 typedef ConstHPBYTE ConstScanline;
-
-// --------------------
-// - Helper functions -
-// --------------------
-
-inline long MinMax( long nVal, long nMin, long nMax );
-inline long AlignedWidth4Bytes( long nWidthBits );
-inline long FRound( double fVal );
 
 // ------------------
 // - Bitmap formats -
@@ -291,29 +284,6 @@ struct VCL_DLLPUBLIC BitmapBuffer
 
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
                                                ULONG nDstBitmapFormat, BitmapPalette* pDstPal = NULL, ColorMask* pDstMask = NULL );
-
-// ---------------
-// - Inlines -
-// ---------------
-
-inline long MinMax( long nVal, long nMin, long nMax )
-{
-    return( nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin );
-}
-
-// ------------------------------------------------------------------
-
-inline long AlignedWidth4Bytes( long nWidthBits )
-{
-    return( ( ( nWidthBits + 31 ) >> 5 ) << 2 );
-}
-
-// ------------------------------------------------------------------
-
-inline long FRound( double fVal )
-{
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
-}
 
 // ------------------------------------------------------------------
 

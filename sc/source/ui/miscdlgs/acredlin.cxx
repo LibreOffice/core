@@ -35,7 +35,7 @@
 
 
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>

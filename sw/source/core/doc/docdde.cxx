@@ -41,7 +41,7 @@
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/linkmgr.hxx>          // LinkManager
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>

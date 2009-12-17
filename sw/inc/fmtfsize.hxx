@@ -31,7 +31,7 @@
 #define _FMTFSIZE_HXX
 
 #include <tools/gen.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <swtypes.hxx>

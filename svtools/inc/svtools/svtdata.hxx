@@ -32,34 +32,22 @@
 #define _SVTOOLS_SVTDATA_HXX
 
 #include <tools/resid.hxx>
-#include <tools/simplerm.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 
 class ResMgr;
 class SfxItemDesruptorList_Impl;
-class SfxItemPool;
-class Twain;
 
 //============================================================================
 class ImpSvtData
 {
 public:
-    Twain * pTwain;
-    const SfxItemPool * pStoringPool;
     SfxItemDesruptorList_Impl * pItemDesruptList;
-
     ResMgr *        pResMgr;
     ResMgr *        pPatchResMgr;
 
-    void*           m_pThreadsafeRMs;
-        // one SimpleResMgr for each language for which a resource was requested
-        // (When using the 'non-simple' resmgr, the first request for any language wins, any
-        // further request for any other language supply the resmgr of the first call.
-        // For the simple resmgr we have a mgr for each language ever requested).
-
 private:
     ImpSvtData():
-        pTwain(0), pStoringPool(0), pItemDesruptList(0), pResMgr(0),
-        pPatchResMgr(NULL), m_pThreadsafeRMs(NULL)
+        pItemDesruptList(0), pResMgr(0), pPatchResMgr(0)
     {}
 
     ~ImpSvtData();
@@ -67,12 +55,8 @@ private:
 public:
     ResMgr * GetResMgr(const ::com::sun::star::lang::Locale aLocale);
     ResMgr * GetResMgr(); // VCL dependant, only available in SVT, not in SVL!
-
     ResMgr * GetPatchResMgr();
     ResMgr * GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale);
-
-
-    SimpleResMgr * GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale);
 
     static ImpSvtData & GetSvtData();
 };
@@ -99,19 +83,6 @@ public:
     SvtResId(USHORT nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
      // VCL dependant, only available in SVT, not in SVL!
 };
-
-//============================================================================
-class SvtSimpleResId
-{
-    String  m_sValue;
-
-public:
-    SvtSimpleResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale) : m_sValue(ImpSvtData::GetSvtData().GetSimpleRM(aLocale)->ReadString(nId)) { };
-
-    operator String () const { return m_sValue; }
-};
-
-
 
 #endif //  _SVTOOLS_SVTDATA_HXX
 

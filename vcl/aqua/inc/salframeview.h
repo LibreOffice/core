@@ -132,7 +132,11 @@
 -(void)moveWordForwardAndModifySelection: (id)aSender;
 -(void)moveWordRightAndModifySelection: (id)aSender;
 -(void)moveToEndOfLine: (id)aSender;
+-(void)moveToRightEndOfLine: (id)aSender;
+-(void)moveToLeftEndOfLine: (id)aSender;
 -(void)moveToEndOfLineAndModifySelection: (id)aSender;
+-(void)moveToRightEndOfLineAndModifySelection: (id)aSender;
+-(void)moveToLeftEndOfLineAndModifySelection: (id)aSender;
 -(void)moveToBeginningOfLine: (id)aSender;
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender;
 -(void)moveToEndOfParagraph: (id)aSender;
@@ -144,8 +148,10 @@
 -(void)moveParagraphBackward: (id)aSender;
 -(void)moveParagraphBackwardAndModifySelection: (id)aSender;
 -(void)moveToEndOfDocument: (id)aSender;
+-(void)scrollToEndOfDocument: (id)aSender;
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender;
 -(void)moveToBeginningOfDocument: (id)aSender;
+-(void)scrollToBeginningOfDocument: (id)aSender;
 -(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender;
 -(void)insertNewline: (id)aSender;
 -(void)deleteBackward: (id)aSender;

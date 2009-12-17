@@ -39,7 +39,7 @@
 #include <unotools/configitem.hxx>
 #include <rsc/rscsfx.hxx>
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/srchdefs.hxx>
 
@@ -112,6 +112,7 @@ public:
 
     // ConfigItem
     virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void            Commit();
 
             sal_uInt16      GetCommand() const { return nCommand; }
             void            SetCommand(sal_uInt16 nNewCommand) { nCommand = nNewCommand; }

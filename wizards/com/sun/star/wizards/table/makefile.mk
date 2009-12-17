@@ -38,7 +38,7 @@ PACKAGE = com$/sun$/star$/wizards$/table
 .INCLUDE : settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-JARFILES= unoil.jar jurt.jar ridl.jar sandbox.jar juh.jar java_uno.jar commonwizards.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar commonwizards.jar
 CUSTOMMANIFESTFILE= MANIFEST.MF
 
 JARCLASSDIRS	= com$/sun$/star$/wizards$/table

@@ -31,7 +31,7 @@
 #ifndef _DBGLOOP_HXX
 #define _DBGLOOP_HXX
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 #include <tools/solar.h>
 

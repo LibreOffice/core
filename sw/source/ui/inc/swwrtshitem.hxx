@@ -29,7 +29,7 @@
  ************************************************************************/
 #ifndef _SW_WRTSHELLITEM_HXX
 #define _SW_WRTSHELLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
 class SwWrtShell;

@@ -32,7 +32,7 @@
 #define _NDARR_HXX
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #ifndef _BPARR_HXX
 #include <bparr.hxx>

@@ -122,11 +122,7 @@ LIB2OBJFILES= \
          $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/impgrfll.obj
 
-LIB3TARGET= $(SLB)$/$(TARGET)-msfilter.lib
-LIB3OBJFILES= \
-         $(SLO)$/svdfppt.obj         \
-
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES) $(LIB3OBJFILES)
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES) 
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src

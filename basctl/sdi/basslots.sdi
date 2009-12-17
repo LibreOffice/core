@@ -28,8 +28,6 @@
  *
  ************************************************************************/
 
-import "svxslots.ilb"
-
 module
 "6706E0E7-FB05-101B-804c-04021c007002"
 "6806E0E7-FB05-101B-804c-04021c007002"
@@ -37,10 +35,14 @@ BasicIDE
 [
 HelpText( "BasicIDE" )
 SlotIdFile( "basslots.hrc" )
-TypeLibFile( "basslots.tlb" )
 ]
 {
     //=========================================================================
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
+    include "svx/svxitems.sdi"
+    include "svx/xoitems.sdi"
+    include "svx/svx.sdi"
 
     include "baside.sdi"
 

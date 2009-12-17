@@ -35,7 +35,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/view3d.hxx>
 #include <svx/fmmodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/sphere3d.hxx>

@@ -41,7 +41,7 @@
 #endif
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/splwrap.hxx>
 #include <svx/langitem.hxx>
 #include <svx/fontitem.hxx>
@@ -367,7 +367,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 
     return bRet;
 }
-
 
 inline BOOL InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
     return ((nIdx >=nStart) && (nIdx <= nEnd));

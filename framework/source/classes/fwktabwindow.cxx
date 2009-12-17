@@ -65,7 +65,6 @@ namespace framework
 {
 
 // class FwkTabControl ---------------------------------------------------
-
 FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
     TabControl( pParent, rResId )
@@ -334,6 +333,11 @@ IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
 void FwkTabWindow::AddEventListener( const Link& rEventListener )
 {
     m_aTabCtrl.AddEventListener( rEventListener );
+}
+
+void FwkTabWindow::RemoveEventListener( const Link& rEventListener )
+{
+    m_aTabCtrl.RemoveEventListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------

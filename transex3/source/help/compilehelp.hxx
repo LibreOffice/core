@@ -71,6 +71,7 @@ struct HelpProcessingErrorInfo
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
+     const rtl::OUString& aOfficeHelpPath,
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,

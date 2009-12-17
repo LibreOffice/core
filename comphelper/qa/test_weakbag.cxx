@@ -35,7 +35,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/weakbag.hxx"
 #include "cppuhelper/weak.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 
 namespace {
 

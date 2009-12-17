@@ -114,7 +114,7 @@ void IceSalSession::queryInteraction()
 
 void IceSalSession::interactionDone()
 {
-    SessionManagerClient::interactionDone();
+    SessionManagerClient::interactionDone( false );
 }
 
 void IceSalSession::saveDone()
@@ -129,6 +129,7 @@ void IceSalSession::saveDone()
 
 bool IceSalSession::cancelShutdown()
 {
+    SessionManagerClient::interactionDone( true );
     return false;
 }
 
@@ -368,6 +369,12 @@ void SessionManagerClient::SaveYourselfProc(
 
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
 {
+    if( pOneInstance )
+    {
+        SalSessionQuitEvent aEvent;
+        pOneInstance->CallCallback( &aEvent );
+    }
+
     const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
     SMprintf( rFrames.begin() != rFrames.end() ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
     if( rFrames.begin() != rFrames.end() )
@@ -526,12 +533,12 @@ bool SessionManagerClient::queryInteraction()
     return bRet;
 }
 
-void SessionManagerClient::interactionDone()
+void SessionManagerClient::interactionDone( bool bCancelShutdown )
 {
     if( aSmcConnection )
     {
         ICEConnectionObserver::lock();
-        SmcInteractDone( aSmcConnection, False );
+        SmcInteractDone( aSmcConnection, bCancelShutdown ? True : False );
         ICEConnectionObserver::unlock();
     }
 }

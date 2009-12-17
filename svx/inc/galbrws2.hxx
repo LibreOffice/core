@@ -37,7 +37,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/miscopt.hxx>
 #include "galbrws.hxx"
 

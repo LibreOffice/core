@@ -47,7 +47,7 @@
 #define GLOBALOVERFLOW3
 
 
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <svx/svxids.hrc>
 #include <svx/svxitems.hrc>
 #include <vcl/vclenum.hxx>
@@ -56,10 +56,10 @@
 
 #include <rtl/ustring.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <svtools/langtab.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

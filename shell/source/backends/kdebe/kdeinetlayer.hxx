@@ -10,7 +10,7 @@
 #endif
 #include <com/sun/star/util/XTimeStamped.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <vcl/kde_headers.h>
+#include <kde_headers.h>
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;

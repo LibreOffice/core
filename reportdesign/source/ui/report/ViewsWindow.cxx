@@ -190,13 +190,13 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
     SetPaintTransparent(TRUE);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    StartListening(m_aColorConfig);
+    m_aColorConfig.AddListener(this);
     ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
 OViewsWindow::~OViewsWindow()
 {
-    EndListening(m_aColorConfig);
+    m_aColorConfig.RemoveListener(this);
     m_aSections.clear();
 
     DBG_DTOR( rpt_OViewsWindow,NULL);
@@ -588,15 +588,10 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
 }
 */
 // -----------------------------------------------------------------------
-void OViewsWindow::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
+void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32)
 {
-    if (rHint.ISA(SfxSimpleHint)
-        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
-            == SFX_HINT_COLORS_CHANGED))
-    {
         ImplInitSettings();
         Invalidate();
-    }
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )

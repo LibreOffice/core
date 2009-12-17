@@ -35,7 +35,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "svtools/svldllapi.h"
+#include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -68,7 +68,7 @@ class SvtOptionsDrawinglayer_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtOptionsDrawinglayer
+class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -217,7 +217,7 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

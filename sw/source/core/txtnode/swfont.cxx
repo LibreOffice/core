@@ -88,7 +88,7 @@
 #define FNT_ATM_HACK
 #endif
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // globale Variable
 SvStatistics aSvStat;
 #endif

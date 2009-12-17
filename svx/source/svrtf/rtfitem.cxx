@@ -92,8 +92,8 @@
 
 
 #include <svtools/rtftoken.h>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
 
 #include "svxrtf.hxx"
 

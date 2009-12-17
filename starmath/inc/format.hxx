@@ -31,8 +31,8 @@
 #define FORMAT_HXX
 
 
-#include <svtools/smplhint.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/brdcst.hxx>
 #include "utility.hxx"
 #include <types.hxx>
 

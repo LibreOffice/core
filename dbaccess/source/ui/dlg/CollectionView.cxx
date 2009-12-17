@@ -106,7 +106,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>

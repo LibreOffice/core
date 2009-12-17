@@ -37,7 +37,7 @@
 #include <vcl/button.hxx>
 #endif
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 //for auto_ptr
 #include <memory>
 

@@ -37,14 +37,14 @@
 #include <iterator>
 #endif
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/opaqitem.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>

@@ -31,7 +31,7 @@
 #define _GLOSDOC_HXX
 
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 
 class SwTextBlocks;

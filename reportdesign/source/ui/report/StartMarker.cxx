@@ -41,8 +41,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/smplhint.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/smplhint.hxx>
 
 #define CORNER_SPACE     5
 

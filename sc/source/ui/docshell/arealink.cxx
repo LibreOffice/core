@@ -40,7 +40,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/linkmgr.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "arealink.hxx"

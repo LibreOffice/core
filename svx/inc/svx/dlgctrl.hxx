@@ -408,6 +408,7 @@ public:
     void Modify( XDashEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
     void SelectEntryByList( const XDashList* pList, const String& rStr,
                             const XDash& rDash, USHORT nDist = 0 );
+    void FillStyles();
 };
 
 /*************************************************************************

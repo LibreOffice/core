@@ -41,7 +41,7 @@
 #include <sfx2/genlink.hxx>
 
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <iderid.hxx>

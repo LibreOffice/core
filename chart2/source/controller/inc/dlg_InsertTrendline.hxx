@@ -32,7 +32,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <memory>
 
 //.............................................................................

@@ -35,7 +35,7 @@
 
 
 
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 
 #include "lnktrans.hxx"
 #include "scmod.hxx"

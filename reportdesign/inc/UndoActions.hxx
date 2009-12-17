@@ -50,7 +50,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/svdouno.hxx>
 #include "RptModel.hxx"
 

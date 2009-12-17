@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-import "sfxslots.ilb"
-
 module
 "BD25A480-30AB-101C-A17D-000024021828"
 "C049C7E0-30AB-101C-A17D-000024021828"
@@ -36,11 +34,12 @@ SvxItems
 [
 HelpText( "Svx-Items" )
 SlotIdFile( "svxslots.hrc" )
-TypeLibFile( "svxslots.tlb" )
 ]
 {
     //=========================================================================
 
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
     include "svxitems.sdi"
     include "xoitems.sdi"
     include "svx.sdi"

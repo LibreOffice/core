@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>

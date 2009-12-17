@@ -44,7 +44,7 @@ dummy:
 
 .ELSE		# "$(OS)"=="MACOSX"
 
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 # --- Sources --------------------------------------------------------
 

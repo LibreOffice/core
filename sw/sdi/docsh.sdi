@@ -68,7 +68,7 @@ interface TextDocument : BaseTextDocument
     ]
 }
 
-shell SwDocShell : SfxObjectShell
+shell SwDocShell
 {
     import TextDocument[Automation];
 }

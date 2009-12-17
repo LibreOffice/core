@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: LinuxSystemEnvironment.java,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: Registration.java,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +28,7 @@
  *
  ************************************************************************/
 
+
 package com.sun.star.servicetag;
 
 // The Service Tags team maintains the latest version of the implementation
@@ -40,6 +40,7 @@ package com.sun.star.servicetag;
 // (e.g. NetBeans and SunStudio) will use the version in JDK.
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Linux implementation of the SystemEnvironment class.
@@ -47,16 +48,25 @@ import java.io.*;
 class LinuxSystemEnvironment extends SystemEnvironment {
     LinuxSystemEnvironment() {
         setHostId(getLinuxHostId());
-        setSystemModel(getCommandOutput("/bin/uname", "-i"));
+
+        setSystemModel(getLinuxModel());
         setSystemManufacturer(getLinuxSystemManufacturer());
         setCpuManufacturer(getLinuxCpuManufacturer());
         setSerialNumber(getLinuxSN());
+        setPhysMem(getLinuxPhysMem());
+        setSockets(getLinuxSockets());
+        setCores(getLinuxCores());
+        setVirtCpus(getLinuxVirtCpus());
+        setCpuName(getLinuxCpuName());
+        setClockRate(getLinuxClockRate());
     }
     private String dmiInfo = null;
+    private String kstatCpuInfo = null;
 
     private static final int SN  = 1;
     private static final int SYS = 2;
     private static final int CPU = 3;
+    private static final int MODEL = 4;
 
     private String getLinuxHostId() {
         String output = getCommandOutput("/usr/bin/hostid");
@@ -89,6 +99,21 @@ class LinuxSystemEnvironment extends SystemEnvironment {
 
         // returns an empty string if it can't be found or an error happened
         return getLinuxDMIInfo("dmi type 4", "manufacturer");
+    }
+
+    private String getLinuxModel() {
+        String tmp = getLinuxPSNInfo(MODEL);
+        if (tmp.length() > 0) {
+            return tmp + "::" + getCommandOutput("/bin/uname","-v");
+        }
+
+        tmp = getLinuxDMIInfo("dmi type 1", "product name");
+        if (tmp.length() > 0) {
+            return tmp + "::" + getCommandOutput("/bin/uname","-v");
+        }
+
+        return getCommandOutput("/bin/uname","-i")
+            + "::" + getCommandOutput("/bin/uname","-v");
     }
 
 
@@ -158,7 +183,7 @@ class LinuxSystemEnvironment extends SystemEnvironment {
             dmidecodeThread.start();
 
             try {
-                dmidecodeThread.join(2000);
+                dmidecodeThread.join(3000);
                 if (dmidecodeThread.isAlive()) {
                     dmidecodeThread.interrupt();
                     dmiInfo = "";
@@ -191,4 +216,111 @@ class LinuxSystemEnvironment extends SystemEnvironment {
         return "";
     }
 
+    private String getLinuxClockRate() {
+        String contents = getFileContent("/proc/cpuinfo");
+        String token = "cpu MHz";
+        for (String line : contents.split("\n")) {
+            if (line.contains(token)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    return key[1].trim();
+                }
+            }
+        }
+        return "";
+    }
+
+    private String getLinuxCpuName() {
+        String contents = getFileContent("/proc/cpuinfo");
+        String token = "model name";
+        for (String line : contents.split("\n")) {
+            if (line.contains(token)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    return key[1].trim();
+                }
+            }
+        }
+        return "";
+    }
+
+    private String getLinuxVirtCpus() {
+        Set<String> set = new HashSet<String>();
+        String contents = getFileContent("/proc/cpuinfo");
+        String token = "processor";
+        for (String line : contents.split("\n")) {
+            if (line.contains(token)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    set.add(key[1].trim());
+                }
+            }
+        }
+        return "" + set.size();
+    }
+
+    private String getLinuxCores() {
+        Set<String> set = new HashSet<String>();
+        String contents = getFileContent("/proc/cpuinfo");
+        String token = "core id";
+        for (String line : contents.split("\n")) {
+            if (line.contains(token)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    set.add(key[1].trim());
+                }
+            }
+        }
+        if (set.size() == 0) {
+            return "1";
+        }
+        return "" + set.size();
+    }
+
+    private String getLinuxPhysMem() {
+        String contents = getFileContent("/proc/meminfo");
+        for (String line : contents.split("\n")) {
+            if (line.contains("MemTotal")) {
+                String[] total = line.split(":", 2);
+                if (total.length > 1) {
+                    String[] mem = total[1].trim().split(" ");
+                    if (mem.length >= 1) {
+                        return mem[0].trim();
+                    } else {
+                        return total[1].trim();
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
+    private String getLinuxSockets() {
+        Set<String> physIdSet = new HashSet<String>();
+        Set<String> procSet = new HashSet<String>();
+        String contents = getFileContent("/proc/cpuinfo");
+        String physIdToken = "physical id";
+        String procToken = "processor";
+
+        for (String line : contents.split("\n")) {
+            if (line.contains(physIdToken)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    physIdSet.add(key[1].trim());
+                }
+            }
+
+            if (line.contains(procToken)) {
+                String[] key = line.split(":", 2);
+                if (key.length > 1) {
+                    procSet.add(key[1].trim());
+                }
+            }
+        }
+        if (physIdSet.size() != 0) {
+            return "" + physIdSet.size();
+        }
+        return "" + procSet.size();
+    }
 }

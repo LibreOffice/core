@@ -31,7 +31,7 @@
 #ifndef SC_XCL97ESC_HXX
 #define SC_XCL97ESC_HXX
 
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include <tools/table.hxx>
 #include <tools/stack.hxx>
 #include "xlescher.hxx"

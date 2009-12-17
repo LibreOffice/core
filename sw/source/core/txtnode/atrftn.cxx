@@ -35,7 +35,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>       // ASSERT in ~SwTxtFtn()
 #include <pagefrm.hxx>      // RemoveFtn()

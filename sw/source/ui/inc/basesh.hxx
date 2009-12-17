@@ -39,7 +39,7 @@
 #include <vcl/timer.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <mdiexp.hxx>
 

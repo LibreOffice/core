@@ -59,12 +59,12 @@
 #include "dsntypes.hxx"
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class Window;
 //.........................................................................

@@ -32,7 +32,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <bibconfig.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -244,6 +244,10 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     SetModified();
 };
 //---------------------------------------------------------------------------
+void BibConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
+}
+
 void    BibConfig::Commit()
 {
     const Sequence<OUString> aPropertyNames = GetPropertyNames();

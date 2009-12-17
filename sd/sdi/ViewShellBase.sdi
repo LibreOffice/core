@@ -267,7 +267,7 @@ SfxVoidItem TaskPaneShowPanel SID_TASK_PANE (
     GroupId = GID_VIEW;
 ]
 
-interface ViewShellBaseView : View
+interface ViewShellBaseView
 {
     SID_SWITCH_SHELL
     [
@@ -380,7 +380,7 @@ interface ViewShellBaseView : View
     ]
 }
 
-shell ViewShellBase : SfxViewShell
+shell ViewShellBase
 {
     import ViewShellBaseView[Automation];
 }

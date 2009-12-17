@@ -35,8 +35,8 @@
 
 //----------------------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 
 #include "parawin.hxx"
 #include "parawin.hrc"

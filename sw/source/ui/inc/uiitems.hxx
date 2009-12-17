@@ -30,7 +30,7 @@
 #ifndef _UIITEMS_HXX
 #define _UIITEMS_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"
 #include "pagedesc.hxx"

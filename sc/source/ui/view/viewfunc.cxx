@@ -48,8 +48,8 @@
 #include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/virdev.hxx>

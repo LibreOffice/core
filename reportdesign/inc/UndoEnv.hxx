@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <memory>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 namespace rptui
 {

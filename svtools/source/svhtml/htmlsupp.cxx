@@ -36,7 +36,7 @@
 #include <tools/urlobj.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <svtools/parhtml.hxx>

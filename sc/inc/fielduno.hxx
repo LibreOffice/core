@@ -34,8 +34,8 @@
 #include "address.hxx"
 #include "mutexhlp.hxx"
 
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/editdata.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

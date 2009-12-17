@@ -39,7 +39,7 @@
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
@@ -90,7 +90,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>

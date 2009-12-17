@@ -31,7 +31,7 @@
 #ifndef SC_UNDODRAW_HXX
 #define SC_UNDODRAW_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 class ScDocShell;
 

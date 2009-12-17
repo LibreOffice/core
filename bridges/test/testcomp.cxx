@@ -30,11 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#undef NDEBUG
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <osl/time.h>
@@ -598,7 +593,7 @@ void testException( const Reference < XCallMe > &r )
 {
     try {
         r->call( OUString( RTL_CONSTASCII_USTRINGPARAM("dummy")) , -1 );
-        assert( ! "no exception flown !" );
+        OSL_ASSERT( ! "no exception flown !" );
     }
     catch( TestBridgeException  & e )
     {
@@ -606,11 +601,11 @@ void testException( const Reference < XCallMe > &r )
     }
     catch( Exception & e )
     {
-        assert( ! "only base class of exception could be catched!" );
+        OSL_ASSERT( ! "only base class of exception could be catched!" );
     }
     catch(...)
     {
-        assert(! "wrong unknown exception !" );
+        OSL_ASSERT(! "wrong unknown exception !" );
     }
 }
 

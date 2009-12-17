@@ -44,7 +44,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svx/svxrtf.hxx>
 #include <svx/numitem.hxx>

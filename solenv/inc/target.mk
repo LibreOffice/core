@@ -55,9 +55,6 @@ target_empty=warn_target_empty
 INCEXT*=.
 INCPRE*=.
 INCPOST*=.
-.IF "$(PRE)"!=""
-ENVINCPRE+=-I$(PRE)/inc
-.ENDIF			# "$(PRE)"!=""
 .IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 UNOINCLUDES=$(SOLARINCDIR)/offuh
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
@@ -66,9 +63,9 @@ SOLARINC+=$(JDKINCS)
 INCLUDE:=
 .EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
@@ -1259,9 +1256,6 @@ CPPUMAKERFLAGS*=-L
 .IF "$(UNOTYPES)" != ""
 # makeing all in one
 .DIRCACHE=no
-.IF "$(ENVINCPRE)"!=""
-MKDEPFLAGS+=-I:$(ENVINCPRE)
-.ENDIF			# "$(ENVINCPRE))"!=""
 .IF "$(OBJFILES)"!=""
 $(OBJFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(OBJFILES)"!=""

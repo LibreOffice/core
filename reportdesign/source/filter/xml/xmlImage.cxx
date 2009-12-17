@@ -40,7 +40,7 @@
 #include "xmlControlProperty.hxx"
 #include "xmlHelper.hxx"
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <comphelper/componentcontext.hxx>
 #include <com/sun/star/awt/ImageScaleMode.hpp>

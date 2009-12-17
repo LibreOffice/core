@@ -48,13 +48,13 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <rtl/math.hxx>
 #include <functional>

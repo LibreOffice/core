@@ -49,7 +49,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/flditem.hxx>
 

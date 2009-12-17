@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,12 @@ CXXFLAGS+= $(LFS_CFLAGS)
 CFLAGS+=/Ob0
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl 
+# auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/test_comtools.obj
 
 SHL1TARGET= test_comtools
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)\
-   uuid.lib
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB) uuid.lib
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def

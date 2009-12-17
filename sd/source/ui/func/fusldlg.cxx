@@ -33,7 +33,7 @@
 
 
 #include "fusldlg.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif

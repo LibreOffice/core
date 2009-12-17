@@ -37,7 +37,7 @@
 #include <tools/list.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "ddelink.hxx"
 #include "brdcst.hxx"

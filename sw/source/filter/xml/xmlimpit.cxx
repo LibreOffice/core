@@ -32,9 +32,9 @@
 #include "precompiled_sw.hxx"
 #include "xmlimpit.hxx"
 #include <xmloff/xmluconv.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

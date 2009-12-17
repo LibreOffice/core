@@ -31,7 +31,7 @@
 #ifndef SC_TARGET_HXX
 #define SC_TARGET_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 class ScTabViewShell;
 

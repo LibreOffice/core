@@ -1002,6 +1002,9 @@ const Size& ToolBox::GetDefaultImageSize() const
             case STYLE_SYMBOLS_CRYSTAL:
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE_CRYSTAL, TB_LARGEIMAGESIZE_CRYSTAL );
                 break;
+            case STYLE_SYMBOLS_OXYGEN:
+                aLargeButtonSize = Size( TB_LARGEIMAGESIZE_OXYGEN, TB_LARGEIMAGESIZE_OXYGEN );
+                break;
             default:
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
         }

@@ -32,8 +32,8 @@
 #define _TEXTDATA_HXX
 
 #include "svtools/svtdllapi.h"
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/string.hxx>
 
 #define TEXTUNDO_START              100

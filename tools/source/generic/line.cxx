@@ -39,11 +39,6 @@
 #include <cstdlib>
 #include <math.h>
 
-inline long FRound( double fVal )
-{
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
-}
-
 // --------
 // - Line -
 // --------

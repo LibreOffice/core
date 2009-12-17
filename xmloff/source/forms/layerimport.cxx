@@ -55,7 +55,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
-#include <vcl/wintypes.hxx>     // for check states
+#include <tools/wintypes.hxx>       // for check states
 #include <com/sun/star/lang/Locale.hpp>
 #include <xmloff/controlpropertyhdl.hxx>
 #include "controlpropertymap.hxx"

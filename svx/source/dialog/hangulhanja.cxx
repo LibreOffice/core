@@ -34,8 +34,8 @@
 #include <vcl/msgbox.hxx> //add CHINA001
 #include <vcl/button.hxx>
 // header for class SvtLinguConfig
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include <set>
 #include <map>
@@ -347,7 +347,7 @@ namespace svx
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, RID_SVX_MDLG_HANGULHANJA);
+                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
                 DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
 
                 m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );

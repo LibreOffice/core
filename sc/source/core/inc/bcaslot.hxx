@@ -34,8 +34,8 @@
 #include <set>
 #include <hash_set>
 #include <functional>
-#include <svtools/broadcast.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/svarray.hxx>
 
 #include "global.hxx"
 #include "brdcst.hxx"

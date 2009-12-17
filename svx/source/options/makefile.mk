@@ -47,24 +47,7 @@ LIBTARGET=NO
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
-    optaccessibility.src    \
-    optasian.src    \
-    optcolor.src    \
-    optjsearch.src  \
-    optgenrl.src    \
-    optdict.src     \
-    optsave.src     \
-    optpath.src     \
-    optlingu.src    \
-    optgrid.src     \
-    optinet2.src    \
-    multipat.src    \
-    optctl.src      \
-    optchart.src    \
-    optimprove.src
-
-EXCEPTIONSFILES=\
-    $(SLO)$/optlingu.obj
+    optgrid.src     
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \
@@ -72,7 +55,6 @@ LIB1OBJFILES= \
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
-    $(SLO)$/optlingu.obj \
     $(SLO)$/htmlcfg.obj \
     $(SLO)$/optitems.obj    \
     $(SLO)$/optgrid.obj \

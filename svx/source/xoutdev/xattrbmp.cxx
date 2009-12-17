@@ -37,7 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <toolkit/unohlp.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <svx/dialogs.hrc>
 #include "xattr.hxx"

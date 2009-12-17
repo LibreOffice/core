@@ -139,6 +139,7 @@ public:
 
         BOOL            ConnectionExistsInAnyDirection( ObjectWin *pWin );
         void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
+        BOOL    IsTop();
 };
 
 DECL_DEST_LIST( TmpObjWinList, ObjWinList, ObjectWin* )
@@ -155,6 +156,7 @@ public:
                ~ObjectList() {};
     void       ResetSelectedObject();
     ObjectWin* GetPtrByName( const ByteString& rText );
+    ObjectList* FindTopLevelModules();
 };
 
 #endif

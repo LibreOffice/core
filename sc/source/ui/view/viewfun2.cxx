@@ -50,9 +50,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>

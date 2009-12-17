@@ -31,7 +31,7 @@
 #define _FCHRFMT_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <calbck.hxx>
 #include <format.hxx>
 

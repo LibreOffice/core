@@ -40,7 +40,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <osl/mutex.hxx>
 
 #include <vector>

@@ -39,8 +39,8 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/asynclink.hxx>
 
-#include <svtools/printwarningoptions.hxx>
-#include <svtools/eitem.hxx>
+#include <unotools/printwarningoptions.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef GCC
 #endif

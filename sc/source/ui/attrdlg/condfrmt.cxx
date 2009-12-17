@@ -33,7 +33,7 @@
 
 
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "tabvwsh.hxx"
 #include "reffact.hxx"

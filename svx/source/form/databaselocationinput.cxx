@@ -45,7 +45,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/urlcontrol.hxx>
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>

@@ -31,7 +31,7 @@
 #include "precompiled_cppu.hxx"
 #include "sal/config.h"
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "sal/types.h"
 
 #include "Rec.hpp"

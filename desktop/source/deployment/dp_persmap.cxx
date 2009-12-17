@@ -104,7 +104,7 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
             OSL_ASSERT( false );
         }
         OString cstr_sysPath(
-            OUStringToOString( m_sysPath, osl_getThreadTextEncoding() ) );
+            OUStringToOString( m_sysPath, RTL_TEXTENCODING_UTF8 ) );
         char const * pcstr_sysPath = cstr_sysPath.getStr();
 
         u_int32_t flags = DB_CREATE;

@@ -31,7 +31,7 @@
 #ifndef _SD_SDUNDO_HXX
 #define _SD_SDUNDO_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "sddllapi.h"
 
 class SdDrawDocument;

@@ -1,33 +1,39 @@
-/*************************************************************************
+
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
  *
- * $RCSfile: RegistrationDocument.java,v $
+ * Contributor(s):
  *
- * $Revision: 1.2 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
 
 package com.sun.star.servicetag;
 
@@ -83,6 +89,13 @@ class RegistrationDocument {
     final static String ST_NODE_SYSTEM_MANUFACTURER = "systemManufacturer";
     final static String ST_NODE_CPU_MANUFACTURER = "cpuManufacturer";
     final static String ST_NODE_SERIAL_NUMBER = "serialNumber";
+    final static String ST_NODE_PHYS_MEM = "physmem";
+    final static String ST_NODE_CPU_INFO = "cpuinfo";
+    final static String ST_NODE_SOCKETS = "sockets";
+    final static String ST_NODE_CORES = "cores";
+    final static String ST_NODE_VIRT_CPUS = "virtcpus";
+    final static String ST_NODE_CPU_NAME = "name";
+    final static String ST_NODE_CLOCK_RATE = "clockrate";
     final static String ST_NODE_REGISTRY = "registry";
     final static String ST_ATTR_REGISTRY_URN = "urn";
     final static String ST_ATTR_REGISTRY_VERSION = "version";
@@ -103,13 +116,13 @@ class RegistrationDocument {
 
     static RegistrationData load(InputStream in) throws IOException {
         Document document = initializeDocument(in);
-
+        
         // Gets the registration URN
         Element root = getRegistrationDataRoot(document);
         Element registryRoot =
                 getSingletonElementFromRoot(root, ST_NODE_REGISTRY);
         String urn = registryRoot.getAttribute(ST_ATTR_REGISTRY_URN);
-
+        
         // Construct a new RegistrationData object from the DOM tree
         // Initialize the environment map and service tags
         RegistrationData regData = new RegistrationData(urn);
@@ -117,10 +130,13 @@ class RegistrationDocument {
 
         Element envRoot = getSingletonElementFromRoot(root, ST_NODE_ENVIRONMENT);
         buildEnvironmentMap(envRoot, regData);
+
+        Element cpuInfo = getSingletonElementFromRoot(envRoot, ST_NODE_CPU_INFO);
+        buildCpuInfoMap(cpuInfo, regData);
         return regData;
     }
 
-    static void store(OutputStream os, RegistrationData registration)
+    static void store(OutputStream os, RegistrationData registration) 
             throws IOException {
         // create a new document with the root node
         Document document = initializeDocument();
@@ -128,26 +144,57 @@ class RegistrationDocument {
         // create the nodes for the environment map and the service tags
         // in the registration data
         addEnvironmentNodes(document,
-                            registration.getEnvironmentMap());
-        addServiceTagRegistry(document,
+                            registration.getEnvironmentMap(),
+                            registration.getCpuInfoMap());
+        addServiceTagRegistry(document, 
                               registration.getRegistrationURN(),
                               registration.getServiceTags());
         transform(document, os);
     }
 
-    // initialize a document from an input stream
+    // initialize a document from an input stream 
     private static Document initializeDocument(InputStream in) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        SchemaFactory sf = null;
         try {
-            // XML schema for validation
-            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            URL xsdUrl = RegistrationDocument.class.getResource(REGISTRATION_DATA_SCHEMA);
-            Schema schema = sf.newSchema(xsdUrl);
-            Validator validator = schema.newValidator();
+            // Some Java versions (e.g., 1.5.0_06-b05) fail with a
+            // NullPointerException if SchemaFactory.newInstance is called with
+            // a null context class loader, so work around that here (and the
+            // class loader of this class hopefully is not the null bootstrap
+            // class loader):
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            if (cl == null) {
+                Thread.currentThread().setContextClassLoader(
+                    RegistrationDocument.class.getClassLoader());
+            }
+            try {
+               sf = SchemaFactory.newInstance(
+                   XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            } finally {
+               Thread.currentThread().setContextClassLoader(cl);
+            }
+
+            Schema schema = null;
+            try {
+                // Even using the workaround above is not enough on some
+                // Java versions. Therefore try to workaround the validation
+                // completely!
+                URL xsdUrl = RegistrationDocument.class.getResource(REGISTRATION_DATA_SCHEMA);
+                schema = sf.newSchema(xsdUrl);
+            }
+        catch (NullPointerException nex) {
+        }
+            
+            Validator validator = null;
+            if (schema != null)
+                validator = schema.newValidator();
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(in));
-            validator.validate(new DOMSource(doc));
+            
+            if (validator != null)
+                validator.validate(new DOMSource(doc));
+            
             return doc;
         } catch (SAXException sxe) {
             IllegalArgumentException e = new IllegalArgumentException("Error generated in parsing");
@@ -218,24 +265,24 @@ class RegistrationDocument {
         }
     }
 
-    private static void addServiceTagRegistry(Document document,
+    private static void addServiceTagRegistry(Document document, 
                                               String registryURN,
                                               Set<ServiceTag> svcTags) {
         // add service tag registry node and its attributes
         Element reg = document.createElement(ST_NODE_REGISTRY);
         reg.setAttribute(ST_ATTR_REGISTRY_URN, registryURN);
         reg.setAttribute(ST_ATTR_REGISTRY_VERSION, SERVICE_TAG_VERSION);
-
+        
         Element root = getRegistrationDataRoot(document);
         root.appendChild(reg);
-
+        
         // adds the elements for the service tags
         for (ServiceTag st : svcTags) {
             addServiceTagElement(document, reg, st);
         }
     }
 
-    private static void addServiceTagElement(Document document,
+    private static void addServiceTagElement(Document document, 
                                              Element registryRoot,
                                              ServiceTag st) {
         Element svcTag = document.createElement(ST_NODE_SERVICE_TAG);
@@ -290,7 +337,7 @@ class RegistrationDocument {
     }
 
     // build environment map from the document
-    private static void buildEnvironmentMap(Element envRoot,
+    private static void buildEnvironmentMap(Element envRoot, 
                                          RegistrationData registration) {
         registration.setEnvironment(ST_NODE_HOSTNAME, getTextValue(envRoot, ST_NODE_HOSTNAME));
         registration.setEnvironment(ST_NODE_HOST_ID, getTextValue(envRoot, ST_NODE_HOST_ID));
@@ -301,24 +348,43 @@ class RegistrationDocument {
         registration.setEnvironment(ST_NODE_SYSTEM_MANUFACTURER, getTextValue(envRoot, ST_NODE_SYSTEM_MANUFACTURER));
         registration.setEnvironment(ST_NODE_CPU_MANUFACTURER, getTextValue(envRoot, ST_NODE_CPU_MANUFACTURER));
         registration.setEnvironment(ST_NODE_SERIAL_NUMBER, getTextValue(envRoot, ST_NODE_SERIAL_NUMBER));
+        registration.setEnvironment(ST_NODE_PHYS_MEM, getTextValue(envRoot, ST_NODE_PHYS_MEM));
+    }
+
+    private static void buildCpuInfoMap(Element cpuInfoRoot, 
+                                         RegistrationData registration) {
+        registration.setCpuInfo(ST_NODE_SOCKETS, getTextValue(cpuInfoRoot, ST_NODE_SOCKETS));
+        registration.setCpuInfo(ST_NODE_CORES, getTextValue(cpuInfoRoot, ST_NODE_CORES));
+        registration.setCpuInfo(ST_NODE_VIRT_CPUS, getTextValue(cpuInfoRoot, ST_NODE_VIRT_CPUS));
+        registration.setCpuInfo(ST_NODE_CPU_NAME, getTextValue(cpuInfoRoot, ST_NODE_CPU_NAME));
+        registration.setCpuInfo(ST_NODE_CLOCK_RATE, getTextValue(cpuInfoRoot, ST_NODE_CLOCK_RATE));
     }
 
     // add the nodes representing the environment map in the document
     private static void addEnvironmentNodes(Document document,
-                                            Map<String, String> envMap) {
+                                            Map<String, String> envMap,
+                                            Map<String, String> cpuInfoMap) {
         Element root = getRegistrationDataRoot(document);
+
         Element env = document.createElement(ST_NODE_ENVIRONMENT);
         root.appendChild(env);
         Set<Map.Entry<String, String>> keys = envMap.entrySet();
         for (Map.Entry<String, String> entry : keys) {
             addChildElement(document, env, entry.getKey(), entry.getValue());
         }
+
+        Element cpuInfo = document.createElement(ST_NODE_CPU_INFO);
+        env.appendChild(cpuInfo);
+        keys = cpuInfoMap.entrySet();
+        for (Map.Entry<String, String> entry : keys) {
+            addChildElement(document, cpuInfo, entry.getKey(), entry.getValue());
+        }
     }
 
     private static Element getRegistrationDataRoot(Document doc) {
         Element root = doc.getDocumentElement();
         if (!root.getNodeName().equals(ST_NODE_REGISTRATION_DATA)) {
-            throw new IllegalArgumentException("Not a " +
+            throw new IllegalArgumentException("Not a " + 
                     ST_NODE_REGISTRATION_DATA +
                     " node \"" + root.getNodeName() + "\"");
         }
@@ -353,7 +419,7 @@ class RegistrationDocument {
             getTextValue(svcTagElement, ST_NODE_PRODUCT_VENDOR),
             getTextValue(svcTagElement, ST_NODE_PLATFORM_ARCH),
             getTextValue(svcTagElement, ST_NODE_CONTAINER),
-            getTextValue(svcTagElement, ST_NODE_SOURCE),
+            getTextValue(svcTagElement, ST_NODE_SOURCE),   
             Util.getIntValue(getTextValue(svcTagElement, ST_NODE_INSTALLER_UID)),
             Util.parseTimestamp(getTextValue(svcTagElement, ST_NODE_TIMESTAMP))
         );

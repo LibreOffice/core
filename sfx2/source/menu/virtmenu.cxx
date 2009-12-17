@@ -34,7 +34,7 @@
 #include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -284,7 +284,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
-    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
     {
@@ -396,7 +396,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SvtMenuOptions aOptions;
-    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;

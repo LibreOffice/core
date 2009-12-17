@@ -49,7 +49,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 
-#include <com/sun/star/frame/XSessionManagerListener.hpp>
+#include <com/sun/star/frame/XSessionManagerListener2.hpp>
 #include <com/sun/star/frame/XSessionManagerClient.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
@@ -98,7 +98,7 @@ namespace framework{
 class SessionListener :   // interfaces
                         public css::lang::XTypeProvider,
                         public css::lang::XInitialization,
-                        public css::frame::XSessionManagerListener,
+                        public css::frame::XSessionManagerListener2,
                         public css::frame::XStatusListener,
                         public css::lang::XServiceInfo,
                         // baseclasses (order important for initialization!)
@@ -119,6 +119,18 @@ class SessionListener :   // interfaces
 
         // restore handling
         sal_Bool m_bRestored;
+
+        sal_Bool m_bSessionStoreRequested;
+
+        sal_Bool m_bAllowUserInteractionOnQuit;
+        sal_Bool m_bTerminated;
+
+
+        // in case of synchronous call the caller should do saveDone() call himself!
+        void StoreSession( sal_Bool bAsync );
+
+        // let session quietly close the documents, remove lock files, store configuration and etc.
+        void QuitSessionQuietly();
 
     public:
 
@@ -162,6 +174,10 @@ class SessionListener :   // interfaces
             throw (css::uno::RuntimeException);
        virtual sal_Bool SAL_CALL doRestore()
             throw (css::uno::RuntimeException);
+
+        // XSessionManagerListener2
+        virtual void SAL_CALL doQuit()
+            throw (::com::sun::star::uno::RuntimeException);
 
        // XStatusListener
        virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)

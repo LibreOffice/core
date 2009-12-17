@@ -48,7 +48,7 @@
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -90,7 +90,7 @@
 #include <svx/svdoutl.hxx>
 
 // #96090#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
 

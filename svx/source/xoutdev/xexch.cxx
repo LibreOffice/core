@@ -38,13 +38,13 @@
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
 #ifndef _SFXIPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #ifndef _SFXIPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "xexch.hxx"
 

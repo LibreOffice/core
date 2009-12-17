@@ -42,7 +42,7 @@
 
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include "document.hxx"
 #include "dpobject.hxx"

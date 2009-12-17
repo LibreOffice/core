@@ -33,23 +33,23 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
 #include <sot/filelist.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urlbmk.hxx>
 #include <svtools/filter.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

@@ -35,7 +35,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <avmedia/mediaitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 

@@ -37,8 +37,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/dockwin.hxx>
 #include <svx/svdmark.hxx>
 #include "ModuleHelper.hxx"

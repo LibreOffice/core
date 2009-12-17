@@ -39,7 +39,7 @@
 #include <vcl/window.hxx>
 #endif
 #ifndef _SFXPOOLITEM_HXX   //autogen
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #endif
 #ifndef _SFXTBXCTRL_HXX    //autogen
 #include <sfx2/tbxctrl.hxx>

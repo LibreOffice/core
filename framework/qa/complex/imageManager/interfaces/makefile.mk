@@ -40,7 +40,7 @@ PACKAGE = imageManager$/interfaces
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XComponent.java _XUIConfiguration.java _XImageManager.java \
                   _XUIConfigurationPersistence.java _XInitialization.java _XTypeProvider.java
 

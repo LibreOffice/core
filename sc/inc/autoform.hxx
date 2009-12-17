@@ -64,7 +64,7 @@ JP 20.07.95:
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/bolnitem.hxx>
 #include "scdllapi.h"
 #include "collect.hxx"

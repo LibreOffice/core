@@ -32,7 +32,7 @@
 #define _DBAUI_STRINGLISTITEM_HXX_
 
 #ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_

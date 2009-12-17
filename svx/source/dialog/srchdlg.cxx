@@ -35,16 +35,16 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/style.hxx>
-#include <svtools/searchopt.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/style.hxx>
+#include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
@@ -285,47 +285,6 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
 
     SrchAttrItemList::Remove( nPos, nLen );
 }
-
-/* //CHINA001
-// class SvxJSearchOptionsDialog -----------------------------------------
-
-SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
-            Window *pParent,
-            const SfxItemSet& rOptionsSet, USHORT nUniqueId, INT32 nInitialFlags ) :
-    SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
-    nInitialTlFlags( nInitialFlags )
-{
-    pPage = (SvxJSearchOptionsPage *)
-                    SvxJSearchOptionsPage::Create( this, rOptionsSet );
-    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
-    pPage->EnableSaveOptions( FALSE );
-}
-
-
-SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
-{
-    // pPage will be implicitly destroyed by the
-    // SfxSingleTabDialog destructor
-}
-
-
-void SvxJSearchOptionsDialog::Activate()
-{
-    pPage->SetTransliterationFlags( nInitialTlFlags );
-}
-
-
-INT32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
-{
-    return pPage->GetTransliterationFlags();
-}
-
-
-void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
-{
-    pPage->SetTransliterationFlags( nSettings );
-}
-*/ //CHINA001
 
 #if ENABLE_LAYOUT
 #undef SfxModelessDialog
@@ -1589,12 +1548,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
-        //CHINA001 SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS,
-        //CHINA001                          pSearchItem->GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( LAYOUT_THIS_WINDOW (this), aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( LAYOUT_THIS_WINDOW (this), aSet,
+                    pSearchItem->GetTransliterationFlags() );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             int nRet = aDlg->Execute(); //CHINA001 int nRet = aDlg.Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
@@ -2280,7 +2238,7 @@ IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( LAYOUT_THIS_WINDOW (this), *pSearchList, pImpl->pRanges, RID_SVXDLG_SEARCHATTR );
+        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( LAYOUT_THIS_WINDOW (this), *pSearchList, pImpl->pRanges );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDlg->Execute();
         delete pDlg;

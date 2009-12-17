@@ -34,11 +34,11 @@
 
 #include "fuolbull.hxx"
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/outliner.hxx>
 #include <svx/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/editdata.hxx>
 #include <svx/svxids.hrc>

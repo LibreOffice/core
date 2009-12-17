@@ -48,7 +48,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 #include <memory>
 

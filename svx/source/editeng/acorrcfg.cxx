@@ -35,8 +35,8 @@
 #include <sfx2/app.hxx>
 
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
 
 #include <svx/svxacorr.hxx>
 #include <com/sun/star/uno/Any.hxx>

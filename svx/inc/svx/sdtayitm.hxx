@@ -30,7 +30,7 @@
 #ifndef _SDTAYITM_HXX
 #define _SDTAYITM_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 

@@ -39,7 +39,7 @@
 #include <unolingu.hxx>
 
 #include <svtools/langtab.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 

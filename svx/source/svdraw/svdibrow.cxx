@@ -63,12 +63,12 @@
 #include <svx/fhgtitem.hxx>
 
 #include <svx/charscaleitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/flagitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/flagitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/rectitem.hxx>
 
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #include <sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svtools/chartprettypainter.hxx>
 
 #include <tools/link.hxx>

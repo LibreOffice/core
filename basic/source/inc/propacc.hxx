@@ -30,7 +30,7 @@
 #ifndef _SFX_PROPBAG_HXX
 #define _SFX_PROPBAG_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HXX_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif

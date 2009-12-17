@@ -51,7 +51,7 @@
 #include <linkmgr.hxx>
 #include <tools/urlobj.hxx>
 
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 // #90477#
 #include <tools/tenccvt.hxx>

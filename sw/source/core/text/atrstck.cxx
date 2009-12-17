@@ -34,7 +34,7 @@
 
 #include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/cmapitem.hxx>
 #include <svx/colritem.hxx>

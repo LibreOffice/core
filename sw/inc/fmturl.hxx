@@ -30,7 +30,7 @@
 #ifndef _FMTURL_HXX
 #define _FMTURL_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>

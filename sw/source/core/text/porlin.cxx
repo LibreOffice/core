@@ -47,7 +47,7 @@
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "blink.hxx"
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 sal_Bool ChkChain( SwLinePortion *pStart )
 {
@@ -216,7 +216,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 {
     pIns->FindLastPortion()->SetPortion( pPortion );
     SetPortion( pIns );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkChain( this );
 #endif
     return pIns;
@@ -247,7 +247,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
     SwLinePortion *pPos = FindLastPortion();
     pPos->SetPortion( pIns );
     pIns->SetPortion( 0 );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkChain( this );
 #endif
     return pIns;
@@ -307,7 +307,7 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
     return SwPosSize();
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                virtual SwLinePortion::Check()

@@ -61,7 +61,7 @@
 #include <svx/outliner.hxx>
 #include <svx/editobj.hxx>
 #include <svx/sxcecitm.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/writingmodeitem.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>

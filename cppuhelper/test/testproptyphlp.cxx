@@ -34,12 +34,6 @@
 
 #include <com/sun/star/beans/Property.hpp>
 
-#if OSL_DEBUG_LEVEL == 0
-#undef  NDEBUG
-#define NDEBUG
-#endif
-#include <assert.h>
-
 using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 
@@ -51,27 +45,27 @@ void testPropertyTypeHelper()
 
     sal_Int32 i;
     convertPropertyValue( i ,  a );
-    assert( 25 == i );
+    OSL_ASSERT( 25 == i );
 
     sal_Int16 i16;
     convertPropertyValue( i16 ,  a );
-    assert( 25 == i16 );
+    OSL_ASSERT( 25 == i16 );
 
     sal_Int8 i8;
     convertPropertyValue( i8 ,  a );
-    assert( 25 == i8 );
+    OSL_ASSERT( 25 == i8 );
 
     sal_uInt32 i32;
     convertPropertyValue( i32 ,  a );
-    assert( 25 == i32 );
+    OSL_ASSERT( 25 == i32 );
 
     double d;
     convertPropertyValue( d , a );
-    assert( 25. == d );
+    OSL_ASSERT( 25. == d );
 
     float f;
     convertPropertyValue( f , a );
-    assert( 25. == f );
+    OSL_ASSERT( 25. == f );
 
     ::com::sun::star::beans::Property prop;
 
@@ -83,11 +77,11 @@ void testPropertyTypeHelper()
 
     ::com::sun::star::beans::Property prop2;
     convertPropertyValue( prop2 , a );
-     assert( prop.Handle == prop2.Handle && prop.Name == prop2.Name && prop.Attributes == prop2.Attributes );
+     OSL_ASSERT( prop.Handle == prop2.Handle && prop.Name == prop2.Name && prop.Attributes == prop2.Attributes );
 
 
     ::rtl::OUString ow;
     a <<= prop.Name;
     convertPropertyValue( ow , a );
-    assert( ow == prop.Name );
+    OSL_ASSERT( ow == prop.Name );
 }

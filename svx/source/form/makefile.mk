@@ -49,8 +49,6 @@ SRC1FILES= \
     fmexpl.src 		\
     filtnav.src		\
     fmstring.src 	\
-    tbxform.src		\
-    fmsearch.src	\
     formshell.src   \
     datanavi.src
 

@@ -33,7 +33,7 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
 #include <swerror.h>
 #ifndef _NDTXT

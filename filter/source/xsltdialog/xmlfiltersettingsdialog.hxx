@@ -40,8 +40,8 @@
 #include <vcl/button.hxx>
 #endif
 #include <svtools/svtabbx.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/poolitem.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include "xmlfiltercommon.hxx"
 

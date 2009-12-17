@@ -33,7 +33,7 @@
 
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>

@@ -46,13 +46,13 @@
 //CHINA001 #include <svx/paragrph.hxx>
 //CHINA001 #include <svx/tabstpge.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "textdlgs.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include <svx/svxids.hrc> //add CHINA001
-#include <svtools/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx> //add CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
 // -----------------------------------------------------------------------
 

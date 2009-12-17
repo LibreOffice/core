@@ -31,9 +31,9 @@
 #ifndef SC_SCATTR_HXX
 #define SC_SCATTR_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"

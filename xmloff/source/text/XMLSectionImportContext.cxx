@@ -226,7 +226,7 @@ void XMLSectionImportContext::StartElement(
                 // last paragraph (and marker) when closing a section.
                 Reference<XTextRange> xStart =
                     rHelper->GetCursor()->getStart();
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                 static const sal_Char sMarker[] = " ";
 #else
                 static const sal_Char sMarker[] = "X";

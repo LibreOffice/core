@@ -37,7 +37,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/group.hxx>
 
-#include "svtools/svarray.hxx"
+#include "svl/svarray.hxx"
 
 #include <vector>
 

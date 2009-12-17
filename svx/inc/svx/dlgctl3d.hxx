@@ -34,7 +34,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "svx/svxdllapi.h"
 #include <basegfx/vector/b3dvector.hxx>
 

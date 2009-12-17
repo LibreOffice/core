@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/itemtype.hxx>
 #include <goodies/grfmgr.hxx>

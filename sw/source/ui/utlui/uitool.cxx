@@ -37,9 +37,9 @@
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/syslocale.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -51,7 +51,7 @@
 #include <svx/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/lrspitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #ifndef _VCL_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif

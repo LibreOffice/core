@@ -68,7 +68,7 @@
 #include <osl/file.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________

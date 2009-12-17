@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

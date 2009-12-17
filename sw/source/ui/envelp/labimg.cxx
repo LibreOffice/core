@@ -38,7 +38,7 @@
 #endif
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include "labimg.hxx"
@@ -410,6 +410,8 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
 /* -----------------------------25.09.00 16:26--------------------------------
 
  ---------------------------------------------------------------------------*/
+void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void    SwLabCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();

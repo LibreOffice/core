@@ -40,7 +40,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>

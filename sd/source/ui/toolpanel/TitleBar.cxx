@@ -47,7 +47,7 @@
 #include <vcl/bitmapex.hxx>
 #include <tools/color.hxx>
 #include <svx/xdash.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>

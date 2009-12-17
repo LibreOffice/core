@@ -42,7 +42,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 /** === end UNO includes === **/
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 
 //........................................................................

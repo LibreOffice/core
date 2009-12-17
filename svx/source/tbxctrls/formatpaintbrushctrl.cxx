@@ -34,7 +34,7 @@
 #include "formatpaintbrushctrl.hxx"
 
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 // header for define SFX_APP
 #include <sfx2/app.hxx>

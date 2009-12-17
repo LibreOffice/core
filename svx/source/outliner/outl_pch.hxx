@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>

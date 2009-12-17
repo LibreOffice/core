@@ -38,7 +38,7 @@
 #include <vcl/status.hxx>
 #endif
 #include <vcl/image.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>

@@ -75,7 +75,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>

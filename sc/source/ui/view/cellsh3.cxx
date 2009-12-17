@@ -40,7 +40,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 #include "globstr.hrc"

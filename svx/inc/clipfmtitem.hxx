@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <tools/gen.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 // class SvxClipboardFmtItem ----------------------------------------------

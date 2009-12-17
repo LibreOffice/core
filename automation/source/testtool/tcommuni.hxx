@@ -30,7 +30,7 @@
 
 #include <automation/communi.hxx>
 #include <tools/link.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <vos/thread.hxx>
 

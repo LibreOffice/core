@@ -61,7 +61,8 @@ public:
                     SvxHtmlOptions();
                     ~SvxHtmlOptions();
 
-    virtual void            Commit();
+    virtual void    Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
     USHORT      GetFontSize(USHORT nPos) const;
     void        SetFontSize(USHORT nPos, USHORT nSize);

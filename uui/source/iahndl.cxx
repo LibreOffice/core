@@ -113,8 +113,8 @@
 #include "vos/mutex.hxx"
 #include "tools/rcid.h"
 #include "vcl/svapp.hxx"
-#include "svtools/svtools.hrc"
-#include "svtools/httpcook.hxx"
+#include "svl/svtools.hrc"
+#include "svl/httpcook.hxx"
 #include "svtools/sfxecode.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -140,7 +140,7 @@
 #include "loginerr.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 using namespace com::sun;
 
 namespace csss = ::com::sun::star::security;

@@ -33,7 +33,7 @@
 
 
 #include <sfx2/docfile.hxx>
-#include <svtools/inethist.hxx>
+#include <svl/inethist.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <doc.hxx>

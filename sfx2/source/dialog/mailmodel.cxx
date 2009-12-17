@@ -78,7 +78,7 @@
 #include <unotools/configitem.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/storagehelper.hxx>

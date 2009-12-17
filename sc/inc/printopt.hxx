@@ -31,7 +31,7 @@
 #ifndef SC_PRINTOPT_HXX
 #define SC_PRINTOPT_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"
 
@@ -96,6 +96,7 @@ public:
     void            SetOptions( const ScPrintOptions& rNew );
 
     virtual void    Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 
 #endif

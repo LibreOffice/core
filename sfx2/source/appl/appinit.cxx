@@ -38,17 +38,17 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/soerr.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/saveopt.hxx>
-#include <svtools/localisationoptions.hxx>
+#include <svl/svtools.hrc>
+#include <unotools/saveopt.hxx>
+#include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -60,9 +60,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <vos/security.hxx>
 #include <ucbhelper/configurationkeys.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include <rtl/logfile.hxx>

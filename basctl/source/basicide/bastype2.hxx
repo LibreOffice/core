@@ -37,7 +37,7 @@
 
 #define _SVICNVW_HXX
 #include <svtools/svtreebx.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>
 #include "basobj.hxx"

@@ -52,7 +52,7 @@
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "PropertySetMerger.hxx"
 #include "sdpropls.hxx"
 #include "layerimp.hxx"

@@ -76,7 +76,7 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "fusel.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include "slideshow.hxx"
 #include <svx/sdrhittesthelper.hxx>

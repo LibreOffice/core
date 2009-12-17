@@ -46,8 +46,8 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/ulspitem.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itemset.hxx>
 
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>

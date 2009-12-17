@@ -68,11 +68,11 @@
 #include <svx/unolingu.hxx>
 
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/slstitm.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <linguistic/lngprops.hxx>

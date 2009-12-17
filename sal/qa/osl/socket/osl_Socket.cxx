@@ -66,7 +66,7 @@
 #include <osl_Socket_Const_orig.h>
 #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 using namespace osl;
 using namespace rtl;

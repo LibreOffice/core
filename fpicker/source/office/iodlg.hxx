@@ -46,9 +46,9 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
-#include "svtools/inettype.hxx"
-#include "svtools/urlfilter.hxx"
-#include <svtools/restrictedpaths.hxx>
+#include "svl/inettype.hxx"
+#include "svl/urlfilter.hxx"
+#include <svl/restrictedpaths.hxx>
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"

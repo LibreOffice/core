@@ -36,7 +36,7 @@
 #include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/shl.hxx>
 #include <basic/sbx.hxx>
 #include "sb.hxx"

@@ -56,7 +56,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>

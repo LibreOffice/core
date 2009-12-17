@@ -52,10 +52,10 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <vcl/window.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <svtools/style.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/style.hxx>
+#include <svl/itempool.hxx>
 #include <svx/editobj.hxx>
 #include <toolkit/helper/convert.hxx>
 

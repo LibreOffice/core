@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <SwAppletImpl.hxx>
 #include <svtools/htmlkywd.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 

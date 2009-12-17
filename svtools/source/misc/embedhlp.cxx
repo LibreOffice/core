@@ -32,7 +32,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -57,6 +57,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
+#include <vos/mutex.hxx>
 
 using namespace com::sun::star;
 

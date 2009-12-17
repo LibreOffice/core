@@ -43,7 +43,7 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <cppuhelper/compbase4.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <tools/link.hxx>
 #include <boost/shared_ptr.hpp>
 

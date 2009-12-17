@@ -32,7 +32,7 @@
 #include "precompiled_sd.hxx"
 
 #include "fusnapln.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 

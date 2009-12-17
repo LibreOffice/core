@@ -48,12 +48,12 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif

@@ -52,7 +52,7 @@
 #include <svx/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"

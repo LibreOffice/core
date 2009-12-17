@@ -436,15 +436,15 @@
 
 #include "sot/clsids.hxx"
 
-#include "svtools/cntnrsrt.hxx"
-#include "svtools/itemset.hxx"
-#include "svtools/moduleoptions.hxx"
-#include "svtools/nfsymbol.hxx"
-#include "svtools/numuno.hxx"
-#include "svtools/poolitem.hxx"
-#include "svtools/svarray.hxx"
-#include "svtools/svstdarr.hxx"
-#include "svtools/urihelper.hxx"
+#include "svl/cntnrsrt.hxx"
+#include "svl/itemset.hxx"
+#include "unotools/moduleoptions.hxx"
+#include "svl/nfsymbol.hxx"
+#include "svl/numuno.hxx"
+#include "svl/poolitem.hxx"
+#include "svl/svarray.hxx"
+#include "svl/svstdarr.hxx"
+#include "svl/urihelper.hxx"
 
 
 #include "tools/bigint.hxx"
@@ -469,9 +469,9 @@
 #include "unotools/processfactory.hxx"
 #include "unotools/streamwrap.hxx"
 
-#include "vcl/fldunit.hxx"
-#include "vcl/fontcvt.hxx"
-#include "vcl/mapunit.hxx"
+#include "tools/fldunit.hxx"
+#include "unotools/fontcvt.hxx"
+#include "tools/mapunit.hxx"
 
 #include "vos/mutex.hxx"
 #include "vos/ref.hxx"

@@ -33,7 +33,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <vcl/spinfld.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 //#define REGEXP_SUPPORT
 

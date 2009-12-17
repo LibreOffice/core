@@ -35,7 +35,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <sfx2/viewsh.hxx>
 #ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>

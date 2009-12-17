@@ -35,9 +35,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/gen.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <clipboardctl.hxx>
 #include <clipfmtitem.hxx>

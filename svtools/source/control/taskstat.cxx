@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/calendarwrapper.hxx>
 
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <taskbar.hxx>
 
 // =======================================================================

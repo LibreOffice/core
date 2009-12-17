@@ -41,9 +41,9 @@
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
 #ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
@@ -1281,7 +1281,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, RID_SVXDLG_POSTIT, FALSE );
+                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, FALSE );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();

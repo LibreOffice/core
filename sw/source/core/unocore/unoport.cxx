@@ -35,7 +35,7 @@
 #include <cmdid.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unocrsrhelper.hxx>
 #include <unoport.hxx>
 #include <unoobj.hxx>

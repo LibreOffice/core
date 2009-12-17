@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/fontitem.hxx>

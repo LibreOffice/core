@@ -34,9 +34,9 @@
 
 #include <hintids.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

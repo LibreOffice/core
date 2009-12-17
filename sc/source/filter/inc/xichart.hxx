@@ -36,7 +36,7 @@
 #include <set>
 #include <list>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "rangelst.hxx"
 #include "xlchart.hxx"

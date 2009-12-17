@@ -34,10 +34,10 @@
 #include "sfx2/dllapi.h"
 
 #include <sfx2/sfxsids.hrc>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 
 class SvStream;

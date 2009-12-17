@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "richtextengine.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/editobj.hxx>
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
@@ -44,8 +44,8 @@
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/undo.hxx>
+#include <unotools/lingucfg.hxx>
+#include <svl/undo.hxx>
 #include <vos/mutex.hxx>
 
 #include <algorithm>

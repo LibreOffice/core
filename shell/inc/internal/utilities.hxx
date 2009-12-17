@@ -47,6 +47,7 @@
 #include "internal/types.hxx"
 
 #include <string>
+#define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 //---------------------------------

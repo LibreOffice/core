@@ -33,7 +33,7 @@
 
 #include <tools/solar.h>
 #include <sal/types.h>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //........................................................................
 namespace frm

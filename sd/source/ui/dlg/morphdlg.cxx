@@ -47,8 +47,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 
 namespace sd {
 

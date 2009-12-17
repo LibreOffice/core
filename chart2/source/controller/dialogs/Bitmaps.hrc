@@ -31,7 +31,7 @@
 #define CHART_BITMAPS_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #ifndef STD_MASKCOLOR

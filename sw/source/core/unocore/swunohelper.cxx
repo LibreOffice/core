@@ -52,7 +52,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <swunohelper.hxx>
 #include <swunodef.hxx>
 #include <errhdl.hxx>

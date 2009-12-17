@@ -31,7 +31,7 @@
 #ifndef _SVX_XLNTRIT_HXX
 #define _SVX_XLNTRIT_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

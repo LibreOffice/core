@@ -33,7 +33,6 @@
 #include "EnhancedCustomShape2d.hxx"
 #include "EnhancedCustomShapeGeometry.hxx"
 #include "EnhancedCustomShapeTypeNames.hxx"
-#include "EnhancedCustomShapeFunctionParser.hxx"
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdocirc.hxx>

@@ -40,12 +40,12 @@
 #include <rtl/strbuf.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inettype.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

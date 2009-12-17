@@ -88,7 +88,7 @@
 #include <tools/urlobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>

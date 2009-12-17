@@ -34,7 +34,7 @@
 #ifndef _TXTRANGE_HXX
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include "svx/svxdllapi.h"
 

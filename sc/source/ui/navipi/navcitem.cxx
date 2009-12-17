@@ -35,8 +35,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 
 #include "navcitem.hxx"
 #include "global.hxx"

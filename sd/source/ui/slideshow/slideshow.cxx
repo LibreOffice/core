@@ -44,7 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <sfx2/topfrm.hxx>
 #include <sfx2/viewfrm.hxx>

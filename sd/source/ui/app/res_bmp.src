@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include <sfx2/sfx.hrc>
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #include "glob.hrc"
 #include "res_bmp.hrc"
 

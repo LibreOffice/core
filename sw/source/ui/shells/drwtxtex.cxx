@@ -59,9 +59,9 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
@@ -99,10 +99,10 @@
 #include "misc.hrc"
 
 //modified on Jul. 30th
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <string.h>
 
 #include <svx/eeitem.hxx>

@@ -42,7 +42,7 @@
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-#   include <svtools/itemiter.hxx>  //SfxItemIter
+#   include <svl/itemiter.hxx>  //SfxItemIter
 #   include <svx/svdobj.hxx>        //SdrObject
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
 #   include <svx/fmglob.hxx>        //FmFormInventor

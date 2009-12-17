@@ -44,7 +44,7 @@
 #ifndef _SBX_HXX
 #include <basic/sbx.hxx>
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>

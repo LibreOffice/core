@@ -37,7 +37,7 @@
 #include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"

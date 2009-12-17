@@ -121,6 +121,7 @@ public:
     virtual BOOL                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
@@ -140,7 +141,7 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle );
     virtual void                CaptureMouse( BOOL bMouse );
     virtual void                SetPointerPos( long nX, long nY );
-    virtual void                Flush( void);
+    virtual void                Flush( void );
     virtual void                Flush( const Rectangle& );
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );

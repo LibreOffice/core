@@ -42,7 +42,7 @@
 #include <svx/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
 #include <sfx2/bindings.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/eeitem.hxx>

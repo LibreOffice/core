@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <svtools/converter.hxx>
+#include <svl/converter.hxx>
 #include "dbase/DConnection.hxx"
 #include "dbase/DColumns.hxx"
 #include <osl/thread.h>
@@ -44,8 +44,8 @@
 #include "dbase/DIndexes.hxx"
 //#include "file/FDriver.hxx"
 #include <comphelper/sequence.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>      //sprintf
 #include <ucbhelper/content.hxx>

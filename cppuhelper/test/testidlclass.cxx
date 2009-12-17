@@ -30,11 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#undef  NDEBUG
-#define NDEBUG
-#endif
-#include <assert.h>
 
 #include <cppuhelper/stdidlclass.hxx>
 
@@ -65,18 +60,18 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
                                 (XServiceInfo * ) 0
                                             );
 
-    assert( r.is() );
+    OSL_ASSERT( r.is() );
 
 
     {  // test the xidlclassprovider interface !
         Reference< XIdlClassProvider > rProv( r , UNO_QUERY );
-        assert( rProv.is() );
+        OSL_ASSERT( rProv.is() );
 
         {
             Sequence < Reference < XIdlClass > > seq = rProv->getIdlClasses();
 
             // is always one
-            assert( seq.getLength() == 1 );
+            OSL_ASSERT( seq.getLength() == 1 );
 
             // test the weak reference
             rProv->getIdlClasses();
@@ -89,7 +84,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
     }
 
 
-    assert( r->getName() == sImplName );
+    OSL_ASSERT( r->getName() == sImplName );
 
     // test equals
     Reference < XIdlClass > r2 =
@@ -101,18 +96,18 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
                                 (XServiceInfo * ) 0
                                             );
     // test for implementation name
-    assert( r2->equals( r ) );
+    OSL_ASSERT( r2->equals( r ) );
 
     Sequence < Reference < XIdlClass > > seqIdlClass = r->getInterfaces();
 
     //TODO !
     // one idl class for one interface
     // this test fails, if core reflection fails !
-//  assert( 1 == seqIdlClass.getLength() );
+//  OSL_ASSERT( 1 == seqIdlClass.getLength() );
 //  Reference < XIdlClass > rIdlInterface = seqIdlClass.getArray()[0];
 
     // check for IdlClass interface returned by Core Reflection
-//  assert( rIdlInterface.is() );
+//  OSL_ASSERT( rIdlInterface.is() );
 
 
 

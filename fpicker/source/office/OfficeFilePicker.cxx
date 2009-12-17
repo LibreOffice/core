@@ -46,7 +46,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include "svtools/svstdarr.hxx"
+#include "svl/svstdarr.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
@@ -58,7 +58,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/ucbhelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "vos/mutex.hxx"

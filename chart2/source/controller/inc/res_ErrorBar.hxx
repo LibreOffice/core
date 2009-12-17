@@ -35,7 +35,7 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include "chartview/ChartSfxItemIds.hxx"
 #include "RangeSelectionButton.hxx"

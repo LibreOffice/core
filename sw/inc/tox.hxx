@@ -34,8 +34,8 @@
 #include <tools/string.hxx>
 
 #include <svx/svxenum.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/svarray.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <toxe.hxx>

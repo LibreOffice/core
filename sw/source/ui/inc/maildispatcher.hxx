@@ -131,7 +131,6 @@ public:
     /** returns if the thread is still running
     */
     using osl::Thread::isRunning;
-    bool isRunning() const;
 
     /** returns if shutdown has already been called
     */
@@ -167,7 +166,6 @@ private:
     ::rtl::Reference<MailDispatcher> m_xSelfReference;
     bool run_;
     bool shutdown_requested_;
-    bool bIsInRun;
 };
 
 #endif // INCLUDED_MAILDISPATCHER_HXX

@@ -34,9 +34,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <verttexttbxctrl.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustring.hxx>
 

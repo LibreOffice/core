@@ -37,7 +37,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <tools/shl.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>

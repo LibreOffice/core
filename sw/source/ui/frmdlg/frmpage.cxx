@@ -46,8 +46,8 @@
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sizeitem.hxx>

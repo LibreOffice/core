@@ -30,7 +30,7 @@
 #ifndef _MACRODLG_HRC
 #define _MACRODLG_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define RID_MACROCHOOSER                ( RID_BASICIDE_START + 50 )
 #define RID_STR_BTNDEL                  ( RID_BASICIDE_START + 51 )

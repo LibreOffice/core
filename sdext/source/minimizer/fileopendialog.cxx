@@ -60,7 +60,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <comphelper/types.hxx>
 
 
 using namespace ::rtl;

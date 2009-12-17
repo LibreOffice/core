@@ -31,8 +31,8 @@
 #ifndef _CELLATR_HXX
 #define _CELLATR_HXX
 
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include "swdllapi.h"
 #include "format.hxx"
 #include "cellfml.hxx"

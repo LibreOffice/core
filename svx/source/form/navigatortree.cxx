@@ -47,6 +47,7 @@
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
 #include "fmobj.hxx"
+#include "fmprop.hrc"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>

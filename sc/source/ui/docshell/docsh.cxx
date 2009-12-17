@@ -42,7 +42,7 @@
 
 
 #include <sot/clsids.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -51,7 +51,7 @@
 #include <vcl/waitobj.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -63,10 +63,9 @@
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/srchitem.hxx>
-#include <svx/svxmsbas.hxx>
-#include <svtools/fltrcfg.hxx>
-#include <svtools/documentlockfile.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/virdev.hxx>
 #include "chgtrack.hxx"

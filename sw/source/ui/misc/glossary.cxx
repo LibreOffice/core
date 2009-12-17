@@ -50,11 +50,11 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 
@@ -70,7 +70,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #include <swwait.hxx>
 #include <swtypes.hxx>
@@ -1216,7 +1216,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH);
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );

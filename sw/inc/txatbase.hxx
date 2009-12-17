@@ -31,7 +31,7 @@
 #define _TXATBASE_HXX
 
 #include <tools/solar.h>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <hintids.hxx>
 #include <errhdl.hxx>
 

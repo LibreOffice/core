@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 #include "kdecommonlayer.hxx"
-#include <vcl/kde_headers.h>
+#include "kde_headers.h"
 #include <com/sun/star/configuration/backend/PropertyInfo.hpp>
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>

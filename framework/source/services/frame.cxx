@@ -106,7 +106,7 @@
 #endif
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #ifdef ENABLE_ASSERTIONS
     #ifndef _RTL_STRBUF_HXX_

@@ -48,7 +48,7 @@
 #include <framework/interaction.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

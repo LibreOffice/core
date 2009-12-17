@@ -67,7 +67,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
     bInner( bInnr ),
     bVertical( bVert )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = FALSE;
 #endif
     pRangeArr = new Range[ nCacheSize ];

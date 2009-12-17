@@ -51,7 +51,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <svtools/sfxecode.hxx>

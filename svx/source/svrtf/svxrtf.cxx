@@ -37,10 +37,10 @@
 #include <ctype.h>
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #include <comphelper/string.hxx>
 

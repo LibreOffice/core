@@ -84,9 +84,9 @@ $(INCCOM)$/r_cmds.hxx :   ..$/inc$/rcontrol.hxx \
                           $(MISC)$/xfilter.pl
     $(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/r_cmds  RC_
 
-$(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/vcl$/wintypes.hxx \
+$(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/tools$/wintypes.hxx \
                           $(MISC)$/xfilter.pl
-    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
+    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  tools$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
 
 
 

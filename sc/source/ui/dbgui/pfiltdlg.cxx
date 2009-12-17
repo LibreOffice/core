@@ -55,7 +55,7 @@
 #define _PFILTDLG_CXX
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 //==================================================================
 

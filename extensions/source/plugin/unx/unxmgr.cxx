@@ -175,6 +175,12 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
     return nDescriptions > 0;
 }
 
+union maxDirent
+{
+    char aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
+    struct dirent asDirent;
+};
+
 static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDescription* >& rDescriptions )
 {
     rtl::OStringBuffer aPath( 1024 );
@@ -200,14 +206,13 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
     }
 
     // check subdirectories
-    long aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
-
     DIR* pDIR = opendir( rPath.getStr() );
     struct dirent* pDirEnt = NULL;
     struct stat aStat;
-    while( pDIR && ! readdir_r( pDIR, (struct dirent*)aBuffer, &pDirEnt ) && pDirEnt )
+    maxDirent u;
+    while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
     {
-        char* pBaseName = ((struct dirent*)aBuffer)->d_name;
+        char* pBaseName = u.asDirent.d_name;
         if( rtl_str_compare( ".", pBaseName ) && rtl_str_compare( "..", pBaseName ) )
         {
             rtl::OStringBuffer aBuf( 1024 );
@@ -262,9 +267,8 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             aSearchPath += ByteString( String( rPaths.getConstArray()[i] ), aEncoding );
         }
 
-
-        long aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
         int nPaths = aSearchPath.GetTokenCount( ':' );
+        maxDirent u;
         for( i = 0; i < nPaths; i++ )
         {
             ByteString aPath( aSearchPath.GetToken( i, ':' ) );
@@ -272,9 +276,9 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             {
                 DIR* pDIR = opendir( aPath.GetBuffer() );
                 struct dirent* pDirEnt = NULL;
-                while( pDIR && ! readdir_r( pDIR, (struct dirent*)aBuffer, &pDirEnt ) && pDirEnt )
+                while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
                 {
-                    char* pBaseName = ((struct dirent*)aBuffer)->d_name;
+                    char* pBaseName = u.asDirent.d_name;
                     if( pBaseName[0] != '.' ||
                         pBaseName[1] != '.' ||
                         pBaseName[2] != 0 )

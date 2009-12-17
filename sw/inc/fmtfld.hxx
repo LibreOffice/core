@@ -30,9 +30,9 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 
 #include "swdllapi.h"
 #include <calbck.hxx>

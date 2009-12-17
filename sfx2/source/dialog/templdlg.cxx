@@ -34,14 +34,14 @@
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/style.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/style.hxx>
 #ifndef GCC
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>

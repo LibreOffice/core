@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headern
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/stdmenu.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/app.hxx>

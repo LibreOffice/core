@@ -46,7 +46,7 @@
 
 #include <cppuhelper/implbase7.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <svx/unoipset.hxx>
 

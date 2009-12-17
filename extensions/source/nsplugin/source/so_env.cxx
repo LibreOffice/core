@@ -310,7 +310,8 @@ char* NSP_getProductName()
     char *pEnd = 0;
     while(!feof(fp))
     {
-        fgets( line, sizeof(line), fp );
+        if (fgets( line, sizeof(line), fp ) == NULL)
+            continue;
         if (NULL == (pStart = strstr( line, "ProductKey=" )))
             continue;
         pStart += strlen("ProductKey=");

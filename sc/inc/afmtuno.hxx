@@ -31,8 +31,8 @@
 #ifndef SC_AFMTUNO_HXX
 #define SC_AFMTUNO_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>

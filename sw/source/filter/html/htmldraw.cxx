@@ -52,8 +52,8 @@
 #include <svx/brshitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

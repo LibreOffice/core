@@ -31,7 +31,7 @@
 #ifndef _SCH_DGRDATA_HXX
 #define _SCH_DGRDATA_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <comphelper/stl_types.hxx>

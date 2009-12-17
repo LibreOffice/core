@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/svdotext.hxx>
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize und GetStyleSheetPool
@@ -47,8 +47,8 @@
 
 
 #include <svx/editview.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/whiter.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/outliner.hxx>
 #include <svx/eeitem.hxx>
@@ -56,10 +56,10 @@
 #include <svx/fhgtitem.hxx>
 
 #include <svx/charscaleitem.hxx>
-#include <svtools/style.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/style.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/lrspitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/numitem.hxx>
 #include <svx/editeng.hxx>
 #include <svx/postitem.hxx>

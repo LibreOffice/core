@@ -61,6 +61,8 @@ sub main
 
     Printlog "******* Ressource-Test Writer Document *******"
 
+    Call wChangeDefaultView()
+
     Call hStatusIn ( "writer", "w_updt.bas" )
     Call w_001_              ' Menu File
     Call w_001a_             ' Menu File

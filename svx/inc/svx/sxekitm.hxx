@@ -30,7 +30,7 @@
 #ifndef _SXEKITM_HXX
 #define _SXEKITM_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 

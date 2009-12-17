@@ -44,7 +44,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <tools/urlobj.hxx>
 #include "file/FCatalog.hxx"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>

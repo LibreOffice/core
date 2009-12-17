@@ -365,7 +365,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -424,7 +424,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -492,7 +492,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }
@@ -560,7 +560,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return REG_SET_VALUE_FAILED;
     }
 
-    rValue.flush();
+    //rValue.flush();
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
 }

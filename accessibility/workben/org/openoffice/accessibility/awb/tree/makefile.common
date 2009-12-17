@@ -56,7 +56,7 @@
 #
 #*************************************************************************
 
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
+JARFILES = jurt.jar unoil.jar ridl.jar 
 JAVAFILES = 						\
 	AccessibilityModel.java \
 	AccessibilityNode.java \
