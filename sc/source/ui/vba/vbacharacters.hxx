@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 #include "vbapalette.hxx"
 typedef InheritedHelperInterfaceImpl1< ov::excel::XCharacters > ScVbaCharacters_BASE;
 
