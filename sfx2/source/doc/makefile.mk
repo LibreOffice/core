@@ -86,10 +86,18 @@ SLOFILES =	\
         $(SLO)$/DocumentMetadataAccess.obj \
         $(SLO)$/Metadatable.obj \
         $(SLO)$/sfxmodelfactory.obj \
+        $(SLO)$/sfxacldetect.obj \
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj
 
 #                $(SLO)$/applet.obj \
+
+.IF "$(GUI)" == "WNT"
+
+#HACK TO DISABLE PCH
+NOOPTFILES= \
+        $(SLO)$/sfxacldetect.obj
+.ENDIF        
 
 
 # --- Tagets -------------------------------------------------------

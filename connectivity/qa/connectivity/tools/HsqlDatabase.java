@@ -71,7 +71,8 @@ public class HsqlDatabase extends AbstractDatabase
     private void createDBDocument() throws Exception
     {
         final File documentFile = File.createTempFile("testdb", ".odb");
-        documentFile.deleteOnExit();
+        if ( documentFile.exists() )
+            documentFile.delete();
         m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
 
         m_databaseDocument = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
