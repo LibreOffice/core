@@ -982,11 +982,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
                     aLoadArgs.put( "URL", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sbasic" ) ) );
 
-                    Reference< XFrame > xStartModuleFrame( lcl_findStartModuleFrame( aContext ) );
-                    SfxFrame* pFrame = xStartModuleFrame.is() ? SfxFrame::Create( xStartModuleFrame ) : SfxFrame::CreateBlank();
-                    ENSURE_OR_THROW( pFrame, "could not create a SfxFrame to load the Basic IDE into!" );
+                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext ) );
+                    if ( !xTargetFrame.is() )
+                        xTargetFrame = SfxFrame::CreateBlankFrame();
+                    ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frameto load the Basic IDE into!" );
 
-                    xLoader->load( aLoadArgs.getPropertyValues(), pFrame->GetFrameInterface() );
+                    xLoader->load( aLoadArgs.getPropertyValues(), xTargetFrame );
                 }
                 catch( const Exception& )
                 {

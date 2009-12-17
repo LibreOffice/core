@@ -138,8 +138,9 @@ protected:
 public:
                         TYPEINFO();
 
-    static SfxFrame*    Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    static SfxFrame*    CreateBlank();
+    static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        CreateBlankFrame();
     static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
