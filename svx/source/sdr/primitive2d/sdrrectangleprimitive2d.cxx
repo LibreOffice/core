@@ -68,7 +68,7 @@ namespace drawinglayer
                         *getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
-            else if(getTextFrame())
+            else if(getForceFillForHitTest())
             {
                 // if no fill and it's a text frame, create a fill for HitTest and
                 // BoundRect fallback
@@ -89,7 +89,7 @@ namespace drawinglayer
                         getTransform(),
                         *getSdrLFSTAttribute().getLine()));
             }
-            else if(!getTextFrame())
+            else if(!getForceFillForHitTest())
             {
                 // if initially no line is defined and it's not a text frame, create
                 // a line for HitTest and BoundRect
@@ -110,7 +110,7 @@ namespace drawinglayer
             // add text
             if(getSdrLFSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
             }
 
             // add shadow
@@ -127,13 +127,13 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
             double fCornerRadiusY,
-            bool bTextFrame)
+            bool bForceFillForHitTest)
         :   BasePrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
-            mbTextFrame(bTextFrame)
+            mbForceFillForHitTest(bForceFillForHitTest)
         {
         }
 
@@ -147,7 +147,7 @@ namespace drawinglayer
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getTextFrame() == rCompare.getTextFrame());
+                    && getForceFillForHitTest() == rCompare.getForceFillForHitTest());
             }
 
             return false;

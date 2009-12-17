@@ -336,11 +336,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
 BOOL SfxVirtualMenu::IsHiContrastMode() const
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Color aMenuColor = rSettings.GetMenuColor();
-    if ( aMenuColor.IsDark() )
-        return TRUE;
-    else
-        return FALSE;
+    return rSettings.GetHighContrastMode();
 }
 
 //--------------------------------------------------------------------
@@ -421,8 +417,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
             DELETEZ( pPopup );
         }
 
+        const String sItemText = pSVMenu->GetItemText(nSlotId);
+        const String sHelpText = pSVMenu->GetHelpText(nSlotId);
+
         if ( pPopup )
         {
+
             SfxMenuControl *pMnuCtrl =
                 SfxMenuControl::CreateControl(nSlotId, *pPopup, *pBindings);
 
@@ -438,10 +438,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
-                (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                    pSVMenu->GetHelpText(nSlotId), *pBindings);
-                pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                pSVMenu->GetHelpText(nSlotId), *pBindings);
+                (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
+                pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
@@ -477,7 +475,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     pMnuCtrl->Bind( this, nSlotId,
                         *new SfxVirtualMenu(nSlotId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
-                        pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId),
+                        sItemText, sHelpText,
                         *pBindings );
                 }
             }
@@ -514,12 +512,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, *pBindings, this );
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, sHelpText, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                     }
 
@@ -531,13 +529,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                         else
                             // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                        pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
                     }
 
                     if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
