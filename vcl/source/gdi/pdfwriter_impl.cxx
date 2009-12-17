@@ -2971,6 +2971,28 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
 
         if( nIndex < 1 || nIndex <= nEndAsciiIndex )
             goto streamend;
+
+        // nLength3 is the rest of the file - excluding any section headers
+        // nIndex now points to the first of the 512 '0' characters marking the
+        // fixed content portion
+        sal_Int32 nLength3 = nFontLen - nIndex;
+        for( it = aSections.begin(); it != aSections.end(); ++it )
+        {
+            if( *it >= nIndex  )
+            {
+                // special case: nIndex inside a section marker
+                if( nIndex >= (*it) && (*it)+5 > nIndex )
+                    nLength3 -= (*it)+5 - nIndex;
+                else
+                {
+                    if( *it < nFontLen - 6 )
+                        nLength3 -= 6;
+                    else // the last section 0x8003 is only 2 bytes after all
+                        nLength3 -= (nFontLen - *it);
+                }
+            }
+        }
+
         // there may be whitespace to ignore before the 512 '0'
         while( pFontData[nIndex] == '\r' || pFontData[nIndex] == '\n' )
         {
@@ -2984,20 +3006,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
             }
         }
         nEndBinaryIndex = nIndex;
-
-        // nLength3 is the rest of the file - excluding any section headers
-        sal_Int32 nLength3 = nFontLen - nIndex;
-        for( it = aSections.begin(); it != aSections.end(); ++it )
-        {
-            if( *it >= nIndex  )
-            {
-                // special case: nIndex inside a section marker
-                if( nIndex >= *it )
-                    nLength3 -= (*it)+5 - nIndex;
-                else
-                    nLength3 -= 5;
-            }
-        }
 
         // search for beginning of binary section
         nBeginBinaryIndex = nEndAsciiIndex;
