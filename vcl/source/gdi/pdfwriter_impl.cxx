@@ -64,6 +64,8 @@
 
 #include "implncvt.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 #include "cppuhelper/implbase1.hxx"
 #include <icc/sRGB-IEC61966-2.1.hxx>
 
@@ -2847,6 +2849,10 @@ static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
     return true;
 }
 
+struct FontException : public std::exception
+{
+};
+
 // TODO: always subset instead of embedding the full font => this method becomes obsolete then
 std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFontData* pFont, EmbedFont& rEmbed )
 {
@@ -2895,559 +2901,525 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
     const unsigned char* pFontData = NULL;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
-    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
+    try
     {
-        if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
-            goto streamend;
-        // see whether it is pfb or pfa; if it is a pfb, fill ranges
-        // of 6 bytes that are not part of the font program
-        std::list< int > aSections;
-        std::list< int >::const_iterator it;
-        int nIndex = 0;
-        while( pFontData[nIndex] == 0x80 && nIndex < nFontLen-1 )
+        if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
         {
-            aSections.push_back( nIndex );
-            if( pFontData[nIndex+1] == 0x03 )
-                break;
-            sal_Int32 nBytes =
+            if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
+                throw FontException();
+            // see whether it is pfb or pfa; if it is a pfb, fill ranges
+            // of 6 bytes that are not part of the font program
+            std::list< int > aSections;
+            std::list< int >::const_iterator it;
+            int nIndex = 0;
+            while( pFontData[nIndex] == 0x80 && nIndex < nFontLen-1 )
+            {
+                aSections.push_back( nIndex );
+                if( pFontData[nIndex+1] == 0x03 )
+                    break;
+                sal_Int32 nBytes =
                 ((sal_Int32)pFontData[nIndex+2])            |
                 ((sal_Int32)pFontData[nIndex+3]) << 8       |
                 ((sal_Int32)pFontData[nIndex+4]) << 16      |
                 ((sal_Int32)pFontData[nIndex+5]) << 24;
-            nIndex += nBytes+6;
-        }
+                nIndex += nBytes+6;
+            }
 
-        // search for eexec
-        // TODO: use getPfbSegmentLengths() if possible to skip the search thingies below
-        nIndex = 0;
-        int nEndAsciiIndex;
-        int nBeginBinaryIndex;
-        int nEndBinaryIndex;
-        do
-        {
-            while( nIndex < nFontLen-4 &&
-                   ( pFontData[nIndex] != 'e'   ||
-                     pFontData[nIndex+1] != 'e' ||
-                     pFontData[nIndex+2] != 'x' ||
-                     pFontData[nIndex+3] != 'e' ||
-                     pFontData[nIndex+4] != 'c'
-                     )
-                   )
+            // search for eexec
+            // TODO: use getPfbSegmentLengths() if possible to skip the search thingies below
+            nIndex = 0;
+            int nEndAsciiIndex;
+            int nBeginBinaryIndex;
+            int nEndBinaryIndex;
+            do
+            {
+                while( nIndex < nFontLen-4 &&
+                    ( pFontData[nIndex] != 'e'  ||
+                        pFontData[nIndex+1] != 'e' ||
+                        pFontData[nIndex+2] != 'x' ||
+                        pFontData[nIndex+3] != 'e' ||
+                        pFontData[nIndex+4] != 'c'
+                        )
+                    )
                 nIndex++;
-            // check whether we are in a excluded section
-            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
-                ;
-        } while( it != aSections.end() && nIndex < nFontLen-4 );
-        // this should end the ascii part
-        if( nIndex > nFontLen-5 )
-            goto streamend;
-
-        nEndAsciiIndex = nIndex+4;
-        // now count backwards until we can account for 512 '0'
-        // which is the endmarker of the (hopefully) binary data
-        // do not count the pfb header sections
-        int nFound = 0;
-        nIndex =  nFontLen-1;
-        while( nIndex > 0 && nFound < 512 )
-        {
-            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
-                ;
-            if( it == aSections.end() )
-            {
-                // inside the 512 '0' block there may only be whitespace
-                // according to T1 spec; probably it would be to simple
-                // if all fonts complied
-                if( pFontData[nIndex] == '0' )
-                    nFound++;
-                else if( nFound > 0                 &&
-                         pFontData[nIndex] != '\r'      &&
-                         pFontData[nIndex] != '\t'      &&
-                         pFontData[nIndex] != '\n'      &&
-                         pFontData[nIndex] != ' ' )
-                    break;
-            }
-            nIndex--;
-        }
-
-        if( nIndex < 1 || nIndex <= nEndAsciiIndex )
-            goto streamend;
-
-        // nLength3 is the rest of the file - excluding any section headers
-        // nIndex now points to the first of the 512 '0' characters marking the
-        // fixed content portion
-        sal_Int32 nLength3 = nFontLen - nIndex;
-        for( it = aSections.begin(); it != aSections.end(); ++it )
-        {
-            if( *it >= nIndex  )
-            {
-                // special case: nIndex inside a section marker
-                if( nIndex >= (*it) && (*it)+5 > nIndex )
-                    nLength3 -= (*it)+5 - nIndex;
-                else
-                {
-                    if( *it < nFontLen - 6 )
-                        nLength3 -= 6;
-                    else // the last section 0x8003 is only 2 bytes after all
-                        nLength3 -= (nFontLen - *it);
-                }
-            }
-        }
-
-        // there may be whitespace to ignore before the 512 '0'
-        while( pFontData[nIndex] == '\r' || pFontData[nIndex] == '\n' )
-        {
-            nIndex--;
-            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
-                ;
-            if( it != aSections.end() )
-            {
-                nIndex = (*it)-1;
-                break; // this is surely a binary boundary, in ascii case it wouldn't matter
-            }
-        }
-        nEndBinaryIndex = nIndex;
-
-        // search for beginning of binary section
-        nBeginBinaryIndex = nEndAsciiIndex;
-        do
-        {
-            nBeginBinaryIndex++;
-            for( it = aSections.begin(); it != aSections.end() && (nBeginBinaryIndex < *it || nBeginBinaryIndex > ((*it) + 5) ); ++it )
-                ;
-        } while( nBeginBinaryIndex < nEndBinaryIndex &&
-                 ( pFontData[nBeginBinaryIndex] == '\r' ||
-                   pFontData[nBeginBinaryIndex] == '\n' ||
-                   it != aSections.end() ) );
-
-        // it seems to be vital to copy the exact whitespace between binary data
-        // and eexec, else a invalid font results. so make nEndAsciiIndex
-        // always immediate in front of nBeginBinaryIndex
-        nEndAsciiIndex = nBeginBinaryIndex-1;
-        for( it = aSections.begin(); it != aSections.end() && (nEndAsciiIndex < *it || nEndAsciiIndex > ((*it)+5)); ++it )
-            ;
-        if( it != aSections.end() )
-            nEndAsciiIndex = (*it)-1;
-
-        nLength1 = nEndAsciiIndex+1; // including the last character
-        for( it = aSections.begin(); it != aSections.end() && *it < nEndAsciiIndex; ++it )
-            nLength1 -= 6; // decrease by pfb section size
-
-        // if the first four bytes are all ascii hex characters, then binary data
-        // has to be converted to real binary data
-        for( nIndex = 0; nIndex < 4 &&
-                 ( ( pFontData[ nBeginBinaryIndex+nIndex ] >= '0' && pFontData[ nBeginBinaryIndex+nIndex ] <= '9' ) ||
-                   ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'a' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'f' ) ||
-                   ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'A' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'F' )
-                   ); ++nIndex )
-            ;
-        bool bConvertHexData = true;
-        if( nIndex < 4 )
-        {
-            bConvertHexData = false;
-            nLength2 = nEndBinaryIndex - nBeginBinaryIndex + 1; // include the last byte
-            for( it = aSections.begin(); it != aSections.end(); ++it )
-                if( *it > nBeginBinaryIndex && *it < nEndBinaryIndex )
-                    nLength2 -= 6;
-        }
-        else
-        {
-            // count the hex ascii characters to get nLength2
-            nLength2 = 0;
-            int nNextSectionIndex = 0;
-            for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
-                ;
-            if( it != aSections.end() )
-                nNextSectionIndex = *it;
-            for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
-            {
-                if( nIndex == nNextSectionIndex )
-                {
-                    nIndex += 6;
-                    ++it;
-                    nNextSectionIndex = (it == aSections.end() ? 0 : *it );
-                }
-                if( ( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' ) ||
-                    ( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' ) ||
-                    ( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' ) )
-                    nLength2++;
-            }
-            DBG_ASSERT( !(nLength2 & 1), "uneven number of hex chars in binary pfa section" );
-            nLength2 /= 2;
-        }
-
-        // now we can actually write the font stream !
-#if OSL_DEBUG_LEVEL > 1
-        {
-            OStringBuffer aLine( " PDFWriterImpl::emitEmbeddedFont" );
-            emitComment( aLine.getStr() );
-        }
-#endif
-        OStringBuffer aLine( 512 );
-        nStreamObject = createObject();
-        if( !updateObject(nStreamObject))
-            goto streamend;
-        sal_Int32 nStreamLengthObject = createObject();
-        aLine.append( nStreamObject );
-        aLine.append( " 0 obj\n"
-                      "<</Length " );
-        aLine.append( nStreamLengthObject );
-        aLine.append( " 0 R"
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-                      "/Filter/FlateDecode"
-#endif
-                      "/Length1 " );
-        aLine.append( nLength1 );
-        aLine.append( " /Length2 " );
-        aLine.append( nLength2 );
-        aLine.append( " /Length3 ");
-        aLine.append( nLength3 );
-        aLine.append( ">>\n"
-                      "stream\n" );
-        if( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            goto streamend;
-
-        sal_uInt64 nBeginStreamPos = 0;
-        osl_getFilePos( m_aFile, &nBeginStreamPos );
-
-        beginCompression();
-        checkAndEnableStreamEncryption( nStreamObject );
-
-        // write ascii section
-        if( aSections.begin() == aSections.end() )
-        {
-            if( ! writeBuffer( pFontData, nEndAsciiIndex+1 ) )
-            {
-                endCompression();
-                disableStreamEncryption();
-                goto streamend;
-            }
-        }
-        else
-        {
-            // first section always starts at 0
-            it = aSections.begin();
-            nIndex = (*it)+6;
-            ++it;
-            while( *it < nEndAsciiIndex )
-            {
-                if( ! writeBuffer( pFontData+nIndex, (*it)-nIndex ) )
-                {
-                endCompression();
-                    disableStreamEncryption();
-                    goto streamend;
-                }
-                nIndex = (*it)+6;
-                ++it;
-            }
-            // write partial last section
-            if( ! writeBuffer( pFontData+nIndex, nEndAsciiIndex-nIndex+1 ) )
-            {
-                endCompression();
-                disableStreamEncryption();
-                goto streamend;
-            }
-        }
-
-        // write binary section
-        if( ! bConvertHexData )
-        {
-            if( aSections.begin() == aSections.end() )
-            {
-                if( ! writeBuffer( pFontData+nBeginBinaryIndex, nFontLen-nBeginBinaryIndex ) )
-                {
-                    endCompression();
-                    disableStreamEncryption();
-                    goto streamend;
-                }
-            }
-            else
-            {
-                for( it = aSections.begin(); *it < nBeginBinaryIndex; ++it )
+                // check whether we are in a excluded section
+                for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
                     ;
-                // write first partial section
-                if( ! writeBuffer( pFontData+nBeginBinaryIndex, (*it) - nBeginBinaryIndex ) )
+            } while( it != aSections.end() && nIndex < nFontLen-4 );
+            // this should end the ascii part
+            if( nIndex > nFontLen-5 )
+                throw FontException();
+
+            nEndAsciiIndex = nIndex+4;
+            // now count backwards until we can account for 512 '0'
+            // which is the endmarker of the (hopefully) binary data
+            // do not count the pfb header sections
+            int nFound = 0;
+            nIndex =  nFontLen-1;
+            while( nIndex > 0 && nFound < 512 )
+            {
+                for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
+                    ;
+                if( it == aSections.end() )
                 {
-                    endCompression();
-                    disableStreamEncryption();
-                    goto streamend;
+                    // inside the 512 '0' block there may only be whitespace
+                    // according to T1 spec; probably it would be to simple
+                    // if all fonts complied
+                    if( pFontData[nIndex] == '0' )
+                        nFound++;
+                        else if( nFound > 0                 &&
+                            pFontData[nIndex] != '\r'       &&
+                        pFontData[nIndex] != '\t'       &&
+                        pFontData[nIndex] != '\n'       &&
+                        pFontData[nIndex] != ' ' )
+                        break;
                 }
-                // write following sections
-                while( it != aSections.end() )
+                nIndex--;
+            }
+
+            if( nIndex < 1 || nIndex <= nEndAsciiIndex )
+                throw FontException();
+
+            // nLength3 is the rest of the file - excluding any section headers
+            // nIndex now points to the first of the 512 '0' characters marking the
+            // fixed content portion
+            sal_Int32 nLength3 = nFontLen - nIndex;
+            for( it = aSections.begin(); it != aSections.end(); ++it )
+            {
+                if( *it >= nIndex  )
                 {
-                    nIndex = (*it)+6;
-                    ++it;
-                    if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
+                // special case: nIndex inside a section marker
+                    if( nIndex >= (*it) && (*it)+5 > nIndex )
+                        nLength3 -= (*it)+5 - nIndex;
+                    else
                     {
-                        sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
-                        if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
-                        {
-                            endCompression();
-                            disableStreamEncryption();
-                            goto streamend;
-                        }
+                        if( *it < nFontLen - 6 )
+                            nLength3 -= 6;
+                        else // the last section 0x8003 is only 2 bytes after all
+                            nLength3 -= (nFontLen - *it);
                     }
                 }
             }
+
+            // there may be whitespace to ignore before the 512 '0'
+            while( pFontData[nIndex] == '\r' || pFontData[nIndex] == '\n' )
+            {
+                nIndex--;
+                for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
+                    ;
+                if( it != aSections.end() )
+                {
+                    nIndex = (*it)-1;
+                    break; // this is surely a binary boundary, in ascii case it wouldn't matter
+                }
+            }
+            nEndBinaryIndex = nIndex;
+
+            // search for beginning of binary section
+            nBeginBinaryIndex = nEndAsciiIndex;
+            do
+            {
+                nBeginBinaryIndex++;
+                for( it = aSections.begin(); it != aSections.end() && (nBeginBinaryIndex < *it || nBeginBinaryIndex > ((*it) + 5) ); ++it )
+                    ;
+                    } while( nBeginBinaryIndex < nEndBinaryIndex &&
+                        ( pFontData[nBeginBinaryIndex] == '\r'  ||
+                            pFontData[nBeginBinaryIndex] == '\n'    ||
+                            it != aSections.end() ) );
+
+                    // it seems to be vital to copy the exact whitespace between binary data
+                    // and eexec, else a invalid font results. so make nEndAsciiIndex
+                    // always immediate in front of nBeginBinaryIndex
+                    nEndAsciiIndex = nBeginBinaryIndex-1;
+                    for( it = aSections.begin(); it != aSections.end() && (nEndAsciiIndex < *it || nEndAsciiIndex > ((*it)+5)); ++it )
+                        ;
+                    if( it != aSections.end() )
+                        nEndAsciiIndex = (*it)-1;
+
+                    nLength1 = nEndAsciiIndex+1; // including the last character
+                    for( it = aSections.begin(); it != aSections.end() && *it < nEndAsciiIndex; ++it )
+                        nLength1 -= 6; // decrease by pfb section size
+
+                    // if the first four bytes are all ascii hex characters, then binary data
+                    // has to be converted to real binary data
+                    for( nIndex = 0; nIndex < 4 &&
+                        ( ( pFontData[ nBeginBinaryIndex+nIndex ] >= '0' && pFontData[ nBeginBinaryIndex+nIndex ] <= '9' ) ||
+                            ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'a' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'f' ) ||
+                            ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'A' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'F' )
+                            ); ++nIndex )
+                    ;
+                    bool bConvertHexData = true;
+                    if( nIndex < 4 )
+                    {
+                        bConvertHexData = false;
+                        nLength2 = nEndBinaryIndex - nBeginBinaryIndex + 1; // include the last byte
+                        for( it = aSections.begin(); it != aSections.end(); ++it )
+                            if( *it > nBeginBinaryIndex && *it < nEndBinaryIndex )
+                            nLength2 -= 6;
+                    }
+                    else
+                    {
+                        // count the hex ascii characters to get nLength2
+                        nLength2 = 0;
+                        int nNextSectionIndex = 0;
+                        for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
+                            ;
+                        if( it != aSections.end() )
+                            nNextSectionIndex = *it;
+                        for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
+                        {
+                            if( nIndex == nNextSectionIndex )
+                            {
+                                nIndex += 6;
+                                ++it;
+                                nNextSectionIndex = (it == aSections.end() ? 0 : *it );
+                            }
+                            if( ( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' ) ||
+                                ( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' ) ||
+                            ( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' ) )
+                            nLength2++;
+                        }
+                        DBG_ASSERT( !(nLength2 & 1), "uneven number of hex chars in binary pfa section" );
+                        nLength2 /= 2;
+                    }
+
+                    // now we can actually write the font stream !
+                    #if OSL_DEBUG_LEVEL > 1
+                    {
+                        OStringBuffer aLine( " PDFWriterImpl::emitEmbeddedFont" );
+                        emitComment( aLine.getStr() );
+                    }
+                    #endif
+                    OStringBuffer aLine( 512 );
+                    nStreamObject = createObject();
+                    if( !updateObject(nStreamObject))
+                        throw FontException();
+                    sal_Int32 nStreamLengthObject = createObject();
+                    aLine.append( nStreamObject );
+                    aLine.append( " 0 obj\n"
+                        "<</Length " );
+                    aLine.append( nStreamLengthObject );
+                    aLine.append( " 0 R"
+                        #ifndef DEBUG_DISABLE_PDFCOMPRESSION
+                        "/Filter/FlateDecode"
+                        #endif
+                        "/Length1 " );
+                    aLine.append( nLength1 );
+                    aLine.append( " /Length2 " );
+                    aLine.append( nLength2 );
+                    aLine.append( " /Length3 ");
+                    aLine.append( nLength3 );
+                    aLine.append( ">>\n"
+                        "stream\n" );
+                    if( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                        throw FontException();
+
+                    sal_uInt64 nBeginStreamPos = 0;
+                    osl_getFilePos( m_aFile, &nBeginStreamPos );
+
+                    beginCompression();
+                    checkAndEnableStreamEncryption( nStreamObject );
+
+                    // write ascii section
+                    if( aSections.begin() == aSections.end() )
+                    {
+                        if( ! writeBuffer( pFontData, nEndAsciiIndex+1 ) )
+                            throw FontException();
+                    }
+                    else
+                    {
+                        // first section always starts at 0
+                        it = aSections.begin();
+                        nIndex = (*it)+6;
+                        ++it;
+                        while( *it < nEndAsciiIndex )
+                        {
+                            if( ! writeBuffer( pFontData+nIndex, (*it)-nIndex ) )
+                                throw FontException();
+                            nIndex = (*it)+6;
+                            ++it;
+                        }
+                        // write partial last section
+                        if( ! writeBuffer( pFontData+nIndex, nEndAsciiIndex-nIndex+1 ) )
+                            throw FontException();
+                    }
+
+                    // write binary section
+                    if( ! bConvertHexData )
+                    {
+                        if( aSections.begin() == aSections.end() )
+                        {
+                            if( ! writeBuffer( pFontData+nBeginBinaryIndex, nFontLen-nBeginBinaryIndex ) )
+                                throw FontException();
+                        }
+                        else
+                        {
+                            for( it = aSections.begin(); *it < nBeginBinaryIndex; ++it )
+                                ;
+                            // write first partial section
+                            if( ! writeBuffer( pFontData+nBeginBinaryIndex, (*it) - nBeginBinaryIndex ) )
+                                throw FontException();
+                            // write following sections
+                            while( it != aSections.end() )
+                            {
+                                nIndex = (*it)+6;
+                                ++it;
+                                if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
+                                {
+                                    sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
+                                    if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
+                                        throw FontException();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        boost::shared_ptr<unsigned char> pWriteBuffer( (unsigned char*)rtl_allocateMemory( nLength2 ), rtl_freeMemory );
+                        rtl_zeroMemory( pWriteBuffer.get(), nLength2 );
+                        int nWriteIndex = 0;
+
+                        int nNextSectionIndex = 0;
+                        for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
+                            ;
+                        if( it != aSections.end() )
+                            nNextSectionIndex = *it;
+                        for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
+                        {
+                            if( nIndex == nNextSectionIndex )
+                            {
+                                nIndex += 6;
+                                ++it;
+                                nNextSectionIndex = (it == aSections.end() ? nFontLen : *it );
+                            }
+                            unsigned char cNibble = 0x80;
+                            if( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' )
+                                cNibble = pFontData[nIndex] - '0';
+                            else if( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' )
+                                cNibble = pFontData[nIndex] - 'a' + 10;
+                            else if( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' )
+                                cNibble = pFontData[nIndex] - 'A' + 10;
+                            if( cNibble != 0x80 )
+                            {
+                                if( !(nWriteIndex & 1 ) )
+                                    cNibble <<= 4;
+                                pWriteBuffer.get()[ nWriteIndex/2 ] |= cNibble;
+                                nWriteIndex++;
+                            }
+                        }
+                        if( ! writeBuffer( pWriteBuffer.get(), nLength2 ) )
+                            throw FontException();
+                        if( aSections.empty() )
+                        {
+                            if( ! writeBuffer( pFontData+nIndex, nFontLen-nIndex ) )
+                                throw FontException();
+                        }
+                        else
+                        {
+                            // write rest of this section
+                            if( nIndex < nNextSectionIndex )
+                            {
+                                if( ! writeBuffer( pFontData+nIndex, nNextSectionIndex - nIndex ) )
+                                    throw FontException();
+                            }
+                            // write following sections
+                            while( it != aSections.end() )
+                            {
+                                nIndex = (*it)+6;
+                                ++it;
+                                if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
+                                {
+                                    sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
+                                    if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
+                                        throw FontException();
+                                }
+                            }
+                        }
+                    }
+                    endCompression();
+                    disableStreamEncryption();
+
+
+                    sal_uInt64 nEndStreamPos = 0;
+                    osl_getFilePos( m_aFile, &nEndStreamPos );
+
+                    // and finally close the stream
+                    aLine.setLength( 0 );
+                    aLine.append( "\nendstream\nendobj\n\n" );
+                    if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                        throw FontException();
+
+                    // write stream length object
+                    aLine.setLength( 0 );
+                    if( ! updateObject( nStreamLengthObject ) )
+                        throw FontException();
+                    aLine.append( nStreamLengthObject );
+                    aLine.append( " 0 obj\n" );
+                    aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos ) );
+                    aLine.append( "\nendobj\n\n" );
+                    if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                        throw FontException();
         }
         else
         {
-            unsigned char* pWriteBuffer = (unsigned char*)rtl_allocateMemory( nLength2 );
-            memset( pWriteBuffer, 0, nLength2 );
-            int nWriteIndex = 0;
-
-            int nNextSectionIndex = 0;
-            for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
-                ;
-            if( it != aSections.end() )
-                nNextSectionIndex = *it;
-            for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
-            {
-                if( nIndex == nNextSectionIndex )
-                {
-                    nIndex += 6;
-                    ++it;
-                    nNextSectionIndex = (it == aSections.end() ? nFontLen : *it );
-                }
-                unsigned char cNibble = 0x80;
-                if( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' )
-                    cNibble = pFontData[nIndex] - '0';
-                else if( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' )
-                    cNibble = pFontData[nIndex] - 'a' + 10;
-                else if( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' )
-                    cNibble = pFontData[nIndex] - 'A' + 10;
-                if( cNibble != 0x80 )
-                {
-                    if( !(nWriteIndex & 1 ) )
-                        cNibble <<= 4;
-                    pWriteBuffer[ nWriteIndex/2 ] |= cNibble;
-                    nWriteIndex++;
-                }
-            }
-            if( ! writeBuffer( pWriteBuffer, nLength2 ) )
-            {
-                endCompression();
-                disableStreamEncryption();
-                goto streamend;
-            }
-            rtl_freeMemory( pWriteBuffer );
-
-            if( aSections.empty() )
-            {
-                if( ! writeBuffer( pFontData+nIndex, nFontLen-nIndex ) )
-                {
-                    endCompression();
-                    disableStreamEncryption();
-                    goto streamend;
-                }
-            }
-            else
-            {
-                // write rest of this section
-                if( nIndex < nNextSectionIndex )
-                {
-                    if( ! writeBuffer( pFontData+nIndex, nNextSectionIndex - nIndex ) )
-                    {
-                        endCompression();
-                        disableStreamEncryption();
-                        goto streamend;
-                    }
-                }
-                // write following sections
-                while( it != aSections.end() )
-                {
-                    nIndex = (*it)+6;
-                    ++it;
-                    if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
-                    {
-                        sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
-                        if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
-                        {
-                            endCompression();
-                            disableStreamEncryption();
-                            goto streamend;
-                        }
-                    }
-                }
-            }
+            rtl::OStringBuffer aErrorComment( 256 );
+            aErrorComment.append( "GetEmbedFontData failed for font \"" );
+            aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
+            aErrorComment.append( '\"' );
+            if( pFont->GetSlant() == ITALIC_NORMAL )
+                aErrorComment.append( " italic" );
+            else if( pFont->GetSlant() == ITALIC_OBLIQUE )
+                aErrorComment.append( " oblique" );
+            aErrorComment.append( " weight=" );
+            aErrorComment.append( sal_Int32(pFont->GetWeight()) );
+            emitComment( aErrorComment.getStr() );
         }
-        endCompression();
-        disableStreamEncryption();
 
-
-        sal_uInt64 nEndStreamPos = 0;
-        osl_getFilePos( m_aFile, &nEndStreamPos );
-
-        // and finally close the stream
-        aLine.setLength( 0 );
-        aLine.append( "\nendstream\nendobj\n\n" );
-        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            goto streamend;
-
-        // write stream length object
-        aLine.setLength( 0 );
-        if( ! updateObject( nStreamLengthObject ) )
-            goto streamend;
-        aLine.append( nStreamLengthObject );
-        aLine.append( " 0 obj\n" );
-        aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos ) );
-        aLine.append( "\nendobj\n\n" );
-        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            goto streamend;
-    }
-    else
-    {
-        rtl::OStringBuffer aErrorComment( 256 );
-        aErrorComment.append( "GetEmbedFontData failed for font \"" );
-        aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
-        aErrorComment.append( '\"' );
-        if( pFont->GetSlant() == ITALIC_NORMAL )
-            aErrorComment.append( " italic" );
-        else if( pFont->GetSlant() == ITALIC_OBLIQUE )
-            aErrorComment.append( " oblique" );
-        aErrorComment.append( " weight=" );
-        aErrorComment.append( sal_Int32(pFont->GetWeight()) );
-        emitComment( aErrorComment.getStr() );
-    }
-
-    if( nStreamObject )
-        // write font descriptor
+        if( nStreamObject )
+            // write font descriptor
         nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, nStreamObject );
 
-    if( nFontDescriptor )
-    {
-        if( pEncoding )
-            nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, sizeof(nEncoding)/sizeof(nEncoding[0]) );
-
-        // write font object
-        sal_Int32 nObject = createObject();
-        if( ! updateObject( nObject ) )
-            goto streamend;
-
-        OStringBuffer aLine( 1024 );
-        aLine.append( nObject );
-        aLine.append( " 0 obj\n"
-                      "<</Type/Font/Subtype/Type1/BaseFont/" );
-        appendName( aInfo.m_aPSName, aLine );
-        aLine.append( "\n" );
-        if( !pFont->mbSymbolFlag &&  pEncoding == 0 )
-            aLine.append( "/Encoding/WinAnsiEncoding\n" );
-        if( nToUnicodeStream )
+        if( nFontDescriptor )
         {
-            aLine.append( "/ToUnicode " );
-            aLine.append( nToUnicodeStream );
-            aLine.append( " 0 R\n" );
-        }
-        aLine.append( "/FirstChar 0 /LastChar 255\n"
-                      "/Widths[" );
-        for( int i = 0; i < 256; i++ )
-        {
-            aLine.append( pWidths[i] );
-            aLine.append( ((i&15) == 15) ? "\n" : " " );
-        }
-        aLine.append( "]\n"
-                      "/FontDescriptor " );
-        aLine.append( nFontDescriptor );
-        aLine.append( " 0 R>>\n"
-                      "endobj\n\n" );
-        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-            goto streamend;
+            if( pEncoding )
+                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, sizeof(nEncoding)/sizeof(nEncoding[0]) );
 
-        nFontObject = nObject;
-
-        aRet[ rEmbed.m_nNormalFontID ] = nObject;
-
-        // write additional encodings
-        for( std::list< EmbedEncoding >::iterator enc_it = rEmbed.m_aExtendedEncodings.begin(); enc_it != rEmbed.m_aExtendedEncodings.end(); ++enc_it )
-        {
-            sal_Int32 aEncWidths[ 256 ];
-            // emit encoding dict
-            sal_Int32 nEncObject = createObject();
-            if( ! updateObject( nEncObject ) )
-                goto streamend;
-
-            OutputDevice* pRef = getReferenceDevice();
-            pRef->Push( PUSH_FONT | PUSH_MAPMODE );
-            pRef->SetMapMode( MapMode( MAP_PIXEL ) );
-            Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
-            aFont.SetWeight( pFont->GetWeight() );
-            aFont.SetItalic( pFont->GetSlant() );
-            aFont.SetPitch( pFont->GetPitch() );
-            pRef->SetFont( aFont );
-            pRef->ImplNewFont();
-
-            aLine.setLength( 0 );
-            aLine.append( nEncObject );
-            aLine.append( " 0 obj\n"
-                          "<</Type/Encoding/Differences[ 0\n" );
-            int nEncoded = 0;
-            aUnicodes.clear();
-            for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
-            {
-                String aStr( str_it->m_aUnicode );
-                aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
-                nEncodedCodes[nEncoded] = str_it->m_aUnicode;
-                nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
-                pEncToUnicodeIndex[nEncoded] = static_cast<sal_Int32>(aUnicodes.size());
-                aUnicodes.push_back( nEncodedCodes[nEncoded] );
-                pUnicodesPerGlyph[nEncoded] = 1;
-
-                aLine.append( " /" );
-                aLine.append( str_it->m_aName );
-                if( !((++nEncoded) & 15) )
-                    aLine.append( "\n" );
-            }
-            aLine.append( "]>>\n"
-                          "endobj\n\n" );
-
-            pRef->Pop();
-
-            if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-                goto streamend;
-
-            nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nEncoded );
-
-            nObject = createObject();
+            // write font object
+            sal_Int32 nObject = createObject();
             if( ! updateObject( nObject ) )
-                goto streamend;
+                throw FontException();
 
-            aLine.setLength( 0 );
+            OStringBuffer aLine( 1024 );
             aLine.append( nObject );
             aLine.append( " 0 obj\n"
-                          "<</Type/Font/Subtype/Type1/BaseFont/" );
+                "<</Type/Font/Subtype/Type1/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            aLine.append( "/Encoding " );
-            aLine.append( nEncObject );
-            aLine.append( " 0 R\n" );
+            if( !pFont->mbSymbolFlag &&  pEncoding == 0 )
+                aLine.append( "/Encoding/WinAnsiEncoding\n" );
             if( nToUnicodeStream )
             {
                 aLine.append( "/ToUnicode " );
                 aLine.append( nToUnicodeStream );
                 aLine.append( " 0 R\n" );
             }
-            aLine.append( "/FirstChar 0\n"
-                          "/LastChar " );
-            aLine.append( (sal_Int32)(nEncoded-1) );
-            aLine.append( "\n"
-                          "/Widths[" );
-            for( int i = 0; i < nEncoded; i++ )
+            aLine.append( "/FirstChar 0 /LastChar 255\n"
+                "/Widths[" );
+            for( int i = 0; i < 256; i++ )
             {
-                aLine.append( aEncWidths[i] );
+                aLine.append( pWidths[i] );
                 aLine.append( ((i&15) == 15) ? "\n" : " " );
             }
-            aLine.append( " ]\n"
-                          "/FontDescriptor " );
+            aLine.append( "]\n"
+                "/FontDescriptor " );
             aLine.append( nFontDescriptor );
             aLine.append( " 0 R>>\n"
-                          "endobj\n\n" );
+                "endobj\n\n" );
             if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
-                goto streamend;
+                throw FontException();
 
-            aRet[ enc_it->m_nFontID ] = nObject;
+            nFontObject = nObject;
+
+            aRet[ rEmbed.m_nNormalFontID ] = nObject;
+
+            // write additional encodings
+            for( std::list< EmbedEncoding >::iterator enc_it = rEmbed.m_aExtendedEncodings.begin(); enc_it != rEmbed.m_aExtendedEncodings.end(); ++enc_it )
+            {
+                sal_Int32 aEncWidths[ 256 ];
+                // emit encoding dict
+                sal_Int32 nEncObject = createObject();
+                if( ! updateObject( nEncObject ) )
+                    throw FontException();
+
+                OutputDevice* pRef = getReferenceDevice();
+                pRef->Push( PUSH_FONT | PUSH_MAPMODE );
+                pRef->SetMapMode( MapMode( MAP_PIXEL ) );
+                Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
+                aFont.SetWeight( pFont->GetWeight() );
+                aFont.SetItalic( pFont->GetSlant() );
+                aFont.SetPitch( pFont->GetPitch() );
+                pRef->SetFont( aFont );
+                pRef->ImplNewFont();
+
+                aLine.setLength( 0 );
+                aLine.append( nEncObject );
+                aLine.append( " 0 obj\n"
+                    "<</Type/Encoding/Differences[ 0\n" );
+                int nEncoded = 0;
+                aUnicodes.clear();
+                for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
+                {
+                    String aStr( str_it->m_aUnicode );
+                    aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
+                    nEncodedCodes[nEncoded] = str_it->m_aUnicode;
+                    nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
+                    pEncToUnicodeIndex[nEncoded] = static_cast<sal_Int32>(aUnicodes.size());
+                    aUnicodes.push_back( nEncodedCodes[nEncoded] );
+                    pUnicodesPerGlyph[nEncoded] = 1;
+
+                    aLine.append( " /" );
+                    aLine.append( str_it->m_aName );
+                    if( !((++nEncoded) & 15) )
+                        aLine.append( "\n" );
+                }
+                aLine.append( "]>>\n"
+                    "endobj\n\n" );
+
+                pRef->Pop();
+
+                if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                    throw FontException();
+
+                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nEncoded );
+
+                nObject = createObject();
+                if( ! updateObject( nObject ) )
+                    throw FontException();
+
+                aLine.setLength( 0 );
+                aLine.append( nObject );
+                aLine.append( " 0 obj\n"
+                    "<</Type/Font/Subtype/Type1/BaseFont/" );
+                appendName( aInfo.m_aPSName, aLine );
+                aLine.append( "\n" );
+                aLine.append( "/Encoding " );
+                aLine.append( nEncObject );
+                aLine.append( " 0 R\n" );
+                if( nToUnicodeStream )
+                {
+                    aLine.append( "/ToUnicode " );
+                    aLine.append( nToUnicodeStream );
+                    aLine.append( " 0 R\n" );
+                }
+                aLine.append( "/FirstChar 0\n"
+                    "/LastChar " );
+                aLine.append( (sal_Int32)(nEncoded-1) );
+                aLine.append( "\n"
+                    "/Widths[" );
+                for( int i = 0; i < nEncoded; i++ )
+                {
+                    aLine.append( aEncWidths[i] );
+                    aLine.append( ((i&15) == 15) ? "\n" : " " );
+                }
+                aLine.append( " ]\n"
+                    "/FontDescriptor " );
+                aLine.append( nFontDescriptor );
+                aLine.append( " 0 R>>\n"
+                    "endobj\n\n" );
+                if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                    throw FontException();
+
+                aRet[ enc_it->m_nFontID ] = nObject;
+            }
         }
     }
+    catch( FontException& )
+    {
+        // these do nothing in case there was no compression or encryption ongoing
+        endCompression();
+        disableStreamEncryption();
+    }
 
-  streamend:
     if( pFontData )
         m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
 
@@ -9382,7 +9354,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     sal_uInt64 nStartPos = 0;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
 
-    checkAndEnableStreamEncryption(  rObject.m_nObject );
+    checkAndEnableStreamEncryption( rObject.m_nObject );
     beginCompression();
     if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
     {
@@ -9396,19 +9368,18 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     else
     {
         const int nScanLineBytes = pAccess->Width()*3;
-        sal_uInt8 *pCol = (sal_uInt8*)rtl_allocateMemory( nScanLineBytes );
+        boost::shared_ptr<sal_uInt8> pCol( (sal_uInt8*)rtl_allocateMemory( nScanLineBytes ), rtl_freeMemory );
         for( int y = 0; y < pAccess->Height(); y++ )
         {
             for( int x = 0; x < pAccess->Width(); x++ )
             {
                 BitmapColor aColor = pAccess->GetColor( y, x );
-                pCol[3*x+0] = aColor.GetRed();
-                pCol[3*x+1] = aColor.GetGreen();
-                pCol[3*x+2] = aColor.GetBlue();
+                pCol.get()[3*x+0] = aColor.GetRed();
+                pCol.get()[3*x+1] = aColor.GetGreen();
+                pCol.get()[3*x+2] = aColor.GetBlue();
             }
-            CHECK_RETURN( writeBuffer( pCol, nScanLineBytes ) );
+            CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
         }
-        rtl_freeMemory( pCol );
     }
     endCompression();
     disableStreamEncryption();
