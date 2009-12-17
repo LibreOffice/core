@@ -389,26 +389,6 @@ protected:
         throw (uno::RuntimeException, xml::sax::SAXException);
  };
 
-class OOXMLFastContextHandlerBooleanValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerBooleanValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerBooleanValue();
-
-    virtual string getType() const { return "BooleanValue"; }
-
-protected:
-    bool mbValue;
-
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-    virtual void setValue(const ::rtl::OUString & rString);
-};
-
 class OOXMLFastContextHandlerValue :
     public OOXMLFastContextHandler
 {
@@ -432,82 +412,6 @@ public:
 
 protected:
     OOXMLValue::Pointer_t mpValue;
-};
-
-class OOXMLFastContextHandlerIntegerValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerIntegerValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerIntegerValue();
-
-    virtual string getType() const { return "IntegerValue"; }
-
-protected:
-    sal_Int32 mnValue;
-
-    virtual void setValue(const ::rtl::OUString & sValue);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerStringValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerStringValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerStringValue();
-
-    virtual string getType() const { return "StringValue"; }
-
-protected:
-    ::rtl::OUString  msValue;
-
-    virtual void setValue(const ::rtl::OUString & sValue);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerHexValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerHexValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerHexValue();
-
-    virtual string getType() const { return "HexValue"; }
-
-protected:
-    sal_Int32  mnValue;
-
-    virtual void setValue(const ::rtl::OUString & sValue);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerListValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerListValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerListValue();
-
-protected:
-    mutable OOXMLValue::Pointer_t mpValue;
-
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual OOXMLValue::Pointer_t getValue() const;
 };
 
 class OOXMLFastContextHandlerTable : public OOXMLFastContextHandler
