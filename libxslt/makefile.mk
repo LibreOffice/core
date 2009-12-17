@@ -53,7 +53,7 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME)_win_manifest.patch
+PATCH_FILES=libxslt-configure.patch libxslt-win_manifest.patch
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"

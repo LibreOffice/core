@@ -1,6 +1,6 @@
---- misc/libxslt-1.1.24/ltmain.sh	Wed Aug 29 14:28:46 2007
-+++ misc/build/libxslt-1.1.24/ltmain.sh	Wed Jun 25 13:06:05 2008
-@@ -3234,9 +3234,9 @@
+--- misc/libxslt-1.1.26/ltmain.sh	Wed Aug 29 14:28:46 2007
++++ misc/build/libxslt-1.1.26/ltmain.sh	Wed Jun 25 13:06:05 2008
+@@ -6195,9 +6195,9 @@
  	    revision="$number_revision"
  	    ;;
  	  freebsd-aout|freebsd-elf|sunos)
@@ -12,20 +12,20 @@
 +	    revision="$number_revision"
  	    ;;
  	  irix|nonstopux)
- 	    current=`expr $number_major + $number_minor`
-@@ -3311,8 +3311,8 @@
+ 	    func_arith $number_major + $number_minor
+@@ -6271,8 +6271,8 @@
  	  ;;
  
  	freebsd-elf)
 -	  major=".$current"
--	  versuffix=".$current";
+-	  versuffix=".$current"
 +	  major=.`expr $current - $age`
 +	  versuffix="$major.$age.$revision"
  	  ;;
  
  	irix | nonstopux)
---- misc/libxslt-1.1.24/xslt-config.in	Wed Jan 17 14:18:26 2007
-+++ misc/build/libxslt-1.1.24/xslt-config.in	Wed Jun 25 13:06:05 2008
+--- misc/libxslt-1.1.26/xslt-config.in	Wed Jan 17 14:18:26 2007
++++ misc/build/libxslt-1.1.26/xslt-config.in	Wed Jun 25 13:06:05 2008
 @@ -1,10 +1,16 @@
  #! /bin/sh
  
@@ -57,9 +57,9 @@
  if test "$includedir" != "/usr/include"; then
      the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
  else
---- misc/libxslt-1.1.24/configure	2008-05-14 00:40:54.000000000 +0900
-+++ misc/build/libxslt-1.1.24/configure	2008-07-17 22:12:38.097000000 +0900
-@@ -5730,7 +5730,7 @@
+--- misc/libxslt-1.1.26/configure	2008-05-14 00:40:54.000000000 +0900
++++ misc/build/libxslt-1.1.26/configure	2008-07-17 22:12:38.097000000 +0900
+@@ -7437,7 +7437,7 @@
  
  cygwin*)
    # func_win32_libid is a shell function defined in ltmain.sh
@@ -68,7 +68,7 @@
    lt_cv_file_magic_cmd='func_win32_libid'
    ;;
  
-@@ -5739,7 +5739,7 @@
+@@ -7446,7 +7446,7 @@
    # func_win32_libid shell function, so use a weaker test based on 'objdump',
    # unless we find 'file', for example because we are cross-compiling.
    if ( file / ) >/dev/null 2>&1; then

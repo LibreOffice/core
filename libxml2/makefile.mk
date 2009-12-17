@@ -46,20 +46,16 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.6.31
+LIBXML2VERSION=2.7.6
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-#.IF "$(OS)$(COM)"=="WNTGCC"
-#PATCH_FILES=$(TARFILE_NAME)-mingw.patch
-#.ELSE
-PATCH_FILES=$(TARFILE_NAME).patch
-#.ENDIF
+PATCH_FILES=libxml2-configure.patch \
+            libxml2-mingw.patch
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-PATCH_FILES+=$(TARFILE_NAME)-mingw.patch
 xml2_CC=$(CC)
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 xml2_CC+=-shared-libgcc
