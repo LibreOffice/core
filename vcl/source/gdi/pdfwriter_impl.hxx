@@ -272,8 +272,16 @@ public:
     // font subsets
     struct GlyphEmit
     {
-        sal_Ucs     m_aUnicode;
+        static const int nMaxUnicodes = 8;
+        // performance: actually this should probably a vector;
+        sal_Ucs     m_aUnicodes[nMaxUnicodes];
+        sal_Int32   m_nUnicodes;
         sal_uInt8   m_nSubsetGlyphID;
+
+        GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
+        {
+            rtl_zeroMemory( m_aUnicodes, sizeof( m_aUnicodes ) );
+        }
     };
     typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
     struct FontEmit
@@ -856,7 +864,7 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -903,7 +911,7 @@ i12626
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()

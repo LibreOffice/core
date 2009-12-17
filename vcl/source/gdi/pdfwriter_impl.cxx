@@ -2866,10 +2866,16 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
     sal_Int32 nToUnicodeStream = 0;
     sal_uInt8 nEncoding[256];
     sal_Ucs nEncodedCodes[256];
+    std::vector<sal_Ucs> aUnicodes;
+    aUnicodes.reserve( 256 );
+    sal_Int32 pUnicodesPerGlyph[256];
+    sal_Int32 pEncToUnicodeIndex[256];
     if( pEncoding )
     {
-        memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
-        memset( nEncoding, 0, sizeof(nEncoding) );
+        rtl_zeroMemory( nEncoding, sizeof(nEncoding) );
+        rtl_zeroMemory( nEncodedCodes, sizeof(nEncodedCodes) );
+        rtl_zeroMemory( pUnicodesPerGlyph, sizeof(pUnicodesPerGlyph) );
+        rtl_zeroMemory( pEncToUnicodeIndex, sizeof(pEncToUnicodeIndex) );
         for( Ucs2SIntMap::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
         {
             if( it->second != -1 )
@@ -2877,6 +2883,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                 sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
                 nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
                 nEncodedCodes[ nCode ] = it->first;
+                pEncToUnicodeIndex[ nCode ] = static_cast<sal_Int32>(aUnicodes.size());
+                aUnicodes.push_back( it->first );
+                pUnicodesPerGlyph[ nCode ] = 1;
             }
         }
     }
@@ -3299,7 +3308,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
     if( nFontDescriptor )
     {
         if( pEncoding )
-            nToUnicodeStream = createToUnicodeCMap( nEncoding, nEncodedCodes, sizeof(nEncoding)/sizeof(nEncoding[0]) );
+            nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, sizeof(nEncoding)/sizeof(nEncoding[0]) );
 
         // write font object
         sal_Int32 nObject = createObject();
@@ -3363,12 +3372,16 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
             aLine.append( " 0 obj\n"
                           "<</Type/Encoding/Differences[ 0\n" );
             int nEncoded = 0;
+            aUnicodes.clear();
             for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
             {
                 String aStr( str_it->m_aUnicode );
                 aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
                 nEncodedCodes[nEncoded] = str_it->m_aUnicode;
                 nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
+                pEncToUnicodeIndex[nEncoded] = static_cast<sal_Int32>(aUnicodes.size());
+                aUnicodes.push_back( nEncodedCodes[nEncoded] );
+                pUnicodesPerGlyph[nEncoded] = 1;
 
                 aLine.append( " /" );
                 aLine.append( str_it->m_aName );
@@ -3383,7 +3396,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
             if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
                 goto streamend;
 
-            nToUnicodeStream = createToUnicodeCMap( nEncoding, nEncodedCodes, nEncoded );
+            nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nEncoded );
 
             nObject = createObject();
             if( ! updateObject( nObject ) )
@@ -3448,11 +3461,15 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
     appendName( rPSName, rBuffer );
 }
 
-sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs )
+sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
+                                              sal_Ucs* pUnicodes,
+                                              sal_Int32* pUnicodesPerGlyph,
+                                              sal_Int32* pEncToUnicodeIndex,
+                                              int nGlyphs )
 {
     int nMapped = 0, n = 0;
     for( n = 0; n < nGlyphs; n++ )
-        if( pUnicodes[n] )
+        if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
             nMapped++;
 
     if( nMapped == 0 )
@@ -3480,7 +3497,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUn
     int nCount = 0;
     for( n = 0; n < nGlyphs; n++ )
     {
-        if( pUnicodes[n] )
+        if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
         {
             if( (nCount % 100) == 0 )
             {
@@ -3492,9 +3509,13 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUn
             aContents.append( '<' );
             appendHex( (sal_Int8)pEncoding[n], aContents );
             aContents.append( "> <" );
-        // TODO: handle unicodes>U+FFFF
-            appendHex( (sal_Int8)(pUnicodes[n] / 256), aContents );
-            appendHex( (sal_Int8)(pUnicodes[n] & 255), aContents );
+            // TODO: handle unicodes>U+FFFF
+            sal_Int32 nIndex = pEncToUnicodeIndex[n];
+            for( sal_Int32 j = 0; j < pUnicodesPerGlyph[n]; j++ )
+            {
+                appendHex( (sal_Int8)(pUnicodes[nIndex + j] / 256), aContents );
+                appendHex( (sal_Int8)(pUnicodes[nIndex + j] & 255), aContents );
+            }
             aContents.append( ">\n" );
             nCount++;
         }
@@ -3654,14 +3675,18 @@ bool PDFWriterImpl::emitFonts()
             sal_Int32 pGlyphIDs[ 256 ];
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
-            sal_Ucs   pUnicodes[ 256 ];
+            sal_Int32 pEncToUnicodeIndex[ 256 ];
+            sal_Int32 pUnicodesPerGlyph[ 256 ];
+            std::vector<sal_Ucs> aUnicodes;
+            aUnicodes.reserve( 256 );
             int nGlyphs = 1;
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
-            memset( pGlyphIDs, 0, sizeof( pGlyphIDs ) );
-            memset( pEncoding, 0, sizeof( pEncoding ) );
-            memset( pUnicodes, 0, sizeof( pUnicodes ) );
+            rtl_zeroMemory( pGlyphIDs, sizeof( pGlyphIDs ) );
+            rtl_zeroMemory( pEncoding, sizeof( pEncoding ) );
+            rtl_zeroMemory( pUnicodesPerGlyph, sizeof( pUnicodesPerGlyph ) );
+            rtl_zeroMemory( pEncToUnicodeIndex, sizeof( pEncToUnicodeIndex ) );
             for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
             {
                 sal_uInt8 nEnc = fit->second.m_nSubsetGlyphID;
@@ -3671,8 +3696,11 @@ bool PDFWriterImpl::emitFonts()
 
                 pGlyphIDs[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
-                pUnicodes[ nEnc ] = fit->second.m_aUnicode;
-                if( pUnicodes[ nEnc ] )
+                pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aUnicodes.size());
+                pUnicodesPerGlyph[ nEnc ] = fit->second.m_nUnicodes;
+                for( sal_Int32 n = 0; n < fit->second.m_nUnicodes; n++ )
+                    aUnicodes.push_back( fit->second.m_aUnicodes[n] );
+                if( fit->second.m_aUnicodes[0] )
                     nToUnicodeStream = 1;
                 if( nGlyphs < 256 )
                     nGlyphs++;
@@ -3693,92 +3721,92 @@ bool PDFWriterImpl::emitFonts()
                 CHECK_RETURN( (osl_File_E_None == osl_getFilePos( aFontFile, &nLength1 ) ) );
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
 
-#if OSL_DEBUG_LEVEL > 1
+                #if OSL_DEBUG_LEVEL > 1
                 {
                     OStringBuffer aLine1( " PDFWriterImpl::emitFonts" );
                     emitComment( aLine1.getStr() );
                 }
-#endif
+                #endif
                 sal_Int32 nFontStream = createObject();
                 sal_Int32 nStreamLengthObject = createObject();
                 CHECK_RETURN( updateObject( nFontStream ) );
                 aLine.setLength( 0 );
                 aLine.append( nFontStream );
                 aLine.append( " 0 obj\n"
-                              "<</Length " );
+                             "<</Length " );
                 aLine.append( (sal_Int32)nStreamLengthObject );
                 aLine.append( " 0 R"
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-                              "/Filter/FlateDecode"
-#endif
-                              "/Length1 " );
+                             #ifndef DEBUG_DISABLE_PDFCOMPRESSION
+                             "/Filter/FlateDecode"
+                             #endif
+                             "/Length1 " );
 
-            sal_uInt64 nStartPos = 0;
-            if( aSubsetInfo.m_nFontType == FontSubsetInfo::SFNT_TTF )
-            {
-                      aLine.append( (sal_Int32)nLength1 );
-
-                aLine.append( ">>\n"
-                              "stream\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
-
-                // copy font file
-                beginCompression();
-                checkAndEnableStreamEncryption( nFontStream );
-                sal_Bool bEOF = sal_False;
-                do
+                sal_uInt64 nStartPos = 0;
+                if( aSubsetInfo.m_nFontType == FontSubsetInfo::SFNT_TTF )
                 {
-                    char buf[8192];
-                    sal_uInt64 nRead;
-                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) );
-                    CHECK_RETURN( writeBuffer( buf, nRead ) );
-                    CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
-                } while( ! bEOF );
-            }
-            else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
-            {
-                // TODO: implement
-                DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
-            }
-            else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
-            {
-                unsigned char* pBuffer = new unsigned char[ (int)nLength1 ];
+                    aLine.append( (sal_Int32)nLength1 );
 
-                   sal_uInt64 nBytesRead = 0;
-                CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer, nLength1, &nBytesRead ) ) );
-                DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
-                   CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
-                // get the PFB-segment lengths
-                ThreeInts aSegmentLengths = {0,0,0};
-                getPfbSegmentLengths( pBuffer, (int)nBytesRead, aSegmentLengths );
-                // the lengths below are mandatory for PDF-exported Type1 fonts
-                // because the PFB segment headers get stripped! WhyOhWhy.
-                   aLine.append( (sal_Int32)aSegmentLengths[0] );
-                aLine.append( "/Length2 " );
-                aLine.append( (sal_Int32)aSegmentLengths[1] );
-                aLine.append( "/Length3 " );
-                aLine.append( (sal_Int32)aSegmentLengths[2] );
+                    aLine.append( ">>\n"
+                                 "stream\n" );
+                    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
 
-                aLine.append( ">>\n"
-                              "stream\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+                    // copy font file
+                    beginCompression();
+                    checkAndEnableStreamEncryption( nFontStream );
+                    sal_Bool bEOF = sal_False;
+                    do
+                    {
+                        char buf[8192];
+                        sal_uInt64 nRead;
+                        CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) );
+                        CHECK_RETURN( writeBuffer( buf, nRead ) );
+                        CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
+                    } while( ! bEOF );
+                }
+                else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
+                {
+                    // TODO: implement
+                    DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
+                }
+                else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
+                {
+                    unsigned char* pBuffer = new unsigned char[ (int)nLength1 ];
 
-                // emit PFB-sections without section headers
-                beginCompression();
-                checkAndEnableStreamEncryption( nFontStream );
-                CHECK_RETURN( writeBuffer( pBuffer+ 6, aSegmentLengths[0] ) );
-                CHECK_RETURN( writeBuffer( pBuffer+12 + aSegmentLengths[0], aSegmentLengths[1] ) );
-                CHECK_RETURN( writeBuffer( pBuffer+18 + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
+                    sal_uInt64 nBytesRead = 0;
+                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer, nLength1, &nBytesRead ) ) );
+                    DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
+                    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
+                    // get the PFB-segment lengths
+                    ThreeInts aSegmentLengths = {0,0,0};
+                    getPfbSegmentLengths( pBuffer, (int)nBytesRead, aSegmentLengths );
+                    // the lengths below are mandatory for PDF-exported Type1 fonts
+                    // because the PFB segment headers get stripped! WhyOhWhy.
+                    aLine.append( (sal_Int32)aSegmentLengths[0] );
+                    aLine.append( "/Length2 " );
+                    aLine.append( (sal_Int32)aSegmentLengths[1] );
+                    aLine.append( "/Length3 " );
+                    aLine.append( (sal_Int32)aSegmentLengths[2] );
 
-                delete[] pBuffer;
-            }
-            else
-            {
-                fprintf( stderr, "PDF: CreateFontSubset result in not yet supported format=%d\n",aSubsetInfo.m_nFontType);
-                aLine.append( "0 >>\nstream\n" );
-            }
+                    aLine.append( ">>\n"
+                                 "stream\n" );
+                    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+
+                    // emit PFB-sections without section headers
+                    beginCompression();
+                    checkAndEnableStreamEncryption( nFontStream );
+                    CHECK_RETURN( writeBuffer( pBuffer+ 6, aSegmentLengths[0] ) );
+                    CHECK_RETURN( writeBuffer( pBuffer+12 + aSegmentLengths[0], aSegmentLengths[1] ) );
+                    CHECK_RETURN( writeBuffer( pBuffer+18 + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
+
+                    delete[] pBuffer;
+                }
+                else
+                {
+                    fprintf( stderr, "PDF: CreateFontSubset result in not yet supported format=%d\n",aSubsetInfo.m_nFontType);
+                    aLine.append( "0 >>\nstream\n" );
+                }
 
                 endCompression();
                 disableStreamEncryption();
@@ -3805,7 +3833,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_Int32 nFontDescriptor = emitFontDescriptor( it->first, aSubsetInfo, lit->m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
-                    nToUnicodeStream = createToUnicodeCMap( pEncoding, pUnicodes, nGlyphs );
+                    nToUnicodeStream = createToUnicodeCMap( pEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
                 CHECK_RETURN( updateObject( nFontObject ) );
@@ -3814,22 +3842,22 @@ bool PDFWriterImpl::emitFonts()
 
                 aLine.append( " 0 obj\n" );
                 aLine.append( ((aSubsetInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) != 0) ?
-                    "<</Type/Font/Subtype/Type1/BaseFont/" :
-                    "<</Type/Font/Subtype/TrueType/BaseFont/" );
+                             "<</Type/Font/Subtype/Type1/BaseFont/" :
+                             "<</Type/Font/Subtype/TrueType/BaseFont/" );
                 appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
                 aLine.append( "\n"
-                              "/FirstChar 0\n"
-                              "/LastChar " );
+                             "/FirstChar 0\n"
+                             "/LastChar " );
                 aLine.append( (sal_Int32)(nGlyphs-1) );
                 aLine.append( "\n"
-                              "/Widths[" );
+                             "/Widths[" );
                 for( int i = 0; i < nGlyphs; i++ )
                 {
                     aLine.append( pWidths[ i ] );
                     aLine.append( ((i & 15) == 15) ? "\n" : " " );
                 }
                 aLine.append( "]\n"
-                              "/FontDescriptor " );
+                             "/FontDescriptor " );
                 aLine.append( nFontDescriptor );
                 aLine.append( " 0 R\n" );
                 if( nToUnicodeStream )
@@ -3839,7 +3867,7 @@ bool PDFWriterImpl::emitFonts()
                     aLine.append( " 0 R\n" );
                 }
                 aLine.append( ">>\n"
-                              "endobj\n\n" );
+                             "endobj\n\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
@@ -3877,7 +3905,7 @@ bool PDFWriterImpl::emitFonts()
     OStringBuffer aFontDict( 1024 );
     aFontDict.append( getFontDictObject() );
     aFontDict.append( " 0 obj\n"
-                      "<<" );
+                     "<<" );
     int ni = 0;
     for( std::map< sal_Int32, sal_Int32 >::iterator mit = aFontIDToObject.begin(); mit != aFontIDToObject.end(); ++mit )
     {
@@ -3886,12 +3914,12 @@ bool PDFWriterImpl::emitFonts()
         aFontDict.append( ' ' );
         aFontDict.append( mit->second );
         aFontDict.append( " 0 R" );
-            if( ((++ni) & 7) == 0 )
-                aFontDict.append( '\n' );
+        if( ((++ni) & 7) == 0 )
+            aFontDict.append( '\n' );
     }
     // emit builtin font for widget apperances / variable text
     for( std::map< sal_Int32, sal_Int32 >::iterator it = m_aBuiltinFontToObjectMap.begin();
-         it != m_aBuiltinFontToObjectMap.end(); ++it )
+        it != m_aBuiltinFontToObjectMap.end(); ++it )
     {
         ImplPdfBuiltinFontData aData(m_aBuiltinFonts[it->first]);
         it->second = emitBuiltinFont( &aData, it->second );
@@ -6389,12 +6417,14 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_GlyphId* pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pUnicodes,
+                                    sal_Int32* pUnicodesPerGlyph,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
                                     const ImplFontData* pFallbackFonts[] )
 {
     const ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
-    for( int i = 0; i < nGlyphs; i++ )
+    sal_Ucs* pCurUnicode = pUnicodes;
+    for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
     {
         const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
         const ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
@@ -6450,7 +6480,9 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                 // add new glyph to emitted font subset
                 GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
                 rNewGlyphEmit.m_nSubsetGlyphID = nNewId;
-                rNewGlyphEmit.m_aUnicode = (pUnicodes ? pUnicodes[i] : 0);
+                rNewGlyphEmit.m_nUnicodes = pUnicodesPerGlyph[i];
+                for( sal_Int32 n = 0; n < pUnicodesPerGlyph[i]; n++ )
+                    rNewGlyphEmit.m_aUnicodes[n] = pCurUnicode[n];
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[ nFontGlyphId ];
@@ -6487,7 +6519,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             Ucs2OStrMap::const_iterator nonenc_it;
 
             sal_Int32 nCurFontID = nFontID;
-            sal_Ucs cChar = pUnicodes[i];
+            sal_Ucs cChar = *pCurUnicode;
             if( pEncoding )
             {
                 enc_it = pEncoding->find( cChar );
@@ -6549,7 +6581,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             pMappedGlyphs[ i ] = (sal_Int8)cChar;
             pMappedFontObjects[ i ] = nCurFontID;
             pGlyphWidths[ i ] = m_aFontCache.getGlyphWidth( pCurrentFont,
-                                                            (pEncoding ? pUnicodes[i] : cChar) | GF_ISCHAR,
+                                                            (pEncoding ? *pCurUnicode : cChar) | GF_ISCHAR,
                                                             false,
                                                             m_pReferenceDevice->mpGraphics );
         }
@@ -6829,7 +6861,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     sal_Int32 pGlyphWidths[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
-    sal_Ucs   pUnicodes[nMaxGlyphs];
+    std::vector<sal_Ucs> aUnicodes;
+    aUnicodes.reserve( nMaxGlyphs );
+    sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     sal_Int32 nAdvanceWidths[nMaxGlyphs];
     const ImplFontData* pFallbackFonts[nMaxGlyphs];
@@ -6962,15 +6996,29 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     Point aGNGlyphPos;
     while( (nGlyphs = rLayout.GetNextGlyphs( nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry )) != 0 )
     {
+        aUnicodes.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
             pFallbackFonts[i] = rLayout.GetFallbackFontData( pGlyphs[i] );
 
+            // default case: 1 glyph is one unicode
+            pUnicodesPerGlyph[i] = 1;
             if( (pGlyphs[i] & GF_ISCHAR) )
-                pUnicodes[i] = static_cast<sal_Ucs>(pGlyphs[i] & GF_IDXMASK);
+            {
+                aUnicodes.push_back( static_cast<sal_Ucs>(pGlyphs[i] & GF_IDXMASK) );
+            }
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
-                pUnicodes[i] = rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) );
+                int nChars = 1;
+                aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) ) );
+                pUnicodesPerGlyph[i] = 1;
+                // try to handle ligatures and such
+                if( i < nGlyphs-1 )
+                {
+                    pUnicodesPerGlyph[i] = nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    for( int n = 1; n < nChars; n++ )
+                        aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ) );
+                }
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout
                 // engine's glyph work is ignored (i.e. char mirroring)
@@ -6978,17 +7026,21 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 // glyphid (i.e. FreeType's synthetic glyphid for a Type1 font)
                 // back to unicode and then to embeddable font's encoding
                 if( getReferenceDevice()->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL )
-                    pUnicodes[i] = static_cast<sal_Ucs>(GetMirroredChar(pUnicodes[i]));
+                {
+                    size_t nI = aUnicodes.size()-1;
+                    for( int n = 0; n < nChars; n++, nI-- )
+                        aUnicodes[nI] = static_cast<sal_Ucs>(GetMirroredChar(aUnicodes[nI]));
+                }
             }
             else
-                pUnicodes[i] = 0;
+                aUnicodes.push_back( 0 );
             // note: in case of ctl one character may result
             // in multiple glyphs. The current SalLayout
             // implementations set -1 then to indicate that no direct
             // mapping is possible
         }
 
-        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, pUnicodes, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
+        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, &aUnicodes[0], pUnicodesPerGlyph, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
 
         for( int i = 0; i < nGlyphs; i++ )
         {
