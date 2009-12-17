@@ -1,13 +1,9 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
-* Copyright 2008 by Sun Microsystems, Inc.
+* Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: XDocumentEventListener.idl,v $
-*
-* $Revision: 1.5.2.2 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -27,36 +23,48 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef __com_sun_star_document_XDocumentEventListener_idl__
-#define __com_sun_star_document_XDocumentEventListener_idl__
+#ifndef __com_sun_star_awt_XTopWindow2_idl__
+#define __com_sun_star_awt_XTopWindow2_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_document_DocumentEvent_idl__
-#include <com/sun/star/document/DocumentEvent.idl>
-#endif
+#include <com/sun/star/awt/XTopWindow.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 //=============================================================================
 
-module com { module sun { module star { module document {
+module com { module sun { module star { module awt {
 
 //=============================================================================
 
-/** allows to be notified of events happening in an <type>OfficeDocument</type>
-
-    <p>This interface is the successor of the XEventListener interface, which should not be used
-    anymore.</p>
-
-    @see XDocumentEventBroadcaster
-    @since OpenOffice.org 3.1
+/** extends XTopWindow with additional functionality
  */
-interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
+interface XTopWindow2 : XTopWindow
 {
-    /** is called whenever a document event occured
+    /** controls whether the window is currently maximized
     */
-    void documentEventOccured( [in] DocumentEvent Event );
+    [attribute] boolean IsMaximized;
+
+    /** controls whether the window is currently minimized
+    */
+    [attribute] boolean IsMinimized;
+
+    /** controls on which display the window is shown.
+
+        <p>When retrieving this property, in case the window is positioned on multiple displays,
+        the number returned will be of the display containing the upper left pixel of the frame
+        area (that is of the client area on system decorated windows, or the frame area of
+        undecorated resp. owner decorated windows).</p>
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if you attempt to set this property to a value which does not correspond to the number
+            of an existing screen.
+
+        @see com::sun::star::awt::DisplayAccess
+        @see com::sun::star::awt::DisplayInfo
+    */
+    [attribute] long Display
+    {
+        set raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    };
 };
 
 //=============================================================================
