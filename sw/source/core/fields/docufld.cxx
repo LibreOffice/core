@@ -61,10 +61,10 @@
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/zforlist.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>

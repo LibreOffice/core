@@ -39,6 +39,7 @@
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <helpid.h>
 #include <swtypes.hxx>
@@ -59,7 +60,6 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#include <svtools/zformat.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
