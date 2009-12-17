@@ -187,3 +187,24 @@
                                        '/usr/contrib/ssl/lib/'
                                       ] )
  
+--- misc/Python-2.6.1/Modules/Setup.dist	2009-12-17 15:16:50.000000000 +0000
++++ misc/build/Python-2.6.1/Modules/Setup.dist	2009-12-17 15:17:49.000000000 +0000
+@@ -248,14 +248,14 @@
+ # Message-Digest Algorithm, described in RFC 1321.  The necessary files
+ # md5.c and md5.h are included here.
+ 
+-#_md5 md5module.c md5.c
++_md5 md5module.c md5.c
+ 
+ 
+ # The _sha module implements the SHA checksum algorithms.
+ # (NIST's Secure Hash Algorithms.)
+-#_sha shamodule.c
+-#_sha256 sha256module.c
+-#_sha512 sha512module.c
++_sha shamodule.c
++_sha256 sha256module.c
++_sha512 sha512module.c
+ 
+ 
+ # SGI IRIX specific modules -- off by default.
