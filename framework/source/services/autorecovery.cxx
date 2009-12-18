@@ -2448,6 +2448,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= REFERRER_USER;
         lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
 
+        // recovered documents are loaded hidden, and shown all at once, later
+        lDescriptor[::comphelper::MediaDescriptor::PROP_HIDDEN()] <<= true;
+
         if (aParams.m_xProgress.is())
             lDescriptor[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= aParams.m_xProgress;
 

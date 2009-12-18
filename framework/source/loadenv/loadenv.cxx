@@ -1629,7 +1629,6 @@ void LoadEnv::impl_reactForLoadingState()
         // We dont hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         sal_Bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
-        sal_Bool                                 bRecovered   = (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()) != m_lMediaDescriptor.end());
         sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED(), sal_False);
 
         if (bMinimized)
@@ -1641,7 +1640,7 @@ void LoadEnv::impl_reactForLoadingState()
                 ((WorkWindow*)pWindow)->Minimize();
         }
         else
-        if (!bHidden && !bRecovered)
+        if (!bHidden)
         {
             // show frame ... if it's not still visible ...
             // But do nothing if it's already visible!
@@ -1761,7 +1760,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
         pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
-    
+
 /* #i19976#
     We tried to prevent a toFront() call in case the user putted the
     loading document into the background ..
