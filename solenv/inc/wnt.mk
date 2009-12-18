@@ -73,9 +73,6 @@ JAVA_RUNTIME=javai_g.lib
 .ENDIF
 .ENDIF
 
-.IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH *= : && \
-    PATH=$${{PATH}}:$(SOLARBINDIR:s/://:^"/cygdrive/")
-.ELSE
-AUGMENT_LIBRARY_PATH *= echos && PATH=%PATH%;$(SOLARBINDIR) &&
-.ENDIF
+OOO_LIBRARY_PATH_VAR = PATH
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(SOLARBINDIR:s/://:^"/cygdrive/")
