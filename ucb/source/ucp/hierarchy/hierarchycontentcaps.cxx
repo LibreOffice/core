@@ -39,23 +39,23 @@
 
     Props/Commands:
 
-                        root    folder  folder  link    link
-                                        (new)           (new)
+                           root    folder  folder  link    link
+                                   (new)           (new)
     ----------------------------------------------------------------
-    ContentType         x       x       x       x       x
-    IsDocument          x       x       x       x       x
-    IsFolder            x       x       x       x       x
-    Title               x       x       x       x       x
-    TargetURL                                   x       x
+    ContentType            x       x       x       x       x
+    IsDocument             x       x       x       x       x
+    IsFolder               x       x       x       x       x
+    Title                  x       x       x       x       x
+    TargetURL                                      x       x
 
-    getCommandInfo      x       x       x       x       x
-    getPropertySetInfo  x       x       x       x       x
-    getPropertyValues   x       x       x       x       x
-    setPropertyValues   x       x       x       x       x
-    insert                              x               x
-    delete                      x               x
-    open                x       x
-    transfer            x       x
+    getCommandInfo         x       x       x       x       x
+    getPropertySetInfo     x       x       x       x       x
+    getPropertyValues      x       x       x       x       x
+    setPropertyValues      x       x       x       x       x
+    insert                                 x               x
+    delete                         x               x
+    open                   x       x
+    transfer               x       x
 
  *************************************************************************/
 #include <com/sun/star/beans/Property.hpp>
