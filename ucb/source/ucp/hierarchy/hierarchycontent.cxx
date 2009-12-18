@@ -41,7 +41,7 @@
  **************************************************************************
 
  - Root Folder vs. 'normal' Folder
-     - root doesn't support command 'delete'
+    - root doesn't support command 'delete'
     - root doesn't support command 'insert'
     - root needs not created via XContentCreator - queryContent with root
       folder id ( HIERARCHY_ROOT_FOLDER_URL ) always returns a value != 0
@@ -552,7 +552,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
     {
         //////////////////////////////////////////////////////////////////
         // transfer
-        //  ( Not available at link objects )
+        //      ( Not available at link objects )
         //////////////////////////////////////////////////////////////////
 
         ucb::TransferInfo aInfo;
@@ -1161,7 +1161,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further        = sal_False;
+    aEvent.Further            = sal_False;
 //  aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
 //  aEvent.OldValue       =
