@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <tools/solar.h>    // for F_PI180
 #include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
@@ -48,10 +49,12 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::chart2::RelativePosition;
 using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::drawing::XShape;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {
@@ -171,19 +174,11 @@ ObjectFormatter& ConverterRoot::getFormatter() const
     return mxData->maFormatter;
 }
 
-Reference< ::com::sun::star::chart::XDiagram > ConverterRoot::getChart1Diagram() const
-{
-    Reference< ::com::sun::star::chart::XDiagram > xDiagram;
-    Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( mxData->mxDoc, UNO_QUERY );
-    if( xChart1Doc.is() )
-        xDiagram = xChart1Doc->getDiagram();
-    return xDiagram;
-}
-
 // ============================================================================
 
 namespace {
 
+/** Returns a position value in the chart area in 1/100 mm. */
 sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode )
 {
     switch( nPosMode )
@@ -199,6 +194,7 @@ sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode
     return -1;
 }
 
+/** Returns a size value in the chart area in 1/100 mm. */
 sal_Int32 lclCalcSize( sal_Int32 nPos, sal_Int32 nChartSize, double fSize, sal_Int32 nSizeMode )
 {
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( nChartSize * fSize + 0.5, 0, nChartSize );
@@ -246,7 +242,9 @@ bool LayoutConverter::calcAbsRectangle( Rectangle& orRect ) const
 
 bool LayoutConverter::convertFromModel( PropertySet& rPropSet )
 {
-    if( !mrModel.mbAutoLayout && (mrModel.mfX >= 0.0) && (mrModel.mfY >= 0.0) )
+    if( !mrModel.mbAutoLayout &&
+        (mrModel.mnXMode == XML_edge) && (mrModel.mfX >= 0.0) &&
+        (mrModel.mnYMode == XML_edge) && (mrModel.mfY >= 0.0) )
     {
         RelativePosition aPos;
         aPos.Primary = getLimitedValue< double, double >( mrModel.mfX, 0.0, 1.0 );
@@ -254,6 +252,34 @@ bool LayoutConverter::convertFromModel( PropertySet& rPropSet )
         aPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
         rPropSet.setProperty( PROP_RelativePosition, aPos );
         return true;
+    }
+    return false;
+}
+
+bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, double fRotationAngle )
+{
+    if( !mrModel.mbAutoLayout )
+    {
+        const Size& rChartSize = getChartSize();
+        Point aShapePos(
+            lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode ),
+            lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
+        if( (aShapePos.X >= 0) && (aShapePos.Y >= 0) )
+        {
+            // the call to XShape.getSize() may recalc the chart view
+            Size aShapeSize = rxShape->getSize();
+            // rotated shapes need special handling...
+            double fSin = fabs( sin( fRotationAngle * F_PI180 ) );
+            // add part of height to X direction, if title is rotated down
+            if( fRotationAngle > 180.0 )
+                aShapePos.X += static_cast< sal_Int32 >( fSin * aShapeSize.Height + 0.5 );
+            // add part of width to Y direction, if title is rotated up
+            else if( fRotationAngle > 0.0 )
+                aShapePos.Y += static_cast< sal_Int32 >( fSin * aShapeSize.Width + 0.5 );
+            // set the resulting position at the shape
+            rxShape->setPosition( aShapePos );
+            return true;
+        }
     }
     return false;
 }

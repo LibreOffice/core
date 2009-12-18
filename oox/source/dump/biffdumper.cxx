@@ -1746,8 +1746,8 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_CHFRAMEPOS:
-            dumpDec< sal_uInt16 >( "object-type", "CHFRAMEPOS-OBJTYPE" );
-            dumpDec< sal_uInt16 >( "size-mode", "CHFRAMEPOS-SIZEMODE" );
+            dumpDec< sal_uInt16 >( "tl-mode", "CHFRAMEPOS-POSMODE" );
+            dumpDec< sal_uInt16 >( "br-mode", "CHFRAMEPOS-POSMODE" );
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
         break;
 
@@ -1995,9 +1995,9 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt16 >( "fill-mode", "CHTEXT-FILLMODE" );
             dumpColorABGR();
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
-            dumpHex< sal_uInt16 >( "flags", "CHTEXT-FLAGS" );
+            dumpHex< sal_uInt16 >( "flags-1", "CHTEXT-FLAGS1" );
             if( eBiff == BIFF8 ) dumpColorIdx();
-            if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "placement", "CHTEXT-PLACEMENT" );
+            if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "flags-2", "CHTEXT-FLAGS2" );
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "rotation", "TEXTROTATION" );
         break;
 

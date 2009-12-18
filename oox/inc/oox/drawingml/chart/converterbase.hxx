@@ -38,9 +38,8 @@
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
-    namespace lang { class XMultiServiceFactory; }
-    namespace chart { class XDiagram; }
     namespace chart2 { class XChartDocument; }
+    namespace drawing { class XShape; }
 } } }
 
 namespace oox { namespace core {
@@ -85,9 +84,6 @@ protected:
     const ::com::sun::star::awt::Size& getChartSize() const;
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
-    /** Returns the *old* API diagram model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >
-                        getChart1Diagram() const;
 
 private:
     ::boost::shared_ptr< ConverterData > mxData;
@@ -127,6 +123,11 @@ public:
     /** Tries to set the position from the contained OOXML layout model.
         Returns true, if a manual position could be calculated. */
     bool                convertFromModel( PropertySet& rPropSet );
+    /** Tries to set the position from the contained OOXML layout model.
+        Returns true, if a manual position could be calculated. */
+    bool                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            double fRotationAngle );
 };
 
 // ============================================================================

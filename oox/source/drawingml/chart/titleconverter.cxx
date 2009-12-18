@@ -180,10 +180,6 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
             OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
             ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
             getFormatter().convertTextRotation( aPropSet, xTextProp, true );
-
-            // frame position
-            LayoutConverter aLayoutConv( *this, mrModel.mxLayout.getOrCreate() );
-            aLayoutConv.convertFromModel( aPropSet );
         }
         catch( Exception& )
         {

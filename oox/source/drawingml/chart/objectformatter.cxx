@@ -1146,18 +1146,19 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
 {
     if( rxTextProp.is() )
     {
-        /*  Chart2 expects rotation angle as double value in range of [0,360).
-            OOXML counts clockwise, Chart2 counts counterclockwise. */
-        double fAngle = rxTextProp->getTextProperties().moRotation.get( 0 );
-        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
-        rPropSet.setProperty( PROP_TextRotation, fAngle );
-
+        bool bStacked = false;
         if( bSupportsStacked )
         {
             sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
-            bool bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
+            bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
             rPropSet.setProperty( PROP_StackCharacters, bStacked );
         }
+
+        /*  Chart2 expects rotation angle as double value in range of [0,360).
+            OOXML counts clockwise, Chart2 counts counterclockwise. */
+        double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( 0 ) );
+        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
+        rPropSet.setProperty( PROP_TextRotation, fAngle );
     }
 }
 

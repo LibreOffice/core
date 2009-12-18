@@ -165,6 +165,7 @@ HasAutoShowInfo
 HasColumnRowHeaders
 HasHorizontalScrollBar
 HasLayoutInfo
+HasMainTitle
 HasReference
 HasSheetTabs
 HasSortInfo
