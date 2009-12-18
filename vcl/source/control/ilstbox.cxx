@@ -565,6 +565,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
     mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
+    meProminentType         = PROMINENT_TOP;
 
     SetLineColor();
     SetTextFillColor();
@@ -1067,11 +1068,11 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
                     if ( !nVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
                     {
                         Resize();
-                        SetTopEntry( nPos );
+                        ShowProminentEntry( nPos );
                     }
                     else
                     {
-                        SetTopEntry( nPos-nVisibleEntries+1 );
+                        ShowProminentEntry( nPos );
                     }
                 }
             }
@@ -1702,11 +1703,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 if ( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    USHORT nCurVis = GetLastVisibleEntry() - mnTop + 1;
-                    if( nSelect < mnTop )
-                        SetTopEntry( nSelect );
-                    else if( nSelect >= (mnTop + nCurVis) )
-                        SetTopEntry( nSelect - nCurVis + 1 );
+                    ShowProminentEntry( nSelect );
 
                     if ( mpEntryList->IsEntryPosSelected( nSelect ) )
                         nSelect = LISTBOX_ENTRY_NOTFOUND;
@@ -2047,6 +2044,20 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::ShowProminentEntry( USHORT nEntryPos )
+{
+    if( meProminentType == PROMINENT_MIDDLE )
+    {
+        USHORT nPos = nEntryPos;
+        long nWHeight = PixelToLogic( GetSizePixel() ).Height();
+        while( nEntryPos > 0 && mpEntryList->GetAddedHeight( nPos+1, nEntryPos ) < nWHeight/2 )
+            nEntryPos--;
+    }
+    SetTopEntry( nEntryPos );
 }
 
 // -----------------------------------------------------------------------
@@ -3204,7 +3215,7 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
-            mpImplLB->SetTopEntry( nPos );
+            mpImplLB->ShowProminentEntry( nPos );
 
         if( bStartTracking )
             mpImplLB->GetMainWindow()->EnableMouseMoveSelect( TRUE );

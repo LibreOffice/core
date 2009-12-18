@@ -333,5 +333,11 @@ typedef USHORT StandardButtonType;
 #define BUTTON_LESS         ((StandardButtonType)10)
 #define BUTTON_COUNT        11
 
+// --------------------------------------------
+// - prominent place for ListBox window types -
+// --------------------------------------------
+
+enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
+
 #endif // _SV_WINTYPES_HXX
 
