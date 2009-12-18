@@ -35,7 +35,6 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdbcx/XAlterView.hpp>
-#include <com/sun/star/sdb/tools/XViewAlteration.hpp>
 #include <com/sun/star/sdb/tools/XViewSupport.hpp>
 /** === end UNO includes === **/
 
