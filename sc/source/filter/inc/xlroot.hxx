@@ -116,6 +116,8 @@ struct XclRootData
     XclTracerRef        mxTracer;           /// Filter tracer.
     RootDataRef         mxRD;               /// Old RootData struct. Will be removed.
 
+    double              mfScreenPixelX;     /// Width of a screen pixel (1/100 mm).
+    double              mfScreenPixelY;     /// Height of a screen pixel (1/100 mm).
     long                mnCharWidth;        /// Width of '0' in default font (twips).
     SCTAB               mnScTab;            /// Current Calc sheet index.
     const bool          mbExport;           /// false = Import, true = Export.
@@ -179,6 +181,11 @@ public:
     inline bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */
     inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
+
+    /** Calculates the width of the passed number of pixels in 1/100 mm. */
+    sal_Int32           GetHmmFromPixelX( double fPixelX ) const;
+    /** Calculates the height of the passed number of pixels in 1/100 mm. */
+    sal_Int32           GetHmmFromPixelY( double fPixelY ) const;
 
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }

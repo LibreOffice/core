@@ -58,9 +58,8 @@
 #include <svx/escherex.hxx>
 
 #include "global.hxx"
-#include "xlconst.hxx"
+#include "xlroot.hxx"
 #include "xlstyle.hxx"
-#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -107,8 +106,8 @@ XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
 // Frame formatting ===========================================================
 
 XclChFramePos::XclChFramePos() :
-    mnObjType( EXC_CHFRAMEPOS_ANY ),
-    mnSizeMode( EXC_CHFRAMEPOS_AUTOSIZE )
+    mnTLMode( EXC_CHFRAMEPOS_PARENT ),
+    mnBRMode( EXC_CHFRAMEPOS_PARENT )
 {
 }
 
@@ -192,7 +191,7 @@ XclChText::XclChText() :
     mnVAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnBackMode( EXC_CHTEXT_TRANSPARENT ),
     mnFlags( EXC_CHTEXT_AUTOCOLOR | EXC_CHTEXT_AUTOFILL ),
-    mnPlacement( EXC_CHTEXT_POS_DEFAULT ),
+    mnFlags2( EXC_CHTEXT_POS_DEFAULT ),
     mnRotation( EXC_ROT_NONE )
 {
 }
@@ -1306,7 +1305,9 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
 
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),
-    mxFmtInfoProv( new XclChFormatInfoProvider )
+    mxFmtInfoProv( new XclChFormatInfoProvider ),
+    mnBorderGapX( 0 ),
+    mnBorderGapY( 0 )
 {
 }
 
@@ -1314,17 +1315,19 @@ XclChRootData::~XclChRootData()
 {
 }
 
-Reference< XChartDocument > XclChRootData::GetChartDoc() const
+void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
-    DBG_ASSERT( mxChartDoc.is(), "XclChRootData::GetChartDoc - missing chart document" );
-    return mxChartDoc;
-}
+    // remember chart document reference and chart shape position/size
+    DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    mxChartDoc = rxChartDoc;
+    maChartRect = rChartRect;
 
-void XclChRootData::InitConversion( XChartDocRef xChartDoc )
-{
-    // remember chart document reference
-    DBG_ASSERT( xChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
-    mxChartDoc = xChartDoc;
+    // Excel excludes a border of 5 pixels in each direction from chart area
+    mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
+    mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
+
+    mfUnitSizeX = static_cast< double >( maChartRect.GetWidth() - 2 * mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = static_cast< double >( maChartRect.GetHeight() - 2 * mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );

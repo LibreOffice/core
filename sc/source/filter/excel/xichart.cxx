@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -60,6 +61,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -93,6 +95,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::drawing::XShape;
 
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::XDiagram;
@@ -109,6 +112,7 @@ using ::com::sun::star::chart2::XScaling;
 using ::com::sun::star::chart2::ScaleData;
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::SubIncrement;
+using ::com::sun::star::chart2::RelativePosition;
 using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::XTitle;
@@ -153,28 +157,18 @@ void lclSetExpValueOrClearAny( Any& rAny, double fValue, bool bLogScale, bool bC
 // Common =====================================================================
 
 /** Stores global data needed in various classes of the Chart import filter. */
-class XclImpChRootData : public XclChRootData
+struct XclImpChRootData : public XclChRootData
 {
-public:
-    explicit            XclImpChRootData( XclImpChChart* pChartData );
+    XclImpChChart&      mrChartData;            /// The chart data object.
 
-    /** Returns a reference to the parent chart data object. */
-    inline XclImpChChart& GetChartData() const { return *mpChartData; }
-
-private:
-    XclImpChChart*      mpChartData;            /// Pointer to the chart data object.
+    inline explicit     XclImpChRootData( XclImpChChart& rChartData ) : mrChartData( rChartData ) {}
 };
-
-XclImpChRootData::XclImpChRootData( XclImpChChart* pChartData ) :
-    mpChartData( pChartData )
-{
-}
 
 // ----------------------------------------------------------------------------
 
-XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData ) :
+XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData ) :
     XclImpRoot( rRoot ),
-    mxChData( new XclImpChRootData( pChartData ) )
+    mxChData( new XclImpChRootData( rChartData ) )
 {
 }
 
@@ -184,22 +178,22 @@ XclImpChRoot::~XclImpChRoot()
 
 XclImpChChart& XclImpChRoot::GetChartData() const
 {
-    return mxChData->GetChartData();
+    return mxChData->mrChartData;
 }
 
 const XclChTypeInfo& XclImpChRoot::GetChartTypeInfo( XclChTypeId eType ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfo( eType );
+    return mxChData->mxTypeInfoProv->GetTypeInfo( eType );
 }
 
 const XclChTypeInfo& XclImpChRoot::GetChartTypeInfo( sal_uInt16 nRecId ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfoFromRecId( nRecId );
+    return mxChData->mxTypeInfoProv->GetTypeInfoFromRecId( nRecId );
 }
 
 const XclChFormatInfo& XclImpChRoot::GetFormatInfo( XclChObjectType eObjType ) const
 {
-    return mxChData->GetFormatInfoProvider().GetFormatInfo( eObjType );
+    return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
 Color XclImpChRoot::GetFontAutoColor() const
@@ -220,10 +214,10 @@ Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
     return ScfTools::GetMixedColor( aColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
 }
 
-void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc ) const
+void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) const
 {
     // create formatting object tables
-    mxChData->InitConversion( xChartDoc );
+    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 
     // lock the model to suppress any internal updates
     Reference< XModel > xModel( xChartDoc, UNO_QUERY );
@@ -250,7 +244,7 @@ void XclImpChRoot::FinishConversion( ScfProgressBar& rProgress ) const
 {
     rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
     // unlock the model
-    Reference< XModel > xModel( mxChData->GetChartDoc(), UNO_QUERY );
+    Reference< XModel > xModel( mxChData->mxChartDoc, UNO_QUERY );
     if( xModel.is() )
         xModel->unlockControllers();
     rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
@@ -260,14 +254,34 @@ void XclImpChRoot::FinishConversion( ScfProgressBar& rProgress ) const
 
 Reference< XDataProvider > XclImpChRoot::GetDataProvider() const
 {
-    return mxChData->GetChartDoc()->getDataProvider();
+    return mxChData->mxChartDoc->getDataProvider();
+}
+
+sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_uInt16 nPosX ) const
+{
+    return static_cast< sal_Int32 >( mxChData->mfUnitSizeX * nPosX + mxChData->mnBorderGapX + 0.5 );
+}
+
+sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_uInt16 nPosY ) const
+{
+    return static_cast< sal_Int32 >( mxChData->mfUnitSizeY * nPosY + mxChData->mnBorderGapY + 0.5 );
+}
+
+double XclImpChRoot::CalcRelativeFromChartX( sal_uInt16 nPosX ) const
+{
+    return static_cast< double >( CalcHmmFromChartX( nPosX ) ) / mxChData->maChartRect.GetWidth();
+}
+
+double XclImpChRoot::CalcRelativeFromChartY( sal_uInt16 nPosY ) const
+{
+    return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRect.GetHeight();
 }
 
 void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
         const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteLineProperties(
-        rPropSet, mxChData->GetLineDashTable(), rLineFmt, ePropMode );
+        rPropSet, *mxChData->mxLineDashTable, rLineFmt, ePropMode );
 }
 
 void XclImpChRoot::ConvertAreaFormat( ScfPropertySet& rPropSet,
@@ -281,7 +295,7 @@ void XclImpChRoot::ConvertEscherFormat( ScfPropertySet& rPropSet,
         XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteEscherProperties( rPropSet,
-        mxChData->GetGradientTable(), mxChData->GetHatchTable(), mxChData->GetBitmapTable(),
+        *mxChData->mxGradientTable, *mxChData->mxHatchTable, *mxChData->mxBitmapTable,
         rEscherFmt, rPicFmt, ePropMode );
 }
 
@@ -352,7 +366,7 @@ void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 
 void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnObjType >> maData.mnSizeMode >> maData.maRect;
+    rStrm >> maData.mnTLMode >> maData.mnBRMode >> maData.maRect;
 }
 
 // ----------------------------------------------------------------------------
@@ -841,9 +855,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
         // #116397# BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
-        rStrm >> maData.mnPlacement >> maData.mnRotation;
-        // lower 4 bits used for placement, other bits contain garbage
-        maData.mnPlacement &= 0x000F;
+        rStrm >> maData.mnFlags2 >> maData.mnRotation;
     }
     else
     {
@@ -857,6 +869,10 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
+        case EXC_ID_CHFRAMEPOS:
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
+        break;
         case EXC_ID_CHFONT:
             mxFont.reset( new XclImpChFont );
             mxFont->ReadChFont( rStrm );
@@ -997,7 +1013,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
         // label placement
         using namespace ::com::sun::star::chart::DataLabelPlacement;
         sal_Int32 nPlacement = rTypeInfo.mnDefaultLabelPos;
-        switch( maData.mnPlacement )
+        switch( ::extract_value< sal_uInt16 >( maData.mnFlags2, 0, 4 ) )
         {
             case EXC_CHTEXT_POS_DEFAULT:    nPlacement = rTypeInfo.mnDefaultLabelPos;   break;
             case EXC_CHTEXT_POS_OUTSIDE:    nPlacement = OUTSIDE;                       break;
@@ -1041,6 +1057,43 @@ Reference< XTitle > XclImpChText::CreateTitle() const
         }
     }
     return xTitle;
+}
+
+void XclImpChText::ConvertMainTitlePos( const Reference< XShape >& rxTitle ) const
+{
+    if( mxFramePos.is() && rxTitle.is() )
+    {
+        const XclChFramePos& rPosData = mxFramePos->GetFramePosData();
+        OSL_ENSURE( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rPosData.mnBRMode == EXC_CHFRAMEPOS_PARENT),
+            "XclImpChText::ConvertMainTitlePos - unexpected frame position mode" );
+        // title moved manually?
+        if( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && ((rPosData.maRect.mnX != 0) || (rPosData.maRect.mnY != 0)) )
+        {
+            // the call to XShape.getSize() may recalc the chart view
+            ::com::sun::star::awt::Size aTitleSize = rxTitle->getSize();
+            // rotated titles need special handling...
+            sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
+            double fRad = nScRot * F_PI18000;
+            double fSin = fabs( sin( fRad ) );
+            double fCos = fabs( cos( fRad ) );
+            ::com::sun::star::awt::Size aBoundSize(
+                static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
+                static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
+            // title position is given relative to the default position
+            // default X = left edge of centered title, default Y = 85 chart units
+            ::com::sun::star::awt::Point aTitlePos(
+                CalcHmmFromChartX( rPosData.maRect.mnX + EXC_CHART_TOTALUNITS / 2 ) - aBoundSize.Width / 2,
+                CalcHmmFromChartY( rPosData.maRect.mnY + 85 ) );
+            // add part of height to X direction, if title is rotated down
+            if( nScRot > 18000 )
+                aTitlePos.X += static_cast< sal_Int32 >( fSin * aTitleSize.Height + 0.5 );
+            // add part of width to Y direction, if title is rotated up
+            else if( nScRot > 0 )
+                aTitlePos.Y += static_cast< sal_Int32 >( fSin * aTitleSize.Width + 0.5 );
+            // set the resulting position at the title shape
+            rxTitle->setPosition( aTitlePos );
+        }
+    }
 }
 
 void XclImpChText::ReadChFrLabelProps( XclImpStream& rStrm )
@@ -3383,7 +3436,7 @@ void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > xDiagram ) const
 // The chart object ===========================================================
 
 XclImpChChart::XclImpChChart( const XclImpRoot& rRoot ) :
-    XclImpChRoot( rRoot, this )
+    XclImpChRoot( rRoot, *this )
 {
     mxPrimAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_PRIMARY ) );
     mxSecnAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_SECONDARY ) );
@@ -3483,17 +3536,19 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress, const Rectangle& rChartRect ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
-    InitConversion( xChartDoc );
+    InitConversion( xChartDoc, rChartRect );
 
-    // chart frame and title
+    // chart frame formatting
     if( mxFrame.is() )
     {
         ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
         mxFrame->Convert( aFrameProp );
     }
+
+    // chart title
     if( mxTitle.is() )
     {
         Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
@@ -3515,13 +3570,25 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     if( xDiagram.is() && mxLegend.is() )
         xDiagram->setLegend( mxLegend->CreateLegend() );
 
-    // set the IncludeHiddenCells property via the old API as only this ensures that the data provider and al created sequences get this flag correctly
-    Reference< com::sun::star::chart::XChartDocument > xStandardApiChartDoc( xChartDoc, UNO_QUERY );
-    if( xStandardApiChartDoc.is() )
+    /*  Following all conversions needing the old Chart1 API that involves full
+        initialization of the chart view. */
+    Reference< com::sun::star::chart::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
+    if( xChart1Doc.is() )
     {
-        ScfPropertySet aDiagramProp( xStandardApiChartDoc->getDiagram() );
-        bool bShowVisCells = (maProps.mnFlags & EXC_CHPROPS_SHOWVISIBLEONLY);
-        aDiagramProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
+        /*  Set the 'IncludeHiddenCells' property via the old API as only this
+            ensures that the data provider and all created sequences get this
+            flag correctly. */
+        ScfPropertySet aDiaProp( xChart1Doc->getDiagram() );
+        bool bShowVisCells = ::get_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY );
+        aDiaProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
+
+        // chart title position
+        ScfPropertySet aDocProp( xChart1Doc );
+        if( aDocProp.GetBoolProperty( EXC_CHPROP_HASMAINTITLE ) )
+            mxTitle->ConvertMainTitlePos( xChart1Doc->getTitle() );
+
+        // plot area position and size (there is no real automatic mode in BIFF5 charts)
+        bool bManualPlotArea = (GetBiff() <= EXC_BIFF5) || ::get_flag( maProps.mnFlags, EXC_CHPROPS_USEMANPLOTAREA );
     }
 
     // unlock the model
@@ -3751,11 +3818,14 @@ sal_Size XclImpChart::GetProgressSize() const
     return mxChartData.is() ? mxChartData->GetProgressSize() : 0;
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress ) const
+void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress, const Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
-    if( mxChartData.is() && xChartDoc.is() )
-        mxChartData->Convert( xChartDoc, rProgress );
+    if( xChartDoc.is() )
+    {
+        if( mxChartData.is() )
+            mxChartData->Convert( xChartDoc, rProgress, rChartRect );
+    }
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )

@@ -67,7 +67,7 @@ namespace com { namespace sun { namespace star {
 
 // Common =====================================================================
 
-class XclExpChRootData;
+struct XclExpChRootData;
 class XclExpChChart;
 
 /** Base class for complex chart classes, provides access to other components
@@ -82,7 +82,7 @@ public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart* pChartData );
+    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData );
     virtual             ~XclExpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
@@ -98,7 +98,7 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -1166,7 +1166,7 @@ public:
 
 public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
-                            XChartDocRef xChartDoc, const Size& rSize );
+                            XChartDocRef xChartDoc, const Rectangle& rChartRect );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1205,7 +1205,7 @@ public:
 
 public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
-                            XModelRef xModel, const Size& rSize );
+                            XModelRef xModel, const Rectangle& rChartRect );
 };
 
 // ============================================================================

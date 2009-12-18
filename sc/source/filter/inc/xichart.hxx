@@ -49,6 +49,10 @@ namespace com { namespace sun { namespace star {
     {
         class XModel;
     }
+    namespace drawing
+    {
+        class XShape;
+    }
     namespace chart2
     {
         struct ScaleData;
@@ -77,7 +81,7 @@ struct XclObjFillData;
 // Common =====================================================================
 
 class ScfProgressBar;
-class XclImpChRootData;
+struct XclImpChRootData;
 class XclImpChChart;
 class ScTokenArray;
 
@@ -89,7 +93,7 @@ public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   XDataProviderRef;
 
 public:
-    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData );
+    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
     virtual             ~XclImpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
@@ -111,12 +115,18 @@ public:
     Color               GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( ScfProgressBar& rProgress ) const;
 
     /** Returns the data provider for the chart document. */
     XDataProviderRef    GetDataProvider() const;
+
+    sal_Int32           CalcHmmFromChartX( sal_uInt16 nPosX ) const;
+    sal_Int32           CalcHmmFromChartY( sal_uInt16 nPosY ) const;
+
+    double              CalcRelativeFromChartX( sal_uInt16 nPosX ) const;
+    double              CalcRelativeFromChartY( sal_uInt16 nPosY ) const;
 
     /** Writes all line properties to the passed property set. */
     void                ConvertLineFormat(
@@ -185,6 +195,9 @@ class XclImpChFramePos
 public:
     /** Reads the CHFRAMEPOS record (frame position and size). */
     void                ReadChFramePos( XclImpStream& rStrm );
+
+    /** Returns read-only access to the imported frame position data. */
+    inline const XclChFramePos& GetFramePosData() const { return maData; }
 
 private:
     XclChFramePos       maData;             /// Position of the frame.
@@ -506,6 +519,8 @@ public:
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
     XTitleRef           CreateTitle() const;
+    /** Converts the manual position of the main title */
+    void                ConvertMainTitlePos( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxTitle ) const;
 
 private:
     using               XclImpChRoot::ConvertFont;
@@ -519,6 +534,7 @@ private:
     XclChText           maData;             /// Contents of the CHTEXT record.
     XclChObjectLink     maObjLink;          /// Link target for this text object.
     XclFormatRunVec     maFormats;          /// Formatting runs (CHFORMATRUNS record).
+    XclImpChFramePosRef mxFramePos;         /// Relative text frame position (CHFRAMEPOS record).
     XclImpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclImpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclImpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
@@ -1353,7 +1369,7 @@ public:
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
-    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
+    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress, const Rectangle& rChartRect ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1421,7 +1437,7 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( XModelRef xModel, ScfProgressBar& rProgress ) const;
+    void                Convert( XModelRef xModel, ScfProgressBar& rProgress, const Rectangle& rChartRect ) const;
 
 private:
     /** Reads the CHCHART group (entire chart data). */

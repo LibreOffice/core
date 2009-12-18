@@ -37,6 +37,7 @@
 #define EXC_CHART2_3DBAR_HAIRLINES_ONLY 1
 
 #include <map>
+#include <tools/gen.hxx>
 #include "fapihelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -44,6 +45,8 @@ namespace com { namespace sun { namespace star {
     namespace lang      { class XMultiServiceFactory; }
     namespace chart2    { class XChartDocument; }
 } } }
+
+class XclRoot;
 
 // Property names =============================================================
 
@@ -100,6 +103,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
 #define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
+#define EXC_CHPROP_HASMAINTITLE             CREATE_OUSTRING( "HasMainTitle" )
 #define EXC_CHPROP_INCLUDEHIDDENCELLS       CREATE_OUSTRING( "IncludeHiddenCells" )
 #define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
 #define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
@@ -170,6 +174,8 @@ const sal_Int32 EXC_CHART_AXIS_Z                = 2;        /// API Z axis index
 const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use only.
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
+
+const sal_Int32 EXC_CHART_TOTALUNITS            = 4000;     /// Chart objects are positioned in 1/4000 of chart area.
 
 // (0x0850) CHFRINFO ----------------------------------------------------------
 
@@ -604,7 +610,8 @@ const sal_uInt16 EXC_ID_CHPROPERTIES            = 0x1044;
 const sal_uInt16 EXC_CHPROPS_MANSERIES          = 0x0001;   /// Manual series allocation.
 const sal_uInt16 EXC_CHPROPS_SHOWVISIBLEONLY    = 0x0002;   /// Show visible cells only.
 const sal_uInt16 EXC_CHPROPS_NORESIZE           = 0x0004;   /// Do not resize chart with window.
-const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Plot area with CHFRAMEPOS records.
+const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Manual plot area mode.
+const sal_uInt16 EXC_CHPROPS_USEMANPLOTAREA     = 0x0010;   /// Manual plot area layout in CHFRAMEPOS record.
 
 const sal_uInt8 EXC_CHPROPS_EMPTY_SKIP          = 0;        /// Skip empty values.
 const sal_uInt8 EXC_CHPROPS_EMPTY_ZERO          = 1;        /// Plot empty values as zero.
@@ -643,11 +650,11 @@ const sal_uInt16 EXC_ID_CHFORMAT                = 0x104E;
 
 const sal_uInt16 EXC_ID_CHFRAMEPOS              = 0x104F;
 
-const sal_uInt16 EXC_CHFRAMEPOS_ANY             = 2;
-const sal_uInt16 EXC_CHFRAMEPOS_LEGEND          = 5;
-
-const sal_uInt16 EXC_CHFRAMEPOS_MANUALSIZE      = 1;
-const sal_uInt16 EXC_CHFRAMEPOS_AUTOSIZE        = 2;
+const sal_uInt16 EXC_CHFRAMEPOS_POINTS          = 0;
+const sal_uInt16 EXC_CHFRAMEPOS_ABSSIZE_POINTS  = 1;
+const sal_uInt16 EXC_CHFRAMEPOS_PARENT          = 2;
+const sal_uInt16 EXC_CHFRAMEPOS_DEFOFFSET_PLOT  = 3;
+const sal_uInt16 EXC_CHFRAMEPOS_CHARTSIZE       = 5;
 
 // (0x1050) CHFORMATRUNS ------------------------------------------------------
 
@@ -774,8 +781,8 @@ struct XclChFrBlock
 struct XclChFramePos
 {
     XclChRectangle      maRect;             /// Object dependent position data.
-    sal_uInt16          mnObjType;          /// Object type.
-    sal_uInt16          mnSizeMode;         /// Size mode (manual, automatic).
+    sal_uInt16          mnTLMode;           /// Top-left position mode.
+    sal_uInt16          mnBRMode;           /// Bottom-right position mode.
 
     explicit            XclChFramePos();
 };
@@ -885,7 +892,7 @@ struct XclChText
     sal_uInt8           mnVAlign;           /// Vertical alignment.
     sal_uInt16          mnBackMode;         /// Background mode: transparent, opaque.
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnPlacement;        /// Text object placement (BIFF8+).
+    sal_uInt16          mnFlags2;           /// Text object placement and text direction (BIFF8+).
     sal_uInt16          mnRotation;         /// Text object rotation (BIFF8+).
 
     explicit            XclChText();
@@ -1429,45 +1436,36 @@ private:
 // ============================================================================
 
 /** Base struct for internal root data structs for import and export. */
-class XclChRootData
+struct XclChRootData
 {
-public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
-
-public:
-    explicit            XclChRootData();
-    virtual             ~XclChRootData();
-
-    /** Returns the API reference of the chart document. */
-    XChartDocRef        GetChartDoc() const;
-
-    /** Returns the chart type info provider, that contains data about all chart types. */
-    inline XclChTypeInfoProvider& GetTypeInfoProvider() const { return *mxTypeInfoProv; }
-    /** Returns the chart type info provider, that contains data about all chart types. */
-    inline XclChFormatInfoProvider& GetFormatInfoProvider() const { return *mxFmtInfoProv; }
-
-    inline XclChObjectTable& GetLineDashTable() const { return *mxLineDashTable; }
-    inline XclChObjectTable& GetGradientTable() const { return *mxGradientTable; }
-    inline XclChObjectTable& GetHatchTable() const { return *mxHatchTable; }
-    inline XclChObjectTable& GetBitmapTable() const { return *mxBitmapTable; }
-
-    /** Starts the API chart document conversion. Must be called once before any API access. */
-    void                InitConversion( XChartDocRef xChartDoc );
-    /** Finishes the API chart document conversion. Must be called once before any API access. */
-    void                FinishConversion();
-
-private:
     typedef ScfRef< XclChTypeInfoProvider >     XclChTypeProvRef;
     typedef ScfRef< XclChFormatInfoProvider >   XclChFmtInfoProvRef;
     typedef ScfRef< XclChObjectTable >          XclChObjectTableRef;
 
-    XChartDocRef        mxChartDoc;             /// The chart document.
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+                        mxChartDoc;             /// The chart document.
+    Rectangle           maChartRect;            /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
     XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
     XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
     XclChObjectTableRef mxHatchTable;           /// Container for hatch fill styles.
     XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
+    sal_Int32           mnBorderGapX;           /// Border gap to chart space in 1/100mm.
+    sal_Int32           mnBorderGapY;           /// Border gap to chart space in 1/100mm.
+    double              mfUnitSizeX;            /// Size of a chart X unit (1/4000 of chart width) in 1/100 mm.
+    double              mfUnitSizeY;            /// Size of a chart Y unit (1/4000 of chart height) in 1/100 mm.
+
+    explicit            XclChRootData();
+    virtual             ~XclChRootData();
+
+    /** Starts the API chart document conversion. Must be called once before any API access. */
+    void                InitConversion(
+                            const XclRoot& rRoot,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
+                            const Rectangle& rChartRect );
+    /** Finishes the API chart document conversion. Must be called once before any API access. */
+    void                FinishConversion();
 };
 
 // ============================================================================

@@ -161,13 +161,15 @@ bool lclIsAutoAnyOrGetScaledValue( double& rfValue, const Any& rAny, bool bLogSc
 // Common =====================================================================
 
 /** Stores global data needed in various classes of the Chart export filter. */
-class XclExpChRootData : public XclChRootData
+struct XclExpChRootData : public XclChRootData
 {
-public:
-    explicit            XclExpChRootData( XclExpChChart* pChartData );
+    typedef ::std::vector< XclChFrBlock > XclChFrBlockVector;
 
-    /** Returns a reference to the parent chart data object. */
-    inline XclExpChChart& GetChartData() const { return *mpChartData; }
+    XclExpChChart&      mrChartData;            /// The chart data object.
+    XclChFrBlockVector  maWrittenFrBlocks;      /// Stack of future record levels already written out.
+    XclChFrBlockVector  maUnwrittenFrBlocks;    /// Stack of future record levels not yet written out.
+
+    inline explicit     XclExpChRootData( XclExpChChart& rChartData ) : mrChartData( rChartData ) {}
 
     /** Registers a new future record level. */
     void                RegisterFutureRecBlock( const XclChFrBlock& rFrBlock );
@@ -175,21 +177,9 @@ public:
     void                InitializeFutureRecBlock( XclExpStream& rStrm );
     /** Finalizes the current future record level (writes CHFRBLOCKEND record if needed). */
     void                FinalizeFutureRecBlock( XclExpStream& rStrm );
-
-private:
-    typedef ::std::vector< XclChFrBlock > XclChFrBlockVector;
-
-    XclExpChChart*      mpChartData;            /// Pointer to the chart data object.
-    XclChFrBlockVector  maWrittenFrBlocks;      /// Stack of future record levels already written out.
-    XclChFrBlockVector  maUnwrittenFrBlocks;    /// Stack of future record levels not yet written out.
 };
 
 // ----------------------------------------------------------------------------
-
-XclExpChRootData::XclExpChRootData( XclExpChChart* pChartData ) :
-    mpChartData( pChartData )
-{
-}
 
 void XclExpChRootData::RegisterFutureRecBlock( const XclChFrBlock& rFrBlock )
 {
@@ -239,9 +229,9 @@ void XclExpChRootData::FinalizeFutureRecBlock( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpChRoot::XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart* pChartData ) :
+XclExpChRoot::XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData ) :
     XclExpRoot( rRoot ),
-    mxChData( new XclExpChRootData( pChartData ) )
+    mxChData( new XclExpChRootData( rChartData ) )
 {
 }
 
@@ -251,27 +241,27 @@ XclExpChRoot::~XclExpChRoot()
 
 XclExpChChart& XclExpChRoot::GetChartData() const
 {
-    return mxChData->GetChartData();
+    return mxChData->mrChartData;
 }
 
 const XclChTypeInfo& XclExpChRoot::GetChartTypeInfo( XclChTypeId eType ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfo( eType );
+    return mxChData->mxTypeInfoProv->GetTypeInfo( eType );
 }
 
 const XclChTypeInfo& XclExpChRoot::GetChartTypeInfo( const OUString& rServiceName ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfoFromService( rServiceName );
+    return mxChData->mxTypeInfoProv->GetTypeInfoFromService( rServiceName );
 }
 
 const XclChFormatInfo& XclExpChRoot::GetFormatInfo( XclChObjectType eObjType ) const
 {
-    return mxChData->GetFormatInfoProvider().GetFormatInfo( eObjType );
+    return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
-void XclExpChRoot::InitConversion( XChartDocRef xChartDoc ) const
+void XclExpChRoot::InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const
 {
-    mxChData->InitConversion( xChartDoc );
+    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 }
 
 void XclExpChRoot::FinishConversion() const
@@ -296,7 +286,7 @@ void XclExpChRoot::ConvertLineFormat( XclChLineFormat& rLineFmt,
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().ReadLineProperties(
-        rLineFmt, mxChData->GetLineDashTable(), rPropSet, ePropMode );
+        rLineFmt, *mxChData->mxLineDashTable, rPropSet, ePropMode );
 }
 
 bool XclExpChRoot::ConvertAreaFormat( XclChAreaFormat& rAreaFmt,
@@ -310,7 +300,7 @@ void XclExpChRoot::ConvertEscherFormat(
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().ReadEscherProperties( rEscherFmt, rPicFmt,
-        mxChData->GetGradientTable(), mxChData->GetHatchTable(), mxChData->GetBitmapTable(), rPropSet, ePropMode );
+        *mxChData->mxGradientTable, *mxChData->mxHatchTable, *mxChData->mxBitmapTable, rPropSet, ePropMode );
 }
 
 sal_uInt16 XclExpChRoot::ConvertFont( const ScfPropertySet& rPropSet, sal_Int16 nScript ) const
@@ -1185,31 +1175,33 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
         ConvertRotationBase( GetChRoot(), rPropSet, false );
         // label placement
         sal_Int32 nPlacement = 0;
+        sal_uInt16 nLabelPos = EXC_CHTEXT_POS_AUTO;
         if( rPropSet.GetProperty( nPlacement, EXC_CHPROP_LABELPLACEMENT ) )
         {
             using namespace ::com::sun::star::chart::DataLabelPlacement;
             if( nPlacement == rTypeInfo.mnDefaultLabelPos )
             {
-                maData.mnPlacement = EXC_CHTEXT_POS_DEFAULT;
+                nLabelPos = EXC_CHTEXT_POS_DEFAULT;
             }
             else switch( nPlacement )
             {
-                case AVOID_OVERLAP:     maData.mnPlacement = EXC_CHTEXT_POS_AUTO;       break;
-                case CENTER:            maData.mnPlacement = EXC_CHTEXT_POS_CENTER;     break;
-                case TOP:               maData.mnPlacement = EXC_CHTEXT_POS_ABOVE;      break;
-                case TOP_LEFT:          maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                case LEFT:              maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                case BOTTOM_LEFT:       maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                case BOTTOM:            maData.mnPlacement = EXC_CHTEXT_POS_BELOW;      break;
-                case BOTTOM_RIGHT:      maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                case RIGHT:             maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                case TOP_RIGHT:         maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                case INSIDE:            maData.mnPlacement = EXC_CHTEXT_POS_INSIDE;     break;
-                case OUTSIDE:           maData.mnPlacement = EXC_CHTEXT_POS_OUTSIDE;    break;
-                case NEAR_ORIGIN:       maData.mnPlacement = EXC_CHTEXT_POS_AXIS;       break;
+                case AVOID_OVERLAP:     nLabelPos = EXC_CHTEXT_POS_AUTO;    break;
+                case CENTER:            nLabelPos = EXC_CHTEXT_POS_CENTER;  break;
+                case TOP:               nLabelPos = EXC_CHTEXT_POS_ABOVE;   break;
+                case TOP_LEFT:          nLabelPos = EXC_CHTEXT_POS_LEFT;    break;
+                case LEFT:              nLabelPos = EXC_CHTEXT_POS_LEFT;    break;
+                case BOTTOM_LEFT:       nLabelPos = EXC_CHTEXT_POS_LEFT;    break;
+                case BOTTOM:            nLabelPos = EXC_CHTEXT_POS_BELOW;   break;
+                case BOTTOM_RIGHT:      nLabelPos = EXC_CHTEXT_POS_RIGHT;   break;
+                case RIGHT:             nLabelPos = EXC_CHTEXT_POS_RIGHT;   break;
+                case TOP_RIGHT:         nLabelPos = EXC_CHTEXT_POS_RIGHT;   break;
+                case INSIDE:            nLabelPos = EXC_CHTEXT_POS_INSIDE;  break;
+                case OUTSIDE:           nLabelPos = EXC_CHTEXT_POS_OUTSIDE; break;
+                case NEAR_ORIGIN:       nLabelPos = EXC_CHTEXT_POS_AXIS;    break;
                 default:                DBG_ERRORFILE( "XclExpChText::ConvertDataLabel - unknown label placement type" );
             }
         }
+        ::insert_value( maData.mnFlags2, nLabelPos, 0, 4 );
         // source link (contains number format)
         mxSrcLink.reset( new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE ) );
         if( bShowValue || bShowPercent )
@@ -1280,7 +1272,7 @@ void XclExpChText::WriteBody( XclExpStream& rStrm )
     if( GetBiff() == EXC_BIFF8 )
     {
         rStrm   << GetPalette().GetColorIndex( mnTextColorId )
-                << maData.mnPlacement
+                << maData.mnFlags2
                 << maData.mnRotation;
     }
 }
@@ -2958,10 +2950,10 @@ void XclExpChAxesSet::WriteBody( XclExpStream& rStrm )
 // The chart object ===========================================================
 
 XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
-        Reference< XChartDocument > xChartDoc, const Size& rSize ) :
-    XclExpChGroupBase( XclExpChRoot( rRoot, this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
+        Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) :
+    XclExpChGroupBase( XclExpChRoot( rRoot, *this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
 {
-    Size aPtSize = OutputDevice::LogicToLogic( rSize, MapMode( MAP_100TH_MM ), MapMode( MAP_POINT ) );
+    Size aPtSize = OutputDevice::LogicToLogic( rChartRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( MAP_POINT ) );
     // rectangle is stored in 16.16 fixed-point format
     maRect.mnX = maRect.mnY = 0;
     maRect.mnWidth = static_cast< sal_Int32 >( aPtSize.Width() << 16 );
@@ -2986,7 +2978,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISIBLEONLY, !bIncludeHidden );
 
         // initialize API conversion (remembers xChartDoc internally)
-        InitConversion( xChartDoc );
+        InitConversion( xChartDoc, rChartRect );
 
         // chart frame
         ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
@@ -3076,7 +3068,7 @@ void XclExpChChart::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const Size& rSize ) :
+XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const Rectangle& rChartRect ) :
     XclExpSubStream( EXC_BOF_CHART ),
     XclExpRoot( rRoot )
 {
@@ -3085,7 +3077,7 @@ XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, c
     AppendNewRecord( new XclExpUInt16Record( EXC_ID_CHUNITS, EXC_CHUNITS_TWIPS ) );
 
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
-    AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rSize ) );
+    AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rChartRect ) );
 }
 
 // ============================================================================
