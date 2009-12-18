@@ -64,8 +64,6 @@
 
 #include "implncvt.hxx"
 
-#include <boost/shared_ptr.hpp>
-
 #include "cppuhelper/implbase1.hxx"
 #include <icc/sRGB-IEC61966-2.1.hxx>
 
@@ -3175,7 +3173,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                     }
                     else
                     {
-                        boost::shared_ptr<unsigned char> pWriteBuffer( (unsigned char*)rtl_allocateMemory( nLength2 ), rtl_freeMemory );
+                        boost::shared_array<unsigned char> pWriteBuffer( new unsigned char[ nLength2 ] );
                         rtl_zeroMemory( pWriteBuffer.get(), nLength2 );
                         int nWriteIndex = 0;
 
@@ -9367,15 +9365,15 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     else
     {
         const int nScanLineBytes = pAccess->Width()*3;
-        boost::shared_ptr<sal_uInt8> pCol( (sal_uInt8*)rtl_allocateMemory( nScanLineBytes ), rtl_freeMemory );
+        boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
         for( int y = 0; y < pAccess->Height(); y++ )
         {
             for( int x = 0; x < pAccess->Width(); x++ )
             {
                 BitmapColor aColor = pAccess->GetColor( y, x );
-                pCol.get()[3*x+0] = aColor.GetRed();
-                pCol.get()[3*x+1] = aColor.GetGreen();
-                pCol.get()[3*x+2] = aColor.GetBlue();
+                pCol[3*x+0] = aColor.GetRed();
+                pCol[3*x+1] = aColor.GetGreen();
+                pCol[3*x+2] = aColor.GetBlue();
             }
             CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
         }
