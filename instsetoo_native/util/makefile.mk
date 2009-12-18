@@ -122,6 +122,10 @@ PKGFORMAT+=$(MAKETARGETS:e:s/.//)
 PKGFORMATSWITCH=-format archive
 .ELSE			# "$(FORCE2ARCHIVE)"!=""
 PKGFORMATSWITCH=-format xxx
+# Independent of PKGFORMAT, always build a default-language openoffice product
+# also in archive format, so that tests that require an OOo installation (like
+# smoketestoo_native) have one available:
+openoffice_$(defaultlangiso) : $$@.archive
 .ENDIF			# "$(FORCE2ARCHIVE)"!=""
 .ENDIF			# "$(PKGFORMAT)"!=""
 
@@ -229,7 +233,7 @@ $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
-openoffice_%{$(PKGFORMAT:^".")} :
+openoffice_%{$(PKGFORMAT:^".") .archive} :
 .ELSE			# "$(PKGFORMAT)"!=""
 openoffice_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
@@ -350,7 +354,7 @@ openoffice:
 .IF "$(PKGFORMAT)"==""
 $(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
