@@ -47,7 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(header)" == ""
 
 SLOFILES=\
-        $(SLO)$/configureucb.obj       \
         $(SLO)$/contentidentifier.obj  \
         $(SLO)$/providerhelper.obj     \
         $(SLO)$/contenthelper.obj      \
@@ -57,7 +56,6 @@ SLOFILES=\
         $(SLO)$/resultsetmetadata.obj  \
         $(SLO)$/resultset.obj          \
         $(SLO)$/resultsethelper.obj    \
-        $(SLO)$/provconf.obj	       \
         $(SLO)$/commandenvironmentproxy.obj     \
         $(SLO)$/interactionrequest.obj          \
         $(SLO)$/simpleinteractionrequest.obj    \

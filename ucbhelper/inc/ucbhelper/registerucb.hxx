@@ -33,17 +33,68 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <vector>
+
+#include "ucbhelper/ucbhelperdllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
-    namespace ucb { class XContentProviderManager; }
 } } }
+
 namespace rtl { class OUString; }
 
 namespace ucbhelper {
 
-struct ContentProviderRegistrationInfo;
+//============================================================================
+/** Information about a registered content provider.
+ */
+struct ContentProviderRegistrationInfo
+{
+    /** The registered content provider (or null if registration failed).
+     */
+    com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
+        m_xProvider;
 
+    /** The arguments the content provider was instantiated with.
+     */
+    rtl::OUString m_aArguments;
+
+    /** The URL template the content provider is registered on.
+     */
+    rtl::OUString m_aTemplate;
+};
+
+typedef std::vector< ContentProviderRegistrationInfo >
+                                    ContentProviderRegistrationInfoList;
+
+//============================================================================
+/** Information about a content provider, passed to
+    <method>configureUcb</method>.
+ */
+struct ContentProviderData
+{
+    /** The UNO service name to use to instanciate the content provider.
+     */
+    rtl::OUString ServiceName;
+
+    /** The URL template to use to instanciate the content provider.
+     */
+    rtl::OUString URLTemplate;
+
+    /** The arguments to use to instanciate the content provider.
+     */
+    rtl::OUString Arguments;
+
+    ContentProviderData() {};
+    ContentProviderData( const rtl::OUString & rService,
+                         const rtl::OUString & rTemplate,
+                         const rtl::OUString & rArgs )
+    : ServiceName( rService ), URLTemplate( rTemplate ), Arguments( rArgs ) {}
+};
+
+typedef std::vector< ContentProviderData > ContentProviderDataList;
 //============================================================================
 /** Register a content provider at a Universal Content Broker.
 
@@ -63,8 +114,8 @@ struct ContentProviderRegistrationInfo;
     @param pInfo  If not null, this output parameter is filled with
     information about the (atemptively) registered provider.
  */
-bool
-registerAtUcb(
+
+UCBHELPER_DLLPUBLIC bool registerAtUcb(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
@@ -77,23 +128,5 @@ registerAtUcb(
     ContentProviderRegistrationInfo * pInfo)
     throw (com::sun::star::uno::RuntimeException);
 
-//============================================================================
-/** Deregister a content provider from a Universal Content Broker.
-
-    @param rManager  A content provider manager (normally, this would be a
-    UCB).  May be null, which is only useful if the content provider is an
-    <type>XParamterizedContentProvider</type>s.
-
-    @param rInfo  Information about the content provider to deregister.
- */
-void
-deregisterFromUcb(
-    com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
-    ContentProviderRegistrationInfo const & rInfo)
-    throw (com::sun::star::uno::RuntimeException);
-
 }
-
 #endif // _UCBHELPER_REGISTERUCB_HXX_
