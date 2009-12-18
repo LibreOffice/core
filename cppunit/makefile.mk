@@ -142,6 +142,7 @@ OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
 OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
+EXTRPATH = NONE
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .END
