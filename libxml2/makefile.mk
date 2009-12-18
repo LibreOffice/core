@@ -51,7 +51,8 @@ LIBXML2VERSION=2.7.6
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILES=libxml2-configure.patch \
             libxml2-mingw.patch \
-            libxml2-gnome599717.patch
+            libxml2-gnome599717.patch \
+            libxml2-gnome602728.patch
 
 # This is only for UNX environment now
 
