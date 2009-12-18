@@ -56,7 +56,7 @@ String SfxViewFactory::GetViewName() const
 {
     ::rtl::OUStringBuffer aViewName;
     aViewName.appendAscii( "view" );
-    aViewName.append( GetOrdinal() );
+    aViewName.append( sal_Int32( GetOrdinal() ) );
     return aViewName.makeStringAndClear();
 }
 
