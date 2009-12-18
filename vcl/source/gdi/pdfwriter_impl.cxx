@@ -3669,7 +3669,7 @@ bool PDFWriterImpl::emitFonts()
             rtl_zeroMemory( pEncToUnicodeIndex, sizeof( pEncToUnicodeIndex ) );
             for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
             {
-                sal_uInt8 nEnc = fit->second.m_nSubsetGlyphID;
+                sal_uInt8 nEnc = fit->second.getGlyphId();
 
                 DBG_ASSERT( pGlyphIDs[nEnc] == 0 && pEncoding[nEnc] == 0, "duplicate glyph" );
                 DBG_ASSERT( nEnc <= lit->m_aMapping.size(), "invalid glyph encoding" );
@@ -3677,10 +3677,10 @@ bool PDFWriterImpl::emitFonts()
                 pGlyphIDs[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
                 pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aUnicodes.size());
-                pUnicodesPerGlyph[ nEnc ] = fit->second.m_nUnicodes;
-                for( sal_Int32 n = 0; n < fit->second.m_nUnicodes; n++ )
-                    aUnicodes.push_back( fit->second.m_aUnicodes[n] );
-                if( fit->second.m_aUnicodes[0] )
+                pUnicodesPerGlyph[ nEnc ] = fit->second.countCodes();
+                for( sal_Int32 n = 0; n < pUnicodesPerGlyph[ nEnc ]; n++ )
+                    aUnicodes.push_back( fit->second.getCode( n ) );
+                if( fit->second.getCode(0) )
                     nToUnicodeStream = 1;
                 if( nGlyphs < 256 )
                     nGlyphs++;
@@ -6459,10 +6459,9 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
 
                 // add new glyph to emitted font subset
                 GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
-                rNewGlyphEmit.m_nSubsetGlyphID = nNewId;
-                rNewGlyphEmit.m_nUnicodes = pUnicodesPerGlyph[i];
+                rNewGlyphEmit.setGlyphId( nNewId );
                 for( sal_Int32 n = 0; n < pUnicodesPerGlyph[i]; n++ )
-                    rNewGlyphEmit.m_aUnicodes[n] = pCurUnicode[n];
+                    rNewGlyphEmit.addCode( pCurUnicode[n] );
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[ nFontGlyphId ];

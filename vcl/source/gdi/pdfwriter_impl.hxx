@@ -52,6 +52,8 @@
 #include <hash_map>
 #include <list>
 
+#include <boost/shared_array.hpp>
+
 class ImplFontSelectData;
 class ImplFontMetricData;
 class FontSubsetInfo;
@@ -270,17 +272,52 @@ public:
     };
 
     // font subsets
-    struct GlyphEmit
+    class GlyphEmit
     {
-        static const int nMaxUnicodes = 8;
         // performance: actually this should probably a vector;
-        sal_Ucs     m_aUnicodes[nMaxUnicodes];
-        sal_Int32   m_nUnicodes;
-        sal_uInt8   m_nSubsetGlyphID;
+        sal_Ucs                         m_aBufferedUnicodes[3];
+        sal_Int32                       m_nUnicodes;
+        sal_Int32                       m_nMaxUnicodes;
+        boost::shared_array<sal_Ucs>    m_pUnicodes;
+        sal_uInt8                       m_nSubsetGlyphID;
 
+    public:
         GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
         {
-            rtl_zeroMemory( m_aUnicodes, sizeof( m_aUnicodes ) );
+            rtl_zeroMemory( m_aBufferedUnicodes, sizeof( m_aBufferedUnicodes ) );
+            m_nMaxUnicodes = sizeof(m_aBufferedUnicodes)/sizeof(m_aBufferedUnicodes[0]);
+        }
+        ~GlyphEmit()
+        {
+        }
+
+        void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
+        sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
+
+        void addCode( sal_Ucs i_cCode )
+        {
+            if( m_nUnicodes == m_nMaxUnicodes )
+            {
+                sal_Ucs* pNew = new sal_Ucs[ 2 * m_nMaxUnicodes];
+                if( m_pUnicodes.get() )
+                    rtl_copyMemory( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
+                else
+                    rtl_copyMemory( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
+                m_pUnicodes.reset( pNew );
+                m_nMaxUnicodes *= 2;
+            }
+            if( m_pUnicodes.get() )
+                m_pUnicodes[ m_nUnicodes++ ] = i_cCode;
+            else
+                m_aBufferedUnicodes[ m_nUnicodes++ ] = i_cCode;
+        }
+        sal_Int32 countCodes() const { return m_nUnicodes; }
+        sal_Ucs getCode( sal_Int32 i_nIndex ) const
+        {
+            sal_Ucs nRet = 0;
+            if( i_nIndex < m_nUnicodes )
+                nRet = m_pUnicodes.get() ? m_pUnicodes[ i_nIndex ] : m_aBufferedUnicodes[ i_nIndex ];
+            return nRet;
         }
     };
     typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
