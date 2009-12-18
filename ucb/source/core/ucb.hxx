@@ -40,13 +40,20 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
 #include <ucbhelper/macros.hxx>
 #include "providermap.hxx"
+#include <ucbhelper/registerucb.hxx>
 
+#include <vector>
 //=========================================================================
 
 #define UCB_SERVICE_NAME "com.sun.star.ucb.UniversalContentBroker"
@@ -69,7 +76,8 @@ class UniversalContentBroker :
                 public com::sun::star::ucb::XContentProviderManager,
                 public com::sun::star::ucb::XContentProvider,
                 public com::sun::star::ucb::XContentIdentifierFactory,
-                public com::sun::star::ucb::XCommandProcessor
+                public com::sun::star::ucb::XCommandProcessor,
+                public com::sun::star::util::XChangesListener
 {
 public:
     UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
@@ -165,6 +173,14 @@ public:
     abort( sal_Int32 CommandId )
         throw( com::sun::star::uno::RuntimeException );
 
+    // XChangesListener
+    virtual void SAL_CALL changesOccurred( const com::sun::star::util::ChangesEvent& Event )
+        throw( com::sun::star::uno::RuntimeException );
+
+     // XEventListener ( base of XChangesLisetenr )
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source )
+        throw( com::sun::star::uno::RuntimeException );
+
 private:
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
     queryContentProvider( const rtl::OUString& Identifier,
@@ -180,8 +196,29 @@ private:
                  com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw( com::sun::star::uno::Exception );
 
+
+    bool configureUcb()
+        throw ( com::sun::star::uno::RuntimeException);
+
+    bool getContentProviderData(
+            const rtl::OUString & rKey1,
+            const rtl::OUString & rKey2,
+            ucbhelper::ContentProviderDataList & rListToFill);
+
+    void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
+
+    void createContentProviderData(
+    const rtl::OUString& rProvider,
+    const com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >& rxHierNameAccess,
+    ucbhelper::ContentProviderData& rInfo);
+
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+
+    com::sun::star::uno::Reference<
+        com::sun::star::util::XChangesNotifier > m_xNotifier;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
