@@ -172,8 +172,7 @@ namespace /* private */
         {
             rtl::OUString env_var = rtl::OUString(env_vars[i]);
 
-            if ((env_var.getLength() == 0) ||
-                (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1))
+            if (env_var.getLength() == 0)
                 return false;
 
             iterator_pair_t iter_pair = std::equal_range(
@@ -182,10 +181,17 @@ namespace /* private */
                 env_var,
                 less_environment_variable());
 
-            if (iter_pair.first != iter_pair.second) // found
-                *iter_pair.first = env_var;
-            else // not found
-                merged_env->insert(iter_pair.first, env_var);
+            if (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1)
+            {
+                merged_env->erase(iter_pair.first, iter_pair.second);
+            }
+            else
+            {
+                if (iter_pair.first != iter_pair.second) // found
+                    *iter_pair.first = env_var;
+                else // not found
+                    merged_env->insert(iter_pair.first, env_var);
+            }
         }
         return true;
     }
