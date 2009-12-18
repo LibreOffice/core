@@ -50,7 +50,6 @@ SLOFILES=	\
     $(SLO)$/GridProperties.obj \
     $(SLO)$/BaseCoordinateSystem.obj \
     $(SLO)$/CartesianCoordinateSystem.obj \
-    $(SLO)$/ChartData.obj		\
     $(SLO)$/ChartModel.obj		\
     $(SLO)$/ChartModel_Persistence.obj		\
     $(SLO)$/DataPoint.obj \
@@ -59,7 +58,6 @@ SLOFILES=	\
     $(SLO)$/Diagram.obj \
     $(SLO)$/DataSeriesProperties.obj \
     $(SLO)$/FormattedString.obj \
-    $(SLO)$/ImplChartModel.obj \
     $(SLO)$/Legend.obj \
     $(SLO)$/PageBackground.obj \
     $(SLO)$/PolarCoordinateSystem.obj \

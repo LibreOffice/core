@@ -32,6 +32,7 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 
+#include <map>
 #include <functional>
 #include <algorithm>
 
