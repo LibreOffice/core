@@ -214,8 +214,6 @@ AusDruckereinstellung sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAPERBIN
 
 *DruckerZusaetzeWriter HID_OPTPRINT_PAGE
 Grafiken sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF
-Tabellen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB
-Zeichnungen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW
 Kontrollfelder sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD
 Hintergrund sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND
 HiddenText sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT
@@ -224,7 +222,6 @@ RightToLeft sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL
 SchwarzDrucken sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT
 LinkeSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP
 RechteSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP
-Umgekehrt sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE
 Prospekt sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT
 Keine sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO
 NurNotizen sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY
