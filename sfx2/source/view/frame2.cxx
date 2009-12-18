@@ -237,21 +237,20 @@ void SfxFrameWindow_Impl::DoResize()
         pFrame->Resize();
 }
 
-SfxFrame* SfxFrame::CreateBlank()
+Reference < XFrame > SfxFrame::CreateBlankFrame()
 {
-    SfxFrame* pFrame = NULL;
+    Reference < XFrame > xFrame;
     try
     {
         ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
         Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
-        Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
-        pFrame = Create( xFrame );
+        xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return pFrame;
+    return xFrame;
 }
 
 SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden )
@@ -315,15 +314,15 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewI
     return pFrame;
 }
 
-SfxFrame* SfxFrame::Create( Reference < XFrame > xFrame )
+SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 {
     // create a new TopFrame to an external XFrame object ( wrap controller )
-    ENSURE_OR_THROW( xFrame.is(), "NULL frame not allowed" );
-    Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+    ENSURE_OR_THROW( i_rFrame.is(), "NULL frame not allowed" );
+    Window* pWindow = VCLUnoHelper::GetWindow( i_rFrame->getContainerWindow() );
     ENSURE_OR_THROW( pWindow, "frame without container window not allowed" );
 
     SfxFrame* pFrame = new SfxFrame( *pWindow, false );
-    pFrame->SetFrameInterface_Impl( xFrame );
+    pFrame->SetFrameInterface_Impl( i_rFrame );
     return pFrame;
 }
 
