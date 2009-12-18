@@ -34,9 +34,7 @@
 #include <list>
 #include <rtl/ref.hxx>
 
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#endif
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
 #include "pkguri.hxx"
@@ -110,7 +108,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ContentState { TRANSIENT,  // created via CreateNewContent,
-                                       // but did not process "insert" yet
+                                        // but did not process "insert" yet
                         PERSISTENT, // processed "insert"
                         DEAD        // processed "delete"
                       };
@@ -119,7 +117,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
     ContentProperties       m_aProps;
     ContentState            m_eState;
     com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >    m_xPackage;
+        com::sun::star::container::XHierarchicalNameAccess > m_xPackage;
     ContentProvider*        m_pProvider;
     sal_uInt32              m_nModifiedProps;
 
@@ -130,7 +128,7 @@ private:
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
              const ::com::sun::star::uno::Reference<
-                 com::sun::star::container::XHierarchicalNameAccess >& Package,
+                com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const ContentProperties& rProps );
     Content( const com::sun::star::uno::Reference<
@@ -139,7 +137,7 @@ private:
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
              const com::sun::star::uno::Reference<
-                 com::sun::star::container::XHierarchicalNameAccess >& Package,
+                com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const com::sun::star::ucb::ContentInfo& Info );
 
@@ -155,7 +153,7 @@ private:
     getPropertyValues( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                        const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
+                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference<
                             ::ucbhelper::ContentProviderImplHelper >& rProvider,
@@ -183,13 +181,13 @@ private:
               const PackageUri& rURI,
               ContentProperties& rProps,
               com::sun::star::uno::Reference<
-                  com::sun::star::container::XHierarchicalNameAccess > &
+                com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
     static sal_Bool
     hasData( ContentProvider* pProvider,
              const PackageUri& rURI,
              com::sun::star::uno::Reference<
-                 com::sun::star::container::XHierarchicalNameAccess > &
+                com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
 
     static ::rtl::OUString
@@ -200,7 +198,7 @@ private:
     hasData( const PackageUri& rURI );
     sal_Bool
     renameData( const com::sun::star::uno::Reference<
-                     com::sun::star::ucb::XContentIdentifier >& xOldId,
+                    com::sun::star::ucb::XContentIdentifier >& xOldId,
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& xNewId );
     sal_Bool
@@ -223,7 +221,7 @@ private:
     ::com::sun::star::uno::Any
     open( const ::com::sun::star::ucb::OpenCommandArgument2& rArg,
           const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
 
     void insert( const ::com::sun::star::uno::Reference<
@@ -292,7 +290,7 @@ public:
     execute( const com::sun::star::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
+                com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( com::sun::star::uno::Exception,
                com::sun::star::ucb::CommandAbortedException,
                com::sun::star::uno::RuntimeException );
@@ -323,7 +321,7 @@ public:
     getPropertyValues( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                        const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
+                            ::com::sun::star::beans::Property >& rProperties,
                        ContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );
 

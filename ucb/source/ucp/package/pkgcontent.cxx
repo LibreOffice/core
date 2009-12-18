@@ -55,9 +55,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#endif
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -294,7 +292,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         aRet = cppu::queryInterface(
                 rType, static_cast< ucb::XContentCreator * >( this ) );
 
-     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
+    return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
 //=========================================================================
@@ -609,7 +607,7 @@ uno::Any SAL_CALL Content::execute(
     {
         //////////////////////////////////////////////////////////////////
         // transfer
-        //  ( Not available at stream objects )
+        //      ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
         ucb::TransferInfo aInfo;
@@ -632,7 +630,7 @@ uno::Any SAL_CALL Content::execute(
     {
         //////////////////////////////////////////////////////////////////
         // flush
-        //  ( Not available at stream objects )
+        //      ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
         if( !flushData() )
@@ -1069,10 +1067,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+//    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+//    aEvent.OldValue       =
+//    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1181,7 +1179,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     aEvent.NewValue     = uno::makeAny( aNewValue );
 
                     m_aProps.aMediaType = aNewValue;
-                      nChanged++;
+                    nChanged++;
                     bStore = sal_True;
                     m_nModifiedProps |= MEDIATYPE_MODIFIED;
                 }
@@ -1219,7 +1217,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         aEvent.NewValue = uno::makeAny( bNewValue );
 
                         m_aProps.bCompressed = bNewValue;
-                          nChanged++;
+                        nChanged++;
                         bStore = sal_True;
                         m_nModifiedProps |= COMPRESSED_MODIFIED;
                     }
@@ -1256,7 +1254,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         aEvent.NewValue = uno::makeAny( bNewValue );
 
                         m_aProps.bEncrypted = bNewValue;
-                          nChanged++;
+                        nChanged++;
                         bStore = sal_True;
                         m_nModifiedProps |= ENCRYPTED_MODIFIED;
                     }
@@ -1483,7 +1481,7 @@ uno::Any Content::open(
         uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
         return uno::makeAny( xSet );
-      }
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -1506,7 +1504,7 @@ uno::Any Content::open(
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
         uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
-          {
+        {
             // PUSH: write data into xOut
 
             uno::Reference< io::XInputStream > xIn = getInputStream();
@@ -1560,14 +1558,14 @@ uno::Any Content::open(
             {
                 // closeOutput, readSomeBytes, writeBytes
             }
-          }
+        }
         else
-          {
+        {
             uno::Reference< io::XActiveDataSink > xDataSink(
                                             rArg.Sink, uno::UNO_QUERY );
-              if ( xDataSink.is() )
+            if ( xDataSink.is() )
             {
-                  // PULL: wait for client read
+                // PULL: wait for client read
 
                 uno::Reference< io::XInputStream > xIn = getInputStream();
                 if ( !xIn.is() )
@@ -1598,7 +1596,7 @@ uno::Any Content::open(
                 // Done.
                 xDataSink->setInputStream( xIn );
             }
-              else
+            else
             {
                 // Note: aOpenCommand.Sink may contain an XStream
                 //       implementation. Support for this type of
@@ -1612,7 +1610,7 @@ uno::Any Content::open(
                     xEnv );
                 // Unreachable
             }
-          }
+        }
     }
 
     return uno::Any();
@@ -2611,8 +2609,8 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
     {
-//      if ( !bCreate )
-//          return sal_True;
+//        if ( !bCreate )
+//            return sal_True;
 
         try
         {
@@ -2956,4 +2954,3 @@ uno::Reference< container::XEnumeration > Content::getIterator()
 
     return xIter;
 }
-
