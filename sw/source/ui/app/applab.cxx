@@ -237,8 +237,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
-        SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
-        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *xDocSh, pFrameItem );
+        SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
         SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
