@@ -517,13 +517,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
