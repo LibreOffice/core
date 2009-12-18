@@ -297,8 +297,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     }
 
     SfxObjectShell* pSh = GetObjectShell();
-    sal_Bool bWasReadonly = pSh->IsReadOnly();
-
     switch ( rReq.GetSlot() )
     {
         case SID_EDITDOC:
@@ -439,12 +437,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // r/o-Doc kann nicht in Editmode geschaltet werden?
                         rReq.Done( sal_False );
 
-                        SFX_REQUEST_ARG( rReq, pFSetItem, SfxBoolItem, SID_EDIT_FRAMESET, sal_False);
                         if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                         {
                             // dem ::com::sun::star::sdbcx::User anbieten, als Vorlage zu oeffnen
                             QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
-                            if ( !pFSetItem && RET_YES == aBox.Execute() )
+                            if ( RET_YES == aBox.Execute() )
                             {
                                 SfxApplication* pApp = SFX_APP();
                                 SfxAllItemSet aSet( pApp->GetPool() );
@@ -485,16 +482,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         rReq.Done( sal_True );
                         // if( nOpenMode == SFX_STREAM_READONLY )
                         //    pMed->Close();
-
-                        // ReloadForEdit bei Framesets schaltet auch FramesetEditmode
-                        sal_Bool bIsReadonly = GetObjectShell()->IsReadOnly();
-                        if ( bIsReadonly != bWasReadonly && !GetFrame().GetParentFrame() )
-                        {
-                            SfxBoolItem aItem( SID_EDIT_FRAMESET, !bIsReadonly );
-                            GetDispatcher()->Execute( SID_EDIT_FRAMESET,
-                                    SFX_CALLMODE_RECORD, &aItem, 0L );
-                            pSh->Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
-                        }
                         return;
                     }
                 }
@@ -2297,46 +2284,6 @@ void SfxViewFrame::ExecView_Impl
             SfxInPlaceClient* pClient = GetViewShell()->GetUIActiveClient();
             if ( pClient )
                 pClient->DeactivateObject();
-            break;
-        }
-
-        case SID_FILLFRAME:
-        {
-            // Bei Mail etc. k"onnen die Frames nicht angesprochen werden
-            SfxViewFrame *pRet = NULL;
-            SFX_REQUEST_ARG(
-                rReq, pItem, SfxStringItem, SID_FILLFRAME, sal_False );
-            if ( pItem )
-            {
-                String aName( pItem->GetValue() );
-                sal_uInt16 nFrame = (sal_uInt16) aName.ToInt32();
-                if ( nFrame == 0 )
-                    nFrame = USHRT_MAX;
-
-                SfxFrameIterator aIter( GetFrame(), sal_False );
-                SfxFrame *pFrame = aIter.FirstFrame();
-                sal_uInt16 nActFrame = 1;
-                while ( pFrame )
-                {
-                    SfxViewFrame *pView = pFrame->GetCurrentViewFrame();
-                    if (
-                        nActFrame == nFrame ||
-                        (
-                         pView &&
-                         aName.CompareIgnoreCaseToAscii( pView->SfxShell::GetName() ) == COMPARE_EQUAL
-                        )
-                       )
-                    {
-                        pRet = pView;
-                        break;
-                    }
-
-                    pFrame = aIter.NextFrame( *pFrame );
-                    nActFrame++;
-                }
-            }
-
-            rReq.SetReturnValue( SfxObjectItem( SID_DOCFRAME, pRet ) );
             break;
         }
 

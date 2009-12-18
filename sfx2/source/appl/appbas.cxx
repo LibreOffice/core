@@ -425,11 +425,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_INTERACTIVEMODE:
-        {
-            break;
-        }
-
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);

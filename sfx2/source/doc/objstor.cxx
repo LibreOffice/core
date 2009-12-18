@@ -2765,7 +2765,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             pSet->ClearItem( SID_OPTIONS );
             //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
             pSet->ClearItem( SID_VERSION );
-            //pSet->ClearItem( SID_USE_FILTEROPTIONS );
             pSet->ClearItem( SID_EDITDOC );
             pSet->ClearItem( SID_OVERWRITE );
             pSet->ClearItem( SID_DEFAULTFILEPATH );

@@ -633,15 +633,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
     }
 
-    // ggf. hinweisen, da\s unter Fremdformat gespeichert
-    if( pMedium )
-    {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIgnoreInformationLost,
-                         SfxBoolItem, SID_DOC_IGNOREINFORMATIONLOST, sal_False);
-        if( pIgnoreInformationLost && pIgnoreInformationLost->GetValue() )
-            bUI = sal_False;
-    }
-
     pImp->bPreparedForClose = sal_True;
     return sal_True;
 }

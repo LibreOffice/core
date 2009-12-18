@@ -242,7 +242,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     SFX_STACK(SfxDispatcher::Call_Impl);
 
     // darf der Slot gerufen werden (i.S.v. enabled)
-    SfxApplication *pSfxApp = SFX_APP();
     if ( rSlot.IsMode(SFX_SLOT_FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
     {
         if ( GetFrame() )
@@ -273,19 +272,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         // Alles holen, was gebraucht wird, da der Slot den Execute evtl. nicht
         // "uberlebt, falls es ein 'Pseudoslot' f"ur Macros oder Verben ist
         sal_Bool bAutoUpdate = rSlot.IsMode(SFX_SLOT_AUTOUPDATE);
-        SFX_REQUEST_ARG(rReq, pOrigItem, SfxExecuteItem, SID_SUBREQUEST, sal_False);
-        SfxExecuteItem *pExecuteItem = pOrigItem
-                            ? (SfxExecuteItem*)pOrigItem->Clone()
-                            : 0;
-
-        // ggf. TabPage-ID setzen
-        SfxAppData_Impl *pAppData = pSfxApp->Get_Impl();
-        SFX_REQUEST_ARG(rReq, pTabPageItem, SfxUInt16Item, SID_TABPAGE, sal_False);
-        if ( pTabPageItem )
-        {
-            pAppData->nAutoTabPageId = pTabPageItem->GetValue();
-            rReq.RemoveItem( SID_TABPAGE ); // sonst ArgCount > 0 => Seiteneff.
-        }
 
         // API-Call-Klammerung und Document-Lock w"ahrend des Calls
         {
@@ -317,16 +303,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                 // do nothing after this object is dead
                 return rReq.IsDone();
             }
-        }
-
-        // TabPage-ID und Executing-SID zurueck setzen
-        if ( pTabPageItem )
-            pAppData->nAutoTabPageId = 0;
-
-        if( pExecuteItem )
-        {
-            Execute( *pExecuteItem );
-            delete pExecuteItem;
         }
 
         if ( rReq.IsDone() )
