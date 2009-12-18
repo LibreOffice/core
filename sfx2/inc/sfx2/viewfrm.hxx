@@ -169,8 +169,8 @@ public:
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId = 0 );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxUnoFrameItem* i_pFrameItem, const USHORT i_nViewId = 0 );
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrameItem, const USHORT i_nViewId = 0 );
+    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const USHORT i_nViewId = 0 );
 
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );

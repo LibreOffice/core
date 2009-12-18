@@ -256,10 +256,13 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame )
+sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame,
+                                                              const bool i_bHidden )
 {
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
+    if ( i_bHidden )
+        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
     return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
 }
 
@@ -575,7 +578,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         const USHORT nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
-            return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame );
+            return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame, aDescriptor.getOrDefault( "Hidden", false ) );
         }
 
         const bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );

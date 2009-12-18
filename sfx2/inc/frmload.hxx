@@ -100,7 +100,8 @@ private:
 
     sal_Bool            impl_createNewDocWithSlotParam(
                             const USHORT _nSlotID,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame,
+                            const bool i_bHidden
                         );
 
     void                impl_determineFilter(

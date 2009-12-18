@@ -1998,10 +1998,6 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                                    const USHORT i_nViewId, const bool i_bHidden )
 {
-    OSL_PRECOND( !i_bHidden || !i_rFrame.is(),
-        "SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow: loading *hidden* into an *existing* frame is not supported!" );
-        // Care for this frame's visibility yourself, please
-
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
     SfxViewShell* pSuccessView = NULL;
@@ -2112,9 +2108,17 @@ SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const
 }
 
 //--------------------------------------------------------------------
-SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxUnoFrameItem* i_pFrameItem, const USHORT i_nViewId )
+SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const USHORT i_nViewId )
 {
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId, false );
+    SFX_REQUEST_ARG( i_rCreateDocRequest, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+    SFX_REQUEST_ARG( i_rCreateDocRequest, pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
+
+    return LoadViewIntoFrame_Impl_NoThrow(
+        i_rDoc,
+        pFrameItem ? pFrameItem->GetFrame() : NULL,
+        i_nViewId,
+        pHiddenItem ? pHiddenItem->GetValue() : false
+    );
 }
 
 //--------------------------------------------------------------------
