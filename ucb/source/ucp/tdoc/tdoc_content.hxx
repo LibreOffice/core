@@ -106,7 +106,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ContentState { TRANSIENT,  // created via createNewContent,
-                                       // but did not process "insert" yet
+                                        // but did not process "insert" yet
                         PERSISTENT, // processed "insert"
                         DEAD        // processed "delete" / document was closed
                       };
@@ -173,7 +173,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                             ::com::sun::star::beans::Property >& rProperties );
+                            ::com::sun::star::beans::Property >& rProperties );
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues(
             const ::com::sun::star::uno::Sequence<
@@ -294,7 +294,7 @@ public:
     execute( const com::sun::star::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
+                com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( com::sun::star::uno::Exception,
                com::sun::star::ucb::CommandAbortedException,
                com::sun::star::uno::RuntimeException );

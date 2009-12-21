@@ -1219,10 +1219,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+    //    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+    //    aEvent.OldValue       =
+    //    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
