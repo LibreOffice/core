@@ -1,6 +1,6 @@
 /*  Copyright 2005 Sun Microsystems, Inc. */
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <odiapi/xxml/XXmlReader.hxx>
 #include <odiapi/props/Properties.hxx>
 #include <odiapi/sl/od_sl.hxx>
