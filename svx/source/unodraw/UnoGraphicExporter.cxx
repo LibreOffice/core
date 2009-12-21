@@ -59,7 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include <svtools/outstrm.hxx>
+#include <svl/outstrm.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -69,7 +69,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include "xoutbmp.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -837,7 +837,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
                     {
                         Size aSizePixel( aGraphic.GetSizePixel() );
-                        if ( rSettings.mnWidth && rSettings.mnHeight && ( rSettings.mnWidth != aSizePixel.Width() ) || ( rSettings.mnHeight != aSizePixel.Height() ) )
+                        if( rSettings.mnWidth && rSettings.mnHeight &&
+                            ( ( rSettings.mnWidth != aSizePixel.Width() ) ||
+                              ( rSettings.mnHeight != aSizePixel.Height() ) ) )
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
                             aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ) );

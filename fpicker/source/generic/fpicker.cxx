@@ -38,7 +38,7 @@
 #endif
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "svtools/miscopt.hxx"
-#include "svtools/pickerhistoryaccess.hxx"
+#include "svl/pickerhistoryaccess.hxx"
 
 #ifndef _SV_APP_HXX
 #include "vcl/svapp.hxx"

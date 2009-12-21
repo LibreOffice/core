@@ -38,7 +38,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #include <tools/string.hxx>
 

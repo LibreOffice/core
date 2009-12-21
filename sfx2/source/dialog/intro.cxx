@@ -38,7 +38,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.h>
 

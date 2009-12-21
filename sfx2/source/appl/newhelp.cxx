@@ -95,10 +95,10 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <svtools/helpopt.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/svtdata.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/cachestr.hxx>
@@ -2139,7 +2139,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     if ( pEnv )
         bIsDebug = sal_True;
 
-    SvtMiscOptions().AddListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
+    SvtMiscOptions().AddListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 
     if ( aOnStartupCB.GetHelpId() == 0 )
         aOnStartupCB.SetHelpId( HID_HELP_ONSTARTUP_BOX );
@@ -2152,7 +2152,7 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
     sfx2::RemoveFromTaskPaneList( &aToolBox );
 
     bIsInClose = sal_True;
-    SvtMiscOptions().RemoveListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
+    SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
     delete pSrchDlg;
 }
 

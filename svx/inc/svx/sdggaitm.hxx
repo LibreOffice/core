@@ -31,7 +31,7 @@
 #ifndef _SDGGAITM_HXX
 #define _SDGGAITM_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 

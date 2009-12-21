@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>

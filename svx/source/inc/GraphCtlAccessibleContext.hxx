@@ -52,7 +52,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vos/mutex.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <set>
 #include <map>

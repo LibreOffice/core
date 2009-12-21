@@ -39,8 +39,8 @@
 #include <edtspell.hxx>
 #include <svx/flditem.hxx>
 #include <fontitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

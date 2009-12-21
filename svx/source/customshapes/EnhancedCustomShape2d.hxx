@@ -36,13 +36,13 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#include <EnhancedCustomShapeFunctionParser.hxx>
+#include <svx/EnhancedCustomShapeFunctionParser.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -52,6 +52,7 @@
 #define DFF_CUSTOMSHAPE_EXCH            4
 
 class SdrModel;
+class SdrObject;
 class SfxItemSet;
 struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;

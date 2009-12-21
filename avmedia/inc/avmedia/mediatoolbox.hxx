@@ -31,7 +31,7 @@
 #ifndef _AVMEDIA_MEDIATOOLBOX_HXX
 #define _AVMEDIA_MEDIATOOLBOX_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 namespace avmedia
