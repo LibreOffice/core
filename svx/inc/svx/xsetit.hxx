@@ -34,8 +34,8 @@
 #ifndef _XATTR_HXX
 #include <svx/xit.hxx>
 #endif
-#include <svtools/metitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/metitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/rectenum.hxx>
 
 #include <svx/xlnasit.hxx>

@@ -83,6 +83,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
             bool getWordWrap() const { return mbWordWrap; }
             bool get3DShape() const { return mb3DShape; }
+             bool get3DShape() const { return mb3DShape; }
             bool isForceTextClipToTextRange() const { return mbForceTextClipToTextRange; }
 
             // compare operator

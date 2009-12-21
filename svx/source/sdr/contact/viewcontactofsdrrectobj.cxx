@@ -37,9 +37,10 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +89,10 @@ namespace sdr
                         double fCornerRadiusY;
                         drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
+                        // #i105856# use knowledge about pickthrough from the model
+                        const bool bPickThroughTransparentTextFrames(
+                            GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
+
                         // create primitive
                         const drawinglayer::primitive2d::Primitive2DReference xReference(
                             new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
@@ -95,7 +100,8 @@ namespace sdr
                                 *pAttribute,
                                 fCornerRadiusX,
                                 fCornerRadiusY,
-                                GetRectObj().IsTextFrame()));
+                                // #i105856# use fill for HitTest when TextFrame and not PickThrough
+                                GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }

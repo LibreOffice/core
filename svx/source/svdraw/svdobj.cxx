@@ -83,7 +83,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
-#include "xlinjoit.hxx"
+#include "svx/xlinjoit.hxx"
 #include <svx/unopage.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/xenum.hxx>
@@ -94,7 +94,9 @@
 #include <svx/svdpool.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
+
+// #97849#
 #include <svx/fmmodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/objface.hxx>

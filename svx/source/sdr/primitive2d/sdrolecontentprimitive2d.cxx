@@ -155,10 +155,12 @@ namespace drawinglayer
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(
             const SdrOle2Obj& rSdrOle2Obj,
             const basegfx::B2DHomMatrix& rObjectTransform,
+            sal_uInt32 nGraphicVersion,
             bool bHighContrast)
         :   BufferedDecompositionPrimitive2D(),
             mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
+            mnGraphicVersion(nGraphicVersion),
             mbHighContrast(bHighContrast)
         {
         }
@@ -174,6 +176,11 @@ namespace drawinglayer
 
                 return ((bBothNot || bBothAndEqual)
                     && getObjectTransform() == rCompare.getObjectTransform()
+
+                    // #i104867# to find out if the Graphic content of the
+                    // OLE has changed, use GraphicVersion number
+                    && getGraphicVersion() == rCompare.getGraphicVersion()
+
                     && getHighContrast() == rCompare.getHighContrast());
             }
 

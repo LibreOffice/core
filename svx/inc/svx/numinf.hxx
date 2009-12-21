@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/numfmtsh.hxx>
 #include "svx/svxdllapi.h"
 

@@ -171,7 +171,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
         m_pImageList[i] = 0;
 
-    m_aOpt.AddListener( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
+    m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
 }
 
@@ -179,7 +179,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
-    m_aOpt.RemoveListener( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
+    m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
 
     for ( sal_uInt32 i = 0; i < m_aToolBoxes.size(); i++ )
@@ -229,7 +229,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
             if ( pInf->nFlags & SFX_TOOLBOX_CHANGESYMBOLSET )
             {
                 ToolBox *pBox       = pInf->pToolBox;
-                BOOL    bHiContrast = pBox->GetBackground().GetColor().IsDark();
+                BOOL    bHiContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
                 USHORT  nCount      = pBox->GetItemCount();
                 for ( USHORT nPos=0; nPos<nCount; nPos++ )
                 {
@@ -424,6 +424,6 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, B
 void SfxImageManager::SetImages( ToolBox& rToolBox )
 {
     BOOL bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
-    BOOL bHiContrast = rToolBox.GetBackground().GetColor().IsDark();
+    BOOL bHiContrast = rToolBox.GetSettings().GetStyleSettings().GetHighContrastMode();
     SetImagesForceSize( rToolBox, bHiContrast, bLarge );
 }

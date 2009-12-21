@@ -31,12 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
-#if OSL_DEBUG_LEVEL == 0
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-#endif
-
 #include <tools/presys.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -60,11 +54,11 @@
 
 #include <iostream>
 #include <fstream>
-#include <assert.h>
 #include <map>
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <string>
 
 namespace /* private */
 {
@@ -282,7 +276,7 @@ public:
     void substitute(std::string& Text)
     {
         replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        assert(prt);
+        OSL_ASSERT(prt);
         replacement_table_t::iterator iter = prt->find(Text);
         if (iter != prt->end())
             Text = iter->second;
@@ -292,7 +286,7 @@ public:
         const std::string& Placeholder, const std::string& Substitute)
     {
         replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        assert(prt);
+        OSL_ASSERT(prt);
         prt->insert(std::make_pair(Placeholder, Substitute));
     }
 
@@ -324,31 +318,47 @@ private:
     iso_lang_identifier active_iso_lang_;
 };
 
+typedef std::map< unsigned short , std::string , std::less< unsigned short > > shortmap;
+
 //###########################################
 void add_group_entries(
     Config& aConfig,
     const ByteString& GroupName,
     Substitutor& Substitutor)
 {
-    assert(aConfig.HasGroup(GroupName));
+    OSL_ASSERT(aConfig.HasGroup(GroupName));
 
     aConfig.SetGroup(GroupName);
     size_t key_count = aConfig.GetKeyCount();
+    shortmap map;
 
     for (size_t i = 0; i < key_count; i++)
     {
         ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<USHORT>(i));
         ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<USHORT>(i));
+        iso_lang_identifier myiso_lang( iso_lang );
+        LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
+        if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
+        {
+            Substitutor.set_language(iso_lang_identifier(iso_lang));
 
-        Substitutor.set_language(iso_lang_identifier(iso_lang));
+            key_value_utf8.EraseLeadingAndTrailingChars('\"');
 
-        key_value_utf8.EraseLeadingAndTrailingChars('\"');
+            OUString key_value_utf16 =
+                rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
-        OUString key_value_utf16 =
-            rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
-
-        Substitutor.add_substitution(
-            GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
+            Substitutor.add_substitution(
+                GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
+            map[ static_cast<unsigned short>(ltype) ] = std::string( iso_lang.GetBuffer() );
+        }
+        else
+        {
+            if( !map[ ltype ].empty() )
+            {
+                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", ltype , map[ ltype ].c_str() , iso_lang.GetBuffer());
+                exit( -1 );
+            }
+        }
     }
 }
 

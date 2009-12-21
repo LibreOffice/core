@@ -53,6 +53,11 @@ namespace drawinglayer
             SdrObjectWeakRef                            mpSdrOle2Obj;
             basegfx::B2DHomMatrix                       maObjectTransform;
 
+            // #i104867# The GraphicVersion number to identify in operator== if
+            // the graphic has changed, but without fetching it (which may
+            // be expensive, e.g. triggering chart creation)
+            sal_uInt32                                  mnGraphicVersion;
+
             // bitfield
             unsigned                                    mbHighContrast : 1;
 
@@ -64,6 +69,7 @@ namespace drawinglayer
             SdrOleContentPrimitive2D(
                 const SdrOle2Obj& rSdrOle2Obj,
                 const basegfx::B2DHomMatrix& rObjectTransform,
+                sal_uInt32 nGraphicVersion,
                 bool bHighContrast);
 
             // compare operator
@@ -74,6 +80,7 @@ namespace drawinglayer
 
             // data access
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
+            sal_uInt32 getGraphicVersion() const { return mnGraphicVersion; }
             bool getHighContrast() const { return mbHighContrast; }
 
             // provide unique ID

@@ -35,7 +35,7 @@
 #ifndef _SBX_HXX //autogen
 #include <basic/sbx.hxx>
 #endif
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #ifndef _BASIC_SBUNO_HXX

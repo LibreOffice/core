@@ -1,4 +1,4 @@
-dt      desktop :       l10n sfx2 stoc uui BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg NULL
+dt      desktop :    l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								nmake	-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
@@ -21,7 +21,7 @@ dt	desktop\os2\source\applauncher			nmake	-	p	dt_applauncher dt_inc NULL
 dt	desktop\unx\source\officeloader		nmake	-	u	dt_officeloader_unx dt_inc NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein dt_inc NULL
 dt	desktop\source\pkgchk\unopkg			nmake	-	all	dt_unopkg dt_dp_misc dt_app dt_inc dt_guiloader.w NULL
-dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_executable dt_dp_registry_help dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_migration dt_dp_unopkg dt_inc NULL
+dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_executable dt_dp_registry_help dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_migration dt_dp_unopkg dt_inc dt_dp_misc NULL
 dt	desktop\source\deployment\misc				nmake	-	all	dt_dp_misc dt_inc NULL
 dt	desktop\source\deployment\unopkg			nmake	-	all	dt_dp_unopkg dt_inc NULL
 dt	desktop\source\deployment\migration			nmake	-	all	dt_dp_migration dt_inc NULL
