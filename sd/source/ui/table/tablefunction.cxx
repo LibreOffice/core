@@ -57,12 +57,12 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include "framework/FrameworkHelper.hxx"
 #include "app.hrc"

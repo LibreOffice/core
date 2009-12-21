@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/dateitem.hxx>
+#include <svl/dateitem.hxx>
 #include "drawdoc.hxx"
 #include <svx/svdotext.hxx>
 #include <svtools/svtreebx.hxx>

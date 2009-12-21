@@ -34,9 +34,9 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include "fuconbez.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdopath.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
