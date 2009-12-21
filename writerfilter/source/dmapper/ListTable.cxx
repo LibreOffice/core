@@ -38,9 +38,12 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <vector>
 
 #define NUMBERING_MAX_LEVELS    10
@@ -139,6 +142,7 @@ class ListPropertyMap : public PropertyMap
     ::rtl::OUString                                 sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int32                                       nXChFollow;      //LN_IXCHFOLLOW
     ::rtl::OUString                                 sBulletChar;
+    sal_Int32                                       nTabstop;
 public:
     ListPropertyMap() :
         nIStartAt(-1)
@@ -150,6 +154,7 @@ public:
         ,nFPrevSpace(-1)
         ,nFWord6(-1)
         ,nXChFollow(-1)
+        ,nTabstop( 0 )
         {}
     ~ListPropertyMap(){}
 
@@ -187,6 +192,8 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValuesList( P
     if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && sBulletChar.getLength() )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, sBulletChar.copy(0,1)));
 
+    aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, nTabstop ) );
+
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
     //1.
@@ -215,6 +222,9 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValuesList( P
         {
             switch( aMapIter->first.eId )
             {
+                case PROP_ADJUST:
+                case PROP_INDENT_AT:
+                case PROP_FIRST_LINE_INDENT:
                 case PROP_FIRST_LINE_OFFSET:
                 case PROP_LEFT_MARGIN:
                     aNumberingProperties.push_back(
@@ -818,22 +828,27 @@ void ListTable::attribute(Id nName, Value & rVal)
         case NS_ooxml::LN_CT_Ind_left:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
-                PROP_LEFT_MARGIN, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+                PROP_INDENT_AT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
-                PROP_FIRST_LINE_OFFSET, true, uno::makeAny( - ConversionHelper::convertTwipToMM100(nIntValue ) ));
+                PROP_FIRST_LINE_INDENT, true, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
-//        case NS_ooxml::LN_CT_Ind_firstLine:
-//            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-//            m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
-//                PROP_FIRST_LINE_OFFSET, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
-//        break;
+        case NS_ooxml::LN_CT_Ind_firstLine:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
+                PROP_FIRST_LINE_INDENT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+        break;
         case NS_ooxml::LN_CT_Lvl_ilvl: //overrides previous level - unsupported
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
         case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
-        case NS_ooxml::LN_CT_Ind_firstLine: //todo: first line indent in numbering not yet supported
+        break;
+        case NS_ooxml::LN_CT_TabStop_pos:
+        {
+            //no paragraph attributes in ListTable char style sheets
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nTabstop = ConversionHelper::convertTwipToMM100( nIntValue );
+        }
         break;
         default:
         {
@@ -955,7 +970,17 @@ void ListTable::sprm(Sprm & rSprm)
             }
             break;
             case NS_ooxml::LN_CT_Lvl_lvlJc:
-                //todo: ????
+            {
+                static sal_Int16 aWWAlignments[ ] =
+                {
+                    text::HoriOrientation::LEFT,
+                    text::HoriOrientation::CENTER,
+                    text::HoriOrientation::RIGHT
+                };
+                m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
+                    PROP_ADJUST, true, uno::makeAny( aWWAlignments[ nIntValue ] ) );
+                    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            }
             break;
             case NS_ooxml::LN_CT_Lvl_pPr:
             case NS_ooxml::LN_CT_PPrBase_ind:
@@ -967,7 +992,12 @@ void ListTable::sprm(Sprm & rSprm)
             }
             break;
             case NS_ooxml::LN_CT_PPrBase_tabs:
-                //no paragraph attributes in ListTable char style sheets
+            case NS_ooxml::LN_CT_Tabs_tab:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                    pProperties->resolve(*this);
+            }
             break;
             case NS_ooxml::LN_CT_Lvl_suff:
                 //todo: currently unsupported suffix
@@ -1057,6 +1087,169 @@ sal_uInt32 ListTable::size() const
 {
     return m_pImpl->m_aListEntries.size();
 }
+
+rtl::OUString ListTable::GetStyleName( sal_Int32 nListId )
+{
+    rtl::OUString sStyleName( rtl::OUString::createFromAscii( "WWNum" ) );
+    sStyleName += rtl::OUString::valueOf( nListId + 1 );
+
+    return sStyleName;
+}
+
+void ListTable::CreateNumberingRules( )
+{
+    uno::Reference< container::XIndexReplace > xRet;
+    std::vector< ListEntryPtr >::const_iterator aIt = m_pImpl->m_aListEntries.begin();
+    std::vector< ListEntryPtr >::const_iterator aEndIt = m_pImpl->m_aListEntries.end();
+
+    uno::Reference< container::XNameContainer > xStyles;
+
+    try
+    {
+        uno::Reference< style::XStyleFamiliesSupplier > xFamilies( m_pImpl->m_xFactory, uno::UNO_QUERY_THROW );
+        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( rtl::OUString::createFromAscii( "NumberingStyles" ) );
+
+        oFamily >>= xStyles;
+    }
+    catch ( const uno::Exception )
+    {
+    }
+
+    for(; aIt != aEndIt; ++aIt)
+    {
+        if( !(*aIt)->m_xNumRules.is() && m_pImpl->m_xFactory.is() && xStyles.is( ) )
+        {
+            try
+            {
+                // Create the numbering style
+                uno::Reference< beans::XPropertySet > xStyle (
+                    m_pImpl->m_xFactory->createInstance(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.NumberingStyle"))),
+                    uno::UNO_QUERY_THROW );
+
+                rtl::OUString sStyleName = GetStyleName( ( *aIt )->nListId );
+#if DEBUG
+                clog << "Creating numbering style: ";
+                clog << rtl::OUStringToOString( sStyleName, RTL_TEXTENCODING_UTF8 ).getStr( );
+                clog << endl;
+#endif
+
+                xStyles->insertByName( sStyleName, makeAny( xStyle ) );
+
+                uno::Any oStyle = xStyles->getByName( sStyleName );
+                xStyle.set( oStyle, uno::UNO_QUERY_THROW );
+
+                PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                uno::Any aRules = xStyle->getPropertyValue( aPropNameSupplier.GetName( PROP_NUMBERING_RULES ) );
+                aRules >>= ( *aIt )->m_xNumRules;
+
+                //now fill the numbering levels appropriately
+                ::std::vector< ListPropertyMapPtr >::const_iterator aIter = (*aIt)->aLevelProperties.begin();
+                ::std::vector< ListPropertyMapPtr >::const_iterator aEnd = (*aIt)->aLevelProperties.end();
+                sal_Int32 nLevel = 0;
+                while(aIter != aEnd)
+                {
+                    PropertyValueVector_t aCharStyleProperties;
+                    uno::Sequence< beans::PropertyValue> aValues = (*aIter)->GetPropertyValuesList(aCharStyleProperties);
+                    if( aCharStyleProperties.size() )
+                    {
+                        //create (or find) a character style containing the character attributes of the symbol
+                        //and apply it to the numbering level
+                        ::rtl::OUString sStyle = m_pImpl->m_rDMapper.getOrCreateCharStyle( aCharStyleProperties );
+                        aValues.realloc( aValues.getLength() + 1);
+                        aValues[aValues.getLength() - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
+                        aValues[aValues.getLength() - 1].Value <<= sStyle;
+                    }
+                    //now parse the text to find %n from %1 to %nLevel+1
+                    //everything before the first % and the last %x is prefix and suffix
+                    ::rtl::OUString sLevelText( (*aIter)->sBulletChar );
+                    sal_Int32 nCurrentIndex = 0;
+                    sal_Int32 nFound = sLevelText.indexOf( '%', nCurrentIndex );
+                    if( nFound > 0 )
+                    {
+                        ::rtl::OUString sPrefix = sLevelText.copy( 0, nFound );
+                        aValues.realloc( aValues.getLength() + 1 );
+                        aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_PREFIX, sPrefix);
+                        sLevelText = sLevelText.copy( nFound );
+                    }
+                    sal_Int32 nMinLevel = nLevel;
+                    //now the text should either be empty or start with %
+                    nFound = 0;
+                    while( nFound >= 0 )
+                    {
+                        if( sLevelText.getLength() > 1 )
+                        {
+                            sal_Unicode cLevel = sLevelText.getStr()[1];
+                            if( cLevel >= '1' && cLevel <= '9' )
+                            {
+                                if( cLevel - '1' < nMinLevel )
+                                    nMinLevel = cLevel - '1';
+                                //remove first char - next char is removed later
+                                sLevelText = sLevelText.copy( 1 );
+                            }
+                        }
+                        //remove old '%' or number
+                        sLevelText = sLevelText.copy( 1 );
+                        nCurrentIndex = 0;
+                        nFound = sLevelText.indexOf( '%', nCurrentIndex );
+                        //remove the text before the next %
+                        if(nFound > 0)
+                            sLevelText = sLevelText.copy( nFound -1 );
+                    }
+                    if( nMinLevel < nLevel )
+                    {
+                        aValues.realloc( aValues.getLength() + 1);
+                        aValues[ aValues.getLength() - 1 ] =
+                            MAKE_PROPVAL(PROP_PARENT_NUMBERING, sal_Int16( nLevel - nMinLevel + 1));
+                    }
+                    aValues.realloc( aValues.getLength() + 1);
+                    aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_SUFFIX, sLevelText);
+
+                    aValues.realloc( aValues.getLength() + 1);
+                    aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
+                            sal_Int16( text::PositionAndSpaceMode::LABEL_ALIGNMENT ) );
+
+#if DEBUG
+                clog << endl << "Numbering rule properties - " << nLevel << endl;
+                for ( sal_Int32 i = 0, len = aValues.getLength( ); i < len; i++ )
+                {
+                    beans::PropertyValue aVal = aValues[i];
+                    clog << "    " << rtl::OUStringToOString( aVal.Name, RTL_TEXTENCODING_UTF8 ).getStr( );
+                    clog << ": ";
+                    rtl::OUString sVal;
+                    sal_Int32 nVal;
+                    if ( aVal.Value >>= sVal )
+                    {
+                        clog << rtl::OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr( );
+                    }
+                    else if ( aVal.Value >>= nVal )
+                    {
+                        clog << nVal;
+                    }
+                    clog << endl;
+                }
+#endif
+
+                    (*aIt)->m_xNumRules->replaceByIndex(nLevel, uno::makeAny(aValues));
+                    ++aIter;
+                    ++nLevel;
+                }
+
+                // Create the numbering style for these rules
+                rtl::OUString sNumRulesName = aPropNameSupplier.GetName( PROP_NUMBERING_RULES );
+                xStyle->setPropertyValue(
+                        sNumRulesName,
+                        uno::makeAny( ( *aIt )->m_xNumRules ) );
+            }
+            catch( const uno::Exception& rEx)
+            {
+                (void)rEx;
+                OSL_ENSURE( false, "ListTable::CreateNumberingRules");
+            }
+        }
+    }
+}
+
 /*-- 26.06.2006 10:33:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1069,93 +1262,6 @@ uno::Reference< container::XIndexReplace > ListTable::GetNumberingRules(sal_Int3
     {
         if((*aIt)->nListId == nListId)
         {
-            if( !(*aIt)->m_xNumRules.is() && m_pImpl->m_xFactory.is())
-            {
-                try
-                {
-                    (*aIt)->m_xNumRules = uno::Reference< container::XIndexReplace >(
-                            m_pImpl->m_xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"))),
-                            uno::UNO_QUERY_THROW);
-
-                    //now fill the numbering levels appropriately
-                    ::std::vector< ListPropertyMapPtr >::const_iterator aIter = (*aIt)->aLevelProperties.begin();
-                    ::std::vector< ListPropertyMapPtr >::const_iterator aEnd = (*aIt)->aLevelProperties.end();
-                    sal_Int32 nLevel = 0;
-                    PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-                    while(aIter != aEnd)
-                    {
-                        PropertyValueVector_t aCharStyleProperties;
-                        uno::Sequence< beans::PropertyValue> aValues = (*aIter)->GetPropertyValuesList(aCharStyleProperties);
-                        if( aCharStyleProperties.size() )
-                        {
-                            //create (or find) a character style containing the character attributes of the symbol
-                            //and apply it to the numbering level
-                            ::rtl::OUString sStyle = m_pImpl->m_rDMapper.getOrCreateCharStyle( aCharStyleProperties );
-                            aValues.realloc( aValues.getLength() + 1);
-                            aValues[aValues.getLength() - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
-                            aValues[aValues.getLength() - 1].Value <<= sStyle;
-                        }
-                        //now parse the text to find %n from %1 to %nLevel+1
-                        //everything before the first % and the last %x is prefix and suffix
-                        ::rtl::OUString sLevelText( (*aIter)->sBulletChar );
-                        sal_Int32 nCurrentIndex = 0;
-                        sal_Int32 nFound = sLevelText.indexOf( '%', nCurrentIndex );
-                        if( nFound > 0 )
-                        {
-                            ::rtl::OUString sPrefix = sLevelText.copy( 0, nFound );
-                            aValues.realloc( aValues.getLength() + 1 );
-                            aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_PREFIX, sPrefix);
-                            sLevelText = sLevelText.copy( nFound );
-                        }
-                        sal_Int32 nMinLevel = nLevel;
-                        //now the text should either be empty or start with %
-                        nFound = 0;
-                        while( nFound >= 0 )
-                        {
-                            if( sLevelText.getLength() > 1 )
-                            {
-                                sal_Unicode cLevel = sLevelText.getStr()[1];
-                                if( cLevel >= '1' && cLevel <= '9' )
-                                {
-                                    if( cLevel - '1' < nMinLevel )
-                                        nMinLevel = cLevel - '1';
-                                    //remove first char - next char is removed later
-                                    sLevelText = sLevelText.copy( 1 );
-                                }
-                            }
-                            //remove old '%' or number
-                            sLevelText = sLevelText.copy( 1 );
-                            nCurrentIndex = 0;
-                            nFound = sLevelText.indexOf( '%', nCurrentIndex );
-                            //remove the text before the next %
-                            if(nFound > 0)
-                                sLevelText = sLevelText.copy( nFound -1 );
-                        }
-                        if( nMinLevel < nLevel )
-                        {
-                            aValues.realloc( aValues.getLength() + 1);
-                            aValues[ aValues.getLength() - 1 ] =
-                                MAKE_PROPVAL(PROP_PARENT_NUMBERING, sal_Int16( nLevel - nMinLevel ));
-                        }
-                        if( sLevelText.getLength() )
-                        {
-                            aValues.realloc( aValues.getLength() + 1);
-                            aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_SUFFIX, sLevelText);
-                        }
-
-                        (*aIt)->m_xNumRules->replaceByIndex(nLevel, uno::makeAny(aValues));
-
-                        ++aIter;
-                        ++nLevel;
-                    }
-
-                }
-                catch( const uno::Exception& rEx)
-                {
-                    (void)rEx;
-                    OSL_ENSURE( false, "ListTable::GetNumberingRules");
-                }
-            }
             xRet = (*aIt)->m_xNumRules;
             break;
         }

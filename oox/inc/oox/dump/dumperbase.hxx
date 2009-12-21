@@ -1901,19 +1901,6 @@ protected:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
                             const ::rtl::OUString& rSysFileName,
-                            const BinaryInputStreamRef& rxRecStrm,
-                            const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
-    void                construct(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxBaseStrm,
-                            const BinaryInputStreamRef& rxRecStrm,
-                            const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
-    void                construct(
-                            const ObjectBase& rParent,
-                            const BinaryInputStreamRef& rxBaseStrm,
-                            const ::rtl::OUString& rSysFileName,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
     void                construct(

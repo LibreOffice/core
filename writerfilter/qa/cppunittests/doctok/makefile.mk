@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:doctok by codegen.pl 
+# auto generated Target:doctok by codegen.pl
 SHL1OBJS=  \
        $(SLO)$/testdoctok.obj
 
@@ -53,6 +53,7 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
+     $(TESTSHL2LIB)    \
    $(CPPUNITLIB)
 
 SHL1LIBS=\

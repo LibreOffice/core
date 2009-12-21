@@ -79,9 +79,8 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
                 OUString aPicturePath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
                 if( aPicturePath.getLength() > 0 )
                 {
-                    StreamDataSequence aPictureData;
-                    if( getFilter().importBinaryData( aPictureData, aPicturePath ) )
-                        mrModel.importPictureData( mnPropId, aPictureData );
+                    BinaryXInputStream aInStrm( getFilter().openInputStream( aPicturePath ), true );
+                    mrModel.importPictureData( mnPropId, aInStrm );
                 }
             }
         break;
@@ -101,11 +100,30 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
 {
     if( isRootElement() && (nElement == AX_TOKEN( ocx )) )
     {
-        if( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) == XML_persistPropertyBag )
+        OUString aClassId = rAttribs.getString( AX_TOKEN( classid ), OUString() );
+        switch( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) )
         {
-            OUString aClassId = rAttribs.getString( AX_TOKEN( classid ), OUString() );
-            if( AxControlModelBase* pModel = mrControl.createModel( aClassId ) )
-                return new AxControlPropertyContext( *this, *pModel );
+            case XML_persistPropertyBag:
+                if( AxControlModelBase* pModel = mrControl.createModel( aClassId ) )
+                    return new AxControlPropertyContext( *this, *pModel );
+            break;
+
+            case XML_persistStreamInit:
+            {
+                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                if( aFragmentPath.getLength() > 0 )
+                {
+                    BinaryXInputStream aInStrm( getFilter().openInputStream( aFragmentPath ), true );
+                    if( !aInStrm.isEof() )
+                    {
+                        mrControl.importBinaryModel( aInStrm );
+                        // binary stream contains a copy of the class ID, must be equal to attribute value
+                        OSL_ENSURE( !mrControl.getModel() || aClassId.equalsIgnoreAsciiCase( mrControl.getClassId() ),
+                            "AxControlFragment::importBinaryControl - form control class ID mismatch" );
+                    }
+                }
+            }
+            break;
         }
     }
     return 0;

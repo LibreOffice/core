@@ -38,7 +38,6 @@
 namespace writerfilter {
 namespace dmapper
 {
-using namespace std;
 
 struct FontTable_Impl;
 struct FontEntry
@@ -98,6 +97,8 @@ public:
     virtual void substream(Id name,
                            ::writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & info);
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
 
     const FontEntry*    getFontEntry(sal_uInt32 nIndex);
     sal_uInt32          size();
