@@ -53,7 +53,12 @@ SDI1EXPORT=swriter
 
 # --- Files --------------------------------------------------------
 SVSDI1DEPEND= \
-        switems.sdi\
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
+                switems.sdi\
         swriter.sdi\
         _docsh.sdi\
         docsh.sdi\
@@ -97,8 +102,7 @@ SVSDI1DEPEND= \
         annotsh.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
-                $(INC)$/cmdid.h \
-                $(SOLARINCXDIR)$/svxslots.ilb
+                $(INC)$/cmdid.h 
 .ENDIF
 
 # --- Targets -------------------------------------------------------

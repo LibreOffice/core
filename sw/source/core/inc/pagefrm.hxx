@@ -31,7 +31,7 @@
 #define _PAGEFRM_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "ftnboss.hxx"
 #include <tools/mempool.hxx>

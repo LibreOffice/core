@@ -31,8 +31,8 @@
 #define _UNOSTYLE_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <svtools/style.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/style.hxx>
+#include <svl/lstner.hxx>
 #include <unocoll.hxx>
 #include <unomap.hxx>
 #include <com/sun/star/style/XStyle.hpp>

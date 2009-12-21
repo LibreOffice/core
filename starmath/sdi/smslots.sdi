@@ -28,8 +28,6 @@
  *
  ************************************************************************/
 
-import "svxslots.ilb"
-
 module
 "312C4240-35E7-101C-B12A-04021C007002"
 "58216740-35E7-101C-B12A-04021C007002"
@@ -39,9 +37,13 @@ StarMath
     SlotIdFile ( "starmath.hrc" )
     SlotIdFile ( "sfx2/sfxsids.hrc" )
     SlotIdFile ( "svx/svxids.hrc" )
-    TypeLibFile ( "smslots.tlb" )
 ]
 {
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
+    include "svx/svxitems.sdi"
+    include "svx/xoitems.sdi"
+    include "svx/svx.sdi"
     include "smath.sdi"
     interface StarMath
     [
@@ -59,7 +61,7 @@ shell SmModule
     import StarMath[Automation];
 }
 
-interface FormulaDocument : OfficeDocument
+interface FormulaDocument
 [
     uuid ( "815CBB20-2FC3-11CF-89CA-008029E4B0B1" )
 ]
@@ -149,13 +151,13 @@ interface FormulaDocument : OfficeDocument
     ]
 }
 
-shell SmDocShell : SfxObjectShell
+shell SmDocShell
 {
     import FormulaDocument[Automation];
 }
 
 
-interface FormulaView : View
+interface FormulaView
 [
     uuid ( "CE1A6C00-2FC3-11CF-89CA-008029E4B0B1" )
 ]
@@ -323,7 +325,7 @@ interface FormulaView : View
         ]
 }
 
-shell SmViewShell : SfxViewShell
+shell SmViewShell
 {
     import FormulaView[Automation];
 }

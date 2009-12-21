@@ -57,8 +57,8 @@
 #include <svx/brkitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/tstpitem.hxx>
-#include "svtools/urihelper.hxx"
-#include <svtools/whiter.hxx>
+#include "svl/urihelper.hxx"
+#include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

@@ -40,11 +40,11 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/intitem.hxx>
 #include <tools/shl.hxx>
 #include <svx/srchitem.hxx>
 

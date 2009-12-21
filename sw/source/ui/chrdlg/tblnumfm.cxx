@@ -51,7 +51,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/tabdlg.hxx>
 
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)

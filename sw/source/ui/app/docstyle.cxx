@@ -33,11 +33,11 @@
 
 #define _SVSTDARR_USHORTS
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/syslocale.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/numitem.hxx>
 // --> OD 2008-02-13 #newlistlevelattrs#
@@ -68,7 +68,7 @@
 #endif
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>

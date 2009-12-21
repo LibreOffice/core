@@ -154,7 +154,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <svx/acorrcfg.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>

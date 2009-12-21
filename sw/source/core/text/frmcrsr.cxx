@@ -887,7 +887,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.Pos().X() = aCharBox.Pos().X() - 150;
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
@@ -1253,7 +1253,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( pNextLine || bFirstOfDouble )
             {
                 aCharBox.SSize().Width() /= 2;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
                 const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif

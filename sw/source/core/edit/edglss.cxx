@@ -34,7 +34,7 @@
 
 #include <osl/endian.h>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/cachestr.hxx>
 #include <doc.hxx>
 #include <pam.hxx>

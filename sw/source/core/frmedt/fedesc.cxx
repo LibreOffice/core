@@ -70,7 +70,7 @@ USHORT SwFEShell::GetPageDescCnt() const
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
     //Der Pagedesc muss im Dokument vorhanden sein!
     BOOL bFound = FALSE;

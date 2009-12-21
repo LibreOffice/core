@@ -35,7 +35,7 @@
 #include <redline.hxx>
 #include <vector>
 #include <vcl/window.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 class SwTxtFld;
 class SwRootFrm;

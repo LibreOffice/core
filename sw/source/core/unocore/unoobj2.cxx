@@ -112,7 +112,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>

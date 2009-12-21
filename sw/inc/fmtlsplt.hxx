@@ -30,7 +30,7 @@
 #ifndef _FMTTSPLT_HXX
 #define _FMTTSPLT_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 #include "swdllapi.h"

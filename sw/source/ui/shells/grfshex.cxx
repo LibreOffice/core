@@ -51,7 +51,7 @@
 #endif
 #include <caption.hxx>
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
@@ -81,7 +81,7 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 

@@ -33,7 +33,7 @@
 
 // #include <math.h>
 #include <tools/datetime.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <doc.hxx>
 #include <fldbas.hxx>

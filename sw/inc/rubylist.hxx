@@ -30,7 +30,7 @@
 #ifndef _RUBYLIST_HXX
 #define _RUBYLIST_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <swtypes.hxx>
 #include <fmtruby.hxx>
 
