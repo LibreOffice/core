@@ -39,7 +39,7 @@ PACKAGE	= org$/openoffice$/java$/accessibility
 .INCLUDE :  settings.mk
 
 JAVADIR = $(OUT)$/misc$/java
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
+JARFILES = jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
     logging$/XAccessibleEventLog.java \
     logging$/XAccessibleHypertextLog.java \

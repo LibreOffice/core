@@ -50,11 +50,6 @@
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
-
 #include <usr/factoryhlp.hxx>
 
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
@@ -401,7 +396,7 @@ void AttributeListImpl::clear()
     vector<struct TagAttribute> dummy;
     m_pImpl->vecAttribute.swap( dummy );
 
-    assert( ! getLength() );
+    OSL_ASSERT( ! getLength() );
 }
 
 
