@@ -1904,6 +1904,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(!xColumn.is())
                     {
                         // no column found so we could look at the position i
+                        bReFetchName = sal_True;
+                        sColumnLabel = ::rtl::OUString();
                         Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
                         if(xIndexAccess.is() && i <= xIndexAccess->getCount())
                         {
@@ -1913,7 +1915,9 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         {
                             Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
                             if( i <= aSeq.getLength())
+                            {
                                 m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                            }
                         }
                     }
                     if(bReFetchName && xColumn.is())
