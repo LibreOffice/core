@@ -47,11 +47,13 @@
 
 #include <malloc.h>
 //#include <string>
-//#include <map> 
+//#include <map>
 #include <strsafe.h>
 
 // 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
+extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD);
+}
 
 // 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
@@ -308,24 +310,24 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
         DWORD    dwName = 255;
         DWORD    dwValue = 1024;
         DWORD    dwComponent = 255;
-        
+
         szKey[0] = '\0';
         szName[0] = '\0';
         szValue[0] = '\0';
         szComponent[0] = '\0';
-        
+
         lRoot = MsiRecordGetInteger(hRecord,2);
         MsiRecordGetString(hRecord,3,szKey,&dwKey);
-        
-        if (!MsiRecordIsNull(hRecord, 4)) 
+
+        if (!MsiRecordIsNull(hRecord, 4))
             MsiRecordGetString(hRecord,4,szName,&dwName);
-        
+
         if (!MsiRecordIsNull(hRecord, 5))
         {
-            MsiRecordGetString(hRecord,5,szValue,&dwValue);         
-                
-            
-    
+            MsiRecordGetString(hRecord,5,szValue,&dwValue);
+
+
+
             wchar_t* nPos = wcsstr(szValue , BASISINSTALLLOCATION);
             if ( NULL != nPos)
             {
@@ -341,21 +343,21 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
 
                 // prefix
                 wcsncpy(newValue, szValue, nPrefixSize);
-                
+
                 // basis location
                 wcsncat(newValue, sBasisInstallLocation, nPropSize * sizeof( wchar_t ));
 
                 // postfix
                 wcsncat(newValue, nPos + ( wcslen( BASISINSTALLLOCATION ) ), nPropSize * sizeof( wchar_t ));
-                
+
                 wcsncpy(szValue, newValue, nNewValueBytes <=1024? nNewValueBytes: 1024);
 
                 free(newValue);
             }
-            
+
         }
-        
-    
+
+
         MsiRecordGetString(hRecord,6,szComponent,&dwComponent);
 
         OutputDebugStringFormat(L"****** DoRegEntries *******" );
@@ -393,7 +395,7 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                 break;
 
         }
-        
+
         OutputDebugStringFormat(L"Key:");
         OutputDebugStringFormat( szKey );
         OutputDebugStringFormat(L"Name:");
@@ -406,14 +408,14 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
         switch (op)
         {
             case SET:
-                    
+
                     if (WriteRegistry(rhMSI, SET, szComponent))
                     {
                         OutputDebugStringFormat(L"DoRegEntries - Write\n" );
                         SetRegistryKey(key, szKey, szName, szValue);
                     }
                 break;
-            case REMOVE: 
+            case REMOVE:
                     OutputDebugStringFormat(L"DoRegEntries - PreRemove\n" );
                     if (WriteRegistry(rhMSI, REMOVE, szComponent))
                     {

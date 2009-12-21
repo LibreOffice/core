@@ -52,6 +52,7 @@ SLOFILES =  \
         $(SLO)$/xstorage.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/disposelistener.obj\
+        $(SLO)$/selfterminatefilestream.obj\
         $(SLO)$/switchpersistencestream.obj\
         $(SLO)$/register.obj
 
