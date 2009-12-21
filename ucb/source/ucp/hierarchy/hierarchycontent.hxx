@@ -101,6 +101,9 @@ public:
 
     sal_Bool getIsDocument() const { return !getIsFolder(); }
 
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    getCreatableContentsInfo() const;
+
     const HierarchyEntryData & getHierarchyEntryData() const { return m_aData; }
 
 private:

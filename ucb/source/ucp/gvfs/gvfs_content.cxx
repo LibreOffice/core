@@ -390,6 +390,13 @@ uno::Any SAL_CALL Content::execute(
             g_warning ("Open falling through ...");
 #endif
 
+    } else if ( COMMAND_IS( aCommand, "createNewContent" ) && isFolder( xEnv ) ) {
+        ucb::ContentInfo arg;
+        if ( !( aCommand.Argument >>= arg ) )
+            ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
+
+        aRet <<= createNewContent( arg );
+
     } else if ( COMMAND_IS( aCommand, "insert" ) ) {
         ucb::InsertCommandArgument arg;
         if ( !( aCommand.Argument >>= arg ) )
@@ -444,32 +451,45 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 // XContentCreator methods.
 //
 
-uno::Sequence< ucb::ContentInfo > SAL_CALL
-Content::queryCreatableContentsInfo()
-    throw( uno::RuntimeException )
+uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+            throw( uno::RuntimeException )
 {
-    uno::Sequence< ucb::ContentInfo > seq(2);
+    if ( isFolder( xEnv ) )
+    {
+        uno::Sequence< ucb::ContentInfo > seq(2);
 
-    // Minimum set of props we really need
-    uno::Sequence< beans::Property > props( 1 );
-    props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
-        -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-        beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
+        // Minimum set of props we really need
+        uno::Sequence< beans::Property > props( 1 );
+        props[0] = beans::Property(
+            rtl::OUString::createFromAscii( "Title" ),
+            -1,
+            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+            beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-    // file
-    seq[0].Type       = rtl::OUString::createFromAscii( GVFS_FILE_TYPE );
-    seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                  ucb::ContentInfoAttribute::KIND_DOCUMENT );
-    seq[0].Properties = props;
+        // file
+        seq[0].Type       = rtl::OUString::createFromAscii( GVFS_FILE_TYPE );
+        seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
+                              ucb::ContentInfoAttribute::KIND_DOCUMENT );
+        seq[0].Properties = props;
 
-    // folder
-    seq[1].Type       = rtl::OUString::createFromAscii( GVFS_FOLDER_TYPE );
-    seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
+        // folder
+        seq[1].Type       = rtl::OUString::createFromAscii( GVFS_FOLDER_TYPE );
+        seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
+        seq[1].Properties = props;
 
-    return seq;
+        return seq;
+    }
+    else
+    {
+        return uno::Sequence< ucb::ContentInfo >();
+    }
+}
+
+uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+            throw( uno::RuntimeException )
+{
+    return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
 }
 
 uno::Reference< ucb::XContent > SAL_CALL
@@ -668,7 +688,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             g_warning ("FIXME: Requested mime-type - an expensive op. indeed!");
 #endif
             xRow->appendVoid( rProp );
-        } else {
+        } else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
+
+        else {
             xRow->appendVoid( rProp );
         }
     }
@@ -780,7 +803,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) ||
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ||
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ||
+             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
             aRet[ n ] <<= getReadOnlyException( this );
 
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) ) {
@@ -1311,8 +1335,8 @@ uno::Sequence< beans::Property > Content::getProperties(
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
 // FIXME: Too expensive for now (?)
 //                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-//               -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-//               beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+//                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+//                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
                  -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
@@ -1327,6 +1351,9 @@ uno::Sequence< beans::Property > Content::getProperties(
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ),
                  -1, getCppuBooleanType(),
+                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+                 -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
@@ -1339,7 +1366,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    static ucb::CommandInfo aDocumentCommandInfoTable[] = {
+    static ucb::CommandInfo aCommandInfoTable[] = {
         // Required commands
         ucb::CommandInfo
         ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
@@ -1365,17 +1392,19 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
-        // Folder only
+        // Folder Only, omitted if not a folder
         ucb::CommandInfo
         ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
-          -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) )
+          -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+        ucb::CommandInfo
+        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+          -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
-    int num = 7;
 
-        if ( isFolder( xEnv ) )
-         num += 1;
-
-    return uno::Sequence< ucb::CommandInfo >(aDocumentCommandInfoTable, num );
+    const int nProps
+        = sizeof( aCommandInfoTable ) / sizeof( aCommandInfoTable[ 0 ] );
+    return uno::Sequence< ucb::CommandInfo >(
+        aCommandInfoTable, isFolder( xEnv ) ? nProps : nProps - 2 );
 }
 
 rtl::OUString

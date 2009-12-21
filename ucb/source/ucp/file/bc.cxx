@@ -49,7 +49,6 @@
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"
@@ -437,6 +436,15 @@ BaseContent::execute( const Command& aCommand,
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
     }
+    else if( ! aCommand.Name.compareToAscii( "createNewContent" ) )
+    {
+        ucb::ContentInfo aArg;
+        if ( !( aCommand.Argument >>= aArg ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT );
+        else
+            aAny <<= createNewContent( aArg );
+    }
     else
         m_pMyShell->installError( CommandId,
                                   TASKHANDLER_UNSUPPORTED_COMMAND );
@@ -637,27 +645,7 @@ BaseContent::queryCreatableContentsInfo(
     void )
     throw( RuntimeException )
 {
-    Sequence< ContentInfo > seq(2);
-
-    // file
-    seq[0].Type       = m_pMyShell->FileContentType;
-    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-        | ContentInfoAttribute::KIND_DOCUMENT;
-
-    Sequence< beans::Property > props( 1 );
-    props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
-        -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-        beans::PropertyAttribute::MAYBEVOID
-        | beans::PropertyAttribute::BOUND );
-    seq[0].Properties = props;
-
-    // folder
-    seq[1].Type       = m_pMyShell->FolderContentType;
-    seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
-    return seq;
+    return m_pMyShell->queryCreatableContentsInfo();
 }
 
 

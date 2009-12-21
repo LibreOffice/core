@@ -43,7 +43,8 @@ namespace com { namespace sun { namespace star {
     namespace sdbc  { class XRow; }
     namespace io    { class XInputStream; class XOutputStream; }
     namespace beans { struct PropertyValue; }
-    namespace ucb   { struct OpenCommandArgument2; struct TransferInfo; }
+    namespace ucb   { struct OpenCommandArgument2; struct TransferInfo;
+                      struct ContentInfo; }
 } } }
 
 namespace tdoc_ucp
@@ -94,6 +95,11 @@ public:
     const rtl::OUString & getTitle() const { return m_aTitle; }
     void setTitle( const rtl::OUString & rTitle ) { m_aTitle = rTitle; }
 
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    getCreatableContentsInfo() const;
+
+    bool isContentCreator() const;
+
 private:
     ContentType   m_eType;
     rtl::OUString m_aContentType;
@@ -136,8 +142,6 @@ private:
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
     virtual ::rtl::OUString getParentURL();
-
-    bool isContentCreator();
 
     static bool hasData( ContentProvider* pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }

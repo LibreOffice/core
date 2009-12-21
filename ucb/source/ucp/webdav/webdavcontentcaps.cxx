@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/CommandInfo.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
@@ -153,6 +154,16 @@ bool ContentProvider::getProperty(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY ) );
+
+            m_pProps->insert(
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -348,6 +359,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     sal_Bool bHasDateModified     = sal_False;
     sal_Bool bHasMediaType        = sal_False;
     sal_Bool bHasSize             = sal_False;
+    sal_Bool bHasCreatableInfos   = sal_False;
 
     {
         std::set< rtl::OUString >::const_iterator it  = aPropSet.begin();
@@ -428,7 +440,13 @@ uno::Sequence< beans::Property > Content::getProperties(
             {
                 bHasSize = sal_True;
             }
-
+            else if ( !bHasCreatableInfos &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "CreatableContentsInfo" ) ) )
+            {
+                bHasCreatableInfos = sal_True;
+            }
             it++;
         }
     }
@@ -477,6 +495,11 @@ uno::Sequence< beans::Property > Content::getProperties(
     if ( !bHasSize && bHasGetContentLength )
         aPropSet.insert(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) );
+
+    if ( !bHasCreatableInfos )
+        aPropSet.insert(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "CreatableContentsInfo" ) ) );
 
     // Add cached properties, if present and still missing.
     if ( xCachedProps.get() )
@@ -602,7 +625,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     sal_Bool bSupportsLocking = supportsExclusiveWriteLock( xEnv );
 
     sal_Int32 nPos = aCmdInfo.getLength();
-    sal_Int32 nMoreCmds = ( bFolder ? 1 : 0 ) + ( bSupportsLocking ? 2 : 0 );
+    sal_Int32 nMoreCmds = ( bFolder ? 2 : 0 ) + ( bSupportsLocking ? 2 : 0 );
     if ( nMoreCmds )
         aCmdInfo.realloc( nPos + nMoreCmds );
     else
@@ -619,6 +642,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
                 getCppuType( static_cast< ucb::TransferInfo * >( 0 ) ) );
+        nPos++;
+        aCmdInfo[ nPos ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "createNewContent" ) ),
+                -1,
+                getCppuType( static_cast< ucb::ContentInfo * >( 0 ) ) );
         nPos++;
     }
     else

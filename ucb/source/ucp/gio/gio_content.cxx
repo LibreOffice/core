@@ -402,6 +402,7 @@ static util::DateTime getDateFromUnix (time_t t)
 
 uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *pInfo,
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv,
     const uno::Sequence< beans::Property >& rProperties)
 {
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( rSMgr );
@@ -499,6 +500,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
             else
                 xRow->appendVoid( rProp );
         }
+        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        {
+            xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
+        }
 #ifdef DEBUG
         else
         {
@@ -520,7 +525,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     if (!pInfo)
         ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
 
-    return getPropertyValuesFromGFileInfo(pInfo, m_xSMgr, rProperties);
+    return getPropertyValuesFromGFileInfo(pInfo, m_xSMgr, xEnv, rProperties);
 }
 
 static lang::IllegalAccessException
@@ -663,7 +668,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) ||
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ||
              rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ||
+             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
         {
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
         }
@@ -944,6 +950,14 @@ uno::Any SAL_CALL Content::execute(
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= setPropertyValues( aProperties, xEnv );
     }
+    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) )
+             && isFolder( xEnv ) )
+    {
+        ucb::ContentInfo arg;
+        if ( !( aCommand.Argument >>= arg ) )
+                ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
+        aRet <<= createNewContent( arg );
+    }
     else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ))
     {
         ucb::InsertCommandArgument arg;
@@ -956,8 +970,8 @@ uno::Any SAL_CALL Content::execute(
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
 
-    //If no delete physical, try and trashcan it, if that doesn't work go
-    //ahead and try and delete it anyway
+        //If no delete physical, try and trashcan it, if that doesn't work go
+        //ahead and try and delete it anyway
         if (!bDeletePhysical && !g_file_trash(getGFile(), NULL, NULL))
                 bDeletePhysical = true;
 
@@ -1079,36 +1093,50 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
         ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
 }
 
-com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
-            throw( com::sun::star::uno::RuntimeException )
+uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+            throw( uno::RuntimeException )
 {
-    uno::Sequence< ucb::ContentInfo > seq(2);
+    if ( isFolder( xEnv ) )
+    {
+        uno::Sequence< ucb::ContentInfo > seq(2);
 
-    // Minimum set of props we really need
-    uno::Sequence< beans::Property > props( 1 );
-    props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
-        -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-        beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
+        // Minimum set of props we really need
+        uno::Sequence< beans::Property > props( 1 );
+        props[0] = beans::Property(
+            rtl::OUString::createFromAscii( "Title" ),
+            -1,
+            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+            beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-    // file
-    seq[0].Type       = rtl::OUString::createFromAscii( GIO_FILE_TYPE );
-    seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                          ucb::ContentInfoAttribute::KIND_DOCUMENT );
-    seq[0].Properties = props;
+        // file
+        seq[0].Type       = rtl::OUString::createFromAscii( GIO_FILE_TYPE );
+        seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
+                              ucb::ContentInfoAttribute::KIND_DOCUMENT );
+        seq[0].Properties = props;
 
-    // folder
-    seq[1].Type       = rtl::OUString::createFromAscii( GIO_FOLDER_TYPE );
-    seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
+        // folder
+        seq[1].Type       = rtl::OUString::createFromAscii( GIO_FOLDER_TYPE );
+        seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
+        seq[1].Properties = props;
 
-    return seq;
+        return seq;
+    }
+    else
+    {
+        return uno::Sequence< ucb::ContentInfo >();
+    }
 }
 
-com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-    SAL_CALL Content::createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-        throw( com::sun::star::uno::RuntimeException )
+uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+            throw( uno::RuntimeException )
+{
+    return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
+}
+
+uno::Reference< ucb::XContent >
+    SAL_CALL Content::createNewContent( const ucb::ContentInfo& Info )
+        throw( uno::RuntimeException )
 {
     bool create_document;
     const char *name;
@@ -1223,6 +1251,9 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ),
             -1, getCppuBooleanType(),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+            -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
@@ -1232,7 +1263,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< ucb::XCommandEnvironment > & xEnv)
 {
-    static ucb::CommandInfo aDocumentCommandInfoTable[] =
+    static ucb::CommandInfo aCommandInfoTable[] =
     {
         // Required commands
         ucb::CommandInfo
@@ -1262,11 +1293,14 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
         ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
-          -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) )
+          -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+        ucb::CommandInfo
+        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+          -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
-    const int nProps = sizeof (aDocumentCommandInfoTable) / sizeof (aDocumentCommandInfoTable[0]);
-    return uno::Sequence< ucb::CommandInfo >(aDocumentCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 1);
+    const int nProps = sizeof (aCommandInfoTable) / sizeof (aCommandInfoTable[0]);
+    return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 
 XTYPEPROVIDER_COMMON_IMPL( Content );

@@ -98,6 +98,9 @@ struct ContentProperties
       bHasEncryptedEntries( sal_False ) {}
 
     ContentProperties( const ::rtl::OUString& rContentType );
+
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    getCreatableContentsInfo( PackageUri const & rUri ) const;
 };
 
 //=========================================================================
@@ -189,10 +192,6 @@ private:
              com::sun::star::uno::Reference<
                 com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
-
-    static ::rtl::OUString
-    GetContentType( const ::rtl::OUString& aScheme,
-            sal_Bool bFolder );
 
     sal_Bool
     hasData( const PackageUri& rURI );
@@ -329,6 +328,9 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XEnumeration >
     getIterator();
+
+    static ::rtl::OUString
+    getContentType( const ::rtl::OUString& aScheme,  sal_Bool bFolder );
 };
 
 }

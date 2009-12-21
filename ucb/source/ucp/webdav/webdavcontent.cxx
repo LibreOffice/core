@@ -641,6 +641,29 @@ uno::Any SAL_CALL Content::execute(
 
         unlock( Environment );
     }
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
+              isFolder( Environment ) )
+    {
+        //////////////////////////////////////////////////////////////////
+        // createNewContent
+        //////////////////////////////////////////////////////////////////
+
+        ucb::ContentInfo aArg;
+        if ( !( aCommand.Argument >>= aArg ) )
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+
+        aRet = uno::makeAny( createNewContent( aArg ) );
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -1165,8 +1188,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     std::auto_ptr< DAVResourceAccess > xResAccess;
     rtl::OUString aEscapedTitle;
     bool bHasAll = false;
-    uno::Reference< lang::XMultiServiceFactory >       xSMgr;
-    uno::Reference< ucb::XContentIdentifier >    xIdentifier;
+    uno::Reference< lang::XMultiServiceFactory > xSMgr;
+    uno::Reference< ucb::XContentIdentifier > xIdentifier;
     rtl::Reference< ::ucbhelper::ContentProviderImplHelper > xProvider;
 
     {
@@ -1413,14 +1436,35 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                                  m_bCollection ) );
     }
 
-    // Add BaseURI property, if requested.
-    if ( !xProps->contains(
-             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ) ) )
+    sal_Int32 nCount = rProperties.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        xProps->addProperty(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
-            uno::makeAny( getBaseURI( xResAccess ) ),
-            true );
+        const rtl::OUString rName = rProperties[ n ].Name;
+        if ( rName.equalsAsciiL(
+                      RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
+        {
+            // Add BaseURI property, if requested.
+            xProps->addProperty(
+                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
+                 uno::makeAny( getBaseURI( xResAccess ) ),
+                 true );
+        }
+        else if ( rName.equalsAsciiL(
+                      RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        {
+            // Add CreatableContentsInfo property, if requested.
+            sal_Bool bFolder = sal_False;
+            xProps->getValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ) )
+                    >>= bFolder;
+            xProps->addProperty(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+                uno::makeAny( bFolder
+                                  ? queryCreatableContentsInfo()
+                                  : uno::Sequence< ucb::ContentInfo >() ),
+                true );
+        }
     }
 
     uno::Reference< sdbc::XRow > xResultRow
@@ -1648,6 +1692,15 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 // (but could be writable, if 'getcontenttype' would be)
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+            }
+            if ( rName.equalsAsciiL(
+                     RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            {
+                // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
                                 rtl::OUString::createFromAscii(
                                     "Property is read-only!" ),

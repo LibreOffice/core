@@ -589,6 +589,12 @@ rtl::OUString FTPURL::net_title() const
             // the client should retry after getting the correct
             // username + password
             throw curl_exception(err);
+#if LIBCURL_VERSION_NUM>=0x070d01 /* 7.13.1 */
+        else if(err == CURLE_LOGIN_DENIED)
+            // the client should retry after getting the correct
+            // username + password
+            throw curl_exception(err);
+#endif
         else if(try_more && err == CURLE_FTP_ACCESS_DENIED) {
             // We  were  either denied access when trying to login to
             //  an FTP server or when trying to change working directory

@@ -286,7 +286,8 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_WRONG_OPEN_ARGUMENT              ||
                  errorCode == TASKHANDLING_WRONG_DELETE_ARGUMENT            ||
                  errorCode == TASKHANDLING_WRONG_TRANSFER_ARGUMENT          ||
-                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT )
+                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT            ||
+                 errorCode == TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT )
         {
             IllegalArgumentException excep;
             excep.ArgumentPosition = 0;
