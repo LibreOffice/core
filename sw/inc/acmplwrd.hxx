@@ -32,7 +32,7 @@
 
 
 #define _SVSTDARR_STRINGSISORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 class SwDoc;
 class SwAutoCompleteWord_Impl;

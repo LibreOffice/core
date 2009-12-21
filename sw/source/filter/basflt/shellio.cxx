@@ -33,11 +33,11 @@
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
@@ -158,7 +158,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+    RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -169,6 +169,8 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         SwPaM* pUndoPam = 0;
         if( bDocUndo || pCrsr )
@@ -190,7 +192,14 @@ ULONG SwReader::Read( const Reader& rOptions )
         xub_StrLen nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
+        pDoc->SetRedlineMode_intern( eOld );
+
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
+
+        // an ODF document may contain redline mode in settings.xml; save it!
+        ePostReadRedlineMode = pDoc->GetRedlineMode();
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
         {
@@ -230,13 +239,27 @@ ULONG SwReader::Read( const Reader& rOptions )
                 const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
                 if( USHRT_MAX == aFlyFrmArr.GetPos( pFrmFmt) )
                 {
-                    if( FLY_PAGE == rAnchor.GetAnchorId() ||
-                        ( FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
-                            rAnchor.GetCntntAnchor() &&
-                            ( pUndoPam->GetPoint()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ||
-                            pUndoPam->GetMark()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ) ) )
+                    SwPosition const*const pFrameAnchor(
+                            rAnchor.GetCntntAnchor());
+                    if  (   (FLY_PAGE == rAnchor.GetAnchorId())
+                        ||  (   pFrameAnchor
+                            &&  (   (   (FLY_AT_CNTNT == rAnchor.GetAnchorId())
+                                    &&  (   (pUndoPam->GetPoint()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        ||  (pUndoPam->GetMark()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        )
+                                    )
+                                // #i97570# also check frames anchored AT char
+                                ||  (   (FLY_AUTO_CNTNT == rAnchor.GetAnchorId())
+                                    &&  !IsDestroyFrameAnchoredAtChar(
+                                              *pFrameAnchor,
+                                              *pUndoPam->GetPoint(),
+                                              *pUndoPam->GetMark())
+                                    )
+                                )
+                            )
+                        )
                     {
                         if( bChkHeaderFooter &&
                             FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
@@ -351,7 +374,9 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks( TRUE );
         // <--
 
-    eOld = (RedlineMode_t)(pDoc->GetRedlineMode() & ~nsRedlineMode_t::REDLINE_IGNORE);
+        // not insert: set the redline mode read from settings.xml
+        eOld = static_cast<RedlineMode_t>(
+                ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
 
         pDoc->SetFieldsDirty(false, NULL, 0);
     }

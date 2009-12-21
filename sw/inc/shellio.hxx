@@ -538,7 +538,7 @@ public:
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
     void SetStrm( SvStream& rStrm ) { pStrm = &rStrm; }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     SvStream& Strm() { return *pStrm; }
 #else
     SvStream& Strm();
@@ -637,6 +637,8 @@ public:
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, BOOL, const String& );
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
 {

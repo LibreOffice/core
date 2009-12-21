@@ -46,8 +46,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
 
-#include <svtools/svstdarr.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/svstdarr.hxx>
+#include <unotools/pathoptions.hxx>
 #include <swtypes.hxx>
 #include <glosbib.hxx>
 #include <gloshdl.hxx>

@@ -41,9 +41,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/adjitem.hxx>
@@ -966,7 +966,7 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
             TableRowEnd( pTextNodeInfoInner->getDepth() );
 
             SVBT16 nSty;
-            ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nSty );
+            ShortToSVBT16( 0, nSty );
             m_rWW8Export.pO->Insert( (BYTE*)&nSty, 2, m_rWW8Export.pO->Count() );     // Style #
             TableInfoRow( pTextNodeInfoInner );
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
@@ -1559,7 +1559,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
         rShd = WW8_SHD();               // alles Nullen : transparent
     else
     {
-        rShd.SetFore( 8);
+        rShd.SetFore( 0);
         rShd.SetBack( TransCol( rCol ) );
         rShd.SetStyle( bWrtWW8, 0 );
     }
@@ -3582,7 +3582,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,

@@ -82,8 +82,13 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
+    {
         pNewFnt = new SwFont( *pFnt );
-    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt );
+    }
+    // --> OD 2009-11-25 #i107143#
+    // pass placeholder property to created <SwFldPortion> instance.
+    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
+    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;

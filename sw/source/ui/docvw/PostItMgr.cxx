@@ -70,9 +70,9 @@
 #include <sfx2/srchitem.hxx>
 
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/eeitem.hxx>
@@ -1941,9 +1941,14 @@ void SwPostItMgr::AssureStdModeAtShell()
         {
                 mpWrtShell->UnSelectFrm();
                 mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->GetView().LeaveDrawCreate();
                 mpWrtShell->EnterStdMode();
 
                 mpWrtShell->DrawSelChanged();
                 mpView->StopShellTimer();
         }
 }
+
+void SwNoteProps::Commit() {}
+void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+

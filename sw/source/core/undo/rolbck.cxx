@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
 #include <fmtflcnt.hxx>
@@ -833,7 +833,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     , m_Array( (BYTE)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
-    bool bAutoStyle = true;
+    bool bAutoStyle = false;
 
     while( TRUE )
     {

@@ -88,14 +88,6 @@ public:
 };
 
 
-class SwInsChr: public SwMsgPoolItem
-{
-public:
-    xub_StrLen nPos;
-
-    SwInsChr( USHORT nP );
-};
-
 class SwInsTxt: public SwMsgPoolItem
 {
 public:
@@ -214,7 +206,7 @@ public:
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhichL = 0 )
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     { pChgSet->ClearItem( nWhichL ); }
 #else
         ;
@@ -269,17 +261,6 @@ public:
 //    const SwTxtNodeTable& GetTxtNodeList() const { return aList; }
 //};
 // <--
-
-class SwNRuleLowerLevel : public SwMsgPoolItem
-{
-    const String& rName;
-    BYTE nLvl;
-public:
-    SwNRuleLowerLevel( const String& rRuleName, BYTE nLevel );
-
-    const String& GetName() const { return rName; }
-    BYTE GetLevel() const { return nLvl; }
-};
 
 class SwFindNearestNode : public SwMsgPoolItem
 {

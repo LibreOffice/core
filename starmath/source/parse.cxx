@@ -40,7 +40,7 @@
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include "parse.hxx"
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"

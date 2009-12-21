@@ -32,7 +32,7 @@
 
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 class SwTxtFtn;
 class SwNodeIndex;

@@ -2110,6 +2110,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         OTextCursorHelper* pCursor = 0;
         SwXTextPortion* pPortion = 0;
         SwXText* pText = 0;
+        SwXParagraph* pParagraph = 0;
 
         pRange  = reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
@@ -2119,6 +2120,8 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
         pPortion = reinterpret_cast< SwXTextPortion * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
+        pParagraph = reinterpret_cast< SwXParagraph * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId( ) ) ) );
 
         if (pRange)
             pDoc = pRange->GetDoc();
@@ -2130,6 +2133,8 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         {
             pDoc = pPortion->GetCursor()->GetDoc();
         }
+        else if ( !pDoc && pParagraph && pParagraph->GetTxtNode( ) )
+            pDoc = pParagraph->GetTxtNode( )->GetDoc( );
 
     }
 

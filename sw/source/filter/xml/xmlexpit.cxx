@@ -34,9 +34,9 @@
 
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -45,7 +45,7 @@
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 

@@ -576,17 +576,17 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_PROSPECT_RTL:
         {
-            rValue <<= mpPrtOpt->IsPrintProspect_RTL();
+            bBoolVal = mpPrtOpt->IsPrintProspect_RTL();
         }
         break;
         case HANDLE_PRINTSET_PLACEHOLDER:
         {
-            rValue <<= mpPrtOpt->IsPrintTextPlaceholder();
+            bBoolVal = mpPrtOpt->IsPrintTextPlaceholder();
         }
         break;
         case HANDLE_PRINTSET_HIDDEN_TEXT:
         {
-            rValue <<= mpPrtOpt->IsPrintHiddenText();
+            bBoolVal = mpPrtOpt->IsPrintHiddenText();
         }
         break;
         default:
