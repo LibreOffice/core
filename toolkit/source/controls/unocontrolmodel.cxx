@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -262,7 +263,11 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
         switch ( nPropId )
         {
             case BASEPROPERTY_GRAPHIC:
-                aDefault <<= makeAny( Reference< graphic::XGraphic >() );
+                aDefault <<= Reference< graphic::XGraphic >();
+                break;
+
+            case BASEPROPERTY_REFERENCE_DEVICE:
+                aDefault <<= Reference< awt::XDevice >();
                 break;
 
             case BASEPROPERTY_VERTICALALIGN:

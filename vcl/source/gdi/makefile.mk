@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,33 @@ CDEFS+=-DENABLE_GRAPHITE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/salmisc.obj 	\
+EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
+                    $(SLO)$/outdev.obj		\
+                    $(SLO)$/outdev3.obj 	\
+                    $(SLO)$/gfxlink.obj		\
+                    $(SLO)$/print.obj		\
+                    $(SLO)$/print2.obj		\
+            $(SLO)$/configsettings.obj 	\
+                    $(SLO)$/sallayout.obj		\
+                    $(SLO)$/image.obj		\
+                    $(SLO)$/impimage.obj		\
+                    $(SLO)$/impgraph.obj	\
+                    $(SLO)$/metric.obj		\
+                    $(SLO)$/pdfwriter_impl.obj	\
+                    $(SLO)$/pdffontcache.obj\
+                    $(SLO)$/bmpconv.obj		\
+                    $(SLO)$/pdfextoutdevdata.obj	\
+                    $(SLO)$/jobset.obj		\
+                    $(SLO)$/impimagetree.obj		\
+                    $(SLO)$/pngread.obj		\
+                    $(SLO)$/pngwrite.obj    \
+                    $(SLO)$/virdev.obj \
+                    $(SLO)$/impprn.obj \
+                    $(SLO)$/gdimtf.obj		\
+                    $(SLO)$/graphictools.obj \
+                    $(SLO)$/textlayout.obj
+
+SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/animate.obj 	\
             $(SLO)$/impanmvw.obj	\
             $(SLO)$/bitmap.obj		\
@@ -68,80 +94,30 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/cvtsvm.obj		\
             $(SLO)$/cvtgrf.obj		\
             $(SLO)$/font.obj		\
-            $(SLO)$/gdimtf.obj		\
-            $(SLO)$/gfxlink.obj 	\
             $(SLO)$/gradient.obj	\
             $(SLO)$/hatch.obj		\
             $(SLO)$/graph.obj		\
-            $(SLO)$/image.obj		\
-            $(SLO)$/impimage.obj		\
             $(SLO)$/impbmp.obj		\
-            $(SLO)$/impgraph.obj	\
-            $(SLO)$/impimagetree.obj \
             $(SLO)$/imagerepository.obj   \
-            $(SLO)$/impprn.obj		\
             $(SLO)$/impvect.obj 	\
             $(SLO)$/jobset.obj		\
             $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
-            $(SLO)$/metric.obj		\
             $(SLO)$/octree.obj		\
             $(SLO)$/outmap.obj		\
-            $(SLO)$/outdev.obj		\
             $(SLO)$/outdev2.obj 	\
-            $(SLO)$/outdev3.obj 	\
             $(SLO)$/outdev4.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
-            $(SLO)$/virdev.obj      \
-            $(SLO)$/fontcvt.obj		\
-            $(SLO)$/print.obj		\
-            $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/wall.obj		\
-            $(SLO)$/fontcfg.obj		\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
-            $(SLO)$/pdfwriter_impl.obj	\
-            $(SLO)$/pdffontcache.obj\
-            $(SLO)$/sallayout.obj		\
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
-            $(SLO)$/pdfextoutdevdata.obj	\
-            $(SLO)$/salnativewidgets-none.obj	\
-            $(SLO)$/bmpconv.obj		\
-            $(SLO)$/pngread.obj		\
-            $(SLO)$/pngwrite.obj	\
-            $(SLO)$/graphictools.obj
-
-EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
-                    $(SLO)$/outdev.obj		\
-                    $(SLO)$/outdev3.obj 	\
-                    $(SLO)$/gfxlink.obj		\
-                    $(SLO)$/print.obj		\
-                    $(SLO)$/print2.obj		\
-                    $(SLO)$/sallayout.obj		\
-                    $(SLO)$/image.obj		\
-                    $(SLO)$/impimage.obj		\
-                    $(SLO)$/impgraph.obj	\
-                    $(SLO)$/metric.obj		\
-                    $(SLO)$/pdfwriter_impl.obj	\
-                    $(SLO)$/pdffontcache.obj\
-                    $(SLO)$/fontcfg.obj		\
-                    $(SLO)$/bmpconv.obj		\
-                    $(SLO)$/pdfextoutdevdata.obj	\
-                    $(SLO)$/fontcvt.obj		\
-                    $(SLO)$/jobset.obj		\
-                    $(SLO)$/impimagetree.obj		\
-                    $(SLO)$/pngread.obj		\
-                    $(SLO)$/pngwrite.obj    \
-                    $(SLO)$/virdev.obj \
-                    $(SLO)$/impprn.obj \
-                    $(SLO)$/gdimtf.obj		\
-                    $(SLO)$/graphictools.obj
-
+            $(SLO)$/salnativewidgets-none.obj
 
 # --- Targets ------------------------------------------------------
 

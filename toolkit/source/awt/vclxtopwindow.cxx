@@ -46,6 +46,7 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -54,11 +55,42 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/debug.hxx>
 
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Type;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::lang::IndexOutOfBoundsException;
+
+VCLXTopWindow_Base::VCLXTopWindow_Base( const bool _bSupportSystemWindowPeer )
+    :m_bWHWND( _bSupportSystemWindowPeer )
+{
+}
+
 VCLXTopWindow_Base::~VCLXTopWindow_Base()
 {
+}
+
+Any VCLXTopWindow_Base::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
+
+    // do not expose XSystemDependentWindowPeer if we do not have a system window handle
+    if ( !aRet.hasValue() && m_bWHWND )
+        aRet = VCLXTopWindow_SBase::queryInterface( rType );
+
+    return aRet;
+}
+
+Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
+{
+    Sequence< Type > aTypes( VCLXTopWindow_XBase::getTypes() );
+    if ( m_bWHWND )
+        aTypes = ::comphelper::concatSequences( aTypes, VCLXTopWindow_SBase::getTypes() );
+    return aTypes;
 }
 
 ::com::sun::star::uno::Any VCLXTopWindow_Base::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
@@ -157,6 +189,81 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
     mxMenuBar = rxMenu;
 }
 
+//--------------------------------------------------------------------
+::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return sal_False;
+
+    return pWindow->IsMaximized();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return;
+
+    pWindow->Maximize( _ismaximized );
+}
+
+//--------------------------------------------------------------------
+::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return sal_False;
+
+    return pWindow->IsMinimized();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return;
+
+    _isMinimized ? pWindow->Minimize() : pWindow->Restore();
+}
+
+//--------------------------------------------------------------------
+::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return 0;
+
+    return pWindow->GetScreenNumber();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (RuntimeException, IndexOutOfBoundsException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    if ( ( _display < 0 ) || ( _display >= (sal_Int32)Application::GetScreenCount() ) )
+        throw IndexOutOfBoundsException();
+
+    SystemWindow* pWindow = dynamic_cast< SystemWindow* >( GetWindowImpl() );
+    if ( !pWindow )
+        return;
+
+    pWindow->SetScreenNumber( _display );
+}
+
 //  ----------------------------------------------------
 //  class VCLXTopWindow
 //  ----------------------------------------------------
@@ -167,7 +274,7 @@ void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 VCLXTopWindow::VCLXTopWindow(bool bWHWND)
-    : m_bWHWND(bWHWND)
+    : VCLXTopWindow_Base( bWHWND )
 {
 }
 
@@ -193,24 +300,19 @@ Window* VCLXTopWindow::GetWindowImpl()
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXTopWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet;
-    if(! m_bWHWND) {
-        aRet = ::cppu::queryInterface( rType,
-                                       SAL_STATIC_CAST( ::com::sun::star::awt::XTopWindow*, this ) );
-    }
-    else {
-        aRet = ::cppu::queryInterface( rType,
-                                       SAL_STATIC_CAST( ::com::sun::star::awt::XTopWindow*, this ),
-                                       SAL_STATIC_CAST( ::com::sun::star::awt::XSystemDependentWindowPeer*, this ) );
-    }
-    return (aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ));
+    ::com::sun::star::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );
+
+    if ( !aRet.hasValue() )
+        aRet = VCLXContainer::queryInterface( rType );
+
+    return aRet;
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
 {
     static ::cppu::OImplementationId* pId = NULL;
     static ::cppu::OImplementationId* pIdWithHandle = NULL;
-    if ( m_bWHWND )
+    if ( isSystemDependentWindowPeer() )
     {
         if( !pIdWithHandle )
         {
@@ -242,41 +344,5 @@ Window* VCLXTopWindow::GetWindowImpl()
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXTopWindow::getTypes() throw(::com::sun::star::uno::RuntimeException)
 {
-    static ::cppu::OTypeCollection* pCollection = NULL;
-    static ::cppu::OTypeCollection* pCollectionWithHandle = NULL;
-
-    if ( m_bWHWND )
-    {
-        if( !pCollectionWithHandle )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pCollectionWithHandle )
-            {
-                static ::cppu::OTypeCollection collectionWithHandle(
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer>* ) NULL ),
-                VCLXContainer::getTypes() );
-                pCollectionWithHandle = &collectionWithHandle;
-            }
-        }
-
-        return (*pCollectionWithHandle).getTypes();
-    }
-    else
-    {
-        if( !pCollection )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pCollection )
-            {
-                static ::cppu::OTypeCollection collection(
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
-                VCLXContainer::getTypes() );
-                pCollection = &collection;
-            }
-        }
-        return (*pCollection).getTypes();
-    }
+    return ::comphelper::concatSequences( VCLXTopWindow_Base::getTypes(), VCLXContainer::getTypes() );
 }

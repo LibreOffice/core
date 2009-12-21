@@ -558,7 +558,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
      || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
         aDFA.mbSubsettable = true;
-    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
+    else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
@@ -637,7 +637,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
      || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
         aDFA.mbSubsettable = true;
-    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
+    else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
@@ -2163,7 +2163,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         ::rtl::OUString aExecutableFile( aPath );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype") );
+        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/share/fonts/truetype") );
 
         // collect fonts in font path that could not be registered
         osl::Directory aFontDir( aFontDirUrl );
@@ -2723,7 +2723,8 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     TEXTMETRICA aTm;
     if( !::GetTextMetricsA( mhDC, &aTm ) )
         *pDataLen = 0;
-    rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1;
+    const bool bPFA = (*aRawFontData.get() < 0x80);
+    rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
     WCHAR aFaceName[64];
     int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
     // #i59854# strip eventual null byte

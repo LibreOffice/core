@@ -2456,6 +2456,14 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                     }
                 }
 
+                if( rIStrm.IsEof() )
+                {
+                    DBG_ERROR( "premature end of region stream" );
+                    delete rRegion.mpImplRegion;
+                    rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
+                    return rIStrm;
+                }
+
                 // get next header
                 rIStrm >> nTmp16;
             }
@@ -2534,7 +2542,13 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         rOStrm << bHasPolyPolygon;
 
         if( bHasPolyPolygon )
-            rOStrm << rRegion.GetPolyPolygon();
+        {
+            // #i105373#
+            PolyPolygon aNoCurvePolyPolygon;
+            rRegion.GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+            rOStrm << aNoCurvePolyPolygon;
+        }
     }
 
     return rOStrm;

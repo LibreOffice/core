@@ -119,7 +119,9 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 
     for( n = 0; n < nPoly; n++ )
     {
-        // #i102224#
+        // #i102224# Here the evtl. curved nature of Polygon was
+        // ignored (for all those Years). Adapted to at least write
+        // a polygon representing the curve as good as possible
          Polygon aSimplePoly;
          rPolyPoly[n].AdaptiveSubdivide(aSimplePoly);
          const USHORT nSize(aSimplePoly.GetSize());
@@ -1596,6 +1598,9 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 // #i102224#
                 MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const LineInfo& rInfo = pAct->GetLineInfo();
@@ -1665,8 +1670,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POLYGON_ACTION ):
             {
-                // #i102224#
                 MetaPolygonAction* pAct = (MetaPolygonAction*)pAction;
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const USHORT nPoints(aSimplePoly.GetSize());
@@ -1677,6 +1684,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 for( USHORT n = 0; n < nPoints; n++ )
                     rOStm << aSimplePoly[ n ];
+
                 nCount++;
 
                 const PolyPolygon aPolyPolygon(pAct->GetPolygon());

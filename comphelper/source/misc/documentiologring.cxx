@@ -34,6 +34,8 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <comphelper_module.hxx>
+
 #include "documentiologring.hxx"
 
 using namespace ::com::sun::star;
@@ -56,33 +58,33 @@ OSimpleLogRing::~OSimpleLogRing()
 }
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::impl_staticGetSupportedServiceNames()
+uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
 {
     uno::Sequence< rtl::OUString > aResult( 1 );
-    aResult[0] = impl_staticGetServiceName();
+    aResult[0] = getServiceName_static();
     return aResult;
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::impl_staticGetImplementationName()
+::rtl::OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
 {
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.logging.SimpleLogRing" ) );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::impl_staticGetSingletonName()
+::rtl::OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
 {
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.DocumentIOLogRing" ) );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::impl_staticGetServiceName()
+::rtl::OUString SAL_CALL OSimpleLogRing::getServiceName_static()
 {
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.SimpleLogRing" ) );
 }
 
 // ----------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::impl_staticCreateSelfInstance( const uno::Reference< uno::XComponentContext >& rxContext )
+uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     return static_cast< cppu::OWeakObject* >( new OSimpleLogRing( rxContext ) );
 }
@@ -149,13 +151,13 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 // ----------------------------------------------------------
 ::rtl::OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException)
 {
-    return impl_staticGetImplementationName();
+    return getImplementationName_static();
 }
 
 // ----------------------------------------------------------
 ::sal_Bool SAL_CALL OSimpleLogRing::supportsService( const ::rtl::OUString& aServiceName ) throw (uno::RuntimeException)
 {
-    const uno::Sequence< rtl::OUString > & aSupportedNames = impl_staticGetSupportedServiceNames();
+    const uno::Sequence< rtl::OUString > & aSupportedNames = getSupportedServiceNames_static();
     for ( sal_Int32 nInd = 0; nInd < aSupportedNames.getLength(); nInd++ )
     {
         if ( aSupportedNames[ nInd ].equals( aServiceName ) )
@@ -168,8 +170,13 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 // ----------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    return impl_staticGetSupportedServiceNames();
+    return getSupportedServiceNames_static();
 }
 
 } // namespace comphelper
 
+void createRegistryInfo_OSimpleLogRing()
+{
+    static ::comphelper::module::OAutoRegistration< ::comphelper::OSimpleLogRing > aAutoRegistration;
+    static ::comphelper::module::OSingletonRegistration< ::comphelper::OSimpleLogRing > aSingletonRegistration;
+}
