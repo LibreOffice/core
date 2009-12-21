@@ -68,6 +68,7 @@ SLOFILES=	\
     $(SLO)$/DiagramHelper.obj \
     $(SLO)$/ExponentialRegressionCurveCalculator.obj \
     $(SLO)$/ImplOPropertySet.obj \
+    $(SLO)$/InternalData.obj \
     $(SLO)$/InternalDataProvider.obj \
     $(SLO)$/LabeledDataSequence.obj \
     $(SLO)$/LinearRegressionCurveCalculator.obj \

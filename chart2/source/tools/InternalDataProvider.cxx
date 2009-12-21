@@ -48,8 +48,6 @@
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
-#include "ResId.hxx"
-#include "Strings.hrc"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -70,9 +68,6 @@ using ::rtl::OUStringBuffer;
 
 namespace chart
 {
-namespace impl
-{
-
 
 struct OUStringBufferAppend : public unary_function< OUString, void >
 {
@@ -99,545 +94,6 @@ OUString FlattenStringSequence( const Sequence< OUString > & aSeq )
               OUStringBufferAppend( aBuf, OUString(RTL_CONSTASCII_USTRINGPARAM(" "))));
     return aBuf.makeStringAndClear();
 }
-
-class InternalData
-{
-public:
-    InternalData();
-
-    void createDefaultData();
-
-    void setData( const Sequence< Sequence< double > > & rNewData, bool bDataInColumns );
-    Sequence< Sequence< double > > getData( bool bDataInColumns ) const;
-    Sequence< double > getDataAt( sal_Int32 nIndex, bool bDataInColumns ) const;
-    void setDataAt( sal_Int32 nIndex, bool bDataInColumns, const ::std::vector< double > & rNewData );
-    void swapAllDataAtIndexWithNext( sal_Int32 nAtIndex, bool bDataInColumns );
-
-    /** resizes the data if at least one of the given dimensions is larger than
-        before.  The data is never becoming smaller only larger.
-
-        @return </TRUE>, if the data was enlarged
-    */
-    bool enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount );
-
-    void insertColumn( sal_Int32 nAfterIndex );
-    void insertRow( sal_Int32 nAfterIndex );
-    void deleteColumn( sal_Int32 nAtIndex );
-    void deleteRow( sal_Int32 nAtIndex );
-
-    /// @return the index of the newly appended column
-    sal_Int32 appendColumn();
-    /// @return the index of the newly appended row
-    sal_Int32 appendRow();
-
-    sal_Int32 getRowCount() const;
-    sal_Int32 getColumnCount() const;
-
-    void setRowLabels( const ::std::vector< OUString > & rNewRowLabels );
-    ::std::vector< OUString > getRowLabels() const;
-    void setColumnLabels( const ::std::vector< OUString > & rNewColumnLabels );
-    ::std::vector< OUString > getColumnLabels() const;
-
-#if OSL_DEBUG_LEVEL > 2
-    void traceData() const;
-#endif
-
-private:
-    sal_Int32                                    m_nColumnCount;
-    sal_Int32                                    m_nRowCount;
-
-    typedef ::std::valarray< double > tDataType;
-    typedef ::std::vector< OUString > tLabelType;
-
-    tDataType    m_aData;
-    tLabelType   m_aRowLabels;
-    tLabelType   m_aColumnLabels;
-};
-
-// ----------------------------------------
-namespace
-{
-struct lcl_NumberedStringGenerator
-{
-    lcl_NumberedStringGenerator( const OUString & rStub, const OUString & rWildcard ) :
-            m_aStub( rStub ),
-            m_nCounter( 0 ),
-            m_nStubStartIndex( rStub.indexOf( rWildcard )),
-            m_nWildcardLength( rWildcard.getLength())
-    {
-    }
-    OUString operator()() {
-        return m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::valueOf( ++m_nCounter ));
-    }
-private:
-    OUString m_aStub;
-    sal_Int32 m_nCounter;
-    const sal_Int32 m_nStubStartIndex;
-    const sal_Int32 m_nWildcardLength;
-};
-
-template< typename T >
-    Sequence< T > lcl_ValarrayToSequence( const ::std::valarray< T > & rValarray )
-{
-    // is there a more elegant way of conversion?
-    Sequence< T > aResult( rValarray.size());
-    for( size_t i = 0; i < rValarray.size(); ++i )
-        aResult[i] = rValarray[i];
-    return aResult;
-}
-
-struct lcl_ValuesOfLabeledSequence :
-        public unary_function< Reference< chart2::data::XLabeledDataSequence >, Sequence< double > >
-{
-    Sequence< double > operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-    {
-        if( ! xLSeq.is())
-            return Sequence< double >();
-        return DataSequenceToDoubleSequence( xLSeq->getValues());
-    }
-};
-
-struct lcl_LabelsOfLabeledSequence :
-        public unary_function< Reference< chart2::data::XLabeledDataSequence >, Sequence< OUString > >
-{
-    Sequence< OUString > operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-    {
-        if( ! xLSeq.is())
-            return Sequence< OUString >();
-        return DataSequenceToStringSequence( xLSeq->getLabel());
-    }
-};
-
-struct lcl_LabelOfLabeledSequence :
-        public unary_function< Reference< chart2::data::XLabeledDataSequence >, OUString >
-{
-    OUString operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-    {
-        if( ! xLSeq.is())
-            return OUString();
-        return FlattenStringSequence( DataSequenceToStringSequence( xLSeq->getLabel()));
-    }
-};
-
-} // anonymous namespace
-// ----------------------------------------
-
-InternalData::InternalData() :
-        m_nColumnCount( 0 ),
-        m_nRowCount( 0 )
-{}
-
-void InternalData::createDefaultData()
-{
-    const sal_Int32 nNumRows = 4;
-    const sal_Int32 nNumColumns = 3;
-    const sal_Int32 nSize = nNumColumns * nNumRows;
-    // @todo: localize this!
-    const OUString aRowName( ::chart::SchResId::getResString( STR_ROW_LABEL ));
-    const OUString aColName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
-
-    const double fDefaultData[ nSize ] =
-        { 9.10, 3.20, 4.54,
-          2.40, 8.80, 9.65,
-          3.10, 1.50, 3.70,
-          4.30, 9.02, 6.20 };
-
-    m_aData.resize( nSize );
-    for( sal_Int32 i=0; i<nSize; ++i )
-        m_aData[i] = fDefaultData[i];
-    m_nRowCount = nNumRows;
-    m_nColumnCount = nNumColumns;
-
-    vector< OUString > aRowLabels;
-    aRowLabels.reserve( nNumRows );
-    generate_n( back_inserter( aRowLabels ), nNumRows,
-                lcl_NumberedStringGenerator( aRowName, C2U("%ROWNUMBER") ));
-    setRowLabels( aRowLabels );
-
-    vector< OUString > aColumnLabels;
-    aColumnLabels.reserve( nNumColumns );
-    generate_n( back_inserter( aColumnLabels ), nNumColumns,
-                lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
-    setColumnLabels( aColumnLabels );
-}
-
-void InternalData::setData( const Sequence< Sequence< double > > & rNewData, bool bDataInColumns )
-{
-    sal_Int32 nOuterSize = rNewData.getLength();
-    sal_Int32 nInnerSize = (nOuterSize ? rNewData[0].getLength() : 0);
-
-    m_nRowCount = (bDataInColumns ? nInnerSize : nOuterSize);
-    m_nColumnCount = (bDataInColumns ? nOuterSize : nInnerSize);
-
-    if( m_aRowLabels.size() != static_cast< sal_uInt32 >( m_nRowCount ))
-        m_aRowLabels.resize( m_nRowCount );
-    if( m_aColumnLabels.size() != static_cast< sal_uInt32 >( m_nColumnCount ))
-        m_aColumnLabels.resize( m_nColumnCount );
-
-    m_aData.resize( m_nRowCount * m_nColumnCount );
-    double fNan;
-    ::rtl::math::setNan( & fNan );
-    // set all values to Nan
-    m_aData = fNan;
-
-    for( sal_Int32 nOuterIdx=0; nOuterIdx<nOuterSize; ++nOuterIdx )
-    {
-        int nDataIdx = (bDataInColumns ? nOuterIdx : nOuterIdx*nInnerSize);
-        const sal_Int32 nMax = ::std::min( rNewData[nOuterIdx].getLength(), nInnerSize );
-        sal_Int32 nInnerIdx=0;
-        for( ; nInnerIdx < nMax; ++nInnerIdx )
-        {
-            m_aData[nDataIdx] = rNewData[nOuterIdx][nInnerIdx];
-            nDataIdx += (bDataInColumns ? m_nColumnCount : 1);
-        }
-    }
-}
-
-Sequence< Sequence< double > > InternalData::getData( bool bDataInColumns ) const
-{
-    Sequence< Sequence< double > > aResult( bDataInColumns ? m_nColumnCount : m_nRowCount );
-
-    if( bDataInColumns )
-    {
-        for( sal_Int32 i=0; i<m_nColumnCount; ++i )
-            aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
-                m_aData[ ::std::slice( i, m_nRowCount, m_nColumnCount ) ] );
-    }
-    else
-    {
-        for( sal_Int32 i=0; i<m_nRowCount; ++i )
-            aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
-                m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
-    }
-
-    return aResult;
-}
-
-Sequence< double > InternalData::getDataAt( sal_Int32 nIndex, bool bDataInColumns ) const
-{
-    Sequence< double > aResult( bDataInColumns ? m_nRowCount : m_nColumnCount );
-
-    if( bDataInColumns )
-    {
-        if( nIndex < m_nColumnCount )
-            return lcl_ValarrayToSequence< tDataType::value_type >(
-                m_aData[ ::std::slice( nIndex, m_nRowCount, m_nColumnCount ) ] );
-    }
-    else
-    {
-        if( nIndex < m_nRowCount )
-            return lcl_ValarrayToSequence< tDataType::value_type >(
-                m_aData[ ::std::slice( nIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
-    }
-
-    return Sequence< double >();
-}
-
-void InternalData::setDataAt( sal_Int32 nIndex, bool bDataInColumns, const ::std::vector< double > & rNewData )
-{
-    if( bDataInColumns )
-    {
-        if( nIndex < m_nColumnCount )
-        {
-            tDataType aSlice = m_aData[ ::std::slice( nIndex, m_nRowCount, m_nColumnCount ) ];
-            for( ::std::vector< double >::size_type i = 0; i < rNewData.size(); ++i )
-                aSlice[i] = rNewData[i];
-            m_aData[ ::std::slice( nIndex, m_nRowCount, m_nColumnCount ) ] = aSlice;
-        }
-    }
-    else
-    {
-        if( nIndex < m_nRowCount )
-        {
-            tDataType aSlice = m_aData[ ::std::slice( nIndex*m_nColumnCount, m_nColumnCount, 1 ) ];
-            for( ::std::vector< double >::size_type i = 0; i < rNewData.size(); ++i )
-                aSlice[i] = rNewData[i];
-            m_aData[ ::std::slice( nIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
-        }
-    }
-}
-
-void InternalData::swapAllDataAtIndexWithNext( sal_Int32 nAtIndex, bool bDataInColumns )
-{
-    if( bDataInColumns && nAtIndex < m_nRowCount - 1 )
-    {
-        const sal_Int32 nMax = m_nColumnCount;
-        for( sal_Int32 nColIdx=0; nColIdx<nMax; ++nColIdx )
-        {
-            size_t nIndex1 = nColIdx + nAtIndex*m_nColumnCount;
-            size_t nIndex2 = nIndex1 + m_nColumnCount;
-            double fTemp = m_aData[nIndex1];
-            m_aData[nIndex1] = m_aData[nIndex2];
-            m_aData[nIndex2] = fTemp;
-        }
-        OUString sTemp( m_aRowLabels[nAtIndex] );
-        m_aRowLabels[nAtIndex] = m_aRowLabels[nAtIndex + 1];
-        m_aRowLabels[nAtIndex + 1] = sTemp;
-    }
-    else if( nAtIndex < m_nColumnCount - 1 )
-    {
-        const sal_Int32 nMax = m_nRowCount;
-        for( sal_Int32 nRowIdx=0; nRowIdx<nMax; ++nRowIdx )
-        {
-            size_t nIndex1 = nAtIndex + nRowIdx*m_nColumnCount;
-            size_t nIndex2 = nIndex1 + 1;
-            double fTemp = m_aData[nIndex1];
-            m_aData[nIndex1] = m_aData[nIndex2];
-            m_aData[nIndex2] = fTemp;
-        }
-        OUString sTemp( m_aColumnLabels[nAtIndex] );
-        m_aColumnLabels[nAtIndex] = m_aColumnLabels[nAtIndex + 1];
-        m_aColumnLabels[nAtIndex + 1] = sTemp;
-    }
-}
-
-bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
-{
-    sal_Int32 nNewColumnCount( ::std::max<sal_Int32>( m_nColumnCount, nColumnCount ) );
-    sal_Int32 nNewRowCount( ::std::max<sal_Int32>( m_nRowCount, nRowCount ) );
-    sal_Int32 nNewSize( nNewColumnCount*nNewRowCount );
-
-    bool bGrow = (nNewSize > m_nColumnCount*m_nRowCount);
-
-    if( bGrow )
-    {
-        double fNan;
-        ::rtl::math::setNan( &fNan );
-        tDataType aNewData( fNan, nNewSize );
-        // copy old data
-        for( int nCol=0; nCol<m_nColumnCount; ++nCol )
-            static_cast< tDataType >(
-                aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ];
-
-        m_aData.resize( nNewSize );
-        m_aData = aNewData;
-    }
-    m_nColumnCount = nNewColumnCount;
-    m_nRowCount = nNewRowCount;
-    return bGrow;
-}
-
-void InternalData::insertColumn( sal_Int32 nAfterIndex )
-{
-    // note: -1 is allowed, as we insert after the given index
-    OSL_ASSERT( nAfterIndex < m_nColumnCount && nAfterIndex >= -1 );
-    if( nAfterIndex >= m_nColumnCount || nAfterIndex < -1 )
-        return;
-    sal_Int32 nNewColumnCount = m_nColumnCount + 1;
-    sal_Int32 nNewSize( nNewColumnCount * m_nRowCount );
-
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
-
-    // copy old data
-    int nCol=0;
-    for( ; nCol<=nAfterIndex; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
-    for( ++nCol; nCol<nNewColumnCount; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol - 1, m_nRowCount, m_nColumnCount ) ] );
-
-    m_nColumnCount = nNewColumnCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
-
-    // labels
-    if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
-        m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), OUString());
-
-#if OSL_DEBUG_LEVEL > 2
-    traceData();
-#endif
-}
-
-sal_Int32 InternalData::appendColumn()
-{
-    insertColumn( getColumnCount() - 1 );
-    return getColumnCount() - 1;
-}
-
-sal_Int32 InternalData::appendRow()
-{
-    insertRow( getRowCount() - 1 );
-    return getRowCount() - 1;
-}
-
-void InternalData::insertRow( sal_Int32 nAfterIndex )
-{
-    // note: -1 is allowed, as we insert after the given index
-    OSL_ASSERT( nAfterIndex < m_nRowCount && nAfterIndex >= -1 );
-    if( nAfterIndex >= m_nRowCount || nAfterIndex < -1 )
-        return;
-    sal_Int32 nNewRowCount = m_nRowCount + 1;
-    sal_Int32 nNewSize( m_nColumnCount * nNewRowCount );
-
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
-
-    // copy old data
-    sal_Int32 nIndex = nAfterIndex + 1;
-    aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
-        static_cast< tDataType >(
-            m_aData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
-
-    if( nIndex < m_nRowCount )
-    {
-        sal_Int32 nRemainingCount = m_nColumnCount * (m_nRowCount - nIndex);
-        aNewData[ ::std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] );
-    }
-
-    m_nRowCount = nNewRowCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
-
-    // labels
-    if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
-        m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, OUString());
-
-#if OSL_DEBUG_LEVEL > 2
-    traceData();
-#endif
-}
-
-void InternalData::deleteColumn( sal_Int32 nAtIndex )
-{
-    OSL_ASSERT( nAtIndex < m_nColumnCount && nAtIndex >= 0 );
-    if( nAtIndex >= m_nColumnCount || m_nColumnCount < 1 || nAtIndex < 0 )
-        return;
-    sal_Int32 nNewColumnCount = m_nColumnCount - 1;
-    sal_Int32 nNewSize( nNewColumnCount * m_nRowCount );
-
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
-
-    // copy old data
-    int nCol=0;
-    for( ; nCol<nAtIndex; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
-    for( ; nCol<nNewColumnCount; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol + 1, m_nRowCount, m_nColumnCount ) ] );
-
-    m_nColumnCount = nNewColumnCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
-
-    // labels
-    if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
-        m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
-
-#if OSL_DEBUG_LEVEL > 2
-    traceData();
-#endif
-}
-
-void InternalData::deleteRow( sal_Int32 nAtIndex )
-{
-    OSL_ASSERT( nAtIndex < m_nRowCount && nAtIndex >= 0 );
-    if( nAtIndex >= m_nRowCount || m_nRowCount < 1 || nAtIndex < 0 )
-        return;
-    sal_Int32 nNewRowCount = m_nRowCount - 1;
-    sal_Int32 nNewSize( m_nColumnCount * nNewRowCount );
-
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
-
-    // copy old data
-    sal_Int32 nIndex = nAtIndex;
-    if( nIndex )
-        aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
-
-    if( nIndex < nNewRowCount )
-    {
-        sal_Int32 nRemainingCount = m_nColumnCount * (nNewRowCount - nIndex);
-        aNewData[ ::std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] =
-            static_cast< tDataType >(
-                m_aData[ ::std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] );
-    }
-
-    m_nRowCount = nNewRowCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
-
-    // labels
-    if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
-        m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
-
-#if OSL_DEBUG_LEVEL > 2
-    traceData();
-#endif
-}
-
-sal_Int32 InternalData::getRowCount() const
-{
-    return m_nRowCount;
-}
-
-sal_Int32 InternalData::getColumnCount() const
-{
-    return m_nColumnCount;
-}
-
-void InternalData::setRowLabels( const ::std::vector< OUString > & rNewRowLabels )
-{
-    m_aRowLabels = rNewRowLabels;
-    if( m_aRowLabels.size() < static_cast< ::std::vector< OUString >::size_type >( m_nRowCount ))
-        m_aRowLabels.resize( m_nRowCount );
-    else
-        enlargeData( 0, static_cast< sal_Int32 >( m_aRowLabels.size() ));
-}
-
-::std::vector< OUString > InternalData::getRowLabels() const
-{
-    return m_aRowLabels;
-}
-
-void InternalData::setColumnLabels( const ::std::vector< OUString > & rNewColumnLabels )
-{
-    m_aColumnLabels = rNewColumnLabels;
-    if( m_aColumnLabels.size() < static_cast< ::std::vector< OUString >::size_type >( m_nColumnCount ))
-        m_aColumnLabels.resize( m_nColumnCount );
-    else
-        enlargeData( static_cast< sal_Int32 >( m_aColumnLabels.size()), 0 );
-}
-
-::std::vector< OUString > InternalData::getColumnLabels() const
-{
-    return m_aColumnLabels;
-}
-
-#if OSL_DEBUG_LEVEL > 2
-void InternalData::traceData() const
-{
-    OSL_TRACE( "InternalData: Data in rows\n" );
-
-    for( sal_Int32 i=0; i<m_nRowCount; ++i )
-    {
-        tDataType aSlice( m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
-        for( sal_Int32 j=0; j<m_nColumnCount; ++j )
-            OSL_TRACE( "%lf ", aSlice[j] );
-        OSL_TRACE( "\n" );
-    }
-    OSL_TRACE( "\n" );
-}
-#endif
-
-} // namespace impl
 
 // ================================================================================
 
@@ -711,7 +167,7 @@ struct lcl_modifySeqMapValue : public ::std::unary_function< lcl_tSequenceMap, v
 Sequence< Reference< chart2::data::XLabeledDataSequence > >
     lcl_internalizeData(
         const Sequence< Reference< chart2::data::XLabeledDataSequence > > & rDataSeq,
-        impl::InternalData & rInternalData,
+        InternalData & rInternalData,
         InternalDataProvider & rProvider )
 {
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aResult( rDataSeq.getLength());
@@ -728,7 +184,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
         {
             ::std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
             rInternalData.enlargeData( nNewIndex + 1, aValues.size());
-            rInternalData.setDataAt( nNewIndex, true, aValues );
+            rInternalData.setColumnValues( nNewIndex, aValues );
             xNewValues.set( rProvider.createDataSequenceByRangeRepresentation( aIdentifier ));
             comphelper::copyProperties(
                 Reference< beans::XPropertySet >( xValues, uno::UNO_QUERY ),
@@ -741,7 +197,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
             OSL_ASSERT( static_cast< size_t >( nNewIndex ) < aLabels.size());
             if( aLabels.size() <= static_cast< size_t >( nNewIndex ) )
                 aLabels.resize( nNewIndex+1 );
-            aLabels[nNewIndex] = impl::FlattenStringSequence( xLabel->getTextualData());
+            aLabels[nNewIndex] = FlattenStringSequence( xLabel->getTextualData());
             rInternalData.setColumnLabels( aLabels );
             Reference< chart2::data::XDataSequence > xNewLabel(
                 rProvider.createDataSequenceByRangeRepresentation( lcl_aLabelRangePrefix + aIdentifier ));
@@ -764,7 +220,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
 
 struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::XDataSeries >, void >
 {
-    lcl_internalizeSeries( impl::InternalData & rInternalData,
+    lcl_internalizeSeries( InternalData & rInternalData,
                            InternalDataProvider & rProvider ) :
             m_rInternalData( rInternalData ),
             m_rProvider( rProvider )
@@ -778,7 +234,7 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
      }
 
 private:
-    impl::InternalData &    m_rInternalData;
+    InternalData &          m_rInternalData;
     InternalDataProvider &  m_rProvider;
 };
 
@@ -814,7 +270,7 @@ InternalDataProvider::InternalDataProvider(
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
         if( xDiagram.is())
         {
-            impl::InternalData & rData( getInternalData());
+            InternalData & rData( getInternalData() );
             // categories
             Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ));
             if( xCategories.is())
@@ -845,7 +301,7 @@ InternalDataProvider::InternalDataProvider(
 InternalDataProvider::InternalDataProvider( const InternalDataProvider & rOther ) :
         impl::InternalDataProvider_Base(),
         m_aSequenceMap( rOther.m_aSequenceMap ),
-        m_apData( new impl::InternalData( rOther.getInternalData())),
+        m_apData( new InternalData( rOther.getInternalData() ) ),
         m_bDataInColumns( rOther.m_bDataInColumns )
 {}
 
@@ -948,21 +404,21 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
     return xSeq;
 }
 
-const impl::InternalData & InternalDataProvider::getInternalData() const
+const InternalData & InternalDataProvider::getInternalData() const
 {
     if( m_apData.get())
         return *(m_apData.get());
 
-    m_apData.reset( new impl::InternalData());
+    m_apData.reset( new InternalData() );
     return *(m_apData.get());
 }
 
-impl::InternalData & InternalDataProvider::getInternalData()
+InternalData & InternalDataProvider::getInternalData()
 {
     if( m_apData.get())
         return *(m_apData.get());
 
-    m_apData.reset( new impl::InternalData());
+    m_apData.reset( new InternalData());
     return *(m_apData.get());
 }
 
@@ -993,7 +449,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     OSL_ASSERT( aRangeRepresentation.equals( lcl_aCompleteRange ));
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
-    impl::InternalData & rData( getInternalData());
+    InternalData & rData( getInternalData());
 
     // categories
     if ( bHasCategories )
@@ -1003,7 +459,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     // data with labels
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;
     const sal_Int32 nCount = (bUseColumns ? rData.getColumnCount() : rData.getRowCount());
-                           for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+    for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
     {
         aDataVec.push_back(
             new LabeledDataSequence(
@@ -1120,7 +576,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
     throw (uno::RuntimeException)
 {
     sal_Bool bResult = false;
-    const impl::InternalData & rData( getInternalData());
+    const InternalData & rData( getInternalData());
 
     if( aRange.equals( lcl_aCategoriesRangeName ))
     {
@@ -1144,7 +600,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     throw (uno::RuntimeException)
 {
     Sequence< uno::Any > aResult;
-    const impl::InternalData & rData( getInternalData());
+    const InternalData & rData( getInternalData());
 
     if( aRange.equals( lcl_aCategoriesRangeName ))
     {
@@ -1166,12 +622,19 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     else
     {
         sal_Int32 nIndex = aRange.toInt32();
-        if( nIndex < (m_bDataInColumns ? rData.getColumnCount() : rData.getRowCount()))
+        if( nIndex >= 0 )
         {
-            Sequence< double > aData( rData.getDataAt( nIndex, m_bDataInColumns ));
-            aResult.realloc( aData.getLength());
-            transform( aData.getConstArray(), aData.getConstArray() + aData.getLength(),
-                       aResult.getArray(), CommonFunctors::makeAny< double >());
+            Sequence< double > aData;
+            if( m_bDataInColumns )
+                aData = rData.getColumnValues(nIndex);
+            else
+                aData = rData.getRowValues(nIndex);
+            if( aData.getLength() )
+            {
+                aResult.realloc( aData.getLength());
+                transform( aData.getConstArray(), aData.getConstArray() + aData.getLength(),
+                           aResult.getArray(), CommonFunctors::makeAny< double >());
+            }
         }
     }
 
@@ -1182,7 +645,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     const OUString& aRange, const Sequence< uno::Any >& aNewData )
     throw (uno::RuntimeException)
 {
-    impl::InternalData & rData( getInternalData());
+    InternalData & rData( getInternalData());
 
     if( aRange.equals( lcl_aCategoriesRangeName ))
     {
@@ -1225,18 +688,23 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     else
     {
         sal_Int32 nIndex = aRange.toInt32();
-        // ensure that the data is large enough
-        if( m_bDataInColumns )
-            rData.enlargeData( nIndex, 0 );
-        else
-            rData.enlargeData( 0, nIndex );
-
-        if( nIndex < (m_bDataInColumns ? rData.getColumnCount() : rData.getRowCount()))
+        if( nIndex>=0 )
         {
             vector< double > aNewDataVec;
             transform( aNewData.getConstArray(), aNewData.getConstArray() + aNewData.getLength(),
                        back_inserter( aNewDataVec ), CommonFunctors::AnyToDouble());
-            rData.setDataAt( nIndex, m_bDataInColumns, aNewDataVec );
+
+            // ensure that the data is large enough
+            if( m_bDataInColumns )
+            {
+                rData.enlargeData( nIndex, 0 );
+                rData.setColumnValues( nIndex, aNewDataVec );
+            }
+            else
+            {
+                rData.enlargeData( 0, nIndex );
+                rData.setRowValues( nIndex, aNewDataVec );
+            }
         }
     }
 }
@@ -1333,7 +801,10 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
 void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
     throw (uno::RuntimeException)
 {
-    getInternalData().swapAllDataAtIndexWithNext( nAtIndex, m_bDataInColumns );
+    if( m_bDataInColumns )
+        getInternalData().swapRowWithNext( nAtIndex );
+    else
+        getInternalData().swapColumnWithNext( nAtIndex );
     sal_Int32 nMaxRep = (m_bDataInColumns
                          ? getInternalData().getColumnCount()
                          : getInternalData().getRowCount());
@@ -1362,7 +833,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
 {
     XMLRangeHelper::CellRange aRange;
     aRange.aTableName = OUString(RTL_CONSTASCII_USTRINGPARAM("local-table"));
-    impl::InternalData & rData( getInternalData());
+    InternalData & rData( getInternalData());
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for
@@ -1482,13 +953,13 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
 Sequence< Sequence< double > > SAL_CALL InternalDataProvider::getData()
     throw (uno::RuntimeException)
 {
-    return getInternalData().getData( false );
+    return getInternalData().getData();
 }
 
-void SAL_CALL InternalDataProvider::setData( const Sequence< Sequence< double > >& aData )
+void SAL_CALL InternalDataProvider::setData( const Sequence< Sequence< double > >& rDataInRows )
     throw (uno::RuntimeException)
 {
-    return getInternalData().setData( aData, false );
+    return getInternalData().setData( rDataInRows );
 }
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()

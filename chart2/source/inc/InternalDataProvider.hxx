@@ -30,6 +30,8 @@
 #ifndef CHART2_INTERNALDATAPROVIDER_HXX
 #define CHART2_INTERNALDATAPROVIDER_HXX
 
+#include "InternalData.hxx"
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -52,7 +54,6 @@ namespace chart
 
 namespace impl
 {
-class InternalData;
 
 typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::chart2::XInternalDataProvider,
@@ -192,8 +193,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 private:
-    impl::InternalData &  getInternalData();
-    const impl::InternalData &  getInternalData() const;
+    InternalData &  getInternalData();
+    const InternalData &  getInternalData() const;
 
     void addDataSequenceToMap(
         const ::rtl::OUString & rRangeRepresentation,
@@ -229,7 +230,7 @@ private:
         be adapted.
      */
     mutable tSequenceMap m_aSequenceMap;
-    mutable ::std::auto_ptr< impl::InternalData > m_apData;
+    mutable ::std::auto_ptr< InternalData > m_apData;
     bool m_bDataInColumns;
 
 //     typedef ::std::map< ::rtl::OUString,
