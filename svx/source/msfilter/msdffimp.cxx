@@ -5227,7 +5227,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             else
                             {
                                 fNumber = 0.0;
-                                seqAdjustmentValues[ 0 ].Value <<= fNumber;
+                                seqAdjustmentValues[ 1 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 1 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
 
