@@ -2415,6 +2415,10 @@ shell::commit( const shell::ContentMap::iterator& it,
                 it1->setValue( aAny );
         }
     }
+    else
+    {
+        isDirectory = sal_False;
+    }
 
     it1 = properties.find( MyProperty( Size ) );
     if( it1 != properties.end() )
