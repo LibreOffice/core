@@ -72,7 +72,7 @@
 #include <vcl/salbtype.hxx>     // FRound
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
