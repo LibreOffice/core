@@ -743,6 +743,8 @@ private:
     void (*mp_set_font_matrix)(cairo_t *, const cairo_matrix_t *);
     void (*mp_show_glyphs)(cairo_t *, const cairo_glyph_t *, int );
     void (*mp_set_source_rgb)(cairo_t *, double , double , double );
+    void (*mp_set_font_options)(cairo_t *, const void *);
+    void (*mp_ft_font_options_substitute)(const void*, void*);
 
     bool canEmbolden() const { return false; }
 
@@ -778,6 +780,10 @@ public:
         { (*mp_show_glyphs)(cr, glyphs, no_glyphs); }
     void set_source_rgb(cairo_t *cr, double red, double green, double blue)
         { (*mp_set_source_rgb)(cr, red, green, blue); }
+    void set_font_options(cairo_t *cr, const void *options)
+        { (*mp_set_font_options)(cr, options); }
+    void ft_font_options_substitute(const void *options, void *pattern)
+        { (*mp_ft_font_options_substitute)(options, pattern); }
 };
 
 static CairoWrapper* pCairoInstance = NULL;
@@ -847,6 +853,10 @@ CairoWrapper::CairoWrapper()
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_show_glyphs" );
     mp_set_source_rgb = (void (*)(cairo_t *, double , double , double ))
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_source_rgb" );
+    mp_set_font_options = (void (*)(cairo_t *, const void *options ))
+        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_font_options" );
+    mp_ft_font_options_substitute = (void (*)(const void *, void *))
+        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_options_substitute" );
 
     if( !(
             mp_xlib_surface_create_with_xrender_format &&
@@ -863,7 +873,9 @@ CairoWrapper::CairoWrapper()
             mp_matrix_rotate &&
             mp_set_font_matrix &&
             mp_show_glyphs &&
-            mp_set_source_rgb
+            mp_set_source_rgb &&
+            mp_set_font_options &&
+            mp_ft_font_options_substitute
         ) )
     {
         osl_unloadModule( mpCairoLib );
@@ -1597,6 +1609,187 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
 {
     // no device specific font substitutions on X11 needed
+}
+
+// ----------------------------------------------------------------------------
+
+void cairosubcallback(void *pPattern)
+{
+    CairoWrapper &rCairo = CairoWrapper::get();
+    if (rCairo.isValid())
+    {
+        rCairo.ft_font_options_substitute(
+            Application::GetSettings().GetStyleSettings().GetCairoFontOptions(),
+            pPattern);
+    }
+}
+
+void X11SalGraphics::GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const
+{
+    psp::FastPrintFontInfo aInfo;
+    // set family name
+    aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
+    // set italic
+    switch( rFontAttributes.GetSlant() )
+    {
+        case ITALIC_NONE:
+            aInfo.m_eItalic = psp::italic::Upright;
+            break;
+        case ITALIC_NORMAL:
+            aInfo.m_eItalic = psp::italic::Italic;
+            break;
+        case ITALIC_OBLIQUE:
+            aInfo.m_eItalic = psp::italic::Oblique;
+            break;
+        default:
+            aInfo.m_eItalic = psp::italic::Unknown;
+            break;
+
+    }
+    // set weight
+    switch( rFontAttributes.GetWeight() )
+    {
+        case WEIGHT_THIN:
+            aInfo.m_eWeight = psp::weight::Thin;
+            break;
+        case WEIGHT_ULTRALIGHT:
+            aInfo.m_eWeight = psp::weight::UltraLight;
+            break;
+        case WEIGHT_LIGHT:
+            aInfo.m_eWeight = psp::weight::Light;
+            break;
+        case WEIGHT_SEMILIGHT:
+            aInfo.m_eWeight = psp::weight::SemiLight;
+            break;
+        case WEIGHT_NORMAL:
+            aInfo.m_eWeight = psp::weight::Normal;
+            break;
+        case WEIGHT_MEDIUM:
+            aInfo.m_eWeight = psp::weight::Medium;
+            break;
+        case WEIGHT_SEMIBOLD:
+            aInfo.m_eWeight = psp::weight::SemiBold;
+            break;
+        case WEIGHT_BOLD:
+            aInfo.m_eWeight = psp::weight::Bold;
+            break;
+        case WEIGHT_ULTRABOLD:
+            aInfo.m_eWeight = psp::weight::UltraBold;
+            break;
+        case WEIGHT_BLACK:
+            aInfo.m_eWeight = psp::weight::Black;
+            break;
+        default:
+            aInfo.m_eWeight = psp::weight::Unknown;
+            break;
+    }
+    // set width
+    switch( rFontAttributes.GetWidthType() )
+    {
+        case WIDTH_ULTRA_CONDENSED:
+            aInfo.m_eWidth = psp::width::UltraCondensed;
+            break;
+        case WIDTH_EXTRA_CONDENSED:
+            aInfo.m_eWidth = psp::width::ExtraCondensed;
+            break;
+        case WIDTH_CONDENSED:
+            aInfo.m_eWidth = psp::width::Condensed;
+            break;
+        case WIDTH_SEMI_CONDENSED:
+            aInfo.m_eWidth = psp::width::SemiCondensed;
+            break;
+        case WIDTH_NORMAL:
+            aInfo.m_eWidth = psp::width::Normal;
+            break;
+        case WIDTH_SEMI_EXPANDED:
+            aInfo.m_eWidth = psp::width::SemiExpanded;
+            break;
+        case WIDTH_EXPANDED:
+            aInfo.m_eWidth = psp::width::Expanded;
+            break;
+        case WIDTH_EXTRA_EXPANDED:
+            aInfo.m_eWidth = psp::width::ExtraExpanded;
+            break;
+        case WIDTH_ULTRA_EXPANDED:
+            aInfo.m_eWidth = psp::width::UltraExpanded;
+            break;
+        default:
+            aInfo.m_eWidth = psp::width::Unknown;
+            break;
+    }
+
+    psp::FontConfigHints aHints(psp::PrintFontManager::get().getFontConfigHints(aInfo, nSize,
+    cairosubcallback));
+
+    switch (aHints.m_eEmbeddedbitmap)
+    {
+        default:
+            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
+            break;
+    }
+
+    switch (aHints.m_eAntialias)
+    {
+        default:
+            rFontHints.meAntiAlias = ANTIALIAS_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            rFontHints.meAntiAlias = ANTIALIAS_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            rFontHints.meAntiAlias = ANTIALIAS_FALSE;
+            break;
+    }
+
+    switch (aHints.m_eAutoHint)
+    {
+        default:
+            rFontHints.meAutoHint = AUTOHINT_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            rFontHints.meAutoHint = AUTOHINT_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            rFontHints.meAutoHint = AUTOHINT_FALSE;
+            break;
+    }
+
+    switch (aHints.m_eHinting)
+    {
+        default:
+            rFontHints.meHinting = HINTING_DONTKNOW;
+            break;
+        case psp::fcstatus::istrue:
+            rFontHints.meHinting = HINTING_TRUE;
+            break;
+        case psp::fcstatus::isfalse:
+            rFontHints.meHinting = HINTING_FALSE;
+            break;
+    }
+
+    switch (aHints.m_eHintStyle)
+    {
+        case psp::fchint::Nohint:
+            rFontHints.meHintStyle = HINT_NONE;
+            break;
+        case psp::fchint::Slight:
+            rFontHints.meHintStyle = HINT_SLIGHT;
+            break;
+        case psp::fchint::Medium:
+            rFontHints.meHintStyle = HINT_MEDIUM;
+            break;
+        default:
+        case psp::fchint::Full:
+            rFontHints.meHintStyle = HINT_FULL;
+            break;
+    }
+
 }
 
 // ----------------------------------------------------------------------------

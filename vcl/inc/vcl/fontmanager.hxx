@@ -137,6 +137,33 @@ enum type {
 };
 }
 
+namespace fchint
+{
+enum type {
+    Nohint = 0,
+    Slight = 1,
+    Medium = 2,
+    Full = 3
+};
+}
+
+struct FontConfigHints
+{
+    fcstatus::type m_eEmbeddedbitmap;
+    fcstatus::type m_eAntialias;
+    fcstatus::type m_eAutoHint;
+    fcstatus::type m_eHinting;
+    fchint::type m_eHintStyle;
+
+    FontConfigHints() :
+        m_eEmbeddedbitmap( fcstatus::isunset ),
+        m_eAntialias( fcstatus::isunset ),
+        m_eAutoHint( fcstatus::isunset ),
+        m_eHinting( fcstatus::isunset ),
+        m_eHintStyle( fchint::Full )
+        {}
+};
+
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
@@ -162,8 +189,6 @@ struct FastPrintFontInfo
     weight::type                        m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
-    fcstatus::type                      m_eEmbeddedbitmap;
-    fcstatus::type                      m_eAntialias;
     bool                                m_bSubsettable;
     bool                                m_bEmbeddable;
 
@@ -175,9 +200,7 @@ struct FastPrintFontInfo
             m_eWidth( width::Unknown ),
             m_eWeight( weight::Unknown ),
             m_ePitch( pitch::Unknown ),
-            m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
-            m_eEmbeddedbitmap( fcstatus::isunset ),
-            m_eAntialias( fcstatus::isunset )
+            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
 };
 
@@ -293,9 +316,6 @@ class VCL_DLLPUBLIC PrintFontManager
         int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
-
-        fcstatus::type                              m_eEmbeddedbitmap;
-        fcstatus::type                              m_eAntialias;
 
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
@@ -736,6 +756,7 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+    FontConfigHints getFontConfigHints(const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void *));
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
         const rtl::OString& rLangAttrib, italic::type eItalic, weight::type eWeight,

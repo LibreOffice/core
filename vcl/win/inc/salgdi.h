@@ -286,6 +286,7 @@ public:
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
     virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void                        GetFontHints( const ImplFontAttributes& rFontAttributes, int nHints, ImplFontHints& rFontHints);
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );

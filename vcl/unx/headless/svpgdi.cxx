@@ -587,3 +587,7 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
+
+void SvpSalGraphics::GetFontHints( const ImplFontAttributes& , int , ImplFontHints& ) const
+{
+}

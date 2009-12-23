@@ -94,8 +94,6 @@ public: // TODO: create matching interface class
     bool               IsDeviceFont() const      { return mbDevice; }
     bool               IsEmbeddable() const      { return mbEmbeddable; }
     bool               IsSubsettable() const     { return mbSubsettable; }
-    FontEmbeddedBitmap UseEmbeddedBitmap() const { return meEmbeddedBitmap; }
-    FontAntiAlias      UseAntiAlias() const      { return meAntiAlias; }
 
 public: // TODO: hide members behind accessor methods
     String             maMapNames;       // List of family name aliass separated with ';'
@@ -104,8 +102,6 @@ public: // TODO: hide members behind accessor methods
     bool               mbDevice;         // true: built in font
     bool               mbSubsettable;    // true: a subset of the font can be created
     bool               mbEmbeddable;     // true: the font can be embedded
-    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
-    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
 };
 
 // ----------------

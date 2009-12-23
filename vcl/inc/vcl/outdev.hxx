@@ -80,6 +80,8 @@ class AlphaMask;
 class FontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
+class ImplFontHints;
+class ImplFontAttributes;
 class VirtualDevice;
 
 namespace com {
@@ -543,6 +545,7 @@ public:
 
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE static BOOL ImplIsUnderlineAbove( const Font& );
+    SAL_DLLPRIVATE void ImplGetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const;
 
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI

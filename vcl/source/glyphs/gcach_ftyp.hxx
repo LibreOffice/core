@@ -85,10 +85,6 @@ public:
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
-    bool                  DontUseAntiAlias() const
-        { return maDevFontAttributes.UseAntiAlias() == ANTIALIAS_FALSE; }
-    bool                  DontUseEmbeddedBitmaps() const
-        { return maDevFontAttributes.UseEmbeddedBitmap() == EMBEDDEDBITMAP_FALSE; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
@@ -213,6 +209,7 @@ private:
     int                         mnWidth;
     int                         mnPrioEmbedded;
     int                         mnPrioAntiAlias;
+    int                         mnPrioAutoHint;
     FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
     double                      mfStretch;

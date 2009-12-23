@@ -40,6 +40,7 @@
 #include "vcl/impfont.hxx"
 #include "vcl/bitmap.hxx"
 #include "vcl/bmpacc.hxx"
+#include "vcl/virdev.hxx"
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -622,9 +623,6 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             aDFA.mbSubsettable= false;
             aDFA.mbEmbeddable = false;
 
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-
             FT_Done_Face( aFaceFT );
             AddFontFile( aCFileName, nFaceNum, ++mnNextFontId, aDFA, NULL );
             ++nCount;
@@ -704,6 +702,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 :   ServerFont( rFSD ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
+    mnPrioAutoHint(nDefaultPrioAutoHint),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
@@ -837,42 +836,69 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 
     mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
-
-    //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
-    //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
-    //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
-    //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
-    //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
-    //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
-    static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
-    const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
-    if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
+    mbUseGamma = false;
+    if (mbArtBold)
+    {
+        //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
+        //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
+        //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
+        //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
+        //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
+        //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
+        static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
+        const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+        if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
         && rFSD.mnHeight < 20)
         mbUseGamma = true;
-    else
-        mbUseGamma = false;
+    }
 
-    if (mbUseGamma)
+    ImplFontHints aHints;
+    VirtualDevice vdev( 1 );
+    vdev.ImplGetFontHints( pFI->GetFontAttributes(), mnWidth, aHints );
+
+    FontAutoHint eHint = aHints.GetUseAutoHint();
+    if (eHint == AUTOHINT_DONTKNOW)
+        eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
+
+    if (eHint == AUTOHINT_TRUE)
         mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if (mpFontInfo->DontUseAntiAlias())
-        mnPrioAntiAlias = 0;
-    if (mpFontInfo->DontUseEmbeddedBitmaps())
-        mnPrioEmbedded = 0;
+    if (aHints.DontUseAntiAlias())
+      mnPrioAntiAlias = 0;
+    if (aHints.DontUseEmbeddedBitmaps())
+      mnPrioEmbedded = 0;
+    if (aHints.DontUseHinting())
+      mnPrioAutoHint = 0;
 
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    if( nDefaultPrioAutoHint <= 0 )
+    if( mnPrioAutoHint <= 0 )
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
-#ifdef FT_LOAD_TARGET_LIGHT
-    // enable "light hinting" if available
+#if defined(FT_LOAD_TARGET_LIGHT) && defined(FT_LOAD_TARGET_NORMAL)
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
-        mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
+    {
+       mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
+       switch (aHints.GetHintStyle())
+       {
+           case HINT_NONE:
+                mnLoadFlags |= FT_LOAD_NO_HINTING;
+                break;
+           case HINT_SLIGHT:
+                mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
+                break;
+           case HINT_MEDIUM:
+                break;
+           case HINT_FULL:
+           default:
+                break;
+       }
+    }
+
 #endif
 
     if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
@@ -1230,13 +1256,15 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
         }
     }
 
-#if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if 0
     // #95556# autohinting not yet optimized for non-western glyph styles
     if( !(mnLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_FORCE_AUTOHINT) )
     &&  ( (aChar >= 0x0600 && aChar < 0x1E00)   // south-east asian + arabic
         ||(aChar >= 0x2900 && aChar < 0xD800)   // CJKV
         ||(aChar >= 0xF800) ) )                 // presentation + symbols
+    {
         nGlyphFlags |= GF_UNHINTED;
+    }
 #endif
 
     if( nGlyphIndex != 0 )
@@ -1378,11 +1406,11 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 #if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
-    if( (mnCos==0 || mnSin==0) && (nDefaultPrioAutoHint > 0) )
+    if( (mnCos==0 || mnSin==0) && (mnPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
-    if( mnPrioEmbedded <= nDefaultPrioAutoHint )
+    if( mnPrioEmbedded <= mnPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
@@ -1547,7 +1575,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #else
-    if( (nGlyphFlags & GF_UNHINTED) || (nDefaultPrioAutoHint < mnPrioAntiAlias) )
+    if( (nGlyphFlags & GF_UNHINTED) || (mnPrioAutoHint < mnPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 

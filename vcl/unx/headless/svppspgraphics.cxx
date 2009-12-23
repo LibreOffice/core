@@ -1160,32 +1160,6 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
 
-    switch (rInfo.m_eEmbeddedbitmap)
-    {
-        default:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
-            break;
-    }
-
-    switch (rInfo.m_eAntialias)
-    {
-        default:
-            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            aDFA.meAntiAlias = ANTIALIAS_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            aDFA.meAntiAlias = ANTIALIAS_FALSE;
-            break;
-    }
-
     switch( rInfo.m_eType )
     {
         case psp::fonttype::Builtin:
@@ -1390,5 +1364,9 @@ SystemGraphicsData PspGraphics::GetGraphicsData() const
         aRes.hDrawable = 0;
         aRes.pRenderFormat = 0;
     return aRes;
+}
+
+void PspGraphics::GetFontHints( const ImplFontAttributes& , int , ImplFontHints& ) const
+{
 }
 

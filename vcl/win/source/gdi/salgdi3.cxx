@@ -1450,6 +1450,12 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
 // -----------------------------------------------------------------------
 
+void WinSalGraphics::GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints)
+{
+}
+
+// -----------------------------------------------------------------------
+
 void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
     if ( aSalShlData.mbWNT )

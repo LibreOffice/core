@@ -237,6 +237,8 @@ public:
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+    virtual void            GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const = 0;
+
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs ) = 0;

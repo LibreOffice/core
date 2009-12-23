@@ -214,9 +214,9 @@ void FontCache::flush()
                 aLine.Append( ';' );
                 aLine.Append( (*it)->m_bUserOverride ? "1" : "0" );
                 aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eEmbeddedbitmap ) );
+                aLine.Append( ByteString::CreateFromInt32( 0 ) );
                 aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eAntialias ) );
+                aLine.Append( ByteString::CreateFromInt32( 0 ) );
 
                 switch( (*it)->m_eType )
                 {
@@ -426,9 +426,6 @@ void FontCache::read()
                                     = atoi( pLine + nTokenPos[14] );
                 pFont->m_bUserOverride
                                     = (atoi( pLine + nTokenPos[15] ) != 0);
-                pFont->m_eEmbeddedbitmap
-                                    = (fcstatus::type)atoi(pLine+nTokenPos[16]);
-                pFont->m_eAntialias = (fcstatus::type)atoi(pLine+nTokenPos[17]);
                 int nStyleTokenNr = 18;
                 switch( eType )
                 {
@@ -560,8 +557,6 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_nYMax            = pFrom->m_nYMax;
     pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
     pTo->m_bUserOverride    = pFrom->m_bUserOverride;
-    pTo->m_eEmbeddedbitmap  = pFrom->m_eEmbeddedbitmap;
-    pTo->m_eAntialias       = pFrom->m_eAntialias;
 }
 
 /*
@@ -623,9 +618,7 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         pRight->m_nXMax             != pLeft->m_nXMax           ||
         pRight->m_nYMax             != pLeft->m_nYMax           ||
         pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs ||
-        pRight->m_bUserOverride     != pLeft->m_bUserOverride   ||
-        pRight->m_eEmbeddedbitmap   != pLeft->m_eEmbeddedbitmap ||
-        pRight->m_eAntialias        != pLeft->m_eAntialias
+        pRight->m_bUserOverride     != pLeft->m_bUserOverride
         )
         return false;
     std::list< int >::const_iterator lit, rit;
