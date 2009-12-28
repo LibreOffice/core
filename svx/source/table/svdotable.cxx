@@ -2575,7 +2575,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
     basegfx::B2DPolyPolygon aRetval;
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    if(HDL_USER == pHdl->GetKind())
+    if( pHdl && (HDL_USER == pHdl->GetKind()) )
     {
         const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
 
@@ -2594,7 +2594,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
 
 FASTBOOL SdrTableObj::BegCreate(SdrDragStat& rStat)
 {
-    rStat.SetOrtho4Possible();
+    rStat.SetOrtho4Possible();5
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
