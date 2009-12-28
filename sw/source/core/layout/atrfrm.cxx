@@ -2718,10 +2718,23 @@ void SwFlyFrmFmt::MakeFrms()
             //die Suche vom StartNode zum FrameFormat sein.
             SwNodeIndex aIdx( aAnchorAttr.GetCntntAnchor()->nNode );
             SwCntntNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-            SwClientIter aIter( *pCNd );
-            if ( aIter.First( TYPE(SwFrm) ) )
-                pModify = pCNd;
-            else
+            // --> OD 2009-12-28 #i105535#
+            if ( pCNd == 0 )
+            {
+                pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+            }
+            if ( pCNd )
+            // <--
+            {
+                SwClientIter aIter( *pCNd );
+                if ( aIter.First( TYPE(SwFrm) ) )
+                {
+                    pModify = pCNd;
+                }
+            }
+            // --> OD 2009-12-28 #i105535#
+            if ( pModify == 0 )
+            // <--
             {
                 const SwNodeIndex &rIdx = aAnchorAttr.GetCntntAnchor()->nNode;
                 SwSpzFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
@@ -2793,7 +2806,24 @@ void SwFlyFrmFmt::MakeFrms()
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
-                pFrm = pFrm->FindFlyFrm();
+            {
+                // --> OD 2009-12-28 #i105535#
+                // fallback to anchor type at-paragraph, if no fly frame is found.
+//                pFrm = pFrm->FindFlyFrm();
+                SwFrm* pFlyFrm = pFrm->FindFlyFrm();
+                if ( pFlyFrm )
+                {
+                    pFrm = pFlyFrm;
+                }
+                else
+                {
+                    aAnchorAttr.SetType( FLY_AT_CNTNT );
+                    SetFmtAttr( aAnchorAttr );
+                    MakeFrms();
+                    return;
+                }
+                // <--
+            }
 
             if( pFrm->GetDrawObjs() )
             {
