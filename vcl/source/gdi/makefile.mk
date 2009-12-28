@@ -100,7 +100,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/impbmp.obj		\
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impvect.obj 	\
-            $(SLO)$/jobset.obj		\
             $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
