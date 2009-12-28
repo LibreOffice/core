@@ -7479,7 +7479,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     {
         bRet = pSalLayout->GetBoundRect( *mpGraphics, aPixelRect );
 
-        if( bRet )
+        if( bRet && (aPixelRect.GetWidth() > 0) || (aPixelRect.GetHeight() > 0) )
         {
             int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
@@ -7600,6 +7600,12 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     }
 
     aBmp.ReleaseAccess( pAcc );
+
+    if( (nRight <= nLeft) || (nBottom <= nTop) )
+    {
+        rRect.SetEmpty();
+        return TRUE;
+    }
 
     if( nTop <= nBottom )
     {
