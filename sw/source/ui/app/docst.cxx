@@ -1019,18 +1019,10 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                // JP 10.06.98: nur automatische Orientierungen uebernehmen
-/*              #61359# jetzt auch wieder alle Orientierungen
- *              const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_VERT_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
-                    aSet.ClearItem( RES_VERT_ORIENT );
-
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_HORI_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
-                    aSet.ClearItem( RES_HORI_ORIENT );*/
+                // --> OD 2009-12-28 #i105535#
+                // no update of anchor attribute
+                aSet.ClearItem( RES_ANCHOR );
+                // <--
 
                 pFrm->SetFmtAttr( aSet );
 
