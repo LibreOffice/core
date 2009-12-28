@@ -633,23 +633,34 @@ void SwTxtFrm::HideAndShowObjects()
  *************************************************************************/
 
 xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
-                          const xub_StrLen nStart, const xub_StrLen nEnd ) const
+                              const xub_StrLen nStart,
+                              const xub_StrLen nEnd ) const
 {
-    xub_StrLen nFound = nStart;
+    // --> OD 2009-12-28 #i104291# - applying patch to avoid overflow.
+    unsigned long nFound = nStart;
     const xub_StrLen nEndLine = Min( nEnd, rTxt.Len() );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
-    while( nFound <= nEndLine && ' ' == rTxt.GetChar( nFound ) )
-         ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' == rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+         nFound++;
+    }
 
     // Eine knifflige Sache mit den TxtAttr-Dummy-Zeichen (hier "$"):
     // "Dr.$Meyer" am Anfang der zweiten Zeile. Dahinter ein Blank eingegeben
     // und das Wort rutscht nicht in die erste Zeile, obwohl es ginge.
     // Aus diesem Grund nehmen wir das Dummy-Zeichen noch mit.
-    while( nFound <= nEndLine && ' ' != rTxt.GetChar( nFound ) )
-        ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' != rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+        nFound++;
+    }
 
-    return nFound;
+    return nFound <= STRING_LEN
+           ? static_cast<xub_StrLen>(nFound)
+           : STRING_LEN;
+    // <--
 }
 
 /*************************************************************************
