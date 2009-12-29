@@ -2420,21 +2420,18 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     sal_uInt16 nItrMode = i18n::CharacterIteratorMode::SKIPCELL;
     sal_Int32 nDone = 0;
     LanguageType aLang = LANGUAGE_NONE;
-    sal_Bool bSkipCell = sal_False;
+    bool bSkipCharacterCells = false;
     xub_StrLen nIdx = rInf.GetIdx();
     xub_StrLen nLastIdx = nIdx;
     const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
 
-    // skip character cells for complex scripts
-    // --> OD 2009-10-14 #i105571# - skip also character cells for CJK
-    if ( rInf.GetFont() &&
-         ( SW_CTL == rInf.GetFont()->GetActual() ||
-           SW_CJK == rInf.GetFont()->GetActual() ) &&
-         pBreakIt->GetBreakIter().is() )
+    // --> OD 2009-12-29 #i105901#
+    // skip character cells for all script types
+    if ( pBreakIt->GetBreakIter().is() )
     // <--
     {
         aLang = rInf.GetFont()->GetLanguage();
-        bSkipCell = sal_True;
+        bSkipCharacterCells = true;
     }
 
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nIdx < nEnd ) )
@@ -2445,7 +2442,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         // go to next character (cell).
         nLastIdx = nIdx;
 
-        if ( bSkipCell )
+        if ( bSkipCharacterCells )
         {
             nIdx = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
                         nIdx, pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
