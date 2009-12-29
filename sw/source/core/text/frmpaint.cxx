@@ -62,7 +62,6 @@
 #include <redlnitr.hxx> // SwRedlineItr
 #include <swmodule.hxx> // SW_MOD
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
-#include <scrrect.hxx>
 #include <SwGrammarMarkUp.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
@@ -749,72 +748,5 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
 
         ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
     }
-}
-
-void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
-    long nOffs)
-{
-    ASSERT( ! IsVertical() || ! IsSwapped(),
-        "SwTxtFrm::CriticalLines with swapped frame" );
-    SWRECTFN( this )
-    long nFrmHeight;
-
-    GetFormatted();
-    if( HasPara() )
-    {
-        const long nTopMargin = (this->*fnRect->fnGetTopMargin)();
-        SwStripe aStripe( (Frm().*fnRect->fnGetTop)(), nTopMargin );
-        if ( nTopMargin )
-        {
-            rStripes.Insert( aStripe, rStripes.Count() );
-            // OD 06.11.2002 #104171#,#103931# - consider vertical layout
-            if ( bVert )
-                aStripe.Y() -= nTopMargin;
-            else
-                // OD 06.11.2002 #104171#,#103931# - *add* top margin to Y.
-                aStripe.Y() += nTopMargin;
-        }
-        SwLineLayout* pLay = GetPara();
-        do
-        {
-            SwTwips nBase = aStripe.GetY() +
-                           ( bVert ? -pLay->GetAscent() : pLay->GetAscent() );
-
-            long nLogToPixBase, nLogToPixSum, nLogToPixOffs;
-
-            if ( bVert )
-            {
-                nLogToPixBase = rOut.LogicToPixel( Point( nBase, 0 ) ).X();
-                nLogToPixSum = rOut.LogicToPixel( Point( nBase + nOffs, 0 ) ).X();
-                nLogToPixOffs = -rOut.LogicToPixel( Size( nOffs, 0 ) ).Width();
-            }
-            else
-            {
-                nLogToPixBase = rOut.LogicToPixel( Point( 0, nBase ) ).Y();
-                nLogToPixSum = rOut.LogicToPixel( Point( 0, nBase - nOffs ) ).Y();
-                nLogToPixOffs = rOut.LogicToPixel( Size( 0, nOffs ) ).Height();
-            }
-
-            if( nLogToPixBase != nLogToPixSum + nLogToPixOffs )
-            {
-                aStripe.Height() = pLay->GetRealHeight();
-                rStripes.Insert( aStripe, rStripes.Count() );
-            }
-            aStripe.Y() += ( bVert ? -pLay->GetRealHeight() :
-                                      pLay->GetRealHeight() );
-            pLay = pLay->GetNext();
-        } while( pLay );
-
-        const long nBottomMargin = (this->*fnRect->fnGetBottomMargin)();
-        if( nBottomMargin )
-        {
-
-            aStripe.Height() = nBottomMargin;
-            rStripes.Insert( aStripe, rStripes.Count() );
-        }
-    }
-    else if( 0 != (nFrmHeight = (Frm().*fnRect->fnGetHeight)() ))
-        rStripes.Insert( SwStripe( (Frm().*fnRect->fnGetTop)(), nFrmHeight ),
-                         rStripes.Count() );
 }
 

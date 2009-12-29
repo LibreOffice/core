@@ -183,9 +183,6 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
                                                 //eine Aktion ausloesen.
 
-    SW_DLLPRIVATE void Scroll();    //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
-                    //ergaben.
-
     SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
@@ -233,11 +230,7 @@ public:
     void ChgHyphenation() { Reformat(); }
     void ChgNumberDigits();
 
-    //Methoden fuer Paint- und Scrollrects, die auf allen Shells im
-    //Ring arbeiten.
     sal_Bool AddPaintRect( const SwRect &rRect );
-    void AddScrollRect( const SwFrm *pFrm, const SwRect &rRect, long nOffs );
-    void SetNoNextScroll();
 
     void InvalidateWindows( const SwRect &rRect );
 

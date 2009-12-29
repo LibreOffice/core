@@ -374,149 +374,6 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
 
 /*************************************************************************
 |*
-|*  SwLayAction::_AddScrollRect()
-|*
-|*  Ersterstellung      MA 04. Mar. 94
-|*  Letzte Aenderung    MA 04. Mar. 94
-|*
-|*************************************************************************/
-BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
-                       const SwRect &rRect1, const SwRect &rRect2,
-                       const SwLayoutFrm *pLay )
-{
-    const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-    const SwFlyFrm *pSelfFly = pFrm->FindFlyFrm();
-    const BOOL bInCnt = pSelfFly && pSelfFly->IsFlyInCntFrm() ? TRUE : FALSE;
-
-    for ( sal_uInt32 j = 0; j < rObjs.Count(); ++j )
-    {
-        // --> OD 2004-07-07 #i28701# - consider changed type of <SwSortedObjs> entries
-        const SwAnchoredObject* pAnchoredObj = rObjs[j];
-        const SwRect aRect( pAnchoredObj->GetObjRect() );
-        if ( !rRect1.IsOver( aRect ) && !rRect2.IsOver( aRect ) )
-            continue;       //Keine Ueberlappung, der naechste.
-
-        const SwFlyFrm *pFly = pAnchoredObj->ISA(SwFlyFrm)
-                               ? static_cast<const SwFlyFrm*>(pAnchoredObj) : 0;
-
-        //Wenn der Rahmen innerhalb des LayFrm verankert ist, so darf er
-        //mitgescrollt werden, wenn er nicht seitlich aus dem Rechteck
-        //herausschaut.
-        if ( pLay && pFly && pFly->IsLowerOf( pLay ) )
-        {
-             if ( pFly->Frm().Left() < rRect1.Left() ||
-                  pFly->Frm().Right()> rRect1.Right() )
-                return TRUE;
-            continue;
-        }
-
-        if ( !pSelfFly )    //Nur wenn der Frm in einem Fly steht kann
-            return TRUE;    //es Einschraenkungen geben.
-
-        if ( !pFly )      //Keine Einschraenkung fuer Zeichenobjekte.
-            return TRUE;
-
-        if ( pFly != pSelfFly )
-        {
-            //Flys unter dem eigenen nur dann abziehen, wenn sie innerhalb des
-            //eigenen stehen.
-            //Fuer inhaltsgebundene Flys alle Flys abziehen fuer die gilt, dass
-            //pSelfFly nicht innerhalb von ihnen steht.
-            if ( bInCnt )
-            {
-                const SwFlyFrm *pTmp = pSelfFly->GetAnchorFrm()->FindFlyFrm();
-                while ( pTmp )
-                {
-                    if ( pTmp == pFly )
-                        return FALSE;
-                    else
-                        pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
-                }
-            } else if ( pAnchoredObj->GetDrawObj()->GetOrdNum() <
-                                    pSelfFly->GetVirtDrawObj()->GetOrdNum() )
-            {
-                const SwFlyFrm *pTmp = pFly;
-                do
-                {   if ( pTmp == pSelfFly )
-                        return TRUE;
-                    else
-                        pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
-                } while ( pTmp );
-            } else
-                return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
-                                  const SwPageFrm *pPage,
-                                  const SwTwips nOfst,
-                                  const SwTwips nOldBottom )
-{
-    // --> OD 2004-07-01 #i28701# - determine, if scrolling is allowed.
-    bool bScroll = mbScrollingAllowed;
-    SwRect aPaintRect( pCntnt->PaintArea() );
-    SWRECTFN( pCntnt )
-
-    // --> OD 2007-11-27 #notes2#
-    // if sidebar for notes is present, no scrolling is allowed
-    if ( bScroll )
-    {
-        const SwPostItMgr* pPostItMgr = pImp->GetShell()->GetPostItMgr();
-        if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
-        {
-            bScroll = false;
-        }
-    }
-    // <--
-
-    //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
-    //Cntnt nicht selbst steht, so ist nichts mit Scrollen.
-    if ( bScroll && pPage->GetSortedObjs() )
-    {
-        SwRect aRect( aPaintRect );
-        if( bVert )
-            aPaintRect.Pos().X() += nOfst;
-        else
-            aPaintRect.Pos().Y() -= nOfst;
-
-        if ( ::lcl_IsOverObj( pCntnt, pPage, aPaintRect, aRect, 0 ) )
-            bScroll = false;
-
-        if( bVert )
-            aPaintRect.Pos().X() -= nOfst;
-        else
-            aPaintRect.Pos().Y() += nOfst;
-    }
-    if ( bScroll && pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
-        bScroll = false;
-
-    if ( bScroll )
-    {
-        if( aPaintRect.HasArea() )
-            pImp->GetShell()->AddScrollRect( pCntnt, aPaintRect, nOfst );
-        if ( pCntnt->IsRetouche() && !pCntnt->GetNext() )
-        {
-            SwRect aRect( pCntnt->GetUpper()->PaintArea() );
-            (aRect.*fnRect->fnSetTop)( (pCntnt->*fnRect->fnGetPrtBottom)() );
-            if ( !pImp->GetShell()->AddPaintRect( aRect ) )
-                pCntnt->ResetRetouche();
-        }
-        pCntnt->ResetCompletePaint();
-    }
-    else if( aPaintRect.HasArea() )
-    {
-        if( bVert )
-            aPaintRect.Pos().X() += nOfst;
-        else
-            aPaintRect.Pos().Y() -= nOfst;
-        PaintCntnt( pCntnt, pPage, aPaintRect, nOldBottom );
-    }
-}
-
-/*************************************************************************
-|*
 |*  SwLayAction::SwLayAction()
 |*
 |*  Ersterstellung      MA 30. Oct. 92
@@ -541,8 +398,6 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     bUpdateExpFlds = bBrowseActionStop = bActionInProgress = FALSE;
     // OD 14.04.2003 #106346# - init new flag <mbFormatCntntOnInterrupt>.
     mbFormatCntntOnInterrupt = sal_False;
-    // --> OD 2004-06-14 #i28701#
-    mbScrollingAllowed = true;
 
     pImp->pLayAct = this;   //Anmelden
 }
@@ -657,8 +512,6 @@ void SwLayAction::Action()
     pRoot->ResetTurboFlag();
     pRoot->ResetTurbo();
 
-    if ( IsInput() )
-        pImp->GetShell()->SetNoNextScroll();
     SetCheckPages( TRUE );
 
     bActionInProgress = FALSE;
@@ -737,34 +590,6 @@ class NotifyLayoutOfPageInProgress
         }
 };
 // <--
-
-// --> OD 2004-06-14 #i28701# - local method to determine, if scrolling during
-// the format of the given page is allowed.
-// Scrolling isn't allowed, if the wrapping style of floating screen objects
-// is considered on object positioning and to-paragraph/to-character anchored
-// floating screen objects are registered at the page.
-bool lcl_ScrollingAllowed( const SwPageFrm& _rPageFrm )
-{
-    bool bRetScrollAllowed = true;
-
-    if ( _rPageFrm.GetSortedObjs() &&
-         _rPageFrm.GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
-    {
-        const SwSortedObjs* pObjs = _rPageFrm.GetSortedObjs();
-        sal_uInt32 i = 0;
-        for ( ; i < pObjs->Count(); ++i )
-        {
-            SwAnchoredObject* pObj = (*pObjs)[i];
-            if ( pObj->ConsiderObjWrapInfluenceOnObjPos() )
-            {
-                bRetScrollAllowed = false;
-                break;
-            }
-        }
-    }
-
-    return bRetScrollAllowed;
-}
 
 void SwLayAction::InternalAction()
 {
@@ -867,8 +692,6 @@ void SwLayAction::InternalAction()
             // <NotifyLayoutOfPageInProgress>
             {
                 NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPage );
-                // --> OD 2004-07-01 #i28701# - determine, if scrolling is allowed.
-                mbScrollingAllowed = lcl_ScrollingAllowed( *pPage );
 
                 while ( !IsInterrupt() && !IsNextCycle() &&
                         ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
@@ -1841,219 +1664,6 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
     return bChanged || bTabChanged;
 }
 
-BOOL MA_FASTCALL lcl_AreLowersScrollable( const SwLayoutFrm *pLay )
-{
-    const SwFrm *pLow = pLay->Lower();
-    while ( pLow )
-    {
-        if ( pLow->IsCompletePaint() || !pLow->IsValid() || pLow->IsCoveredCell() )
-            return FALSE;
-        if ( pLow->IsLayoutFrm() && !::lcl_AreLowersScrollable( (SwLayoutFrm*)pLow ))
-            return FALSE;
-        pLow = pLow->GetNext();
-    }
-    return TRUE;
-}
-
-SwLayoutFrm * MA_FASTCALL lcl_IsTabScrollable( SwTabFrm *pTab )
-{
-    //returnt die erste unveraenderte Zeile, oder 0 wenn nicht
-    //gescrollt werden darf.
-    if ( !pTab->IsCompletePaint() )
-    {
-        SwLayoutFrm *pUnchgdRow = 0;
-        SwLayoutFrm *pRow = (SwLayoutFrm*)pTab->Lower();
-        while ( pRow )
-        {
-            if ( ::lcl_AreLowersScrollable( pRow ) )
-            {
-                if ( !pUnchgdRow )
-                    pUnchgdRow = pRow;
-            }
-            else
-            {
-                pUnchgdRow = 0;
-            }
-
-            pRow = (SwLayoutFrm*)pRow->GetNext();
-        }
-        return pUnchgdRow;
-    }
-    return 0;
-}
-
-// OD 2004-05-11 #i28701#
-void lcl_ValidateLowerObjs( SwFrm* pFrm,
-                            const SwTwips nOfst,
-                            SwPageFrm *pPage,
-                            bool bResetOnly );
-
-// OD 2004-05-11 #i28701# - correction: floating screen objects, which are
-// anchored at-fly, have also been to be considered.
-void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
-                                     SwLayoutFrm *pRow, SwPageFrm *pPage,
-                                     BOOL bResetOnly )
-{
-    pLay->ResetCompletePaint();
-
-    // OD 2004-05-11 #i28701# - consider floating screen objects, which are
-    // anchored at-fly.
-    if ( pLay->IsFlyFrm() )
-    {
-        ::lcl_ValidateLowerObjs( pLay, nOfst, pPage, bResetOnly );
-    }
-
-    SwFrm *pLow = pRow ? pRow : pLay->Lower();
-    SwRootFrm *pRootFrm = 0;
-
-    while ( pLow )
-    {
-        if ( !bResetOnly )
-        {
-            SwRect aOldFrm( pLow->Frm() );
-            pLow->Frm().Pos().Y() += nOfst;
-            if( pLow->IsAccessibleFrm() )
-            {
-                if( !pRootFrm )
-                    pRootFrm = pPage->FindRootFrm();
-                if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
-                    pRootFrm->GetCurrShell() )
-                {
-                    pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pLow, aOldFrm );
-                }
-            }
-        }
-        if ( pLow->IsLayoutFrm() )
-        {
-            ::lcl_ValidateLowers( (SwLayoutFrm*)pLow, nOfst, 0, pPage, bResetOnly);
-        }
-        else
-        {
-            pLow->ResetCompletePaint();
-            // OD 2004-05-11 #i28701# - use new local helper method
-            // <lcl_ValidateLowerObjs(..)>
-            ::lcl_ValidateLowerObjs( pLow, nOfst, pPage, bResetOnly);
-        }
-        if ( !bResetOnly )
-            pLow->Calc();           //#55435# Stabil halten.
-        pLow = pLow->GetNext();
-    }
-}
-
-// OD 2004-05-11 #i28701# - helper method for <lcl_ValidateLowers(..)> to
-// 'ValidateLowers' for floating screen objects
-void lcl_ValidateLowerObjs( SwFrm* pFrm,
-                            const SwTwips nOfst,
-                            SwPageFrm *pPage,
-                            bool bResetOnly )
-{
-    if ( pFrm->GetDrawObjs() )
-    {
-        // --> OD 2004-10-15 #i26945# - consider layout direction
-        SWRECTFN( pFrm )
-        // <--
-        for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
-        {
-            SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-            // --> OD 2004-10-08 #i26945# - check, if the anchor frame, which
-            // contains the anchor position, is the given frame
-            if ( pAnchoredObj->GetAnchorFrmContainingAnchPos() != pFrm )
-            {
-                continue;
-            }
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
-            {
-                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                if ( !bResetOnly )
-                {
-                    // --> OD 2004-10-15 #i26945#
-                    // - consider layout direction
-                    // - consider condition for direct move
-                    const bool bNoDirectMove =
-                            WEIT_WECH == pFly->Frm().Top() ||
-                            pFly->ConsiderObjWrapInfluenceOnObjPos();
-                    if ( !bNoDirectMove )
-                    {
-                        (pFly->Frm().*fnRect->fnSubTop)( -nOfst );
-                        (pFly->Frm().*fnRect->fnAddBottom)( nOfst );
-                    }
-                    // <--
-                    pFly->GetVirtDrawObj()->SetRectsDirty();
-                    // --> OD 2004-08-17 - also notify view of <SdrObject>
-                    // instance, which represents the Writer fly frame in the
-                    // drawing layer
-                    pFly->GetVirtDrawObj()->SetChanged();
-                    // <--
-                    if ( pFly->IsFlyInCntFrm() )
-                        ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
-                    // --> OD 2004-10-15 #i26945# - consider at-character
-                    // anchored Writer fly frames
-                    else if( pFly->IsAutoPos() )
-                    {
-                        pFly->AddLastCharY( nOfst );
-                        // OD 2004-05-18 #i28701# - follow-up of #i22341#
-                        // <mnLastTopOfLine> has also been adjusted.
-                        pFly->AddLastTopOfLineY( nOfst );
-                    }
-                    // <--
-                }
-                ::lcl_ValidateLowers( pFly, nOfst, 0, pPage, bResetOnly);
-            }
-            // --> OD 2004-10-15 #i26945# - consider drawing objects
-            else
-            {
-                if ( !bResetOnly )
-                {
-                    pAnchoredObj->AddLastCharY( nOfst );
-                    pAnchoredObj->AddLastTopOfLineY( nOfst );
-                }
-            }
-            // <--
-            pAnchoredObj->InvalidateObjPos();
-        }
-    }
-}
-
-void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
-                               const SwRect &rRect,
-                               const SwTwips nOfst)
-{
-    // --> OD 2007-11-27 #notes2#
-    // if sidebar for notes is present, no scrolling is allowed
-    const SwPageFrm* pPage = pTab->FindPageFrm();
-    ASSERT( pPage, "<lcl_AddScrollRectTab(..)> - no page frame found at table frame -> crash" );
-    ViewShell* pSh = pPage->GetShell();
-    if ( pSh )
-    {
-        const SwPostItMgr* pPostItMgr = pSh->GetPostItMgr();
-        if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
-        {
-            return;
-        }
-    }
-    // <--
-    //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
-    //Frm nicht selbst steht, so ist nichts mit Scrollen.
-    SwRect aRect( rRect );
-    // OD 04.11.2002 #104100# - <SWRECTFN( pTab )> not needed.
-    if( pTab->IsVertical() )
-        aRect.Pos().X() -= nOfst;
-    else
-        aRect.Pos().Y() += nOfst;
-    if ( pPage->GetSortedObjs() )
-    {
-        if ( ::lcl_IsOverObj( pTab, pPage, rRect, aRect, pTab ) )
-            return;
-    }
-    if ( pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
-        return;
-
-    if ( pSh )
-        pSh->AddScrollRect( pTab, aRect, nOfst );
-    ::lcl_ValidateLowers( pTab, nOfst, pRow, pTab->FindPageFrm(),
-                                                pTab->IsLowersFormatted() );
-}
-
 // OD 31.10.2002 #104100#
 // NOTE: no adjustments for vertical layout support necessary
 BOOL CheckPos( SwFrm *pFrm )
@@ -2096,76 +1706,27 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     if ( !pTab->IsValid() || pTab->IsCompletePaint() || pTab->IsComplete() )
     {
         if ( pTab->GetPrev() && !pTab->GetPrev()->IsValid() )
-            pTab->GetPrev()->SetCompletePaint();
-
-        //Potenzielles Scrollrect ist die ganze Tabelle. Da bereits ein
-        //Wachstum innerhalb der Tabelle - und damit der Tabelle selbst -
-        //stattgefunden haben kann, muss die untere Kante durch die
-        //Unterkante der letzten Zeile bestimmt werden.
-        SwLayoutFrm* pRow = 0L;
-        SwRect aScrollRect( pTab->PaintArea() );
-        // --> OD 2004-07-01 #i28701# - check, if scrolling is allowed.
-        if ( mbScrollingAllowed &&
-             ( IsPaint() || bAddRect ) )
         {
-            pRow = static_cast<SwLayoutFrm*>(pTab->GetLastLower());
-            // OD 31.10.2002 #104100# - vertical layout support
-            (aScrollRect.*fnRect->fnSetBottom)( (pRow->Frm().*fnRect->fnGetBottom)() );
-            //Die Oberkante wird ggf. durch die erste unveraenderte Zeile bestimmt.
-            pRow = ::lcl_IsTabScrollable( pTab );
-            if ( pRow && pRow != pTab->Lower() )
-                // OD 31.10.2002 #104100# - vertical layout support
-                (aScrollRect.*fnRect->fnSetTop)( (pRow->Frm().*fnRect->fnGetTop)() );
+            pTab->GetPrev()->SetCompletePaint();
         }
 
-        const SwFrm *pOldUp = pTab->GetUpper();
-
-        SwRect aOldRect( pTab->Frm() );
+        const SwRect aOldRect( pTab->Frm() );
         pTab->SetLowersFormatted( FALSE );
         pTab->Calc();
         if ( aOldRect != pTab->Frm() )
+        {
             bChanged = TRUE;
-        SwRect aPaintFrm = pTab->PaintArea();
+        }
+        const SwRect aPaintFrm = pTab->PaintArea();
 
         if ( IsPaint() && bAddRect )
         {
-            // --> OD 2004-07-01 #i28701# - check, if scrolling is allowed
-            if ( mbScrollingAllowed &&
-                 pRow && pOldUp == pTab->GetUpper() &&
-                 pTab->Frm().SSize() == aOldRect.SSize() &&
-                 // OD 31.10.2002 #104100# - vertical layout support
-                 (pTab->Frm().*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)() &&
-                 pTab->IsAnLower( pRow ) )
-            {
-                SwTwips nOfst;
-                if ( pRow->GetPrev() )
-                {
-                    if ( pRow->GetPrev()->IsValid() ||
-                         ::CheckPos( pRow->GetPrev() ) )
-                    {
-                        // OD 31.10.2002 #104100# - vertical layout support
-                        nOfst = -(pRow->Frm().*fnRect->fnTopDist)( (pRow->GetPrev()->Frm().*fnRect->fnGetBottom)() );
-                    }
-                    else
-                        nOfst = 0;
-                }
-                else
-                    // OD 31.10.2002 #104100# - vertical layout support
-                    nOfst = (pTab->Frm().*fnRect->fnTopDist)( (aOldRect.*fnRect->fnGetTop)() );
-
-                if ( nOfst )
-                {
-                     ::lcl_AddScrollRectTab( pTab, pRow, aScrollRect, nOfst );
-                     bPainted = TRUE;
-                }
-            }
-
             // OD 01.11.2002 #104100# - add condition <pTab->Frm().HasArea()>
-            if ( !pTab->IsCompletePaint() && pTab->IsComplete() &&
+            if ( !pTab->IsCompletePaint() &&
+                 pTab->IsComplete() &&
                  ( pTab->Frm().SSize() != pTab->Prt().SSize() ||
                    // OD 31.10.2002 #104100# - vertical layout support
-                   (pTab->*fnRect->fnGetLeftMargin)()
-                 ) &&
+                   (pTab->*fnRect->fnGetLeftMargin)() ) &&
                  pTab->Frm().HasArea()
                )
             {
@@ -2481,13 +2042,6 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     SWRECTFN( pCntnt )
     if ( !bDrawObjsOnly && IsPaint() )
     {
-        const BOOL bPosOnly = !pCntnt->GetValidPosFlag() &&
-                              !pCntnt->IsCompletePaint() &&
-                              pCntnt->GetValidSizeFlag() &&
-                              pCntnt->GetValidPrtAreaFlag() &&
-                              ( !pCntnt->IsTxtFrm() ||
-                                !((SwTxtFrm*)pCntnt)->HasAnimation() );
-        const SwFrm *pOldUp = pCntnt->GetUpper();
         const SwRect aOldRect( pCntnt->UnionFrm() );
         const long nOldBottom = (pCntnt->*fnRect->fnGetPrtBottom)();
         pCntnt->OptCalc();
@@ -2495,23 +2049,10 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
             return;
         if( (*fnRect->fnYDiff)( (pCntnt->Frm().*fnRect->fnGetBottom)(),
                                 (aOldRect.*fnRect->fnGetBottom)() ) < 0 )
-            pCntnt->SetRetouche();
-        const SwRect aNewRect( pCntnt->UnionFrm() );
-        if ( bPosOnly &&
-             (aNewRect.*fnRect->fnGetTop)() != (aOldRect.*fnRect->fnGetTop)() &&
-             !pCntnt->IsInTab() && !pCntnt->IsInSct() &&
-             ( !pCntnt->GetPrev() || !pCntnt->GetPrev()->IsTabFrm() ) &&
-             pOldUp == pCntnt->GetUpper() &&
-             (aNewRect.*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)() &&
-             aNewRect.SSize() == aOldRect.SSize()
-           )
         {
-            _AddScrollRect( pCntnt, pPage, (*fnRect->fnYDiff)(
-                            (pCntnt->Frm().*fnRect->fnGetTop)(),
-                            (aOldRect.*fnRect->fnGetTop)() ), nOldBottom );
+            pCntnt->SetRetouche();
         }
-        else
-            PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom);
+        PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom);
     }
     else
     {
@@ -2910,7 +2451,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         {
             --pSh->nStartAction;
 
-            if ( pSh->Imp()->GetRegion() || pSh->Imp()->GetScrollRects() )
+            if ( pSh->Imp()->GetRegion() )
                 bActions = TRUE;
             else
             {
@@ -2956,9 +2497,9 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 //fix(18176):
                 SwViewImp *pViewImp = pSh->Imp();
                 BOOL bUnlock = FALSE;
-                if ( pViewImp->GetRegion() || pViewImp->GetScrollRects() )
+                if ( pViewImp->GetRegion() )
                 {
-                    pViewImp->DelRegions();
+                    pViewImp->DelRegion();
 
                     //Fuer Repaint mit virtuellem Device sorgen.
                     pSh->LockPaint();

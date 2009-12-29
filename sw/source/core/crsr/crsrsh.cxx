@@ -1773,13 +1773,6 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         }
     }
 
-    //Ggf. gescrollten Bereicht korrigieren (Alignment).
-    //Nur wenn gescrollt wurde, und wenn keine Selektion existiert.
-    if( pFrm && Imp()->IsScrolled() &&
-            pShellCrsr->GetNext() == pShellCrsr && !pShellCrsr->HasMark() )
-        Imp()->RefreshScrolledArea( aCharRect );
-
-
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
     if( pFrm && Imp()->IsAccessible() )

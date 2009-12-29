@@ -2809,7 +2809,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
         aAction.Action();
         ((SwRootFrm*)this)->ResetTurboFlag();
         if ( !pSh->ActionPend() )
-            pSh->Imp()->DelRegions();
+            pSh->Imp()->DelRegion();
     }
 
     SwRect aRect( rRect );

@@ -298,14 +298,6 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     // <--
         StopAnimation();
 
-    if ( pSh->Imp()->IsPaintInScroll() && pSh->GetWin() && rRect != Frm() &&
-         HasAnimation() )
-    {
-        pSh->GetWin()->Invalidate( Frm().SVRect() );
-        return;
-    }
-
-
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
 
     OutputDevice *pOut = pSh->GetOut();
@@ -802,6 +794,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
 {
+
     if(!pOut)
         return;
     Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
@@ -868,7 +861,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //this might be a good idea for all other OLE objects also,
         //but as I cannot oversee the consequences I fix it only for charts for now
         lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
-     }
+    }
 
     if( pGrfNd )
     {

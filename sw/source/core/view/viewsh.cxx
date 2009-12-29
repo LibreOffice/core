@@ -219,28 +219,18 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         Imp()->StartAction();
 
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegions();
+        Imp()->DelRegion();
 
     const BOOL bExtraData = ::IsExtraData( GetDoc() );
 
     if ( !bIdleEnd )
     {
-        if ( Imp()->IsNextScroll() && !bExtraData )
-            Imp()->SetScroll();
-        else
-        {
-            if ( bExtraData )
-                Imp()->bScroll = FALSE;
-            Imp()->SetNextScroll();
-            Imp()->ResetScroll();
-        }
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( FALSE );
         if ( nLockPaint )
             aAction.SetPaint( FALSE );
         aAction.SetInputType( INPUT_KEYBOARD );
         aAction.Action();
-        Imp()->SetScroll();
     }
 
     if ( bIsShellForCheckViewLayout )
@@ -249,8 +239,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     //Wenn wir selbst keine Paints erzeugen, so warten wir auf das Paint
     //vom System. Dann ist das Clipping korrekt gesetzt; Beispiel: verschieben
     //eines DrawObjektes.
-    if ( Imp()->GetRegion()     || Imp()->GetScrollRects() ||
-         aInvalidRect.HasArea() || bExtraData )
+    if ( Imp()->GetRegion()     ||
+         aInvalidRect.HasArea() ||
+         bExtraData )
     {
         if ( !nLockPaint )
         {
@@ -274,14 +265,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             // Mitte eine Selektion und mit einem anderen Cursor an linken
             // rechten Rand springen. Ohne ShowCrsr verschwindet die
             // Selektion
-            BOOL bShowCrsr = (pRegion || Imp()->GetScrollRects()) &&
-                                IsA( TYPE(SwCrsrShell) );
+            BOOL bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->HideCrsrs();
-
-            Scroll();
-            if ( bPaintsFromSystem && Imp()->pScrolledArea )
-                Imp()->FlushScrolledArea();
 
             if ( pRegion )
             {
@@ -411,14 +397,14 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 
                 delete pVout;
                 delete pRegion;
-                Imp()->DelRegions();
+                Imp()->DelRegion();
             }
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->ShowCrsrs( TRUE );
         }
         else
         {
-            Imp()->DelRegions();
+            Imp()->DelRegion();
             bPaintWorks =  TRUE;
         }
     }
@@ -437,13 +423,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     --nStartAction;
     UISizeNotify();
     ++nStartAction;
-
-#ifdef DBG_UTIL
-    // test option 'No Scroll' suppresses the automatic repair of the scrolled area
-    if ( !GetViewOptions()->IsTest8() )
-#endif
-    if ( Imp()->IsScrolled() )
-        Imp()->RestartScrollTimer();
 
     if( Imp()->IsAccessible() )
         Imp()->FireAccessibleEvents();
@@ -1199,11 +1178,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     //vom RootFrm::Paint erzeugt worden sein.
     if ( !bInEndAction &&
          Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegions();
+        Imp()->DelRegion();
 
     SET_CURR_SHELL( this );
-
-    //SwSaveHdl aSaveHdl( Imp() );
 
     bool bScrolled = false;
 
@@ -1334,9 +1311,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->GetDrawView()->VisAreaChanged( GetWin() );
         Imp()->GetDrawView()->SetActualWin( GetWin() );
     }
-    Imp()->bPaintInScroll = TRUE;
     GetWin()->Update();
-    Imp()->bPaintInScroll = FALSE;
 
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
@@ -1836,9 +1811,8 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
         //nicht ankommen.
         //Ergo: Alles selbst machen (siehe ImplEndAction())
         if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea())
-             Imp()->DelRegions();
+             Imp()->DelRegion();
 
-        Imp()->ResetScroll();
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( FALSE );
         // We increment the action counter to avoid a recursive call of actions
@@ -1864,7 +1838,7 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             }
             if ( bStop )
             {
-                Imp()->DelRegions();
+                Imp()->DelRegion();
                 pRegion = 0;
             }
         }
@@ -1909,7 +1883,7 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             }
             else
                 bRet = FALSE;
-            Imp()->DelRegions();
+            Imp()->DelRegion();
         }
         else
             bRet = FALSE;
@@ -1960,17 +1934,7 @@ void ViewShell::Paint(const Rectangle &rRect)
     {
         if( GetWin() && GetWin()->IsVisible() )
         {
-            //Wenn mit dem Paint ein Bereich betroffen ist, der vorher gescrolled
-            //wurde, so wiederholen wir das Paint mit dem Gesamtbereich. Nur so
-            //koennen wir sicherstellen, das (nicht mal kurzfristig) durch das Paint
-            //keine Alignmentfehler sichtbar werden.
             SwRect aRect( rRect );
-            if ( Imp()->IsScrolled() && Imp()->FlushScrolledArea( aRect ) )
-            {
-                GetWin()->Invalidate( aRect.SVRect() );
-                return;
-            }
-
             if ( bPaintInProgress ) //Schutz gegen doppelte Paints!
             {
                 GetWin()->Invalidate( rRect );
