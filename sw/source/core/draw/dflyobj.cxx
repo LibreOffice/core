@@ -566,6 +566,11 @@ const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
     return aOutRect;
 }
 
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLastBoundRect() const
+{
+    return GetCurrentBoundRect();
+}
+
 
 void __EXPORT SwVirtFlyDrawObj::RecalcBoundRect()
 {

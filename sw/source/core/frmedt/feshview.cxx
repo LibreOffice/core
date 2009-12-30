@@ -1185,9 +1185,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
 }
 
 // #107513#
-// Test if there is a draw object at that position and if it should be selected.
-// The 'should' is aimed at Writer text fly frames which may be in front of
-// the draw object.
+// Test if there is a object at that position and if it should be selected.
 sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
     SET_CURR_SHELL(this);
@@ -1204,39 +1202,79 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         bRet = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
-        if(bRet && pObj)
+        if ( bRet && pObj )
         {
             const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-            if( pObj->GetLayer() == pIDDMA->GetHellId() )
+            // --> OD 2009-12-30 #i89920#
+            // Do not select object in background which is overlapping this text
+            // at the given position.
+            bool bObjInBackground( false );
             {
-                const SwFrm *pPageFrm = GetLayout()->Lower();
-                while( pPageFrm && !pPageFrm->Frm().IsInside( rPt ) )
+                if ( pObj->GetLayer() == pIDDMA->GetHellId() )
                 {
-                    if ( rPt.Y() < pPageFrm->Frm().Top() )
-                        pPageFrm = 0;
-                    else
-                        pPageFrm = pPageFrm->GetNext();
-                }
-                if( pPageFrm )
-                {
-                    SwRect aTmp( pPageFrm->Prt() );
-                    aTmp += pPageFrm->Frm().Pos();
-                    if( aTmp.IsInside( rPt ) )
-                        return sal_False;
+                    const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+                    const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+                    const SwFmtSurround& rSurround = rFmt.GetSurround();
+                    if ( rSurround.GetSurround() == SURROUND_THROUGHT )
+                    {
+                        bObjInBackground = true;
+                    }
                 }
             }
-
-            const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
-            // --> FME 2005-04-18 #i20965# Use GetOrdNum() instead of GetOrdNumDirect()
-            // because ordnums might be wrong
-            for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
+            if ( bObjInBackground )
             {
-            // <--
-                SdrObject *pCandidate = pPage->GetObj(a);
-
-                if(pCandidate->ISA(SwVirtFlyDrawObj) && ((SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt))
+                const SwPageFrm* pPageFrm = GetLayout()->GetPageAtPos( rPt );
+                if( pPageFrm )
                 {
-                    bRet = sal_False;
+                    const SwCntntFrm* pCntntFrm( pPageFrm->ContainsCntnt() );
+                    while ( pCntntFrm )
+                    {
+                        if ( pCntntFrm->UnionFrm().IsInside( rPt ) )
+                        {
+                            const SwTxtFrm* pTxtFrm =
+                                    dynamic_cast<const SwTxtFrm*>(pCntntFrm);
+                            if ( pTxtFrm )
+                            {
+                                SwPosition* pPos =
+                                    new SwPosition( *(pTxtFrm->GetTxtNode()) );
+                                Point aTmpPt( rPt );
+                                if ( pTxtFrm->GetKeyCrsrOfst( pPos, aTmpPt ) )
+                                {
+                                    SwRect aCharRect;
+                                    if ( pTxtFrm->GetCharRect( aCharRect, *pPos ) )
+                                    {
+                                        if ( aCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
+                                        {
+                                            bRet = sal_False;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                bRet = sal_False;
+                            }
+                            break;
+                        }
+
+                        pCntntFrm = pCntntFrm->GetNextCntntFrm();
+                    }
+                }
+            }
+            // <--
+
+            if ( bRet )
+            {
+                const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
+                for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
+                {
+                    SdrObject *pCandidate = pPage->GetObj(a);
+
+                    if (pCandidate->ISA(SwVirtFlyDrawObj) &&
+                       ( (SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt) )
+                    {
+                        bRet = sal_False;
+                    }
                 }
             }
         }

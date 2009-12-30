@@ -2882,7 +2882,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             !bExecDrawTextLink)
                         {
                             // #107513#
-                            // Test if there is a draw object at that position and if it should be selected.
+                            // Test if there is a object at that position and if it should be selected.
                             sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
 
                             if(bShould)
@@ -3153,7 +3153,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if ( rSh.IsSelFrmMode() )
                                 rSh.SelectObj(aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP);
                             else
-                            {   if ( rSh.SelectObj( aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP ) )
+                            {
+                                if ( rSh.SelectObj( aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP ) )
                                 {
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
@@ -3366,11 +3367,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
-                if( !bOverURLGrf && !bOnlyText )
+                if ( !bOverURLGrf && !bOnlyText )
                 {
-                    const int nSelType = rSh.GetSelectionType();
-                    if( nSelType == nsSelectionType::SEL_OLE ||
-                        nSelType == nsSelectionType::SEL_GRF )
+                    const SelectionType nSelType = rSh.GetSelectionType();
+                    // --> OD 2009-12-30 #i89920#
+                    // Check in general, if an object is selectable at given position.
+                    // Thus, also text fly frames in background become selectable via Ctrl-Click.
+                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                         nSelType & nsSelectionType::SEL_GRF ||
+                         rSh.IsObjSelectable( aDocPos ) )
+                    // <--
                     {
                         MV_KONTEXT( &rSh );
                         if( !rSh.IsFrmSelected() )
@@ -3379,11 +3385,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = FALSE;
                     }
                 }
-                // nicht mehr hier zuruecksetzen, damit -- falls durch MouseMove
-                // bei gedrueckter Ctrl-Taste eine Mehrfachselektion erfolgen soll,
-                // im Drag nicht die vorherige Selektion aufgehoben wird.
-//              if(bModePushed)
-//                  rSh.PopMode(FALSE);
                 break;
             }
         }
