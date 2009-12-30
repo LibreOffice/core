@@ -75,9 +75,11 @@
 // --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
 // <--
-
 #include <frmatr.hxx>
-
+// --> OD 2009-12-29 #i89920#
+#include <fmtsrnd.hxx>
+#include <svx/opaqitem.hxx>
+// <--
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -899,67 +901,50 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
 }
 
 
-void SwFEShell::Insert(  SdrObject& rDrawObj,
-                         const SfxItemSet* pFlyAttrSet,
-                         SwFrmFmt* pFrmFmt, const Point* pPt )
+void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
+                               const Point& rInsertPosition )
 {
-    SwDrawFrmFmt* pFmt = 0;
     SET_CURR_SHELL( this );
 
-    if( pPt )
-    {
-        SfxItemSet* pSet = 0;
-        const SfxPoolItem* pItem;
-        if( !pFlyAttrSet ||
-            !pFlyAttrSet->GetItemState( RES_ANCHOR, sal_False, &pItem ) ||
-            FLY_PAGE != ((SwFmtAnchor*)pItem)->GetAnchorId() )
-        {
-            pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
-            pSet->Put( SwFmtAnchor( FLY_AT_CNTNT ));
-            pFlyAttrSet = pSet;
-        }
+    SfxItemSet rFlyAttrSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
+    rFlyAttrSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+    // --> OD 2009-12-29 #i89920#
+    rFlyAttrSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
+    rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
+    // <--
 
+    // find anchor position
+    SwPaM aPam( pDoc->GetNodes() );
+    {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
-        SwPaM aPam( pDoc->GetNodes() );
-        Point aTmpPt( *pPt );
+        Point aTmpPt( rInsertPosition );
         getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
-        SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
-        const Point aRelPos( pPt->X() - pFrm->Frm().Left(),
-                             pPt->Y() - pFrm->Frm().Top() );
-        // OD 2004-04-05 #i26791# - direct object positioning for <SwDoc::Insert(..)>
+        const SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
+        const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
+                             rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
-        ::lcl_FindAnchorPos( *GetDoc(), *pPt, *pFrm, *(SfxItemSet*)pFlyAttrSet );
-        pFmt = GetDoc()->Insert( aPam, rDrawObj, pFlyAttrSet, pFrmFmt );
-        if( pSet )
-            delete pSet;
+        ::lcl_FindAnchorPos( *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
-    else
-    {
-        StartAllAction();
-            FOREACHPAM_START( this )
-                pFmt = GetDoc()->Insert(*PCURCRSR, rDrawObj,
-                                        pFlyAttrSet, pFrmFmt );
-                ASSERT( pFmt, "Doc->Insert(sdrobj) failed." );
+    // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
+    SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
 
-            FOREACHPAM_END()
-        EndAllAction();
-    }
-
-    // --> OD 2005-01-07 #i40085# - follow-up of #i35635#
     // move object to visible layer
     SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
     if ( pContact )
     {
         pContact->MoveObjToVisibleLayer( &rDrawObj );
     }
-    // <--
 
-    if( pFmt )
-        // das DrawObject selektieren
+    if ( pFmt )
+    {
+        // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView(),
-                                            sal_False, sal_False );
+                                       sal_False, sal_False );
+    }
     else
+    {
         GetLayout()->SetAssertFlyPages();
+    }
 }
 
 /***********************************************************************
