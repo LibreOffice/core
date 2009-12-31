@@ -767,6 +767,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     if ( pWrtShell )
     {
         SwWait aWait( *this, TRUE );
+        // --> OD 2009-12-31 #i106906#
+        const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
+        pWrtShell->LockView( sal_True );
+        // <--
         pWrtShell->StartAllAction();
         pWrtShell->Push();
         SwWriter aWrt( rMedium, *pWrtShell, TRUE );
@@ -777,6 +781,9 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             pWrtShell->Pop(FALSE);
             pWrtShell->EndAllAction();
+            // --> OD 2009-12-31 #i106906#
+            pWrtShell->LockView( bFormerLockView );
+            // <--
         }
     }
     else
