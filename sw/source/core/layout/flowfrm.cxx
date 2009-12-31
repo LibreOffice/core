@@ -513,10 +513,10 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
             pParent->pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
-        //If the pParent has more than 1 child nodes, former design will 
-        //ignore them directly without any collection work. It will make some 
+        //If the pParent has more than 1 child nodes, former design will
+        //ignore them directly without any collection work. It will make some
         //dangling pointers. This lead the crash...
-        //The new design will find the last child of pParent in loop way, and 
+        //The new design will find the last child of pParent in loop way, and
         //add the pStart after the last child.
         //  pParent->Lower()->pNext = pStart;
         {
@@ -2130,13 +2130,15 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
         if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
-            //Bei Sections kann es passieren, das wir gleich  in den Follow geflutscht
-            //sind. Dadurch wird nicht vom GetLeaf fuer die richtige Seite gesorgt.
-            //Das muessen wir fuer diesen Fall pruefen.
-            if ( !bSamePage && pNewUpper->IsInSct() &&
+            // --> OD 2009-12-31 #i106452#
+            // check page description not only in situation with sections.
+            if ( !bSamePage &&
                  ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
                    pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
+            {
                 SwFrm::CheckPageDescs( pNewPage, FALSE );
+            }
+            // <--
         }
     }
     return bSamePage;
