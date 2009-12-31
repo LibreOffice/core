@@ -78,6 +78,8 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   mrExport( rExp ),
     mnNextUniqueShapeId(1),
+    maShapesInfos(),
+    maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( sal_False ),
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
