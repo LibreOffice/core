@@ -1240,10 +1240,10 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                                 Point aTmpPt( rPt );
                                 if ( pTxtFrm->GetKeyCrsrOfst( pPos, aTmpPt ) )
                                 {
-                                    SwRect aCharRect;
-                                    if ( pTxtFrm->GetCharRect( aCharRect, *pPos ) )
+                                    SwRect aCursorCharRect;
+                                    if ( pTxtFrm->GetCharRect( aCursorCharRect, *pPos ) )
                                     {
-                                        if ( aCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
+                                        if ( aCursorCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
                                         {
                                             bRet = sal_False;
                                         }
