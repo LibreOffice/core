@@ -37,13 +37,13 @@
 #define INCLUDED_LIST
 #endif
 #include <tools/string.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 typedef std::list< sal_Int32 > IdList;
 
 class SvtHelpOptions_Impl;
 
-class SVT_DLLPUBLIC SvtHelpOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtHelpOptions: public utl::detail::Options
 {
     SvtHelpOptions_Impl*    pImp;
 
