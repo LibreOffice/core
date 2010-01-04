@@ -258,7 +258,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
             // --> OD 2005-08-16 #i53320#
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
             ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),

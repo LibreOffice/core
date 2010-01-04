@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -1160,6 +1160,10 @@ void SwSectionFrm::SimpleFormat()
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
+        // --> OD 2009-09-28 #b6882166#
+        // assure notifications on position changes.
+        const SwLayNotify aNotify( this );
+        // <--
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
         bValidPos = TRUE;
     }
@@ -2777,7 +2781,7 @@ void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
         pDestroy->Remove( nPos );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {

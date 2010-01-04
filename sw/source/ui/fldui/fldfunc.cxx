@@ -460,7 +460,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 {
     aListItemsLB.SetUpdateMode(FALSE);
     if(pControl == &aListAddPB ||
-            pControl == &aListItemED && aListAddPB.IsEnabled())
+            (pControl == &aListItemED && aListAddPB.IsEnabled()))
     {
         String sEntry(aListItemED.GetText());
         aListItemsLB.InsertEntry(sEntry);

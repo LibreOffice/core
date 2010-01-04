@@ -63,7 +63,7 @@
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <viewsh.hxx>
 #include <tabfrm.hxx>
 #include <redline.hxx>
@@ -87,7 +87,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <unotbl.hxx>
 #include <unoobj.hxx>
-#include <svtools/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svx/brkitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/lrspitem.hxx>

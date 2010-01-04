@@ -32,7 +32,7 @@
 #define _NOTEURL_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include "swrect.hxx"
 

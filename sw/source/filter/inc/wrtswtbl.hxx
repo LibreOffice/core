@@ -32,7 +32,7 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <swdllapi.h>
 
@@ -262,7 +262,7 @@ protected:
 
     BOOL bRelWidths : 1;        // Breiten relativ ausgeben?
     BOOL bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL bGetLineHeightCalled : 1;
 #endif
 

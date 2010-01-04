@@ -44,7 +44,7 @@
 #include <mmmergepage.hrc>
 #include <svx/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <swabstdlg.hxx>
 
 /*-- 02.04.2004 16:38:45---------------------------------------------------

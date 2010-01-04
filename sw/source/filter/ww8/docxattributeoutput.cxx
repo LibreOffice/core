@@ -44,7 +44,7 @@
 
 #include <hintids.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 #include <svx/fontitem.hxx>
 #include <svx/tstpitem.hxx>

@@ -32,7 +32,7 @@
 
 #include <tools/solar.h>
 #include <sal/types.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svx/langitem.hxx>
 #include <hintids.hxx>
 

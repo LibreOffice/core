@@ -46,20 +46,20 @@
 #include <docsh.hxx>
 
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/langitem.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
@@ -112,9 +112,10 @@
 #include "dbgoutsw.hxx"
 
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
@@ -741,7 +742,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( nEndPos == nCurPos, "Falsches FillUntil()" );
 #endif
@@ -2370,37 +2371,44 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     if ( m_rWW8Export.bWrtWW8 )
     {
+        sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
         sal_uInt8 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TCellShd );
-        m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10), m_rWW8Export.pO->Count() );
-
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        for (sal_uInt32 m = 0; m < 2; m++)
         {
-            const SwTableBox * pBox1 = rTabBoxes[n];
-            const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
-            const SfxPoolItem * pI = NULL;
-            Color aColor;
+            m_rWW8Export.InsUInt16( aSprmIds[m] );
+            m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10),
+                                     m_rWW8Export.pO->Count() );
 
-            if ( SFX_ITEM_ON == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
+            for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
             {
-                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                const SwTableBox * pBox1 = rTabBoxes[n];
+                const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
+                const SfxPoolItem * pI = NULL;
+                Color aColor;
+
+                if ( SFX_ITEM_ON ==
+                         pFrmFmt->GetAttrSet().
+                         GetItemState( RES_BACKGROUND, false, &pI ) )
+                {
+                    aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                }
+                else
+                    aColor = COL_AUTO;
+
+                WW8SHDLong aSHD;
+                aSHD.setCvFore( 0xFF000000 );
+
+                sal_uInt32 nBgColor = aColor.GetColor();
+                if ( nBgColor == COL_AUTO )
+                    aSHD.setCvBack( 0xFF000000 );
+                else
+                    aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
+
+                aSHD.Write( m_rWW8Export );
             }
-            else
-                aColor = COL_AUTO;
-
-            WW8SHDLong aSHD;
-            aSHD.setCvFore( 0xFF000000 );
-
-            sal_uInt32 nBgColor = aColor.GetColor();
-            if ( nBgColor == COL_AUTO )
-                aSHD.setCvBack( 0xFF000000 );
-            else
-                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
-
-            aSHD.Write( m_rWW8Export );
         }
     }
 }
@@ -2415,11 +2423,24 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
+#ifdef DEBUG
+struct SwNodeHash
+{
+    size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
+};
+
+typedef ::std::hash_set<SwNode *, SwNodeHash> SwNodeHashSet;
+typedef ::std::deque<SwNode *> SwNodeDeque;
+#endif
+
 void MSWordExportBase::WriteText()
 {
 #ifdef DEBUG
     ::std::clog << "<WriteText>" << ::std::endl;
-//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+
+    SwNodeHashSet aNodeSet;
+    SwNodeDeque aNodeDeque;
 #endif
 
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
@@ -2427,6 +2448,29 @@ void MSWordExportBase::WriteText()
              pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex() ) )
     {
         SwNode * pNd = pCurPam->GetNode();
+
+#ifdef DEBUG
+        if (aNodeSet.find(pNd) == aNodeSet.end())
+        {
+            aNodeSet.insert(pNd);
+            aNodeDeque.push_back(pNd);
+        }
+        else
+        {
+            ::std::clog << "<already-done><which>" << dbg_out(*pNd)
+                        << "</which><nodes>" << ::std::endl;
+
+            SwNodeDeque::const_iterator aEnd = aNodeDeque.end();
+
+            for (SwNodeDeque::const_iterator aIt = aNodeDeque.begin();
+                 aIt != aEnd; aIt++)
+            {
+                ::std::clog << dbg_out(**aIt) << ::std::endl;
+            }
+
+            ::std::clog << "</nodes></already-done>" << ::std::endl;
+        }
+#endif
 
         if ( pNd->IsTxtNode() )
             SectionBreaksAndFrames( *pNd->GetTxtNode() );
@@ -2664,33 +2708,41 @@ void WW8Export::WriteFkpPlcUsw()
         // Write SttbfAssoc
         WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
             (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
-        ::std::vector<String> aStrings;
-
-        ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
-        ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
-        for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
-             aIt != aItEnd; aIt++)
+        // --> OD 2009-10-19 #i106057#
+        if ( pSttbfAssoc )
+        // <--
         {
-            String aStr(aIt->getStr());
-            aStrings.push_back(aStr);
+            ::std::vector<String> aStrings;
+            ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
+            ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
+            for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
+                 aIt != aItEnd; aIt++)
+            {
+                String aStr(aIt->getStr());
+                aStrings.push_back(aStr);
+            }
+
+            WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
+                               pFib->lcbSttbfAssoc);
         }
-
-        WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
-                           pFib->lcbSttbfAssoc);
-
     }
     Strm().Seek( 0 );
 
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
           (pDoc->getExternalData(::sw::FIB).get());
-
-    pFib->fReadOnlyRecommended =
-        pFibData->getReadOnlyRecommended() ? 1 : 0;
-    pFib->fWriteReservation =
-        pFibData->getWriteReservation() ? 1 : 0;
+    // --> OD 2009-10-19 #i106057#
+    if ( pFibData )
+    // <--
+    {
+        pFib->fReadOnlyRecommended =
+            pFibData->getReadOnlyRecommended() ? 1 : 0;
+        pFib->fWriteReservation =
+            pFibData->getWriteReservation() ? 1 : 0;
+    }
 
     pFib->Write( Strm() );  // FIB
+
 }
 
 void WW8Export::StoreDoc1()
@@ -2813,7 +2865,7 @@ namespace
 {
     const ULONG WW_BLOCKSIZE = 0x200;
 
-    void EncryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -3049,7 +3101,7 @@ void WW8Export::ExportDocument_Impl()
         for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
             aPassword[nChar] = sUniPassword.GetChar(nChar);
 
-        svx::MSCodec_Std97 aCtx;
+        msfilter::MSCodec_Std97 aCtx;
         aCtx.InitKey(aPassword, aDocId);
 
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
@@ -3343,9 +3395,21 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SvxImportMSVBasic aTmp( rDoc, rStor );
+    return aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName );
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
+{
+    return SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS );
 }
 
 bool WW8_WrPlcFtnEdn::WriteTxt( WW8Export& rWrt )
@@ -3590,6 +3654,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
 
+        ShortToSVBT16(0, nStyle);
         m_rWW8Export.pO->Insert( (BYTE*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
         TableInfoRow(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
