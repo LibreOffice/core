@@ -2817,6 +2817,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 n
 }
 
 std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontData* pFont, EmbedFont& rEmbed )
+{
     std::map< sal_Int32, sal_Int32 > aRet;
     if( isBuiltinFont( pFont ) )
     {
