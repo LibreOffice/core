@@ -38,15 +38,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <swtypes.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <wrtsh.hxx>
@@ -63,13 +60,16 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#include <svtools/zformat.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
 using namespace nsSwDocInfoSubType;
-
+using namespace com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -103,7 +103,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
 
     SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, FALSE );
     if ( pItem )
-        pItem->GetValue() >>= aPropertyNames;
+        pItem->GetValue() >>= xCustomPropertySet;
 }
 
 /*--------------------------------------------------------------------
@@ -168,24 +168,31 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
         {
             if (DI_CUSTOM == i)
             {
-                if (aPropertyNames.getLength() )
+                if(xCustomPropertySet.is() )
                 {
+                    uno::Reference< beans::XPropertySetInfo > xSetInfo = xCustomPropertySet->getPropertySetInfo();
+                    const uno::Sequence< beans::Property > rProperties = xSetInfo->getProperties();
+//                    uno::Sequence< ::rtl::OUString > aPropertyNames(rProperties.getLength());
+//                    for (sal_Int32 i = 0; i < rProperties.getLength(); ++i) {
+//                        aPropertyNames[i] = rProperties[i].Name;
+//                    }
                     //if ( !IsFldEdit() )
+                    if( rProperties.getLength() )
                     {
                         pInfo = aTypeTLB.InsertEntry( String(SW_RES( STR_CUSTOM )) );
                         pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
-                    }
 
-                    for (sal_Int32 n=0; n<aPropertyNames.getLength(); n++)
-                    {
-                        rtl::OUString sEntry = aPropertyNames[n];
-                        pEntry = aTypeTLB.InsertEntry(sEntry, pInfo);
-                        if(m_sOldCustomFieldName.equals( sEntry ))
+                        for (sal_Int32 n=0; n < rProperties.getLength(); n++)
                         {
-                            pSelEntry = pEntry;
-                            aTypeTLB.Expand( pInfo );
+                            rtl::OUString sEntry = rProperties[n].Name;
+                            pEntry = aTypeTLB.InsertEntry(sEntry, pInfo);
+                            if(m_sOldCustomFieldName.equals( sEntry ))
+                            {
+                                pSelEntry = pEntry;
+                                aTypeTLB.Expand( pInfo );
+                            }
+                            pEntry->SetUserData(reinterpret_cast<void*>(i));
                         }
-                        pEntry->SetUserData(reinterpret_cast<void*>(i));
                     }
                 }
             }
@@ -263,12 +270,12 @@ IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
     USHORT nSubType = (USHORT)(ULONG)pSelEntry->GetUserData();
     USHORT nPos = aSelectionLB.GetSelectEntryPos();
     USHORT nExtSubType;
+    USHORT nNewType = 0;
 
     if (nSubType != DI_EDIT)
     {
@@ -279,7 +286,33 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                 aFormatLB.Clear();
                 aFormatLB.Enable(FALSE);
                 aFormatFT.Enable(FALSE);
-                return 0;
+                if( nSubType == DI_CUSTOM )
+                {
+                    //find out which type the custom field has - for a start set to DATE format
+                    ::rtl::OUString sName = aTypeTLB.GetEntryText(pSelEntry);
+                    try
+                    {
+                        uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
+                        const uno::Type& rValueType = aVal.getValueType();
+                        if( rValueType == ::getCppuType( (util::DateTime*)0 ))
+                        {
+                            nNewType = NUMBERFORMAT_DATETIME;
+                        }
+                        else if( rValueType == ::getCppuType( (util::Date*)0 ))
+                        {
+                            nNewType = NUMBERFORMAT_DATE;
+                        }
+                        else if( rValueType == ::getCppuType( (util::Time*)0 ))
+                        {
+                            nNewType = NUMBERFORMAT_TIME;
+                        }
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
+                else
+                    return 0;
             }
             nPos = 0;
         }
@@ -290,7 +323,6 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
         nExtSubType = DI_SUB_TIME;
 
     USHORT nOldType = 0;
-    USHORT nNewType = 0;
     BOOL bEnable = FALSE;
     BOOL bOneArea = FALSE;
 
@@ -312,7 +344,6 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
             bOneArea = TRUE;
             break;
     }
-
     if (!nNewType)
     {
         aFormatLB.Clear();
@@ -334,7 +365,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
     if (IsFldEdit())
     {
         nPos = aSelectionLB.GetSelectEntryPos();
-        if (nPos != LISTBOX_ENTRY_NOTFOUND)
+        if (nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             nSubType = (USHORT)(ULONG)aSelectionLB.GetEntryData(nPos);
 
@@ -346,7 +377,6 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                     SwWrtShell *pSh = GetWrtShell();
                     if(pSh)
                     {
-
                         SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
                         LanguageType eLang = aFormatLB.GetCurLanguage();
                         if (nNewType == NUMBERFORMAT_DATE)
@@ -357,6 +387,10 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                 }
                 aFormatLB.SetDefFormat(nFormat);
             }
+        }
+        else if( (nSubType == DI_CUSTOM)  && (nNewType != 0) )
+        {
+            aFormatLB.SetDefFormat(nFormat);
         }
     }
 

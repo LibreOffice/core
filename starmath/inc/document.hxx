@@ -35,7 +35,7 @@
 #include <sot/storage.hxx>
 #include <sot/sotref.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/docfac.hxx>
 #include <vcl/virdev.hxx>
 #include "format.hxx"

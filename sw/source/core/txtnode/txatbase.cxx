@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>

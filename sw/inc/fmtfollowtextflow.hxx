@@ -31,7 +31,7 @@
 #define _FMTFOLLOWTEXTFLOW_HXX
 
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 #include "swdllapi.h"

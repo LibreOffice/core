@@ -38,7 +38,7 @@
 #define _SVSTDARR_ULONGS
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/langitem.hxx>
 #include <swtypes.hxx>

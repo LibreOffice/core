@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -321,7 +321,7 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*************************************************************************
  *                  operator<<( ostream&, SwRect&)
  *************************************************************************/

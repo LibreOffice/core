@@ -37,10 +37,10 @@
 #include <tools/link.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
@@ -48,15 +48,15 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/srchitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/isethint.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/isethint.hxx>
 #include <svx/hyprlink.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/ctloptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/ctloptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/insctrl.hxx>
@@ -753,82 +753,8 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(rHint.ISA(SfxSimpleHint))
     {
-        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
-        if(SFX_HINT_COLORS_CHANGED == nHintId ||
-           SFX_HINT_ACCESSIBILITY_CHANGED == nHintId )
-        {
-            sal_Bool bAccessibility = sal_False;
-            if(SFX_HINT_COLORS_CHANGED == nHintId)
-                SwViewOption::ApplyColorConfigValues(*pColorConfig);
-            else
-                bAccessibility = sal_True;
-
-            //invalidate all edit windows
-            const TypeId aSwViewTypeId = TYPE(SwView);
-            const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
-            const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while(pViewShell)
-            {
-                if(pViewShell->GetWindow())
-                {
-                    if((pViewShell->IsA(aSwViewTypeId) ||
-                        pViewShell->IsA(aSwPreViewTypeId) ||
-                        pViewShell->IsA(aSwSrcViewTypeId)))
-                    {
-                        if(bAccessibility)
-                        {
-                            if(pViewShell->IsA(aSwViewTypeId))
-                                ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
-                            else if(pViewShell->IsA(aSwPreViewTypeId))
-                                ((SwPagePreView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
-                        }
-                        pViewShell->GetWindow()->Invalidate();
-                    }
-                }
-                pViewShell = SfxViewShell::GetNext( *pViewShell );
-            }
-        }
-        else if( SFX_HINT_CTL_SETTINGS_CHANGED == nHintId )
-        {
-            const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-            while( pObjSh )
-            {
-                if( pObjSh->IsA(TYPE(SwDocShell)) )
-                {
-                    const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
-                    ViewShell* pVSh = 0;
-                    pDoc->GetEditShell( &pVSh );
-                    if ( pVSh )
-                        pVSh->ChgNumberDigits();
-                }
-                pObjSh = SfxObjectShell::GetNext(*pObjSh);
-            }
-        }
-        else if(SFX_HINT_USER_OPTIONS_CHANGED == nHintId)
-        {
-            bAuthorInitialised = FALSE;
-        }
-        else if(SFX_HINT_UNDO_OPTIONS_CHANGED == nHintId)
-        {
-            const int nNew = GetUndoOptions().GetUndoCount();
-            const int nOld = SwEditShell::GetUndoActionCount();
-            if(!nNew || !nOld)
-            {
-                sal_Bool bUndo = nNew != 0;
-                //ueber DocShells iterieren und Undo umschalten
-
-                TypeId aType(TYPE(SwDocShell));
-                SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
-                while( pDocShell )
-                {
-                    pDocShell->GetDoc()->DoUndo( bUndo );
-                    pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
-                }
-            }
-            SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
-        }
-        else if(SFX_HINT_DEINITIALIZING == nHintId)
+        USHORT nHintId = ((SfxSimpleHint&)rHint).GetId();
+        if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
             DELETEZ(pUsrPref)   ;
@@ -842,18 +768,96 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             DELETEZ(pWebToolbarConfig)  ;
             DELETEZ(pAuthorNames)       ;
             DELETEZ(pDBConfig);
-            EndListening(*pColorConfig);
+            pColorConfig->RemoveListener(this);
             DELETEZ(pColorConfig);
-            EndListening(*pAccessibilityOptions);
+            pAccessibilityOptions->RemoveListener(this);
             DELETEZ(pAccessibilityOptions);
-            EndListening(*pCTLOptions);
+            pCTLOptions->RemoveListener(this);
             DELETEZ(pCTLOptions);
-            EndListening(*pUserOptions);
+            pUserOptions->RemoveListener(this);
             DELETEZ(pUserOptions);
-            EndListening(*pUndoOptions);
+            pUndoOptions->RemoveListener(this);
             DELETEZ(pUndoOptions);
         }
     }
+}
+
+void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
+{
+    if( pBrdCst == pUserOptions )
+    {
+        bAuthorInitialised = FALSE;
+    }
+    else if( pBrdCst == pUndoOptions )
+    {
+        const int nNew = GetUndoOptions().GetUndoCount();
+        const int nOld = SwEditShell::GetUndoActionCount();
+        if(!nNew || !nOld)
+        {
+            sal_Bool bUndo = nNew != 0;
+            //ueber DocShells iterieren und Undo umschalten
+
+            TypeId aType(TYPE(SwDocShell));
+            SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+            while( pDocShell )
+            {
+                pDocShell->GetDoc()->DoUndo( bUndo );
+                pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+            }
+        }
+        SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
+    }
+    else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
+    {
+        sal_Bool bAccessibility = sal_False;
+        if( pBrdCst == pColorConfig )
+            SwViewOption::ApplyColorConfigValues(*pColorConfig);
+        else
+            bAccessibility = sal_True;
+
+        //invalidate all edit windows
+        const TypeId aSwViewTypeId = TYPE(SwView);
+        const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
+        const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell)
+        {
+            if(pViewShell->GetWindow())
+            {
+                if((pViewShell->IsA(aSwViewTypeId) ||
+                    pViewShell->IsA(aSwPreViewTypeId) ||
+                    pViewShell->IsA(aSwSrcViewTypeId)))
+                {
+                    if(bAccessibility)
+                    {
+                        if(pViewShell->IsA(aSwViewTypeId))
+                            ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                        else if(pViewShell->IsA(aSwPreViewTypeId))
+                            ((SwPagePreView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                    }
+                    pViewShell->GetWindow()->Invalidate();
+                }
+            }
+            pViewShell = SfxViewShell::GetNext( *pViewShell );
+        }
+    }
+    else if( pBrdCst == pCTLOptions )
+    {
+        const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+        while( pObjSh )
+        {
+            if( pObjSh->IsA(TYPE(SwDocShell)) )
+            {
+                const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
+                ViewShell* pVSh = 0;
+                pDoc->GetEditShell( &pVSh );
+                if ( pVSh )
+                    pVSh->ChgNumberDigits();
+            }
+            pObjSh = SfxObjectShell::GetNext(*pObjSh);
+        }
+    }
+
 }
 
 /* -----------------------------20.02.01 12:43--------------------------------
@@ -874,7 +878,7 @@ svtools::ColorConfig& SwModule::GetColorConfig()
     {
         pColorConfig = new svtools::ColorConfig;
         SwViewOption::ApplyColorConfigValues(*pColorConfig);
-        StartListening(*pColorConfig);
+        pColorConfig->AddListener(this);
     }
     return *pColorConfig;
 }
@@ -886,7 +890,7 @@ SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
     if(!pAccessibilityOptions)
     {
         pAccessibilityOptions = new SvtAccessibilityOptions;
-        StartListening(*pAccessibilityOptions);
+        pAccessibilityOptions->AddListener(this);
     }
     return *pAccessibilityOptions;
 }
@@ -898,7 +902,7 @@ SvtCTLOptions& SwModule::GetCTLOptions()
     if(!pCTLOptions)
     {
         pCTLOptions = new SvtCTLOptions;
-        StartListening(*pCTLOptions);
+        pCTLOptions->AddListener(this);
     }
     return *pCTLOptions;
 }
@@ -910,7 +914,7 @@ SvtUserOptions& SwModule::GetUserOptions()
     if(!pUserOptions)
     {
         pUserOptions = new SvtUserOptions;
-        StartListening(*pUserOptions);
+        pUserOptions->AddListener(this);
     }
     return *pUserOptions;
 }
@@ -922,7 +926,7 @@ SvtUndoOptions& SwModule::GetUndoOptions()
     if(!pUndoOptions)
     {
         pUndoOptions = new SvtUndoOptions;
-        StartListening(*pUndoOptions);
+        pUndoOptions->AddListener(this);
     }
     return *pUndoOptions;
 }

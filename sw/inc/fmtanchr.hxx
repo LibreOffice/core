@@ -34,7 +34,7 @@
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <format.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 struct SwPosition;
 class IntlWrapper;

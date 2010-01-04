@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/field.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 #include "authratr.hxx"
@@ -78,6 +78,7 @@ class SwRevisionConfig : public utl::ConfigItem
         ~SwRevisionConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -108,6 +109,7 @@ class SwInsertConfig : public utl::ConfigItem
         ~SwInsertConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -134,6 +136,7 @@ class SwTableConfig : public utl::ConfigItem
         ~SwTableConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -163,6 +166,7 @@ class SwMiscConfig : public utl::ConfigItem
         ~SwMiscConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
