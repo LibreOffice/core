@@ -1649,7 +1649,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     /// Because for drawing a graphic left-top-corner and size coordinations are
     /// used, these coordinations have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
-    pGrf->Draw( pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
+    pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
 
     if ( bNotInside )
         pOut->Pop();

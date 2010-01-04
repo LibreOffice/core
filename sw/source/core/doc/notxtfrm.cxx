@@ -909,8 +909,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
-                rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                &aGrfAttr );
+                rGrfObj.DrawWithPDFHandling( *pOut,
+                                             aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                             &aGrfAttr );
                 bContinue = FALSE;
             }
         }
@@ -949,8 +950,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                    &aGrfAttr );
+                    rGrfObj.DrawWithPDFHandling( *pOut,
+                                                 aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                                                 &aGrfAttr );
             }
             else
             {
