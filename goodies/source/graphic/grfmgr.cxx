@@ -47,6 +47,10 @@
 #include <unotools/cacheoptions.hxx>
 #include "grfmgr.hxx"
 
+// --> OD 2010-01-04 #i105243#
+#include <vcl/pdfextoutdevdata.hxx>
+// <--
+
 // -----------
 // - Defines -
 // -----------
@@ -740,6 +744,68 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
     return bRet;
 }
+
+// --> OD 2010-01-04 #i105243#
+BOOL GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
+                                         const Point& rPt, const Size& rSz,
+                                         const GraphicAttr* pGrfAttr,
+                                         const ULONG nFlags )
+{
+    const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
+
+    // Notify PDF writer about linked graphic (if any)
+    bool bWritingPdfLinkedGraphic( false );
+    Point aPt( rPt );
+    Size aSz( rSz );
+    Rectangle aCropRect;
+    vcl::PDFExtOutDevData* pPDFExtOutDevData =
+            dynamic_cast<vcl::PDFExtOutDevData*>(rOutDev.GetExtOutDevData());
+    if( pPDFExtOutDevData )
+    {
+        // only delegate image handling to PDF, if no special treatment is necessary
+        if( GetGraphic().IsLink() &&
+            rSz.Width() > 0L &&
+            rSz.Height() > 0L &&
+            !aGrfAttr.IsSpecialDrawMode() &&
+            !aGrfAttr.IsMirrored() &&
+            !aGrfAttr.IsRotated() &&
+            !aGrfAttr.IsAdjusted() )
+        {
+            bWritingPdfLinkedGraphic = true;
+
+            if( aGrfAttr.IsCropped() )
+            {
+                PolyPolygon aClipPolyPoly;
+                BOOL bRectClip;
+                const BOOL bCrop = ImplGetCropParams( &rOutDev,
+                                                      aPt, aSz,
+                                                      &aGrfAttr,
+                                                      aClipPolyPoly,
+                                                      bRectClip );
+                if ( bCrop && bRectClip )
+                {
+                    aCropRect = aClipPolyPoly.GetBoundRect();
+                }
+            }
+
+            pPDFExtOutDevData->BeginGroup();
+        }
+    }
+
+    BOOL bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
+
+    // Notify PDF writer about linked graphic (if any)
+    if( bWritingPdfLinkedGraphic )
+    {
+        pPDFExtOutDevData->EndGroup( const_cast< Graphic& >(GetGraphic()),
+                                     aGrfAttr.GetTransparency(),
+                                     Rectangle( aPt, aSz ),
+                                     aCropRect );
+    }
+
+    return bRet;
+}
+// <--
 
 // -----------------------------------------------------------------------------
 

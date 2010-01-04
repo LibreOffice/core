@@ -428,6 +428,11 @@ public:
     BOOL                    Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                   const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
 
+    BOOL DrawWithPDFHandling( OutputDevice& rOutDev,
+                              const Point& rPt, const Size& rSz,
+                              const GraphicAttr* pGrfAttr = NULL,
+                              const ULONG nFlags = GRFMGR_DRAW_STANDARD );
+
     /** Draw the graphic repeatedly into the given output rectangle
 
         @param pOut
