@@ -79,6 +79,7 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
                     $(SRS)$/wizard.srs
 
 .IF "$(L10N_framework)"==""
+.IF "$(LINK_SO)"=="TRUE"
 .IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
@@ -143,6 +144,8 @@ APP1STACK=10000000
 
 .ENDIF # "$(GUI)" != "OS2"
 
+.ENDIF # "$(LINK_SO)"=="TRUE"
+
 APP5TARGET=soffice
 APP5NOSAL=TRUE
 APP5RPATH=BRAND
@@ -206,6 +209,7 @@ APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # OS2
 
 .IF "$(GUI)" == "WNT"
+.IF "$(LINK_SO)"=="TRUE"
 APP6TARGET=so$/officeloader
 APP6RES=$(RES)$/soloader.res
 APP6NOSAL=TRUE
@@ -218,6 +222,7 @@ APP6OBJS = \
     $(OBJ)$/officeloader.obj \
     $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB6=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
+.ENDIF # "$(LINK_SO)"=="TRUE"
 
 APP7TARGET=officeloader
 APP7RES=$(RES)$/ooloader.res
@@ -265,7 +270,9 @@ $(APP6TARGETN) :  $(MISC)$/binso_created.flg
 ALLTAR: $(MISC)$/$(TARGET).exe.manifest
 ALLTAR: $(MISC)$/$(TARGET).bin.manifest
 ALLTAR: $(BIN)$/$(TARGET).bin
+.IF "$(LINK_SO)"=="TRUE"
 ALLTAR: $(BIN)$/so$/$(TARGET).bin
+.ENDIF # "$(LINK_SO)"=="TRUE"
 .ENDIF # WNT
 
 .IF "$(GUI)" == "OS2"
@@ -276,23 +283,29 @@ $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
     $(COPY) $< $@
 
 .IF "$(GUI)" != "OS2"
+.IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
 
-ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
-
+ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST)
+.ENDIF # "$(LINK_SO)"=="TRUE"
+ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
 .ENDIF
 
 .IF "$(OS)" == "MACOSX"
+.IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
     
+ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST)
+.ENDIF # "$(LINK_SO)"=="TRUE"
+
 $(BIN)$/soffice_mac$(EXECPOST) : $(APP5TARGETN)
     $(COPY) $< $@
 
-ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST) $(BIN)$/soffice_mac$(EXECPOST)
+ALLTAR : $(BIN)$/soffice_mac$(EXECPOST)
 
-.ENDIF
+.ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(GUI)" == "WNT"
 
