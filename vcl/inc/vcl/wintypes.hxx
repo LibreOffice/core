@@ -32,11 +32,5 @@
 
 #include <tools/wintypes.hxx>
 
-// --------------------------------------------
-// - prominent place for ListBox window types -
-// --------------------------------------------
-
-enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
-
 #endif // _SV_WINTYPES_HXX
 
