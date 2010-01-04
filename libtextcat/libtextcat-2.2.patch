@@ -932,7 +932,7 @@
 +}
 --- misc/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:30:06 2008
 +++ misc/build/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:29:42 2008
-@@ -1 +1,90 @@
+@@ -1 +1,91 @@
 -dummy
 +#*************************************************************************
 +#
@@ -973,6 +973,7 @@
 +
 +USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB=
 +
 +.INCLUDE : settings.mk
 +
