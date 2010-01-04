@@ -30,7 +30,7 @@
 #ifndef _MODULDLG_HRC
 #define _MODULDLG_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define RID_STR_LIB             1
 #define RID_TRLBOX              2

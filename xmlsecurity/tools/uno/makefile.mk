@@ -41,7 +41,7 @@ USE_JAVAVER:=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
-JARFILES = java_uno.jar sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar
+JARFILES = java_uno.jar jurt.jar unoil.jar ridl.jar juh.jar
 JAVAFILES := $(shell @ls *.java)
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

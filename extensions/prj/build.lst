@@ -1,4 +1,5 @@
-ex  extensions :    l10n rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg ZLIB:zlib NULL
+ex  extensions :  officecfg  l10n rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc ZLIB:zlib NULL
+
 ex  extensions                                  usr1    -   all ex_mkout NULL
 ex  extensions\inc                              nmake   -   all ex_inc NULL
 ex  extensions\inc\ucbhelper                    get     -   all ex_incucbh ex_inc NULL

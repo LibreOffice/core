@@ -43,8 +43,8 @@
 #include <svx/scripttypeitem.hxx>
 
 #include <svx/editobj.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
