@@ -195,7 +195,7 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
         if ( aFeatures.getOrDefault("MediaType",::rtl::OUString()) == _sMediaType )
         {
             const ::rtl::OUString sFileExtension = aFeatures.getOrDefault("Extension",::rtl::OUString());
-            if ( (sFileExtension.getLength() && _sExtension == sFileExtension ) || !sFileExtension.getLength() || !_sExtension.getLength() )
+            if ( _sExtension == sFileExtension )
             {
                 sURL = *pIter;
                 break;
