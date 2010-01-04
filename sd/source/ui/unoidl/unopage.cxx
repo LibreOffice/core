@@ -54,7 +54,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <sdresid.hxx>
 #include <glob.hrc>
@@ -68,7 +68,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <svx/svdorect.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 

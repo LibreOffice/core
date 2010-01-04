@@ -51,7 +51,7 @@
 #include <svx/outliner.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/unolingu.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
