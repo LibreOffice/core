@@ -32,9 +32,9 @@
 #include <tools/list.hxx>
 #include <i18npool/lang.h>
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
-
+#include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <hash_map>
@@ -48,13 +48,9 @@ class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
 class ImplFontSelectData;
 class Font;
-class ImplCvtChar;
+class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
-
-namespace vcl {
-  struct FontNameAttr;
-}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -185,8 +181,6 @@ public: // TODO: change to private
     ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
 };
 
-struct FontNameHash { int operator()(const String&) const; };
-
 // -------------------
 // - ImplDevFontList -
 // -------------------
@@ -238,7 +232,7 @@ protected:
 
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
-    ImplDevFontListData*    ImplFindBySubstFontAttr( const vcl::FontNameAttr& ) const;
+    ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
     ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
@@ -337,7 +331,7 @@ public:
 public: // TODO: make data members private
     ImplFontSelectData  maFontSelData;      // FontSelectionData
     ImplFontMetricData  maMetric;           // Font Metric
-    const ImplCvtChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
+    const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
     ULONG               mnRefCount;
     USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()

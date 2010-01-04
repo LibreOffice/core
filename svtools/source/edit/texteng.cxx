@@ -40,7 +40,7 @@
 #include <textdat2.hxx>
 #include <textundo.hxx>
 #include <textund2.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/window.hxx>
 
 #include <vcl/edit.hxx>

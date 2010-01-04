@@ -1793,7 +1793,7 @@ void splitIntersectingSegments( LSVector& rLSVector)
 
     // prepare the result vector
     // try to avoid reallocations by guessing a reasonable result size
-    rLSVector.reserve( aYMinQueue.size() * 1.5);
+    rLSVector.reserve( aYMinQueue.size() * 3/2 );
 
     // find all intersections
     CutPointSet aCutPointSet;
