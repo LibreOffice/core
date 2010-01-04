@@ -38,6 +38,8 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
@@ -384,16 +386,12 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,
                             ( aWindowSize.Height() - aOutputSize.Height() ) >> 1 );
 
-    ::basegfx::B2DHomMatrix aMatrix;
-
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );
 
-    // scale presentation into available window rect (minus 10%)
-    aMatrix.scale( aOutputSize.Width(), aOutputSize.Height() );
-
-    // center in the window
-    aMatrix.translate( aOutputOffset.X(), aOutputOffset.Y() );
+    // scale presentation into available window rect (minus 10%); center in the window
+    const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+        aOutputSize.Width(), aOutputSize.Height(), aOutputOffset.X(), aOutputOffset.Y()));
 
     geometry::AffineMatrix2D aRes;
 
