@@ -33,7 +33,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <comphelper/processfactory.hxx>
 #include "swfwriter.hxx"
 #include <vcl/metaact.hxx>
@@ -41,8 +40,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-
-
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svtools/filter.hxx>
 #include <vcl/graphictools.hxx>
 
@@ -53,7 +51,10 @@
 #include <external/zlib/zlib.h>
 #endif
 #endif
+
 #include <vcl/salbtype.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 using namespace ::swf;
 using namespace ::std;
@@ -640,9 +641,6 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         // CL: This is still a hack until we figure out how to calculate a correct bound rect
         //     for rotatet text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
-
-        ::basegfx::B2DHomMatrix m; // #i73264#
-
         double scale = 1.0;
 
         // scale width if we have a stretched text
@@ -660,7 +658,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             scale =  (double)n1 / (double)n2;
         }
 
-        m.rotate( static_cast<double>(nOrientation) * F_PI1800 );
+        basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix(static_cast<double>(nOrientation) * F_PI1800));
         m.translate( double(aPt.X() / scale), double(aPt.Y()) );
         m.scale( scale, scale );
 
@@ -1240,6 +1238,12 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 
     Rectangle aNewRect( aPolyPolygon.GetBoundRect() );
 
+    // as log as not LINESTYLE2 and DefineShape4 is used (which
+    // added support for LineJoin), only round LineJoins are
+    // supported. Fallback to META_POLYLINE_ACTION and META_LINE_ACTION
+    if(SvtGraphicStroke::joinRound != rStroke.getJoinType())
+        return false;
+
     PolyPolygon aStartArrow;
     rStroke.getStartArrow( aStartArrow );
     if( 0 != aStartArrow.Count() )
@@ -1395,6 +1399,46 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 
 // -----------------------------------------------------------------------------
 
+void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
+{
+    if(rLinePolygon.count())
+    {
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
+        {
+            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            {
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                Impl_writePolygon(Polygon(aCandidate), sal_False );
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(mpVDev->GetLineColor());
+            const Color aOldFillColor(mpVDev->GetFillColor());
+
+            mpVDev->SetLineColor();
+            mpVDev->SetFillColor(aOldLineColor);
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), sal_True );
+            }
+
+            mpVDev->SetLineColor(aOldLineColor);
+            mpVDev->SetFillColor(aOldFillColor);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
     Rectangle clipRect;
@@ -1426,7 +1470,18 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaLineAction* pA = (const MetaLineAction*) pAction;
 
-                Impl_writeLine( pA->GetStartPoint(), pA->GetEndPoint() );
+                if(pA->GetLineInfo().IsDefault())
+                {
+                    Impl_writeLine( pA->GetStartPoint(), pA->GetEndPoint() );
+                }
+                else
+                {
+                    // LineInfo used; handle Dash/Dot and fat lines
+                    basegfx::B2DPolygon aPolygon;
+                    aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
+                    aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
+                    Impl_handleLineInfoPolyPolygons(pA->GetLineInfo(), aPolygon);
+                }
             }
             break;
 
@@ -1501,7 +1556,17 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const Polygon&              rPoly = pA->GetPolygon();
 
                 if( rPoly.GetSize() )
-                    Impl_writePolygon( rPoly, sal_False );
+                {
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        Impl_writePolygon( rPoly, sal_False );
+                    }
+                    else
+                    {
+                        // LineInfo used; handle Dash/Dot and fat lines
+                        Impl_handleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
+                    }
+                }
             }
             break;
 
