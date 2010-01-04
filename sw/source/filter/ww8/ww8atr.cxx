@@ -982,6 +982,24 @@ void WW8AttributeOutput::StartRunProperties()
     m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
 }
 
+
+void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+{
+    if (pRedlineData)
+    {
+        const String &rComment = pRedlineData->GetComment();
+        //Only possible to export to main text
+        if (rComment.Len() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
+        {
+            if (m_rWW8Export.pAtn->IsNewRedlineComment(pRedlineData))
+            {
+                m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+            }
+        }
+    }
+}
+
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
     Redline( pRedlineData );
@@ -2555,8 +2573,8 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
 
 void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
-    const SwPostItField& rPFld = *(SwPostItField*)pFld;
-    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rPFld );
+    const SwPostItField *pPFld = (const SwPostItField*)pFld;
+    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
 

@@ -57,9 +57,8 @@
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/langitem.hxx>
-// --> OD 2005-02-28 #i43427#
 #include <svx/opaqitem.hxx>
-// <--
+#include <svx/charhiddenitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
@@ -1630,7 +1629,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
+    pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_HIDDEN);
 
     return 0;
 }
