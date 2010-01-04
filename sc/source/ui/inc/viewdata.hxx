@@ -225,6 +225,7 @@ private:
 
     SC_DLLPRIVATE void          CalcPPT();
     SC_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
+    SC_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
     SC_DLLPRIVATE void          CreateSelectedTabData();
 
 public:
@@ -311,6 +312,8 @@ public:
     void            SetPagebreakMode( BOOL bSet );
 
     void            SetZoomType( SvxZoomType eNew, BOOL bAll );
+    void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
     void            RefreshZoom();
 

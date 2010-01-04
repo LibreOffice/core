@@ -35,7 +35,7 @@
 #include "conditio.hxx"
 #include "sortparam.hxx"
 #include "paramisc.hxx"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class ScEditEngineDefaulter;
 class EditTextObject;

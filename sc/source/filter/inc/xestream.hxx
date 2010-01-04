@@ -43,7 +43,7 @@
 #include "xlstream.hxx"
 #include "xestring.hxx"
 
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <vector>
 
 /* ============================================================================
@@ -245,7 +245,7 @@ private:
     sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos ) const;
 
 private:
-    ::svx::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
+    ::msfilter::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
     sal_uInt16          mnPassw[16];   /// Cached password data for copy construction.
     sal_uInt8           mnDocId[16];   /// Cached document ID for copy construction.
     sal_uInt8           mnSaltDigest[16];

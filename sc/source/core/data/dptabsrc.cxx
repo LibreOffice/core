@@ -44,8 +44,8 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/intitem.hxx>
 
 #include "scitems.hxx"
 #include "document.hxx"

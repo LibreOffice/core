@@ -37,7 +37,7 @@
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/rcid.h>
 #include <tools/rc.hxx>
 #include <tools/solar.h>

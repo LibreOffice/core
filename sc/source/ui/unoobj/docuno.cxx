@@ -40,9 +40,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 
-#include <svtools/numuno.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/undoopt.hxx>
+#include <svl/numuno.hxx>
+#include <svl/smplhint.hxx>
+#include <unotools/undoopt.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -244,7 +244,8 @@ ScModelObj::~ScModelObj()
 
 uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
 {
-    if ( !xNumberAgg.is() )
+    // pDocShell may be NULL if this is the base of a ScDocOptionsObj
+    if ( !xNumberAgg.is() && pDocShell )
     {
         // setDelegator veraendert den RefCount, darum eine Referenz selber halten
         // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
