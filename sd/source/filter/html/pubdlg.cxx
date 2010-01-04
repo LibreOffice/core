@@ -44,14 +44,14 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/impgrf.hxx>
 #include <svtools/colrdlg.hxx>
 #include <svx/colritem.hxx>
@@ -60,8 +60,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <pres.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "sdresid.hxx"
 #include "sdattr.hxx"

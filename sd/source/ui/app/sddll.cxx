@@ -34,7 +34,7 @@
 
 #include <svx/editeng.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
 #endif

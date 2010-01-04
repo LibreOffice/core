@@ -36,7 +36,7 @@
 #endif
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "sdpage.hxx"
 #include "Outliner.hxx"

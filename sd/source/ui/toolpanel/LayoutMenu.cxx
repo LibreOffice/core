@@ -61,7 +61,7 @@
 #include <sfx2/objface.hxx>
 #include "sdresid.hxx"
 #include <vcl/image.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include "taskpane/TitledControl.hxx"
 #include <sfx2/dispatch.hxx>

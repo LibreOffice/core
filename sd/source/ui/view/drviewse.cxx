@@ -40,10 +40,10 @@
 
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/editstat.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 #include <vcl/scrbar.hxx>
@@ -51,7 +51,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -64,11 +64,11 @@
 #include <svx/svdouno.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -106,7 +106,7 @@
 #include "anminfo.hxx"
 #include "optsitem.hxx"
 #include "Window.hxx"
-
+#include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -203,13 +203,22 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(HasCurrentFunction())
     {
-        if(GetOldFunction() == GetCurrentFunction())
+        if( (nSId == SID_FORMATPAINTBRUSH) && (GetCurrentFunction()->GetSlotID() == SID_TEXTEDIT) )
         {
-            SetOldFunction(0);
+            // save text edit mode for format paintbrush!
+            SetOldFunction( GetCurrentFunction() );
+        }
+        else
+        {
+            if(GetOldFunction() == GetCurrentFunction())
+            {
+                SetOldFunction(0);
+            }
         }
 
         if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR && nSId != SID_TEXT_FITTOSIZE &&
              nSId != SID_ATTR_CHAR_VERTICAL && nSId != SID_TEXT_FITTOSIZE_VERTICAL &&
+             nSId != SID_FORMATPAINTBRUSH &&
              mpDrawView->IsTextEdit() )
         {
             mpDrawView->SdrEndTextEdit();
@@ -526,8 +535,18 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
         break;
 
+        case SID_FORMATPAINTBRUSH:
+        {
+            SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            rReq.Done();
+            SfxBindings& rBind = GetViewFrame()->GetBindings();
+            rBind.Invalidate( nSId );
+            rBind.Update( nSId );
+            break;
+        }
+
         default:
-        break;
+           break;
     }
 
     if(HasOldFunction())

@@ -46,11 +46,11 @@
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/unolingu.hxx>
@@ -58,11 +58,11 @@
 #include <svx/fontworkbar.hxx>
 
 // #UndoRedo#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 
@@ -87,7 +87,6 @@
 #include "zoomlist.hxx"
 #include "slideshow.hxx"
 #include "drawview.hxx"
-#include "formatclipboard.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "LayerTabBar.hxx"
@@ -95,6 +94,7 @@
 #include "Window.hxx"
 #include "fuediglu.hxx"
 #include "fubullet.hxx"
+#include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -249,19 +249,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     const ULONG nMarkCount = rMarkList.GetMarkCount();
 
     //format paintbrush
-    {
-        SdFormatClipboard* pFormatClipboard = GetDocSh()->mpFormatClipboard;
-        bool bHasContent = pFormatClipboard && pFormatClipboard->HasContent();
-        rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH,bHasContent));
-        if( ( nMarkCount!=1 && !bHasContent ) || mpDrawView->IsTextEdit() )
-            rSet.DisableItem( SID_FORMATPAINTBRUSH );
-        if( !bHasContent && nMarkCount==1 )
-        {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if( !pFormatClipboard->CanCopyThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
-                rSet.DisableItem( SID_FORMATPAINTBRUSH );
-        }
-    }
+    FuFormatPaintBrush::GetMenuState( *this, rSet );
 
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
     SetChildWindowState( rSet );

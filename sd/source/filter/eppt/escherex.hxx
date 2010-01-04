@@ -30,7 +30,7 @@
 
 #ifndef _PptEscherEX_HXX
 #define _PptEscherEX_HXX
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 // ---------------------------------------------------------------------------------------------
 // Werte fuer den ULONG im PPT_PST_TextHeaderAtom

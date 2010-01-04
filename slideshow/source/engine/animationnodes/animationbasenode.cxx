@@ -456,7 +456,8 @@ AnimationBaseNode::fillCommonParameters() const
     EventSharedPtr pEndEvent;
     if (pSelf) {
         pEndEvent = makeEvent(
-            boost::bind( &AnimationNode::deactivate, pSelf ) );
+            boost::bind( &AnimationNode::deactivate, pSelf ),
+            "AnimationBaseNode::deactivate");
     }
 
     // Calculate the minimum frame count that depends on the duration and
