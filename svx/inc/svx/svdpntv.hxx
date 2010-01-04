@@ -31,19 +31,20 @@
 #ifndef _SVDPNTV_HXX
 #define _SVDPNTV_HXX
 
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/undo.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/undo.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdlayer.hxx>  // fuer SetOfByte
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/timer.hxx>
 #include "svx/svxdllapi.h"
 #include <svtools/optionsdrawinglayer.hxx>
+#include <unotools/options.hxx>
 
 //************************************************************
 //   Pre-Defines
@@ -127,7 +128,7 @@ typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster
+class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
     friend class                SdrPageView;
     friend class                FrameAnimator;
@@ -241,6 +242,7 @@ protected:
 protected:
     void AppendPaintWindow(SdrPaintWindow& rNew);
     SdrPaintWindow* RemovePaintWindow(SdrPaintWindow& rOld);
+    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }

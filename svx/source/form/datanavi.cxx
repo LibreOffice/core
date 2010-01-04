@@ -44,9 +44,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
-#include <svtools/svtools.hrc>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <svl/svtools.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objitem.hxx>

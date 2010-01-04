@@ -41,9 +41,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/colritem.hxx>
 #include "chrtitem.hxx"
 #include <tools/urlobj.hxx>

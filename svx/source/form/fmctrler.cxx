@@ -41,7 +41,7 @@
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmurl.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmshell.hxx"

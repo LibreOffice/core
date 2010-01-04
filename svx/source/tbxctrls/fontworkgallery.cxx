@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <dlgutil.hxx>

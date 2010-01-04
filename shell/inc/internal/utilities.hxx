@@ -47,6 +47,8 @@
 #include "internal/types.hxx"
 
 #include <string>
+#define STRSAFE_NO_DEPRECATE
+#include <strsafe.h>
 
 //---------------------------------
 /** Convert a string to a wstring
@@ -88,5 +90,24 @@ bool HasOnlySpaces(const std::wstring& String);
 #ifndef OS2
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 #endif
+
+//----------------------------------------------------------
+#ifdef DEBUG
+inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
+{
+    CHAR    buffer[1024];
+    va_list args;
+
+    va_start( args, pFormat );
+    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
+    OutputDebugStringA( buffer );
+}
+#else
+static inline void OutputDebugStringFormat( LPCSTR, ... )
+{
+}
+#endif
+//----------------------------------------------------------
+
 
 #endif

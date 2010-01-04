@@ -109,6 +109,8 @@
 #define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
 #define STR_RECHECK_DOCUMENT            ( RC_DIALOG_BEGIN + 121 )
 #define IMG_INFO                        ( RC_DIALOG_BEGIN + 122 )
+#define RID_EDIT_DURATIONS              ( RC_DIALOG_BEGIN + 123 )
+#define SFX_PB_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 

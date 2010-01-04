@@ -208,7 +208,10 @@ int SalAquaPicker::run()
     }
 
     if (retVal == NSFileHandlingPanelOKButton) {
-        implsetDisplayDirectory([[NSURL fileURLWithPath:[m_pDialog directory]] OUStringForInfo:FULLPATH]);
+        NSString* pDir = [m_pDialog directory];
+        if (pDir) {
+            implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
+        }
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);

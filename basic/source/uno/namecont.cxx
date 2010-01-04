@@ -54,7 +54,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
@@ -940,7 +940,17 @@ sal_Bool SfxLibraryContainer::init_Impl(
     // #110009
 
     if( !bStorage && meInitMode == DEFAULT )
-        implScanExtensions();
+    {
+        try
+        {
+            implScanExtensions();
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: error handling?
+            OSL_ASSERT( "Cannot access extensions!" );
+        }
+    }
 
     // #110009 Preload?
     {

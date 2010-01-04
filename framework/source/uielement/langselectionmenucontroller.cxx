@@ -68,7 +68,7 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <map>
 #include <i18npool/mslangid.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <svtools/langtab.hxx>
 #include <classes/fwlresid.hxx>

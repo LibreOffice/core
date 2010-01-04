@@ -46,7 +46,7 @@
 #include <tools/urlobj.hxx>
 #include "calc/CPreparedStatement.hxx"
 #include "calc/CStatement.hxx"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/logfile.hxx>

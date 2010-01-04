@@ -42,7 +42,7 @@
 #include <cppuhelper/propshlp.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <rtl/ustring.hxx>
 #include <vos/mutex.hxx>
 

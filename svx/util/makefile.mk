@@ -99,7 +99,6 @@ LIB5FILES=\
     $(SLB)$/form-core.lib \
     $(SLB)$/gal.lib \
     $(SLB)$/items-core.lib \
-    $(SLB)$/msfilter-core.lib \
     $(SLB)$/options-core.lib
 
 LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
@@ -111,7 +110,8 @@ LIB6FILES=\
     $(SLB)$/properties.lib \
     $(SLB)$/svdraw-core.lib \
     $(SLB)$/svxlink.lib \
-    $(SLB)$/svxrtf-core.lib    \
+    $(SLB)$/svxrtf-core.lib \
+    $(SLB)$/svxrtf.lib \
     $(SLB)$/table-core.lib \
     $(SLB)$/tbxctrls-core.lib  \
     $(SLB)$/toolbars.lib \
@@ -119,13 +119,6 @@ LIB6FILES=\
     $(SLB)$/unoedit-core.lib   \
     $(SLB)$/xml.lib \
     $(SLB)$/xout.lib
-
-# Objects needed for the svxmsfilter library.
-LIB7TARGET= $(SLB)$/$(TARGET)_7.lib
-LIB7FILES=\
-    $(SLB)$/msfilter-msfilter.lib \
-    $(SLB)$/svdraw-msfilter.lib \
-    $(SLB)$/svxrtf.lib
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
@@ -205,82 +198,9 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 DEFLIB2NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
 
-# cui
-SHL3TARGET= cui$(DLLPOSTFIX)
-SHL3VERSIONMAP= cui.map
-SHL3IMPLIB=icui
-SHL3DEPN=$(SHL2TARGETN)
-
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-
-SHL3LIBS=	$(SLB)$/cui.lib
-
-SHL3STDLIBS= \
-            $(SVXCORELIB) \
-            $(SVXLIB) \
-            $(AVMEDIALIB) \
-            $(SFX2LIB) \
-            $(GOODIESLIB) \
-            $(BASEGFXLIB) \
-            $(BASICLIB) \
-            $(LNGLIB) \
-            $(SVTOOLLIB) \
-            $(TKLIB) \
-            $(VCLLIB) \
-            $(SVLLIB) \
-            $(UNOTOOLSLIB) \
-            $(TOOLSLIB) \
-            $(I18NISOLANGLIB) \
-            $(COMPHELPERLIB) \
-            $(UCBHELPERLIB) \
-            $(CPPUHELPERLIB)        \
-            $(CPPULIB) \
-            $(VOSLIB) \
-            $(SALLIB) \
-            $(JVMFWKLIB) \
-            $(ICUUCLIB)
-
 .IF "$(debug)$(dbgutil)"!=""
 SHL2STDLIBS += $(CPPUHELPERLIB)
 .ENDIF # "$(debug)$(dbgutil)"!=""
-
-.IF "$(GUI)"=="WNT"
-SHL3STDLIBS+= \
-             $(SHLWAPILIB) \
-             $(ADVAPI32LIB)
-.ENDIF # WNT
-
-# svxmsfilter library
-SHL4TARGET= svxmsfilter$(DLLPOSTFIX)
-SHL4IMPLIB= isvxmsfilter
-SHL4USE_EXPORTS=name
-SHL4DEPN=$(SHL1TARGETN)
-SHL4LIBS= $(LIB7TARGET)
-
-SHL4STDLIBS= \
-             $(SVXCORELIB) \
-             $(SFX2LIB) \
-             $(XMLOFFLIB) \
-             $(GOODIESLIB) \
-             $(BASEGFXLIB) \
-             $(BASICLIB) \
-             $(SVTOOLLIB) \
-             $(TKLIB) \
-             $(VCLLIB) \
-             $(SVLLIB) \
-             $(SOTLIB) \
-             $(UNOTOOLSLIB) \
-             $(TOOLSLIB) \
-             $(XMLSCRIPTLIB) \
-             $(COMPHELPERLIB) \
-             $(CPPUHELPERLIB) \
-             $(CPPULIB) \
-             $(SALLIB)
-
-SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
-DEF4NAME=	$(SHL4TARGET)
-DEFLIB4NAME=$(TARGET)_7
 
 # ------------------------------------------------------------------------------
 
@@ -290,9 +210,7 @@ SRSFILELIST=\
         $(SRS)$/editeng.srs \
         $(SRS)$/outliner.srs \
         $(SRS)$/dialogs.srs \
-        $(SRS)$/cui.srs \
         $(SRS)$/drawdlgs.srs \
-        $(SRS)$/cuidrawdlgs.srs \
         $(SRS)$/mnuctrls.srs \
         $(SRS)$/stbctrls.srs \
         $(SRS)$/tbxctrls.srs \
