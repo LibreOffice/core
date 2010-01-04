@@ -156,6 +156,18 @@
         PACKED_LIB_FILE_BODY_PATCH; \
     End
 
+#define SPECIAL_LIB_FILE(id,name) \
+    File id \
+        Name    = SPECIAL_NAME(name); \
+        PACKED_LIB_FILE_BODY; \
+    End
+
+#define SPECIAL_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name    = SPECIAL_NAME(name); \
+        PACKED_LIB_FILE_BODY_PATCH; \
+    End
+ 
 #define STD_RES_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \

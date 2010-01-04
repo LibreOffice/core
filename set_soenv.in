@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
-     $UPD, $WORK_STAMP, 
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -495,6 +495,17 @@ elsif ( $platform =~ m/linux/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
    }
+   elsif ($platform =~ m/^hppa/)
+   {  print "Setting Linux hppa specific values... ";
+      $outfile        = "LinuxHPPAEnv.Set";
+      $CPU            = "H";
+      $CPUNAME        = "HPPA";
+      $OUTPATH        = "unxlnghppa";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
+      $EPM_FLAGS      = "-a hppa";
+   }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
@@ -635,7 +646,6 @@ elsif ( $platform =~ m/cygwin/ )
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
-      $COMPATH        =~ s/\/bin$//i;
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -644,8 +654,6 @@ elsif ( $platform =~ m/cygwin/ )
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
       $COM            = "MSC";
-      # COMPATH for MSC is differently used
-      $COMPATH        =~ s/\/bin$//i;
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -793,6 +801,7 @@ chomp($SRC_ROOT  = `pwd`);
 $SRC_ROOT =~ s/\/config_office//;
 $SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
+
 
 #-----------------------------------------------------------------------------------------------------
 # Copy top level makefile from config_office/ to $SRC_ROOT
@@ -967,6 +976,10 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
+# Location of the repository.
+my @splitlist = split( /\//, $SRC_ROOT );
+pop @splitlist;
+$SOURCE_ROOT_DIR      = join("/", @splitlist);
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1305,9 +1318,7 @@ if ($platform =~ m/solaris/)
                         $L.$LIB.
                         $L.$USR_LIB;
    if ( $CC =~ "gcc" ) {
-      my $temp = $COMPATH;
-      $temp =~ s:/bin$::;
-      $SOLARLIB      .= $L.$temp.$LIB;
+      $SOLARLIB      .= $L.$COMPATH.$LIB;
    }
    $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
@@ -1376,9 +1387,8 @@ $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
-{   my $temp;
-    $temp =~ s:$COMPATH:/bin\$:;
-    $SOLARINC         .= $I.$temp.$ds."include";
+{   
+    $SOLARINC         .= $I.$COMPATH.$ds."include";
 }
 if ($platform =~ m/linux/)
 {
@@ -1919,6 +1929,7 @@ if ($platform !~ m/cygwin|os2/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
+ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
