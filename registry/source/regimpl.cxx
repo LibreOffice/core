@@ -1477,6 +1477,20 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     return REG_NO_ERROR;
 }
 
+RegError ORegistry::flush()
+{
+    REG_GUARD(m_mutex);
+
+    if (m_file.isValid())
+    {
+        m_file.flush();
+        return REG_NO_ERROR;
+    } else
+    {
+        return REG_REGISTRY_NOT_EXISTS;
+    }
+}
+
 
 //*********************************************************************
 //  dumpValue()
