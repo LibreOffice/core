@@ -34,7 +34,7 @@
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 

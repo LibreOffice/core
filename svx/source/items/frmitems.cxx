@@ -52,14 +52,14 @@
 
 #define _SVX_FRMITEMS_CXX
 
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <svtools/wallitem.hxx>
-#include <svtools/cntwall.hxx>
+#include <svl/cntwall.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <impgrf.hxx>
+#include <svx/impgrf.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialogs.hrc>

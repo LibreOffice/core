@@ -33,7 +33,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <tools/rtti.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <i18npool/lang.h>
 #include <tools/time.hxx>
 #include <tools/date.hxx>

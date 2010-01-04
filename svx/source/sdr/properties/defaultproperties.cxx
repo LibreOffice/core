@@ -32,8 +32,8 @@
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 
 #include <vector>
 #include <svx/svdobj.hxx>

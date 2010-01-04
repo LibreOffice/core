@@ -42,7 +42,7 @@
 #include <editstat.hxx>
 #include <vcl/salbtype.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>

@@ -31,7 +31,7 @@
 #ifndef _FILLCTRL_HXX
 #define _FILLCTRL_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 
