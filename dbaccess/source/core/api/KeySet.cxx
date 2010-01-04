@@ -311,8 +311,8 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     if ( sOldFilter.getLength() )
     {
         FilterCreator aFilterCreator;
-        aFilterCreator.append( aFilter.makeStringAndClear() );
         aFilterCreator.append( sOldFilter );
+        aFilterCreator.append( aFilter.makeStringAndClear() );
         aFilter = aFilterCreator.getComposedAndClear();
     }
     xAnalyzer->setFilter(aFilter.makeStringAndClear());
