@@ -87,6 +87,7 @@ public:
     ~SvtTabAppearanceCfg( );
 
     virtual void    Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
     USHORT      GetLookNFeel () const { return nLookNFeel; }
     void        SetLookNFeel ( USHORT nSet );

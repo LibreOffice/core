@@ -48,14 +48,13 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <svtools/fmtfield.hxx>
-#include <numuno.hxx>
+#include <svl/numuno.hxx>
 #include <calendar.hxx>
 #include <prgsbar.hxx>
 
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
-//#include "vclxgridcontrol.hxx"
-#include "unocontroltablemodel.hxx"
+#include "svtxgridcontrol.hxx"
 #include <svtools/table/tablecontrol.hxx>
 
 namespace
@@ -172,10 +171,8 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     {
         if ( pParent )
         {
-            ::svt::table::TableControl* m_pTable = new ::svt::table::TableControl(pParent, nWinBits);
-            UnoControlTableModel* pModel = new UnoControlTableModel();
-            *ppNewComp = pModel;
-            pWindow = m_pTable;
+            pWindow = new ::svt::table::TableControl(pParent, nWinBits);
+            *ppNewComp = new SVTXGridControl;
         }
         else
         {

@@ -69,7 +69,7 @@
 #import "apple_remote/RemoteMainController.h"
 #include "apple_remote/RemoteControl.h"
 #include "postmac.h"
-
+#include <tools/solarmutex.hxx>
 
 using namespace std;
 using namespace ::com::sun::star;
@@ -472,6 +472,7 @@ AquaSalInstance::AquaSalInstance()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
     maMainThread = vos::OThread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
@@ -482,6 +483,7 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );
