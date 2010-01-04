@@ -164,12 +164,54 @@ static void MakeAsMeta(Graphic &rGraphic)
     rGraphic = aMtf;
 }
 
+static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
+    rtl_uString* pArgs[], sal_uInt32 nArgs, oslProcess *pProcess,
+    oslFileHandle *pIn, oslFileHandle *pOut, oslFileHandle *pErr)
+{
+#ifdef WNT
+    /*
+     * ooo#72096
+     * On Window the underlying SearchPath searches in order of...
+     * The directory from which the application loaded.
+     * The current directory.
+     * The Windows system directory.
+     * The Windows directory.
+     * The directories that are listed in the PATH environment variable.
+     *
+     * Because one of our programs is called "convert" and there is a convert
+     * in the windows system directory, we want to explicitly search the PATH
+     * to avoid picking up on that one if ImageMagick's convert preceeds it in
+     * PATH.
+     *
+     */
+    rtl::OUString url;
+    rtl::OUString path(_wgetenv(L"PATH"));
+
+    oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
+    if (err != osl_File_E_None)
+        return osl_Process_E_NotFound;
+    return osl_executeProcess_WithRedirectedIO(url.pData,
+    pArgs, nArgs, osl_Process_HIDDEN,
+        osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
+#else
+    return osl_executeProcess_WithRedirectedIO(rProgName.pData,
+        pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
+        osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
+#endif
+}
+
+#if defined(WNT) || defined(OS2)
+#    define EXESUFFIX ".exe"
+#else
+#    define EXESUFFIX ""
+#endif
+
 static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
     TempFile aTemp;
     aTemp.EnableKillingFile();
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit"EXESUFFIX));
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
     rtl::OUString arg2 =
@@ -186,10 +228,10 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pIn = NULL;
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
-    oslProcessError eErr = osl_executeProcess_WithRedirectedIO(fileName.pData,
-        args, sizeof(args)/sizeof(rtl_uString *),
-        osl_Process_SEARCHPATH | osl_Process_HIDDEN,
-        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
+        oslProcessError eErr = runProcessWithPathSearch(fileName,
+            args, sizeof(args)/sizeof(rtl_uString *),
+            &aProcess, &pIn, &pOut, &pErr);
+
     if (eErr!=osl_Process_E_None)
         return false;
 
@@ -222,15 +264,15 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 }
 
 static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString **pArgs, size_t nArgs)
+    Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
-    oslProcessError eErr = osl_executeProcess_WithRedirectedIO(rProgName.pData,
-        pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
-        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
+        oslProcessError eErr = runProcessWithPathSearch(rProgName,
+            pArgs, nArgs,
+            &aProcess, &pIn, &pOut, &pErr);
     if (eErr!=osl_Process_E_None)
         return false;
 
@@ -251,7 +293,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 
         aMemStm.Seek(0);
         if (
-            eFileErr == osl_File_E_None &&
+            aMemStm.GetSize() &&
             GraphicConverter::Import(aMemStm, rGraphic, CVT_PNG) == ERRCODE_NONE
            )
         {
@@ -270,7 +312,7 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     Graphic &rGraphic)
 {
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"EXESUFFIX));
     // density in pixel/inch
     rtl::OUString arg1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-density"));
     // since the preview is also used for PDF-Export & printing on non-PS-printers,
@@ -293,10 +335,10 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 {
 #ifdef WNT
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c"EXESUFFIX));
 #else
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs"EXESUFFIX));
 #endif
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
