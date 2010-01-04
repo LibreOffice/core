@@ -417,15 +417,11 @@ testcase t_TB_Form
         Call sMenufunktionen("-Checkbox-")
 
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTML" then
+        if gApplication <> "HTML" then
             wait 500
             Label.Click
             printlog " Insert a textbox from toolbox"
-            if gplatgroup = "unx" then
-                Call hMalZeichnenMitSelektion ( 10, 40, 21, 25 )
-            else
-                Call hMalZeichnenMitSelektion ( 57, 20, 68, 25 )
-            endif
+            Call hMalZeichnenMitSelektion ( 57, 20, 68, 25 )
             printlog "+ Open Control Properties"
             Call sMenufunktionen("-Textbox-")
         end if
@@ -454,11 +450,7 @@ testcase t_TB_Form
             Combobox.Click
             printlog " Insert a Combobox from toolbox"
             Wait 500
-            if gPlatgroup = "unx" then
-                Call hMalZeichnenMitSelektion ( 41, 40, 52, 35 )
-            else
-                Call hMalZeichnenMitSelektion ( 57, 30, 68, 35 )
-            endif
+            Call hMalZeichnenMitSelektion ( 57, 30, 68, 35 )
             printlog "+ Step through pages of upcoming Autopilot"
             Call sAutopilot_ListboxCombobox("Combo")
             printlog "+ Open Control Properties"
