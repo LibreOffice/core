@@ -12,7 +12,9 @@
 #   undef _STLP_MAP
 #   define _STLP_DONT_REDEFINE_STD 1
 #   define _STLP_WHOLE_NATIVE_STD 1
+#   pragma GCC visibility push(default)
 #   include _STLP_NATIVE_HEADER(exception_defines.h)
+#   include _STLP_NATIVE_HEADER(limits)
 #   include _STLP_NATIVE_HEADER(memory)
 #   include _STLP_NATIVE_HEADER(exception)
 #   include _STLP_NATIVE_HEADER(iosfwd)
@@ -24,6 +26,7 @@
 #   include _STLP_NATIVE_HEADER(ostream)
 #   include _STLP_NATIVE_HEADER(istream)
 #   include _STLP_NATIVE_HEADER(iostream)
+#   pragma GCC visibility pop
 #endif
 //sil_std resolves to the std that Graphite was built with
 namespace sil_std = std;
