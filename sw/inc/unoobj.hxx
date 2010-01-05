@@ -50,26 +50,9 @@
 
 #include <unomid.h>
 
-#include <deque>
-#include <boost/shared_ptr.hpp>
-
 
 class GetCurTxtFmtColl;
 
-
-struct FrameDependSortListEntry {
-    xub_StrLen nIndex;
-    sal_uInt32 nOrder;
-    ::boost::shared_ptr<SwDepend> pFrameDepend;
-    FrameDependSortListEntry (xub_StrLen const i_nIndex,
-                sal_uInt32 const i_nOrder, SwDepend * const i_pDepend)
-        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameDepend(i_pDepend) { }
-};
-typedef ::std::deque< FrameDependSortListEntry >
-    FrameDependSortList_t;
-
-typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
-    FrameDependList_t;
 
 
 /* -----------------26.06.98 16:18-------------------
@@ -79,10 +62,6 @@ typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
-// OD 2004-05-07 #i28701# - adjust 4th parameter
-void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                         FrameDependSortList_t & rFrames,
-                         const bool _bAtCharAnchoredObjs );
 
 /*-----------------04.03.98 11:54-------------------
     Start/EndAction oder Start/EndAllAction
@@ -167,53 +146,6 @@ public:
 /*-----------------23.02.98 10:45-------------------
 
 --------------------------------------------------*/
-
-/* -----------------23.03.99 12:57-------------------
- *
- * --------------------------------------------------*/
-#define PARAFRAME_PORTION_PARAGRAPH     0
-#define PARAFRAME_PORTION_CHAR          1
-#define PARAFRAME_PORTION_TEXTRANGE     2
-
-class SwXParaFrameEnumeration : public cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XEnumeration,
-    ::com::sun::star::lang::XServiceInfo
->,
-    public SwClient
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
-        m_xNextObject;    // created by hasMoreElements
-    FrameDependList_t m_Frames;
-
-    SwUnoCrsr*          GetCursor() const
-    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
-
-public:
-    SwXParaFrameEnumeration(const SwPaM& rPaM,
-        sal_uInt8 nParaFrameMode, SwFrmFmt* pFmt = 0);
-    ~SwXParaFrameEnumeration();
-
-    // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-        throw( ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException );
-
-    // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-};
 
 
 /* -----------------29.09.98 09:01-------------------

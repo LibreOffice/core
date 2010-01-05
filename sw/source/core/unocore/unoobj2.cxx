@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <rtl/ustrbuf.hxx>
 #include <swtypes.hxx>
 #include <hintids.hxx>
@@ -78,6 +77,7 @@
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unoparaframeenum.hxx>
 #include <unofootnote.hxx>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>

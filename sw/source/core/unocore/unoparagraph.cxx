@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <cmdid.h>
 #include <unomid.h>
 #include <unoobj.hxx>
+#include <unoparaframeenum.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
