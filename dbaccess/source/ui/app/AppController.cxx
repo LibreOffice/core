@@ -534,7 +534,8 @@ void SAL_CALL OApplicationController::disposing()
                 }
             }
 
-            m_aModelConnector.clear();
+            m_xModel->disconnectController( this );
+
             m_xModel.clear();
         }
     }
@@ -614,7 +615,6 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     else if ( _rSource.Source == m_xModel )
     {
         m_xModel.clear();
-        m_aModelConnector.clear();
     }
     else if ( _rSource.Source == m_xDataSource )
     {
@@ -2675,7 +2675,7 @@ Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( Runt
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::onConnectedModel()
+void OApplicationController::onAttachedFrame()
 {
     sal_Int32 nConnectedControllers( 0 );
     try
@@ -2704,9 +2704,15 @@ void OApplicationController::onConnectedModel()
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 {
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    if ( !m_xModel.is() )
+    {
+        OSL_ENSURE( false, "OApplicationController::OnFirstControllerConnected: too late!" );
+    }
+
     // if we have forms or reports which contain macros/scripts, then show a warning
     // which suggests the user to migrate them to the database document
-
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {
@@ -2752,6 +2758,14 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 }
 
 // -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException )
+{
+    OApplicationController_CBASE::attachFrame( i_rxFrame );
+    if ( getFrame().is() )
+        onAttachedFrame();
+}
+
+// -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2767,16 +2781,13 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         // at least: remove as property change listener from the old model/data source
 
     m_xModel = _rxModel;
-    if ( _rxModel.is() )
+    if ( m_xModel.is() )
     {
         m_xDocumentModify.set( m_xModel, UNO_QUERY_THROW );
-        m_aModelConnector.connect( _rxModel, this );
-        onConnectedModel();
     }
     else
     {
         m_xDocumentModify.clear();
-        m_aModelConnector.clear();
     }
 
     m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);

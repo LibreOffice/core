@@ -31,7 +31,6 @@
 #ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #define DBAUI_SINGLEDOCCONTROLLER_HXX
 
-#include "documentcontroller.hxx"
 #include "genericcontroller.hxx"
 #include "IEnvironment.hxx"
 

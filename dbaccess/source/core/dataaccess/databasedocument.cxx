@@ -539,6 +539,26 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
 }
 
 // -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::doEmergencySave( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    // for the moment, just delegate this to our "storeToURL" method
+    storeToURL( i_TargetLocation, i_MediaDescriptor );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::recoverDocument( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    // for the moment, just delegate this to our "load" method
+    ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
+
+    // our load implementation expects the SalvagedFile and URL to be in the media descriptor
+    aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
+    aMediaDescriptor.put( "URL", i_SourceLocation );
+
+    load( aMediaDescriptor.getPropertyValues() );
+}
+
+// -----------------------------------------------------------------------------
 // XModel
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
 {
@@ -593,6 +613,16 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (Runtime
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
+
+#if OSL_DEBUG_LEVEL > 0
+    for (   Controllers::const_iterator controller = m_aControllers.begin();
+            controller != m_aControllers.end();
+            ++controller
+        )
+    {
+        OSL_ENSURE( *controller != _xController, "ODatabaseDocument::connectController: this controller is already connected!" );
+    }
+#endif
 
     m_aControllers.push_back( _xController );
 

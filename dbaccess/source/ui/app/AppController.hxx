@@ -35,7 +35,6 @@
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 #include "commontypes.hxx"
-#include "documentcontroller.hxx"
 #include "dsntypes.hxx"
 #include "genericcontroller.hxx"
 #include "linkeddocuments.hxx"
@@ -123,8 +122,6 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper
                                 m_aContextMenuInterceptors;
 
-        ModelControllerConnector
-                                m_aModelConnector;
         TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
         ::rtl::Reference< SubComponentManager >
                                 m_pSubComponentManager;
@@ -396,12 +393,12 @@ namespace dbaui
         */
         void showPreviewFor( const ElementType _eType,const ::rtl::OUString& _sName );
 
-        /** called when we just connected to a new, non-NULL model
+        /** called we were attached to a frame
 
             In particular, this is called *after* the controller has been announced to the model
             (XModel::connectController)
         */
-        void onConnectedModel();
+        void onAttachedFrame();
 
         /// determines whether the given table name denotes a view which can be altered
         bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
@@ -455,6 +452,7 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // ::com::sun::star::frame::XController
+        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
