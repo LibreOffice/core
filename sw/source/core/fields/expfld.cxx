@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
@@ -41,6 +40,7 @@
 #include <svx/fontitem.hxx>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <unofield.hxx>
+#include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <fmtanchr.hxx>

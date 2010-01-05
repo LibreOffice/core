@@ -30,15 +30,26 @@
 #ifndef _UNOIDX_HXX
 #define _UNOIDX_HXX
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <unoobj.hxx>
+
+#include <cppuhelper/implbase5.hxx>
+
+#include <unoevtlstnr.hxx>
 #include <unocoll.hxx>
 #include <toxe.hxx>
+
+
+class SfxItemPropertySet;
 class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
+
 /* -----------------07.12.98 10:08-------------------
  *
  * --------------------------------------------------*/
