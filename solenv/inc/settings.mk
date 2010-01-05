@@ -1029,6 +1029,25 @@ LNTFLAGSOUTOBJ=-os
 .INCLUDE : os2.mk
 .ENDIF
 
+.IF "$(OOO_LIBRARY_PATH_VAR)" != ""
+# Add SOLARLIBDIR to the end of a (potentially previously undefined) library
+# path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
+# the end over adding at the start); the ": &&" in the bash case enables this to
+# work at the start of a recipe line that is not prefixed by "+" as well as in
+# the middle of an existing && chain; the tcsh case is somewhat imprecise in
+# that it potentially affects multiple commands following on the recipe line:
+.IF "$(USE_SHELL)" == "bash"
+AUGMENT_LIBRARY_PATH *= : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(SOLARLIBDIR)
+.ELSE
+AUGMENT_LIBRARY_PATH *= if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
+    eval 'setenv $(OOO_LIBRARY_PATH_VAR) \
+    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(SOLARLIBDIR)"' \
+    && if ($$?$(OOO_LIBRARY_PATH_VAR) == 0) \
+    setenv $(OOO_LIBRARY_PATH_VAR) "$(SOLARLIBDIR)" &&
+.END
+.END
+
 # remove if .Net 2003 support has expired 
 .IF "$(debug)"!=""
 .IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
@@ -1054,7 +1073,7 @@ JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javamaker
 RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rdbmaker
 CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 
-TESTSHL2=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/testshl2
+CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cppunittester
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker

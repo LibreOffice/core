@@ -358,13 +358,16 @@ sub replace_variables_in_scriptfile
 #############################################
 # Creating the "simple" package.
 # "zip" for Windows
-# "dmg" on Mac OS X
 # "tar.gz" for all other platforms
+# additionally "dmg" on Mac OS X
 #############################################
 
 sub create_package
 {
-    my ( $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref ) = @_;
+    my ( $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $format ) = @_;
+
+    installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
+    installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
 
     # moving dir into temporary directory
     my $pid = $$; # process id
@@ -378,7 +381,7 @@ sub create_package
     # creating new directory with original name
     installer::systemactions::create_directory($installdir);
 
-    my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
+    my $archive =  $installdir . $installer::globals::separator . $packagename . $format;
 
     if ( $archive =~ /zip$/ )
     {
@@ -395,7 +398,6 @@ sub create_package
     }
      elsif ( $archive =~ /dmg$/ )
     {
-        installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
         my $folder = (( -l "$tempdir/$packagename/Applications" ) or ( -l "$tempdir/$packagename/opt" )) ? $packagename : "\.";
 
         if ( $allvariables->{'PACK_INSTALLED'} ) {
@@ -760,23 +762,19 @@ sub create_simple_package
     installer::logger::include_header_into_logfile("Registering extensions:");
     register_extensions($subfolderdir, $languagestringref);
 
-    # Adding scpactions for mac installations sets, that use not dmg format. Without scpactions the
-    # office does not start.
-
-    if (( $installer::globals::packageformat eq "installed" ) && ( $installer::globals::compiler =~ /^unxmacx/ ))
+    if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
         installer::worker::put_scpactions_into_installset("$installdir/$packagename");
     }
 
     # Creating archive file
-    if (( $installer::globals::packageformat eq "archive" ) || ( $installer::globals::packageformat eq "dmg" ))
+    if ( $installer::globals::packageformat eq "archive" )
     {
-        # creating a package
-        # -> zip for Windows
-        # -> tar.gz for all other platforms
-        installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
-        installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
-        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref);
+        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $installer::globals::archiveformat);
+    }
+    elsif ( $installer::globals::packageformat eq "dmg" )
+    {
+        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, ".dmg");
     }
 
     # Analyzing the log file

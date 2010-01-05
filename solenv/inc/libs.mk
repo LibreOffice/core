@@ -270,8 +270,11 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
-TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
+.IF "$(OS)" == "WNT"
+CPPUNITLIB = -lcygcppunit-1-12-1
+.ELSE
+CPPUNITLIB = -lcppunit
+.ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
@@ -478,8 +481,7 @@ FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
-CPPUNITLIB = cppunit.lib
-TESTSHL2LIB = testshl2.lib
+CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
