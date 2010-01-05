@@ -35,12 +35,8 @@
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
-#endif
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -59,9 +55,7 @@
 #include <frmfmt.hxx>
 #include <pam.hxx>
 #include <ndgrf.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>            // fuer Ole-Node
-#endif
 #include <mdiexp.hxx>           // Progress
 #include <redline.hxx>
 #include <fltshell.hxx>
@@ -296,7 +290,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         if (!mbNewDoc)
             Reader::ResetFrmFmtAttrs( *pTempSet );
 
-        SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AS_CHAR );
         aAnchor.SetAnchor( pPaM->GetPoint() );
         pTempSet->Put( aAnchor );
 

@@ -33,9 +33,7 @@
 #include "hintids.hxx"
 #include <svtools/itemiter.hxx>
 #include <svtools/imap.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <tools/poly.hxx>
 #include <svx/contdlg.hxx>
 #include <svx/protitem.hxx>
@@ -1182,7 +1180,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         // --> OD 2004-11-12 #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
         const RndStdIds eAnchorType = GetFrmFmt().GetAnchor().GetAnchorId();
-        if ( eAnchorType == FLY_PAGE )
+        if ( eAnchorType == FLY_AT_PAGE )
         {
             aVert.SetVertOrient( text::VertOrientation::NONE );
             aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
@@ -1235,7 +1233,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
             SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
             // --> OD 2004-11-12 #i34948# - handle also at-page and at-fly anchored
             // Writer fly frames
-            if ( eAnchorType == FLY_PAGE )
+            if ( eAnchorType == FLY_AT_PAGE )
             {
                 aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
@@ -1645,11 +1643,17 @@ void CalcCntnt( SwLayoutFrm *pLay,
                                 {
                                     // Bei autopositionierten hilft manchmal nur
                                     // noch, auf Durchlauf zu schalten
-                                    if( rFmt.GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT &&
-                                        SURROUND_PARALLEL == aAttr.GetSurround() )
+                                    if ((rFmt.GetAnchor().GetAnchorId() ==
+                                            FLY_AT_CHAR) &&
+                                        (SURROUND_PARALLEL ==
+                                            aAttr.GetSurround()))
+                                    {
                                         aAttr.SetSurround( SURROUND_THROUGHT );
+                                    }
                                     else
+                                    {
                                         aAttr.SetSurround( SURROUND_PARALLEL );
+                                    }
                                     rFmt.LockModify();
                                     rFmt.SetFmtAttr( aAttr );
                                     rFmt.UnlockModify();
@@ -2313,7 +2317,8 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
         {
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
             if ( _bNoInvaOfAsCharAnchoredObjs &&
-                 pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+                 (pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                    == FLY_AS_CHAR) )
             {
                 continue;
             }

@@ -45,9 +45,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>
 #include <swcli.hxx>
 #include <ndindex.hxx>
@@ -1402,7 +1400,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         aSet.Put(aAnchor);
                     }
                 }
-                else if(aAnchor.GetAnchorId() != FLY_PAGE && !aAnchor.GetCntntAnchor())
+                else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) &&
+                         !aAnchor.GetCntntAnchor())
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
                     SwPaM aPam(rNode);
@@ -2023,7 +2022,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
                ( pObj->GetUserCall() &&
                  !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
         {
-            if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            if (pFmt->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
@@ -2049,7 +2048,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
-        if( rAnchor.GetAnchorId() != FLY_PAGE ||
+        if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetCntntAnchor());
@@ -2128,7 +2127,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const SfxPoolItem* pItem;
-        RndStdIds eAnchorId = FLY_AT_CNTNT;
+        RndStdIds eAnchorId = FLY_AT_PARA;
         if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) )
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
@@ -2136,10 +2135,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 !aPam.GetNode()->FindFlyStartNode())
             {
                 //rahmengebunden geht nur dort, wo ein Rahmen ist!
-                SwFmtAnchor aAnchor(FLY_AT_CNTNT);
+                SwFmtAnchor aAnchor(FLY_AT_PARA);
                 aFrmSet.Put(aAnchor);
             }
-            else if( FLY_PAGE == eAnchorId &&
+            else if ((FLY_AT_PAGE == eAnchorId) &&
                      0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
             {
                 SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
@@ -2162,10 +2161,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 SwFmtAnchor* pAnchorItem = 0;
                 // the frame is inserted bound to page
                 // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
-                if(eAnchorId != FLY_PAGE)
+                if (eAnchorId != FLY_AT_PAGE)
                 {
                     pAnchorItem = static_cast<SwFmtAnchor*>(aFrmSet.Get(RES_ANCHOR).Clone());
-                    aFrmSet.Put( SwFmtAnchor( FLY_PAGE, 1 ));
+                    aFrmSet.Put( SwFmtAnchor( FLY_AT_PAGE, 1 ));
                 }
 
                 pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
@@ -2183,8 +2182,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 DELETEZ( m_pCopySource );
             }
             else
-                pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
+            {
+                pFmt = pDoc->MakeFlySection( FLY_AT_PARA, aPam.GetPoint(),
                                          &aFrmSet, pParentFrmFmt );
+            }
             if(pFmt)
             {
                 pFmt->Add(this);

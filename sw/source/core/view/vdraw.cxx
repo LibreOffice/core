@@ -46,9 +46,7 @@
 #include <svx/svdoutl.hxx>
 
 #ifndef PRODUCT
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
 #endif
 
 #include "fesh.hxx"
@@ -62,9 +60,8 @@
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
 
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
+
 
 /*************************************************************************
 |*
@@ -337,8 +334,10 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
-                 FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
+                 (FLY_AS_CHAR == pCont->GetFmt()->GetAnchor().GetAnchorId()) )
+            {
                 continue;
+            }
 
             // OD 19.06.2003 #108784# - no move for drawing objects in header/footer
             if ( pAnchor->FindFooterOrHeader() )

@@ -1648,7 +1648,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
-    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_CNTNT, pPaM->GetPoint());
+    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_PARA, pPaM->GetPoint());
 
     pFrame->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
     pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));

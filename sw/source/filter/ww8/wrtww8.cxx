@@ -2899,7 +2899,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     mpParentFrame = 0;
     pFlyOffset = 0;
-    eNewAnchorType = FLY_PAGE;
+    eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
     // --> OD 2007-04-19 #i43447# - removed
 //    nFlyWidth = nFlyHeight = 0;

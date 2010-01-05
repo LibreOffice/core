@@ -1033,9 +1033,11 @@ SwCntntNotify::~SwCntntNotify()
                 SwFrmFmt *pFmt = (*pTbl)[i];
                 const SwFmtAnchor &rAnch = pFmt->GetAnchor();
 
-                if ( FLY_PAGE       != rAnch.GetAnchorId() &&
-                     FLY_AT_CNTNT   != rAnch.GetAnchorId() )
+                if ((FLY_AT_PAGE != rAnch.GetAnchorId()) &&
+                    (FLY_AT_PARA != rAnch.GetAnchorId()))
+                {
                     continue;   //#60878# nicht etwa zeichengebundene.
+                }
 
                 BOOL bCheckPos = FALSE;
                 if ( rAnch.GetCntntAnchor() )
@@ -1047,7 +1049,7 @@ SwCntntNotify::~SwCntntNotify()
                     if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
                     {
                         bCheckPos = TRUE;
-                        if ( FLY_PAGE == rAnch.GetAnchorId() )
+                        if (FLY_AT_PAGE == rAnch.GetAnchorId())
                         {
                             ASSERT( false, "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
                             SwFmtAnchor aAnch( rAnch );
@@ -1097,7 +1099,7 @@ SwCntntNotify::~SwCntntNotify()
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                        == FLY_AUTO_CNTNT )
+                        == FLY_AT_CHAR )
                 {
                     pAnchoredObj->CheckCharRectAndTopOfLine( !pMasterFrm->IsEmpty() );
                 }
@@ -1135,11 +1137,11 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
             // OD 23.06.2003 #108784# - append also drawing objects anchored
             // as character.
             const bool bDrawObjInCntnt = bSdrObj &&
-                                         rAnch.GetAnchorId() == FLY_IN_CNTNT;
+                                         (rAnch.GetAnchorId() == FLY_AS_CHAR);
 
             if( bFlyAtFly ||
-                rAnch.GetAnchorId() == FLY_AT_CNTNT ||
-                rAnch.GetAnchorId() == FLY_AUTO_CNTNT ||
+                (rAnch.GetAnchorId() == FLY_AT_PARA) ||
+                (rAnch.GetAnchorId() == FLY_AT_CHAR) ||
                 bDrawObjInCntnt )
             {
                 SdrObject* pSdrObj = 0;
@@ -1227,7 +1229,7 @@ bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
 
     const SwFmtAnchor& rAnch = _rFmt.GetAnchor();
 
-    if ( rAnch.GetAnchorId() != FLY_PAGE )
+    if (rAnch.GetAnchorId() != FLY_AT_PAGE)
     {
         bRetVal = _rFmt.GetDoc()->IsInHeaderFooter( rAnch.GetCntntAnchor()->nNode );
     }
@@ -1256,10 +1258,13 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
             SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ USHORT(i) ];
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
             BOOL bRemove = FALSE;
-            if ( rAnch.GetAnchorId() == FLY_PAGE || rAnch.GetAnchorId() == FLY_IN_CNTNT )
+            if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
+                (rAnch.GetAnchorId() == FLY_AS_CHAR))
+            {
                 //Seitengebunde sind bereits verankert, zeichengebundene
                 //will ich hier nicht.
                 bRemove = TRUE;
+            }
             else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt )) ||
                       ::lcl_InHeaderOrFooter( *pFmt ) )
             {
@@ -2578,7 +2583,7 @@ void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
         // --> OD 2004-11-29 #115759# - remove also drawing objects from page
         else if ( pObj->ISA(SwAnchoredDrawObject) )
         {
-            if ( pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+            if (pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
                 pObj->GetPageFrm()->RemoveDrawObjFromPage(
                                 *(static_cast<SwAnchoredDrawObject*>(pObj)) );
@@ -2746,7 +2751,7 @@ void MA_FASTCALL lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
         // --> OD 2004-11-29 #115759# - remove also drawing objects from page
         else if ( pObj->ISA(SwAnchoredDrawObject) )
         {
-            if ( pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+            if (pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
                 pObj->InvalidateObjPos();
                 _pPage->AppendDrawObjToPage(

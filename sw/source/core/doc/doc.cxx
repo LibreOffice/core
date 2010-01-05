@@ -95,9 +95,7 @@
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
-#endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // StatLine-String
 #endif
@@ -923,7 +921,7 @@ SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
     SwFlyFrmFmt *pFmt = 0;
     if( pNode )
     {
-        pFmt = _MakeFlySection( rPos, *pNode, FLY_AT_CNTNT,
+        pFmt = _MakeFlySection( rPos, *pNode, FLY_AT_PARA,
                                 pFlyAttrSet, pFrmFmt );
         if( pGrfAttrSet )
             pNode->SetAttr( *pGrfAttrSet );

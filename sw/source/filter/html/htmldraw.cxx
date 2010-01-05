@@ -34,9 +34,7 @@
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -182,7 +180,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrmSet.Put( aULItem );
     }
 
-    SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AS_CHAR );
     if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eLeftType &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
@@ -198,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         }
         else
         {
-            aAnchor.SetType( FLY_PAGE );
+            aAnchor.SetType( FLY_AT_PAGE );
         }
         // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
@@ -208,7 +206,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     else if( SVX_ADJUST_LEFT == rCSS1PropInfo.eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )
     {
-        aAnchor.SetType( FLY_AT_CNTNT );
+        aAnchor.SetType( FLY_AT_PARA );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
         // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
@@ -219,10 +217,14 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrmSet.Put( SwFmtVertOrient( 0, eVertOri ) );
     }
 
-    if( FLY_PAGE == aAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
+    {
         aAnchor.SetPageNum( 1 );
+    }
     else if( FLY_AT_FLY != aAnchor.GetAnchorId() )
+    {
         aAnchor.SetAnchor( pPam->GetPoint() );
+    }
     aFrmSet.Put( aAnchor );
 
     pDoc->Insert( *pPam, *pNewDrawObj, &aFrmSet, NULL );

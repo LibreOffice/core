@@ -64,9 +64,7 @@
 #include <swtable.hxx>
 #include <breakit.hxx>
 #include <SwStyleNameMapper.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
@@ -187,17 +185,20 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                 pLayout = (SwLayoutFrm*)((SwFlyFrm*)pLayout)->GetAnchorFrm();
                 continue;
             }
-            else if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                     FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-                     FLY_IN_CNTNT == rAnchor.GetAnchorId() )
+            else if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                     (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                     (FLY_AS_CHAR == rAnchor.GetAnchorId()))
             {
                 ASSERT( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
                 rPos = *rAnchor.GetCntntAnchor();
                 pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                if( FLY_AT_CNTNT == rAnchor.GetAnchorId() )
-                    ((SwTxtNode*)pTxtNode)->MakeStartIndex( &rPos.nContent );
+                if ( FLY_AT_PARA == rAnchor.GetAnchorId() )
+                {
+                    const_cast<SwTxtNode*>(pTxtNode)->MakeStartIndex(
+                            &rPos.nContent );
 // oder doch besser das Ende vom (Anker-)TextNode nehmen ??
 //                  ((SwTxtNode*)pTxtNode)->MakeEndIndex( &rPos.nContent );
+                }
 
                 // noch nicht abbrechen, kann ja auch noch im
                 // Header/Footer/Footnote/Fly stehen !!

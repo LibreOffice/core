@@ -593,7 +593,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 pAnchor = &pFmt->GetAnchor();
                 switch( pAnchor->GetAnchorId() )
                 {
-                case FLY_IN_CNTNT:
+                case FLY_AS_CHAR:
                     if( 0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
                         (( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                         ? ( pStt->nNode <= pAPos->nNode &&
@@ -611,7 +611,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                     }
                     break;
-                case FLY_AT_CNTNT:
+                case FLY_AT_PARA:
                     {
                         pAPos =  pAnchor->GetCntntAnchor();
                         if( pAPos )
@@ -660,7 +660,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         }
                     }
                     break;
-                case FLY_AUTO_CNTNT:
+                case FLY_AT_CHAR:
                     if( 0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
                         ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {

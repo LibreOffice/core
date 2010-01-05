@@ -38,9 +38,7 @@
  */
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <vcl/cvtgrf.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/stritem.hxx>
@@ -50,9 +48,7 @@
 #include <svtools/itemiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hyznitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/lspcitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/keepitem.hxx>
@@ -72,16 +68,12 @@
 #include <svx/lrspitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
-#endif
 #include <svx/postitem.hxx>
 #include <svx/shdditem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/wrlmitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/twolinesitem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/charrotateitem.hxx>
@@ -127,9 +119,7 @@
 #include <flddat.hxx>
 #include <pagedesc.hxx>     // fuer SwPageDesc ...
 #include <swtable.hxx>      // fuer SwPageDesc ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swrect.hxx>
 #include <section.hxx>
 #include <wrtswtbl.hxx>
@@ -3592,7 +3582,7 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pOrient;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyVert.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pOrient = OOO_STRING_SVTOOLS_RTF_PVPG;
@@ -3648,7 +3638,7 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pS;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyHori.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pS = OOO_STRING_SVTOOLS_RTF_PHPG;
@@ -3702,12 +3692,12 @@ static Writer& OutRTF_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.bOutFmtAttr = TRUE;
         switch( nId )
         {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
                 rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYPAGE;
                 rWrt.OutULong( rAnchor.GetPageNum() );
             break;
-        case FLY_AT_CNTNT:
-        case FLY_IN_CNTNT:
+        case FLY_AT_PARA:
+        case FLY_AS_CHAR:
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYCNTNT;
             break;
         }

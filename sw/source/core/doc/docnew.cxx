@@ -1415,7 +1415,7 @@ void SwDoc::Paste( const SwDoc& rSource )
                 if( bInsWithFmt  )
                 {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                    if( FLY_PAGE == aAnchor.GetAnchorId() )
+                    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
                     {
                         aAnchor.SetPageNum( aAnchor.GetPageNum() + /*nStartPageNumber - */1 );
                     }

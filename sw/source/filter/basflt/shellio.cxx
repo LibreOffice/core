@@ -34,9 +34,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <svtools/urihelper.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
-#endif
 #include <svtools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/lrspitem.hxx>
@@ -60,9 +58,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <fltini.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <redline.hxx>
 #include <swerror.h>
 
@@ -71,6 +67,7 @@
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
 // <--
+
 
 using namespace ::com::sun::star;
 
@@ -241,9 +238,9 @@ ULONG SwReader::Read( const Reader& rOptions )
                 {
                     SwPosition const*const pFrameAnchor(
                             rAnchor.GetCntntAnchor());
-                    if  (   (FLY_PAGE == rAnchor.GetAnchorId())
+                    if  (   (FLY_AT_PAGE == rAnchor.GetAnchorId())
                         ||  (   pFrameAnchor
-                            &&  (   (   (FLY_AT_CNTNT == rAnchor.GetAnchorId())
+                            &&  (   (   (FLY_AT_PARA == rAnchor.GetAnchorId())
                                     &&  (   (pUndoPam->GetPoint()->nNode ==
                                              pFrameAnchor->nNode)
                                         ||  (pUndoPam->GetMark()->nNode ==
@@ -251,7 +248,7 @@ ULONG SwReader::Read( const Reader& rOptions )
                                         )
                                     )
                                 // #i97570# also check frames anchored AT char
-                                ||  (   (FLY_AUTO_CNTNT == rAnchor.GetAnchorId())
+                                ||  (   (FLY_AT_CHAR == rAnchor.GetAnchorId())
                                     &&  !IsDestroyFrameAnchoredAtChar(
                                               *pFrameAnchor,
                                               *pUndoPam->GetPoint(),
@@ -262,7 +259,7 @@ ULONG SwReader::Read( const Reader& rOptions )
                         )
                     {
                         if( bChkHeaderFooter &&
-                            FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
+                            (FLY_AT_PARA == rAnchor.GetAnchorId()) &&
                             RES_DRAWFRMFMT == pFrmFmt->Which() )
                         {
                             // DrawObjecte in Kopf-/Fusszeilen ist nicht
@@ -286,15 +283,19 @@ ULONG SwReader::Read( const Reader& rOptions )
                                 pFrmFmt->DelFrms();
                             }
 
-                            if( FLY_PAGE == rAnchor.GetAnchorId() )
+                            if (FLY_AT_PAGE == rAnchor.GetAnchorId())
                             {
                                 if( !rAnchor.GetCntntAnchor() )
+                                {
                                     pFrmFmt->MakeFrms();
+                                }
                                 else if( pCrsr )
+                                {
                                     // seitengebundene Flys eingefuegt, dann schalte
                                     // die Optimierungs-Flags vom SwDoc ab. Sonst
                                     // werden die Flys nicht an der Position erzeugt.
                                     pDoc->SetLoaded( FALSE );
+                                }
                             }
                             else
                                 pFrmFmt->MakeFrms();

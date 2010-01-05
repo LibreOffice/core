@@ -1270,11 +1270,15 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     InsertText( c, aIdx, nInsertFlags );
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
 
-                    if( pAnchor && FLY_IN_CNTNT == pAnchor->GetAnchorId() &&
+                    if (pAnchor &&
+                        (FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
                         pAnchor->GetCntntAnchor() &&
                         pAnchor->GetCntntAnchor()->nNode == *this &&
                         pAnchor->GetCntntAnchor()->nContent == aIdx )
-                        ((SwIndex&)pAnchor->GetCntntAnchor()->nContent)--;
+                    {
+                        const_cast<SwIndex&>(
+                            pAnchor->GetCntntAnchor()->nContent)--;
+                    }
                 }
                 pFly->SetAnchor( this );
 

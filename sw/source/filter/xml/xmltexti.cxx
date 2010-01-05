@@ -47,9 +47,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlprmap.hxx>
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/i18nmap.hxx>
 #include "unocrsr.hxx"
 #include "unoobj.hxx"
@@ -75,6 +73,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/urihelper.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -126,7 +125,7 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
     }
 
-    SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AT_CHAR );
     rItemSet.Put( aAnchor );
 
     if( pTwipWidth )

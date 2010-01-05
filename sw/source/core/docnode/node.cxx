@@ -38,9 +38,7 @@
 #include <svx/frmdiritem.hxx>
 // <--
 #include <svx/protitem.hxx>
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -609,7 +607,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             if( pFmt )
             {
                 const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                     pAnchor->GetCntntAnchor() )
                 {
                     pNd = &pAnchor->GetCntntAnchor()->nNode.GetNode();
@@ -631,7 +629,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                                     break;
                                 }
                                 pAnchor = &pFrmFmt->GetAnchor();
-                                if( FLY_PAGE == pAnchor->GetAnchorId() ||
+                                if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                                     !pAnchor->GetCntntAnchor() )
                                 {
                                     pFlyNd = 0;

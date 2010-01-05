@@ -163,7 +163,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     // gebunden sind
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    USHORT nChkType = static_cast< USHORT >(_bAtCharAnchoredObjs ? FLY_AUTO_CNTNT : FLY_AT_CNTNT);
+    USHORT nChkType = static_cast< USHORT >((_bAtCharAnchoredObjs)
+            ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
     if( pDoc->GetRootFrm() &&
