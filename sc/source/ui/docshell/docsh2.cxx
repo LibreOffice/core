@@ -43,7 +43,7 @@
 #include <svx/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>

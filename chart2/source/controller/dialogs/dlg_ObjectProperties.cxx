@@ -34,7 +34,7 @@
 #ifndef _ZFORLIST_DECLARE_TABLE
 #define _ZFORLIST_DECLARE_TABLE
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 
 #include "dlg_ObjectProperties.hxx"
@@ -66,8 +66,8 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <svtools/intitem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/intitem.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -82,7 +82,7 @@
 #include <svx/flagsdef.hxx>
 #include <svx/numinf.hxx>
 
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 //.............................................................................
 namespace chart

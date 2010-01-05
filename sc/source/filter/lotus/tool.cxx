@@ -37,7 +37,7 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/solar.h>
 
 #include "cell.hxx"

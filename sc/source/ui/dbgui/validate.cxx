@@ -36,10 +36,10 @@
 #endif
 
 #include <vcl/svapp.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>

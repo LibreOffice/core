@@ -34,8 +34,8 @@
 //-----------------------------------------------------------------------------
 
 #include <osl/security.hxx>
-#include <svtools/sharecontrolfile.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/sharecontrolfile.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <docsh.hxx>
 

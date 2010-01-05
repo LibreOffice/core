@@ -44,7 +44,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/eeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "futext.hxx"
 #include "drwlayer.hxx"

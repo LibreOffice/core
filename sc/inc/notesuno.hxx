@@ -32,7 +32,7 @@
 #define SC_NOTESUNO_HXX
 
 #include "address.hxx"
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

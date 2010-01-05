@@ -32,10 +32,10 @@
 #include "precompiled_sc.hxx"
 
 #include "xepage.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "scitems.hxx"
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/lrspitem.hxx>

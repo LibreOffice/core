@@ -36,8 +36,8 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
 #include "content.hxx"
 #include <svtools/svmedit.hxx>

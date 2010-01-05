@@ -36,7 +36,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

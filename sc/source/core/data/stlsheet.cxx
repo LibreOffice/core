@@ -48,9 +48,9 @@
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/smplhint.hxx>
 #include "attrib.hxx"
 
 

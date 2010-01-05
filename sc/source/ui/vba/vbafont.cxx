@@ -38,7 +38,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlUnderlineStyle.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "vbafont.hxx"
 #include "scitems.hxx"
 #include "cellsuno.hxx"

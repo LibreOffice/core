@@ -52,7 +52,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <vcl/window.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 

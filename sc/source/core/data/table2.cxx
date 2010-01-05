@@ -36,10 +36,10 @@
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/poolcach.hxx>
+#include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "patattr.hxx"
