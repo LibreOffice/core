@@ -129,6 +129,27 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
                            rAny ));
     Invalidate();
 }
+
+XMLTag::Pointer_t PropertyMap::toTag()
+{
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
+
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    PropertyMap::iterator aMapIter = begin();
+    while (aMapIter != end())
+    {
+        XMLTag::Pointer_t pTag(new XMLTag("property"));
+
+        pTag->addAttr("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
+
+        pResult->addTag(pTag);
+
+        ++aMapIter;
+    }
+
+    return pResult;
+}
+
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <dmapperLoggers.hxx>
 
 
 namespace writerfilter {
@@ -31,6 +32,11 @@ namespace dmapper {
 
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("TablePropertiesHandler.sprm");
+        dmapper_logger->attribute("sprm", rSprm.toString());
+#endif
+
         bool bRet = true;
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
@@ -133,6 +139,10 @@ namespace dmapper {
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->insert( pBorderHandler->getProperties() );
+
+#ifdef DEBUG_DOMAINMAPPER
+                    dmapper_logger->addTag(pTablePropMap->toTag());
+#endif
                     insertTableProps( pTablePropMap );
                 }
             }
@@ -212,6 +222,11 @@ namespace dmapper {
             break;
             default: bRet = false;
         }
+
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->endElement("TablePropertiesHandler.sprm");
+#endif
+
         return bRet;
     }
 }}

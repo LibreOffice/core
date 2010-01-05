@@ -116,7 +116,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("tablemanager.table");
     dmapper_logger->attribute("rows", nRows);
-    lcl_printProperties( pProps );
+    dmapper_logger->addTag(pProps->toTag());
 #endif
 }
 
@@ -125,6 +125,11 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
   -----------------------------------------------------------------------*/
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("lcl_SearchParentStyleSheetAndMergeProperties");
+    dmapper_logger->addTag(pStyleSheet->toTag());
+#endif
+
     PropertyMapPtr pRet;
     if( pStyleSheet->sBaseStyleIdentifier.getLength())
     {
@@ -137,6 +142,11 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
     }
 
     pRet->insert(  pStyleSheet->pProperties, true );
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("lcl_SearchParentStyleSheetAndMergeProperties");
+#endif
+
     return pRet;
 }
 
@@ -238,38 +248,41 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
     }
 }
 
-void DomainMapperTableHandler::endTable()
-{
 #ifdef DEBUG_DOMAINMAPPER
-{
-    sal_uInt32 nCells = 0;
-    sal_uInt32 nRows = m_aRowProperties.size();
-    if( nRows == m_aCellProperties.size() )
-    {
-        for( sal_uInt32 nRow = 0; nRow < nRows; ++nRow )
-            nCells += m_aCellProperties[nRow].size();
-    }
-    sal_uInt32 nTblPropSize = m_aTableProperties.get() ? m_aTableProperties->size() : 0;
-    (void)nTblPropSize;
 
-    ::rtl::OUString sNames;
-    if( nTblPropSize )
-    {
-        const beans::PropertyValues aDebugTbl = m_aTableProperties->GetPropertyValues();
-        for( sal_uInt32 nDebug = 0; nDebug < nTblPropSize; ++nDebug)
-        {
-            const ::rtl::OUString sName = aDebugTbl[nDebug].Name;
-            sNames += sName;
-            sNames += ::rtl::OUString('-');
-        }
-        m_aTableProperties->Invalidate();
-        sNames += ::rtl::OUString(' ');
-        dmapper_logger->chars("Props: ");
-        dmapper_logger->chars(sNames);
-    }
+void lcl_debug_BorderLine(table::BorderLine & rLine)
+{
+    dmapper_logger->startElement("BorderLine");
+    dmapper_logger->attribute("Color", rLine.Color);
+    dmapper_logger->attribute("InnerLineWidth", rLine.InnerLineWidth);
+    dmapper_logger->attribute("OuterLineWidth", rLine.OuterLineWidth);
+    dmapper_logger->attribute("LineDistance", rLine.LineDistance);
+    dmapper_logger->endElement("BorderLine");
+}
+
+void lcl_debug_TableBorder(table::TableBorder & rBorder)
+{
+    dmapper_logger->startElement("TableBorder");
+    lcl_debug_BorderLine(rBorder.TopLine);
+    dmapper_logger->attribute("IsTopLineValid", rBorder.IsTopLineValid);
+    lcl_debug_BorderLine(rBorder.BottomLine);
+    dmapper_logger->attribute("IsBottomLineValid", rBorder.IsBottomLineValid);
+    lcl_debug_BorderLine(rBorder.LeftLine);
+    dmapper_logger->attribute("IsLeftLineValid", rBorder.IsLeftLineValid);
+    lcl_debug_BorderLine(rBorder.RightLine);
+    dmapper_logger->attribute("IsRightLineValid", rBorder.IsRightLineValid);
+    lcl_debug_BorderLine(rBorder.VerticalLine);
+    dmapper_logger->attribute("IsVerticalLineValid", rBorder.IsVerticalLineValid);
+    lcl_debug_BorderLine(rBorder.HorizontalLine);
+    dmapper_logger->attribute("IsHorizontalLineValid", rBorder.IsHorizontalLineValid);
+    dmapper_logger->attribute("Distance", rBorder.Distance);
+    dmapper_logger->attribute("IsDistanceValid", rBorder.IsDistanceValid);
+    dmapper_logger->endElement("TableBorder");
 }
 #endif
 
+void DomainMapperTableHandler::endTable()
+{
     TablePropertyValues_t       aTableProperties;
     sal_Int32 nLeftBorderDistance, nRightBorderDistance, nTopBorderDistance, nBottomBorderDistance;
     nLeftBorderDistance = nRightBorderDistance = DEF_BORDER_DIST;
@@ -312,13 +325,31 @@ void DomainMapperTableHandler::endTable()
 
                 PropertyMapPtr pMergedProperties = lcl_SearchParentStyleSheetAndMergeProperties(pStyleSheet, pStyleSheetTable);
 
+#ifdef DEBUG_DOMAINMAPPER
+                dmapper_logger->startElement("mergedProps");
+                dmapper_logger->addTag(pMergedProperties->toTag());
+                dmapper_logger->endElement("mergedProps");
+#endif
+
                 m_aTableProperties->insert( pMergedProperties );
                 m_aTableProperties->insert( pTableProps );
+
+#ifdef DEBUG_DOMAINMAPPER
+                dmapper_logger->startElement("TableProperties");
+                dmapper_logger->addTag(m_aTableProperties->toTag());
+                dmapper_logger->endElement("TableProperties");
+#endif
             }
         }
 
         // Set the table default attributes for the cells
         pTableDefaults->insert( m_aTableProperties );
+
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("TableDefaults");
+        dmapper_logger->addTag(pTableDefaults->toTag());
+        dmapper_logger->endElement("TableDefaults");
+#endif
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
         m_aTableProperties->getValue( TablePropertyMap::LEFT_MARGIN, nLeftMargin );
@@ -420,6 +451,10 @@ void DomainMapperTableHandler::endTable()
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
 
+#ifdef DEBUG_DOMAINMAPPER
+        lcl_debug_TableBorder(aTableBorder);
+#endif
+
         m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - nLeftBorderDistance));
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
@@ -444,6 +479,43 @@ void DomainMapperTableHandler::endTable()
             pTableDefaults->erase( aDefaultRepeatIt );
 
         aTableProperties = m_aTableProperties->GetPropertyValues();
+
+#ifdef DEBUG_DOMAINMAPPER
+        {
+            sal_uInt32 nCells = 0;
+            sal_uInt32 nRows = m_aRowProperties.size();
+            if( nRows == m_aCellProperties.size() )
+            {
+                for( sal_uInt32 nRow = 0; nRow < nRows; ++nRow )
+                    nCells += m_aCellProperties[nRow].size();
+            }
+            sal_uInt32 nTblPropSize = m_aTableProperties.get() ? m_aTableProperties->size() : 0;
+            (void)nTblPropSize;
+
+            if( nTblPropSize )
+            {
+                dmapper_logger->startElement("debug.tableprops");
+                const beans::PropertyValues aDebugTbl = m_aTableProperties->GetPropertyValues();
+                for( sal_uInt32 nDebug = 0; nDebug < nTblPropSize; ++nDebug)
+                {
+                    dmapper_logger->startElement("property");
+
+                    const ::rtl::OUString sName = aDebugTbl[nDebug].Name;
+                    dmapper_logger->attribute("name", sName);
+
+                    ::rtl::OUString sValue;
+                    aDebugTbl[nDebug].Value >>= sValue;
+                    dmapper_logger->chars(sValue);
+
+                    dmapper_logger->endElement("property");
+                }
+                m_aTableProperties->Invalidate();
+
+                dmapper_logger->endElement("debug.tableprops");
+            }
+        }
+#endif
+
     }
 
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >

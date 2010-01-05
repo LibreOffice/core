@@ -54,18 +54,12 @@ BorderHandler::BorderHandler( bool bOOXML ) :
     m_nLineDistance(0),
     m_bOOXML( bOOXML )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("borderHandler");
-#endif
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 BorderHandler::~BorderHandler()
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("borderHandler");
-#endif
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
@@ -73,9 +67,9 @@ BorderHandler::~BorderHandler()
 void BorderHandler::attribute(Id rName, Value & rVal)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("attribute");
+    dmapper_logger->startElement("BorderHandler.attribute");
     dmapper_logger->attribute("id", (*QNameToString::Instance())(rName));
-    dmapper_logger->endElement("attribute");
+    dmapper_logger->endElement("BorderHandler.attribute");
 #endif
 
     sal_Int32 nIntValue = rVal.getInt();
@@ -132,9 +126,8 @@ void BorderHandler::attribute(Id rName, Value & rVal)
 void BorderHandler::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("sprm");
-    dmapper_logger->attribute("id", (*QNameToString::Instance())(rSprm.getId()));
-    dmapper_logger->endElement("sprm");
+    dmapper_logger->startElement("BorderHandler.sprm");
+    dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
 
     /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
@@ -164,6 +157,11 @@ void BorderHandler::sprm(Sprm & rSprm)
         break;
         default:;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("BorderHandler.sprm");
+#endif
+
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 

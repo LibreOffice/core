@@ -39,6 +39,10 @@
 #include <FontTable.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
+
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
 }}}}
@@ -74,6 +78,11 @@ public:
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
     ::rtl::OUString sConvertedStyleName;
+
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
+
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
 };
@@ -141,6 +150,10 @@ public:
     //     + corresponding to the mask,
     //     + from the parent styles
     PropertyMapPtr GetProperties( sal_Int32 nMask );
+
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
     virtual ~TableStyleSheetEntry( );

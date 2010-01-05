@@ -2167,7 +2167,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("sprm");
     dmapper_logger->chars(rSprm.toString());
-    dmapper_logger->endElement("sprm");
 #endif
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
@@ -4171,6 +4170,10 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #endif
         }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("sprm");
+#endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 

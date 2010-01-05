@@ -327,6 +327,7 @@ void DomainMapperTableManager::endLevel( )
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("tablemanager.endLevel");
     dmapper_logger->attribute("level", m_aTableGrid.size());
+    dmapper_logger->addTag(getTableProps()->toTag());
     dmapper_logger->endElement("tablemanager.endLevel");
 #endif
 }

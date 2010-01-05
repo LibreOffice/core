@@ -42,6 +42,10 @@
 #include <map>
 #include <vector>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
+
 namespace com{namespace sun{namespace star{
     namespace beans{
     struct PropertyValue;
@@ -133,6 +137,10 @@ class PropertyMap : public _PropertyMap
     void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
+
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
 
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;

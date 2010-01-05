@@ -49,6 +49,11 @@
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <dmapperLoggers.hxx>
+#include <resourcemodel/QNameToString.hxx>
+#endif
+
 using namespace ::com::sun::star;
 namespace writerfilter {
 namespace dmapper
@@ -79,6 +84,28 @@ StyleSheetEntry::~StyleSheetEntry()
 {
 }
 
+#ifdef DEBUG_DOMAINMAPPER
+XMLTag::Pointer_t StyleSheetEntry::toTag()
+{
+    XMLTag::Pointer_t pResult(new XMLTag("StyleSheetEntry"));
+
+    pResult->addAttr("identifierI", sStyleIdentifierI);
+    pResult->addAttr("identifierD", sStyleIdentifierD);
+    pResult->addAttr("default", bIsDefaultStyle ? "true" : "false");
+    pResult->addAttr("invalidHeight", bInvalidHeight ? "true" : "false");
+    pResult->addAttr("hasUPE", bHasUPE ? "true" : "false");
+    pResult->addAttr("styleType", nStyleTypeCode);
+    pResult->addAttr("baseStyle", sBaseStyleIdentifier);
+    pResult->addAttr("nextStyle", sNextStyleIdentifier);
+    pResult->addAttr("styleName", sStyleName);
+    pResult->addAttr("styleName1", sStyleName1);
+    pResult->addAttr("convertedName", sConvertedStyleName);
+    pResult->addTag(pProperties->toTag());
+
+    return pResult;
+}
+#endif
+
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetTable* pStyles ):
     StyleSheetEntry( ),
     m_pStyleSheet( pStyles )
@@ -103,6 +130,13 @@ TableStyleSheetEntry::~TableStyleSheetEntry( )
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("AddTblStylePr");
+    dmapper_logger->attribute("type", nType);
+    dmapper_logger->addTag(pProps->toTag());
+    dmapper_logger->endElement("AddTblStylePr");
+#endif
+
     static TblStyleType pTypesToFix[] =
     {
         TBL_STYLE_FIRSTROW,
@@ -167,6 +201,20 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
     return pProps;
 }
 
+XMLTag::Pointer_t TableStyleSheetEntry::toTag()
+{
+    XMLTag::Pointer_t pResult(StyleSheetEntry::toTag());
+
+    for (sal_Int32 nBit = 0; nBit < 13; ++nBit)
+    {
+        PropertyMapPtr pMap = GetProperties(1 << nBit);
+
+        pResult->addTag(pMap->toTag());
+    }
+
+    return pResult;
+}
+
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
     static PropertyIds pPropsToCheck[] =
@@ -225,7 +273,8 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
         TBL_STYLE_LASTCOL,
         TBL_STYLE_FIRSTCOL,
         TBL_STYLE_LASTROW,
-        TBL_STYLE_FIRSTROW
+        TBL_STYLE_FIRSTROW,
+        TBL_STYLE_UNKNOWN
     };
 
     // Get the properties applying according to the mask
@@ -243,7 +292,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
         nBit++;
     }
-    while ( nBit < 12 );
+    while ( nBit < 13 );
 
     return pProps;
 }
@@ -363,6 +412,11 @@ StyleSheetTable::~StyleSheetTable()
   -----------------------------------------------------------------------*/
 void StyleSheetTable::attribute(Id Name, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
+#endif
+
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->m_pCurrentEntry)
         return ;
@@ -485,12 +539,21 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         }
         break;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.attribute");
+#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void StyleSheetTable::sprm(Sprm & rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.sprm");
+    dmapper_logger->attribute("sprm", rSprm.toString());
+#endif
+
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
@@ -550,9 +613,17 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                 TblStyleType nType = pTblStylePrHandler->getType( );
                 PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
                 StyleSheetEntry *  pEntry = m_pImpl->m_pCurrentEntry.get();
-                TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
-                if (pTableEntry != NULL)
-                    pTableEntry->AddTblStylePr( nType, pProps );
+
+                if (nType == TBL_STYLE_UNKNOWN)
+                {
+                    pEntry->pProperties->insert(pProps);
+                }
+                else
+                {
+                    TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
+                    if (pTableEntry != NULL)
+                        pTableEntry->AddTblStylePr( nType, pProps );
+                }
             }
             break;
         }
@@ -623,12 +694,20 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                 m_pImpl->m_rDMapper.PopStyleSheetProperties( );
             }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.sprm");
+#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("StyleSheetTable.entry");
+#endif
+
     //create a new style entry
     // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
@@ -647,8 +726,17 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
     {
         //TODO: this entry contains the default settings - they have to be added to the settings
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->addTag(m_pImpl->m_pCurrentEntry->toTag());
+#endif
+
     StyleSheetEntryPtr pEmptyEntry;
     m_pImpl->m_pCurrentEntry = pEmptyEntry;
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("StyleSheetTable.entry");
+#endif
 }
 /*-- 21.06.2006 15:34:49---------------------------------------------------
     sorting helper
