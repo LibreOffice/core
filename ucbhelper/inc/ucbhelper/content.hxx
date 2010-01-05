@@ -106,14 +106,14 @@ class UCBHELPER_DLLPUBLIC Content
 protected:
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 rtl::OUString >& rPropertyNames,
-                                                  ResultSetInclude eMode )
+                                                ResultSetInclude eMode )
             throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 sal_Int32 >& rPropertyHandles,
-                                                  ResultSetInclude eMode )
+                                                ResultSetInclude eMode )
             throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -148,7 +148,7 @@ public:
       *        errors.
       */
     Content( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContentIdentifier >& rId,
+                    ::com::sun::star::ucb::XContentIdentifier >& rId,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
         throw ( ::com::sun::star::ucb::ContentCreationException,
@@ -163,7 +163,7 @@ public:
       *        errors.
       */
     Content( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContent >& rContent,
+                    ::com::sun::star::ucb::XContent >& rContent,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
         throw ( ::com::sun::star::ucb::ContentCreationException,
@@ -221,7 +221,7 @@ public:
       */
     static sal_Bool
     create( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContentIdentifier >& rId,
+                    ::com::sun::star::ucb::XContentIdentifier >& rId,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             Content& rContent );
@@ -241,7 +241,7 @@ public:
       */
     static sal_Bool
     create( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContent >& xContent,
+                    ::com::sun::star::ucb::XContent >& xContent,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             Content& rContent );
@@ -501,7 +501,7 @@ public:
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 rtl::OUString >& rPropertyNames,
                        const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Any >& rValues )
+                                    ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -539,7 +539,7 @@ public:
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 sal_Int32 >& nPropertyHandles,
                        const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Any >& rValues )
+                                    ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -655,8 +655,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
     createDynamicCursor( const ::com::sun::star::uno::Sequence<
                          rtl::OUString >& rPropertyNames,
-                           ResultSetInclude eMode
-                             = INCLUDE_FOLDERS_AND_DOCUMENTS )
+                         ResultSetInclude eMode
+                            = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -678,8 +678,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
     createDynamicCursor( const ::com::sun::star::uno::Sequence<
                          sal_Int32 >& rPropertyHandles,
-                           ResultSetInclude eMode
-                             = INCLUDE_FOLDERS_AND_DOCUMENTS )
+                         ResultSetInclude eMode
+                            = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -846,9 +846,9 @@ public:
     sal_Bool
     insertNewContent( const ::rtl::OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                          rtl::OUString >& rPropertyNames,
+                        rtl::OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -880,7 +880,7 @@ public:
                       const ::com::sun::star::uno::Sequence<
                         sal_Int32 >& nPropertyHandles,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -913,9 +913,9 @@ public:
     sal_Bool
     insertNewContent( const ::rtl::OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                          rtl::OUString >& rPropertyNames,
+                        rtl::OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::io::XInputStream >& rStream,
                       Content& rNewContent )
@@ -952,7 +952,7 @@ public:
                       const ::com::sun::star::uno::Sequence<
                         sal_Int32 >& nPropertyHandles,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::io::XInputStream >& rStream,
                       Content& rNewContent )
