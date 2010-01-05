@@ -1,10 +1,29 @@
-mkdir: %_DEST%/inc%_EXT%/cppunit
-mkdir: %_DEST%/inc%_EXT%/cppunit/extensions
+mkdir: %_DEST%\inc%_EXT%\cppunit
+..\%__SRC%\inc\cppunit\*.h %_DEST%\inc%_EXT%\cppunit\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\config
+..\%__SRC%\inc\cppunit\config\*.h %_DEST%\inc%_EXT%\cppunit\config\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\extensions
+..\%__SRC%\inc\cppunit\extensions\*.h %_DEST%\inc%_EXT%\cppunit\extensions\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\plugin
+..\%__SRC%\inc\cppunit\plugin\*.h %_DEST%\inc%_EXT%\cppunit\plugin\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\portability
+..\%__SRC%\inc\cppunit\portability\*.h %_DEST%\inc%_EXT%\cppunit\portability\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\tools
+..\%__SRC%\inc\cppunit\tools\*.h %_DEST%\inc%_EXT%\cppunit\tools\*.h
+mkdir: %_DEST%\inc%_EXT%\cppunit\ui\text
+..\%__SRC%\inc\cppunit\ui\text\*.h %_DEST%\inc%_EXT%\cppunit\ui\text\*.h
 
-../%__SRC%/misc/build/cppunit-1.8.0/include/cppunit/*.h %_DEST%/inc%_EXT%/cppunit/*.h
-../%__SRC%/misc/build/cppunit-1.8.0/include/cppunit/*.hxx %_DEST%/inc%_EXT%/cppunit/*.hxx
-../%__SRC%/misc/build/cppunit-1.8.0/include/cppunit/extensions/*.h %_DEST%/inc%_EXT%/cppunit/extensions/*.h
+..\%__SRC%\bin\cppunit_dll.dll %_DEST%\bin%_EXT%\cppunit_dll.dll
+..\%__SRC%\lib\icppunit_dll.lib %_DEST%\lib%_EXT%\icppunit_dll.lib
 
-../%__SRC%/lib/cppunit.lib %_DEST%/lib%_EXT%/cppunit.lib
-../%__SRC%/lib/*.a %_DEST%/lib%_EXT%/*.a
+..\%__SRC%\bin\cygcppunit-1-12-1.dll %_DEST%\bin%_EXT%\cygcppunit-1-12-1.dll
 
+..\%__SRC%\lib\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib
+symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit.dylib
+
+..\%__SRC%\lib\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit-1.12.so.1
+symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit.so
+
+..\%__SRC%\bin\DllPlugInTester %_DEST%\bin%_EXT%\DllPlugInTester
+..\%__SRC%\bin\DllPlugInTester.exe %_DEST%\bin%_EXT%\DllPlugInTester.exe
+..\%__SRC%\bin\DllPlugInTester_dll.exe %_DEST%\bin%_EXT%\DllPlugInTester_dll.exe
