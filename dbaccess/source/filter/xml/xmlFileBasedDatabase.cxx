@@ -102,9 +102,9 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                     rtl::OUString sFileName = aPathOptions.SubstituteVariable(sValue);
                     if ( sValue == sFileName )
                     {
-                        const sal_Int32 nLength = sFileName.getLength();
-                        if ( ( nLength > 0 ) && ( sFileName.getStr()[ nLength - 1 ] == '/' ) )
-                            sFileName = sFileName.copy( 0, nLength - 1 );
+                        const sal_Int32 nFileNameLength = sFileName.getLength();
+                        if ( ( nFileNameLength > 0 ) && ( sFileName.getStr()[ nFileNameLength - 1 ] == '/' ) )
+                            sFileName = sFileName.copy( 0, nFileNameLength - 1 );
 
                         sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
                     }
