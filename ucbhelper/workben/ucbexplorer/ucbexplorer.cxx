@@ -38,9 +38,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#endif
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -57,9 +55,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/configurationkeys.hxx>
@@ -89,8 +85,8 @@ class TestDataSink : public cppu::OWeakObject, public XActiveDataSink
     uno::Reference< XInputStream > m_xStream;
 
 public:
-//  TestDataSink() {}
-//  virtual ~TestDataSink();
+//    TestDataSink() {}
+//    virtual ~TestDataSink();
 
     // XInterface methods
     virtual Any SAL_CALL queryInterface( const Type & rType )
@@ -230,7 +226,7 @@ Any SAL_CALL TestDataSink::queryInterface( const Type & rType )
 {
     Any aRet = cppu::queryInterface(
                         rType,
-                           static_cast< XActiveDataSink * >( this ) );
+                            static_cast< XActiveDataSink * >( this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -457,7 +453,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             if ( aSourceURL.getLength() == 0 )
             {
                 DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                              "No document data URL!" );
+                               "No document data URL!" );
                 return FALSE;
             }
 
@@ -469,7 +465,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 if ( pBroker )
                 {
                     uno::Reference< XInteractionHandler > xInteractionHandler(
-                         pBroker->getServiceManager()->createInstance(
+                        pBroker->getServiceManager()->createInstance(
                                 OUString::createFromAscii(
                                     "com.sun.star.task.InteractionHandler" ) ),
                         UNO_QUERY );
@@ -478,7 +474,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                                     /* = new ProgressHandler( *pBroker ) */ ;
 
                     xEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
-                                                               xProgressHandler );
+                                                              xProgressHandler );
                 }
 
                 ::ucb::Content aSourceContent( aSourceURL, xEnv );
@@ -491,7 +487,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             catch ( ContentCreationException const & )
             {
                 DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                              "No content for document data!" );
+                               "No content for document data!" );
                 return FALSE;
             }
             catch ( CommandAbortedException const & )
@@ -516,7 +512,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
 
     // Create new content.
 
-       ULONG n = Application::ReleaseSolarMutex();
+        ULONG n = Application::ReleaseSolarMutex();
     BOOL bRet = sal_False;
 
     try
@@ -580,13 +576,13 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
         {
             case UcbExplorerListBoxEntry::FOLDER:
             {
-                   ULONG n = Application::ReleaseSolarMutex();
+                    ULONG n = Application::ReleaseSolarMutex();
 
                 try
                 {
                     Sequence< OUString > aPropertyNames( 0 );
-//                  OUString* pNames = aPropertyNames.getArray();
-//                  pNames[ 0 ] = OUString::createFromAscii( "Title" );
+//                    OUString* pNames = aPropertyNames.getArray();
+//                    pNames[ 0 ] = OUString::createFromAscii( "Title" );
 
                     uno::Reference< XResultSet > xResultSet
                         = pEntry->m_aContent.createCursor(
@@ -651,9 +647,9 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
             PopupMenu* pMenu = new PopupMenu( ResId( MENU_POPUP ) );
             PopupMenu* pNewMenu = 0;
 
-//          pMenu->SetSelectHdl( LINK( this,
-//                                     SfxCommonTemplateDialog_Impl,
-//                                     MenuSelectHdl ) );
+//            pMenu->SetSelectHdl( LINK( this,
+//                                       SfxCommonTemplateDialog_Impl,
+//                                       MenuSelectHdl ) );
 
             //////////////////////////////////////////////////////////////
             // Configure "New"
@@ -721,7 +717,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
             {
                 pMenu->EnableItem( MENU_DELETE,
                                    pEntry->m_aContent
-                                       .getCommands()->hasCommandByName(
+                                        .getCommands()->hasCommandByName(
                                         OUString::createFromAscii(
                                             "delete" ) ) );
             }
@@ -743,8 +739,8 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
             USHORT nSelected = pMenu->Execute( this, rPos );
             switch ( nSelected )
             {
-//              case MENU_NEW:
-//                  break;
+//                case MENU_NEW:
+//                    break;
 
                 case MENU_RENAME:
                 {
@@ -884,7 +880,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                     {
                         // New-menu entry selected.
 
-                           ::ucb::Content aNewContent;
+                            ::ucb::Content aNewContent;
                         if ( pEntry->createNewContent(
                                     aInfo.getConstArray()[ nSelected - 20001 ],
                                     aNewContent ) )
@@ -910,8 +906,8 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
 
 //=========================================================================
 UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
-                                              ::ucb::Content& rContent,
-                                                 SvLBoxEntry* pParent )
+                                            ::ucb::Content& rContent,
+                                                SvLBoxEntry* pParent )
 {
     try
     {
@@ -921,7 +917,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         if ( !aTitle.getLength() )
             aTitle = OUString::createFromAscii( "/" );
 
-           UcbExplorerListBoxEntry* pEntry = 0;
+            UcbExplorerListBoxEntry* pEntry = 0;
 
         if ( rContent.isFolder() )
         {
@@ -995,8 +991,8 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
 
 //=========================================================================
 UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
-                                                  const String& rURL,
-                                                     SvLBoxEntry* pParent )
+                                                const String& rURL,
+                                                    SvLBoxEntry* pParent )
 {
     try
     {
@@ -1006,7 +1002,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         if ( pBroker )
         {
             uno::Reference< XInteractionHandler > xInteractionHandler(
-                 pBroker->getServiceManager()->createInstance(
+                pBroker->getServiceManager()->createInstance(
                         OUString::createFromAscii(
                             "com.sun.star.task.InteractionHandler" ) ),
                 UNO_QUERY );
@@ -1015,7 +1011,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
                                 /* = new ProgressHandler( *pBroker ) */ ;
 
             xEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
-                                                     xProgressHandler );
+                                                      xProgressHandler );
         }
 
         ::ucb::Content aContent( rURL, xEnv );
@@ -1105,7 +1101,7 @@ void MyApp::Main()
 
     comphelper::setProcessServiceFactory( xFac );
 
-    unO::Reference< XComponent > xComponent(    xFac, UNO_QUERY );
+    unO::Reference< XComponent > xComponent( xFac, UNO_QUERY );
 
     //////////////////////////////////////////////////////////////////////
     // Create UCB.
