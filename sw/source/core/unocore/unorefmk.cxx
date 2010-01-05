@@ -33,7 +33,8 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <unoobj.hxx>
+
+#include <unomid.h>
 #include <unotextrange.hxx>
 #include <unorefmark.hxx>
 #include <unoparagraph.hxx>

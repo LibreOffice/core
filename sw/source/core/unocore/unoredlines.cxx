@@ -31,19 +31,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <tools/debug.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+
 #include <unoredlines.hxx>
 #include <unoredline.hxx>
-#include <unoobj.hxx>
-#include <tools/debug.hxx>
+#include <unomid.h>
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
 #include <doc.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

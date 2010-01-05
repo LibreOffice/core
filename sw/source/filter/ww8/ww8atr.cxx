@@ -128,9 +128,7 @@
 
 #include <writerfilter/doctok/sprmids.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#  include <fmtcntnt.hxx>
-#endif
+#include <fmtcntnt.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"

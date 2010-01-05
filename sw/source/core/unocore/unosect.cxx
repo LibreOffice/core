@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 
 #include <cmdid.h>
@@ -43,7 +44,6 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtclds.hxx>
-#include <unoobj.hxx>
 #include <unotextrange.hxx>
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
@@ -64,7 +64,7 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <fmtcntnt.hxx>
 #include <svx/frmdiritem.hxx>
 /* #109700# */
 #include <svx/lrspitem.hxx>

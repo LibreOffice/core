@@ -47,7 +47,6 @@
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <unomod.hxx>
-#include <unoobj.hxx>
 #include <unoframe.hxx>
 #include <unocrsr.hxx>
 #include <wrtsh.hxx>

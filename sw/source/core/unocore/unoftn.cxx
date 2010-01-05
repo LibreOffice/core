@@ -34,7 +34,8 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
-#include <unoobj.hxx>
+
+#include <unomid.h>
 #include <unofootnote.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>

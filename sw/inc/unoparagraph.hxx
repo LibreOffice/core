@@ -359,7 +359,7 @@ public:
 
 --------------------------------------------------*/
 class SwXParagraphEnumeration
-    : public SwSimpleEnumerationBaseClass
+    : public SwSimpleEnumeration_Base
     , public SwClient
 {
 

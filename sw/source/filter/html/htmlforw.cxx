@@ -63,7 +63,7 @@
 #include <svx/postitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/crsditem.hxx>
-#include <unoobj.hxx>
+
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <docary.hxx>

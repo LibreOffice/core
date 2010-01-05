@@ -31,15 +31,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
+#include <rtl/ustrbuf.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
 #include <redline.hxx>
 #include <section.hxx>
 #include <unoprnms.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -49,9 +53,6 @@
 #include <unoredline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
 
 
 using namespace ::com::sun::star;

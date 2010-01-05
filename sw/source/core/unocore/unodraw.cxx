@@ -37,7 +37,6 @@
 #include <unomid.h>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
-#include <unoobj.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
@@ -443,7 +442,8 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
 ****************************************************************************/
 namespace
 {
-    class SwXShapesEnumeration : public SwSimpleEnumerationBaseClass
+    class SwXShapesEnumeration
+        : public SwSimpleEnumeration_Base
     {
         private:
             typedef ::std::slist< ::com::sun::star::uno::Any > shapescontainer_t;

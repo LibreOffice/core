@@ -36,9 +36,9 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/itemprop.hxx>
+
 #include <unocrsrhelper.hxx>
 #include <unoport.hxx>
-#include <unoobj.hxx>
 #include <unoparaframeenum.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
@@ -51,6 +51,7 @@
 #include <doc.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtfld.hxx>
+#include <frmfmt.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>

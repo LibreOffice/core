@@ -55,8 +55,8 @@
 #include <poolfmt.hrc>
 #endif
 #include <pagedesc.hxx>
+#include <fmtcntnt.hxx>
 #include <unomap.hxx>
-#include <unoobj.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>

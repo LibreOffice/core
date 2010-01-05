@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -60,7 +61,6 @@
 #include <ndole.hxx>
 #include <frmfmt.hxx>
 #include <frame.hxx>
-#include <unoobj.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -100,6 +100,7 @@
 #include <unoframe.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclds.hxx>
+#include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>

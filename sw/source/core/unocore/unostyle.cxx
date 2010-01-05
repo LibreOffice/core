@@ -60,7 +60,6 @@
 #include <unoprnms.hxx>
 #include <shellio.hxx>
 #include <docstyle.hxx>
-#include <unoobj.hxx>
 #include <unotextbodyhf.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>

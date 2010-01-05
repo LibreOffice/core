@@ -50,13 +50,13 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/i18nmap.hxx>
 #include "unocrsr.hxx"
-#include "unoobj.hxx"
 #include "TextCursorHelper.hxx"
 #include "unoframe.hxx"
 #include "doc.hxx"
 #include "unocoll.hxx"
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include "xmltexti.hxx"

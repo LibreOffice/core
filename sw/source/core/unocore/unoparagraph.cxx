@@ -33,7 +33,6 @@
 
 #include <cmdid.h>
 #include <unomid.h>
-#include <unoobj.hxx>
 #include <unoparaframeenum.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>

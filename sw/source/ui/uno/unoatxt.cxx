@@ -49,7 +49,7 @@
 #include <gloslst.hxx>
 #include <unoatxt.hxx>
 #include <unomap.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <TextCursorHelper.hxx>

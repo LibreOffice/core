@@ -51,6 +51,7 @@
 #include <comphelper/uno3.hxx>
 #include <tools/string.hxx>
 
+#include <calbck.hxx>
 #include <TextCursorHelper.hxx>
 #include <unoevtlstnr.hxx>
 #include <unotext.hxx>

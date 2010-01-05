@@ -59,38 +59,12 @@ class GetCurTxtFmtColl;
  *
  * --------------------------------------------------*/
 
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
-::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
-
-/*-----------------04.03.98 11:54-------------------
-    Start/EndAction oder Start/EndAllAction
---------------------------------------------------*/
-class UnoActionContext
-{
-        SwDoc*      pDoc;
-    public:
-        UnoActionContext(SwDoc* pDoc);
-        ~UnoActionContext();
-
-        void InvalidateDocument() {pDoc = 0;}
-};
-/* -----------------07.07.98 12:03-------------------
- *  Actions kurzfristig unterbrechen
- * --------------------------------------------------*/
-class UnoActionRemoveContext
-{
-        SwDoc*      pDoc;
-    public:
-        UnoActionRemoveContext(SwDoc* pDoc);
-        ~UnoActionRemoveContext();
-};
 
 /******************************************************************************
  *
  ******************************************************************************/
 
-void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 
 /*-----------------20.03.98 07:47-------------------

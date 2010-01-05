@@ -41,7 +41,6 @@
 #include <ndtxt.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <unoobj.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unocoll.hxx>

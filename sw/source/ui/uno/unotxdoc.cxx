@@ -49,7 +49,7 @@
 #include <svtools/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svtools/numuno.hxx>
-#include <unoobj.hxx>
+#include <fldbas.hxx>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>

@@ -61,7 +61,6 @@
 #include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sfx2/linkmgr.hxx>  // for cTokenSeperator
-#include "unoobj.hxx"
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"

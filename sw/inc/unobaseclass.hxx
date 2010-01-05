@@ -30,18 +30,22 @@
 #ifndef _UNOBASECLASS_HXX
 #define _UNOBASECLASS_HXX
 
-#include <calbck.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+
 #include <cppuhelper/implbase2.hxx>
 
-typedef
-cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XEnumeration,
-    ::com::sun::star::lang::XServiceInfo
+
+class SfxPoolItem;
+class SwClient;
+class SwDoc;
+
+
+typedef ::cppu::WeakImplHelper2
+<   ::com::sun::star::lang::XServiceInfo
+,   ::com::sun::star::container::XEnumeration
 >
-SwSimpleEnumerationBaseClass;
+SwSimpleEnumeration_Base;
 
 
 /* -----------------29.04.98 07:35-------------------
@@ -63,6 +67,40 @@ enum CursorType
     CURSOR_SELECTION_IN_TABLE,
     CURSOR_META,         // meta/meta-field
 };
+
+/*-----------------04.03.98 11:54-------------------
+    Start/EndAction or Start/EndAllAction
+  -------------------------------------------------- */
+class UnoActionContext
+{
+    private:
+        SwDoc * m_pDoc;
+
+    public:
+        UnoActionContext(SwDoc *const pDoc);
+        ~UnoActionContext();
+
+        void InvalidateDocument() { m_pDoc = 0; }
+};
+
+/* -----------------07.07.98 12:03-------------------
+    interrupt Actions for a little while
+   -------------------------------------------------- */
+class UnoActionRemoveContext
+{
+    private:
+        SwDoc *const m_pDoc;
+
+    public:
+        UnoActionRemoveContext(SwDoc *const pDoc);
+        ~UnoActionRemoveContext();
+};
+
+
+::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
+
+/// helper function for implementing SwClient::Modify
+void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 #endif
 

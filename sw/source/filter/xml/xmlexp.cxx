@@ -56,7 +56,6 @@
 #include <docsh.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
-#include <unoobj.hxx>
 #include <unotext.hxx>
 #include <xmltexte.hxx>
 #include <xmlexp.hxx>

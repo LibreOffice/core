@@ -34,12 +34,13 @@
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 
-#include <cmdid.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
-#include <unoobj.hxx>
+
+#include <cmdid.h>
 #include <unotextbodyhf.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
@@ -68,9 +69,10 @@
 #include <section.hxx>
 #include <IMark.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
-#include <com/sun/star/text/TableColumnSeparator.hpp>
+
 #include <memory>
 #include <stdlib.h>
 

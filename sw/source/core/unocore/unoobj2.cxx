@@ -76,7 +76,6 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
-#include <unoobj.hxx>
 #include <unoparaframeenum.hxx>
 #include <unofootnote.hxx>
 #include <unotextbodyhf.hxx>
@@ -100,6 +99,7 @@
 #include <flypos.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
+#include <fmtcntnt.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
@@ -224,6 +224,60 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             }
         }
         ::std::sort(rFrames.begin(), rFrames.end(), FrameDependSortListLess());
+    }
+}
+
+/****************************************************************************
+    ActionContext
+****************************************************************************/
+UnoActionContext::UnoActionContext(SwDoc *const pDoc)
+    : m_pDoc(pDoc)
+{
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    if (pRootFrm)
+    {
+        pRootFrm->StartAllAction();
+    }
+}
+
+/*-----------------04.03.98 11:56-------------------
+
+--------------------------------------------------*/
+UnoActionContext::~UnoActionContext()
+{
+    // Doc may already have been removed here
+    if (m_pDoc)
+    {
+        SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+        if (pRootFrm)
+        {
+            pRootFrm->EndAllAction();
+        }
+    }
+}
+
+/****************************************************************************
+    ActionRemoveContext
+****************************************************************************/
+UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
+    : m_pDoc(pDoc)
+{
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    if (pRootFrm)
+    {
+        pRootFrm->UnoRemoveAllActions();
+    }
+}
+
+/* -----------------07.07.98 12:05-------------------
+ *
+ * --------------------------------------------------*/
+UnoActionRemoveContext::~UnoActionRemoveContext()
+{
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    if (pRootFrm)
+    {
+        pRootFrm->UnoRestoreAllActions();
     }
 }
 
@@ -751,6 +805,7 @@ SwDoc* SwXTextCursor::GetDoc()
 {
     return   GetCrsr() ? GetCrsr()->GetDoc() : 0;
 }
+
 
 /*-- 09.12.98 14:19:03---------------------------------------------------
 

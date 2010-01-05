@@ -874,7 +874,8 @@ namespace
     }
 
     template<FlyCntType T>
-    class SwXFrameEnumeration : public SwSimpleEnumerationBaseClass
+    class SwXFrameEnumeration
+        : public SwSimpleEnumeration_Base
     {
         private:
             typedef ::std::slist< Any > frmcontainer_t;

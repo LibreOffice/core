@@ -46,7 +46,7 @@
 #include <docary.hxx>
 #include <tox.hxx>
 #include <unoclbck.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unoparaframeenum.hxx>
 #include <unotextcursor.hxx>
 #include <unorefmark.hxx>
@@ -56,6 +56,7 @@
 #include <unometa.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
+#include <frmfmt.hxx>
 #include <unoidx.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>

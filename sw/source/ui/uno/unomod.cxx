@@ -35,7 +35,7 @@
 #include <swtypes.hxx>
 #include <tools/debug.hxx>
 #include <unomod.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
 #include <prtopt.hxx>

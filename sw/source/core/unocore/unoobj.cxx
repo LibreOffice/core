@@ -82,7 +82,6 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
-#include <unoobj.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
@@ -186,50 +185,6 @@ SwUnoInternalPaM&   SwUnoInternalPaM::operator=(const SwPaM& rPaM)
             new SwPaM(*pTmp->GetPoint(), this);
     }
     return *this;
-}
-/****************************************************************************
-    ActionContext
-****************************************************************************/
-UnoActionContext::UnoActionContext(SwDoc* pDc) :
-    pDoc(pDc)
-{
-    SwRootFrm* pRootFrm = pDoc->GetRootFrm();
-    if(pRootFrm)
-        pRootFrm->StartAllAction();
-}
-/*-----------------04.03.98 11:56-------------------
-
---------------------------------------------------*/
-UnoActionContext::~UnoActionContext()
-{
-    //das Doc kann hier schon entfernt worden sein
-    if(pDoc)
-    {
-        SwRootFrm* pRootFrm = pDoc->GetRootFrm();
-        if(pRootFrm)
-            pRootFrm->EndAllAction();
-    }
-}
-
-/****************************************************************************
-    ActionRemoveContext
-****************************************************************************/
-UnoActionRemoveContext::UnoActionRemoveContext(SwDoc* pDc) :
-    pDoc(pDc)
-{
-    SwRootFrm* pRootFrm = pDoc->GetRootFrm();
-    if(pRootFrm)
-        pRootFrm->UnoRemoveAllActions();
-}
-/* -----------------07.07.98 12:05-------------------
- *
- * --------------------------------------------------*/
-UnoActionRemoveContext::~UnoActionRemoveContext()
-{
-    SwRootFrm* pRootFrm = pDoc->GetRootFrm();
-    if(pRootFrm)
-        pRootFrm->UnoRestoreAllActions();
-
 }
 
 /*-----------------09.03.98 08:29-------------------
