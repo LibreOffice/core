@@ -1,14 +1,13 @@
-#***********************************************************************
-#
+#*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,33 +25,72 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=.
+PRJ = .
+PRJNAME = smoketestoo_native
+TARGET = smoketest
 
-PRJNAME=test10
-TARGET=t1
+ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE : settings.mk
+.INCLUDE: settings.mk
 
-STAR_REGISTRY=
-.EXPORT : STAR_REGISTRY
-.EXPORT : PERL
-.EXPORT : DMAKE_WORK_DIR
+SLOFILES = $(SHL1OBJS)
 
-.INCLUDE :      target.mk   
+SHL1TARGET = smoketest
+SHL1OBJS = $(SLO)/smoketest.obj
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+DEF1NAME = $(SHL1TARGET)
 
-ALLTAR : make_test
+.INCLUDE: target.mk
 
-
-make_test:
-.IF $(NOREMOVE)
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
+.IF "$(OS)" == "MACOSX"
+my_path = OpenOffice.org.app/Contents/MacOS/soffice
 .ELSE
-    @$(PERL) smoketest.pl $(LAST_MINOR) $(BUILD)
-.ENDIF
+my_path = openoffice.org3/program/soffice
+.END
 
-noremove:
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
+.IF "$(OOO_LIBRARY_PATH_VAR)" != ""
+.IF "$(USE_SHELL)" == "bash"
+my_arg_env = \
+    -env:arg-env=$(OOO_LIBRARY_PATH_VAR)$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}
+.ELSE
+# The tcsh case is somewhat imprecise in that it treats a null environment
+# variable the same as an unset one:
+.IF "$($(OOO_LIBRARY_PATH_VAR))" == ""
+my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)
+.ELSE
+my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)=$($(OOO_LIBRARY_PATH_VAR))
+.END
+.END
+.END
 
+ALLTAR: smoketest
+
+smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
+        $(MISC)/services.rdb $(BIN)/smoketestdoc.sxw
+    $(RM) -r $(MISC)/user
+    $(MKDIR) $(MISC)/user
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
+        -env:UNO_SERVICES=file://$(PWD)/$(MISC)/services.rdb \
+        -env:UNO_TYPES=file://$(SOLARBINDIR)/types.rdb \
+        -env:arg-path=$(MISC)/installation/opt/$(my_path) \
+        -env:arg-user=$(MISC)/user -env:arg-doc=$(BIN)/smoketestdoc.sxw \
+        $(my_arg_env)
+
+$(MISC)/installation.flag:
+    $(RM) -r $(MISC)/installation
+    $(MKDIR) $(MISC)/installation
+    cd $(MISC)/installation && $(GNUTAR) xfz \
+        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
+    $(MV) $(MISC)/installation/OOo_*_install $(MISC)/installation/opt
+    $(TOUCH) $@
+
+$(MISC)/services.rdb:
+    $(RM) $@
+    $(REGCOMP) -register -r $@ -wop -c bridgefac.uno -c connector.uno \
+        -c remotebridge.uno -c uuresolver.uno
+
+$(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
+    $(COPY) $< $@
