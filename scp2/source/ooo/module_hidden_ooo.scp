@@ -1126,6 +1126,17 @@ Module gid_Module_Root_Extension_Dictionary_Nl
 	Styles = (HIDDEN_ROOT);
 End
 
+Module gid_Module_Root_Extension_Dictionary_No
+    Name = "gid_Module_Root_Extension_Dictionary_No";
+    Description = "gid_Module_Root_Extension_Dictionary_No";
+    Files = (gid_File_Extension_Dictionary_No);
+    InstallOrder = "2000";
+    Spellcheckerlanguage = "no";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root;
+    Styles = (HIDDEN_ROOT);
+End
+
 Module gid_Module_Root_Extension_Dictionary_Pl
 	Name = "gid_Module_Root_Extension_Dictionary_Pl";
 	Description = "gid_Module_Root_Extension_Dictionary_Pl";
