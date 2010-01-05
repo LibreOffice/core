@@ -170,7 +170,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_UNKNOWN = 0,
             /// modified against the original file
             E_MODIFIED = 1,
-            /** We differe between the states: "modified in general" and "modified after last AutoSave".
+            /** We differ between the states: "modified in general" and "modified after last AutoSave".
                 The first state will be interesting in case the crashed document will be restored. Then we have
                 set the right modify state after loading the document. But the second state let us optimize the
                 AutoSave itself. see member ListenForModify too ...
@@ -308,10 +308,13 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                 ::rtl::OUString NewTempURL;
 
                 ::rtl::OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
+                ::rtl::OUString FactoryService; // the service to create a document of the module
                 ::rtl::OUString RealFilter;     // real filter, which was used at loading time
                 ::rtl::OUString DefaultFilter;  // supports saving of the default format without loosing data
                 ::rtl::OUString Extension;      // file extension of the default filter
                 ::rtl::OUString Title;          // can be used as "DisplayName" on every recovery UI!
+                ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                ViewNames;      // names of the view which were active at emergency-save time
 
                 sal_Int32 ID;
         };
@@ -864,7 +867,17 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentInfo& rInfo);
+        void implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo& rInfo);
+
+        /** retrieves the names of all active views of the given document
+            @param rInfo
+                the document info, whose <code>Document</code> member must not be <NULL/>.
+        */
+        void implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& rInfo );
+
+        /** updates the configuration so that for all documents, their current view/names are stored
+        */
+        void implts_persistAllActiveViewNames();
 
         //---------------------------------------
         // TODO document me

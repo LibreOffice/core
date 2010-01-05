@@ -31,59 +31,64 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Recovery" oor:package="org.openoffice.Office" xml:lang="en-US">
     <info>
-        <desc>TODO</desc>
+        <desc> </desc>
     </info>
 	<templates>
 		<group oor:name="RecoveryEntry">
             <info>
-                <desc>TODO</desc>
+                <desc> </desc>
             </info>
 			<prop oor:name="TempURL" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
     		</prop>
 			<prop oor:name="OriginalURL" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
 			<prop oor:name="TemplateURL" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
 			<prop oor:name="Module" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
 			<prop oor:name="DocumentState" oor:type="xs:int">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
 			</prop>
-		</group>
+            <prop oor:name="ViewNames" oor:type="oor:string-list">
+                <info>
+                    <desc> </desc>
+                </info>
+            </prop>
+        </group>
     </templates>
 	<component>
 		<set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
             <info>
-                <desc>TODO</desc>
+                <desc> </desc>
             </info>
         </set>
         <group oor:name="RecoveryInfo">
             <info>
-                <desc>TODO</desc>
+                <desc> </desc>
             </info>
             <prop oor:name="Enabled" oor:type="xs:boolean">
                 <info>
@@ -93,13 +98,13 @@
             </prop>
             <prop oor:name="Crashed" oor:type="xs:boolean">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
                 <value>false</value>
             </prop>
             <prop oor:name="SessionData" oor:type="xs:boolean">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
                 <value>false</value>
             </prop>
@@ -117,17 +122,17 @@
         </group>
         <group oor:name="AutoSave">
             <info>
-                <desc>TODO</desc>
+                <desc> </desc>
             </info>
             <prop oor:name="Enabled" oor:type="xs:boolean">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
                 <value>true</value>
             </prop>
             <prop oor:name="TimeIntervall" oor:type="xs:int">
                 <info>
-                    <desc>TODO</desc>
+                    <desc> </desc>
                 </info>
                 <value>15</value>
             </prop>

@@ -35,7 +35,6 @@
 
 //_______________________________________________
 // own includes
-#include <loadenv/loaddispatchlistener.hxx>
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
@@ -51,6 +50,8 @@
 // interface includes
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -71,6 +72,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -79,10 +81,12 @@
 // other includes
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -101,6 +105,23 @@
 #ifndef css
 namespace css = ::com::sun::star;
 #endif
+
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::container::XEnumeration;
+using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::frame::XModel2;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::frame::XController2;
+using ::com::sun::star::frame::XLoadable;
+using ::com::sun::star::frame::XStorable;
+using ::com::sun::star::lang::XComponent;
 
 namespace fpf = ::framework::pattern::frame;
 
@@ -135,6 +156,7 @@ static const ::rtl::OUString CFG_ENTRY_PROP_DOCUMENTSTATE     = ::rtl::OUString:
 static const ::rtl::OUString CFG_ENTRY_PROP_FILTER            = ::rtl::OUString::createFromAscii("Filter"       );
 static const ::rtl::OUString CFG_ENTRY_PROP_TITLE             = ::rtl::OUString::createFromAscii("Title"        );
 static const ::rtl::OUString CFG_ENTRY_PROP_ID                = ::rtl::OUString::createFromAscii("ID"           );
+static const ::rtl::OUString CFG_ENTRY_PROP_VIEWNAMES         = ::rtl::OUString::createFromAscii("ViewNames"    );
 
 static const ::rtl::OUString FILTER_PROP_TYPE                = ::rtl::OUString::createFromAscii("Type"            );
 static const ::rtl::OUString FILTER_PROP_NAME                = ::rtl::OUString::createFromAscii("Name"            );
@@ -144,6 +166,7 @@ static const ::rtl::OUString DOCINFO_PROP_TEMPLATE           = ::rtl::OUString::
 // setup.xcu
 static const ::rtl::OUString CFG_ENTRY_PROP_EMPTYDOCUMENTURL = ::rtl::OUString::createFromAscii("ooSetupFactoryEmptyDocumentURL");
 static const ::rtl::OUString CFG_ENTRY_PROP_DEFAULTFILTER    = ::rtl::OUString::createFromAscii("ooSetupFactoryDefaultFilter"   );
+static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYSERVICE   = ::rtl::OUString::createFromAscii("ooSetupFactoryDocumentService"   );
 
 static const ::rtl::OUString EVENT_ON_NEW                    = ::rtl::OUString::createFromAscii("OnNew"          );
 static const ::rtl::OUString EVENT_ON_LOAD                   = ::rtl::OUString::createFromAscii("OnLoad"         );
@@ -784,7 +807,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
-    // REINTRANT !? -> --------------------------------
+    // REENTRANT !? -> --------------------------------
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     // THREAD SAFE -> ----------------------------------
@@ -1089,7 +1112,7 @@ void AutoRecovery::implts_readConfig()
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xCommonRegistry(implts_openConfig(), css::uno::UNO_QUERY);
 
-    // REINTRANT -> --------------------------------
+    // REENTRANT -> --------------------------------
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
 
     // THREADSAFE -> -------------------------------
@@ -1101,7 +1124,7 @@ void AutoRecovery::implts_readConfig()
     // <- THREADSAFE -------------------------------
 
     aCacheLock.unlock();
-    // <- REINTRANT --------------------------------
+    // <- REENTRANT --------------------------------
 
     css::uno::Any aValue;
 
@@ -1116,7 +1139,7 @@ void AutoRecovery::implts_readConfig()
               sal_Int32                             c      = lItems.getLength();
               sal_Int32                             i      = 0;
 
-        // REINTRANT -> --------------------------
+        // REENTRANT -> --------------------------
         aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);
 
         for (i=0; i<c; ++i)
@@ -1136,7 +1159,8 @@ void AutoRecovery::implts_readConfig()
             xItem->getPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE) >>= aInfo.DocumentState;
             xItem->getPropertyValue(CFG_ENTRY_PROP_MODULE       ) >>= aInfo.AppModule    ;
             xItem->getPropertyValue(CFG_ENTRY_PROP_TITLE        ) >>= aInfo.Title        ;
-            implts_specifyAppModuleAndFactoryURL(aInfo);
+            xItem->getPropertyValue(CFG_ENTRY_PROP_VIEWNAMES    ) >>= aInfo.ViewNames    ;
+            implts_specifyAppModuleAndFactory(aInfo);
             implts_specifyDefaultFilterAndExtension(aInfo);
 
             if (pItems[i].indexOf(RECOVERY_ITEM_BASE_IDENTIFIER)==0)
@@ -1166,7 +1190,7 @@ void AutoRecovery::implts_readConfig()
         }
 
         aCacheLock.unlock();
-        // <- REINTRANT --------------------------
+        // <- REENTRANT --------------------------
     }
 
     implts_actualizeTimer();
@@ -1234,17 +1258,12 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentInfo& rInfo)
+void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo& rInfo)
 {
-    if (
-        (!rInfo.AppModule.getLength()) &&
-        (!rInfo.Document.is()        )
-       )
-    {
-        throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Cant find out the application module nor its factory URL, if no application module (or a suitable) document is known!"),
-                static_cast< css::frame::XDispatch* >(this));
-    }
+    ENSURE_OR_THROW2(
+        rInfo.AppModule.getLength() || rInfo.Document.is(),
+        "Cant find out the application module nor its factory URL, if no application module (or a suitable) document is known!",
+        *this );
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -1260,6 +1279,70 @@ void AutoRecovery::implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentI
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xModuleConfig->getByName(rInfo.AppModule));
     lModuleDescription[CFG_ENTRY_PROP_EMPTYDOCUMENTURL] >>= rInfo.FactoryURL;
+    lModuleDescription[CFG_ENTRY_PROP_FACTORYSERVICE] >>= rInfo.FactoryService;
+}
+
+//-----------------------------------------------
+void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i_rInfo )
+{
+    ENSURE_OR_THROW2( i_rInfo.Document.is(), "need at document, at the very least", *this );
+
+    i_rInfo.ViewNames.realloc(0);
+
+    // obtain list of controllers of this document
+    ::std::vector< ::rtl::OUString > aViewNames;
+    const Reference< XModel2 > xModel( i_rInfo.Document, UNO_QUERY );
+    if ( xModel.is() )
+    {
+        const Reference< XEnumeration > xEnumControllers( xModel->getControllers() );
+        while ( xEnumControllers->hasMoreElements() )
+        {
+            const Reference< XController2 > xController( xEnumControllers->nextElement(), UNO_QUERY );
+            ::rtl::OUString sViewName;
+            if ( xController.is() )
+                sViewName = xController->getViewControllerName();
+            OSL_ENSURE( sViewName.getLength(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
+
+            if ( sViewName.getLength() )
+                aViewNames.push_back( sViewName );
+        }
+    }
+    else
+    {
+        const Reference< XController2 > xController( xModel->getCurrentController(), UNO_QUERY );
+        ::rtl::OUString sViewName;
+        if ( xController.is() )
+            sViewName = xController->getViewControllerName();
+        OSL_ENSURE( sViewName.getLength(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
+
+        if ( sViewName.getLength() )
+            aViewNames.push_back( sViewName );
+    }
+
+    i_rInfo.ViewNames.realloc( aViewNames.size() );
+    ::std::copy( aViewNames.begin(), aViewNames.end(), i_rInfo.ViewNames.getArray() );
+}
+
+//-----------------------------------------------
+void AutoRecovery::implts_persistAllActiveViewNames()
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    // This list will be filled with every document
+    // which should be saved as last one. E.g. if it was used
+    // already for an UI save operation => crashed ... and
+    // now we try to save it again ... which can fail again ( of course .-) ).
+    ::std::vector< AutoRecovery::TDocumentList::iterator > lDangerousDocs;
+
+    AutoRecovery::TDocumentList::iterator pIt;
+    for (  pIt  = m_lDocCache.begin();
+           pIt != m_lDocCache.end()  ;
+         ++pIt                       )
+    {
+        implts_collectActiveViewNames( *pIt );
+        implts_flushConfigItem( *pIt );
+    }
 }
 
 //-----------------------------------------------
@@ -1312,6 +1395,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
             xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE       , css::uno::makeAny(rInfo.AppModule    ));
             xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE        , css::uno::makeAny(rInfo.Title        ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES    , css::uno::makeAny(rInfo.ViewNames    ));
 
             if (bNew)
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
@@ -1707,7 +1791,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // <- SAFE ----------------------------------
 
     // classify the used application module, which is used by this document.
-    implts_specifyAppModuleAndFactoryURL(aNew);
+    implts_specifyAppModuleAndFactory(aNew);
 
     // Hack! Check for "illegal office documents" ... as e.g. the Basic IDE
     // Its not realy a full featured office document. It doesnt provide an URL, any filter, a factory URL etcpp.
@@ -2162,7 +2246,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
             continue;
 
         // already auto saved during this session :-)
-        // This state must be reseted for all documents
+        // This state must be reset for all documents
         // if timer is started with normnal AutoSaveTimerIntervall!
         if ((aInfo.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
             continue;
@@ -2315,7 +2399,8 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
-    css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
+    Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY);
+    ENSURE_OR_THROW( xDocRecover.is(), "invalid document" );
 
     // safe the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occures inside next line!
@@ -2328,7 +2413,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     {
         try
         {
-            xStore->storeToURL(rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList());
+            xDocRecover->doEmergencySave( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
             #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();
@@ -2603,60 +2688,110 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
-    css::util::URL aURL;
-    aURL.Complete = sURL;
-    xParser->parseStrict(aURL);
+    css::uno::Reference< css::frame::XFrame > xDesktop( xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW );
 
-    LoadDispatchListener*                                      pLoadListener = new LoadDispatchListener();
-    css::uno::Reference< css::frame::XDispatchResultListener > xLoadListener (static_cast< css::frame::XDispatchResultListener* >(pLoadListener), css::uno::UNO_QUERY_THROW);
-
-    css::uno::Reference< css::frame::XFrame >             xDesktop   (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::frame::XFrame >             xNewTarget = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
-    css::uno::Reference< css::frame::XDispatchProvider >  xProvider  (xNewTarget, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::frame::XNotifyingDispatch > xDispatcher(
-        xProvider->queryDispatch(aURL, SPECIALTARGET_SELF, 0),
-        css::uno::UNO_QUERY_THROW);
-
-    // load the document and listen for the state of this operation.
-    pLoadListener->setURL(aURL.Complete);
-
-    // make sure the right progress is used always.
-    impl_establishProgress(rInfo, lDescriptor, xNewTarget);
-
+    ::std::vector< Reference< XComponent > > aCleanup;
     try
     {
-        xDispatcher->dispatchWithNotification(
-            aURL,
-            lDescriptor.getAsConstPropertyValueList(),
-            xLoadListener);
+        // create a new document of the desired type
+        Reference< XModel2 > xModel( xSMGR->createInstance( rInfo.FactoryService ), UNO_QUERY_THROW );
+        aCleanup.push_back( xModel.get() );
 
-        pLoadListener->wait(0); // wait for ever!
+        // put the filter name into the descriptor - we're not going to involve any type detection, so
+        // the document might be lost without the FilterName property
+        lDescriptor[ ::comphelper::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.RealFilter;
 
-        css::frame::DispatchResultEvent aResult = pLoadListener->getResult();
-        if (aResult.State != css::frame::DispatchResultState::SUCCESS)
+        if ( sURL == rInfo.FactoryURL )
         {
-            ::rtl::OUStringBuffer sMsg(256);
-            sMsg.appendAscii("Recovery of \"");
-            sMsg.append     (aURL.Complete   );
-            sMsg.appendAscii("\" failed."    );
-            throw css::uno::Exception(sMsg.makeStringAndClear(), static_cast< css::frame::XDispatch* >(this));
+            // if the document was a new, unmodified document, then there's nothing to recover, just to init
+            ENSURE_OR_THROW( ( rInfo.DocumentState & AutoRecovery::E_MODIFIED ) == 0,
+                "unexpected document state" );
+            Reference< XLoadable > xModelLoad( xModel, UNO_QUERY_THROW );
+            xModelLoad->initNew();
+        }
+        else
+        {
+            // let it recover itself
+            Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
+            xDocRecover->recoverDocument(
+                sURL,
+                lDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString() ),
+                lDescriptor.getAsConstPropertyValueList()
+            );
         }
 
-        rInfo.Document = fpf::extractFrameModel(xNewTarget);
+        xModel->attachResource( sURL, lDescriptor.getAsConstPropertyValueList() );
+            // TODO: remove load-process specific arguments from the descriptor, e.g. the status indicator
+
+        // re-create all the views
+        ::std::vector< ::rtl::OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
+        if ( rInfo.ViewNames.getLength() )
+            ::std::copy( rInfo.ViewNames.getConstArray(), rInfo.ViewNames.getConstArray() + rInfo.ViewNames.getLength(), aViewsToRestore.begin() );
+        // if we don't have views for whatever reason, then create a default-view, at least
+        if ( aViewsToRestore.empty() )
+            aViewsToRestore.push_back( ::rtl::OUString() );
+
+        for (   ::std::vector< ::rtl::OUString >::const_iterator viewName = aViewsToRestore.begin();
+                viewName != aViewsToRestore.end();
+                ++viewName
+            )
+        {
+            // create a frame
+            Reference< XFrame > xTargetFrame = xDesktop->findFrame( SPECIALTARGET_BLANK, 0 );
+            aCleanup.push_back( xTargetFrame.get() );
+
+            // create a view to the document
+            Reference< XController2 > xController;
+            if ( viewName->getLength() )
+            {
+                xController.set( xModel->createViewController( *viewName, Sequence< PropertyValue >(), xTargetFrame ), UNO_SET_THROW );
+            }
+            else
+            {
+                xController.set( xModel->createDefaultViewController( xTargetFrame ), UNO_SET_THROW );
+            }
+
+            // introduce model/view/controller to each other
+            xController->attachModel( xModel.get() );
+            xModel->connectController( xController.get() );
+            xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xController->attachFrame( xTargetFrame );
+            xModel->setCurrentController( xController.get() );
+        }
+
+        rInfo.Document = xModel.get();
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
     {
-        css::uno::Reference< css::util::XCloseable > xClose(xNewTarget, css::uno::UNO_QUERY);
-        xClose->close(sal_True);
-        xNewTarget.clear();
-        throw;
-    }
+        Any aCaughtException( ::cppu::getCaughtException() );
 
-    // of course we must forget all references to this temp(!) progress
-    impl_forgetProgress(rInfo, lDescriptor, xNewTarget);
+        // clean up
+        for (   ::std::vector< Reference< XComponent > >::const_iterator component = aCleanup.begin();
+                component != aCleanup.end();
+                ++component
+            )
+        {
+            css::uno::Reference< css::util::XCloseable > xClose( *component, css::uno::UNO_QUERY );
+            if ( xClose.is() )
+                xClose->close( sal_True );
+            else
+                (*component)->dispose();
+        }
+
+        // re-throw
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("Recovery of \"");
+        sMsg.append     (sURL            );
+        sMsg.appendAscii("\" failed."    );
+
+        throw css::lang::WrappedTargetException(
+            sMsg.makeStringAndClear(),
+            static_cast< css::frame::XDispatch* >(this),
+            aCaughtException
+        );
+    }
 }
 
 //-----------------------------------------------
@@ -2765,7 +2900,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         sFeature.append(CMD_DO_AUTO_SAVE);
     #ifdef ENABLE_WARNINGS
-    else
+    else if ( eJob != AutoRecovery::E_NO_JOB )
         LOG_WARNING("AutoRecovery::implst_getJobDescription()", "Invalid job identifier detected.")
     #endif
 
@@ -2821,35 +2956,18 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     if (sEventType.equals(OPERATION_UPDATE) && pInfo)
     {
         // pack rInfo for transport via UNO
-        css::uno::Sequence< css::beans::NamedValue > lInfo(8);
-        lInfo[0].Name    = CFG_ENTRY_PROP_ID;
-        lInfo[0].Value <<= pInfo->ID;
+        ::comphelper::NamedValueCollection aInfo;
+        aInfo.put( CFG_ENTRY_PROP_ID, pInfo->ID );
+        aInfo.put( CFG_ENTRY_PROP_ORIGINALURL,      pInfo->OrgURL           );
+        aInfo.put( CFG_ENTRY_PROP_FACTORYURL,       pInfo->FactoryURL       );
+        aInfo.put( CFG_ENTRY_PROP_TEMPLATEURL,      pInfo->TemplateURL      );
+        aInfo.put( CFG_ENTRY_PROP_TEMPURL,          pInfo->OldTempURL.getLength() ? pInfo->OldTempURL : pInfo->NewTempURL );
+        aInfo.put( CFG_ENTRY_PROP_MODULE,           pInfo->AppModule        );
+        aInfo.put( CFG_ENTRY_PROP_TITLE,            pInfo->Title            );
+        aInfo.put( CFG_ENTRY_PROP_VIEWNAMES,        pInfo->ViewNames        );
+        aInfo.put( CFG_ENTRY_PROP_DOCUMENTSTATE,    pInfo->DocumentState    );
 
-        lInfo[1].Name    = CFG_ENTRY_PROP_ORIGINALURL;
-        lInfo[1].Value <<= pInfo->OrgURL;
-
-        lInfo[2].Name    = CFG_ENTRY_PROP_FACTORYURL;
-        lInfo[2].Value <<= pInfo->FactoryURL;
-
-        lInfo[3].Name    = CFG_ENTRY_PROP_TEMPLATEURL;
-        lInfo[3].Value <<= pInfo->TemplateURL;
-
-        lInfo[4].Name    = CFG_ENTRY_PROP_TEMPURL;
-        if (pInfo->OldTempURL.getLength())
-            lInfo[4].Value <<= pInfo->OldTempURL;
-        else
-            lInfo[4].Value <<= pInfo->NewTempURL;
-
-        lInfo[5].Name    = CFG_ENTRY_PROP_MODULE;
-        lInfo[5].Value <<= pInfo->AppModule;
-
-        lInfo[6].Name    = CFG_ENTRY_PROP_TITLE;
-        lInfo[6].Value <<= pInfo->Title;
-
-        lInfo[7].Name    = CFG_ENTRY_PROP_DOCUMENTSTATE;
-        lInfo[7].Value <<= pInfo->DocumentState;
-
-        aEvent.State <<= lInfo;
+        aEvent.State <<= aInfo.getPropertyValues();
     }
 
     return aEvent;
@@ -2906,6 +3024,9 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
         CFG_ENTRY_CRASHED,
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
+
+    // for all docs, store their current view/names in the configurtion
+    implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
     // during normal AutoSave more then once. Because
@@ -2981,6 +3102,9 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
+
+    // for all docs, store their current view/names in the configurtion
+    implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
     // during normal AutoSave more then once. Because
