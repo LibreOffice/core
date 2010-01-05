@@ -116,6 +116,90 @@ template <typename T, typename PropertiesPointer>
  */
 class TableManager
 {
+    struct TableManagerState
+    {
+        /**
+         properties at the current point in document
+         */
+        PropertiesPointer mpProps;
+
+        /**
+         properties of the current cell
+         */
+        PropertiesPointer mpCellProps;
+
+        /**
+         properties of the current row
+         */
+        PropertiesPointer mpRowProps;
+
+        /**
+         properties of the current table
+         */
+        PropertiesPointer mpTableProps;
+
+    };
+
+    /**
+     handle for the current position in document
+     */
+    T mCurHandle;
+
+    ::std::stack<TableManagerState> mStateStack;
+    TableManagerState mState;
+
+protected:
+    PropertiesPointer getProps()
+    {
+        return mState.mpProps;
+    }
+
+    void setProps(PropertiesPointer pProps)
+    {
+        mState.mpProps = pProps;
+    }
+
+    PropertiesPointer getCellProps()
+    {
+        return mState.mpCellProps;
+    }
+
+    void setCellProps(PropertiesPointer pProps)
+    {
+        mState.mpCellProps = pProps;
+    }
+
+    PropertiesPointer getRowProps()
+    {
+        return mState.mpRowProps;
+    }
+
+    void setRowProps(PropertiesPointer pProps)
+    {
+        mState.mpRowProps = pProps;
+    }
+
+    PropertiesPointer getTableProps()
+    {
+        return mState.mpTableProps;
+    }
+
+    void setTableProps(PropertiesPointer pProps)
+    {
+        mState.mpTableProps = pProps;
+    }
+
+    T getHandle()
+    {
+        return mCurHandle;
+    }
+
+    void setHandle(const T & rHandle)
+    {
+        mCurHandle = rHandle;
+    }
+
+private:
     typedef boost::shared_ptr<T> T_p;
 
     /**
@@ -142,31 +226,6 @@ class TableManager
         depth of the previous cell
     */
     sal_uInt32 mnTableDepth;
-
-    /**
-       properties at the current point in document
-    */
-    PropertiesPointer mpProps;
-
-    /**
-       properties of the current cell
-    */
-    PropertiesPointer mpCellProps;
-
-    /**
-        properties of the current row
-    */
-    PropertiesPointer mpRowProps;
-
-    /**
-       properties of the current table
-    */
-    PropertiesPointer mpTableProps;
-
-    /**
-       handle for the current position in document
-    */
-    T mCurHandle;
 
     /**
        stack of table data
@@ -392,7 +451,7 @@ void TableManager<T, PropertiesPointer>::setHandler
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 {
-    mCurHandle = rHandle;
+    setHandle(rHandle);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -402,6 +461,7 @@ void TableManager<T, PropertiesPointer>::startLevel()
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
     mTableDataStack.push(pTableData);
+    mStateStack.push(mState);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -411,6 +471,8 @@ void TableManager<T, PropertiesPointer>::endLevel()
         resolveCurrentTable();
 
     mTableDataStack.pop();
+    mState = mStateStack.top();
+    mStateStack.pop();
 }
 
 template <typename T, typename PropertiesPointer>
@@ -449,22 +511,22 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
         if (mbRowEnd)
         {
             endOfRowAction();
-            pTableData->endRow(mpRowProps);
-            mpRowProps.reset();
+            pTableData->endRow(getRowProps());
+            getRowProps().reset();
         }
 
         else if (mbInCell)
         {
             if (! pTableData->isCellOpen())
-                pTableData->addCell(mCurHandle, mpCellProps);
+                pTableData->addCell(getHandle(), getCellProps());
 
             if (mbCellEnd)
             {
                 endOfCellAction();
-                pTableData->endCell(mCurHandle);
+                pTableData->endCell(getHandle());
             }
         }
-        mpCellProps.reset();
+        getCellProps().reset();
     }
 }
 
@@ -499,7 +561,7 @@ bool TableManager<T, PropertiesPointer>::sprm(Sprm & rSprm)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::props(PropertiesPointer pProps)
 {
-    mpProps = pProps;
+    setProps(pProps);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -541,10 +603,10 @@ void TableManager<T, PropertiesPointer>::utext(const sal_uInt8 * data, size_t le
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 {
-    if(mpCellProps.get())
-        mpCellProps->insert( pProps );
+    if(getCellProps().get())
+        getCellProps()->insert( pProps );
     else
-        mpCellProps = pProps;
+        setCellProps(pProps);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -557,19 +619,19 @@ void TableManager<T, PropertiesPointer>::cellPropsByCell
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps)
 {
-    if( mpRowProps.get() )
-        mpRowProps->insert( pProps );
+    if( getRowProps().get() )
+        getRowProps()->insert( pProps );
     else
-        mpRowProps = pProps;
+        setRowProps(pProps);
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pProps)
 {
-    if( mpTableProps.get() )
-        mpTableProps->insert( pProps );
+    if( getTableProps().get() )
+        getTableProps()->insert( pProps );
     else
-        mpTableProps = pProps;
+        setTableProps(pProps);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -582,7 +644,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
         unsigned int nRows = pTableData->getRowCount();
 
-        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), mpTableProps);
+        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
 
         for (unsigned int nRow = 0; nRow < nRows; ++nRow)
         {
@@ -606,7 +668,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
         mpTableDataHandler->endTable();
     }
-    mpTableProps.reset();
+    getTableProps().reset();
     clearData();
 }
 
