@@ -68,6 +68,13 @@ USE_64:=1
 .ENDIF			# "$(CPU)"=="X"
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
+.IF "$(OS)$(COM)"=="FREEBSDGCC"
+.IF "$(CPU)"=="X"
+# force 64-bit buildmode
+USE_64:=1
+.EXPORT : USE_64
+.ENDIF			# "$(CPU)"=="X"
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)"=="MACOSX"
 .IF "$(EXTRA_CFLAGS)"!=""
