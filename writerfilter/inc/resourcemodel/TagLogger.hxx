@@ -77,6 +77,8 @@ namespace writerfilter
         XMLTag(string sTag, eMode mode = COMPLETE) : mTag(sTag), mMode(mode) {}
 
         void addAttr(string name, string value);
+        void addAttr(string name, const ::rtl::OUString & value);
+        void addAttr(string name, sal_uInt32 nValue);
         void addTag(Pointer_t pTag);
         void chars(const string & rChars);
         const string & getTag() const;

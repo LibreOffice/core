@@ -45,6 +45,20 @@ namespace writerfilter
         mAttrs.push_back(aAttr);
     }
 
+    void XMLTag::addAttr(string sName, const ::rtl::OUString & sValue)
+    {
+        addAttr(sName,
+                OUStringToOString
+                (sValue, RTL_TEXTENCODING_ASCII_US).getStr());
+    }
+
+    void XMLTag::addAttr(string sName, sal_uInt32 nValue)
+    {
+        char buffer[256];
+        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
+        addAttr(sName, buffer);
+    }
+
     void XMLTag::addTag(XMLTag::Pointer_t pTag)
     {
         if (pTag != XMLTag::Pointer_t())
@@ -214,14 +228,12 @@ namespace writerfilter
 
     void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
     {
-        attribute(name, OUStringToOString(value, RTL_TEXTENCODING_ASCII_US).getStr());
+        currentTag()->addAttr(name, value);
     }
 
     void TagLogger::attribute(const string & name, sal_uInt32 value)
     {
-        char buffer[256];
-        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, value);
-        attribute(name, buffer);
+        currentTag()->addAttr(name, value);
     }
 
     void TagLogger::addTag(XMLTag::Pointer_t pTag)
