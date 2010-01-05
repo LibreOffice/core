@@ -180,8 +180,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-//  const SfxDocumentInfoItem& rItem = (const SfxDocumentInfoItem&)rSet.Get(SID_DOCINFO);
-//  if(rItem.IsOwnFormat())
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();

@@ -1353,6 +1353,7 @@ SwDoc* SwDoc::CreateCopy() const
     ResetModified();
 
 */
+    pRet->ReplaceStyles( *(SwDoc*)this );
     //copy content
     pRet->Paste( *this );
     return pRet;
@@ -1417,7 +1418,7 @@ void SwDoc::Paste( const SwDoc& rSource )
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
                     if( FLY_PAGE == aAnchor.GetAnchorId() )
                     {
-                        aAnchor.SetPageNum( aAnchor.GetPageNum() + /*nStartPageNumber - */1 );
+                        aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
                     }
                     else
                         continue;

@@ -47,12 +47,6 @@ SwFmtChg::SwFmtChg( SwFmt *pFmt )
 {}
 
 
-SwInsChr::SwInsChr( xub_StrLen nP )
-    : SwMsgPoolItem( RES_INS_CHR ),
-    nPos( nP )
-{}
-
-
 
 SwInsTxt::SwInsTxt( xub_StrLen nP, xub_StrLen nL )
     : SwMsgPoolItem( RES_INS_TXT ),
@@ -226,12 +220,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 //{
 //    aList.Insert(rNd.GetIndex(), &rNd);
 //}
-
-SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
-    : SwMsgPoolItem( RES_GETLOWERNUMLEVEL ), rName( rRuleName ),
-    nLvl(nSrchLvl)
-{
-}
 
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
