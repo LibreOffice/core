@@ -39,6 +39,7 @@
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
+#include "unotools/pathoptions.hxx"
 
 #include <transex3/compilehelp.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -350,8 +351,12 @@ void BackendImpl::implProcessHelp
                     pXhpFiles[iXhp] = aXhpRelFile;
                 }
 
+                rtl::OUString aOfficeHelpPath( SvtPathOptions().GetHelpPath() );
+                rtl::OUString aOfficeHelpPathFileURL;
+                ::osl::File::getFileURLFromSystemPath( aOfficeHelpPath, aOfficeHelpPathFileURL );
+
                 HelpProcessingErrorInfo aErrorInfo;
-                bool bSuccess = compileExtensionHelp( aHelpStr, aLangURL,
+                bool bSuccess = compileExtensionHelp( aOfficeHelpPathFileURL, aHelpStr, aLangURL,
                     nXhpFileCount, pXhpFiles, aErrorInfo );
 
                 if( bSuccess && xInvocation.is() )

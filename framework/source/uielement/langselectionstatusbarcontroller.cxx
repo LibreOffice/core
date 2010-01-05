@@ -337,7 +337,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     mRectangle.Y = mMousePos.Y();
     sal_Int16 nId = xPopupMenu->execute( xParent, mRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
-    if ( m_xFrame.is() )
+    if ( nId && m_xFrame.is() )
     {
         uno::Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         util::URL aURL;

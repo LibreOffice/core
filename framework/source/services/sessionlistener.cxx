@@ -60,6 +60,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -103,12 +104,13 @@ namespace framework{
 //***********************************************
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_5(
+DEFINE_XINTERFACE_6(
         SessionListener,
         OWeakObject,
         DIRECT_INTERFACE(css::lang::XTypeProvider),
         DIRECT_INTERFACE(css::lang::XInitialization),
         DIRECT_INTERFACE(css::frame::XSessionManagerListener),
+        DIRECT_INTERFACE(css::frame::XSessionManagerListener2),
         DIRECT_INTERFACE(css::frame::XStatusListener),
         DIRECT_INTERFACE(css::lang::XServiceInfo))
 
@@ -116,7 +118,7 @@ DEFINE_XTYPEPROVIDER_5(
         SessionListener,
         css::lang::XTypeProvider,
         css::lang::XInitialization,
-        css::frame::XSessionManagerListener,
+        css::frame::XSessionManagerListener2,
         css::frame::XStatusListener,
         css::lang::XServiceInfo)
 
@@ -137,7 +139,10 @@ SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiSer
         : ThreadHelpBase      (&Application::GetSolarMutex())
         , OWeakObject         (                             )
         , m_xSMGR             (xSMGR                        )
-        , m_bRestored( false )
+        , m_bRestored( sal_False )
+        , m_bSessionStoreRequested( sal_False )
+        , m_bAllowUserInteractionOnQuit( sal_False )
+        , m_bTerminated( sal_False )
 {
 }
 
@@ -147,6 +152,63 @@ SessionListener::~SessionListener()
     {
         css::uno::Reference< XSessionManagerListener> me(this);
         m_rSessionManager->removeSessionManagerListener(me);
+    }
+}
+
+void SessionListener::StoreSession( sal_Bool bAsync )
+{
+    ResetableGuard aGuard(m_aLock);
+    try
+    {
+        // xd create SERVICENAME_AUTORECOVERY -> XDispatch
+        // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=bAsync
+        // on stop event m_rSessionManager->saveDone(this); in case of asynchronous call
+        // in case of synchronous call the caller should do saveDone() call himself!
+
+        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
+        css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
+        URL aURL;
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
+        xURLTransformer->parseStrict(aURL);
+
+        // in case of asynchronous call the notification will trigger saveDone()
+        if ( bAsync )
+            xDispatch->addStatusListener(this, aURL);
+
+        Sequence< PropertyValue > args(1);
+        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
+        xDispatch->dispatch(aURL, args);
+    } catch (com::sun::star::uno::Exception& e) {
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
+        OSL_ENSURE(sal_False, aMsg.getStr());
+        // save failed, but tell manager to go on if we havent yet dispatched the request
+        // in case of synchronous saving the notification is done by the caller
+        if ( bAsync && m_rSessionManager.is() )
+            m_rSessionManager->saveDone(this);
+    }
+}
+
+void SessionListener::QuitSessionQuietly()
+{
+    ResetableGuard aGuard(m_aLock);
+    try
+    {
+        // xd create SERVICENAME_AUTORECOVERY -> XDispatch
+        // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
+        // it is done synchronously to avoid conflict with normal quit process
+
+        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
+        css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
+        URL aURL;
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionQuietQuit");
+        xURLTransformer->parseStrict(aURL);
+
+        Sequence< PropertyValue > args(1);
+        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
+        xDispatch->dispatch(aURL, args);
+    } catch (com::sun::star::uno::Exception& e) {
+        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
 }
 
@@ -170,6 +232,8 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
                     v.Value >>= aSMgr;
                 else if (v.Name.equalsAscii("SessionManager"))
                     v.Value >>= m_rSessionManager;
+                else if (v.Name.equalsAscii("AllowUserInteractionOnQuit"))
+                    v.Value >>= m_bAllowUserInteractionOnQuit;
             }
         }
     }
@@ -235,46 +299,73 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
 {
     if (bShutdown)
     {
-        sal_Bool bDispatched = sal_False;
-        ResetableGuard aGuard(m_aLock);
-        try
-        {
-            // xd create SERVICENAME_AUTORECOVERY -> XDispatch
-            // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=true
-            // on stop event m_rSessionManager->saveDone(this);
-
-            css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-            css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
-            URL aURL;
-            aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
-            xURLTransformer->parseStrict(aURL);
-            xDispatch->addStatusListener(this, aURL);
-            Sequence< PropertyValue > args(1);
-            args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(sal_True),PropertyState_DIRECT_VALUE);
-            xDispatch->dispatch(aURL, args);
-            bDispatched = sal_True;
-            // on stop event set call m_rSessionManager->saveDone(this);
-        } catch (com::sun::star::uno::Exception& e) {
-            OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-            OSL_ENSURE(sal_False, aMsg.getStr());
-            // save failed, but tell manager to go on if we havent yet dispatched the request
-            if (m_rSessionManager.is() && !bDispatched)
-                m_rSessionManager->saveDone(this);
-        }
+        m_bSessionStoreRequested = sal_True; // there is no need to protect it with mutex
+        if ( m_bAllowUserInteractionOnQuit && m_rSessionManager.is() )
+            m_rSessionManager->queryInteraction( static_cast< css::frame::XSessionManagerListener* >( this ) );
+        else
+            StoreSession( sal_True );
     }
     // we don't have anything to do so tell the session manager we're done
     else if( m_rSessionManager.is() )
         m_rSessionManager->saveDone( this );
 }
 
-
-
-void SAL_CALL SessionListener::approveInteraction( sal_Bool /*bInteractionGranted*/ )
+void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
     throw (RuntimeException)
-{}
+{
+    // do AutoSave as the first step
+    ResetableGuard aGuard(m_aLock);
+
+    if ( bInteractionGranted )
+    {
+        // close the office documents in normal way
+        try
+        {
+            // first of all let the session be stored to be sure that we lose no information
+            StoreSession( sal_False );
+
+            css::uno::Reference< css::frame::XDesktop > xDesktop( m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+            m_bTerminated = xDesktop->terminate();
+
+            if ( m_rSessionManager.is() )
+            {
+                // false means that the application closing has been cancelled
+                if ( !m_bTerminated )
+                    m_rSessionManager->cancelShutdown();
+                else
+                    m_rSessionManager->interactionDone( this );
+            }
+        }
+        catch( css::uno::Exception& )
+        {
+            StoreSession( sal_True );
+            m_rSessionManager->interactionDone( this );
+        }
+
+        if ( m_rSessionManager.is() )
+            m_rSessionManager->saveDone(this);
+    }
+    else
+    {
+        StoreSession( sal_True );
+    }
+}
 
 void SessionListener::shutdownCanceled()
     throw (RuntimeException)
-{}
+{
+    // set the state back
+    m_bSessionStoreRequested = sal_False; // there is no need to protect it with mutex
+}
+
+void SessionListener::doQuit()
+    throw (RuntimeException)
+{
+    if ( m_bSessionStoreRequested && !m_bTerminated )
+    {
+        // let the session be closed quietly in this case
+        QuitSessionQuietly();
+    }
+}
 
 }
