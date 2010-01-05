@@ -40,7 +40,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/scrbar.hxx>
 
 //.........................................................................

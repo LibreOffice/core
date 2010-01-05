@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: svuidlg.hrc,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svl/solar.hrc>
+#include <helpid.hrc>
+
+#define TB_LINKS                32014
+
+// gemeinsame Id's
+#define CB_DISPLAY_AS_ICON     12
+#define FI_DISPLAY             13
+#define PB_CHANGE_ICON         14
+
+#define STR_AUTOLINK                            32006
+#define STR_MANUALLINK                          32007
+#define STR_BROKENLINK                          32008
+#define STR_GRAPHICLINK                         32009
+#define STR_BUTTONCLOSE                         32010
+#define STR_CLOSELINKMSG                        32011
+#define STR_CLOSELINKMSG_MULTI                  32024
+#define STR_WAITINGLINK                         32028
+#define STR_EDIT_APPLET                         32029
+
+
+#define FL_CHOICE              15
+#define LB_INSERT_LIST          7
+
+#define MD_PASTE_OBJECT     32001
+#define S_OBJECT               1
+#define RB_PASTE               20
+#define RB_PASTE_LINK          21
+#define FT_OBJECT_SOURCE       22
+#define FT_SOURCE              23
+
+#define MD_UPDATE_BASELINKS 32002
+#define LB_LINKS               30
+#define FT_FILES               31
+#define FT_LINKS               32
+#define FT_TYPE                33
+#define FT_STATUS              34
+#define PB_UPDATE_NOW          35
+#define PB_OPEN_SOURCE         36
+#define PB_CHANGE_SOURCE       37
+#define PB_BREAK_LINK          38
+#define FT_SOURCE2             39
+#define FT_TYPE2               40
+#define FT_UPDATE              41
+#define RB_AUTOMATIC           42
+#define RB_MANUAL              43
+#define FT_FULL_SOURCE_NAME    44
+#define FT_FULL_TYPE_NAME      45
+#define GB_LINK                46
+#define FT_FILES2              47
+#define FT_FULL_FILE_NAME      48
+
+#define MD_LINKEDIT            32004
+#define ED_FULL_SOURCE_NAME    1
+
+#define ED_FILEPATH             10
+#define BTN_FILEPATH            11
+#define CB_FILELINK             12
+
+#define MD_INSERT_OBJECT_PLUGIN 32008
+#define ED_FILEURL              10
+#define BTN_FILEURL             11
+#define GB_FILEURL              12
+#define ED_PLUGINS_OPTIONS      20
+#define GB_PLUGINS_OPTIONS      21
+
+#define MD_INSERT_OBJECT_APPLET 32009
+#define FT_CLASSFILE            10
+#define ED_CLASSFILE            11
+#define FT_CLASSLOCATION        12
+#define ED_CLASSLOCATION        12
+#define BTN_CLASS               13
+#define GB_CLASS                14
+#define ED_APPLET_OPTIONS       20
+#define GB_APPLET_OPTIONS       21
+
+#define MD_INSERT_OLEOBJECT     32010
+#define RB_NEW_OBJECT           10
+#define RB_OBJECT_FROMFILE      11
+#define LB_OBJECTTYPE           12
+#define GB_OBJECT               13
+#define STR_FILE                14
+
+#define MD_INSERT_OBJECT_IFRAME 32011
+#define FT_FRAMENAME                    3
+#define ED_FRAMENAME                    4
+#define FT_URL                          5
+#define ED_URL                          6
+#define BT_FILEOPEN                     7
+#define NM_MARGINHEIGHT                 8
+#define FT_MARGINHEIGHT                 9
+#define NM_MARGINWIDTH                  10
+#define FT_MARGINWIDTH                  11
+#define GB_MARGIN                       12
+#define RB_SCROLLINGON                  13
+#define RB_SCROLLINGOFF                 14
+#define RB_SCROLLINGAUTO                15
+#define GB_SCROLLING                    16
+#define GB_BORDER                       17
+#define RB_FRMBORDER_ON                 18
+#define RB_FRMBORDER_INHERIT            19
+#define RB_FRMBORDER_OFF                20
+#define CB_MARGINWIDTHDEFAULT           21
+#define CB_MARGINHEIGHTDEFAULT          22
+#define FL_SEP_LEFT                     46
+#define FL_SEP_RIGHT                    47
+

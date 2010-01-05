@@ -28,13 +28,6 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
-
 #include <interface.hxx>
 #include <cstdio>
 #include <hash_map>
@@ -49,7 +42,7 @@ static string getResFileName( const char* progname )
     string aRet = progname;
     size_t pos = aRet.rfind( '/' );
     // FIXME: search PATH if necessary
-    assert( pos != string::npos );
+    OSL_ASSERT( pos != string::npos );
     aRet.erase( pos );
     aRet.append( "/resource/crash_dump.res" );
 

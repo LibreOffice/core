@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optjava.hrc,v $
+ * $Revision: 1.5 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_OPTJAVA_HRC
+#define _SVX_OPTJAVA_HRC
+
+// defines ---------------------------------------------------------------
+
+// class SvxJavaOptionsPage ----------------------------------------------
+
+#define FL_JAVA             10
+#define CB_JAVA_ENABLE      11
+#define FT_JAVA_FOUND       12
+#define LB_JAVA             13
+#define FT_JAVA_PATH        14
+
+#define PB_ADD              20
+#define PB_PARAMETER        21
+#define PB_CLASSPATH        22
+
+#define STR_INSTALLED_IN    30
+#define STR_ACCESSIBILITY   31
+#define STR_ADDDLGTEXT      32
+
+#define STR_HEADER_VENDOR   40
+#define STR_HEADER_VERSION  41
+#define STR_HEADER_FEATURES 42
+
+// class SvxJavaParameterDlg ---------------------------------------------
+
+#define FT_PARAMETER        10
+#define ED_PARAMETER        11
+#define PB_ASSIGN           12
+
+#define FT_ASSIGNED         20
+#define LB_ASSIGNED         21
+#define FT_EXAMPLE          22
+#define PB_REMOVE           23
+
+#define FL_BUTTONS          30
+#define PB_PARAMETER_OK     31
+#define PB_PARAMETER_ESC    32
+#define PB_PARAMETER_HLP    33
+
+// class SvxJavaClassPathDlg ---------------------------------------------
+
+#define FT_PATH             10
+#define LB_PATH             11
+
+#define PB_ADDARCHIVE       20
+#define PB_ADDPATH          21
+#define PB_REMOVE_PATH      22
+
+#define FL_PATH_BUTTONS     30
+#define PB_PATH_OK          31
+#define PB_PATH_ESC         32
+#define PB_PATH_HLP         33
+
+#endif // #ifndef _SVX_OPTJAVA_HRC
+
