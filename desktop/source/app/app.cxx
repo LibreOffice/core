@@ -1668,7 +1668,11 @@ void Desktop::Main()
     // remove temp directory
     RemoveTemporaryDirectory();
 
+    // The acceptors in the AcceptorMap must be released (in DeregisterServices)
+    // with the solar mutex unlocked, to avoid deadlock:
+    nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
+    Application::AcquireSolarMutex(nAcquireCount);
 
     tools::DeInitTestToolLib();
 

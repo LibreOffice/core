@@ -314,7 +314,6 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 namespace
 {
     struct acceptorMap : public rtl::Static< AcceptorMap, acceptorMap > {};
-    struct mtxAccMap : public rtl::Static< osl::Mutex, mtxAccMap > {};
     struct CurrentTempURL : public rtl::Static< String, CurrentTempURL > {};
 }
 
@@ -322,8 +321,6 @@ static sal_Bool bAccept = sal_False;
 
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
-    // make sure nobody adds an acceptor whle we create one...
-    osl::MutexGuard aGuard(mtxAccMap::get());
     // check whether the requested acceptor already exists
     AcceptorMap &rMap = acceptorMap::get();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
@@ -370,7 +367,6 @@ class enable
 void Desktop::enableAcceptors()
 {
     RTL_LOGFILE_CONTEXT(aLog, "desktop (lo119109) Desktop::enableAcceptors");
-    osl::MutexGuard aGuard(mtxAccMap::get());
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled
@@ -384,7 +380,6 @@ void Desktop::enableAcceptors()
 
 void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
-    osl::MutexGuard aGuard(mtxAccMap::get());
     // special case stop all acceptors
     AcceptorMap &rMap = acceptorMap::get();
     if (aAcceptString.compareToAscii("all") == 0) {
