@@ -42,6 +42,7 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unocoll.hxx>
 #include <svx/linkmgr.hxx>
 #include <docstat.hxx>

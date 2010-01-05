@@ -78,6 +78,7 @@
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoport.hxx>
@@ -123,6 +124,7 @@
 #include <vector>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <sortopt.hxx>
 
 #include <algorithm>
 #include <iterator>

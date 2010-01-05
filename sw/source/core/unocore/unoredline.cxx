@@ -40,6 +40,7 @@
 #include <section.hxx>
 #include <unoprnms.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unocoll.hxx>
 #include <unomap.hxx>

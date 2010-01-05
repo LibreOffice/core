@@ -61,6 +61,7 @@
 #include <frmfmt.hxx>
 #include <frame.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>

@@ -35,6 +35,7 @@
 #include <cmdid.h>
 #include <unomid.h>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unoport.hxx>
 #include <unomap.hxx>

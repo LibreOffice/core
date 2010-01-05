@@ -30,10 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <crstate.hxx>
 #include <accmap.hxx>
 #include "fesh.hxx"
@@ -63,7 +65,6 @@
 #include <unotools/charclass.hxx>   // for GetWordBoundary
 // for get/setCharacterAttribute(...)
 #include "unocrsr.hxx"
-#include "unoobj.hxx"
 #include "unoport.hxx"
 #include "doc.hxx"
 #include "crsskip.hxx"

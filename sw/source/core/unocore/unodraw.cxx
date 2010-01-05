@@ -49,6 +49,7 @@
 #include <unomap.hxx>
 #include <unoport.hxx>
 #include <unocrsr.hxx>
+#include <TextCursorHelper.hxx>
 #include <swundo.hxx>
 #include <dflyobj.hxx>
 #include <ndtxt.hxx>

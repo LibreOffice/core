@@ -34,10 +34,7 @@
 
 #define _SVSTDARR_STRINGS
 
-
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -53,6 +50,7 @@
 #include <unoatxt.hxx>
 #include <unomap.hxx>
 #include <unoobj.hxx>
+#include <TextCursorHelper.hxx>
 #include <swevent.hxx>
 #include <doc.hxx>
 #include <unocrsr.hxx>
@@ -67,6 +65,7 @@
 #include <svx/acorrcfg.hxx>
 
 #include <memory>
+
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;

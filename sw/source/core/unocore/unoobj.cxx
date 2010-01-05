@@ -83,6 +83,7 @@
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unosett.hxx>
 #include <unoprnms.hxx>
@@ -118,6 +119,7 @@
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
+#include <sortopt.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <memory>
 

@@ -63,7 +63,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>

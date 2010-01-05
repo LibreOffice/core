@@ -84,6 +84,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <unotbl.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <svtools/zforlist.hxx>     // SvNumberFormatter
 #include <svx/brkitem.hxx>
@@ -99,6 +100,7 @@
 #include <frmatr.hxx>
 #include <crsskip.hxx>
 #include <unochart.hxx>
+#include <sortopt.hxx>
 #include <rtl/math.hxx>
 
 

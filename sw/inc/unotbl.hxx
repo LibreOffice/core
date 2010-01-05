@@ -32,6 +32,7 @@
 
 #include <unoobj.hxx>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -43,6 +44,10 @@
 #include <cppuhelper/implbase10.hxx> // helper for implementations
 #include <cppuhelper/implbase7.hxx> // helper for implementations
 #include <cppuhelper/implbase5.hxx> // helper for implementations
+
+#include <comphelper/uno3.hxx>
+#include <TextCursorHelper.hxx>
+
 
 class SwTableBoxFmt;
 class SwTableLine;

@@ -51,6 +51,7 @@
 #include <xmloff/i18nmap.hxx>
 #include "unocrsr.hxx"
 #include "unoobj.hxx"
+#include "TextCursorHelper.hxx"
 #include "unoframe.hxx"
 #include "doc.hxx"
 #include "unocoll.hxx"

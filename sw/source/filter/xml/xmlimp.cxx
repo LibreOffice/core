@@ -38,18 +38,15 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
-#ifndef _XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX_
 #include <xmloff/XMLTextShapeImportHelper.hxx>
-#endif
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
+#include <TextCursorHelper.hxx>
 #include <unoobj.hxx>
 #include "unocrsr.hxx"
 #include <poolfmt.hxx>

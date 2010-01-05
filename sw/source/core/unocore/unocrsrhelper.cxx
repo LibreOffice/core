@@ -37,6 +37,7 @@
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unorefmark.hxx>
 #include <unostyle.hxx>
 #include <unoidx.hxx>

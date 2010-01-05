@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>

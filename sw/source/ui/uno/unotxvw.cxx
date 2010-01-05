@@ -79,6 +79,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unobookmark.hxx>
 #include <unoparagraph.hxx>
+#include <unotextcursor.hxx>
 
 #include <svx/editview.hxx>
 #include <sfx2/docfile.hxx>

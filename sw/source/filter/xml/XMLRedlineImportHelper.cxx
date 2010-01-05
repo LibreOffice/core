@@ -33,6 +33,7 @@
 
 
 #include "XMLRedlineImportHelper.hxx"
+#include <unotextcursor.hxx>
 #include "unoobj.hxx"
 #include <unocrsr.hxx>
 #include "doc.hxx"

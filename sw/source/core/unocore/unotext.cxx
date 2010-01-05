@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <unoobj.hxx>
+#include <unotextcursor.hxx>
 #include <unosection.hxx>
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>

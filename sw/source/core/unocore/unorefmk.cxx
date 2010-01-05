@@ -36,6 +36,7 @@
 #include <unoobj.hxx>
 #include <unorefmark.hxx>
 #include <unoparagraph.hxx>
+#include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
