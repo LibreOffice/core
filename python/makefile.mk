@@ -50,7 +50,9 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-PATCH_FILES=Python-$(PYVERSION).patch
+PATCH_FILES=\
+    Python-$(PYVERSION).patch \
+    Python-ssl.patch
 
 CONFIGURE_DIR=
 
