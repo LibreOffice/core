@@ -42,7 +42,7 @@
 #include <svx/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <undobj.hxx>
-#include <unoobj.hxx>
+#include <unobookmark.hxx>
 #include <rtl/random.h>
 
 

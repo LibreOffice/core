@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <unobookmark.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unoobj.hxx>
@@ -73,6 +73,20 @@ namespace
  * SwXBookmark
  ******************************************************************/
 TYPEINIT1(SwXBookmark, SwClient)
+
+void SwXBookmark::registerInMark(::sw::mark::IMark* const pBkmk)
+{
+    if (pBkmk)
+    {
+        pBkmk->Add(this);
+    }
+    else if (m_pRegisteredBookmark)
+    {
+        m_aName = m_pRegisteredBookmark->GetName();
+        m_pRegisteredBookmark->Remove(this);
+    }
+    m_pRegisteredBookmark = pBkmk;
+}
 
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
@@ -353,7 +367,7 @@ void SwXBookmark::removeVetoableChangeListener(const OUString& /*PropertyName*/,
 { }
 
 SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
-    : SwXFieldmark_BASE(pBkm, pDc)
+    : SwXFieldmark_Base(pBkm, pDc)
     , isReplacementObject(_isReplacementObject)
 { }
 

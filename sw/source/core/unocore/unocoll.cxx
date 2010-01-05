@@ -75,6 +75,7 @@
 #include <slist>
 #include <iterator>
 
+#include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"

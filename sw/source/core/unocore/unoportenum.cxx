@@ -48,6 +48,7 @@
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
 #include <unorefmark.hxx>
+#include <unobookmark.hxx>
 #include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
