@@ -1288,7 +1288,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
         aLastLineLB.Hide();
         aLastLineFT.Hide();
         aExpandCB.Hide();
-        if(!(nHtmlMode & HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE) )
+        if(!(nHtmlMode & (HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE)) )
             aJustify.Disable();
         aSnapToGridCB.Show(FALSE);
     }

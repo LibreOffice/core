@@ -135,25 +135,6 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
     return ( aSystemPath.getLength() != 0 );
 }
 
-class PostinitializationGuard
-{
-    uno::Reference< io::XInputStream > m_xTempStream;
-
-    ZipPackage&                        m_rZipPackage;
-
-public:
-    PostinitializationGuard( const uno::Reference< io::XInputStream >& xTempStream,
-                             ZipPackage& rZipPackage )
-    : m_xTempStream( xTempStream )
-    , m_rZipPackage( rZipPackage )
-    {}
-
-    virtual ~PostinitializationGuard()
-    {
-        m_rZipPackage.ConnectTo( m_xTempStream );
-    }
-};
-
 }
 
 //===========================================================================
@@ -1380,8 +1361,8 @@ void SAL_CALL ZipPackage::commitChanges()
                     static_cast < OWeakObject * > ( this ), makeAny ( r ) );
         }
 
-        // switch to the new temporary stream only after the transfer
-        PostinitializationGuard aPostInitGuard( xTempInStream, *this );
+        // connect to the temporary stream
+        ConnectTo( xTempInStream );
 
         if ( m_eMode == e_IMode_XStream )
         {

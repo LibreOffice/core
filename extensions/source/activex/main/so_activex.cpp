@@ -35,6 +35,9 @@ END_OBJECT_MAP()
 #ifndef KEY_WOW64_64KEY
     #define KEY_WOW64_64KEY (0x0100)
 #endif
+#ifndef KEY_WOW64_32KEY
+    #define KEY_WOW64_32KEY (0x0200)
+#endif
 
 const REGSAM n64KeyAccess = KEY_ALL_ACCESS | KEY_WOW64_64KEY;
 const REGSAM n32KeyAccess = KEY_ALL_ACCESS;
@@ -46,7 +49,9 @@ const BOOL bX64 = FALSE;
 #endif
 
 // 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
+extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
