@@ -45,9 +45,9 @@
 //
 // the systray icon is only available on windows
 //
-#include <svtools/moduleoptions.hxx>
 
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 
 #include "shutdownicon.hxx"
 #include "app.hrc"

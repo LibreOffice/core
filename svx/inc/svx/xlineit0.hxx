@@ -32,7 +32,7 @@
 #define _SVX_XLINEIT0_HXX
 
 #include <svx/xenum.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 //---------------------
 // class LineStyleItem
 //---------------------

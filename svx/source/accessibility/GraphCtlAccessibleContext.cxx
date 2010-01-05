@@ -44,7 +44,7 @@
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svtools/colorcfg.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>

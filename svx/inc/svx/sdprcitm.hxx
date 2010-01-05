@@ -30,7 +30,7 @@
 #ifndef _SDPRCITM_HXX
 #define _SDPRCITM_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
 

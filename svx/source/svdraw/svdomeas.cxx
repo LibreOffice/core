@@ -45,8 +45,8 @@
 #include <svx/svdview.hxx>
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svtools/style.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/style.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
@@ -63,7 +63,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/measureproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>

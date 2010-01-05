@@ -32,7 +32,7 @@
 
 #include <tools/link.hxx>
 #include <tools/list.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
 #include "rtl/ref.hxx"
@@ -58,7 +58,6 @@ class SfxFilterMatcher;
 class SfxCancelManager;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
-class SfxMiscCfg;
 class SfxDocumentTemplates;
 class SfxFrameArr_Impl;
 class SvtSaveOptions;
@@ -122,7 +121,6 @@ public:
     SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
-    SfxMiscCfg*                         pMiscConfig;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;
     SvtHelpOptions*                     pHelpOptions;

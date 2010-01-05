@@ -115,12 +115,6 @@ void recently_used_file::reset() const
 }
 
 //------------------------------------------------
-void recently_used_file::flush()
-{
-    fflush(file_);
-}
-
-//------------------------------------------------
 void recently_used_file::truncate(off_t length)
 {
     ftruncate(fileno(file_), length);

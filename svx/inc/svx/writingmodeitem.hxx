@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <com/sun/star/text/WritingMode.hpp>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 

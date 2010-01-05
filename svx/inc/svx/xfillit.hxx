@@ -38,7 +38,7 @@
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xenum.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/xflclit.hxx>
 #include <svx/xsflclit.hxx>

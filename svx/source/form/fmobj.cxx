@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 /** === end UNO includes === **/
 #include <svx/fmmodel.hxx>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 

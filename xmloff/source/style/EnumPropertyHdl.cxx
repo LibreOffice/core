@@ -36,20 +36,6 @@
 #include <comphelper/extract.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-
-/*
-#include <vcl/vclenum.hxx>
-#include <tools/solar.h>
-
-#ifndef _INC_LIMITS
-#include <limits.h>
-#endif
-
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
-*/
 #include <com/sun/star/uno/Any.hxx>
 
 using ::rtl::OUString;

@@ -32,7 +32,7 @@
 #define _BASMGR_HXX
 
 #include <tools/string.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>

@@ -43,7 +43,7 @@
 #include <sal/config.h>
 
 #include <vcl/svapp.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 #include <sfx2/request.hxx>
 

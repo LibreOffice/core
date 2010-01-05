@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1661,8 +1661,14 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         pProps->Name = sHeadingStyleName;
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            pProps->Value <<= sChosenStyles[i];
-            xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            // --> OD 2009-12-11 #i107610#
+            if ( bSetEmptyLevels ||
+                 sChosenStyles[i].getLength() > 0 )
+            // <--
+            {
+                pProps->Value <<= sChosenStyles[i];
+                xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            }
         }
         // <--
     }

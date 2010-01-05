@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <i18npool/lang.h>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace framework
 {

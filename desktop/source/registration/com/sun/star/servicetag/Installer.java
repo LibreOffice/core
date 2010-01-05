@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: Installer.java,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: Registration.java,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -794,7 +793,7 @@ public class Installer {
             reader.close();
         }
 
-        String resourceFilename = "/com/sun/star/servicetag/resources/register";
+        String resourceFilename = "/com/sun/servicetag/resources/register";
         for (Locale locale : supportedLocales) {
             String name = REGISTRATION_HTML_NAME;
             String resource = resourceFilename;
