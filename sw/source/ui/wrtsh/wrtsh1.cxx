@@ -1379,10 +1379,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            short nTxtNodeFirstLineOffset( 0 );
-            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
-            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
-                                           nTxtNodeFirstLineOffset;
+            // --> OD 2010-01-05 #b6884103#
+//            short nTxtNodeFirstLineOffset( 0 );
+//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
+//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
+//                                           nTxtNodeFirstLineOffset;
+            const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
+            // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
                 const SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;

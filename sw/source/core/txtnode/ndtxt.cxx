@@ -2889,6 +2889,51 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return bRet;
 }
 
+// --> OD 2010-01-05 #b6884103#
+SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
+{
+    SwTwips nAdditionalIndent = 0;
+
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if ( pRule )
+    {
+        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+        {
+            nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+
+            if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+            {
+                nAdditionalIndent = nAdditionalIndent -
+                                    GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+            }
+        }
+        else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            if ( AreListLevelIndentsApplicable() )
+            {
+                nAdditionalIndent = rFmt.GetIndentAt() + rFmt.GetFirstLineIndent();
+            }
+            else
+            {
+                nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+                if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    nAdditionalIndent = nAdditionalIndent -
+                                        GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+                }
+            }
+        }
+    }
+    else
+    {
+        nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+    }
+
+    return nAdditionalIndent;
+}
+// <--
+
 // --> OD 2008-12-02 #i96772#
 void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const
 {

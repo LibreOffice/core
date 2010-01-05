@@ -484,6 +484,10 @@ public:
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
+    // --> OD 2010-01-05 #b6884103#
+    SwTwips GetAdditionalIndentForStartingNewList() const;
+    // <--
+
     // --> OD 2008-12-02 #i96772#
     void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
     // <--
