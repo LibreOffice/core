@@ -918,7 +918,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                             }
                         }
                     }
-                    else if ( nNewMagic == 0x43464D57 && nLen >= 34 && ( nLen + 10 <= nRecSize * 2 ))
+                    else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( (sal_Int32)(nLen + 10) <= (sal_Int32)(nRecSize * 2) ))
                     {
                         sal_uInt32 nComType, nVersion, nFlags, nComRecCount,
                                    nCurRecSize, nRemainingSize, nEMFTotalSize;
