@@ -67,7 +67,6 @@ namespace sdr
             // no need to correct if no extra text range
             if(aTextRange != aObjectRange)
             {
-                const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used

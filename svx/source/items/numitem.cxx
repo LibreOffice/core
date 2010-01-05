@@ -1182,11 +1182,6 @@ SfxPoolItem* SvxNumBulletItem::Create(SvStream &s, USHORT n) const
     return SfxPoolItem::Create(s, n );
 }
 
-SvStream& SvxNumBulletItem::Store(SvStream & s, USHORT v ) const
-{
-    return SfxPoolItem::Store( s, v );
-}
-
 /* -----------------27.10.98 10:41-------------------
  *
  * --------------------------------------------------*/
@@ -1220,11 +1215,6 @@ SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-SfxPoolItem*     SvxNumBulletItem::Create(SvStream &rStream, USHORT) const
-{
-    SvxNumRule aRule(rStream);
-    return new SvxNumBulletItem(aRule, Which() );
-}
 USHORT  SvxNumBulletItem::GetVersion( USHORT /*nFileVersion*/ ) const
 {
     return NUMITEM_VERSION_03;
