@@ -64,6 +64,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/salgdi.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/glyphcache.hxx>
 
 #include <dndlcon.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -2227,9 +2228,14 @@ static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
                 nType = DATACHANGED_DISPLAY;
                 break;
             case SALEVENT_FONTCHANGED:
+            {
+                ULONG nOldSize = GlyphCache::GetInstance().mnMaxSize;
+                GlyphCache::GetInstance().mnMaxSize = 0;
                 OutputDevice::ImplUpdateAllFontData( TRUE );
+                GlyphCache::GetInstance().mnMaxSize = nOldSize;
                 nType = DATACHANGED_FONTS;
                 break;
+            }
             case SALEVENT_DATETIMECHANGED:
                 nType = DATACHANGED_DATETIME;
                 break;

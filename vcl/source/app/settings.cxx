@@ -436,6 +436,7 @@ ImplStyleData::ImplStyleData()
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
     mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
+    mpFontOptions              = NULL;
 
     SetStandardStyles();
 }
@@ -542,6 +543,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
     mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mpFontOptions               = rData.mpFontOptions;
 }
 
 // -----------------------------------------------------------------------

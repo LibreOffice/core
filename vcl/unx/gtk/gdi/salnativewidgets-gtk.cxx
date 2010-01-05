@@ -3465,6 +3465,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
 
+    const cairo_font_options_t *pNewOptions = 0;
+    if (GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ))
+        pNewOptions = gdk_screen_get_font_options(pScreen);
+    aStyleSet.SetCairoFontOptions( pNewOptions );
+
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
 

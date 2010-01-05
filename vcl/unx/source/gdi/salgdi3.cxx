@@ -983,6 +983,9 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     cairo_t *cr = rCairo.create(surface);
     rCairo.surface_destroy(surface);
 
+    if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
+        rCairo.set_font_options( cr, pOptions);
+
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
     {
     for (long i = 0; i < pClipRegion_->numRects; ++i)

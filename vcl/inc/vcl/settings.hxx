@@ -440,6 +440,7 @@ private:
     ULONG                           mnPreferredSymbolsStyle;
     USHORT                          mnSkipDisabledInMenus;
     Wallpaper                       maWorkspaceGradient;
+    const void*                     mpFontOptions;
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -756,6 +757,11 @@ public:
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
     BOOL                            GetSkipDisabledInMenus() const
                                         { return (BOOL) mpData->mnSkipDisabledInMenus; }
+
+    void                            SetCairoFontOptions( const void *pOptions )
+                                        { CopyData(); mpData->mpFontOptions = pOptions;  }
+    const void*                     GetCairoFontOptions() const
+                                        { return mpData->mpFontOptions; }
 
     void                            SetAppFont( const Font& rFont )
                                         { CopyData(); mpData->maAppFont = rFont; }

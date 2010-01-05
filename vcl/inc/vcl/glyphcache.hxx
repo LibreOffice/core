@@ -99,8 +99,9 @@ private:
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
     typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
-
+public:
     ULONG                       mnMaxSize;      // max overall cache size in bytes
+private:
     mutable ULONG               mnBytesUsed;
     mutable long                mnLruIndex;
     mutable int                 mnGlyphCount;
