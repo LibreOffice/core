@@ -31,7 +31,7 @@
 #define _UNOFRAME_HXX
 
 #include <unoobj.hxx>
-#include <sfx2/objsh.hxx>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -43,8 +43,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
  */
 
+#include <cppuhelper/implbase3.hxx>
+
+#include <sfx2/objsh.hxx>
+
+
 class SwDoc;
 class SfxItemPropertSet;
+
 /*-----------------12.02.98 11:21-------------------
 
 --------------------------------------------------*/

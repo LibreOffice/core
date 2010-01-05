@@ -44,6 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <fmtclds.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unotextcursor.hxx>

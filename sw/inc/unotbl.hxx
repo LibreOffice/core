@@ -41,11 +41,14 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/table/XAutoFormattable.hpp>
-#include <cppuhelper/implbase10.hxx> // helper for implementations
-#include <cppuhelper/implbase7.hxx> // helper for implementations
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase10.hxx>
 
 #include <comphelper/uno3.hxx>
+
 #include <TextCursorHelper.hxx>
 
 

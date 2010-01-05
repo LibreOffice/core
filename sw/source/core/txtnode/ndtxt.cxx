@@ -4973,7 +4973,7 @@ bool SwTxtNode::IsInContent() const
 }
 
 #include <unoparagraph.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()

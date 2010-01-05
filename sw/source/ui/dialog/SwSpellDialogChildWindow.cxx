@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svxacorr.hxx>
@@ -50,20 +51,19 @@
 #include <svtools/linguprops.hxx>
 #include <svtools/lingucfg.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <docary.hxx>
 #include <frmfmt.hxx>
 #include <dcontact.hxx>
 #include <edtwin.hxx>
 #include <pam.hxx>
 #include <drawbase.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #ifndef _DIALOG_HXX
 #include <dialog.hrc>
 #endif
 #include <cmdid.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

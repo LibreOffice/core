@@ -50,6 +50,7 @@
 #include <unotxdoc.hxx>
 #include <svtools/numuno.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unosett.hxx>
 #include <unocoll.hxx>

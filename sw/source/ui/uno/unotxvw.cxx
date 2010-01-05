@@ -80,6 +80,7 @@
 #include <unobookmark.hxx>
 #include <unoparagraph.hxx>
 #include <unotextcursor.hxx>
+#include <unotextrange.hxx>
 
 #include <svx/editview.hxx>
 #include <sfx2/docfile.hxx>

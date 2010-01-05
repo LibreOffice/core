@@ -57,7 +57,7 @@
 #include <ndtxt.hxx> // for meta
 #include <doc.hxx> // for meta
 #include <unometa.hxx>
-#include <unoobj.hxx> // SwXTextRange
+#include <unotextrange.hxx>
 #include <docsh.hxx>
 #include <svtools/zforlist.hxx> // GetNumberFormat
 

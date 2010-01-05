@@ -58,6 +58,7 @@
 #include <unomap.hxx>
 #include <unoobj.hxx>
 #include <unoparagraph.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <doctxm.hxx>
 #include <txttxmrk.hxx>

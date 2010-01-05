@@ -39,6 +39,7 @@
 #include <unocrsrhelper.hxx>
 #include <unoport.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>

@@ -83,6 +83,7 @@
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unosett.hxx>

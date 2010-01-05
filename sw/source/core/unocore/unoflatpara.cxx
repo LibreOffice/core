@@ -47,6 +47,7 @@
 #include <breakit.hxx>
 #include <pam.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>

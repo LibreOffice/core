@@ -34,7 +34,7 @@
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <crstate.hxx>
 #include <accmap.hxx>

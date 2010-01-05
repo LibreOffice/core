@@ -31,11 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
@@ -47,6 +47,7 @@
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
 #include <hints.hxx>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

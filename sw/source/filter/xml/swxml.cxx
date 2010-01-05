@@ -72,7 +72,7 @@
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 

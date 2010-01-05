@@ -34,6 +34,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unorefmark.hxx>
 #include <unoparagraph.hxx>
 #include <unotextcursor.hxx>

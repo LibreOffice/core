@@ -84,6 +84,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <unotbl.hxx>
 #include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <svtools/zforlist.hxx>     // SvNumberFormatter

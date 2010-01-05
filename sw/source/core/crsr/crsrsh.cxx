@@ -66,7 +66,7 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <fmteiro.hxx>
 #include <wrong.hxx> // SMARTTAGS
-#include <unoobj.hxx> // SMARTTAGS
+#include <unotextrange.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>

@@ -39,6 +39,7 @@
 #include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
+#include <unotextrange.hxx>
 #include <unoprnms.hxx>
 #include <svx/unoprnms.hxx>
 #include <swunohelper.hxx>

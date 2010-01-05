@@ -32,7 +32,6 @@
 #include "precompiled_sw.hxx"
 
 
-
 #include "hintids.hxx"
 
 #include <limits.h>
@@ -58,6 +57,7 @@
 #include "swtblfmt.hxx"
 #include "pam.hxx"
 #include "unotbl.hxx"
+#include "unotextrange.hxx"
 #include "unocrsr.hxx"
 #include "cellatr.hxx"
 #include "swddetbl.hxx"
