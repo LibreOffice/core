@@ -170,6 +170,7 @@ public:
 
     virtual void                SetTitle( const XubString& rTitle ) = 0;
     virtual void                SetIcon( USHORT nIcon ) = 0;
+    virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                    SetMenu( SalMenu *pSalMenu ) = 0;
     virtual void                    DrawMenuBar() = 0;
 
