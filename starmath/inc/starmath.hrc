@@ -31,7 +31,7 @@
 #define _STARMATH_HRC
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/sfxsids.hrc>

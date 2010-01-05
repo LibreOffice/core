@@ -32,7 +32,7 @@
 
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SwTxtRefMark;
 

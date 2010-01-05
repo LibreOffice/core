@@ -72,7 +72,7 @@
 #include "viewsh.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
                                 HTML_CNTXT_KEEP_NUMRULE | \

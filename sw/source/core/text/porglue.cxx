@@ -114,7 +114,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         const xub_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
         ASSERT( CH_BLANK  == cChar || CH_BULLET == cChar,
                 "SwGluePortion::Paint: blank expected" );

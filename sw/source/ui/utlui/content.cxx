@@ -33,9 +33,9 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1354,7 +1354,7 @@ void SwContentTree::Display( sal_Bool bActive )
 {
     if(!bIsImageListInitialized)
     {
-        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = sal_True;
     }
@@ -3257,7 +3257,7 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
   if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         FindActiveTypeAndRemoveUserData();
         Display(sal_True);

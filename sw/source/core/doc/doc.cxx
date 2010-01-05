@@ -47,7 +47,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/cscoitem.hxx>
@@ -106,6 +106,8 @@
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
+#include <docufld.hxx>
+
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -465,6 +467,9 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
         if ( bDeleteOld )
             delete pPrt;
         pPrt = pP;
+
+        if ( pDrawModel && !get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+            pDrawModel->SetRefDevice( pPrt );
     }
 
     if ( bCallPrtDataChanged &&
@@ -493,6 +498,9 @@ void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOl
         if ( bDeleteOld )
             delete pVirDev;
         pVirDev = pVd;
+
+        if ( pDrawModel && get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+            pDrawModel->SetRefDevice( pVirDev );
     }
 }
 
@@ -528,6 +536,9 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
                 pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
             else
                 pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+
+            if( pDrawModel )
+                pDrawModel->SetRefDevice( pMyVirDev );
         }
         else
         {
@@ -537,8 +548,10 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
             // triggers this funny situation:
             // getReferenceDevice()->getPrinter()->CreatePrinter_()
             // ->setPrinter()-> PrtDataChanged()
-            getPrinter( true );
+            SfxPrinter* pPrinter = getPrinter( true );
             // <--
+            if( pDrawModel )
+                pDrawModel->SetRefDevice( pPrinter );
         }
 
         set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
@@ -1066,6 +1079,24 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             }
         }
 
+        // #i93174#: notes contain paragraphs that are not nodes
+        {
+            SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
+            SwClientIter aIter(*pPostits);
+            SwFmtFld const * pFmtFld =
+                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
+            while (pFmtFld)
+            {
+                if (pFmtFld->IsFldInDoc())
+                {
+                    SwPostItField const * const pField(
+                        static_cast<SwPostItField const*>(pFmtFld->GetFld()));
+                    rStat.nAllPara += pField->GetNumberOfParagraphs();
+                }
+                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
+            }
+        }
+
         rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = FALSE;
         SetDocStat( rStat );
@@ -1091,12 +1122,21 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
-        if (GetDocShell()) {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps(
+        SfxObjectShell * const pObjShell( GetDocShell() );
+        if (pObjShell)
+        {
+            const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
+            const uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
+            // #i96786#: do not set modified flag when updating statistics
+            const bool bDocWasModified( IsModified() );
+            const ModifyBlocker_Impl b(pObjShell);
             xDocProps->setDocumentStatistics(aStat);
+            if (!bDocWasModified)
+            {
+                ResetModified();
+            }
         }
 
         // event. Stat. Felder Updaten

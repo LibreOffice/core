@@ -36,7 +36,7 @@
 #include <hints.hxx>
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
