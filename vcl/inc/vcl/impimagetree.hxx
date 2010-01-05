@@ -54,14 +54,17 @@ public:
 
     ~ImplImageTree();
 
+    // check whether the icon style is installed
+    bool checkStyle(rtl::OUString const & style);
+
     bool loadImage(
         rtl::OUString const & name, rtl::OUString const & style,
-        BitmapEx & bitmap, bool localized = false);
+        BitmapEx & bitmap, bool localized = false );
 
     void shutDown();
         // a crude form of life cycle control (called from DeInitVCL; otherwise,
         // if the ImplImageTree singleton were destroyed during exit that would
-        // be too late for the destructors of the bitmaps in m_cache)
+        // be too late for the destructors of the bitmaps in m_iconCache)
 
 private:
     typedef std::list<
@@ -71,20 +74,23 @@ private:
                 com::sun::star::container::XNameAccess > > > Zips;
 
     typedef std::hash_map<
-        rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > Cache;
+        rtl::OUString, bool, rtl::OUStringHash > CheckStyleCache;
+    typedef std::hash_map<
+        rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > IconCache;
 
     rtl::OUString m_style;
     Zips m_zips;
-    Cache m_cache;
+    CheckStyleCache m_checkStyleCache;
+    IconCache m_iconCache;
 
-    void setStyle(rtl::OUString const & style);
+    void setStyle(rtl::OUString const & style );
 
     void resetZips();
 
-    bool cacheLookup(
-        rtl::OUString const & name, bool localized, BitmapEx & bitmap);
+    bool checkStyleCacheLookup( rtl::OUString const & style, bool &exists );
+    bool iconCacheLookup( rtl::OUString const & name, bool localized, BitmapEx & bitmap );
 
-    bool find(std::vector< rtl::OUString > const & paths, BitmapEx & bitmap);
+    bool find(std::vector< rtl::OUString > const & paths, BitmapEx & bitmap );
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;

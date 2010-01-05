@@ -42,10 +42,10 @@
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 
 using namespace ::com::sun::star;

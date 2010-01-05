@@ -33,7 +33,7 @@
 
 #include <vcl/salbtype.hxx>
 #include "wmfwr.hxx"
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>

@@ -52,7 +52,7 @@ class KDESalFrame : public X11SalFrame
 
         virtual SalGraphics* GetGraphics();
         virtual void ReleaseGraphics( SalGraphics *pGraphics );
-        virtual void updateGraphics();
+        virtual void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings );
         virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };

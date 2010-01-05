@@ -1128,11 +1128,16 @@ namespace
 {
     inline int iround( float x )
     {
-        sal_Int32 a = *reinterpret_cast<const sal_Int32 *>(&x);
-        sal_Int32 exponent = (127 + 31) - ((a >> 23) & 0xFF);
-        sal_Int32 r = ((sal_Int32(a) << 8) | (1U << 31)) >> exponent;
+        union
+        {
+            float f;
+            sal_Int32 i;
+        };
+        f = x;
+        sal_Int32 exponent = (127 + 31) - ((i >> 23) & 0xFF);
+        sal_Int32 r = ((sal_Int32(i) << 8) | (1U << 31)) >> exponent;
         r &= ((exponent - 32) >> 31);
-        sal_Int32 sign = a >> 31;
+        sal_Int32 sign = i >> 31;
         return r = (r ^ sign) - sign;
     }
 
