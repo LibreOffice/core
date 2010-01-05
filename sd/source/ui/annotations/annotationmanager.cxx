@@ -199,7 +199,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
     if( pOptions )
-        mbShowAnnotations = pOptions->IsPreviewTransitions() == sal_True;
+        mbShowAnnotations = pOptions->IsShowComments() == TRUE;
 }
 
 // --------------------------------------------------------------------
