@@ -48,8 +48,8 @@
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svtools/style.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/style.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>

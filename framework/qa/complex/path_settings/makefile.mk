@@ -40,7 +40,7 @@ PACKAGE = complex$/path_settings
 
 #----- compile .java files -----------------------------------------
 
-JARFILES =  sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar mysql.jar
+JARFILES =  ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar mysql.jar
 JAVAFILES       = PathSettingsTest.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

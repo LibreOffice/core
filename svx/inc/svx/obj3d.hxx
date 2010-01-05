@@ -40,7 +40,7 @@
 #include <vcl/bitmap.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/xflclit.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

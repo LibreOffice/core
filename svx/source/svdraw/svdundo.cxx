@@ -47,7 +47,7 @@
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svdocapt.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 #include "svdviter.hxx"

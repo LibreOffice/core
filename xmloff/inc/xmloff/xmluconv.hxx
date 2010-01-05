@@ -38,7 +38,7 @@
 #include <limits.h>
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/util/Date.hpp>

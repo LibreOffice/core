@@ -33,9 +33,9 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
@@ -219,7 +219,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
                 Image aImage = GetImage( m_xFrame,
                                         aSlotURL,
                                         hasBigImages(),
-                                        GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                        GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
 
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;

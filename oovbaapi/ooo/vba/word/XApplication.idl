@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XApplication.idl,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __ooo_vba_word_XApplication_idl__
+#define __ooo_vba_word_XApplication_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
+#endif
+
+module ooo {  module vba {  module word {
+
+interface XDocument;
+interface XWindow;
+interface XSystem;
+interface XOptions;
+interface XSelection;
+interface XApplication : com::sun::star::uno::XInterface
+{
+    [attribute, readonly] XDocument ActiveDocument;
+    [attribute, readonly] XWindow ActiveWindow;
+    [attribute, readonly] string Name;
+    [attribute, readonly] ooo::vba::word::XSystem System;
+    [attribute, readonly] ooo::vba::word::XOptions Options;
+    [attribute, readonly] ooo::vba::word::XSelection Selection;
+    [attribute] boolean DisplayAutoCompleteTips;
+    [attribute] long EnableCancelKey;
+
+    any CommandBars( [in] any aIndex );
+    any Documents( [in] any aIndex );
+    any Addins( [in] any aIndex );
+    any Dialogs( [in] any aIndex );
+    float CentimetersToPoints([in] float Centimeters );
+};
+
+}; }; };
+
+#endif
+
+

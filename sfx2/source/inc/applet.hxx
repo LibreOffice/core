@@ -43,8 +43,8 @@
 #include <cppuhelper/implbase6.hxx>
 
 #include <rtl/ustring.hxx>
-#include <svtools/ownlist.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/ownlist.hxx>
+#include <svl/itemprop.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

@@ -32,7 +32,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
