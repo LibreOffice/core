@@ -1283,7 +1283,7 @@ public:
     static SwXParagraph* GetImplementation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xRef );
     //falls es mal als Service erzeugt werden kann
     //void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-    void attachToText(SwXText* pParent, SwUnoCrsr* pCrsr);
+    void attachToText(SwXText & rParent, SwTxtNode & rTxtNode);
 };
 /* -----------------23.03.99 12:57-------------------
  *

@@ -662,7 +662,7 @@ void SwXText::insertTextContentBefore(
     SwXTextSection* pXSection = SwXTextSection::GetImplementation( xSuccessor );
     SwXTextTable* pXTable = SwXTextTable::GetImplementation(xSuccessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
-    SwUnoCrsr* pUnoCrsr = 0;
+    SwTxtNode * pTxtNode = 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
         SwTable* pTable = SwTable::FindTable( pTableFmt );
@@ -671,7 +671,7 @@ void SwXText::insertTextContentBefore(
         SwNodeIndex aTblIdx(  *pTblNode, -1 );
         SwPosition aBefore(aTblIdx);
         bRet = GetDoc()->AppendTxtNode( aBefore );
-        pUnoCrsr = GetDoc()->CreateUnoCrsr( aBefore, FALSE);
+        pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
     }
     else if(pXSection &&
         pXSection->GetFmt() &&
@@ -683,13 +683,15 @@ void SwXText::insertTextContentBefore(
         SwNodeIndex aSectIdx(  *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
         bRet = GetDoc()->AppendTxtNode( aBefore );
-        pUnoCrsr = GetDoc()->CreateUnoCrsr( aBefore, FALSE);
+        pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
     }
-    if(!bRet)
+    if (!bRet || !pTxtNode)
+    {
         throw lang::IllegalArgumentException();
+    }
     else
     {
-        pPara->attachToText(this, pUnoCrsr);
+        pPara->attachToText(*this, *pTxtNode);
     }
 
 }
@@ -708,11 +710,11 @@ void SwXText::insertTextContentAfter(
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
         throw lang::IllegalArgumentException();
 
-    SwUnoCrsr* pUnoCrsr = 0;
     SwXTextSection* pXSection = SwXTextSection::GetImplementation( xPredecessor );
     SwXTextTable* pXTable = SwXTextTable::GetImplementation(xPredecessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
     sal_Bool bRet = sal_False;
+    SwTxtNode * pTxtNode = 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
         SwTable* pTable = SwTable::FindTable( pTableFmt );
@@ -721,7 +723,7 @@ void SwXText::insertTextContentAfter(
         SwEndNode* pTableEnd = pTblNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
         bRet = GetDoc()->AppendTxtNode( aTableEnd );
-        pUnoCrsr = GetDoc()->CreateUnoCrsr( aTableEnd, FALSE);
+        pTxtNode = aTableEnd.nNode.GetNode().GetTxtNode();
     }
     else if(pXSection &&
         pXSection->GetFmt() &&
@@ -732,13 +734,15 @@ void SwXText::insertTextContentAfter(
         SwEndNode* pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
         bRet = GetDoc()->AppendTxtNode( aEnd );
-        pUnoCrsr = GetDoc()->CreateUnoCrsr( aEnd, FALSE);
+        pTxtNode = aEnd.nNode.GetNode().GetTxtNode();
     }
-    if(!bRet)
+    if (!bRet || !pTxtNode)
+    {
         throw lang::IllegalArgumentException();
+    }
     else
     {
-        pPara->attachToText(this, pUnoCrsr);
+        pPara->attachToText(*this, *pTxtNode);
     }
 }
 /* -----------------------------10.07.00 15:40--------------------------------

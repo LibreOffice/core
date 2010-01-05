@@ -226,14 +226,15 @@ SwXParagraph::~SwXParagraph()
 /* -----------------------------11.07.00 14:48--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXParagraph::attachToText(SwXText* pParent, SwUnoCrsr* pCrsr)
+void
+SwXParagraph::attachToText(SwXText & rParent, SwTxtNode & rTxtNode)
 {
     DBG_ASSERT(m_bIsDescriptor, "Paragraph is not a descriptor");
     if(m_bIsDescriptor)
     {
         m_bIsDescriptor = FALSE;
-        pCrsr->Add(this);
-        xParentText = pParent;
+        rTxtNode.Add(this);
+        xParentText = &rParent;
         if(m_sText.getLength())
         {
             try { setString(m_sText); }
