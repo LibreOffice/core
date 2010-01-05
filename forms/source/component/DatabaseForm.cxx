@@ -81,8 +81,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
-#include <svtools/inetstrm.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inetstrm.hxx>
+#include <svl/inettype.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fsys.hxx>
