@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unoobj.hxx>
+#include <unorefmark.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>

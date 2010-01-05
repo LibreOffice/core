@@ -47,6 +47,7 @@
 #include <tox.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unorefmark.hxx>
 #include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>

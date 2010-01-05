@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -76,7 +75,8 @@
 #include <slist>
 #include <iterator>
 
-#include "unometa.hxx"
+#include <unorefmark.hxx>
+#include <unometa.hxx>
 #include "docsh.hxx"
 
 

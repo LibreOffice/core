@@ -36,6 +36,7 @@
 #include <tools/debug.hxx>
 #include <swtypes.hxx>
 #include <unoobj.hxx>
+#include <unorefmark.hxx>
 #include <unoidx.hxx>
 #include <tox.hxx>
 #include <unoclbck.hxx>
