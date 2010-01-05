@@ -552,7 +552,7 @@ sub get_base
     }
 
     if ( $#field == -1 ) {
-        print_error("can't determine module");
+        print_error("can't find d.lst");
         exit(2);
     }
     else {

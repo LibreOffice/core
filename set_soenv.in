@@ -646,7 +646,6 @@ elsif ( $platform =~ m/cygwin/ )
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
-      $COMPATH        =~ s/\/bin$//i;
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -655,8 +654,6 @@ elsif ( $platform =~ m/cygwin/ )
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
       $COM            = "MSC";
-      # COMPATH for MSC is differently used
-      $COMPATH        =~ s/\/bin$//i;
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -979,12 +976,10 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
-
-# SOURCE_ROOT_DIR equals $SOLARSRC/..
-my @list1 = split( /\// , $SOLARSRC );
-pop @list1;
-$SOURCE_ROOT_DIR = join ( '/' , @list1 );
-
+# Location of the repository.
+my @splitlist = split( /\//, $SRC_ROOT );
+pop @splitlist;
+$SOURCE_ROOT_DIR      = join("/", @splitlist);
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1323,9 +1318,7 @@ if ($platform =~ m/solaris/)
                         $L.$LIB.
                         $L.$USR_LIB;
    if ( $CC =~ "gcc" ) {
-      my $temp = $COMPATH;
-      $temp =~ s:/bin$::;
-      $SOLARLIB      .= $L.$temp.$LIB;
+      $SOLARLIB      .= $L.$COMPATH.$LIB;
    }
    $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
@@ -1394,9 +1387,8 @@ $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
-{   my $temp;
-    $temp =~ s:$COMPATH:/bin\$:;
-    $SOLARINC         .= $I.$temp.$ds."include";
+{   
+    $SOLARINC         .= $I.$COMPATH.$ds."include";
 }
 if ($platform =~ m/linux/)
 {
