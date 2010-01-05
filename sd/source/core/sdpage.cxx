@@ -54,7 +54,7 @@
 #include <basic/basmgr.hxx>
 #include <svx/pbinitem.hxx>
 #include <svx/svdundo.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/editobj.hxx>
 #ifndef _SVX_SRIPTTYPEITEM_HXX

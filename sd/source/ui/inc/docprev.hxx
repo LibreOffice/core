@@ -37,7 +37,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 #include "fadedef.h"
 #include "sddllapi.h"

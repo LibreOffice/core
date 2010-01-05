@@ -48,11 +48,11 @@
 #include <svx/numitem.hxx>
 
 #include <svx/dialogs.hrc>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdmark.hxx>
 #include "View.hxx"
 #include <svx/svdobj.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <drawdoc.hxx>
 
 #ifndef _SD_SDRESID_HXX
@@ -64,7 +64,7 @@
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 
 namespace sd {
 

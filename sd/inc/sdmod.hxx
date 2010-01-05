@@ -42,7 +42,7 @@
 #include <sot/storage.hxx>
 #include <tools/shl.hxx>
 #include "sddllapi.h"
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>

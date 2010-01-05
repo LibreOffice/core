@@ -32,7 +32,7 @@
 #include "precompiled_sd.hxx"
 
 #include "Ruler.hxx"
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVXIDS_HXX //autogen
 #include <svx/svxids.hrc>

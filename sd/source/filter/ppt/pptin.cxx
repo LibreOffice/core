@@ -35,20 +35,20 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/colritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -75,7 +75,7 @@
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/numitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>
@@ -88,11 +88,11 @@
 #include "../../ui/inc/FrameView.hxx"
 #include "../../ui/inc/optsitem.hxx"
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
