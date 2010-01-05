@@ -3519,8 +3519,8 @@ const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
     return pPage;
 }
 
-SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
-                        const SwPosition *pPos, const BOOL bCalcFrm )
+SwFrm* GetFrmOfModify( SwModify const& rMod, USHORT const nFrmType,
+        const Point* pPoint, const SwPosition *pPos, const BOOL bCalcFrm )
 {
     SwFrm *pMinFrm = 0, *pTmpFrm;
     SwRect aCalcRect;
