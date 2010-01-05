@@ -2090,8 +2090,11 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
-    if ( pVScrollbar )
-        ScrollDocSzChg();
+    if ( pVScrollbar &&
+             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+        {
+            ScrollDocSzChg();
+        }
 }
 
 /*--------------------------------------------------------------------
