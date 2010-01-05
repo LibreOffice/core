@@ -48,6 +48,7 @@
 #include <doc.hxx>
 #include <TextCursorHelper.hxx>
 #include <unoobj.hxx>
+#include <unotext.hxx>
 #include <unotextrange.hxx>
 #include "unocrsr.hxx"
 #include <poolfmt.hxx>

@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <unoredlines.hxx>
 #include <unoredline.hxx>
+#include <unoobj.hxx>
 #include <tools/debug.hxx>
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"

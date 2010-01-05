@@ -31,14 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include "hintids.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <svx/fontitem.hxx>
-#include <unoobj.hxx>
+//#include <unoobj.hxx>
+#include <unotext.hxx>
 #include <doc.hxx>
 #include <xmlexp.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

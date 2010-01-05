@@ -99,6 +99,7 @@
 #include <fmtclbl.hxx>
 #include <swunohelper.hxx>
 #include <unoframe.hxx>
+#include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
 /// OD 22.08.2002 #99657#
 ///     include definition of class SvxBrushItem and GraphicObject

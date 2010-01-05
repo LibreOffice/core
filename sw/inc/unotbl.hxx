@@ -30,8 +30,8 @@
 #ifndef _UNOTBL_HXX
 #define _UNOTBL_HXX
 
-#include <unoobj.hxx>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
@@ -43,22 +43,27 @@
 #include <com/sun/star/table/XAutoFormattable.hpp>
 
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/implbase10.hxx>
 
 #include <comphelper/uno3.hxx>
+#include <tools/string.hxx>
 
 #include <TextCursorHelper.hxx>
+#include <unoevtlstnr.hxx>
+#include <unotext.hxx>
 
 
-class SwTableBoxFmt;
+class SwUnoCrsr;
+class SwTable;
+class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
 class SwTableBoxFmt;
-class SwTableLine;
-class SwTableCursor;
 class SwChartDataProvider;
+class SwFrmFmt;
 
 
 /* -----------------------------22.09.00 11:10--------------------------------

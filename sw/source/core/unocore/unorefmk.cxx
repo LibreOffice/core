@@ -440,6 +440,7 @@ void SwXReferenceMark::removeVetoableChangeListener(
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <unometa.hxx>
+#include <unotext.hxx>
 #include <unoport.hxx>
 #include <txtatr.hxx>
 #include <fmtmeta.hxx>

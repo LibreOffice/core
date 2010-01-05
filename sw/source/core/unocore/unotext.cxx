@@ -40,6 +40,8 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <unoobj.hxx>
+#include <unotextbodyhf.hxx>
+#include <unotext.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unosection.hxx>
@@ -2272,7 +2274,7 @@ uno::Any SwXBodyText::queryAggregation(
   -----------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SwXBodyText::getTypes(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aTypes = SwXBodyTextBaseClass::getTypes();
+    uno::Sequence< uno::Type > aTypes = SwXBodyText_Base::getTypes();
     uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
     long nIndex = aTypes.getLength();
     aTypes.realloc(aTypes.getLength() + aTextTypes.getLength());
@@ -2301,13 +2303,13 @@ uno::Sequence< sal_Int8 > SwXBodyText::getImplementationId(  ) throw(uno::Runtim
 
   -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
-    SwXBodyText::queryInterface( const uno::Type& rType )
-        throw(uno::RuntimeException)
+SwXBodyText::queryInterface(const uno::Type& rType)
+throw (uno::RuntimeException)
 {
-      uno::Any aRet = SwXText::queryInterface( rType );
-    if(aRet.getValueType() == ::getCppuVoidType())
-        aRet = SwXBodyTextBaseClass::queryInterface( rType );
-    return aRet;
+    const uno::Any ret = SwXText::queryInterface(rType);
+    return (ret.getValueType() == ::getCppuVoidType())
+        ?   SwXBodyText_Base::queryInterface(rType)
+        :   ret;
 }
 /* -----------------------------05.01.00 11:07--------------------------------
 
@@ -2504,7 +2506,7 @@ uno::Reference< text::XTextCursor >   SwXHeadFootText::createCursor() throw(uno:
  ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SwXHeadFootText::getTypes(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aHFTypes = SwXHeadFootTextBaseClass::getTypes();
+    uno::Sequence< uno::Type > aHFTypes = SwXHeadFootText_Base::getTypes();
     uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
 
     long nIndex = aHFTypes.getLength();
@@ -2538,12 +2540,13 @@ uno::Sequence< sal_Int8 > SwXHeadFootText::getImplementationId(  ) throw(uno::Ru
 /* -----------------------------21.03.00 15:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Any SwXHeadFootText::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
+uno::Any SwXHeadFootText::queryInterface(const uno::Type& rType)
+throw (uno::RuntimeException)
 {
-    uno::Any aRet = SwXHeadFootTextBaseClass::queryInterface(aType);
-    if(aRet.getValueType() == ::getCppuVoidType() )
-        aRet = SwXText::queryInterface(aType);
-    return aRet;
+    const uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
+    return (ret.getValueType() == ::getCppuVoidType())
+        ?   SwXText::queryInterface(rType)
+        :   ret;
 }
 
 /*-- 11.12.98 10:14:50---------------------------------------------------

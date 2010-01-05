@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <tools/debug.hxx>
 #include <swtypes.hxx>
-#include <unoobj.hxx>
+#include <unofootnote.hxx>
 #include <unorefmark.hxx>
 #include <unoidx.hxx>
 #include <tox.hxx>

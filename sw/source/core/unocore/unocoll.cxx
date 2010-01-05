@@ -66,7 +66,9 @@
 #include <unofield.hxx>
 #include <unoidx.hxx>
 #include <unoframe.hxx>
+#include <unofootnote.hxx>
 #include <vcl/svapp.hxx>
+#include <fmtcntnt.hxx>
 #include <authfld.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unochart.hxx>

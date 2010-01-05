@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <unoobj.hxx>
+#include <unofootnote.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -147,7 +148,7 @@ SwXFootnote::~SwXFootnote()
  ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SwXFootnote::getTypes(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aFtnTypes = SwXFootnoteBaseClass::getTypes();
+    uno::Sequence< uno::Type > aFtnTypes = SwXFootnote_Base::getTypes();
     uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
 
     long nIndex = aFtnTypes.getLength();
@@ -179,12 +180,13 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXFootnote::getImplementationId(  ) throw(un
 /* -----------------------------21.03.00 15:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Any SAL_CALL SwXFootnote::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SwXFootnote::queryInterface(const uno::Type& rType)
+throw (uno::RuntimeException)
 {
-    uno::Any aRet = SwXFootnoteBaseClass::queryInterface(aType);
-    if(aRet.getValueType() == ::getCppuVoidType() )
-        aRet = SwXText::queryInterface(aType);
-    return aRet;
+    const uno::Any ret = SwXFootnote_Base::queryInterface(rType);
+    return (ret.getValueType() == ::getCppuVoidType())
+        ?   SwXText::queryInterface(rType)
+        :   ret;
 }
 
 /*-- 10.12.98 15:31:47---------------------------------------------------

@@ -30,26 +30,34 @@
 #ifndef _UNOFRAME_HXX
 #define _UNOFRAME_HXX
 
-#include <unoobj.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
- /*
-#include <com/sun/star/container/XNameAccess.hpp>
- */
 
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <sfx2/objsh.hxx>
 
+#include <flyenum.hxx>
+#include <frmfmt.hxx>
+#include <unoevtlstnr.hxx>
+#include <unotext.hxx>
 
-class SwDoc;
+
 class SfxItemPropertSet;
+class SdrObject;
+class SwDoc;
+class SwFmt;
+class SwFlyFrmFmt;
+
 
 /*-----------------12.02.98 11:21-------------------
 

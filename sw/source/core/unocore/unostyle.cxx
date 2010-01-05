@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -62,6 +61,7 @@
 #include <shellio.hxx>
 #include <docstyle.hxx>
 #include <unoobj.hxx>
+#include <unotextbodyhf.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
 #include <tools/urlobj.hxx>
@@ -74,16 +74,9 @@
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/printer.hxx>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
-/*
-#include <com/sun/star/frame/XModel.hpp>
-*/
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
 #include <istyleaccess.hxx>
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>

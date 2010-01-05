@@ -50,6 +50,7 @@
 #include <unoatxt.hxx>
 #include <unomap.hxx>
 #include <unoobj.hxx>
+#include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <TextCursorHelper.hxx>
 #include <swevent.hxx>

@@ -37,6 +37,7 @@
 #include <unomid.h>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
+#include <unoobj.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
@@ -44,6 +45,7 @@
 #include <svx/unoprnms.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtatr.hxx>
 #include <docsh.hxx>
