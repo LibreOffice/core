@@ -32,6 +32,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/XTextSection.hpp>
+
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
 #include <unoobj.hxx>

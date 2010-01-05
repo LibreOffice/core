@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/XTextSection.hpp>
 
 #include <hints.hxx>
 #include <tools/debug.hxx>

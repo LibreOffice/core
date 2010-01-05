@@ -31,6 +31,7 @@
 #define _UNOTBL_HXX
 
 #include <unoobj.hxx>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>

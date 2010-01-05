@@ -32,6 +32,7 @@
 
 #include <unoobj.hxx>
 #include <sfx2/objsh.hxx>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

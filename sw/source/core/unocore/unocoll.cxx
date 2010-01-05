@@ -75,6 +75,7 @@
 #include <slist>
 #include <iterator>
 
+#include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>

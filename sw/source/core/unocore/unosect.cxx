@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/text/SectionFileLink.hpp>
 
 #include <cmdid.h>
@@ -45,6 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <fmtclds.hxx>
 #include <unoobj.hxx>
+#include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unoredline.hxx>
 #include <redline.hxx>
