@@ -52,7 +52,7 @@
 #endif
 #include <osl/time.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 using namespace osl;
 using namespace rtl;
