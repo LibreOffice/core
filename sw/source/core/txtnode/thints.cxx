@@ -159,7 +159,8 @@ bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
                  const xub_StrLen nStart2, const xub_StrLen nEnd2)
 {
     return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
-        ? (nStart1 != nEnd1) // same start/end: nested except if hint1 empty
+        // same start/end: nested except if hint1 empty and hint2 not empty
+        ? (nStart1 != nEnd1) || (nStart2 == nEnd2)
         : ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
 }
 
