@@ -285,7 +285,7 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
     {
         if( pTabDesc && pTabDesc->getOldRedlineStack() )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ASSERT( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
 #else
             pTabDesc->getOldRedlineStack()->close( rPos, eType );
@@ -1502,7 +1502,7 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
     if (nLen != 6)
         return;
     mbHasSpacing=true;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BYTE nWhichCell =
 #endif
             *pParams++;
@@ -1556,7 +1556,7 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
 
     ASSERT(nOverrideSpacing[nWhichCell] < 0x10,
         "Unexpected value for nSideBits");
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BYTE nUnknown2 =
 #endif
             *pParams++;

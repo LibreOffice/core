@@ -33,8 +33,8 @@
 
 
 #include "hintids.hxx"
-#include <svtools/aeitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>

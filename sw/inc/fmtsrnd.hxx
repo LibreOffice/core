@@ -33,7 +33,7 @@
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 // --> OD 2006-08-15 #i68520# - refactoring
 // separate enumeration <SwSurround> in own header file

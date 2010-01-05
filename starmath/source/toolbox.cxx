@@ -33,9 +33,9 @@
 
 
 #include <rtl/logfile.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/imgdef.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imgmgr.hxx>

@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/protitem.hxx>
@@ -218,7 +218,7 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( !(nNew == FLY_PAGE &&
         (FLY_AT_CNTNT==nOld || FLY_AUTO_CNTNT==nOld || FLY_IN_CNTNT==nOld ) &&
         pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
@@ -602,7 +602,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             SwRect aTmpRect( aRet, rAbsPos );
             if( aTmpRect.HasArea() )
                 MakeVisible( aTmpRect );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {

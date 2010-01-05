@@ -34,7 +34,7 @@
 
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -65,7 +65,7 @@
 #include <helpid.h>
 #endif
 #include <wrtsh.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <vcl/lstbox.hxx>
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"

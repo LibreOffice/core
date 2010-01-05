@@ -33,9 +33,9 @@
 #include <hintids.hxx>
 #include <vcl/salbtype.hxx>             // FRound
 #include <tools/urlobj.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <svtools/imap.hxx>
 #include <svtools/filter.hxx>

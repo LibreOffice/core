@@ -35,8 +35,8 @@
 // #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svx/unolingu.hxx>
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
@@ -167,7 +167,7 @@ SwFieldType::SwFieldType( USHORT nWhichId )
     DBG_CTOR( SwFieldType, 0 );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 SwFieldType::~SwFieldType()
 {
@@ -213,7 +213,7 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 USHORT SwField::Which() const
 {
     ASSERT(pType, "Kein Typ vorhanden");

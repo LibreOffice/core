@@ -30,7 +30,7 @@
 #ifndef _UNOMAP_HXX
 #define _UNOMAP_HXX
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #define PROPERTY_NONE 0
 
