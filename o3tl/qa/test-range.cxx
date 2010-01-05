@@ -28,8 +28,9 @@
  *
  ************************************************************************/
 
-
-#include <testshl/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
 
 #include <o3tl/range.hxx>
 #include <vector>
@@ -233,4 +234,4 @@ public:
 }; // class range_test
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(range_test, "o3tltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(range_test);

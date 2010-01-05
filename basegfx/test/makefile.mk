@@ -66,7 +66,6 @@ SHL1STDLIBS= \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
                         $(CPPULIB)       \
-                                $(TESTSHL2LIB) \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
@@ -83,7 +82,6 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
 
 # --- Enable testshl2 execution in normal build ------------------------
 
@@ -91,7 +89,7 @@ $(MISC)$/unittest_succeeded : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        $(TESTSHL2) -sf $(mktmp ) -forward $(BIN)$/ $(SHL1TARGETN)
+        $(CPPUNITTESTER) $(SHL1TARGETN)
         $(TOUCH) $@
 
 ALLTAR : $(MISC)$/unittest_succeeded
