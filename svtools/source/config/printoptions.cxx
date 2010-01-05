@@ -31,11 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 //_________________________________________________________________________________________________________________
 //  includes
 //_________________________________________________________________________________________________________________
@@ -73,7 +68,7 @@
 #endif
 
 #ifndef _SVT_LOGHELPER_HXX
-#include <loghelper.hxx>
+#include <unotools/loghelper.hxx>
 #endif
 
 #include <itemholder2.hxx>
