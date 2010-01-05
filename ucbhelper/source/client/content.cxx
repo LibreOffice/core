@@ -149,7 +149,7 @@ void EmptyInputStream::closeInput()
 //=========================================================================
 
 class ContentEventListener_Impl : public cppu::OWeakObject,
-                                     public XContentEventListener
+                                      public XContentEventListener
 {
     Content_Impl& m_rContent;
 
@@ -157,7 +157,7 @@ public:
     ContentEventListener_Impl( Content_Impl& rContent )
     : m_rContent( rContent ) {}
 
-     // XInterface
+    // XInterface
     XINTERFACE_DECL()
 
     // XContentEventListener
@@ -184,8 +184,8 @@ friend class ContentEventListener_Impl;
     mutable rtl::OUString               m_aURL;
     Reference< XMultiServiceFactory >   m_xSMgr;
     Reference< XContent >               m_xContent;
-    Reference< XCommandProcessor >      m_xCommandProcessor;
-      Reference< XCommandEnvironment >      m_xEnv;
+    Reference< XCommandProcessor >          m_xCommandProcessor;
+    Reference< XCommandEnvironment >    m_xEnv;
     Reference< XContentEventListener >  m_xContentEventListener;
     mutable osl::Mutex                  m_aMutex;
     sal_Int32                           m_nCommandId;
@@ -587,7 +587,7 @@ Any Content::getPropertyValue( sal_Int32 nPropertyHandle )
 
 //=========================================================================
 Any Content::setPropertyValue( const rtl::OUString& rName,
-                                  const Any& rValue )
+                                const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Sequence< rtl::OUString > aNames( 1 );
@@ -602,7 +602,7 @@ Any Content::setPropertyValue( const rtl::OUString& rName,
 
 //=========================================================================
 Any Content::setPropertyValue( const sal_Int32 nPropertyHandle,
-                                  const Any& rValue )
+                                const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Sequence< sal_Int32 > aHandles( 1 );
@@ -674,8 +674,8 @@ Reference< XRow > Content::getPropertyValuesInterface(
 
         rProp.Name       = pNames[ n ];
         rProp.Handle     = -1; // n/a
-//      rProp.Type       =
-//      rProp.Attributes = ;
+//        rProp.Type       =
+//        rProp.Attributes = ;
     }
 
     Command aCommand;
@@ -707,8 +707,8 @@ Reference< XRow > Content::getPropertyValuesInterface(
 
         rProp.Name       = rtl::OUString(); // n/a
         rProp.Handle     = pHandles[ n ];
-//      rProp.Type       =
-//      rProp.Attributes = ;
+//        rProp.Type       =
+//        rProp.Attributes = ;
     }
 
     Command aCommand;
@@ -726,7 +726,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
 //=========================================================================
 Sequence< Any > Content::setPropertyValues(
                             const Sequence< rtl::OUString >& rPropertyNames,
-                               const Sequence< Any >& rValues )
+                                const Sequence< Any >& rValues )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( rPropertyNames.getLength() != rValues.getLength() )
@@ -756,7 +756,7 @@ Sequence< Any > Content::setPropertyValues(
         rProp.Name   = pNames[ n ];
         rProp.Handle = -1; // n/a
         rProp.Value  = pValues[ n ];
-//      rProp.State  = ;
+//        rProp.State  = ;
     }
 
     Command aCommand;
@@ -774,7 +774,7 @@ Sequence< Any > Content::setPropertyValues(
 //=========================================================================
 Sequence< Any > Content::setPropertyValues(
                             const Sequence< sal_Int32 >& nPropertyHandles,
-                               const Sequence< Any >& rValues )
+                                const Sequence< Any >& rValues )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( nPropertyHandles.getLength() != rValues.getLength() )
@@ -804,7 +804,7 @@ Sequence< Any > Content::setPropertyValues(
         rProp.Name   = rtl::OUString(); // n/a
         rProp.Handle = pHandles[ n ];
         rProp.Value  = pValues[ n ];
-//      rProp.State  = ;
+//        rProp.State  = ;
     }
 
     Command aCommand;
@@ -934,7 +934,7 @@ Reference< XResultSet > Content::createCursor(
 
     OSL_ENSURE( aResult.is(), "Content::createCursor - no cursor!" );
 
-     if ( !aResult.is() )
+    if ( !aResult.is() )
     {
         // Former, the open command directly returned a XResultSet.
         aCursorAny >>= aResult;
@@ -964,7 +964,7 @@ Reference< XResultSet > Content::createCursor(
 
     OSL_ENSURE( aResult.is(), "Content::createCursor - no cursor!" );
 
-     if ( !aResult.is() )
+    if ( !aResult.is() )
     {
         // Former, the open command directly returned a XResultSet.
         aCursorAny >>= aResult;
@@ -1008,7 +1008,7 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
 //=========================================================================
 Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            const Sequence< NumberedSortingInfo >& rSortInfo,
                             Reference< XAnyCompareFactory > rAnyCompareFactory,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1043,7 +1043,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
 //=========================================================================
 Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
                             const Sequence< sal_Int32 >& rPropertyHandles,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            const Sequence< NumberedSortingInfo >& rSortInfo,
                             Reference< XAnyCompareFactory > rAnyCompareFactory,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1078,7 +1078,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
 //=========================================================================
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            const Sequence< NumberedSortingInfo >& rSortInfo,
                             Reference< XAnyCompareFactory > rAnyCompareFactory,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1132,7 +1132,7 @@ Reference< XResultSet > Content::createSortedCursor(
 //=========================================================================
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< sal_Int32 >& rPropertyHandles,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            const Sequence< NumberedSortingInfo >& rSortInfo,
                             Reference< XAnyCompareFactory > rAnyCompareFactory,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1331,7 +1331,7 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
 
 //=========================================================================
 void Content::writeStream( const Reference< XInputStream >& rStream,
-                            sal_Bool bReplaceExisting )
+                           sal_Bool bReplaceExisting )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     InsertCommandArgument aArg;
@@ -1352,8 +1352,8 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
 sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     const Sequence< rtl::OUString >&
                                         rPropertyNames,
-                                      const Sequence< Any >& rPropertyValues,
-                                      Content& rNewContent )
+                                    const Sequence< Any >& rPropertyValues,
+                                    Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     return insertNewContent( rContentType,
@@ -1367,8 +1367,8 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     const Sequence< sal_Int32 >&
                                         nPropertyHandles,
-                                      const Sequence< Any >& rPropertyValues,
-                                      Content& rNewContent )
+                                    const Sequence< Any >& rPropertyValues,
+                                    Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     return insertNewContent( rContentType,
@@ -1382,9 +1382,9 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     const Sequence< rtl::OUString >&
                                         rPropertyNames,
-                                      const Sequence< Any >& rPropertyValues,
+                                    const Sequence< Any >& rPropertyValues,
                                     const Reference< XInputStream >& rData,
-                                      Content& rNewContent )
+                                    Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( rContentType.getLength() == 0 )
@@ -1423,9 +1423,9 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     const Sequence< sal_Int32 >&
                                         nPropertyHandles,
-                                      const Sequence< Any >& rPropertyValues,
+                                    const Sequence< Any >& rPropertyValues,
                                     const Reference< XInputStream >& rData,
-                                      Content& rNewContent )
+                                    Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( rContentType.getLength() == 0 )
@@ -1464,7 +1464,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 sal_Bool Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
                                    const rtl::OUString & rTitle,
-                                     const sal_Int32 nNameClashAction )
+                                   const sal_Int32 nNameClashAction )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     ContentBroker* pBroker = ContentBroker::get();
@@ -1578,8 +1578,8 @@ sal_Bool Content::isDocument()
 //=========================================================================
 
 Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
-                              const Reference< XContent >& rContent,
-                              const Reference< XCommandEnvironment >& rEnv )
+                            const Reference< XContent >& rContent,
+                            const Reference< XCommandEnvironment >& rEnv )
 : m_xSMgr( rSMgr ),
   m_xContent( rContent ),
   m_xEnv( rEnv ),
