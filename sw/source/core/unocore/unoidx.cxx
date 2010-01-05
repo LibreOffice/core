@@ -43,9 +43,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swtypes.hxx>
 #include <shellres.hxx>
 #include <viewsh.hxx>
@@ -58,17 +56,17 @@
 #include <pagedesc.hxx>
 #include <unomap.hxx>
 #include <unoobj.hxx>
+#include <unoparagraph.hxx>
 #include <doctxm.hxx>
 #include <txttxmrk.hxx>
 #include <unocrsr.hxx>
 #include <unostyle.hxx>
 #include <ndtxt.hxx>
 #include <unoidx.hxx>
-#ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

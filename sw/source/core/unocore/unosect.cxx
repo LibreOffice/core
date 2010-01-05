@@ -38,24 +38,21 @@
 #include <hintids.hxx>
 #include <svtools/urihelper.hxx>
 #include <svx/brshitem.hxx>
-#ifndef _SVX_XMLCNITEM_HXX
 #include <svx/xmlcnitm.hxx>
-#endif
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtclds.hxx>
 #include <unoobj.hxx>
+#include <unoparagraph.hxx>
 #include <unoredline.hxx>
 #include <redline.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <section.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
@@ -65,12 +62,11 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <svx/frmdiritem.hxx>
 /* #109700# */
 #include <svx/lrspitem.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -79,6 +75,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using ::rtl::OUString;
+
 
 TYPEINIT1(SwXTextSectionClient, SwClient);
 /*-- 20.12.2005 09:56:33---------------------------------------------------

@@ -53,6 +53,7 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <undobj.hxx>
+#include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -70,8 +71,10 @@
 
 #include <iostream>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 
 const sal_Char cInvalidObject[] = "this object is invalid";
 /******************************************************************

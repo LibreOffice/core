@@ -33,16 +33,12 @@
 #include "precompiled_sw.hxx"
 
 
-
-
 // STL includes
 #include <list>
 
 #include <float.h> // for DBL_MIN
 #include <swtypes.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <unotbl.hxx>
 #include <unostyle.hxx>
 #include <section.hxx>
@@ -87,6 +83,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <unotbl.hxx>
 #include <unoobj.hxx>
+#include <unoparagraph.hxx>
 #include <svtools/zforlist.hxx>     // SvNumberFormatter
 #include <svx/brkitem.hxx>
 #include <svx/shaditem.hxx>
@@ -103,8 +100,10 @@
 #include <unochart.hxx>
 #include <rtl/math.hxx>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 
 //-----------------------------------------------------------------------------
 // from unoobj.cxx

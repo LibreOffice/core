@@ -38,6 +38,7 @@
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
+#include <unoparagraph.hxx>
 #include <unoprnms.hxx>
 #include <svx/unoprnms.hxx>
 #include <swunohelper.hxx>

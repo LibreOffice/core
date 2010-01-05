@@ -4972,6 +4972,7 @@ bool SwTxtNode::IsInContent() const
     return !GetDoc()->IsInHeaderFooter( SwNodeIndex(*this) );
 }
 
+#include <unoparagraph.hxx>
 #include <unoobj.hxx>
 
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >

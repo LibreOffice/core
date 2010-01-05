@@ -78,6 +78,7 @@
 #include <txtrfmrk.hxx>
 #include <unoclbck.hxx>
 #include <unoobj.hxx>
+#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoport.hxx>
 #include <unocrsrhelper.hxx>

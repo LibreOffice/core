@@ -40,6 +40,7 @@
 #include <section.hxx>
 #include <unoprnms.hxx>
 #include <unoobj.hxx>
+#include <unoparagraph.hxx>
 #include <unocoll.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
@@ -49,6 +50,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

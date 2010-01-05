@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <unoobj.hxx>
 #include <unorefmark.hxx>
+#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>

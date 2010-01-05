@@ -43,5 +43,26 @@ cppu::WeakImplHelper2
 >
 SwSimpleEnumerationBaseClass;
 
+
+/* -----------------29.04.98 07:35-------------------
+ *
+ * --------------------------------------------------*/
+enum CursorType
+{
+    CURSOR_INVALID,
+    CURSOR_BODY,
+    CURSOR_FRAME,
+    CURSOR_TBLTEXT,
+    CURSOR_FOOTNOTE,
+    CURSOR_HEADER,
+    CURSOR_FOOTER,
+    CURSOR_REDLINE,
+    CURSOR_ALL,         // for Search&Replace
+    CURSOR_SELECTION,   // create a paragraph enumeration from
+                        // a text range or cursor
+    CURSOR_SELECTION_IN_TABLE,
+    CURSOR_META,         // meta/meta-field
+};
+
 #endif
 
