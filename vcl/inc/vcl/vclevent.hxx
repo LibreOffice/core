@@ -262,7 +262,10 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
         std::list< Link >::iterator     m_aIt;
         bool                            m_bWasInvalidated;
 
-        ListenerIt() : m_bWasInvalidated( false ) {}
+        ListenerIt(const std::list<Link>::iterator& rIt)
+            : m_aIt(rIt)
+            , m_bWasInvalidated( false )
+        {}
     };
 
     std::vector< ListenerIt >      m_aIterators;
