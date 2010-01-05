@@ -31,7 +31,7 @@
 #ifndef _FMSRCIMP_HXX
 #define _FMSRCIMP_HXX
 
-#include "fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include <vos/thread.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/awt/XTextComponent.hpp>

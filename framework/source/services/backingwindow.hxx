@@ -38,7 +38,7 @@
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
 
-#include "svtools/moduleoptions.hxx"
+#include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
 #include "com/sun/star/frame/XDispatchProvider.hpp"

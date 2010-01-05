@@ -31,7 +31,7 @@
 #define _SXMFSITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 // Formatstring (aehnl. Calc), z.B. "#.###,00km"
 // ueberschreibt SdrMeasureUnitItem und SdrMeasureShowUnitItem (n.i.)

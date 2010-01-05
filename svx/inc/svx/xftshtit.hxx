@@ -31,7 +31,7 @@
 #ifndef _SVX_XFTSHTIT_HXX
 #define _SVX_XFTSHTIT_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 /*************************************************************************
 |*
