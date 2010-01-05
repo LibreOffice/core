@@ -209,11 +209,7 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 
 const String&   SwCondCollItem::GetStyle(USHORT nPos) const
 {
-#ifndef IRIX
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
-#else
-    return nPos < COND_COMMAND_COUNT ? (String)sStyles[nPos] : aEmptyStr;
-#endif
 }
 
 /****************************************************************************
@@ -224,11 +220,7 @@ const String&   SwCondCollItem::GetStyle(USHORT nPos) const
 void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-#ifndef IRIX
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
-#else
-        sStyles[nPos] = pStyle ? (String)*pStyle : aEmptyStr;
-#endif
 }
 
 
