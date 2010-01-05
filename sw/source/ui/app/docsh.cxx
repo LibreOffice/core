@@ -38,16 +38,15 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/adjitem.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <sfx2/app.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/misccfg.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -58,7 +57,6 @@
 #include <svx/srchitem.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/svxmsbas.hxx>
 #include <svtools/soerr.hxx>
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
@@ -111,8 +109,8 @@
 #include "warnpassword.hxx"
 
 #include <cfgid.h>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svx/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
@@ -382,8 +380,7 @@ BOOL SwDocShell::Save()
                     //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
                     //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                        nVBWarning = SvxImportMSVBasic::
-                                        GetSaveWarningOfMSVBAStorage( *this );
+                        nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     pDoc->SetContainsMSVBasic( FALSE );
                 }
 
@@ -501,8 +498,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
             //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
             if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::
-                                GetSaveWarningOfMSVBAStorage( *this );
+                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             pDoc->SetContainsMSVBasic( FALSE );
         }
 
@@ -599,8 +595,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             DBG_ASSERT( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                SvxImportMSVBasic aTmp( *this, *xStg );
-                nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave, String::CreateFromAscii("Macros") );
+                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
                 xStg->Commit();
                 pDoc->SetContainsMSVBasic( TRUE );
             }
@@ -1134,7 +1129,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
-                              : SFX_APP()->GetMiscConfig()->GetYear2000() )));
+                              : ::utl::MiscCfg().GetYear2000() )));
             }
             break;
         case SID_ATTR_CHAR_FONTLIST:

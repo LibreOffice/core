@@ -158,7 +158,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const SwTxtNode *pNode = pFrm->GetTxtNode();
 
     const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
-    // --> OD 2009-09-02 #i95907#
+    // --> OD 2009-09-08 #i95907#, #b6879723#
     const bool bListLevelIndentsApplicable = pFrm->GetTxtNode()->AreListLevelIndentsApplicable();
     // <--
 
@@ -183,7 +183,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                 pFrm->Prt().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum( sal_False ) -
-                // --> OD 2009-09-02 #i95907#
+                // --> OD 2009-09-08 #i95907#, #b6879723#
 //                rSpace.GetLeft() +
 //                rSpace.GetTxtLeft();
                 ( bListLevelIndentsApplicable
@@ -193,14 +193,18 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     }
     else
     {
-        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // --> OD 2009-09-08 #i95907#, #b6879723#
+//        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        if ( bListLevelIndentsApplicable ||
+             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // <--
         {
             // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
-                    // --> OD 2009-09-02 #i95907#
+                    // --> OD 2009-09-08 #i95907#, #b6879723#
 //                    rSpace.GetLeft() +
 //                    rSpace.GetTxtLeft();
                     ( bListLevelIndentsApplicable
@@ -223,7 +227,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
-          !nLMWithNum) )
+          !nLMWithNum ) )
          // <--
     {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
@@ -235,8 +239,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         nFirst = nLeft;
     else
     {
-        short nFLOfst;
-        long nFirstLineOfs;
+        short nFLOfst = 0;
+        long nFirstLineOfs = 0;
         if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
             rSpace.IsAutoFirst() )
         {
@@ -290,8 +294,13 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         else
             nFirstLineOfs = nFLOfst;
 
+        // --> OD 2009-09-08 #i95907#, #b6879723#
+//        if ( pFrm->IsRightToLeft() ||
+//             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         if ( pFrm->IsRightToLeft() ||
-            !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+             bListLevelIndentsApplicable ||
+             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // <--
         {
             nFirst = nLeft + nFirstLineOfs;
         }

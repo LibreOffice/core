@@ -57,9 +57,9 @@ one go*/
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemprop.hxx>
+#include <unotools/saveopt.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -2382,7 +2382,7 @@ void SmXMLRootContext_Impl::EndElement()
         "Root tag is missing component");
 
     SmToken aToken;
-    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on OpenSymbol font
+    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.nGroup = 0;
     aToken.nLevel = 0;
     aToken.eType = TNROOT;
@@ -2406,7 +2406,7 @@ void SmXMLSqrtContext_Impl::EndElement()
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
-    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on OpenSymbol font
+    aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.nGroup = 0;
     aToken.nLevel = 0;
     aToken.eType = TSQRT;
@@ -3186,4 +3186,5 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 
 
 ////////////////////////////////////////////////////////////
+
 

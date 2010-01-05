@@ -33,8 +33,8 @@
 #define _WW8PAR_HXX
 
 #include <tools/string.hxx>
-#include <svx/msdffimp.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <svx/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 

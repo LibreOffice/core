@@ -48,7 +48,7 @@
 #endif
 
 #ifndef SV_FONTCVT_HXX
-#   include <vcl/fontcvt.hxx>   //GetSubsFontName
+#   include <unotools/fontcvt.hxx>   //GetSubsFontName
 #endif
 #   include <svx/paperinf.hxx>      //lA0Width...
 #   include <svx/lrspitem.hxx>      //SvxLRSpaceItem

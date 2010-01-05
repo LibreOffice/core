@@ -405,7 +405,7 @@ public:
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     void CalcFtnFlag();
 #else
     void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//Fuer den Test von SplitFrm

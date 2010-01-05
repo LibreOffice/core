@@ -258,7 +258,7 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
 #endif

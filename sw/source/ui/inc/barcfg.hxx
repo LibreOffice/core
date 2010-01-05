@@ -41,7 +41,8 @@ public:
     SwToolbarConfigItem( sal_Bool bWeb );
     ~SwToolbarConfigItem();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
     void        SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId );
 };

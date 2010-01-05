@@ -43,7 +43,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtreebx.hxx>
 #include <vcl/combobox.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 class SwMailMergeWizard;
 class SwMailMergeConfigItem;
 /*-- 13.04.2004 15:50:37---------------------------------------------------
