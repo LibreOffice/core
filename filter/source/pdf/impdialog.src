@@ -226,11 +226,7 @@ TabPage  RID_PDF_TAB_GENER
     };
     CheckBox CB_EXPORTEMPTYPAGES
     {
-<<<<<<< local
         Pos = MAP_APPFONT ( 12 , 216 ) ;
-=======
-        Pos = MAP_APPFONT ( 12 , 219 ) ;
->>>>>>> other
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -238,11 +234,7 @@ TabPage  RID_PDF_TAB_GENER
     };
     CheckBox CB_ADDSTREAM
     {
-<<<<<<< local
         Pos = MAP_APPFONT ( 12 , 235 ) ;
-=======
-        Pos = MAP_APPFONT ( 12 , 237 ) ;
->>>>>>> other
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Create ~hybrid file";
