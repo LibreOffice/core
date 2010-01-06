@@ -2960,6 +2960,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ca
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-ca.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-cs.oxt";
@@ -3127,6 +3136,15 @@ File gid_File_Extension_Dictionary_Pt
 	Name = "dict-pt.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ro
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-ro.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 

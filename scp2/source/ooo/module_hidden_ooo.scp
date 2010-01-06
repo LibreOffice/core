@@ -972,6 +972,17 @@ Module gid_Module_Root_Extension_Dictionary_Af
 	Styles = (HIDDEN_ROOT);
 End
 
+Module gid_Module_Root_Extension_Dictionary_Ca
+    Name = "gid_Module_Root_Extension_Dictionary_Ca";
+    Description = "gid_Module_Root_Extension_Dictionary_Ca";
+    Files = (gid_File_Extension_Dictionary_Ca);
+    InstallOrder = "2000";
+    Spellcheckerlanguage = "ca";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root;
+    Styles = (HIDDEN_ROOT);
+End
+
 Module gid_Module_Root_Extension_Dictionary_Cs
 	Name = "gid_Module_Root_Extension_Dictionary_Cs";
 	Description = "gid_Module_Root_Extension_Dictionary_Cs";
@@ -1179,6 +1190,17 @@ Module gid_Module_Root_Extension_Dictionary_Pt
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Ro
+    Name = "gid_Module_Root_Extension_Dictionary_Ro";
+    Description = "gid_Module_Root_Extension_Dictionary_Ro";
+    Files = (gid_File_Extension_Dictionary_Ro);
+    InstallOrder = "2000";
+    Spellcheckerlanguage = "ro";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root;
+    Styles = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Root_Extension_Dictionary_Ru
