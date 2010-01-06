@@ -2243,21 +2243,18 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 //------------------------------------------------------------------
 
-ScDocShell::ScDocShell( SfxObjectCreateMode eMode, const bool _bScriptSupport )
-    :   SfxObjectShell( eMode ),
-        __SCDOCSHELL_INIT
+ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
+    :   SfxObjectShell( i_nSfxCreationFlags )
+    ,   __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 
-    bIsInplace = (eMode == SFX_CREATE_MODE_EMBEDDED);
+    bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
-
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
