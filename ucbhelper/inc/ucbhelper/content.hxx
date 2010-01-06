@@ -60,6 +60,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContentIdentifier;
     class XDynamicResultSet;
     class XAnyCompareFactory;
+    struct ContentInfo;
     struct NumberedSortingInfo;
 } } } }
 
@@ -70,7 +71,7 @@ namespace ucbhelper
 
 /**
   * These are the possible values for the parameter eMode of method
-  * ucb::Content::createCursor.
+  * ucbhelper::Content::createCursor.
   */
 enum ResultSetInclude
 {
@@ -81,7 +82,7 @@ enum ResultSetInclude
 
 /**
   * These are the possible values for the parameter eOperation of method
-  * ucb::Content::insertNewContent.
+  * ucbhelper::Content::insertNewContent.
   */
 enum InsertOperation
 {
@@ -821,16 +822,31 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+
+    /**
+      * This method returns the different types of contents this content
+      * can create.
+      *
+      * @return the content types or an empty sequence if no contents can be
+      *         created by this content.
+      */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::ContentInfo >
+    queryCreatableContentsInfo()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
     /**
       * This method creates, initializes and inserts ( commits ) a new content
       * (i.e. it could be used to create a new file system folder).
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -856,13 +872,14 @@ public:
     /**
       * This method creates, initializes and inserts ( commits ) a new content
       * (i.e. it could be used to create a new file system folder).
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -888,14 +905,15 @@ public:
     /**
       * This method creates, initializes and inserts (commits) a new content
       * inside this (the target folder) content. For example, it can be used to
-      * create a new file system folder.
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * create a new file system file.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -925,14 +943,15 @@ public:
     /**
       * This method creates, initializes and inserts (commits) a new content
       * inside this (the target folder) content. For example, it can be used to
-      * create a new file system folder.
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * create a new file system file.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).

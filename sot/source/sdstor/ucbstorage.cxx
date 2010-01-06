@@ -48,7 +48,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/ucb/XContentCreator.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
@@ -2277,13 +2277,10 @@ BOOL UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
     // a new substorage is inserted into a UCBStorage ( given by the parameter pContent )
     // it must be inserted with a title and a type
     BOOL bRet = FALSE;
-    Reference< XContentCreator > xCreator = Reference< XContentCreator >( pContent->get(), UNO_QUERY );
-    if ( !xCreator.is() )
-        return sal_False;
 
     try
     {
-        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        Sequence< ContentInfo > aInfo = pContent->queryCreatableContentsInfo();
         sal_Int32 nCount = aInfo.getLength();
         if ( nCount == 0 )
             return sal_False;

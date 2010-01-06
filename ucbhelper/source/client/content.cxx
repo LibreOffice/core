@@ -73,9 +73,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <ucbhelper/activedatastreamer.hxx>
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
-#endif
 #include <ucbhelper/cancelcommandexecution.hxx>
 
 using namespace com::sun::star::container;
@@ -210,6 +208,7 @@ public:
 
     Any  executeCommand( const Command& rCommand );
     void abortCommand();
+
     inline const Reference< XCommandEnvironment >& getEnvironment() const;
     inline void setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv );
@@ -1349,6 +1348,26 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
 }
 
 //=========================================================================
+Sequence< ContentInfo > Content::queryCreatableContentsInfo()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    // First, try it using "CreatableContentsInfo" property -> the "new" way.
+    Sequence< ContentInfo > aInfo;
+    if ( getPropertyValue(
+             rtl::OUString::createFromAscii( "CreatableContentsInfo" ) )
+         >>= aInfo )
+        return aInfo;
+
+    // Second, try it using XContentCreator interface -> the "old" way (not
+    // providing the chance to supply an XCommandEnvironment.
+    Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
+    if ( xCreator.is() )
+        aInfo = xCreator->queryCreatableContentsInfo();
+
+    return aInfo;
+}
+
+//=========================================================================
 sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     const Sequence< rtl::OUString >&
                                         rPropertyNames,
@@ -1390,21 +1409,43 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     if ( rContentType.getLength() == 0 )
         return sal_False;
 
-    Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
-
-    OSL_ENSURE( xCreator.is(),
-                "Content::insertNewContent - Not a XContentCreator!" );
-
-    if ( !xCreator.is() )
-        return sal_False;
-
+    // First, try it using "createNewContent" command -> the "new" way.
     ContentInfo aInfo;
     aInfo.Type = rContentType;
     aInfo.Attributes = 0;
 
-    Reference< XContent > xNew = xCreator->createNewContent( aInfo );
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aInfo;
+
+    Reference< XContent > xNew;
+    try
+    {
+        m_xImpl->executeCommand( aCommand ) >>= xNew;
+    }
+    catch ( RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( Exception const & )
+    {
+    }
+
     if ( !xNew.is() )
-        return sal_False;
+    {
+        // Second, try it using XContentCreator interface -> the "old"
+        // way (not providing the chance to supply an XCommandEnvironment.
+        Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
+
+        if ( !xCreator.is() )
+            return sal_False;
+
+        xNew = xCreator->createNewContent( aInfo );
+
+        if ( !xNew.is() )
+            return sal_False;
+    }
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
@@ -1431,21 +1472,43 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     if ( rContentType.getLength() == 0 )
         return sal_False;
 
-    Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
-
-    OSL_ENSURE( xCreator.is(),
-                "Content::insertNewContent - Not a XContentCreator!" );
-
-    if ( !xCreator.is() )
-        return sal_False;
-
+    // First, try it using "createNewContent" command -> the "new" way.
     ContentInfo aInfo;
     aInfo.Type = rContentType;
     aInfo.Attributes = 0;
 
-    Reference< XContent > xNew = xCreator->createNewContent( aInfo );
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aInfo;
+
+    Reference< XContent > xNew;
+    try
+    {
+        m_xImpl->executeCommand( aCommand ) >>= xNew;
+    }
+    catch ( RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( Exception const & )
+    {
+    }
+
     if ( !xNew.is() )
-        return sal_False;
+    {
+        // Second, try it using XContentCreator interface -> the "old"
+        // way (not providing the chance to supply an XCommandEnvironment.
+        Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
+
+        if ( !xCreator.is() )
+            return sal_False;
+
+        xNew = xCreator->createNewContent( aInfo );
+
+        if ( !xNew.is() )
+            return sal_False;
+    }
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( nPropertyHandles, rPropertyValues );
