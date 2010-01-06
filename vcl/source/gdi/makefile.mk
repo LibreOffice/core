@@ -101,7 +101,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/impbmp.obj		\
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impvect.obj 	\
-            $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
             $(SLO)$/octree.obj		\
