@@ -33,7 +33,7 @@
 
 #include <vcl/metaact.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 
 #include <math.h>
@@ -1573,7 +1573,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                     Polygon aSimplePoly;
                     if ( rPoly.HasFlags() )
-                        rPoly.GetSimple( aSimplePoly );
+                        rPoly.AdaptiveSubdivide( aSimplePoly );
                     else
                         aSimplePoly = rPoly;
 
@@ -1603,7 +1603,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 Polygon aSimplePoly;
                 if ( rPoly.HasFlags() )
-                    rPoly.GetSimple( aSimplePoly );
+                    rPoly.AdaptiveSubdivide( aSimplePoly );
                 else
                     aSimplePoly = rPoly;
 
@@ -1632,7 +1632,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     if ( aSimplePolyPoly[ i ].HasFlags() )
                     {
                         Polygon aSimplePoly;
-                        aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+                        aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
                         aSimplePolyPoly[ i ] = aSimplePoly;
                     }
                 }

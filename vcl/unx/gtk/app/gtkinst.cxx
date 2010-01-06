@@ -216,6 +216,34 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
+extern "C"
+{
+    typedef void*(* getDefaultFnc)();
+    typedef void(* addItemFnc)(void *, const char *);
+}
+
+void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+{
+#if GTK_CHECK_VERSION(2,10,0)
+    GtkRecentManager *manager = gtk_recent_manager_get_default ();
+    gtk_recent_manager_add_item (manager, rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    (void)rMimeType;
+#else
+    static getDefaultFnc sym_gtk_recent_manager_get_default =
+        (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
+
+    static addItemFnc sym_gtk_recent_manager_add_item =
+        (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
+    if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
+    {
+        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(),
+            rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else
+        X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
+#endif
+}
+
 GtkYieldMutex::GtkYieldMutex()
 {
 }

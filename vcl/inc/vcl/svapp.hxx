@@ -287,6 +287,9 @@ public:
     static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
+    static void                 EnableNoYieldMode( bool i_bNoYield );
+    static void                 AddPostYieldListener( const Link& i_rListener );
+    static void                 RemovePostYieldListener( const Link& i_rListener );
 
     static BOOL                 IsInMain();
     static BOOL                 IsInExecute();
@@ -478,6 +481,20 @@ public:
         the process is currently running in.
      */
     static const ::rtl::OUString& GetDesktopEnvironment();
+
+    /** Add a file to the system shells recent document list if there is any.
+          This function may have no effect under Unix because there is no
+          standard API among the different desktop managers.
+
+          @param rFileUrl
+                    The file url of the document.
+
+          @param rMimeType
+          The mime content type of the document specified by aFileUrl.
+          If an empty string will be provided "application/octet-stream"
+          will be used.
+    */
+    static void AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
 private:
 

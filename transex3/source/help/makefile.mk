@@ -104,36 +104,17 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexerTool.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
 
-
-#	$(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
-#	$(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
-#	$(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
-#	$(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
-
-#JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
 .IF "$(SYSTEM_LUCENE)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
-COMP=fix_system_lucene
+CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
 JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-#JAVAFILES = $(JAVACLASSFILES) 
 
 JARCLASSDIRS	   = $(PACKAGE)/*
 JARTARGET	       = HelpIndexerTool.jar
 JARCOMPRESS        = TRUE 
-#CUSTOMMANIFESTFILE = MANIFEST.MF 
  
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.IF "$(JARTARGETN)"!=""
-$(JARTARGETN) : $(COMP)
-.ENDIF
-
-fix_system_lucene:
-    @echo "Fix Java Class-Path entry for Lucene libraries from system."
-    @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
-    -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF

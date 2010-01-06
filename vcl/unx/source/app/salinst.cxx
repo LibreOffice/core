@@ -35,6 +35,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <osl/module.hxx>
+
 #include "salunx.h"
 
 #include "saldata.hxx"
@@ -48,7 +50,7 @@
 #include "vcl/salwtype.hxx"
 #include "vcl/salatype.hxx"
 #include "vcl/helper.hxx"
-
+#include <tools/solarmutex.hxx>
 #include "vos/mutex.hxx"
 
 // -------------------------------------------------------------------------
@@ -61,6 +63,7 @@ SalYieldMutex::SalYieldMutex()
 {
     mnCount     = 0;
     mnThreadId  = 0;
+    ::tools::SolarMutex::SetSolarMutex( this );
 }
 
 void SalYieldMutex::acquire()
@@ -139,6 +142,7 @@ X11SalInstance::~X11SalInstance()
     delete pSalData;
     SetSalData( NULL );
 
+    ::tools::SolarMutex::SetSolarMutex( 0 );
       delete mpSalYieldMutex;
 }
 
@@ -413,3 +417,20 @@ void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
     #endif /* SOLARIS */
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
+void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+{
+    const rtl::OUString SYM_ADD_TO_RECENTLY_USED_FILE_LIST(RTL_CONSTASCII_USTRINGPARAM("add_to_recently_used_file_list"));
+    const rtl::OUString LIB_RECENT_FILE(RTL_CONSTASCII_USTRINGPARAM("librecentfile.so"));
+    typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const rtl::OUString&, const rtl::OUString&);
+
+    PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list = 0;
+
+    osl::Module module;
+    module.loadRelative( &thisModule, LIB_RECENT_FILE );
+    if (module.is())
+        add_to_recently_used_file_list = (PFUNC_ADD_TO_RECENTLY_USED_LIST)module.getFunctionSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST);
+    if (add_to_recently_used_file_list)
+        add_to_recently_used_file_list(rFileUrl, rMimeType);
+}

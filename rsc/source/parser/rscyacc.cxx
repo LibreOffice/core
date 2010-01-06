@@ -190,7 +190,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
 
             ObjNode * pNode = new ObjNode( aName1, S.Top().pData,
                                            pFI->GetFileIndex() );
-            pTC->pEH->StdOut( "." );
+            pTC->pEH->StdOut( ".", RscVerbosityVerbose );
 
             if( !aName1.IsId() )
                 pTC->pEH->Error( ERR_IDEXPECTED, pHeader->pClass, aName1 );
