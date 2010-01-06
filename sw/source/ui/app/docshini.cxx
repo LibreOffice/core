@@ -44,6 +44,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #ifndef _OFA_MISCCFG_HXX //autogen
 #include <svtools/misccfg.hxx>
 #endif
@@ -400,7 +401,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
  --------------------------------------------------------------------*/
 
 
-SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport ) :
+SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     SfxObjectShell ( eMode ),
     pDoc(0),
     pFontList(0),
@@ -411,8 +412,25 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport )
     bInUpdateFontList(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
-    if ( !_bScriptingSupport )
-        SetHasNoBasic();
+    Init_Impl();
+}
+
+/*--------------------------------------------------------------------
+    Beschreibung: Ctor / Dtor
+ --------------------------------------------------------------------*/
+
+
+SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell ( i_nSfxCreationFlags ),
+    pDoc(0),
+    pFontList(0),
+    pView( 0 ),
+    pWrtShell( 0 ),
+    pOLEChildList( 0 ),
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    bInUpdateFontList(false)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
 }
 
