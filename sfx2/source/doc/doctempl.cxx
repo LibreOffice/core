@@ -794,12 +794,12 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     INetURLObject aTemplateObj( pImp->GetRootURL() );
 
     aTemplateObj.insertName( aGroupName, false,
-                         INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::ENCODE_ALL );
+                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::ENCODE_ALL );
 
     aTemplateObj.insertName( aTitle, false,
-                         INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::ENCODE_ALL );
+                        INetURLObject::LAST_SEGMENT, true,
+                        INetURLObject::ENCODE_ALL );
 
 
     ::rtl::OUString aResult;
