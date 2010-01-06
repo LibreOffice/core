@@ -43,7 +43,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "svtools/svmedit.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/lstner.hxx"
 #include "svtools/xtextedt.hxx"
 #include <vcl/scrbar.hxx>
 #include "vcl/threadex.hxx"
@@ -215,7 +215,7 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 {
 
-    if (GetBackground().GetColor().IsDark())
+    if (GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         // high contrast mode needs other images
         m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));

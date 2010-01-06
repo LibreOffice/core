@@ -30,12 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -55,12 +55,12 @@
 #include <vos/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/internaloptions.hxx>
 
-#include <svtools/javaoptions.hxx>
+#include <unotools/javaoptions.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
@@ -131,6 +131,8 @@ class SfxClipboardChangeListener : public ::cppu::WeakImplHelper1<
 public:
     SfxClipboardChangeListener( SfxViewShell* pView );
     virtual ~SfxClipboardChangeListener();
+
+    void DisconnectViewShell() { pViewShell = NULL; }
 };
 
 SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView )
@@ -241,7 +243,12 @@ static ::rtl::OUString RetrieveLabelFromCommand(
 }
 
 //=========================================================================
+SfxViewShell_Impl::SfxViewShell_Impl()
+: aInterceptorContainer( aMutex )
+, pAccExec(0)
+{}
 
+//=========================================================================
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_MAIL_CHILDWIN );
@@ -1297,21 +1304,27 @@ SfxViewShell::~SfxViewShell()
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Remove( rViewArr.GetPos(pThis) );
 
+    if ( pImp->xClipboardListener.is() )
+    {
+        pImp->xClipboardListener->DisconnectViewShell();
+        pImp->xClipboardListener = NULL;
+    }
+
     if ( pImp->pController )
     {
         pImp->pController->ReleaseShell_Impl();
         pImp->pController->release();
+        pImp->pController = NULL;
     }
 
     if (pImp->pAccExec)
     {
-        delete pImp->pAccExec;
-        pImp->pAccExec = 0;
+        DELETEZ( pImp->pAccExec );
     }
 
-    delete pImp->pPrinterCommandQueue;
-    delete pImp;
-    delete pIPClientList;
+    DELETEZ( pImp->pPrinterCommandQueue );
+    DELETEZ( pImp );
+    DELETEZ( pIPClientList );
 }
 
 //--------------------------------------------------------------------
@@ -1997,7 +2010,12 @@ void SfxViewShell::SetController( SfxBaseController* pController )
     pImp->pController->acquire();
     pImp->bControllerSet = TRUE;
 
-    AddRemoveClipboardListener( new SfxClipboardChangeListener( this ), TRUE );
+    // there should be no old listener, but if there is one, it should be disconnected
+    if (  pImp->xClipboardListener.is() )
+        pImp->xClipboardListener->DisconnectViewShell();
+
+    pImp->xClipboardListener = new SfxClipboardChangeListener( this );
+    AddRemoveClipboardListener( pImp->xClipboardListener.get(), TRUE );
 }
 
 Reference < XController > SfxViewShell::GetController()
@@ -2205,17 +2223,20 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
 {
     try
     {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( GetViewFrame()->GetWindow().GetClipboard() );
-        if( !xClipboard.is() )
-            return;
-
-        uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClpbrdNtfr( xClipboard, uno::UNO_QUERY );
-        if( xClpbrdNtfr.is() )
+        if ( GetViewFrame() )
         {
-            if( bAdd )
-                xClpbrdNtfr->addClipboardListener( rClp );
-            else
-                xClpbrdNtfr->removeClipboardListener( rClp );
+            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( GetViewFrame()->GetWindow().GetClipboard() );
+            if( xClipboard.is() )
+            {
+                uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClpbrdNtfr( xClipboard, uno::UNO_QUERY );
+                if( xClpbrdNtfr.is() )
+                {
+                    if( bAdd )
+                        xClpbrdNtfr->addClipboardListener( rClp );
+                    else
+                        xClpbrdNtfr->removeClipboardListener( rClp );
+                }
+            }
         }
     }
     catch( const uno::Exception& )

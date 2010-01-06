@@ -39,19 +39,19 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer { namespace primitive2d {
+    enum MeasureTextPosition
     {
-        enum MeasureTextPosition
-        {
-            MEASURETEXTPOSITION_AUTOMATIC,
-            MEASURETEXTPOSITION_NEGATIVE,
-            MEASURETEXTPOSITION_CENTERED,
-            MEASURETEXTPOSITION_POSITIVE
-        };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+        MEASURETEXTPOSITION_AUTOMATIC,
+        MEASURETEXTPOSITION_NEGATIVE,
+        MEASURETEXTPOSITION_CENTERED,
+        MEASURETEXTPOSITION_POSITIVE
+    };
+}}
+
+namespace drawinglayer { namespace attribute {
+    class SdrLineAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -80,6 +80,7 @@ namespace drawinglayer
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
+                const attribute::SdrLineAttribute& rLineAttribute,
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,

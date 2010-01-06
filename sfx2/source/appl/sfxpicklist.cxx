@@ -32,18 +32,16 @@
 #include "precompiled_sfx2.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <svtools/historyoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <framework/menuconfiguration.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/inethist.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
-
-#include <shell/systemshell.hxx>
 
 // ----------------------------------------------------------------------------
 
@@ -470,7 +468,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
-                    SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
+                    Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
             }
             break;
         }

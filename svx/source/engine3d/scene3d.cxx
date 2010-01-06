@@ -40,7 +40,7 @@
 #endif
 #include "globl3d.hxx"
 #include <svx/svdpage.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/svdtrans.hxx>
@@ -50,7 +50,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <i18npool/lang.h>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <rtl/ustring.hxx>
 
 #include <set>
@@ -85,19 +85,19 @@ enum LangMenuIDs
     MID_LANG_PARA_RESET,
     MID_LANG_PARA_MORE,
 };
-    
-    
+
+
 inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType nLang )
 {
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
-    
+
 class LanguageGuessingHelper
 {
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-    
+
 public:
     LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager) : m_xServiceManager(_xServiceManager){}
 

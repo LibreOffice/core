@@ -87,7 +87,6 @@ using namespace linguistic;
 
 
 ///////////////////////////////////////////////////////////////////////////
-
 void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.Len() == 0)
@@ -165,7 +164,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     {
     }
 }
-
 
 BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
 {
@@ -266,12 +264,10 @@ void ConvDic::Load()
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
     bNeedEntries = FALSE;
-
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
-
     bIsModified = FALSE;
 }
 
@@ -326,7 +322,6 @@ void ConvDic::Save()
 
         // prepare arguments (prepend doc handler to given arguments)
         uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
-
         ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object

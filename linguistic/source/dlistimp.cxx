@@ -39,18 +39,25 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <i18npool/mslangid.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localfilehelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/svapp.hxx>
-
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+
+#include "defs.hxx"
+#include "dlistimp.hxx"
+#include "dicimp.hxx"
+#include "lngopt.hxx"
 
 #include "defs.hxx"
 #include "dlistimp.hxx"
@@ -934,7 +941,8 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
     if(aExt != aDIC)
         return FALSE;
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+    // get stream to be used
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;

@@ -37,7 +37,7 @@
 
 #include <svx/dialmgr.hxx>
 
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>

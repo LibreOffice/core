@@ -32,9 +32,9 @@
 #include "precompiled_svx.hxx"
 
 #include <tools/shl.hxx>
-#include <svtools/lngmisc.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svl/lngmisc.hxx>
+#include <svl/svlbitm.hxx>
+#include <svl/svtreebx.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -112,7 +112,7 @@ public:
         bHeader(bIsHeader)
         {
         }
-    
+
     bool IsHeader() const           { return bHeader; }
     const String& GetText() const   { return sText; }
 };
@@ -129,8 +129,8 @@ public:
 };
 
 
-void AlternativesString_Impl::Paint( 
-    const Point& rPos, 
+void AlternativesString_Impl::Paint(
+    const Point& rPos,
     SvLBox& rDev, USHORT,
     SvLBoxEntry* pEntry )
 {

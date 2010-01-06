@@ -36,15 +36,15 @@
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/gradient.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <basic/sbmod.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <vcl/wrkwin.hxx>
@@ -53,9 +53,9 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/undoopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include <sfx2/appuno.hxx>

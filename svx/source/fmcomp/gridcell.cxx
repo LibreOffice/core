@@ -34,7 +34,7 @@
 
 #include "fmprop.hrc"
 #include "fmresids.hrc"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "gridcell.hxx"
 #include "gridcols.hxx"
 #include "sdbdatacolumn.hxx"
@@ -66,7 +66,7 @@
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <svtools/svmedit.hxx>
 #include <svx/dialmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -2080,7 +2080,7 @@ SpinField* DbCurrencyField::createField( Window* _pParent, WinBits _nFieldStyle,
 //------------------------------------------------------------------------------
 double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
-    volatile double fValue = GetValue(_rxField, xFormatter);
+    double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
     {
         // OSL_TRACE("double = %.64f ",fValue);
@@ -2158,7 +2158,7 @@ sal_Bool DbCurrencyField::commitControl()
     Any aVal;
     if (aText.Len() != 0)   // nicht null
     {
-        volatile double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
+        double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
         if (m_nScale)
         {
             fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);

@@ -34,7 +34,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <i18npool/mslangid.hxx>
 
 #define _OUTLINER_CXX
@@ -48,7 +48,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/numitem.hxx>
 #include <vcl/window.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <editstat.hxx>
 
 
@@ -963,7 +963,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
     // Eigentlich nicht ganz richtig, das evtl. Einrueckungen
     // korrigiert werden muessen, aber das kommt spaeter durch ein
     // allgemeingueltiges Import.
-    // Dann wird im Inserted gleich ermittelt, was fr eine Einrueckebene
+    // Dann wird im Inserted gleich ermittelt, was fï¿½r eine Einrueckebene
     // Moegliche Struktur:
     // pImportInfo mit DestPara, DestPos, nFormat, pParaObj...
     // Evtl. Problematisch:
@@ -1015,6 +1015,14 @@ void OutlinerView::PasteSpecial()
         pOwner->pEditEngine->SetUpdateMode( FALSE );
         pOwner->bPasting = TRUE;
         pEditView->PasteSpecial();
+
+        if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+        {
+            const USHORT nParaCount = pOwner->pEditEngine->GetParagraphCount();
+
+            for( USHORT nPara = 0; nPara < nParaCount; nPara++ )
+                pOwner->ImplSetLevelDependendStyleSheet( nPara );
+        }
 
         pEditView->SetEditEngineUpdateMode( TRUE );
         pOwner->UndoActionEnd( OLUNDO_INSERT );

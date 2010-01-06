@@ -54,7 +54,7 @@
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 using ::rtl::OUString;

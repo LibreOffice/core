@@ -48,10 +48,10 @@
 #endif
 
 #include "flagsdef.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 //........................................................................
 namespace svx

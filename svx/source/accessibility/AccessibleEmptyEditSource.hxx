@@ -31,8 +31,8 @@
 #ifndef _SVX_ACCESSIBLEEMPTYEDITSOURCE_HXX
 #define _SVX_ACCESSIBLEEMPTYEDITSOURCE_HXX
 
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 
 #include <memory>
 #include <svx/unoedsrc.hxx>

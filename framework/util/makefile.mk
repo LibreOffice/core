@@ -335,7 +335,6 @@ SHL4OBJS=       \
                 $(SLO)$/uicategorydescription.obj   \
                 $(SLO)$/uicommanddescription.obj    \
                 $(SLO)$/uiconfigurationmanager.obj  \
-                $(SLO)$/uiconfigurationmanagerimpl.obj  \
                 $(SLO)$/uielementfactorymanager.obj \
                 $(SLO)$/urltransformer.obj          \
                 $(SLO)$/vclstatusindicator.obj      \

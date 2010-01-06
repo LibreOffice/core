@@ -31,7 +31,7 @@
 #ifndef SVX_XFILLIT0_HXX
 #define SVX_XFILLIT0_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>

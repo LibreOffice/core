@@ -70,7 +70,7 @@
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <dispatch/uieventloghelper.hxx>
 
@@ -277,11 +277,12 @@ throw (::com::sun::star::uno::RuntimeException)
 
     com::sun::star::awt::Rectangle aRectangle;
     Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
-    const Point aMousePos = pWindow->GetPointerPosPixel();
-    aRectangle.X = aMousePos.X();
-    aRectangle.Y = aMousePos.Y();
-    sal_Int16 nId = xPopupMenu->execute( xParent, aRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
-    if ( m_xFrame.is() )
+    const Point mMousePos = pWindow->GetPointerPosPixel();
+    mRectangle.X = mMousePos.X();
+    mRectangle.Y = mMousePos.Y();
+    sal_Int16 nId = xPopupMenu->execute( xParent, mRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    //click "More..."
+    if ( nId && m_xFrame.is() )
     {
         uno::Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         util::URL aURL;

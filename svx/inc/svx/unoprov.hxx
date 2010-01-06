@@ -33,7 +33,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svx/svdpool.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 

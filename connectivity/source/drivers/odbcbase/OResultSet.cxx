@@ -843,8 +843,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    SQLSMALLINT nMaxLen = 20;
-    SQLINTEGER nRealLen = 0;
+    SQLLEN nMaxLen = 20;
+    SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxLen);
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
@@ -925,7 +925,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
     if ( bPositionByBookmark )
     {
-        SQLINTEGER nRealLen = 0;
+        SQLLEN nRealLen = 0;
         nRet = N3SQLBindCol(m_aStatementHandle,
                             0,
                             SQL_C_VARBOOKMARK,

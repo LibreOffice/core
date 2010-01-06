@@ -35,7 +35,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #ifndef ITEMID_GRF_CROP
 #define ITEMID_GRF_CROP 0
@@ -307,6 +307,7 @@ namespace sdr
                         aTextRangeTransform,
                         SDRTEXTHORZADJUST_LEFT,
                         SDRTEXTVERTADJUST_TOP,
+                        false,
                         false,
                         false,
                         false,

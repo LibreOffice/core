@@ -54,14 +54,14 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <sfx2/mnumgr.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"

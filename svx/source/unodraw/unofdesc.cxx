@@ -45,7 +45,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/wrlmitem.hxx>
 #include <svx/unomid.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #include "unofdesc.hxx"
 

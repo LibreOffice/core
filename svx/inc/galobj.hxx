@@ -33,6 +33,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
+#include "svx/galmisc.hxx"
 
 // -----------
 // - Defines -
@@ -49,21 +50,6 @@
 #define SGA_FORMAT_OLE                  0x00001000L
 #define SGA_FORMAT_SVDRAW               0x00010000L
 #define SGA_FORMAT_ALL                  0xFFFFFFFFL
-
-// --------------
-// - SgaObjKind -
-// --------------
-
-enum SgaObjKind
-{
-    SGA_OBJ_NONE = 0,   // Abstraktes Objekt
-    SGA_OBJ_BMP = 1,    // Bitmap-Objekt
-    SGA_OBJ_SOUND = 2,  // Sound-Objekt
-    SGA_OBJ_VIDEO = 3,  // Video-Objekt
-    SGA_OBJ_ANIM = 4,   // Animations-Objekt
-    SGA_OBJ_SVDRAW = 5, // Svdraw-Objekt
-    SGA_OBJ_INET = 6    // Grafik aus dem Internet
-};
 
 // ----------------
 // - GalSoundType -
@@ -85,7 +71,7 @@ enum GalSoundType
 // - SgaObject -
 // -------------
 
-class SgaObject
+class SVX_DLLPUBLIC SgaObject
 {
     friend class GalleryTheme;
 
@@ -122,8 +108,8 @@ public:
     BOOL                    IsValid() const { return bIsValid; }
     BOOL                    IsThumbBitmap() const { return bIsThumbBmp; }
 
-    SVX_DLLPUBLIC const String          GetTitle() const;
-    SVX_DLLPUBLIC void                  SetTitle( const String& rTitle );
+    const String            GetTitle() const;
+    void                    SetTitle( const String& rTitle );
 
     friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );

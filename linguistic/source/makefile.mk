@@ -68,16 +68,15 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
+        $(COMPHELPERLIB)   \
         $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB) \
-        $(SVTOOLLIB)	\
-        $(SVLLIB)		\
-        $(VCLLIB)		\
+        $(SVLLIB)	\
         $(SALLIB)		\
+        $(XMLOFFLIB)    \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)  \
-        $(XMLOFFLIB)    \
         $(ICUUCLIB)
         
 # build DLL

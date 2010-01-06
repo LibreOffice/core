@@ -271,7 +271,6 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     if (rMainURL.getLength() == 0)
         return 0;
-    DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
 

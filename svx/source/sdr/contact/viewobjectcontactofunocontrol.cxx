@@ -75,6 +75,52 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
+/*
+
+Form controls (more precise: UNO Controls) in the drawing layer are ... prone to breakage, since they have some
+specialities which the drawing layer currently doesn't capture too well. In particular, having a living VCL
+window as child of the document window, and coupling this Window to a drawing layer object, makes things
+difficult sometimes.
+
+Below is a list of issues which existed in the past. Whenever you change code here, you're encouraged to
+verify those issues are still fixed. (Whenever you have some additional time, you're encouraged to write
+an automatic test for one or more of those issues for which this is possible :)
+
+http://www.openoffice.org/issues/show_bug.cgi?id=105992
+zooming documents containg (alive) form controls improperly positions the controls
+
+http://www.openoffice.org/issues/show_bug.cgi?id=104362
+crash when copy a control
+
+http://www.openoffice.org/issues/show_bug.cgi?id=104544
+Gridcontrol duplicated after design view on/off
+
+http://www.openoffice.org/issues/show_bug.cgi?id=102089
+print preview shows control elements with property printable=false
+
+http://www.openoffice.org/issues/show_bug.cgi?id=102090
+problem with setVisible on TextControl
+
+http://www.openoffice.org/issues/show_bug.cgi?id=103138
+loop when insert a control in draw
+
+http://www.openoffice.org/issues/show_bug.cgi?id=101398
+initially-displaying a document with many controls is very slow
+
+http://www.openoffice.org/issues/show_bug.cgi?id=72429
+repaint error in form wizard in bugdoc database
+
+http://www.openoffice.org/issues/show_bug.cgi?id=72694
+form control artifacts when scrolling a text fast
+
+
+issues in the old (Sun-internal) bug tracking system:
+
+#110592#
+form controls being in redlining or in hidden section are visible in alive-mode
+
+*/
+
 //........................................................................
 namespace sdr { namespace contact {
 //........................................................................
@@ -402,7 +448,7 @@ namespace sdr { namespace contact {
     //= InvisibleControlViewAccess
     //====================================================================
     /** is a ->IPageViewAccess implementation which can be used to create an invisble control for
-        an arbitrary device
+        an arbitrary window
      */
     class InvisibleControlViewAccess : public IPageViewAccess
     {
@@ -443,6 +489,47 @@ namespace sdr { namespace contact {
     bool InvisibleControlViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
         return false;
+    }
+
+    //====================================================================
+    //= DummyPageViewAccess
+    //====================================================================
+    /** is a ->IPageViewAccess implementation which can be used to create a control for an arbitrary
+        non-Window device
+
+        The implementation will report the "PageView" as being in design mode, all layers to be visible,
+        and will not return any ControlContainer, so all control container related features (notifications etc)
+        are not available.
+     */
+    class DummyPageViewAccess : public IPageViewAccess
+    {
+    public:
+        DummyPageViewAccess()
+        {
+        }
+
+        virtual bool    isDesignMode() const;
+        virtual Reference< XControlContainer >
+                        getControlContainer( const OutputDevice& _rDevice ) const;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
+    };
+
+    //--------------------------------------------------------------------
+    bool DummyPageViewAccess::isDesignMode() const
+    {
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
+    {
+        return NULL;
+    }
+
+    //--------------------------------------------------------------------
+    bool DummyPageViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
+    {
+        return true;
     }
 
     //====================================================================
@@ -763,8 +850,9 @@ namespace sdr { namespace contact {
 
             This method cares for this, by retrieving the very original OutputDevice.
         */
-        static const OutputDevice& imp_getPageViewDevice_nothrow( const ObjectContactOfPageView& _rObjectContact );
-        const OutputDevice& imp_getPageViewDevice_nothrow() const;
+        static const OutputDevice& impl_getPageViewOutputDevice_nothrow( const ObjectContactOfPageView& _rObjectContact );
+
+        const OutputDevice& impl_getOutputDevice_throw() const;
 
     private:
         ViewObjectContactOfUnoControl_Impl();                                                       // never implemented
@@ -799,11 +887,6 @@ namespace sdr { namespace contact {
 
     protected:
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
-            get2DDecomposition(
-                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const;
-
-        virtual ::drawinglayer::primitive2d::Primitive2DSequence
             createLocalDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const;
@@ -827,6 +910,13 @@ namespace sdr { namespace contact {
         DeclPrimitrive2DIDBlock()
 
         static void getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation );
+
+    private:
+        void impl_positionAndZoomControl( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+        {
+            if ( !_rViewInformation.getViewport().isEmpty() )
+                m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
+        }
 
     private:
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >  m_pVOCImpl;
@@ -854,8 +944,14 @@ namespace sdr { namespace contact {
         DBG_CTOR( ViewObjectContactOfUnoControl_Impl, NULL );
         DBG_ASSERT( m_pAntiImpl, "ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl: invalid AntiImpl!" );
 
-        const OutputDevice& rPageViewDevice( imp_getPageViewDevice_nothrow() );
+        const OutputDevice& rPageViewDevice( impl_getOutputDevice_throw() );
         m_aZoomLevelNormalization = rPageViewDevice.GetInverseViewTransformation();
+
+    #if OSL_DEBUG_LEVEL > 1
+        ::basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
+    #endif
 
         ::basegfx::B2DHomMatrix aScaleNormalization;
         MapMode aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
@@ -953,27 +1049,40 @@ namespace sdr { namespace contact {
             return false;
 
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
-        DBG_ASSERT( pPageViewContact, "ViewObjectContactOfUnoControl_Impl::ensureControl: cannot create a control if I don't have a PageView!" );
-        if ( !pPageViewContact )
-            return false;
+        if ( pPageViewContact )
+        {
+            SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
+            return impl_ensureControl_nothrow(
+                aPVAccess,
+                impl_getPageViewOutputDevice_nothrow( *pPageViewContact )
+            );
+        }
 
-        SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
+        DummyPageViewAccess aNoPageView;
         return impl_ensureControl_nothrow(
-            aPVAccess,
-            imp_getPageViewDevice_nothrow( *pPageViewContact )
+            aNoPageView,
+            impl_getOutputDevice_throw()
         );
     }
 
     //--------------------------------------------------------------------
-    const OutputDevice& ViewObjectContactOfUnoControl_Impl::imp_getPageViewDevice_nothrow() const
+    const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getOutputDevice_throw() const
     {
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
-        ENSURE_OR_THROW( pPageViewContact, "need a ObjectContactOfPageView." );
-        return imp_getPageViewDevice_nothrow( *pPageViewContact );
+        if ( pPageViewContact )
+        {
+            // do not use ObjectContact::TryToGetOutputDevice here, it would not care for the PageWindow's
+            // OriginalPaintWindow
+            return impl_getPageViewOutputDevice_nothrow( *pPageViewContact );
+        }
+
+        const OutputDevice* pDevice = m_pAntiImpl->GetObjectContact().TryToGetOutputDevice();
+        ENSURE_OR_THROW( pDevice, "no output device -> no control" );
+        return *pDevice;
     }
 
     //--------------------------------------------------------------------
-    const OutputDevice& ViewObjectContactOfUnoControl_Impl::imp_getPageViewDevice_nothrow( const ObjectContactOfPageView& _rObjectContact )
+    const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getPageViewOutputDevice_nothrow( const ObjectContactOfPageView& _rObjectContact )
     {
         // if the PageWindow has a patched PaintWindow, use the original PaintWindow
         // this ensures that our control is _not_ re-created just because somebody
@@ -1520,20 +1629,17 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
-    {
-        if ( m_pVOCImpl->hasControl() )
-            m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
-        return BasePrimitive2D::get2DDecomposition( _rViewInformation );
-    }
-
-    //--------------------------------------------------------------------
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocalDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
+    #if OSL_DEBUG_LEVEL > 1
+        ::basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
+    #endif
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()
         m_pVOCImpl->ensureControl();
-        m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
+        impl_positionAndZoomControl( _rViewInformation );
 
         // get needed data
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
@@ -1661,8 +1767,35 @@ namespace sdr { namespace contact {
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
             return drawinglayer::primitive2d::Primitive2DSequence();
 
+        // ignore existing controls which are in alive mode and manually switched to "invisible"
+        // #102090# / 2009-06-05 / frank.schoenheit@sun.com
+        const ControlHolder& rControl( m_pImpl->getExistentControl() );
+        if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
+            return drawinglayer::primitive2d::Primitive2DSequence();
+
         ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
         return ::drawinglayer::primitive2d::Primitive2DSequence( &xPrimitive, 1 );
+    }
+
+    //--------------------------------------------------------------------
+    bool ViewObjectContactOfUnoControl::isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const
+    {
+        VOCGuard aGuard( *m_pImpl );
+
+        if ( m_pImpl->hasControl() )
+        {
+            const ::drawinglayer::geometry::ViewInformation2D& rViewInformation( GetObjectContact().getViewInformation2D() );
+        #if OSL_DEBUG_LEVEL > 1
+            ::basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
+        #endif
+
+            if ( !rViewInformation.getViewport().isEmpty() )
+                m_pImpl->positionAndZoomControl( rViewInformation.getObjectToViewTransformation() );
+        }
+
+        return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );
     }
 
     //--------------------------------------------------------------------
@@ -1704,40 +1837,6 @@ namespace sdr { namespace contact {
     }
 
     //====================================================================
-    //= UnoControlDefaultContact
-    //====================================================================
-    DBG_NAME( UnoControlDefaultContact )
-    //--------------------------------------------------------------------
-    UnoControlDefaultContact::UnoControlDefaultContact( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
-        :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
-    {
-        DBG_CTOR( UnoControlDefaultContact, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    UnoControlDefaultContact::~UnoControlDefaultContact()
-    {
-        DBG_DTOR( UnoControlDefaultContact, NULL );
-    }
-
-    //====================================================================
-    //= UnoControlWindowContact
-    //====================================================================
-    DBG_NAME( UnoControlWindowContact )
-    //--------------------------------------------------------------------
-    UnoControlWindowContact::UnoControlWindowContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
-        :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
-    {
-        DBG_CTOR( UnoControlWindowContact, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    UnoControlWindowContact::~UnoControlWindowContact()
-    {
-        DBG_DTOR( UnoControlWindowContact, NULL );
-    }
-
-    //====================================================================
     //= UnoControlPrintOrPreviewContact
     //====================================================================
     DBG_NAME( UnoControlPrintOrPreviewContact )
@@ -1760,23 +1859,6 @@ namespace sdr { namespace contact {
         if ( !m_pImpl->isPrintableControl() )
             return drawinglayer::primitive2d::Primitive2DSequence();
         return ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo );
-    }
-
-    //====================================================================
-    //= UnoControlPDFExportContact
-    //====================================================================
-    DBG_NAME( UnoControlPDFExportContact )
-    //--------------------------------------------------------------------
-    UnoControlPDFExportContact::UnoControlPDFExportContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
-        :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
-    {
-        DBG_CTOR( UnoControlPDFExportContact, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    UnoControlPDFExportContact::~UnoControlPDFExportContact()
-    {
-        DBG_DTOR( UnoControlPDFExportContact, NULL );
     }
 
 //........................................................................
