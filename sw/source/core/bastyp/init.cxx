@@ -34,7 +34,7 @@
 #include <tools/globname.hxx>
 #include <vcl/mapmod.hxx>
 #include <svx/xmlcnitm.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/pbinitem.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/nlbkitem.hxx>
@@ -83,7 +83,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <svx/acorrcfg.hxx>
@@ -311,16 +311,16 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
+    { 0, 0 },                                           // RES_TXTATR_META
+    { 0, 0 },                                           // RES_TXTATR_METAFIELD
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
+    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
+    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
-    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
-    { 0, 0 },                                           // RES_TXTATR_META,
-    { 0, 0 },                                           // RES_TXTATR_METAFIELD,
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
@@ -780,7 +780,7 @@ void _FinitCore()
 
     delete SwEditShell::pAutoFmtFlags;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);

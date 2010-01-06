@@ -60,18 +60,18 @@
 // --> OD 2005-02-28 #i43427#
 #include <svx/opaqitem.hxx>
 // <--
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -129,7 +129,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <svtools/itemiter.hxx>  //SfxItemIter
+#include <svl/itemiter.hxx>  //SfxItemIter
 
 #include <stdio.h>
 
@@ -138,6 +138,8 @@
 #include <dbgoutsw.hxx>
 #endif
 
+#include "WW8Sttbf.hxx"
+#include "WW8FibData.hxx"
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
@@ -3740,6 +3742,34 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 
+    ::ww8::WW8FibData * pFibData = new ::ww8::WW8FibData();
+
+    if (pWwFib->fReadOnlyRecommended)
+        pFibData->setReadOnlyRecommended(true);
+    else
+        pFibData->setReadOnlyRecommended(false);
+
+    if (pWwFib->fWriteReservation)
+        pFibData->setWriteReservation(true);
+    else
+        pFibData->setWriteReservation(false);
+
+    ::sw::tExternalDataPointer pExternalFibData(pFibData);
+
+    rDoc.setExternalData(::sw::FIB, pExternalFibData);
+
+    ::sw::tExternalDataPointer pSttbfAsoc
+          (new ::ww8::WW8Sttb<ww8::WW8Struct>(*pTableStream, pWwFib->fcSttbfAssoc, pWwFib->lcbSttbfAssoc));
+
+    rDoc.setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
+
+    if (pWwFib->fWriteReservation || pWwFib->fReadOnlyRecommended)
+    {
+        SwDocShell * pDocShell = rDoc.GetDocShell();
+        if (pDocShell)
+            pDocShell->SetReadOnlyUI(sal_True);
+    }
+
     pPaM = new SwPaM(rPos);
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
@@ -4186,7 +4216,7 @@ namespace
 
 #define WW_BLOCKSIZE 0x200
 
-    void DecryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -4203,7 +4233,7 @@ namespace
         }
     }
 
-    void DecryptXOR(svx::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
         ULONG nSt = rIn.Tell();
         rIn.Seek(STREAM_SEEK_TO_END);
@@ -4336,7 +4366,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
                         aPassword[nChar] = sPassword.GetChar(nChar);
 
-                    svx::MSCodec_XorWord95 aCtx;
+                    msfilter::MSCodec_XorWord95 aCtx;
                     aCtx.InitKey(aPassword);
                     if (aCtx.VerifyKey(pWwFib->nKey, pWwFib->nHash))
                     {
@@ -4349,7 +4379,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         pStrm->Read(pIn, nUnencryptedHdr);
                         aDecryptMain.Write(pIn, nUnencryptedHdr);
-                        delete pIn;
+                        delete [] pIn;
 
                         DecryptXOR(aCtx, *pStrm, aDecryptMain);
 
@@ -4394,7 +4424,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     sal_uInt8 aSaltHash[ 16 ];
                     pTableStream->Read(aSaltHash, 16);
 
-                    svx::MSCodec_Std97 aCtx;
+                    msfilter::MSCodec_Std97 aCtx;
                     aCtx.InitKey(aPassword, aDocId);
                     if (aCtx.VerifyKey(aSaltData, aSaltHash))
                     {

@@ -41,30 +41,30 @@
 #include <helpid.h>
 
 #include <i18npool/mslangid.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <string.h>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/svxacorr.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <charfmt.hxx>
 #include <svx/fontitem.hxx>
@@ -119,13 +119,13 @@
 #include <IDocumentStatistics.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/languageoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <doc.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
@@ -511,9 +511,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
                 RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
                 RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                 RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };

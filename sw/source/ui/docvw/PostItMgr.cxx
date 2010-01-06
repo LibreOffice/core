@@ -70,9 +70,9 @@
 #include <sfx2/srchitem.hxx>
 
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/eeitem.hxx>
@@ -154,14 +154,6 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
         mbWaitingForCalcRects = true;
         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
     }
-
-    //#i#
-    if (HasNotes() && !mpWrtShell->GetViewOptions()->IsPostIts())
-        {
-                SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
-                mpView->ExecViewOptions(aRequest);
-        }
-
 }
 
 SwPostItMgr::~SwPostItMgr()
@@ -1949,9 +1941,14 @@ void SwPostItMgr::AssureStdModeAtShell()
         {
                 mpWrtShell->UnSelectFrm();
                 mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->GetView().LeaveDrawCreate();
                 mpWrtShell->EnterStdMode();
 
                 mpWrtShell->DrawSelChanged();
                 mpView->StopShellTimer();
         }
 }
+
+void SwNoteProps::Commit() {}
+void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+

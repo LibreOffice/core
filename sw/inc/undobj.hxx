@@ -36,9 +36,9 @@
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <numrule.hxx>
 #include <itabenum.hxx>
@@ -115,7 +115,7 @@ namespace utl {
     class TransliterationWrapper;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class Writer;
 class SwUndo;
 #define OUT_UNDOBJ( name )  \
@@ -205,6 +205,11 @@ namespace nsDelCntntType
     const DelCntntType DELCNT_ALL = 0x0F;
     const DelCntntType DELCNT_CHKNOCNTNT = 0x80;
 }
+
+/// will DelCntntIndex destroy a frame anchored at character at rAnchorPos?
+bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
 
 // diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
 // fuers Redo/Undo ... speichert

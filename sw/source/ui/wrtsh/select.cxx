@@ -35,8 +35,8 @@
 #include <limits.h>
 #include <hintids.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <svx/scripttypeitem.hxx>
 #ifndef _CMDID_H
@@ -343,7 +343,6 @@ void SwWrtShell::UnSelectFrm()
     // Rahmenselektion aufheben mit garantiert ungueltiger Position
     Point aPt(LONG_MIN, LONG_MIN);
     SelectObj(aPt, 0);
-    GetView().LeaveDrawCreate();
     SwTransferable::ClearSelection( *this );
 }
 

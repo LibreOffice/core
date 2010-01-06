@@ -354,7 +354,7 @@ void SwHTMLWriter::OutFootEndNotes()
     if( !pFootEndNotes )
         return;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
@@ -419,7 +419,7 @@ void SwHTMLWriter::OutFootEndNotes()
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( nFtn == nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
     ASSERT( nEn == nEndNote,

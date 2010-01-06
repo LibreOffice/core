@@ -40,12 +40,12 @@
 // --> OD 2008-01-17 #newlistlevelattrs#
 #include <svx/tstpitem.hxx>
 // <--
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>
@@ -92,13 +92,13 @@
 #include <numrule.hxx>
 
 //--> #outlinelevel added by zhaojianwei
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 //<--end
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
 // --> OD 2008-02-25 #refactorlists#
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <list.hxx>
 // <--
 
@@ -111,7 +111,7 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
@@ -372,7 +372,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( TRUE );
                         }
                     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     while( 0 != (pCntnt = (SwCntntFrm*)aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
@@ -943,9 +943,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
             bool bNoExp = false;
             bool bResort = false;
             const USHORT coArrSz = static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<USHORT>(RES_CHRATR_BEGIN) +
-                                   static_cast<USHORT>(RES_UNKNOWNATR_END) -
-                                   static_cast<USHORT>(RES_UNKNOWNATR_BEGIN);
+                                   static_cast<USHORT>(RES_CHRATR_BEGIN);
 
             BOOL aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(BOOL) );
@@ -979,14 +977,6 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         {
                             nWhPos = static_cast<USHORT>(nWhich -
                                         RES_CHRATR_BEGIN);
-                        }
-                        else if (isUNKNOWNATR(nWhich))
-                        {
-                            nWhPos = static_cast<USHORT>(
-                                nWhich -
-                                static_cast<USHORT>(RES_UNKNOWNATR_BEGIN) +
-                                static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                static_cast<USHORT>(RES_CHRATR_BEGIN) );
                         }
                         else
                             continue;
@@ -1518,8 +1508,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                     RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                     0 );
                 aCharSet.Put( *GetpSwAttrSet() );
@@ -1565,8 +1555,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                 RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                 0 );
             aCharSet.Put( *GetpSwAttrSet() );
@@ -2072,8 +2062,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                     RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                     0 );
                 aCharSet.Put( *GetpSwAttrSet() );
@@ -2852,6 +2842,9 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
 BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
     BOOL bRet( FALSE );
+    // --> OD 2009-09-08 #i95907#, #b6879723#
+    rFLOffset = 0;
+    // <--
 
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
@@ -2885,8 +2878,6 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             }
             // <--
         }
-        else
-            rFLOffset = 0;
 
         bRet = TRUE;
     }

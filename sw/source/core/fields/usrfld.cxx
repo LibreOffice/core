@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svx/svdmodel.hxx>
 
 

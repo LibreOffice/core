@@ -34,9 +34,9 @@
 
 #define SMDLL 1
 #include "tools/rcid.h"
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
@@ -396,9 +396,9 @@ void SmFontDialog::InitColor_Impl()
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetDisplayBackground().GetColor().IsDark())
+    const StyleSettings &rS = GetSettings().GetStyleSettings();
+    if (rS.GetHighContrastMode())
     {
-        const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();
         nTxtCol = rS.GetFieldTextColor().GetColor();
     }
@@ -967,7 +967,7 @@ SmDistanceDialog::~SmDistanceDialog()
 
 void SmDistanceDialog::ApplyImages()
 {
-    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     for (int i = 0;  i < NOCATEGORIES;  ++i)
     {
         SmCategoryDesc *pCat = Categories[i];
@@ -1562,9 +1562,9 @@ void SmSymbolDialog::InitColor_Impl()
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetDisplayBackground().GetColor().IsDark())
+    const StyleSettings &rS = GetSettings().GetStyleSettings();
+    if (rS.GetHighContrastMode())
     {
-        const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();
         nTxtCol = rS.GetFieldTextColor().GetColor();
     }
@@ -2108,7 +2108,7 @@ void SmSymDefineDialog::InitColor_Impl()
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     if (bHighContrast)
     {
         const StyleSettings &rS = GetSettings().GetStyleSettings();

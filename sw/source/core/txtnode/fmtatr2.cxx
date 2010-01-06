@@ -35,9 +35,9 @@
 #include "unomid.h"
 
 #include <basic/sbxvar.hxx>
-#include <svtools/macitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/stylepool.hxx>
+#include <svl/macitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/stylepool.hxx>
 #include <fmtautofmt.hxx>
 #include <fchrfmt.hxx>
 #include <fmtinfmt.hxx>
@@ -59,7 +59,7 @@
 #include <unometa.hxx>
 #include <unoobj.hxx> // SwXTextRange
 #include <docsh.hxx>
-#include <svtools/zforlist.hxx> // GetNumberFormat
+#include <svl/zforlist.hxx> // GetNumberFormat
 
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -615,7 +615,7 @@ SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
 
 SwFmtMeta::~SwFmtMeta()
 {
-    if (m_pMeta->GetFmtMeta() == this)
+    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
     {
         m_pMeta->SetFmtMeta(0);
     }
@@ -631,7 +631,8 @@ int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
-    return new SwFmtMeta( m_pMeta, Which() );
+    return (m_pMeta) // #i105148# pool default may be cloned also!
+        ? new SwFmtMeta( m_pMeta, Which() ) : new SwFmtMeta( Which() );
 }
 
 void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)

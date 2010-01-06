@@ -29,7 +29,7 @@
  ************************************************************************/
 
 
-interface BaseTextEditView : View
+interface BaseTextEditView
 [
     Automation = FALSE;
 ]

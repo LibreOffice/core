@@ -41,7 +41,7 @@
 #include <vcl/graph.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/opaqitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -748,7 +748,7 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = GetDisplayBackground().GetColor().IsDark() ?
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
         aWrapILH : aWrapIL;
 
     aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));

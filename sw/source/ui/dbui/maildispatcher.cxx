@@ -110,8 +110,7 @@ namespace /* private */
 MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     mailserver_ (mailserver),
     run_(false),
-    shutdown_requested_(false),
-    bIsInRun(false)
+    shutdown_requested_(false)
 {
     wakening_call_.reset();
     mail_dispatcher_active_.reset();
@@ -206,12 +205,6 @@ bool MailDispatcher::isStarted() const
     return run_;
 }
 
-bool MailDispatcher::isRunning() const
-{
-    return bIsInRun;
-}
-
-
 void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> listener)
 {
     OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
@@ -267,7 +260,6 @@ void MailDispatcher::run()
     // signal that the mail dispatcher thread is now alive
     mail_dispatcher_active_.set();
 
-    bIsInRun = true;
     for(;;)
     {
         wakening_call_.wait();
@@ -295,7 +287,6 @@ void MailDispatcher::run()
             std::for_each(listeners_cloned.begin(), listeners_cloned.end(), GenericEventNotifier(&IMailDispatcherListener::idle, this));
         }
     } // end for        SSH ALI
-    bIsInRun = false;
 }
 /*-- 27.08.2004 12:04:46---------------------------------------------------
 

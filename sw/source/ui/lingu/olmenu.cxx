@@ -45,6 +45,12 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
+
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_STRINGSDTOR
+#include <svl/svstdarr.hxx>
+#endif
+
 #include <i18npool/mslangid.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
@@ -54,21 +60,30 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/languageoptions.hxx>
 #include <svtools/lingucfg.hxx>
 #include <svtools/linguprops.hxx>
+#include <svtools/langtab.hxx>
+#include <svtools/stritem.hxx>
+#include <svx/brshitem.hxx>
 #include <svx/acorrcfg.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/langitem.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/splwrap.hxx>
 #include <svx/svxacorr.hxx>
 #include <svx/unolingu.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+
 
 #include "SwRewriter.hxx"
 #include "chrdlg.hrc"
@@ -84,9 +99,6 @@
 #include "ndtxt.hxx"
 #include "olmenu.hrc"
 #include "olmenu.hxx"
-#include "svtools/langtab.hxx"
-#include "svtools/stritem.hxx"
-#include "svx/brshitem.hxx"
 #include "swabstdlg.hxx"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
@@ -99,7 +111,9 @@
 #include "wrtsh.hxx"
 #include "wview.hxx"
 
+
 #include <map>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -402,7 +416,7 @@ bGrammarResults(false)
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
-    const bool bIsDark = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -414,7 +428,7 @@ bGrammarResults(false)
         uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
         if (xNamed.is())
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bIsDark );
+            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bHC );
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
@@ -504,7 +518,7 @@ bGrammarResults(false)
                 if (xSvcInfo.is())
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName(), bIsDark) );
+                            xSvcInfo->getImplementationName(), bHC) );
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -560,8 +574,8 @@ bGrammarResults(false)
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
-    SetItemImage( MN_SPELLING_DLG, rImg );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+    SetItemImage( MN_SPELLING, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -693,8 +707,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
-    SetItemImage( MN_SPELLING_DLG, rImg );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+    SetItemImage( MN_SPELLING, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
 

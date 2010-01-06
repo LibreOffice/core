@@ -44,7 +44,7 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 
 #include <symbol.hxx>
@@ -174,7 +174,7 @@ public:
     virtual ~SmMathConfig();
 
     // utl::ConfigItem
-    //virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();
 
     // make some protected functions of utl::ConfigItem public

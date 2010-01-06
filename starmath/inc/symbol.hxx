@@ -35,8 +35,8 @@
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/dynary.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/lstner.hxx>
+#include <svl/svarray.hxx>
 
 #include <map>
 #include <vector>

@@ -2,6 +2,8 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ *
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +52,7 @@ _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 void DumpHints( const SwpHtStart &rHtStart,
                 const SwpHtEnd &rHtEnd )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aDbstream << "DumpHints:" << endl;
     (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
     for( USHORT i = 0; i < rHtStart.Count(); ++i )
@@ -123,8 +125,8 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 < (long)&rHt2;
             }
-            // the order must ensure that META is inside RUBY!
-            return ( nWhich1 < nWhich2 );
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 > nWhich2 );
         }
         return ( nHt1 > nHt2 );
     }
@@ -159,8 +161,8 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 > (long)&rHt2;
             }
-            // the order must ensure that META is inside RUBY!
-            return ( nWhich1 > nWhich2 );
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 < nWhich2 );
         }
         else
             return ( *rHt1.GetStart() > *rHt2.GetStart() );
@@ -247,7 +249,7 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nPos;
     ASSERT(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");
@@ -256,7 +258,7 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 #endif
     m_HintStarts.Insert( pHt );
     m_HintEnds.Insert( pHt );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
     DumpHints( m_HintStarts, m_HintEnds );
@@ -275,7 +277,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
     USHORT nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
     DumpHints( m_HintStarts, m_HintEnds );
@@ -283,7 +285,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 #endif
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                      SwpHintsArray::Check()
@@ -441,7 +443,7 @@ bool SwpHintsArray::Resort()
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //            ASSERT( bResort, "!Resort/Start: correcting hints-array" );
             aDbstream << "Resort: Starts" << endl;
             DumpHints( m_HintStarts, m_HintEnds );
@@ -464,7 +466,7 @@ bool SwpHintsArray::Resort()
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             aDbstream << "Resort: Ends" << endl;
             DumpHints( m_HintStarts, m_HintEnds );
 #endif
@@ -480,7 +482,7 @@ bool SwpHintsArray::Resort()
         }
         pLast = pHt;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     aDbstream << "Resorted:" << endl;
     DumpHints( m_HintStarts, m_HintEnds );

@@ -38,7 +38,7 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/udlnitem.hxx>
@@ -67,7 +67,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>
@@ -3755,22 +3755,22 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
 
-/* RES_TXTATR_NOLINEBREAK   */      0,
-/* RES_TXTATR_NOHYPHEN  */          0,
-/* RES_TXTATR_REFMARK*/             0,
+/* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
-/* RES_TXTATR_CHARFMT   */          0,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_META */               0,
+/* RES_TXTATR_METAFIELD */          0,
+/* RES_TXTATR_AUTOFMT */            0,
+/* RES_TXTATR_INETFMT */            0,
+/* RES_TXTATR_CHARFMT */            0,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
-/* RES_TXTATR_DUMMY6 */             0,
 
 /* RES_TXTATR_FIELD */              0,
 /* RES_TXTATR_FLYCNT */             0,
 /* RES_TXTATR_FTN */                0,
-/* RES_TXTATR_SOFTHYPH */           0,
-/* RES_TXTATR_HARDBLANK*/           0,
+/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

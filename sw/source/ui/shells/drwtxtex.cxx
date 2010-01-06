@@ -39,24 +39,15 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
-#include <svtools/langtab.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
+#include <svl/langtab.hxx>
+#include <svl/languageoptions.hxx>
+#include <sfx2/bindings.hxx>
+#include <vcl/msgbox.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/frmdiritem.hxx>
@@ -108,6 +99,21 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
+//modified on Jul. 30th
+#include <svl/languageoptions.hxx>
+#include <svx/langitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svtools/langtab.hxx>
+
+#include <svx/eeitem.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editdata.hxx>
+#include <svx/outliner.hxx>
+#include <vcl/window.hxx>
+#include <svx/editview.hxx>
+#include <vcl/outdev.hxx>
+
+#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 

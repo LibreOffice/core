@@ -33,8 +33,8 @@
 #ifdef DEBUG
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemiter.hxx>
 #include <string>
 #include <map>
 #include <node.hxx>
@@ -109,6 +109,11 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
         fprintf(stderr, "%s", aDbgOutResult.GetBuffer());
 
     return aDbgOutResult.GetBuffer();
+}
+
+SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
+{
+    return OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
 }
 
 
@@ -546,7 +551,7 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
@@ -1084,9 +1089,9 @@ String lcl_dbg_out(const SwNodeRange & rRange)
 {
     String aStr("[", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += lcl_dbg_out(rRange.aStart);
+    aStr += lcl_dbg_out(SwPosition(rRange.aStart));
     aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-    aStr += lcl_dbg_out(rRange.aEnd);
+    aStr += lcl_dbg_out(SwPosition(rRange.aEnd));
 
     aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
 
