@@ -43,7 +43,13 @@ namespace basegfx
     class B2DTrapezoid
     {
     private:
-        // geometry data
+        // Geometry data. YValues are down-oriented, this means bottom should
+        // be bigger than top to be below it. The constructor implementation
+        // guarantees:
+        //
+        // - mfBottomY >= mfTopY
+        // - mfTopXRight >= mfTopXLeft
+        // - mfBottomXRight >= mfBottomXLeft
         double              mfTopXLeft;
         double              mfTopXRight;
         double              mfTopY;
@@ -83,8 +89,40 @@ namespace basegfx
 {
     namespace tools
     {
-        // convert SourcePolyPolygon to trapezoids
-        B2DTrapezoidVector trapezoidSubdivide(const B2DPolyPolygon& rSourcePolyPolygon);
+        // convert SourcePolyPolygon to trapezoids. The trapezoids will be appended to
+        // ro_Result. ro_Result will not be cleared. If SourcePolyPolygon contains curves,
+        // it's default AdaptiveSubdivision will be used.
+        // CAUTION: Trapezoids are oreintation-dependent in the sense that the upper and lower
+        // lines have to be parallel to the X-Axis, thus this subdivision is NOT simply usable
+        // for primitive decompositions. To use it, the shear and rotate parts of the
+        // involved transformations HAVE to be taken into account.
+        void trapezoidSubdivide(
+            B2DTrapezoidVector& ro_Result,
+            const B2DPolyPolygon& rSourcePolyPolygon);
+
+        // directly create trapezoids from given edge. Depending on the given geometry,
+        // none up to three trapezoids will be created
+        void createLineTrapezoidFromEdge(
+            B2DTrapezoidVector& ro_Result,
+            const B2DPoint& rPointA,
+            const B2DPoint& rPointB,
+            double fLineWidth = 1.0);
+
+        // create trapezoids for all edges of the given polygon. The closed state of
+        // the polygon is taken into account. If curves are contaned, the default
+        // AdaptiveSubdivision will be used.
+        void createLineTrapezoidFromB2DPolygon(
+            B2DTrapezoidVector& ro_Result,
+            const B2DPolygon& rPolygon,
+            double fLineWidth = 1.0);
+
+        // create trapezoids for all edges of the given polyPolygon. The closed state of
+        // the PolyPolygon is taken into account. If curves are contaned, the default
+        // AdaptiveSubdivision will be used.
+        void createLineTrapezoidFromB2DPolyPolygon(
+            B2DTrapezoidVector& ro_Result,
+            const B2DPolyPolygon& rPolyPolygon,
+            double fLineWidth = 1.0);
 
     } // end of namespace tools
 } // end of namespace basegfx
