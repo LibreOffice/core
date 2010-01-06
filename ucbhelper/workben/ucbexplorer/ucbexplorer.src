@@ -82,6 +82,7 @@ Menu MENU_POPUP
     };
 };
 
+/*
 Bitmap BMP_FOLDER_CLOSED
 {
     File = "bmp/fldclose.bmp" ;
@@ -98,6 +99,7 @@ Bitmap BMP_LINK
 {
     File = "bmp/link.bmp" ;
 };
+*/
 
 ModalDialog DLG_STRINGINPUT
 {
