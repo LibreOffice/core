@@ -1,6 +1,6 @@
 --- misc/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:56:45 2008
 +++ misc/build/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:55:09 2008
-@@ -1,1 +1,97 @@
+@@ -1,1 +1,98 @@
 -dummy
 +#*************************************************************************
 +#
@@ -38,6 +38,7 @@
 +PRJNAME=redland
 +TARGET=rasqal
 +LIBTARGET=NO
++UWINAPILIB=
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +

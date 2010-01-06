@@ -50,7 +50,7 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8k
+OPENSSL_NAME=openssl-0.9.8l
 
 TARFILE_NAME=$(OPENSSL_NAME)
 
@@ -68,12 +68,14 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
-    .IF "$(CPU)" == "X"
+        libcrypto_OOo_0_9_8l.map \
+        libssl_OOo_0_9_8l.map
+    .IF "$(CPU)" == "I"
+        CONFIGURE_ACTION=Configure linux-elf
+    .ELIF "$(BUILD64)" == "1"
         CONFIGURE_ACTION=Configure linux-generic64
     .ELSE
-        CONFIGURE_ACTION=Configure linux-elf
+        CONFIGURE_ACTION=Configure linux-generic32
     .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
@@ -82,27 +84,23 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
+        libcrypto_OOo_0_9_8l.map \
+        libssl_OOo_0_9_8l.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
-    # We need a 64 BIT switch (currently I disable 64 Bit by default). 
-    # Please replace this with a global switch if available
-    #USE_64 = 1
+    # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
 
-    # Solaris INTEL
-    .IF "$(CPUNAME)" == "INTEL" 
+    .IF "$(CPUNAME)" == "INTEL" # Solaris INTEL
         .IF "$(CPU)" == "X"
            CONFIGURE_ACTION=Configure solaris64-x86_64-cc
         .ELSE
            CONFIGURE_ACTION=Configure solaris-x86-cc
         .ENDIF
+    .ELIF "$(CPU)" == "U" # Solaris SPARC
+       CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
     .ELSE
-    # Solaris SPARC
-        .IF "$(CPU)" == "U"
-           CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
-        .ENDIF
-.ENDIF
+       CONFIGURE_ACTION=Configure solaris-sparcv9-cc
+    .ENDIF
 .ENDIF
 
 .IF "$(OS)" == "WNT"
@@ -136,7 +134,11 @@ OUT2BIN += out/libeay32.dll
             # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
             # If WRAPCMD is set it is prepended before the compiler, don't touch that.
             .IF "$(WRAPCMD)"==""
-                CC!:=$(subst,/,\ $(normpath,1 $(CC)))
+                # relace / with \ first word only
+                cc_first_repl = $(subst,/,\ $(normpath,1 $(CC:1)))
+                cc_first = $(normpath,1 $(CC:1))
+                CC!:=$(subst,$(cc_first),$(cc_first_repl) $(normpath,1 $(CC)))
+#				CC!:=$(subst,/,\ $(normpath,1 $(CC)))
                 .EXPORT : CC
             .ENDIF
             PERL_bak:=$(PERL)

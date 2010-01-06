@@ -1,4 +1,0 @@
-..\%__SRC%\bin\msfontextract %_DEST%\bin%_EXT%\msfontextract
-
-..\%__SRC%\bin\msfontextract.exe %_DEST%\bin%_EXT%\msfontextract.exe
-

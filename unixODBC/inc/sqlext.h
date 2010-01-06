@@ -39,7 +39,9 @@
 
 /* END - unixODBC ONLY */
 
-#include "sql.h"
+#ifndef __SQL_H
+#include "odbc/sql.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {                         /* Assume C declarations for C++ */
@@ -47,8 +49,8 @@ extern "C" {                         /* Assume C declarations for C++ */
 
 /* generally useful constants */
 #define SQL_SPEC_MAJOR     3        /* Major version of specification  */
-#define SQL_SPEC_MINOR     51       /* Minor version of specification  */
-#define SQL_SPEC_STRING   "03.51"   /* String constant for version */
+#define SQL_SPEC_MINOR     52       /* Minor version of specification  */
+#define SQL_SPEC_STRING   "03.52"   /* String constant for version */
 
 #define SQL_SQLSTATE_SIZE   5   /* size of SQLSTATE */
 #define SQL_MAX_DSN_LENGTH  32  /* maximum data source name size */
@@ -72,6 +74,11 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_ATTR_ODBC_VERSION               200
 #define SQL_ATTR_CONNECTION_POOLING         201
 #define SQL_ATTR_CP_MATCH                   202
+
+/* unixODBC additions */
+#define SQL_ATTR_UNIXODBC_SYSPATH           65001
+#define SQL_ATTR_UNIXODBC_VERSION           65002
+#define SQL_ATTR_UNIXODBC_ENVATTR           65003
 #endif  /* ODBCVER >= 0x0300 */
 
 #if (ODBCVER >= 0x0300)
@@ -127,6 +134,8 @@ extern "C" {                         /* Assume C declarations for C++ */
 
 #define SQL_ATTR_CONNECTION_DEAD    1209    /* GetConnectAttr only */
 
+#define SQL_ATTR_DRIVER_THREADING   1028    /* Driver threading level */
+
 #if (ODBCVER >= 0x0351)
 /*  ODBC Driver Manager sets this connection attribute to a unicode driver
     (which supports SQLConnectW) when the application is an ANSI application
@@ -170,7 +179,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_OPT_TRACE_OFF               0UL
 #define SQL_OPT_TRACE_ON                1UL
 #define SQL_OPT_TRACE_DEFAULT           SQL_OPT_TRACE_OFF
-#define SQL_OPT_TRACE_FILE_DEFAULT      "\\SQL.LOG"
+#define SQL_OPT_TRACE_FILE_DEFAULT      "/tmp/SQL.LOG"
 
 /* SQL_ODBC_CURSORS options */
 #define SQL_CUR_USE_IF_NEEDED           0UL
@@ -516,7 +525,12 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_C_ULONG      (SQL_C_LONG+SQL_UNSIGNED_OFFSET)  /* UNSIGNED INTEGER*/
 #define SQL_C_USHORT     (SQL_C_SHORT+SQL_UNSIGNED_OFFSET) /* UNSIGNED SMALLINT*/
 #define SQL_C_UTINYINT   (SQL_TINYINT+SQL_UNSIGNED_OFFSET) /* UNSIGNED TINYINT*/
+
+#if (ODBCVER >= 0x0300) && (SIZEOF_LONG_INT == 8) && !defined(BUILD_LEGACY_64_BIT_MODE)
+#define SQL_C_BOOKMARK   SQL_C_UBIGINT                     /* BOOKMARK        */
+#else
 #define SQL_C_BOOKMARK   SQL_C_ULONG                       /* BOOKMARK        */
+#endif
 
 #if (ODBCVER >= 0x0350)
 #define SQL_C_GUID  SQL_GUID
@@ -751,6 +765,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_CONVERT_VARBINARY               69
 #define SQL_CONVERT_VARCHAR                 70
 #define SQL_CONVERT_LONGVARBINARY           71
+#define SQL_CONVERT_GUID                    173
 #define SQL_ODBC_SQL_OPT_IEF                73      /* SQL_INTEGRITY */
 #define SQL_CORRELATION_NAME                74
 #define SQL_NON_NULLABLE_COLUMNS            75
@@ -780,7 +795,9 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_QUALIFIER_LOCATION              114
 
 #if (ODBCVER >= 0x0201 && ODBCVER < 0x0300)
+#ifndef SQL_OJ_CAPABILITIES
 #define SQL_OJ_CAPABILITIES         65003  /* Temp value until ODBC 3.0 */
+#endif
 #endif  /* ODBCVER >= 0x0201 && ODBCVER < 0x0300 */
 
 /*----------------------------------------------*/
@@ -927,6 +944,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_CVT_WCHAR                       0x00200000L
 #define SQL_CVT_WLONGVARCHAR                0x00400000L
 #define SQL_CVT_WVARCHAR                    0x00800000L
+#define SQL_CVT_GUID                        0x01000000L
 
 #endif  /* ODBCVER >= 0x0300 */
 
@@ -1199,7 +1217,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_FILE_NOT_SUPPORTED              0x0000
 #define SQL_FILE_TABLE                      0x0001
 #define SQL_FILE_QUALIFIER                  0x0002
-#define SQL_FILE_CATALOG                    SQL_FILE_QUALIFIER  // ODBC 3.0
+#define SQL_FILE_CATALOG                    SQL_FILE_QUALIFIER  /* ODBC 3.0 */
 
 
 /* SQL_GETDATA_EXTENSIONS values */
@@ -1688,7 +1706,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_DRIVER_PROMPT               2
 #define SQL_DRIVER_COMPLETE_REQUIRED    3
 
-SQLRETURN  SQLDriverConnect(
+SQLRETURN SQL_API SQLDriverConnect(
     SQLHDBC            hdbc,
     SQLHWND            hwnd,
     SQLCHAR           *szConnStrIn,
@@ -1762,8 +1780,7 @@ SQLRETURN  SQLDriverConnect(
 #define SQL_PT_FUNCTION                  2
 
 /*      This define is too large for RC */
-#define SQL_ODBC_KEYWORDS "ABSOLUTE,ACTION,ADA,ADD,ALL,ALLOCATE,ALTER,AND,ANY,ARE,AS,"
-/*
+#define SQL_ODBC_KEYWORDS "ABSOLUTE,ACTION,ADA,ADD,ALL,ALLOCATE,ALTER,AND,ANY,ARE,AS,"\
 "ASC,ASSERTION,AT,AUTHORIZATION,AVG,"\
 "BEGIN,BETWEEN,BIT,BIT_LENGTH,BOTH,BY,CASCADE,CASCADED,CASE,CAST,CATALOG,"\
 "CHAR,CHAR_LENGTH,CHARACTER,CHARACTER_LENGTH,CHECK,CLOSE,COALESCE,"\
@@ -1794,9 +1811,8 @@ SQLRETURN  SQLDriverConnect(
 "UNION,UNIQUE,UNKNOWN,UPDATE,UPPER,USAGE,USER,USING,"\
 "VALUE,VALUES,VARCHAR,VARYING,VIEW,WHEN,WHENEVER,WHERE,WITH,WORK,WRITE,"\
 "YEAR,ZONE"
-*/
 
-SQLRETURN  SQLBrowseConnect(
+SQLRETURN SQL_API SQLBrowseConnect(
     SQLHDBC            hdbc,
     SQLCHAR           *szConnStrIn,
     SQLSMALLINT        cbConnStrIn,
@@ -1805,21 +1821,21 @@ SQLRETURN  SQLBrowseConnect(
     SQLSMALLINT       *pcbConnStrOut);
 
 #if (ODBCVER >= 0x0300)
-SQLRETURN   SQLBulkOperations(
+SQLRETURN   SQL_API SQLBulkOperations(
     SQLHSTMT            StatementHandle,
     SQLSMALLINT         Operation);
 #endif  /* ODBCVER >= 0x0300 */
 
-SQLRETURN  SQLColAttributes(
+SQLRETURN SQL_API SQLColAttributes(
     SQLHSTMT           hstmt,
     SQLUSMALLINT       icol,
     SQLUSMALLINT       fDescType,
     SQLPOINTER         rgbDesc,
     SQLSMALLINT        cbDescMax,
     SQLSMALLINT       *pcbDesc,
-    SQLINTEGER        *pfDesc);
+    SQLLEN            *pfDesc);
 
-SQLRETURN  SQLColumnPrivileges(
+SQLRETURN SQL_API SQLColumnPrivileges(
     SQLHSTMT           hstmt,
     SQLCHAR           *szCatalogName,
     SQLSMALLINT        cbCatalogName,
@@ -1830,22 +1846,22 @@ SQLRETURN  SQLColumnPrivileges(
     SQLCHAR           *szColumnName,
     SQLSMALLINT        cbColumnName);
 
-SQLRETURN  SQLDescribeParam(
+SQLRETURN SQL_API SQLDescribeParam(
     SQLHSTMT           hstmt,
     SQLUSMALLINT       ipar,
     SQLSMALLINT       *pfSqlType,
-    SQLUINTEGER       *pcbParamDef,
+    SQLULEN           *pcbParamDef,
     SQLSMALLINT       *pibScale,
     SQLSMALLINT       *pfNullable);
 
-SQLRETURN  SQLExtendedFetch(
+SQLRETURN SQL_API SQLExtendedFetch(
     SQLHSTMT           hstmt,
     SQLUSMALLINT       fFetchType,
-    SQLINTEGER         irow,
-    SQLUINTEGER       *pcrow,
-    SQLUSMALLINT      *rgfRowStatus);
+    SQLLEN             irow,
+    SQLULEN            *pcrow,
+    SQLUSMALLINT       *rgfRowStatus);
 
-SQLRETURN  SQLForeignKeys(
+SQLRETURN SQL_API SQLForeignKeys(
     SQLHSTMT           hstmt,
     SQLCHAR           *szPkCatalogName,
     SQLSMALLINT        cbPkCatalogName,
@@ -1860,10 +1876,10 @@ SQLRETURN  SQLForeignKeys(
     SQLCHAR           *szFkTableName,
     SQLSMALLINT        cbFkTableName);
 
-SQLRETURN  SQLMoreResults(
+SQLRETURN SQL_API SQLMoreResults(
     SQLHSTMT           hstmt);
 
-SQLRETURN  SQLNativeSql(
+SQLRETURN SQL_API SQLNativeSql(
     SQLHDBC            hdbc,
     SQLCHAR           *szSqlStrIn,
     SQLINTEGER         cbSqlStrIn,
@@ -1871,16 +1887,16 @@ SQLRETURN  SQLNativeSql(
     SQLINTEGER         cbSqlStrMax,
     SQLINTEGER        *pcbSqlStr);
 
-SQLRETURN  SQLNumParams(
+SQLRETURN SQL_API SQLNumParams(
     SQLHSTMT           hstmt,
     SQLSMALLINT       *pcpar);
 
-SQLRETURN  SQLParamOptions(
+SQLRETURN SQL_API SQLParamOptions(
     SQLHSTMT           hstmt,
-    SQLUINTEGER        crow,
-    SQLUINTEGER       *pirow);
+    SQLULEN            crow,
+    SQLULEN            *pirow);
 
-SQLRETURN  SQLPrimaryKeys(
+SQLRETURN SQL_API SQLPrimaryKeys(
     SQLHSTMT           hstmt,
     SQLCHAR           *szCatalogName,
     SQLSMALLINT        cbCatalogName,
@@ -1889,7 +1905,7 @@ SQLRETURN  SQLPrimaryKeys(
     SQLCHAR           *szTableName,
     SQLSMALLINT        cbTableName);
 
-SQLRETURN  SQLProcedureColumns(
+SQLRETURN SQL_API SQLProcedureColumns(
     SQLHSTMT           hstmt,
     SQLCHAR           *szCatalogName,
     SQLSMALLINT        cbCatalogName,
@@ -1900,7 +1916,7 @@ SQLRETURN  SQLProcedureColumns(
     SQLCHAR           *szColumnName,
     SQLSMALLINT        cbColumnName);
 
-SQLRETURN  SQLProcedures(
+SQLRETURN SQL_API SQLProcedures(
     SQLHSTMT           hstmt,
     SQLCHAR           *szCatalogName,
     SQLSMALLINT        cbCatalogName,
@@ -1909,13 +1925,13 @@ SQLRETURN  SQLProcedures(
     SQLCHAR           *szProcName,
     SQLSMALLINT        cbProcName);
 
-SQLRETURN  SQLSetPos(
+SQLRETURN SQL_API SQLSetPos(
     SQLHSTMT           hstmt,
-    SQLUSMALLINT       irow,
+    SQLSETPOSIROW      irow,
     SQLUSMALLINT       fOption,
     SQLUSMALLINT       fLock);
 
-SQLRETURN  SQLTablePrivileges(
+SQLRETURN SQL_API SQLTablePrivileges(
     SQLHSTMT           hstmt,
     SQLCHAR           *szCatalogName,
     SQLSMALLINT        cbCatalogName,
@@ -1924,7 +1940,7 @@ SQLRETURN  SQLTablePrivileges(
     SQLCHAR           *szTableName,
     SQLSMALLINT        cbTableName);
 
-SQLRETURN  SQLDrivers(
+SQLRETURN SQL_API SQLDrivers(
     SQLHENV            henv,
     SQLUSMALLINT       fDirection,
     SQLCHAR           *szDriverDesc,
@@ -1934,17 +1950,17 @@ SQLRETURN  SQLDrivers(
     SQLSMALLINT        cbDrvrAttrMax,
     SQLSMALLINT       *pcbDrvrAttr);
 
-SQLRETURN  SQLBindParameter(
+SQLRETURN SQL_API SQLBindParameter(
     SQLHSTMT           hstmt,
     SQLUSMALLINT       ipar,
     SQLSMALLINT        fParamType,
     SQLSMALLINT        fCType,
     SQLSMALLINT        fSqlType,
-    SQLUINTEGER        cbColDef,
+    SQLULEN            cbColDef,
     SQLSMALLINT        ibScale,
     SQLPOINTER         rgbValue,
-    SQLINTEGER         cbValueMax,
-    SQLINTEGER        *pcbValue);
+    SQLLEN             cbValueMax,
+    SQLLEN            *pcbValue);
 
 /*---------------------------------------------------------*/
 /* SQLAllocHandleStd is implemented to make SQLAllocHandle */
@@ -1972,7 +1988,7 @@ SQLRETURN  SQLBindParameter(
 #endif /* ODBC_STD */
 
 #if (ODBCVER >= 0x0300)
-SQLRETURN  SQLAllocHandleStd(
+SQLRETURN SQL_API SQLAllocHandleStd(
     SQLSMALLINT     fHandleType,
     SQLHANDLE       hInput,
     SQLHANDLE      *phOutput);
@@ -1999,20 +2015,56 @@ SQLRETURN  SQLAllocHandleStd(
 #define SQL_SCROLL_STATIC               (-3L) /*-SQL_CURSOR_STATIC */
 
 /*      Deprecated functions from prior versions of ODBC */
-SQLRETURN  SQLSetScrollOptions(    /*      Use SQLSetStmtOptions */
+SQLRETURN SQL_API SQLSetScrollOptions(    /*      Use SQLSetStmtOptions */
     SQLHSTMT           hstmt,
     SQLUSMALLINT       fConcurrency,
-    SQLINTEGER         crowKeyset,
+    SQLLEN             crowKeyset,
     SQLUSMALLINT       crowRowset);
 
-/* Tracing section */
-
-#define     TRACE_VERSION   1000        /* Version of trace API */
-
-RETCODE  TraceOpenLogFile(LPWSTR,LPWSTR,DWORD);     /* open a trace log file                */
-RETCODE  TraceCloseLogFile();                   /* Request to close a trace log         */
-VOID     TraceReturn(RETCODE,RETCODE);          /* Processes trace after FN is called   */
-DWORD    TraceVersion();                            /* Returns trace API version            */
+/*!
+ * \defgroup    Tracing.
+ *
+ *              unixODBC implements a slight variation of the tracing mechanism used
+ *              on MS platforms. The unixODBC method loses the ability to produce trace
+ *              output for invalid handles but gains the following;
+ *
+ *              - better concurrency
+ *              - allows tracing to be turned on/off and configured at finer granularity
+ *              - hopefully; better performance
+ *
+ *              unixODBC provides a cross-platform helper library called 'trace' and an
+ *              example/default trace plugin called 'odbctrac'. Those writing an ODBC
+ *              driver can use the 'trace' helper library (a static library). Those wanting
+ *              to create custom trace output can implement a different version of the
+ *              'odbctrac' plugin.
+ *
+ *              The text file driver (odbctxt) included with unixODBC is an example of a
+ *              driver using the 'trace' helper library.
+ *
+ *              The 'trace' library and the example plugin 'odbctrac' are designed to be
+ *              portable on all platforms where unixODBC is available and on MS platforms.
+ *              This will allow drivers using 'trace' and 'odbctrac' plugin to equilly
+ *              portable. On MS platforms - this compliments traditional tracing (mostly
+ *              just used by the Driver Manager).
+ *
+ * \sa          trace
+ *              odbctxt
+ *              odbctrac
+ */
+/*@{*/
+#define TRACE_VERSION 1000                                  /*!< Version of trace API                               */
+#ifdef UNICODE
+RETCODE TraceOpenLogFile(SQLPOINTER,LPWSTR,LPWSTR,DWORD);   /*!< open a trace log file                              */
+#else
+RETCODE TraceOpenLogFile(SQLPOINTER,LPSTR,LPSTR,DWORD);     /*!< open a trace log file                              */
+#endif
+RETCODE TraceCloseLogFile(SQLPOINTER);                      /*!< Request to close a trace log                       */
+SQLRETURN TraceReturn(SQLPOINTER,SQLRETURN);                /*!< Call to produce trace output upon function return. */
+#ifdef __cplusplus
+DWORD    TraceVersion();                                    /*!< Returns trace API version                          */
+#else
+DWORD    TraceVersion(VOID);                                /*!< Returns trace API version                          */
+#endif
 
 /* Functions for Visual Studio Analyzer*/
 /* to turn on/off tracing or VS events, call TraceVSControl by setting or clearing the following bits  */
@@ -2028,7 +2080,11 @@ RETCODE TraceVSControl(DWORD);
 #define ODBC_VS_FLAG_STOP       0x00000008L /* Stop firing visual studio analyzer events */
 
 typedef struct tagODBC_VS_ARGS {
+#ifdef GUID_DEFINED
     const GUID  *pguidEvent;    /* the GUID for event */
+#else
+    const void  *pguidEvent;    /* the GUID for event */
+#endif
     DWORD   dwFlags;        /* flags for the call */
     union {
         WCHAR   *wszArg;
@@ -2042,10 +2098,25 @@ typedef struct tagODBC_VS_ARGS {
 } ODBC_VS_ARGS, *PODBC_VS_ARGS;
 
 VOID    FireVSDebugEvent(PODBC_VS_ARGS);
-
+/*@}*/
 
 #ifdef __cplusplus
 }
+#endif
+
+/*
+ * connection pooling retry times
+ */
+
+BOOL ODBCSetTryWaitValue ( DWORD dwValue );
+#ifdef __cplusplus
+DWORD ODBCGetTryWaitValue ( );
+#else
+DWORD ODBCGetTryWaitValue ( VOID );
+#endif
+
+#ifndef __SQLUCODE_H
+#include "odbc/sqlucode.h"
 #endif
 
 #endif
