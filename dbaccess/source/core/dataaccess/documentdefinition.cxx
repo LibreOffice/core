@@ -1631,6 +1631,10 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     aEmbeddedDescriptor.put( "EmbeddedScriptSupport", (sal_Bool)objectSupportsEmbeddedScripts() );
 
     // .........................................................................
+    // tell the embedded object to not participate in the document recovery game - the DB doc will handle it
+    aEmbeddedDescriptor.put( "DocumentRecoverySupport", (sal_Bool)sal_False );
+
+    // .........................................................................
     // pass the descriptor of the embedded object to the caller
     aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
 
