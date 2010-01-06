@@ -1071,7 +1071,7 @@ bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
             _1,
                     rUserStrokeWidth));
 }
-//NELLE a regarder de plus près
+
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(

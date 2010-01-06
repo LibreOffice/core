@@ -913,7 +913,7 @@ void SlideImpl::drawPolygons() const
 
 void SlideImpl::addPolygons(PolyPolygonVector aPolygons)
 {
-    if(!aPolygons.empty()) /* FIXME : was if(aPolygons.size() != 0) */
+    if(!aPolygons.empty())
     {
         for( PolyPolygonVector::iterator aIter=aPolygons.begin(),
                  aEnd=aPolygons.end();
