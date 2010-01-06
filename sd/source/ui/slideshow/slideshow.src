@@ -147,11 +147,6 @@ Menu RID_SLIDESHOW_CONTEXTMENU
             Identifier = CM_ERASE_ALLINK ;
             Text [ en-US ] = "~Erase All Ink On Slide" ;
         };
-        // MenuItem
-        // {
-        //     Identifier = CM_ERASE_INK ;
-        //     Text [ en-US ] = "~Erase Ink Mode ON/OFF" ;
-        // };
         MenuItem
         {
             Separator = TRUE;
