@@ -58,6 +58,7 @@ namespace drawinglayer {
 }
 
 class ZBufferRasterConverter3D;
+class RasterPrimitive3D;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -81,20 +82,14 @@ namespace drawinglayer
             // will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
             sal_uInt16                                          mnAntiAlialize;
 
-            // bitfield
-            // a combination of bools to allow two-pass rendering to render
-            // the transparent parts in the 2nd run (if any) as needed for Z-Buffer
-            unsigned                                            mbProcessTransparent : 1;
-            unsigned                                            mbContainsTransparent : 1;
-
+            // remembered RasterPrimitive3D's which need to be painted back to front
+            // for transparent 3D parts
+            std::vector< RasterPrimitive3D >*                   mpRasterPrimitive3Ds;
 
             //////////////////////////////////////////////////////////////////////////////
             // rasterconversions for filled and non-filled polygons
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const;
             virtual void rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const;
-
-            // the processing method for a single, known primitive
-            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive);
 
         public:
             ZBufferProcessor3D(
@@ -108,12 +103,7 @@ namespace drawinglayer
                 sal_uInt16 nAntiAlialize);
             virtual ~ZBufferProcessor3D();
 
-            // helpers for drawing transparent parts in 2nd run. To use this
-            // processor, call processNonTransparent and then processTransparent
-            // with the same primitives. The 2nd call will only do something,
-            // when transparent parts are contained
-            void processNonTransparent(const primitive3d::Primitive3DSequence& rSource);
-            void processTransparent(const primitive3d::Primitive3DSequence& rSource);
+            void finish();
 
             // get the result as bitmapEx
             BitmapEx getBitmapEx() const;

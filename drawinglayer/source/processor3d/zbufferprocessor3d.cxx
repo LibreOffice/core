@@ -50,6 +50,7 @@
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -233,14 +234,14 @@ private:
             basegfx::B2DPoint aTexCoor(0.0, 0.0);
             getTextureCoor(aTexCoor);
 
-            if(mrProcessor.getGeoTexSvx())
+            if(mrProcessor.getGeoTexSvx().get())
             {
                 // calc color in spot. This may also set to invisible already when
                 // e.g. bitmap textures have transparent parts
                 mrProcessor.getGeoTexSvx()->modifyBColor(aTexCoor, rColor, fOpacity);
             }
 
-            if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx())
+            if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx().get())
             {
                 // calc opacity. Object has a 2nd texture, a transparence texture
                 mrProcessor.getTransparenceGeoTexSvx()->modifyOpacity(aTexCoor, fOpacity);
@@ -249,7 +250,7 @@ private:
 
         if(basegfx::fTools::more(fOpacity, 0.0))
         {
-            if(mrProcessor.getGeoTexSvx())
+            if(mrProcessor.getGeoTexSvx().get())
             {
                 if(mbUseNrm)
                 {
@@ -317,9 +318,9 @@ private:
         mbModifyColor = mrProcessor.getBColorModifierStack().count();
         mbHasTexCoor = SCANLINE_EMPTY_INDEX != rA.getTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getTextureIndex();
         mbHasInvTexCoor = SCANLINE_EMPTY_INDEX != rA.getInverseTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getInverseTextureIndex();
-        const bool bTextureActive(mrProcessor.getGeoTexSvx() || mrProcessor.getTransparenceGeoTexSvx());
+        const bool bTextureActive(mrProcessor.getGeoTexSvx().get() || mrProcessor.getTransparenceGeoTexSvx().get());
         mbUseTex = bTextureActive && (mbHasTexCoor || mbHasInvTexCoor || mrProcessor.getSimpleTextureActive());
-        const bool bUseColorTex(mbUseTex && mrProcessor.getGeoTexSvx());
+        const bool bUseColorTex(mbUseTex && mrProcessor.getGeoTexSvx().get());
         const bool bNeedNrmOrCol(!bUseColorTex || (bUseColorTex && mrProcessor.getModulate()));
         mbUseNrm = bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getNormalIndex() && SCANLINE_EMPTY_INDEX != rB.getNormalIndex();
         mbUseCol = !mbUseNrm && bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getColorIndex() && SCANLINE_EMPTY_INDEX != rB.getColorIndex();
@@ -434,7 +435,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
                             if(nOpacity >= 0x00ff)
                             {
-                                // full opacity, set z and color
+                                // full opacity (not transparent), set z and color
                                 rOldZ = nNewZ;
                                 mrBuffer.getBPixel(nScanlineIndex) = basegfx::BPixel(aNewColor, 0xff);
                             }
@@ -444,8 +445,8 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
                                 if(rDest.getOpacity())
                                 {
-                                    // both transparent, mix color based on front pixel's opacity
-                                    // (the new one)
+                                    // mix new color by using
+                                    // color' = color * (1 - opacity) + newcolor * opacity
                                     const sal_uInt16 nTransparence(0x0100 - nOpacity);
                                     rDest.setRed((sal_uInt8)(((rDest.getRed() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
                                     rDest.setGreen((sal_uInt8)(((rDest.getGreen() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
@@ -453,14 +454,14 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
                                     if(0xff != rDest.getOpacity())
                                     {
-                                        // destination is also transparent, mix opacities by weighting
-                                        // old opacity with new pixel's transparence and adding new opacity
-                                        rDest.setOpacity((sal_uInt8)(((rDest.getOpacity() * nTransparence) >> 8) + nOpacity));
+                                        // both are transparent, mix new opacity by using
+                                        // opacity = newopacity * (1 - oldopacity) + oldopacity
+                                        rDest.setOpacity(((sal_uInt8)((nOpacity * (0x0100 - rDest.getOpacity())) >> 8)) + rDest.getOpacity());
                                     }
                                 }
                                 else
                                 {
-                                    // dest is not visible. Set color.
+                                    // dest is unused, set color
                                     rDest = basegfx::BPixel(aNewColor, (sal_uInt8)nOpacity);
                                 }
                             }
@@ -478,133 +479,160 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// helper class to buffer output for transparent rasterprimitives (filled areas
+// and lines) until the end of processing. To ensure correct transparent
+// visualisation, ZBuffers require to not set Z and to mix with the transparent
+// color. If transparent rasterprimitives overlap, it gets necessary to
+// paint transparent rasterprimitives from back to front to ensure that the
+// mixing happens from back to front. For that purpose, transparent
+// rasterprimitives are held in this class during the processing run, remember
+// all data and will be rendered
+
+class RasterPrimitive3D
+{
+private:
+    boost::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpGeoTexSvx;
+    boost::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpTransparenceGeoTexSvx;
+    drawinglayer::attribute::MaterialAttribute3D              maMaterial;
+    basegfx::B3DPolyPolygon                                   maPolyPolygon;
+    sal_uInt32                                                mfCenterZ;
+
+    // bitfield
+    bool                                                      mbModulate : 1;
+    bool                                                      mbFilter : 1;
+    bool                                                      mbSimpleTextureActive : 1;
+    bool                                                      mbIsLine : 1;
+
+public:
+    RasterPrimitive3D(
+        const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& pGeoTexSvx,
+        const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& pTransparenceGeoTexSvx,
+        const drawinglayer::attribute::MaterialAttribute3D& rMaterial,
+        const basegfx::B3DPolyPolygon& rPolyPolygon,
+        bool bModulate,
+        bool bFilter,
+        bool bSimpleTextureActive,
+        bool bIsLine)
+    :   mpGeoTexSvx(pGeoTexSvx),
+        mpTransparenceGeoTexSvx(pTransparenceGeoTexSvx),
+        maMaterial(rMaterial),
+        maPolyPolygon(rPolyPolygon),
+        mfCenterZ(basegfx::tools::getRange(rPolyPolygon).getCenter().getZ()),
+        mbModulate(bModulate),
+        mbFilter(bFilter),
+        mbSimpleTextureActive(bSimpleTextureActive),
+        mbIsLine(bIsLine)
+    {
+    }
+
+    RasterPrimitive3D& operator=(const RasterPrimitive3D& rComp)
+    {
+        mpGeoTexSvx = rComp.mpGeoTexSvx;
+        mpTransparenceGeoTexSvx = rComp.mpTransparenceGeoTexSvx;
+        maMaterial = rComp.maMaterial;
+        maPolyPolygon = rComp.maPolyPolygon;
+        mfCenterZ = rComp.mfCenterZ;
+        mbModulate = rComp.mbModulate;
+        mbFilter = rComp.mbFilter;
+        mbSimpleTextureActive = rComp.mbSimpleTextureActive;
+        mbIsLine = rComp.mbIsLine;
+
+        return *this;
+    }
+
+    bool operator<(const RasterPrimitive3D& rComp) const
+    {
+        return mfCenterZ < rComp.mfCenterZ;
+    }
+
+    const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& getGeoTexSvx() const { return mpGeoTexSvx; }
+    const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+    const drawinglayer::attribute::MaterialAttribute3D& getMaterial() const { return maMaterial; }
+    const basegfx::B3DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
+    bool getModulate() const { return mbModulate; }
+    bool getFilter() const { return mbFilter; }
+    bool getSimpleTextureActive() const { return mbSimpleTextureActive; }
+    bool getIsLine() const { return mbIsLine; }
+};
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace processor3d
     {
-        // the processing method for a single, known primitive
-        void ZBufferProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)
-        {
-            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-            switch(rBasePrimitive.getPrimitiveID())
-            {
-                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
-                {
-                    // AlphaTexturePrimitive3D
-                    const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(rBasePrimitive);
-
-                    if(mbProcessTransparent)
-                    {
-                        impRenderGradientTexturePrimitive3D(rPrimitive, true);
-                    }
-                    else
-                    {
-                        mbContainsTransparent = true;
-                    }
-                    break;
-                }
-                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
-                {
-                    // directdraw of PolygonHairlinePrimitive3D
-                    const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(rBasePrimitive);
-
-                    // do something when either not transparent and no transMap, or transparent and a TransMap
-                    if((bool)mbProcessTransparent == (0 != getTransparenceGeoTexSvx()))
-                    {
-                        impRenderPolygonHairlinePrimitive3D(rPrimitive);
-                    }
-                    break;
-                }
-                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
-                {
-                    // directdraw of PolyPolygonMaterialPrimitive3D
-                    const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rBasePrimitive);
-
-                    // do something when either not transparent and no transMap, or transparent and a TransMap
-                    if((bool)mbProcessTransparent == (0 != getTransparenceGeoTexSvx()))
-                    {
-                        impRenderPolyPolygonMaterialPrimitive3D(rPrimitive);
-                    }
-                    break;
-                }
-                default:
-                {
-                    // use the DefaultProcessor3D::processBasePrimitive3D()
-                    DefaultProcessor3D::processBasePrimitive3D(rBasePrimitive);
-                    break;
-                }
-            }
-        }
-
-        void ZBufferProcessor3D::processNonTransparent(const primitive3d::Primitive3DSequence& rSource)
-        {
-            if(mpBZPixelRaster)
-            {
-                mbProcessTransparent = false;
-                mbContainsTransparent = false;
-                process(rSource);
-            }
-        }
-
-        void ZBufferProcessor3D::processTransparent(const primitive3d::Primitive3DSequence& rSource)
-        {
-            if(mpBZPixelRaster && mbContainsTransparent)
-            {
-                mbProcessTransparent = true;
-                process(rSource);
-            }
-        }
-
         void ZBufferProcessor3D::rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const
         {
             if(mpBZPixelRaster)
             {
-                mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
-
-                if(mnAntiAlialize > 1)
+                if(getTransparenceCounter())
                 {
-                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
-
-                    if(bForceLineSnap)
+                    // transparent output; record for later sorting and painting from
+                    // back to front
+                    if(!mpRasterPrimitive3Ds)
                     {
-                        basegfx::B3DHomMatrix aTransform;
-                        basegfx::B3DPolygon aSnappedHairline(rHairline);
-                        const double fScaleDown(1.0 / mnAntiAlialize);
-                        const double fScaleUp(mnAntiAlialize);
-
-                        // take oversampling out
-                        aTransform.scale(fScaleDown, fScaleDown, 1.0);
-                        aSnappedHairline.transform(aTransform);
-
-                        // snap to integer
-                        aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
-
-                        // add oversampling again
-                        aTransform.identity();
-                        aTransform.scale(fScaleUp, fScaleUp, 1.0);
-
-                        if(false)
-                        {
-                            // when really want to go to single pixel lines, move to center.
-                            // Without this translation, all hor/ver hairlines will be centered exactly
-                            // between two pixel lines (which looks best)
-                            const double fTranslateToCenter(mnAntiAlialize * 0.5);
-                            aTransform.translate(fTranslateToCenter, fTranslateToCenter, 0.0);
-                        }
-
-                        aSnappedHairline.transform(aTransform);
-
-                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
+                        const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
                     }
-                    else
-                    {
-                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
-                    }
+
+                    mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                        getGeoTexSvx(),
+                        getTransparenceGeoTexSvx(),
+                        rMaterial,
+                        basegfx::B3DPolyPolygon(rHairline),
+                        getModulate(),
+                        getFilter(),
+                        getSimpleTextureActive(),
+                        true));
                 }
                 else
                 {
-                    mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), 1);
+                    // do rasterconversion
+                    mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
+
+                    if(mnAntiAlialize > 1)
+                    {
+                        const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+
+                        if(bForceLineSnap)
+                        {
+                            basegfx::B3DHomMatrix aTransform;
+                            basegfx::B3DPolygon aSnappedHairline(rHairline);
+                            const double fScaleDown(1.0 / mnAntiAlialize);
+                            const double fScaleUp(mnAntiAlialize);
+
+                            // take oversampling out
+                            aTransform.scale(fScaleDown, fScaleDown, 1.0);
+                            aSnappedHairline.transform(aTransform);
+
+                            // snap to integer
+                            aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
+
+                            // add oversampling again
+                            aTransform.identity();
+                            aTransform.scale(fScaleUp, fScaleUp, 1.0);
+
+                            if(false)
+                            {
+                                // when really want to go to single pixel lines, move to center.
+                                // Without this translation, all hor/ver hairlines will be centered exactly
+                                // between two pixel lines (which looks best)
+                                const double fTranslateToCenter(mnAntiAlialize * 0.5);
+                                aTransform.translate(fTranslateToCenter, fTranslateToCenter, 0.0);
+                            }
+
+                            aSnappedHairline.transform(aTransform);
+
+                            mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
+                        }
+                        else
+                        {
+                            mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
+                        }
+                    }
+                    else
+                    {
+                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), 1);
+                    }
                 }
             }
         }
@@ -613,8 +641,30 @@ namespace drawinglayer
         {
             if(mpBZPixelRaster)
             {
-                mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
-                mpZBufferRasterConverter3D->rasterconvertB3DPolyPolygon(rFill, &maInvEyeToView, 0, mpBZPixelRaster->getHeight());
+                if(getTransparenceCounter())
+                {
+                    // transparent output; record for later sorting and painting from
+                    // back to front
+                    if(!mpRasterPrimitive3Ds)
+                    {
+                        const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
+                    }
+
+                    mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                        getGeoTexSvx(),
+                        getTransparenceGeoTexSvx(),
+                        rMaterial,
+                        rFill,
+                        getModulate(),
+                        getFilter(),
+                        getSimpleTextureActive(),
+                        false));
+                }
+                else
+                {
+                    mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
+                    mpZBufferRasterConverter3D->rasterconvertB3DPolyPolygon(rFill, &maInvEyeToView, 0, mpBZPixelRaster->getHeight());
+                }
             }
         }
 
@@ -632,8 +682,7 @@ namespace drawinglayer
             maInvEyeToView(),
             mpZBufferRasterConverter3D(0),
             mnAntiAlialize(nAntiAlialize),
-            mbProcessTransparent(false),
-            mbContainsTransparent(false)
+            mpRasterPrimitive3Ds(0)
         {
             // generate ViewSizes
             const double fFullViewSizeX((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
@@ -728,6 +777,58 @@ namespace drawinglayer
             {
                 delete mpZBufferRasterConverter3D;
                 delete mpBZPixelRaster;
+            }
+
+            if(mpRasterPrimitive3Ds)
+            {
+                OSL_ASSERT("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
+                delete mpRasterPrimitive3Ds;
+            }
+        }
+
+        void ZBufferProcessor3D::finish()
+        {
+            if(mpRasterPrimitive3Ds)
+            {
+                // there are transparent rasterprimitives
+                const sal_uInt32 nSize(mpRasterPrimitive3Ds->size());
+
+                if(nSize > 1)
+                {
+                    // sort them from back to front
+                    std::sort(mpRasterPrimitive3Ds->begin(), mpRasterPrimitive3Ds->end());
+                }
+
+                for(sal_uInt32 a(0); a < nSize; a++)
+                {
+                    // paint each one by setting the remembered data and calling
+                    // the render method
+                    const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
+
+                    mpGeoTexSvx = rCandidate.getGeoTexSvx();
+                    mpTransparenceGeoTexSvx = rCandidate.getTransparenceGeoTexSvx();
+                    mbModulate = rCandidate.getModulate();
+                    mbFilter = rCandidate.getFilter();
+                    mbSimpleTextureActive = rCandidate.getSimpleTextureActive();
+
+                    if(rCandidate.getIsLine())
+                    {
+                        rasterconvertB3DPolygon(
+                            rCandidate.getMaterial(),
+                            rCandidate.getPolyPolygon().getB3DPolygon(0));
+                    }
+                    else
+                    {
+                        rasterconvertB3DPolyPolygon(
+                            rCandidate.getMaterial(),
+                            rCandidate.getPolyPolygon());
+                    }
+                }
+
+                // delete them to signal the destructor that all is done and
+                // to allow asserting there
+                delete mpRasterPrimitive3Ds;
+                mpRasterPrimitive3Ds = 0;
             }
         }
 

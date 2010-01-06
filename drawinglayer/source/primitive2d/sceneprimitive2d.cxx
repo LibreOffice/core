@@ -235,8 +235,9 @@ namespace drawinglayer
                     aUnitVisibleRange,
                     nOversampleValue);
 
-                aZBufferProcessor3D.processNonTransparent(getChildren3D());
-                aZBufferProcessor3D.processTransparent(getChildren3D());
+                aZBufferProcessor3D.process(getChildren3D());
+                aZBufferProcessor3D.finish();
+
                 const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
                 const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 

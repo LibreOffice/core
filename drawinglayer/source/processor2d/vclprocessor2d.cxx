@@ -337,17 +337,69 @@ namespace drawinglayer
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+            static bool bCheckTrapezoidDecomposition(false);
+            static bool bShowOutlinesThere(false);
+            if(bCheckTrapezoidDecomposition)
             {
-                // #i98289#
-                // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
-                // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
-                // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
-                // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
-                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
-            }
+                // clip against discrete ViewPort
+                const basegfx::B2DRange& rDiscreteViewport = getViewInformation2D().getDiscreteViewport();
+                basegfx::B2DPolyPolygon aLocalPolyPolygon(basegfx::tools::clipPolygonOnRange(
+                    aLocalPolygon, rDiscreteViewport, true, false));
 
-            mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
+                if(aLocalPolyPolygon.count())
+                {
+                    // subdivide
+                    aLocalPolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(
+                        aLocalPolyPolygon, 0.5);
+
+                    // trapezoidize
+                    static double fLineWidth(2.0);
+                    basegfx::B2DTrapezoidVector aB2DTrapezoidVector;
+                    basegfx::tools::createLineTrapezoidFromB2DPolyPolygon(aB2DTrapezoidVector, aLocalPolyPolygon, fLineWidth);
+
+                    const sal_uInt32 nCount(aB2DTrapezoidVector.size());
+
+                    if(nCount)
+                    {
+                        basegfx::BColor aInvPolygonColor(aHairlineColor);
+                        aInvPolygonColor.invert();
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const basegfx::B2DPolygon aTempPolygon(aB2DTrapezoidVector[a].getB2DPolygon());
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor(Color(aHairlineColor));
+                                mpOutputDevice->SetLineColor();
+                            }
+
+                            mpOutputDevice->DrawPolygon(aTempPolygon);
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor();
+                                mpOutputDevice->SetLineColor(Color(aInvPolygonColor));
+                                mpOutputDevice->DrawPolyLine(aTempPolygon, 0.0);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+                {
+                    // #i98289#
+                    // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
+                    // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
+                    // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
+                    // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
+                    aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
+                }
+
+                mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
+            }
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -684,8 +736,8 @@ namespace drawinglayer
                         aLocalPolyPolygon, 0.5);
 
                     // trapezoidize
-                    const basegfx::B2DTrapezoidVector aB2DTrapezoidVector(basegfx::tools::trapezoidSubdivide(
-                        aLocalPolyPolygon));
+                    basegfx::B2DTrapezoidVector aB2DTrapezoidVector;
+                    basegfx::tools::trapezoidSubdivide(aB2DTrapezoidVector, aLocalPolyPolygon);
 
                     const sal_uInt32 nCount(aB2DTrapezoidVector.size());
 
