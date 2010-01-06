@@ -247,18 +247,42 @@ NS_<namespace/@alias>
 <xsl:template name="contextresource">
   <xsl:variable name="name" select="@name"/>
   <xsl:variable name="nsid" select="generate-id(ancestor::namespace)"/>
-  <xsl:for-each select="key('context-resource', @name)">
-    <xsl:if test="generate-id(ancestor::namespace) = $nsid">
-      <xsl:value-of select="@resource"/>
-    </xsl:if>
-  </xsl:for-each>
+  <xsl:variable name="resourcesamens">
+    <xsl:for-each select="key('context-resource', @name)">
+      <xsl:if test="generate-id(ancestor::namespace) = $nsid">
+	<xsl:value-of select="@resource"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="string-length($resourcesamens) = 0">
+      <xsl:for-each select="key('context-resource', @name)[1]">
+	<xsl:value-of select="@resource"/>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$resourcesamens"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="idforref">
     <xsl:variable name="name" select="@name"/>
-    <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
-        <xsl:call-template name="idfordefine"/>
-    </xsl:for-each>
+    <xsl:variable name="result1">
+      <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+	<xsl:call-template name="idfordefine"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="string-length($result1) = 0">
+	<xsl:for-each select="(ancestor::model/namespace/rng:grammar/rng:define[@name=$name])[1]">
+	  <xsl:call-template name="idfordefine"/>
+	</xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="$result1"/>
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- factoryclassname -->

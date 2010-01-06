@@ -3339,7 +3339,7 @@
       <attribute name="bwMode" tokenid="ooxml:CT_ShapeProperties_bwMode"/>
     </resource>
   </namespace>
-  <namespace name="dml-baseTypes" file="dml-baseTypes" todo="ignore">
+  <namespace name="dml-baseTypes" file="dml-baseTypes">
     <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-relationshipReference.rng"/>

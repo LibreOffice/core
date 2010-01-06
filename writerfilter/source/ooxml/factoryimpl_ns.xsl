@@ -306,12 +306,24 @@ ListValueMapPointer </xsl:text>
                 <xsl:call-template name="factorycreateelementmapinner"/>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:if test="string-length($block) > 0">
+	<xsl:variable name="block1">
+	  <xsl:choose>
+	    <xsl:when test="string-length($block) = 0">
+	      <xsl:for-each select="ancestor::model/namespace/rng:grammar/rng:define[@name=$name]">
+		<xsl:call-template name="factorycreateelementmapinner"/>
+	      </xsl:for-each>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="$block"/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
+        <xsl:if test="string-length($block1) > 0">
             <xsl:text>
          /* ref: </xsl:text>
             <xsl:value-of select="$name"/>
             <xsl:text>*/</xsl:text>
-            <xsl:value-of select="$block"/>
+            <xsl:value-of select="$block1"/>
         </xsl:if>
     </xsl:for-each>
 </xsl:template>
