@@ -253,19 +253,17 @@ namespace writerfilter
 
     void TagLogger::endElement(const string & name)
     {
-        string nameRemoved;
-        bool found = false;
-        do
-        {
-            nameRemoved = currentTag()->getTag();
-            mTags.pop();
+        string nameRemoved = currentTag()->getTag();
 
-            if (name == nameRemoved)
-                found = true;
-            else
-                found = false; // for debugging
+        if (name == nameRemoved)
+            mTags.pop();
+        else {
+            XMLTag::Pointer_t pTag(new XMLTag("end.mismatch"));
+            pTag->addAttr("name", name);
+
+            currentTag()->addTag(pTag);
         }
-        while (! found && ! mTags.empty());
+
     }
 
     void TagLogger::endDocument()
