@@ -115,17 +115,11 @@ Name=Single Platform: macosx_powerpc
 
 [22]
 File=macosx_x86.oxt
-Platform=none
+Platform=osx
 Name=Single Platform: macosx_x86
 
 [23]
-File=mul1.oxt
-Platform=all
-Name=Multiple Platforms 1
-
-
-[23]
-File=os2_x86
+File=os2_x86.oxt
 Platform=eComStation
 Name=Single Platform: os2_x86
 
@@ -143,3 +137,10 @@ Name=Single Platform: solaris_x86
 File=windows_x86.oxt
 Platform=w95
 Name=Single Platform: windows_x86
+
+#[23]
+#File=mul1.oxt
+#Platform=all
+#Name=Multiple Platforms 1
+
+

@@ -62,8 +62,7 @@ function hSaveLoadDelSuccess( cFile as string ) as integer
     '///<ul>
     
     dim brc as boolean
-    dim cFileExt as string
-        cFileExt = cFile & hGetSuffix( "current" )
+    dim cFileExt as string : cFileExt = cFile & hGetSuffix( "current" )
     
     const CFN = "hSaveLoadDelSuccess::"
     
@@ -160,14 +159,13 @@ function hLoadFileExpectSuccess( fpath as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     const CFN = "hLoadFileExpectSuccess::"
     printlog( CFN & "Enter with option: " & fpath )
 
     '///+<li>Click FileOpen (or use the menu)</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
 
     '///+<li>Enter the filename (with extension)</li>
     'printlog( " - Type the filepath/name into the entryfield" )
@@ -232,13 +230,12 @@ function hLoadFileExpectFailure( fpath as string ) as boolean
     
     const CFN = "hLoadFileExpectFailure::"
 
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
 
     printlog( CFN & "Enter with option: " & fpath )
 
     '///+<li>Click FileOpen</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
     Kontext "OeffnenDLG"
 
     '///+<li>Enter filepath</li>
@@ -277,7 +274,7 @@ function hLoadFileExpectFailure( fpath as string ) as boolean
     
     '///+<li>If the document is loaded, set errorcondition to false</li>
     if ( not brc ) then
-        IsItLoaded
+        hFileWait( FALSE )
         warnlog( CFN & "The file appears to have loaded correctly. Not good" )
     
         '///+<li>Click away possible messagebox to recover</li>
@@ -321,24 +318,21 @@ function hSaveFileExpectSuccess( fpath as string , bReplace as boolean ) as bool
     '///<ul>
 
     const CFN = "hSaveFileExpectSuccess::" 
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     dim iDocumentCount as integer
     
     printlog( CFN & "Enter with options: " & fpath & ", " & bReplace )
 
     '///+<li>Make sure we start from the backing window</li>
-    do while ( getDocumentCount > 0 )
-        hCloseDocument()
-    loop
+    hFileCloseAll()
 
 
     '///+<li>Open a new document</li>
     hCreateDocument()
 
     '///+<li>Click &quot;Save As...&quot;</li>
-    FileSaveAs 
+    hUseAsyncSlot( "FileSaveAs" )
 
     Kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
@@ -429,8 +423,7 @@ function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boo
     ' This sequence tries to save a document with an invalid name. The errormsg
     ' is closed, the filedialog cancelled and the file closed. 
     
-    dim brc as boolean
-        brc = false
+    dim brc as boolean : brc = false
         
     dim cMsg as string
         
@@ -442,7 +435,7 @@ function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boo
     '///+<li>Click &quot;Save As;&quot;</li>
     printlog( "" )
     printlog( CFN & "Enter with options: " & fpath & ", " & errortype )
-    FileSaveAs
+    hUseAsyncSlot( "FileSaveAs" )
     
     '///+<li>Enter the filename</li>
     kontext "SpeichernDlg"
@@ -549,14 +542,13 @@ function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     const CFN = "hCreateDirectoryExpectSuccess::"
     printlog( CFN & "Enter with option: " & dirname )
 
     '///+<li>Click &quot;File Open&quot;</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
 
     '///+<li>Click on &quot;New folder&quot;</li>
     Kontext "OeffnenDlg"
@@ -646,7 +638,7 @@ function hDeleteFileViaFileOpen( cFile as String ) as boolean
     endif    
 
     '///+<li>Click &quot;File Open&quot;</li>
-    FileOpen
+    hUseAsyncSlot( "FileOpen" )
     
     '///+<li>Look for the requested file, get the position from the filelist</li>
     Kontext "OeffnenDLG"
@@ -725,14 +717,16 @@ function hGetFileCountViaFileOpen() as integer
     '///<ul>
     
     '///+<li>Click &quot;File open&quot;</li>
-    FileOpen
+    hUseAsyncSlot( "FileOpen" )
     
     '///+<li>Retrieve the number of items in the filepicker window</li>
     Kontext "OeffnenDLG"
-    hGetFileCountViaFileOpen() = DateiAuswahl.getItemCount()
-    
-    '///+<li>Close &quot;File Open&quot;</li>
-    OeffnenDLG.cancel()
+    if ( OeffnenDlg.exists( 2 ) ) then
+        hGetFileCountViaFileOpen() = DateiAuswahl.getItemCount()
+        OeffnenDLG.cancel()
+    else
+        hGetFileCountViaFileOpen() = -1
+    endif
     '///</ul>    
 
 end function
@@ -871,10 +865,9 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
     dim iCurrentObject as integer
     dim cCurrentName as string
     dim iFileOpenItemCount as integer
-    dim iPos as integer
-        iPos = 0
-    dim cPath as string
-        cPath = cName
+    
+    dim iPos as integer : iPos = 0
+    dim cPath as string : cPath = cName
 
     dim iPathItems as integer
     dim asPathList( 100 ) as string

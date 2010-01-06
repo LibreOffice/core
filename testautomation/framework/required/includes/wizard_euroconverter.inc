@@ -39,6 +39,8 @@
 
 testcase tUpdtWizardEuroconverter
 
+    printlog( "Resource test for the euro-converter" )
+
     dim irc as integer
     dim iWait as integer
     dim cMsg as string 

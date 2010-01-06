@@ -62,10 +62,10 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
-            printlog( CFN & "Enable Impress Autopilot" )
+            if ( VERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
         else
             mitAutopilotStarten.uncheck()
-            printlog( CFN & "Disable Impress Autopilot" )
+            if ( VERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
         endif
 
         '///+<li>Return Status of Checkbox (checked=TRUE)</li>
@@ -105,9 +105,9 @@ function hCloseNavigator() as boolean
     Kontext "Navigator"
     if ( Navigator.Exists() ) then
         Navigator.Close()
-        printlog( CFN & "Closed Navigator" )
+        if ( VERBOSE ) then printlog( CFN & "Closed Navigator" )
     else
-        printlog( CFN & "Navigator not present" )
+        if ( VERBOSE ) then printlog( CFN & "Navigator not present" )
     endif
     
     '///+<li>verify that the navigator is indeed closed, return true on success</li>
@@ -281,7 +281,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
         if ( bWarn ) then
             warnlog ( CFN & "The focus is not on the expected document" )
         else
-            printlog( CFN & "The focus is not on the expected document" )
+            if ( VERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
         endif
         
         printlog( CFN & "Expected: " & cString )
@@ -352,7 +352,7 @@ function hCreateDocument() as boolean
             hCreateDocument() = false
         endif
     endif
-    printlog( CFN & "New document created. Open: " & iDocCountAfter )
+    if ( VERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
     '///</ul>
     
 end function

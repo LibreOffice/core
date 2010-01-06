@@ -39,11 +39,16 @@
 
 testcase tBasicDialogI18nImport
 
-    printlog( "Dialogs that show up when importing Multi locale dialogs into BASIC IDE" )
+    printlog( "Dialogs that show up when importing multi locale dialogs into BASIC IDE" )
     
     dim cDialogPath as string
         cDialogPath = gTesttoolPath & "framework\required\input\basic_ide\Dialog5.xdl"
         cDialogPath = convertpath( cDialogPath )
+        
+    dim iNumberOfLanguages as integer
+    dim iTry as integer
+        
+    const LANGUAGE_COUNT = 5
         
     printlog( "Open BASIC-IDE" )
     hCreateDocument()
@@ -72,7 +77,7 @@ testcase tBasicDialogI18nImport
             if ( Active.exists( 2 ) ) then
             
                 printlog( "Messagebox: " & Active.getText() ) 
-                if ( Active.getButtonCount <> 4 ) then
+                if ( Active.getButtonCount() <> 4 ) then
                     warnlog( "Incorrect messagebox, expected locale clash warning" )
                 endif
                 
@@ -80,13 +85,23 @@ testcase tBasicDialogI18nImport
                 
                 printlog( "Accept with yes" )
                 Active.Yes()
-                
+                sleep(1)
                 Kontext "TranslationBar"
                 if ( TranslationBar.exists() ) then
+
+                    for iTry = 1 to 5
+                        iNumberOfLanguages = CurrentLanguage.getItemCount()
+                        if ( iNumberOfLanguages = LANGUAGE_COUNT ) then
+                            exit for
+                        endif
+                        wait( 100 )
+                    next iTry
                 
-                    printlog( "Check number of imported languages, should be 5" )
-                    if ( CurrentLanguage.getItemCount <> 5 ) then
-                        warnlog( "Five languages should be listed in the languages box" )
+                    printlog( "Check number of imported languages" )
+                    if ( iNumberOfLanguages <> LANGUAGE_COUNT ) then
+                        warnlog( "Incorrect language count in listbox <CurrentLanguage>" )
+                        printlog( "Expected: " & LANGUAGE_COUNT )
+                        printlog( "Found...: " & iNumberOfLanguages )
                     endif
                     
                     Kontext "DialogBar"
@@ -107,7 +122,7 @@ testcase tBasicDialogI18nImport
                             if ( Active.exists( 2 ) ) then
                             
                                 printlog( "Messagebox: " & Active.getText() ) 
-                                if ( Active.getButtonCount <> 3 ) then
+                                if ( Active.getButtonCount() <> 3 ) then
                                     warnlog( "Incorrect messagebox, expected dialog replace warning" )
                                 endif
                                 
@@ -128,7 +143,7 @@ testcase tBasicDialogI18nImport
                     warnlog( "<TranslationBar> is not available" )
                 endif
             else
-                warning( "Locale clash messagebox is missing" )
+                warning( "Conflicting locales messagebox is missing" )
             endif
         else
             warnlog( "<OeffnenDlg> did not open" )

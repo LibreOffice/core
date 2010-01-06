@@ -39,172 +39,165 @@
 
 testcase tHelpBookmarks
 
-    '///<H1>Bookmarks in the help browser</H1>
-    '///<h2>help_bookmarks.bas::tHelpBookmarks</h2>
-    '///<ul>
+    printlog( "Bookmarks in Help Browser")
     dim brc as boolean
     dim cStringFind as string
     dim cStringBookmark as string
     dim iItemCount as integer
     const MYBOOKMARK = "myBookMark"
 
-    '///+<li>Open Help</li>
+    printlog( "Open Help Browser")
     brc = hOpenHelp()
     if ( not brc ) then
-        warnlog( "Help not open, aborting test" )
+        warnlog( "Help not open, aborting test")
         goto endsub
     endif
 
-    '///+<li>Select &quot;Find&quot; tab</li>
-    brc = hSelectHelpTab( "find" )
+    printlog( "Switch to Search Tab (Find)")
+    brc = hSelectHelpTab( "find")
 
-    '///+<li>Enter Search Term (Java)</li>
-    SearchFind.setText( "java" )
+    printlog( "Enter <Java> as search term")
+    SearchFind.setText( "java")
 
-    '///+<li>Search whole words and headers only</li>
+    printlog( "Search whole words and headers only")
     FindInHeadingsOnly.check()
     FindFullWords.check()
     FindButton.click()
 
-    '///+<li>Select first match and display the item</li>
+    printlog( "Select first match and display the item")
     Result.select( 1  )
     cStringFind = Result.getSelText()
     DisplayFind.click()
 
-    '///+<li>Switch to the bookmarks tab</li>
-    brc = hSelectHelpTab( "bookmarks" )
+    printlog( "Switch to the bookmarks tab")
+    hSelectHelpTab( "bookmarks")
 
-    '///+<li>Click the &quot;Add Bookmark&quot; button</li>
-    printlog( " Adding bookmark" )
+    printlog( "Click the <Add Bookmark> button")
     SetBookmarks.click()
 
-    '///+<li>Name the bookmark after checking its default name</li>
     Kontext "AddBookmark"
-
-    printlog( " Verifying default name of bookmark" )
+    printlog( "Name the bookmark after checking its default name")
     cStringBookmark = BookmarkName.getText() 
     if ( cStringFind = cStringBookmark ) then
-        printlog( " Bookmark has correct default name: " & cStringFind )
+        printlog( "Bookmark has correct default name: " & cStringFind )
     else
-        warnlog( "Incorrect default name for new bookmark" )
+        warnlog( "Incorrect default name for new bookmark")
     endif
 
-    printlog( " Accept default name, close dialog with ok" )
+    printlog( "Accept default name, close dialog with ok")
     AddBookmark.ok()
 
-    '///+<li>Verify that the bookmark has been added to the list</li>
-    hSelectHelpTab( "bookmarks" ) 
-    printlog( " Verify that the bookmark has been added" )
-    Kontext "BookmarksPage" 
+    printlog( "Verify that the bookmark has been added to the list")
+    hSelectHelpTab( "bookmarks") 
+    
+    Kontext "BookmarksPage"
+    printlog( "Verify that the bookmark has been added")
     iItemCount = Bookmarks.getItemCount()
     if ( iItemCount = 1 ) then
-        printlog( " The correct number of bookmarks is listed (1)" )
+        printlog( "The correct number of bookmarks is listed (1)")
     else
-        warnlog( "Incorrect number of bookmarks listed" )
+        warnlog( "Incorrect number of bookmarks listed")
     endif
 
-    '///+<li>Abort the test if there is no bookmark listed at all</li>
+    printlog( "Abort the test if there is no bookmark listed at all")
     if ( iItemCount = 0 ) then
-        warnlog( "Bookmark has not been created, aborting test" )
+        warnlog( "Bookmark has not been created, aborting test")
         call hCloseHelp()
         goto endsub
     endif
 
-    '///+<li>Verify that the bookmark name makes it to the bookmarks list</li>
     Kontext "BookmarksPage"
+    printlog( "Verify that the bookmark name makes it to the bookmarks list")
     Bookmarks.select( 1 )
     cStringBookmark = Bookmarks.getSelText()
     if ( cStringBookmark = cStringFind ) then
-        printlog( " Name in the bookmarks-list: " & cStringFind )
+        printlog( "Name in the bookmarks-list: " & cStringFind )
     else
         warnlog( "Incorrect name in bookmarks list: " & cStringBookmark )
     endif
 
-    '///+<li>Close the help</li>
-    brc = hCloseHelp()
+    printlog( "Close the help")
+    hCloseHelp()
 
-    '///+<li>Reopen Help</li>
-    brc = hOpenHelp()
+    printlog( "Reopen Help")
+    hOpenHelp()
 
-    '///+<li>Verify that the bookmark is still present</li>
-    brc = hSelectHelpTab( "bookmarks" )
+    printlog( "Verify that the bookmark is still present")
+    hSelectHelpTab( "bookmarks")
 
-    '///+<li>Open context menu, select &quot;Rename&quot;</li>
-    printlog( " Open the context menu and rename the bookmark" )
+    printlog( "Open the context menu and rename the bookmark")
     Kontext "BookmarksPage"
     Bookmarks.select( 1 )
-    brc = hUseBookmarksContextMenu( "rename" ) 
+    brc = hUseBookmarksContextMenu( "rename") 
 
-    '///+<li>Change the name of the bookmark, accept with ok</li>
+    printlog( "Change the name of the bookmark, accept with ok")
     Kontext "AddBookmark"
     if ( brc and AddBookmark.exists() ) then
 	BookmarkName.setText( MYBOOKMARK ) 
         AddBookmark.ok() 
     else
-        warnlog( "The AddBookmarks dialog is not open" )
+        warnlog( "The AddBookmarks dialog is not open")
     endif
     
-    '///+<li>Verify that the changed name is listed in the listbox</li>
-    hSelectHelpTab( "bookmarks" )
-    kontext "BookmarksPage" 
+    printlog( "Verify that the changed name is listed in the listbox")
+    hSelectHelpTab( "bookmarks")
+
+    kontext "BookmarksPage"
     Bookmarks.select( 1 )
     cStringBookmark = Bookmarks.getSelText()
     if ( cStringBookmark = MYBOOKMARK ) then
-        printlog( " The Bookmark has been renamed: " & cStringBookmark )
+        printlog( "The Bookmark has been renamed: " & cStringBookmark )
     else
-        warnlog( "Incorrect name displayed in bookmarks list" )
+        warnlog( "Incorrect name displayed in bookmarks list")
     endif
  
-    '///+<li>Close the Help, Close the Office</li>
-    brc = hCloseHelp()
+    printlog( "Close the Help, Close the Office")
+    hCloseHelp()
 
-    '///+<li>Restart the office, open help, switch to Bookmarks tab</li>
-    printlog( " Exit and restart the office" )
+    printlog( "Restart the office, open help, switch to Bookmarks tab")
     call ExitRestartTheOffice()
-    brc = hOpenHelp()
-    brc = hSelectHelpTab( "bookmarks" )
+    hOpenHelp()
+    hSelectHelpTab( "bookmarks")
 
-    '///+<li>Verify that the renamed bookmark still exists</li>
+    printlog( "Verify that the renamed bookmark still exists")
     Kontext "BookmarksPage"
     Bookmarks.select( 1 )
     cStringBookmark = Bookmarks.getSelText()
     if ( cStringBookmark = MYBOOKMARK ) then
-        printlog( " The bookmark has the correct name" )
+        printlog( "The bookmark has the correct name")
     else
-        warnlog( "Incorrect name displayed in bookmarks list" )
+        warnlog( "Incorrect name displayed in bookmarks list")
     endif
 
-    '///+<li>Delete the Bookmark (using context menu)</li>    
-    brc = hUseBookmarksContextMenu( "delete" )
+    printlog( "Delete the Bookmark (using context menu)")    
+    hUseBookmarksContextMenu( "delete")
 
-    '///+<li>verify that the bookmark has been deleted (none left)</li>
+    printlog( "verify that the bookmark has been deleted (none left)")
     kontext "Bookmarks"
     if ( bookmarks.getItemCount = 0 ) then
-        printlog( " Bookmark has been deleted" )
+        printlog( "Bookmark has been deleted")
     else
-        warnlog( "There are bookmarks left over, please check" )
+        warnlog( "There are bookmarks left over, please check")
     endif
 
-    '///+<li>Close the help</li>
-    brc = hClosehelp()
+    printlog( "Close the help")
+    hClosehelp()
 
-    '///+<li>Open help, switch to bookmarks tab</li>
-    brc = hOpenhelp()
-    brc = hSelectHelpTab( "bookmarks" )
+    printlog( "Open help, switch to bookmarks tab")
+    hOpenhelp()
+    hSelectHelpTab( "bookmarks")
 
-    '///+<li>Verify that the bookmark has been deleted</li>
+    printlog( "Verify that the bookmark has been deleted")
     kontext "BookmarksPage"
     iItemCount = Bookmarks.getItemCount()
     if ( iItemCount = 0 ) then
-        printlog( " The bookmark has been deleted" )
+        printlog( "The bookmark has been deleted")
     else
-        warnlog( "Bookmarks have been left over, there should be none" )
+        warnlog( "Bookmarks have been left over, there should be none")
     endif
 
-    '///+<li>Close help</li>
-    brc = hCloseHelp()
+    printlog( "Close help")
+    hCloseHelp()
     
-    '///</ul>
-
 endcase
 

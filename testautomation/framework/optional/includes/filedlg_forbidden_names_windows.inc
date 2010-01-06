@@ -44,20 +44,12 @@ testcase tSLDForbiddenNamesWin()
         goto endsub
     endif
 
-    '///<h1>Check forbidden filenames on Windows using File-Save dialog</h1>
     
     ' This test tries to save files that contain characters that are not allowed
     ' in filenames on Windows. This covers the entire ASCII range from 0 to 31.
     ' Currently the ASCII chars 0, 9, 10, and 13 are excluded because we - for some
     ' reason - do not intercept them.
     
-    '///<ul>
-    '///+<li>Open a new document</li>
-    '///+<li>Save the file with a name containing the ASCII chars 0 through 31, excluding 0,9,10,13</li>
-    '///+<li>Confirm the warning</li>
-    '///+<li>Close the document</li>
-    '///+<li>Repeat the test for all applications</li>
-    '///</ul>
     
     dim cStrangeName as string
     dim iCounter as integer
