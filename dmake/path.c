@@ -172,6 +172,7 @@ char *path;
    char *tpath;
    int hasdriveletter = 0;
    int delentry;
+   size_t len;
 
    DB_ENTER( "Clean_path" );
 
@@ -231,14 +232,16 @@ char *path;
         p++;
      }
      while( *p == *DirSepStr);
-     strcpy(t+1,p);
+     len = strlen(p)+1;
+     memmove(t+1,p,len);
      continue;
       }
 
       /* Remove './'. If OOODMAKEMODE is set do this only if it is not at
        * the start of the path. */
       if ( p-q == 1 && *q == '.' && (q != path || !STOBOOL(OOoDmMode)) ) {
-     strcpy(q,p+1);
+     len = strlen(p+1)+1;
+     memmove(q,p+1,len);
      q = tpath;
      continue;
       }
@@ -268,7 +271,8 @@ char *path;
      }
      while( *t == *DirSepStr);
      /* q points to first letter of the current directory/file. */
-     strcpy(q,t);
+     len = strlen(t)+1;
+     memmove(q,t,len);
      q = tpath;
       }
       else

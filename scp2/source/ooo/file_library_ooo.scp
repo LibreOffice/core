@@ -399,7 +399,42 @@ File gid_File_Lib_Vbaobj
   #endif
 End
 
+File gid_File_Lib_Vbaswobj
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(libvbaswobj,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(vbaswobj,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+
+File gid_File_Lib_Vbamsforms
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(msforms,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+
 #endif // VBA_EXTENSION
+File gid_File_Lib_Vbahelper
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT3(libvbahelper,DLLPOSTFIX,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT3(vbahelper,DLLPOSTFIX,.dll));
+  #endif
+End
 #endif // ENABLE_VBA
 
 
@@ -1410,20 +1445,6 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_OOoFilt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "ooofilt.dll";
-End
-
-File gid_File_Lib_OOoFiltProxy
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "ooofiltproxy.dll";
-End
-
 File gid_File_Lib_Instooofiltmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
@@ -1472,14 +1493,14 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
-STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Svx_Core, svxcore)
-STD_LIB_FILE_PATCH( gid_File_Lib_Svx_Msfilter, svxmsfilter)
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
+
+STD_LIB_FILE_PATCH( gid_File_Lib_Msfilter, msfilter)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
 STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
@@ -1561,6 +1582,9 @@ End
 
 #ifndef DISABLE_NEON
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
+ #ifndef SYSTEM_NEON
+   SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
+ #endif
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)
@@ -1720,7 +1744,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef _gcc3
-      Name = "libxmlsec1-1.dll";
+      Name = "libxmlsec1.dll";
     #else
       Name = "libxmlsec.dll";
     #endif
@@ -1731,7 +1755,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
   #ifdef _gcc3
-    Name = "libxmlsec1-mscrypto-1.dll";
+    Name = "libxmlsec1-mscrypto.dll";
   #else
     Name = "libxmlsec-mscrypto.dll";
   #endif

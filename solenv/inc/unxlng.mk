@@ -6,9 +6,9 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: unxlngi4.mk,v $
+# $RCSfile: unxlngi6.mk,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,11 +28,18 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# mk file for unxlngi4
-ASM=
-AFLAGS=
 
+# generic mk file for unxlng (unix linux glibc)
+ASM*=
+AFLAGS*=
 SOLAR_JAVA*=
+# default optimization level for product code
+CDEFAULTOPT*=-O2
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+# position independent code switch
+PICSWITCH*:=-fpic
 JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
@@ -40,7 +47,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -55,24 +62,25 @@ JAVA_RUNTIME=-ljava
 .ELSE
 JAVA_RUNTIME=-ljava_g
 .ENDIF
-.ENDIF 
-
-# architecture dependent flags for the C and C++ compiler that can be changed by
-# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-ARCH_FLAGS*=-mcpu=pentiumpro
+.ENDIF
 
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
 CC*=gcc
-# flags for C and C++ Compiler
+.IF "$(SYSBASE)"!=""
+CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CXX+:=$(CFLAGS_SYSBASE)
+CC+:=$(CFLAGS_SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-fmessage-length=0 -c
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
 CFLAGSENABLESYMBOLS=-g1
 .ELSE
-CFLAGSENABLESYMBOLS=-g
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
+
 .ENDIF
 
 # flags for the C++ Compiler
@@ -82,13 +90,15 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
+# -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
-# HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
-.IF "$(BUILD_SPECIAL)"==""
-CFLAGSCXX+=-include preinclude.h
-.ENDIF
-PICSWITCH:=-fpic
+CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
@@ -104,23 +114,29 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
-# CFLAGSOPT=-O2
-# reduce to -O1 to avoid optimization problems
-CFLAGSOPT=-O1
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=$(CDEFAULTOPT) -fno-strict-aliasing		# optimizing for products
+.ELSE 	# "$(PRODUCT)"!=""
+CFLAGSOPT=   							# no optimizing for non products
+.ENDIF	# "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 
-CFLAGSWARNCC=
-.IF "$(PRODUCT)"!=""
-CFLAGSWARNCC+=-Wuninitialized # not supported without optimization
-.ENDIF
-CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
-CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
-CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
+CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
+    -Wno-non-virtual-dtor
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    soldep
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -140,11 +156,17 @@ LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=
-LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
+# flag -Wl,-z,noexecstack sets the NX bit on the stack
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -167,7 +189,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
-STDOBJVCL=$(L)/salmain.o
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -179,28 +201,43 @@ STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
 .ENDIF
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
+.ENDIF
 
 # libraries for linking applications
-STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
-STDLIBCUIMT+=-ldl -lpthread -lm
+STDLIBGUIMT+=-Wl,--as-needed -lX11 -ldl -lpthread -lm -Wl,--no-as-needed
+STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
-STDSHLCUIMT+=-ldl -lpthread -lm
+STDSHLGUIMT+=-Wl,--as-needed -lX11 -lXext -ldl -lpthread -lm -Wl,--no-as-needed
+STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
+.IF "$(USE_STLP_DEBUG)" != ""
 .IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlport -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlportstlg
+LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ENDIF
+.ELSE # "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
 LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
 .ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 .ENDIF
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
-LIBMGR=ar
+LIBMGR*=ar
 LIBFLAGS=-r
 
 # tool for generating import libraries
@@ -217,7 +254,6 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 # platform specific identifier for shared libs
-DLLPOSTFIX=li
 DLLPRE=lib
 DLLPOST=.so
-
+PCHPOST=.gch

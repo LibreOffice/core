@@ -178,17 +178,6 @@ End
 
 #endif
 
-#ifndef WITHOUT_FONTOOO
-
-File gid_File_Exe_Msfontextract
-        BIN_FILE_BODY;
-        Dir             = gid_Dir_Program;
-        Name            = EXENAME(msfontextract);
-        Styles          = (PACKED);
-End
-
-#endif
-
 #ifdef UNX
 
 File gid_File_Bin_Open_Url
@@ -511,17 +500,6 @@ File gid_File_Jar_Commonwizards
     Dir = gid_Dir_Classes;
     Styles = (PACKED);
 End
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
-File gid_File_Jar_Sandbox
-    TXT_FILE_BODY;
-    Name = JARFILENAME(sandbox);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -2920,6 +2898,13 @@ File gid_File_ImagesCrystal_Zip
     Styles = (PACKED);
 End
 
+File gid_File_ImagesOxygen_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_oxygen.zip";
+    Styles = (PACKED);
+End
+
 File gid_File_ImagesHicontrast_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
@@ -3049,6 +3034,15 @@ File gid_File_Extension_Dictionary_Gl
 	Name = "dict-gl.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 

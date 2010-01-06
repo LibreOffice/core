@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-# mk file for wntgcci6
+# mk file for Window Intel using GCC
 
 SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
@@ -59,8 +59,8 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 PICSWITCH:=
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
@@ -116,16 +116,16 @@ LINKC*=$(CC)
 CYGLIB=$(LIB:s/;/ -L/)
 LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc -L$(CYGLIB)
 .IF "$(USE_MINGW)"=="cygwin"
-MINGWLIBDIR=$(COMPATH)/lib/mingw
+MINGWLIBDIR=$(COMPATH)$/lib$/mingw
 .ELSE
-MINGWLIBDIR=$(COMPATH)/lib
+MINGWLIBDIR=$(COMPATH)$/lib
 .ENDIF
-MINGWSSTDOBJ=$(MINGW_CLIB_DIR)/crtbegin.o
-MINGWSSTDENDOBJ=$(MINGW_CLIB_DIR)/crtend.o
-LINKFLAGSAPPGUI=-mwindows $(MINGWLIBDIR)/crt2.o
-LINKFLAGSSHLGUI=--warn-once -mwindows -shared $(MINGWLIBDIR)/dllcrt2.o
-LINKFLAGSAPPCUI=-mconsole $(MINGWLIBDIR)/crt2.o
-LINKFLAGSSHLCUI=--warn-once -mconsole -shared $(MINGWLIBDIR)/dllcrt2.o
+MINGWSSTDOBJ=$(MINGW_CLIB_DIR)$/crtbegin.o
+MINGWSSTDENDOBJ=$(MINGW_CLIB_DIR)$/crtend.o
+LINKFLAGSAPPGUI=-mwindows $(MINGWLIBDIR)$/crt2.o
+LINKFLAGSSHLGUI=--warn-once -mwindows -shared $(MINGWLIBDIR)$/dllcrt2.o
+LINKFLAGSAPPCUI=-mconsole $(MINGWLIBDIR)$/crt2.o
+LINKFLAGSSHLCUI=--warn-once -mconsole -shared $(MINGWLIBDIR)$/dllcrt2.o
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
@@ -148,7 +148,7 @@ MINGW_LIBGCC=-lgcc_eh -lgcc
 MINGW_LIBGCC=-lgcc
 .ENDIF
 .ENDIF
-STDOBJVCL=$(L)/salmain.obj
+STDOBJVCL=$(L)$/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -194,7 +194,7 @@ SHELL32LIB=-lshell32
 GDI32LIB=-lgdi32
 OLE32LIB=-lole32
 OLEAUT32LIB=-loleaut32
-UUIDLIB=$(PSDK_HOME)/lib/uuid.lib
+UUIDLIB=$(PSDK_HOME)$/lib$/uuid.lib
 WINSPOOLLIB=-lwinspool
 IMM32LIB=-limm32
 VERSIONLIB=-lversion
@@ -207,14 +207,14 @@ USER32LIB=-luser32
 LIBCMT=-lmsvcrt
 COMDLG32LIB=-lcomdlg32
 COMCTL32LIB=-lcomctl32
-CRYPT32LIB=$(PSDK_HOME)/lib/crypt32.lib
-GDIPLUSLIB=$(PSDK_HOME)/lib/gdiplus.lib
-DBGHELPLIB=$(PSDK_HOME)/lib/dbghelp.lib
-MSILIB=$(PSDK_HOME)/lib/msi.lib
+CRYPT32LIB=$(PSDK_HOME)$/lib$/crypt32.lib
+GDIPLUSLIB=$(PSDK_HOME)$/lib$/gdiplus.lib
+DBGHELPLIB=$(PSDK_HOME)$/lib$/dbghelp.lib
+MSILIB=$(PSDK_HOME)$/lib$/msi.lib
 DDRAWLIB=$(DIRECTXSDK_LIB)/ddraw.lib
-SHLWAPILIB=$(PSDK_HOME)/lib/shlwapi.lib
-URLMONLIB=$(PSDK_HOME)/lib/urlmon.lib
-UNICOWSLIB=$(PSDK_HOME)/lib/unicows.lib
+SHLWAPILIB=$(PSDK_HOME)$/lib$/shlwapi.lib
+URLMONLIB=$(PSDK_HOME)$/lib$/urlmon.lib
+UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
-MSIMG32LIB=$(PSDK_HOME)/lib/msimg32.lib
+MSIMG32LIB=$(PSDK_HOME)$/lib$/msimg32.lib
