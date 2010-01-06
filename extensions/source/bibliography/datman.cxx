@@ -60,7 +60,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/container.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <vcl/dialog.hxx>
@@ -80,20 +80,14 @@
 #include "bibview.hxx"
 // #100312# ---------
 #include "bibbeam.hxx"
-#ifndef _BIB_FMPROP_HRC
 #include "bibprop.hrc"
-#endif
 #include "toolbar.hxx"
 #include "toolbar.hrc"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "datman.hrc"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star;

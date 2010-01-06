@@ -45,10 +45,6 @@
 #include <vos/mutex.hxx>
 #include <vos/thread.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <string.h>
 
 #include "testfactreg.hxx"
@@ -404,7 +400,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
             XInputStreamRef input( x , USR_QUERY );
             XOutputStreamRef output( x , USR_QUERY );
 
-            assert( output.is() );
+            OSL_ASSERT( output.is() );
             while(  TRUE ) {
                 // basic read/write
                 Sequence<BYTE> seqWrite( 500 );

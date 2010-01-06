@@ -30,7 +30,7 @@
 #ifndef _BRKDLG_HRC
 #define _BRKDLG_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define RID_BASICIDE_BREAKPOINTDLG      ( RID_BASICIDE_START + 80 )
 

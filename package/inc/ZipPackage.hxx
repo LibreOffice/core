@@ -91,6 +91,7 @@ protected:
     ::rtl::OUString  m_aURL;
     sal_Bool         m_bHasEncryptedEntries;
     sal_Bool         m_bHasNonEncryptedEntries;
+    sal_Bool         m_bInconsistent;
     sal_Bool         m_bUseManifest;
     sal_Bool         m_bForceRecovery;
 

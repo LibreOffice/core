@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 //.........................................................................
 namespace frm
@@ -255,6 +255,13 @@ Any OCurrencyModel::getDefaultForReset() const
         aValue = m_aDefault;
 
     return aValue;
+}
+
+//------------------------------------------------------------------------------
+void OCurrencyModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
 }
 
 //.........................................................................

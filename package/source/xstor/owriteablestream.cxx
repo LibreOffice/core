@@ -48,6 +48,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
+#include "selfterminatefilestream.hxx"
 #include "owriteablestream.hxx"
 #include "oseekinstream.hxx"
 #include "mutexholder.hxx"
@@ -592,18 +593,21 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             if ( aData.getLength() > nRead )
                 aData.realloc( nRead );
 
-            if ( nRead && nRead <= MAX_STORCACHE_SIZE )
+            if ( nRead <= MAX_STORCACHE_SIZE )
             {
                 uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
                 OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
 
-                uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
-                xOutStream->writeBytes( aData );
+                if ( nRead )
+                {
+                    uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
+                    xOutStream->writeBytes( aData );
+                }
                 m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
                 m_xCacheStream = xCacheStream;
                 m_xCacheSeek->seek( 0 );
             }
-            else if ( nRead && !m_aTempURL.getLength() )
+            else if ( !m_aTempURL.getLength() )
             {
                 m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
@@ -847,6 +851,9 @@ void OWriteStream_Impl::Commit()
 
     if ( m_xCacheStream.is() )
     {
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
+
         uno::Reference< io::XInputStream > xInStream( m_xCacheStream->getInputStream(), uno::UNO_SET_THROW );
 
         xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
@@ -858,23 +865,16 @@ void OWriteStream_Impl::Commit()
         m_xCacheStream = uno::Reference< io::XStream >();
         m_xCacheSeek = uno::Reference< io::XSeekable >();
 
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else if ( m_aTempURL.getLength() )
     {
-        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                        uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
 
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream = xTempAccess->openFileRead( m_aTempURL );
+            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( GetServiceFactory(), m_aTempURL ) ), uno::UNO_QUERY );
         }
         catch( uno::Exception& )
         {
@@ -890,9 +890,6 @@ void OWriteStream_Impl::Commit()
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
         m_aTempURL = ::rtl::OUString();
-
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -2623,6 +2620,8 @@ void SAL_CALL OWriteStream::dispose()
             m_xInStream->closeInput();
             m_xInStream = uno::Reference< io::XInputStream >();
         }
+
+        m_xSeekable = uno::Reference< io::XSeekable >();
 
         m_pImpl->m_pAntiImpl = NULL;
 

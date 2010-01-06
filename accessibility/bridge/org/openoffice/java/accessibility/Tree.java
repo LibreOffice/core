@@ -118,6 +118,16 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                     }
                     break;
 
+                case AccessibleEventId.LISTBOX_ENTRY_EXPANDED:
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
+                        AccessibleState.COLLAPSED, AccessibleState.EXPANDED);
+                    break;
+
+                case AccessibleEventId.LISTBOX_ENTRY_COLLAPSED:
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
+                        AccessibleState.EXPANDED, AccessibleState.COLLAPSED);
+                    break;
+
                 default:
                     super.notifyEvent(event);
             }
