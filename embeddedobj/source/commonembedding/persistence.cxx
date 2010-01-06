@@ -63,6 +63,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -199,22 +200,17 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
 //------------------------------------------------------
 static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< lang::XMultiServiceFactory >& _rxFactory,
-    const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport )
+    const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
-    uno::Sequence< uno::Any > aArguments(2);
-    aArguments[0] <<= beans::NamedValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedObject" ) ),
-                        uno::makeAny( (sal_Bool)sal_True )
-                      );
-    aArguments[1] <<= beans::NamedValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedScriptSupport" ) ),
-                        uno::makeAny( (sal_Bool)_bEmbeddedScriptSupport )
-                      );
+    ::comphelper::NamedValueCollection aArguments;
+    aArguments.put( "EmbeddedObject", (sal_Bool)sal_True );
+    aArguments.put( "EmbeddedScriptSupport", (sal_Bool)_bEmbeddedScriptSupport );
+    aArguments.put( "DocumentRecoverySupport", (sal_Bool)i_bDocumentRecoverySupport );
 
     uno::Reference< uno::XInterface > xDocument;
     try
     {
-        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments );
+        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments.getWrappedPropertyValues() );
     }
     catch( const uno::Exception& )
     {
@@ -308,7 +304,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
@@ -359,7 +355,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -462,7 +458,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
 
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     //#i103460# ODF: take the size given from the parent frame as default
     uno::Reference< chart2::XChartDocument > xChart( xDocument, uno::UNO_QUERY );
@@ -804,7 +800,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
                                         const uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -1062,6 +1058,10 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "EmbeddedScriptSupport" ) )
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bEmbeddedScriptSupport );
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "DocumentRecoverySupport" ) )
+        {
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
         }
 
 

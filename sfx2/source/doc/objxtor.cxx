@@ -65,6 +65,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 
 #ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -188,7 +189,7 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 
 //--------------------------------------------------------------------
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
-:mpObjectContainer(0)
+    :mpObjectContainer(0)
     ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )
     ,aMacroMode( *this )
@@ -208,7 +209,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bImportDone ( sal_False)
     ,bInPrepareClose( sal_False )
     ,bPreparedForClose( sal_False )
-    ,bWaitingForPicklist( sal_False )
+    ,bWaitingForPicklist( sal_True )
     ,bForbidReload( sal_False )
     ,bBasicInitialized( sal_False )
     ,bIsPrintJobCancelable( sal_True )
@@ -220,6 +221,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bPreserveVersions( sal_True )
     ,m_bMacroSignBroken( sal_False )
     ,m_bNoBasicCapabilities( sal_False )
+    ,m_bDocRecoverySupport( sal_True )
     ,bQueryLoadTemplate( sal_True )
     ,bLoadReadonly( sal_False )
     ,bUseUserData( sal_True )
@@ -230,7 +232,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,nEventId ( 0)
     ,pReloadTimer ( 0)
     ,pMarkData( 0 )
-    ,nLoadedFlags ( SFX_LOADED_MAINDOCUMENT )
+    ,nLoadedFlags ( SFX_LOADED_ALL )
     ,nFlagsInProgress( 0 )
     ,bModalMode( sal_False )
     ,bRunningMacro( sal_False )
@@ -249,6 +251,10 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bIsInit( sal_False )
     ,m_bIncomplEncrWarnShown( sal_False )
 {
+    SfxObjectShell* pDoc = &_rDocShell;
+    SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
+    rArr.C40_INSERT( SfxObjectShell, pDoc, rArr.Count() );
+    bInList = sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -257,6 +263,28 @@ SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
     delete pBasicManager;
 }
+
+//--------------------------------------------------------------------
+
+SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
+    :   pImp( new SfxObjectShell_Impl( *this ) )
+    ,   pMedium(0)
+    ,   pStyleSheetPool(0)
+    ,   eCreateMode( ( i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD )
+    ,   bHasName( sal_False )
+{
+    DBG_CTOR(SfxObjectShell, 0);
+
+    const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
+    if ( !bScriptSupport )
+        SetHasNoBasic();
+
+    const bool bDocRecovery = ( i_nCreationFlags & SFXMODEL_DISABLE_DOCUMENT_RECOVERY ) == 0;
+    if ( !bDocRecovery )
+        pImp->m_bDocRecoverySupport = sal_False;
+}
+
+//--------------------------------------------------------------------
 
 // initializes a document from a file-description
 
@@ -291,23 +319,10 @@ SfxObjectShell::SfxObjectShell
 :   pImp( new SfxObjectShell_Impl( *this ) ),
     pMedium(0),
     pStyleSheetPool(0),
-    eCreateMode(eMode)
+    eCreateMode(eMode),
+    bHasName( sal_False )
 {
     DBG_CTOR(SfxObjectShell, 0);
-
-    bHasName = sal_False;
-
-    pImp->bWaitingForPicklist = sal_True;
-
-    // Aggregation InPlaceObject+Automation
-//(mba)    AddInterface( SvDispatch::ClassFactory() );
-
-    SfxObjectShell *pThis = this;
-    SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
-    rArr.C40_INSERT( SfxObjectShell, pThis, rArr.Count() );
-    pImp->bInList = sal_True;
-    pImp->nLoadedFlags = SFX_LOADED_ALL;
-//REMOVE        SetObjectShell( TRUE );
 }
 
 //--------------------------------------------------------------------

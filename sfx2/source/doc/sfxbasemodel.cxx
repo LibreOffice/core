@@ -151,6 +151,9 @@ using ::com::sun::star::frame::XController2;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::io::IOException;
 using ::com::sun::star::lang::WrappedTargetException;
+using ::com::sun::star::uno::Type;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::document::XDocumentRecovery;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -537,6 +540,7 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : BaseMutex()
 , m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )
 , m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() ? !pObjectShell->Get_Impl()->m_bNoBasicCapabilities : false )
+, m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() ? pObjectShell->Get_Impl()->m_bDocRecoverySupport : false )
 {
     DBG_CTOR(sfx2_SfxBaseModel,NULL);
     if ( pObjectShell != NULL )
@@ -560,7 +564,9 @@ SfxBaseModel::~SfxBaseModel()
 
 uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( uno::RuntimeException )
 {
-    if ( !m_bSupportEmbeddedScripts && rType.equals( XEMBEDDEDSCRIPTS::static_type() ) )
+    if  (   ( !m_bSupportEmbeddedScripts && rType.equals( XEMBEDDEDSCRIPTS::static_type() ) )
+        ||  ( !m_bSupportDocRecovery && rType.equals( XDocumentRecovery::static_type() ) )
+        )
         return Any();
 
     return SfxBaseModel_Base::queryInterface( rType );
@@ -596,21 +602,31 @@ void SAL_CALL SfxBaseModel::release() throw( )
 //  XTypeProvider
 //________________________________________________________________________________________________________
 
+namespace
+{
+    void lcl_stripType( Sequence< Type >& io_rTypes, const Type& i_rTypeToStrip )
+    {
+        Sequence< UNOTYPE > aStrippedTypes( io_rTypes.getLength() - 1 );
+        ::std::remove_copy_if(
+            io_rTypes.getConstArray(),
+            io_rTypes.getConstArray() + io_rTypes.getLength(),
+            aStrippedTypes.getArray(),
+            ::std::bind2nd( ::std::equal_to< Type >(), i_rTypeToStrip )
+        );
+        io_rTypes = aStrippedTypes;
+    }
+}
+
 uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeException )
 {
     uno::Sequence< UNOTYPE > aTypes( SfxBaseModel_Base::getTypes() );
+
     if ( !m_bSupportEmbeddedScripts )
-    {
-        // remove XEmbeddedScripts type from the sequence
-        Sequence< UNOTYPE > aStrippedTypes( aTypes.getLength() - 1 );
-        ::std::remove_copy_if(
-            aTypes.getConstArray(),
-            aTypes.getConstArray() + aTypes.getLength(),
-            aStrippedTypes.getArray(),
-            ::std::bind2nd( ::std::equal_to< UNOTYPE >(), XEMBEDDEDSCRIPTS::static_type() )
-        );
-        aTypes = aStrippedTypes;
-    }
+        lcl_stripType( aTypes, XEMBEDDEDSCRIPTS::static_type() );
+
+    if ( !m_bSupportDocRecovery )
+        lcl_stripType( aTypes, XDocumentRecovery::static_type() );
+
     return aTypes;
 }
 
@@ -1709,10 +1725,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        // do not use the SfxModelGuard, it would throw, since we're not yet initialized
-    if ( IsDisposed() )
-        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     if ( IsInitialized() )
         throw ::com::sun::star::frame::DoubleInitializationException( ::rtl::OUString(), *this );
 

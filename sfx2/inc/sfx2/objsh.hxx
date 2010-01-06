@@ -236,6 +236,7 @@ private:
 
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
+                                SfxObjectShell( const sal_uInt64 i_nCreationFlags );    // see sfxmodelfactory.hxx
     virtual                     ~SfxObjectShell();
 
     virtual void                ModifyChanged();
