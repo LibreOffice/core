@@ -150,7 +150,7 @@ namespace drawinglayer
                         mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
 
                         // set Overline attribute
-                        const FontUnderline eFontOverline(mapTextLineToFontUnderline( pTCPP->getFontOverline() ));
+                        const FontUnderline eFontOverline(primitive2d::mapTextLineToFontUnderline( pTCPP->getFontOverline() ));
                         if( eFontOverline != UNDERLINE_NONE )
                         {
                             aFont.SetOverline( eFontOverline );
@@ -161,7 +161,7 @@ namespace drawinglayer
                         }
 
                         // set Underline attribute
-                        const FontUnderline eFontUnderline(mapTextLineToFontUnderline( pTCPP->getFontUnderline() ));
+                        const FontUnderline eFontUnderline(primitive2d::mapTextLineToFontUnderline( pTCPP->getFontUnderline() ));
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
                             aFont.SetUnderline( eFontUnderline );
@@ -172,7 +172,7 @@ namespace drawinglayer
                         }
 
                         // set Strikeout attribute
-                        const FontStrikeout eFontStrikeout(mapTextStrikeoutToFontStrikeout(pTCPP->getTextStrikeout()));
+                        const FontStrikeout eFontStrikeout(primitive2d::mapTextStrikeoutToFontStrikeout(pTCPP->getTextStrikeout()));
 
                         if( eFontStrikeout != STRIKEOUT_NONE )
                             aFont.SetStrikeout( eFontStrikeout );
