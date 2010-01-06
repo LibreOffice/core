@@ -94,7 +94,6 @@
  #endif
 #endif
 
-#define OWN_ATTR_VALUE_START                    (3900)
 #define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)    // the next 10 entries are reserved for text
 #define OWN_ATTR_VALUE_POLYGONKIND              (OWN_ATTR_VALUE_START+10)
 #define OWN_ATTR_VALUE_POLYPOLYGON              (OWN_ATTR_VALUE_START+11)
@@ -194,7 +193,7 @@
 
 #define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
 
-#define OWN_ATTR_VALUE_END                      OWN_ATTR_EDGE_POLYPOLYGONBEZIER // WARNING: ee items start at 3991!
+// maximum is OWN_ATTR_VALUE_END = OWN_ATTR_VALUE_START+90
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \

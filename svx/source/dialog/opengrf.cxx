@@ -63,7 +63,7 @@
 #include "opengrf.hxx"
 
 #include <svx/dialogs.hrc>
-#include "impgrf.hrc"
+//#include "impgrf.hrc"
 
 
 //-----------------------------------------------------------------------------

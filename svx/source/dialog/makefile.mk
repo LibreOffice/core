@@ -58,7 +58,6 @@ SRC1FILES =  \
         hdft.src \
         hyprlink.src \
         imapdlg.src \
-        impgrf.src \
         langbox.src \
         language.src \
         lingu.src \
@@ -83,7 +82,6 @@ LIB1OBJFILES= \
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
         $(SLO)$/hangulhanja.obj \
-        $(SLO)$/impgrf.obj \
         $(SLO)$/langbox.obj \
         $(SLO)$/opengrf.obj \
         $(SLO)$/simptabl.obj \

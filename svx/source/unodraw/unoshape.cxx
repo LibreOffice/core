@@ -606,6 +606,53 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 }
 
 //----------------------------------------------------------------------
+//----------------------------------------------------------------------
+void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
+  SfxItemSet& rSet, uno::Reference< beans::XPropertySet > xSet, const SfxItemPropertyMap* pMap ) const
+{
+    if(rPropSet.AreThereOwnUsrAnys())
+    {
+        const SfxItemPropertyMap* pSrc = rPropSet.getPropertyMap();
+        PropertyEntryVector_t aSrcPropVector = pSrc->getPropertyEntries();
+        PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
+        while(aSrcIt != aSrcPropVector.end())
+        {
+            if(aSrcIt->nWID)
+            {
+                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(aSrcIt->nWID);
+                if(pUsrAny)
+                {
+                    // Aequivalenten Eintrag in pDst suchen
+                    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( aSrcIt->sName );
+                    if(pEntry)
+                    {
+                        // entry found
+                        if(pEntry->nWID >= OWN_ATTR_VALUE_START && pEntry->nWID <= OWN_ATTR_VALUE_END)
+                        {
+                            // Special ID im PropertySet, kann nur direkt am
+                            // Objekt gesetzt werden+
+                            xSet->setPropertyValue( aSrcIt->sName, *pUsrAny);
+                        }
+                        else
+                        {
+                            if(rSet.GetPool()->IsWhich(pEntry->nWID))
+                                rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
+
+                            // setzen
+                            setPropertyValue(pEntry, *pUsrAny, rSet);
+                        }
+                    }
+                }
+            }
+
+            // next entry
+            ++aSrcIt;
+        }
+    }
+}
+
+
+
 void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
 {
     DBG_TESTSOLARMUTEX();
@@ -613,7 +660,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     {
         SfxItemSet aSet( mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
-        mpPropSet->ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
+        ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, mpPropSet->getPropertyMap() );
 
         mpObj->SetMergedItemSetAndBroadcast(aSet);
 

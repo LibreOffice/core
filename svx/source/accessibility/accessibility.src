@@ -196,16 +196,6 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text [ en-US ] = "This is where you can edit the contour." ;
 };
 
-String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
-{
-    Text [ en-US ] = "Image bullet in paragraph" ;
-};
-
-String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
-{
-    Text [ en-US ] = "Image bullet" ;
-};
-
 String RID_SVXSTR_CHARACTER_SELECTION
 {
     Text [ en-US ] = "Special character selection";

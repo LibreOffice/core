@@ -37,8 +37,6 @@
 
 // Help-Ids --------------------------------------------------------------
 #define HID_ALIGN_TBX                                               (HID_SVX_START +   1)
-#define HID_AUTOCORR_HELP_END                                       (HID_SVX_START +   2)
-#define HID_AUTOCORR_HELP_START                                     (HID_SVX_START +   3)
 #define HID_BMPMASK_CTL_PIPETTE                                     (HID_SVX_START +   4)
 #define HID_BMPMASK_CTL_QCOL_1                                      (HID_SVX_START +   5)
 #define HID_BMPMASK_TBI_PIPETTE                                     (HID_SVX_START +   6)
