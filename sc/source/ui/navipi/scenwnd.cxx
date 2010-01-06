@@ -38,8 +38,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include "navipi.hxx"

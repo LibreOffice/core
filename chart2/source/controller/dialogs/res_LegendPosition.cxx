@@ -50,7 +50,7 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>
 // header for class SfxItemPool
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 //.............................................................................
 namespace chart

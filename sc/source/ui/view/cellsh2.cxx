@@ -41,14 +41,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -208,6 +208,18 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     }
     return bSort;
 }
+
+//<!-- Added by PengYunQuan for Validity Cell Range Picker
+//after end execute from !IsModalInputMode, it is safer to delay deleting
+namespace
+{
+    long DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
+    {
+        delete reinterpret_cast<VclAbstractDialog*>( pAbstractDialog );
+        return 0;
+    }
+}
+//--> Added by PengYunQuan for Validity Cell Range Picker
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
@@ -1060,10 +1072,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     //CHINA001 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     //CHINA001 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION );
+                    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+                    //SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION );
+                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION, pTabViewShell );
+                    //-->Modified by PengYunQuan for Validity Cell Range Picker
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
-                    if ( pDlg->Execute() == RET_OK )
+                    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+                    //if ( pDlg->Execute() == RET_OK )
+                    short nResult = pDlg->Execute();
+                    pTabViewShell->SetTabNo( nTab );//When picking Cell Range ,other Tab may be switched. Need restore the correct tab
+                    if ( nResult == RET_OK )
+                    //-->Modified by PengYunQuan for Validity Cell Range Picker
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
@@ -1142,7 +1162,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->SetValidation( aData );
                         rReq.Done( *pOutSet );
                     }
-                    delete pDlg;
+                    //<!-- Modified by PengYunQuan for Validity Cell Range Picker
+                    //after end execute from !IsModalInputMode, it is safer to delay deleting
+                    //delete pDlg;
+                    Application::PostUserEvent( Link( pDlg, &DelayDeleteAbstractDialog ) );
+                    //--> Modified by PengYunQuan for Validity Cell Range Picker
                 }
             }
             break;

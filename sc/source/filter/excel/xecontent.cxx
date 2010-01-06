@@ -40,7 +40,7 @@
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <formula/grammar.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>

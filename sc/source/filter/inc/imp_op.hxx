@@ -99,6 +99,8 @@ protected:
     XclImpStream            maStrm;             // input stream
     XclImpStream&           aIn;                // input stream
 
+    ScfUInt32Vec            maSheetOffsets;
+
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter
 

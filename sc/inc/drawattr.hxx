@@ -30,7 +30,7 @@
 #ifndef _IDLITEMS_HXX
 #define _IDLITEMS_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxenum.hxx>
 
 

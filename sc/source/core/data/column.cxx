@@ -37,8 +37,8 @@
 
 #include <map>
 
-#include <svtools/poolcach.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/poolcach.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <string.h>
 
@@ -1233,8 +1233,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             }
         }
 
-        delete pDelRows;
-        delete ppDelCells;
+        delete [] pDelRows;
+        delete [] ppDelCells;
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );

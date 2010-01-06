@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 template< typename Ifc1 >
 class ScVbaFormat : public InheritedHelperInterfaceImpl1< Ifc1 >

@@ -38,7 +38,7 @@
 #include "excrecds.hxx"
 
 #include <map>
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -62,13 +62,13 @@
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/escpitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <string.h>
 
@@ -107,17 +107,10 @@ using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -
 const BYTE      ExcDummy_00::pMyData[] = {
-    0xe1, 0x00, 0x00, 0x00,                                 // INTERFACEHDR
-    0xc1, 0x00, 0x02, 0x00, 0x00, 0x00,                     // MMS
-    0xbf, 0x00, 0x00, 0x00,                                 // TOOLBARHDR
-    0xc0, 0x00, 0x00, 0x00,                                 // TOOLBAREND
-    0xe2, 0x00, 0x00, 0x00,                                 // INTERFACEEND
-    0x5c, 0x00, 0x20, 0x00, 0x04, 0x4d, 0x72, 0x20, 0x58,   // WRITEACCESS
+    0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    // WRITEACCESS
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-    0x42, 0x00, 0x02, 0x00, 0xe4, 0x04,                     // CODEPAGE
-    0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 };
 const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
@@ -315,27 +308,6 @@ sal_Size ExcEof::GetLen( void ) const
 
 
 
-//----------------------------------------------------- class ExcFngroupcount -
-
-void ExcFngroupcount::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << ( UINT16 ) 0x000E;     // copied from Excel
-}
-
-
-UINT16 ExcFngroupcount::GetNum( void ) const
-{
-    return 0x009C;
-}
-
-
-sal_Size ExcFngroupcount::GetLen( void ) const
-{
-    return 2;
-}
-
-
-
 //--------------------------------------------------------- class ExcDummy_00 -
 
 sal_Size ExcDummy_00::GetLen( void ) const
@@ -484,7 +456,7 @@ XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     /*  #i31530# set document country as UI country too -
         needed for correct behaviour of number formats. */
     mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+        ::msfilter::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
 void XclExpCountry::WriteBody( XclExpStream& rStrm )

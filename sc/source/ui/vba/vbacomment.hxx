@@ -39,7 +39,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XComment > ScVbaComment_BASE;
 
