@@ -35,20 +35,20 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/colritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -75,7 +75,7 @@
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/numitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>
@@ -88,11 +88,11 @@
 #include "../../ui/inc/FrameView.hxx"
 #include "../../ui/inc/optsitem.hxx"
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
@@ -2346,16 +2346,21 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 if ( aPresentationText.Len() )
                     pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
 
-                SfxStyleSheet* pSheet2( pPage->GetStyleSheetForPresObj( ePresKind ) );
-                if ( pSheet2 )
+                if ( pPage->GetPageKind() != PK_NOTES )
                 {
-                    SfxItemSet& rItemSet = pSheet2->GetItemSet();
-                    rItemSet.Put( (SdrTextLeftDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) );
-                    rItemSet.Put( (SdrTextRightDistItem&)pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST ) );
-                    rItemSet.Put( (SdrTextUpperDistItem&)pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST ) );
-                    rItemSet.Put( (SdrTextLowerDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
+                    SfxStyleSheet* pSheet2( pPage->GetStyleSheetForPresObj( ePresKind ) );
+                    if ( pSheet2 )
+                    {
+                        SfxItemSet& rItemSet = pSheet2->GetItemSet();
+                        rItemSet.Put( (SdrTextLeftDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) );
+                        rItemSet.Put( (SdrTextRightDistItem&)pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST ) );
+                        rItemSet.Put( (SdrTextUpperDistItem&)pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST ) );
+                        rItemSet.Put( (SdrTextLowerDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
+                        rItemSet.Put( (SdrTextVertAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST ) );
+                        rItemSet.Put( (SdrTextHorzAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST ) );
+                    }
+                    pText->NbcSetStyleSheet( pSheet2, FALSE );
                 }
-                pText->NbcSetStyleSheet( pSheet2, TRUE );
 
                 SfxItemSet aTempAttr( mpDoc->GetPool() );
                 SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );

@@ -180,17 +180,12 @@ interface ImpressEditView : DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-}
-
-shell DrawViewShell
-{
-    import ImpressEditView[Automation];
-    SID_INSERT_POSTIT
+    SID_SHOW_POSTIT
     [
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
-    SID_SHOW_POSTIT
+    SID_INSERT_POSTIT
     [
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
@@ -225,6 +220,11 @@ shell DrawViewShell
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
+}
+
+shell DrawViewShell
+{
+    import ImpressEditView[Automation];
 }
 
 

@@ -717,6 +717,7 @@ void AnnotationTag::ClosePopup()
     if( mpAnnotationWindow.get() )
     {
         mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
+        mpAnnotationWindow->Deactivate();
         mpAnnotationWindow.reset();
     }
 }
