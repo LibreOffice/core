@@ -514,8 +514,17 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
 
         if(aResult.size())
         {
-            // take the frontmost one
-            const E3dCompoundObject* pResult = aResult[0];
+            // exclude expansion object which will be part of
+            // the hits. It's invisible, but for HitTest, it's included
+            const E3dCompoundObject* pResult = 0;
+
+            for(sal_uInt32 b(0); !pResult && b < aResult.size(); b++)
+            {
+                if(aResult[b] && aResult[b] != mpExpansionObject)
+                {
+                    pResult = aResult[b];
+                }
+            }
 
             if(pResult == mp3DObj)
             {
@@ -780,8 +789,8 @@ void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
     }
     if(IsGeometrySelected())
     {
-        rHor = mfRotateY;
-        rVer = mfRotateX;
+        rHor = mfRotateY / F_PI180; // 0..360.0
+        rVer = mfRotateX / F_PI180; // -90.0..90.0
     }
 }
 
@@ -824,8 +833,8 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
     {
         if(mfRotateX != fVer || mfRotateY != fHor)
         {
-            mfRotateX = fVer;
-            mfRotateY = fHor;
+            mfRotateX = fVer * F_PI180;
+            mfRotateY = fHor * F_PI180;
 
             if(mp3DObj)
             {
