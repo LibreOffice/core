@@ -1618,8 +1618,6 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
         uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
         uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
 
-        sal_Int32 nIndex = 1;
-
         LanguageType eLanguage = Application::GetSettings().GetLanguage();
         while( xAnnotationEnumeration->hasMoreElements() )
         {
