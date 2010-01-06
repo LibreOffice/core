@@ -93,7 +93,6 @@ namespace svt
     void OWizardPage::updateDialogTravelUI()
     {
         OWizardMachine* pWizardMachine = dynamic_cast< OWizardMachine* >( GetParent() );
-        OSL_ENSURE( pWizardMachine, "OWizardPage::updateDialogTravelUI: where am I?" );
         if ( pWizardMachine )
             pWizardMachine->updateTravelUI();
     }
