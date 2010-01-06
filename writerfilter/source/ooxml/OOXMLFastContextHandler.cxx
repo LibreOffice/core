@@ -2027,7 +2027,8 @@ void SAL_CALL ShapesNoAdd::remove(const uno::Reference< drawing::XShape > & xSha
 
 OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false )
+: OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false ),
+    m_bShapeStarted(false)
 {
     uno::Reference<uno::XComponentContext> xContext(getComponentContext());
     if (xContext.is())
@@ -2119,7 +2120,10 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
+            {
                 mpStream->startShape( xShape );
+                m_bShapeStarted = true;
+            }
         }
     }
 }
@@ -2138,7 +2142,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 
     // Ending the shape should be the last thing to do
     bool bIsPicture = Element == ( NS_picture | OOXML_pic );
-    if ( !bIsPicture )
+    if ( !bIsPicture && m_bShapeStarted)
         mpStream->endShape( );
 }
 

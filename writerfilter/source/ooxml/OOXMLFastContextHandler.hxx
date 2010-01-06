@@ -517,6 +517,7 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 {
 private:
     bool m_bShapeSent;
+    bool m_bShapeStarted;
 
 public:
     explicit OOXMLFastContextHandlerShape
