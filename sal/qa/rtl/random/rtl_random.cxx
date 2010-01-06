@@ -35,7 +35,7 @@
 
 #include <algorithm> // STL
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <rtl/random.h>
 
 namespace rtl_random
