@@ -33,6 +33,9 @@
 
 // defines ------------------------------------------------------------------
 
+#define OWN_ATTR_VALUE_START                    3900
+#define OWN_ATTR_VALUE_END                      3990
+
 #define CREATERESMGR_NAME( Name )   #Name
 #define CREATERESMGR( Name )        ResMgr::CreateResMgr( CREATERESMGR_NAME( Name ) )
 
@@ -112,7 +115,10 @@
 #define RID_CHANNEL_END             (RID_LIB_START+7499)
 
 #define RID_CHAOS_START             (RID_LIB_START+7500)
-#define RID_CHAOS_END               (RID_LIB_START+7999)
+#define RID_CHAOS_END               (RID_LIB_START+7599)
+
+#define RID_EDITITEMS_START         (RID_LIB_START+7600)
+#define RID_EDITITEMS_END           (RID_LIB_START+7999)
 
 #define RID_FORMS_START             (RID_LIB_START+8000)
 #define RID_FORMS_END               (RID_LIB_START+8999)
@@ -300,6 +306,43 @@
 #define HID_EXTENSIONS_START        (HID_OBJ_START+2281)
 #define HID_EXTENSIONS_END          (HID_OBJ_START+2800)
 
+// Slot Ids
+
+#define SID_SFX_START                5000
+#define SID_SFX_END                  8999
+#define SID_DOCKWIN_START            9800
+#define SID_DOCKWIN_END              9999
+
+#define SID_LIB_START               10000
+#define SID_LIB_END                 19999
+#define SID_APP_START               20000
+#define SID_APP_END                 29999
+#define SID_OBJ_START               30000
+
+#define SID_SW_START                20000
+#define SID_SW_END                  25999
+#define SID_SC_START                26000
+#define SID_SC_END                  26999
+#define SID_SD_START                27000
+#define SID_SD_END                  27999
+
+#define SID_SMA_START               SID_OBJ_START
+#define SID_SMA_END                 (SID_OBJ_START + 256)
+#define SID_BASICIDE_START          (SID_SMA_END + 1)
+#define SID_BASICIDE_END            (SID_BASICIDE_START + 256)
+
+#define SID_EDIT_START              SID_LIB_START
+#define SID_EDIT_END                (SID_EDIT_START + 500)
+#define SID_SVX_START               (SID_EDIT_END + 1)
+#define SID_SVX_END                 (SID_SVX_START + 2000)
+#define SID_OPTIONS_START           (SID_SVX_END + 1)
+#define SID_OPTIONS_END             (SID_OPTIONS_START + 100)
+#define SID_SBA_START               (SID_OPTIONS_END + 1)
+#define SID_SBA_END                 (SID_SBA_START + 149)
+#define SID_DBACCESS_START          (SID_SBA_END + 1)
+#define SID_DBACCESS_END            (SID_DBACCESS_START + 200)
+#define SID_RPTUI_START             (SID_DBACCESS_END + 1)
+#define SID_RPTUI_END               (SID_RPTUI_START + 200)
 
 #endif
 

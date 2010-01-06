@@ -49,6 +49,7 @@ SRC1FILES=\
         filectrl.src
 
 EXCEPTIONSFILES=\
+        $(SLO)$/svxbox.obj \
         $(SLO)$/filectrl2.obj \
         $(SLO)$/roadmap.obj \
         $(SLO)$/scriptedtext.obj\
