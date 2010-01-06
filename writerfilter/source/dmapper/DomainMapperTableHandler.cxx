@@ -116,7 +116,9 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("tablemanager.table");
     dmapper_logger->attribute("rows", nRows);
-    dmapper_logger->addTag(pProps->toTag());
+
+    if (pProps.get() != NULL)
+        dmapper_logger->addTag(pProps->toTag());
 #endif
 }
 
