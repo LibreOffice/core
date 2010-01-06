@@ -610,7 +610,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
          */
-        void implts_actualizeTimer();
+        void implts_updateTimer();
 
         //---------------------------------------
         /** @short  stop the timer.
@@ -678,7 +678,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_actualizeModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
+        void implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
 
         //---------------------------------------
         // TODO document me

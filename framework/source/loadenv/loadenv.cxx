@@ -821,7 +821,7 @@ void LoadEnv::impl_detectTypeAndFilter()
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
     // we cant use as an in/out parameter here. Copy it before and dont forget to
-    // actualize structure afterwards again!
+    // update structure afterwards again!
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR       = m_xSMGR;
 

@@ -487,7 +487,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  tries to detect the type and the filter of the specified content.
 
-            @descr  This method actualize the available media descriptor of this instance,
+            @descr  This method update the available media descriptor of this instance,
                     so it contains the right type, a corresponding filter, may a
                     valid frame loader etc. In case detection failed, this descriptor
                     is corrected first, before a suitable exception will be thrown.

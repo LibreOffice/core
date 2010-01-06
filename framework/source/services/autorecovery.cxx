@@ -645,7 +645,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
             // dont enable AutoSave hardly !
             // reload configuration to know the current state.
             implts_readAutoSaveConfig();
-            implts_actualizeTimer();
+            implts_updateTimer();
             // can it happen that might be the listener was stopped ? .-)
             // make sure it runs always ... even if AutoSave itself was disabled temporarly.
             implts_startListening();
@@ -791,7 +791,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     // <- SAFE ----------------------------------
 
     // depends on bAllowAutoSaveReactivation implicitly by looking on m_eJob=E_AUTO_SAVE! see before ...
-    implts_actualizeTimer();
+    implts_updateTimer();
 
     if (bAllowAutoSaveReactivation)
         implts_startListening();
@@ -861,7 +861,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     else
     if (aEvent.EventName.equals(EVENT_ON_MODIFYCHANGED))
     {
-        implts_actualizeModifiedState(xDocument);
+        implts_updateModifiedState(xDocument);
     }
     /* at least one document starts saving process =>
        Our application code isnt ready for multiple save requests
@@ -970,7 +970,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     // Note: This call stops the timer and starts it again.
     // But it checks the different timer states internaly and
     // may be supress the restart!
-    implts_actualizeTimer();
+    implts_updateTimer();
 }
 
 //-----------------------------------------------
@@ -1193,7 +1193,7 @@ void AutoRecovery::implts_readConfig()
         // <- REENTRANT --------------------------
     }
 
-    implts_actualizeTimer();
+    implts_updateTimer();
 }
 
 //-----------------------------------------------
@@ -1330,11 +1330,6 @@ void AutoRecovery::implts_persistAllActiveViewNames()
     WriteGuard aWriteLock(m_aLock);
 
     // This list will be filled with every document
-    // which should be saved as last one. E.g. if it was used
-    // already for an UI save operation => crashed ... and
-    // now we try to save it again ... which can fail again ( of course .-) ).
-    ::std::vector< AutoRecovery::TDocumentList::iterator > lDangerousDocs;
-
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
            pIt != m_lDocCache.end()  ;
@@ -1555,7 +1550,7 @@ void AutoRecovery::implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& 
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_actualizeTimer()
+void AutoRecovery::implts_updateTimer()
 {
     implts_stopTimer();
 
@@ -1646,7 +1641,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
             m_eTimerType = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
             aWriteLock.unlock();
             // <- SAFE ------------------------------
-            implts_actualizeTimer();
+            implts_updateTimer();
             return 0;
         }
 
@@ -1661,7 +1656,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
             sal_Bool bUserIdle = (Application::GetLastInputInterval()>MIN_TIME_FOR_USER_IDLE);
             if (!bUserIdle)
             {
-                implts_actualizeTimer();
+                implts_updateTimer();
                 return 0;
             }
         }
@@ -1702,7 +1697,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
         aWriteLock.unlock();
         // <- SAFE ----------------------------------
 
-        implts_actualizeTimer();
+        implts_updateTimer();
     }
     catch(const css::uno::Exception&)
     {
@@ -1739,7 +1734,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // notification for already existing document !
     // Can happen if events came in asynchronous on recovery time.
     // Then our cache was filled from the configuration ... but now we get some
-    // asynchronous events from the global event broadcaster. We must be shure that
+    // asynchronous events from the global event broadcaster. We must be sure that
     // we dont add the same document more then once.
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
@@ -1747,7 +1742,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         // Normaly nothing must be done for this "late" notification.
         // But may be the modified state was changed inbetween.
         // Check it ...
-        implts_actualizeModifiedState(xDocument);
+        implts_updateModifiedState(xDocument);
         return;
     }
 
@@ -1770,6 +1765,11 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     css::uno::Reference< css::frame::XFrame >   xFrame   = xController->getFrame();
     css::uno::Reference< css::frame::XDesktop > xDesktop (xFrame->getCreator(), css::uno::UNO_QUERY);
     if (!xDesktop.is())
+        return;
+
+    // if the document doesn't support the XDocumentRecovery interface, we're not interested in it.
+    Reference< XDocumentRecovery > xDocRecovery( xDocument, UNO_QUERY );
+    if ( !xDocRecovery.is() )
         return;
 
     // get all needed informations of this document
@@ -1800,7 +1800,12 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         (!aNew.OrgURL.getLength()    ) &&
         (!aNew.FactoryURL.getLength())
        )
-       return;
+    {
+        OSL_ENSURE( false, "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
+        // nowadays, the Basic IDE should already die on the "supports XDocumentRecovery" check. And no other known
+        // document type fits in here ...
+        return;
+    }
 
     // By the way - get some information about the default format for saving!
     // and save an information about the real used filter by this document.
@@ -1923,7 +1928,7 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_actualizeModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
+void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
     CacheLockGuard aCacheLock(this, m_aLock, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
