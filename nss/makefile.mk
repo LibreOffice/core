@@ -45,9 +45,9 @@ all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
 .ENDIF	
 
-TARFILE_NAME=nss_3_12_3
+TARFILE_NAME=nss_3_12_5
 TARFILE_ROOTDIR=mozilla
-PATCH_FILES=nss_3_12_3.patch
+PATCH_FILES=nss.patch
 
 .IF "$(debug)" != ""
 .ELSE
@@ -55,13 +55,9 @@ BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
 
-
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-#LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
-.EXPORT: LDFLAGS
-
-.IF "$(CPU)"=="X"
+.IF "$(BUILD64)"=="1"
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
@@ -82,6 +78,10 @@ OUT2LIB=dist$/out$/lib$/*$(DLLPOST)
 
 BUILD_DIR=security$/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all
+#See #i105566# && moz#513024#
+.IF "$(OS)"=="LINUX"
+BUILD_ACTION+=FREEBL_NO_DEPEND=1
+.ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"
 
@@ -90,7 +90,7 @@ BUILD_ACTION= $(GNUMAKE) nss_build_all
 
 .IF "$(COM)"=="GCC"
 
-PATCH_FILES+=nss_3_12_3.patch.mingw
+PATCH_FILES+=nss.patch.mingw
 
 moz_build:=$(shell cygpath -p $(MOZILLABUILD))
 PATH!:=$(moz_build)/bin:$(PATH)
