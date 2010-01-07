@@ -239,11 +239,11 @@ void OQuery::rebuildColumns()
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
         Sequence< ::rtl::OUString> aDefintionNames;
         bool bApplyDefinitionNames = false;
-        if ( xColumnDefinitions.is() )
-        {
-            aDefintionNames = xColumnDefinitions->getElementNames();
-            bApplyDefinitionNames = aDefintionNames.getLength() == aNames.getLength();
-        }
+        //if ( xColumnDefinitions.is() )
+        //{
+        //    aDefintionNames = xColumnDefinitions->getElementNames();
+        //    bApplyDefinitionNames = aDefintionNames.getLength() == aNames.getLength();
+        //}
 
         ::rtl::OUString sEmpty;
         const ::rtl::OUString* pIter = aNames.getConstArray();
