@@ -67,15 +67,15 @@ XCLASSPATH := $(CLASSDIR)
 .ELSE
 XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPERATOR)$(CLASSDIR)
 .ENDIF
-CLASSDIR !:= $(CLASSDIR)$/test
+CLASSDIR !:= $(CLASSDIR)/test
 
 .INCLUDE: target.mk
 
 ALLTAR: $(TESTS)
 
-$(JAVAFILES): $(MISC)$/$(TARGET).classdir.flag
+$(JAVAFILES): $(MISC)/$(TARGET).classdir.flag
 
-$(MISC)$/$(TARGET).classdir.flag:
+$(MISC)/$(TARGET).classdir.flag:
     - $(MKDIR) $(CLASSDIR)
     $(TOUCH) $@
 
@@ -85,26 +85,26 @@ $(TESTS): $(JAVACLASSFILES)
 
 %.test .PHONY: %.java
     $(JAVAI) $(JAVACPS) $(CLASSPATH) org.openoffice.Runner -TestBase java_complex \
-        -NoOffice yes -o $(subst,$/,. $(subst,.test, $(PACKAGE).$@))
+        -NoOffice yes -o $(subst,/,. $(subst,.test, $(PACKAGE).$@))
 
 .IF "$(IDLTESTFILES)" != ""
 
 # The following dependency (to execute javac whenever javamaker has run) does
 # not work reliably, see #i28827#:
-$(JAVAFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).javamaker.flag
+$(JAVAFILES) $(JAVACLASSFILES): $(MISC)/$(TARGET).javamaker.flag
 
-$(MISC)$/$(TARGET).javamaker.flag: $(MISC)$/$(TARGET).rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD $< -X$(SOLARBINDIR)$/types.rdb
+$(MISC)/$(TARGET).javamaker.flag: $(MISC)/$(TARGET).rdb
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD $< -X$(SOLARBINDIR)/types.rdb
     $(TOUCH) $@
 
-$(MISC)$/$(TARGET).rdb .ERRREMOVE: \
-        $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i))
+$(MISC)/$(TARGET).rdb .ERRREMOVE: \
+        $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)/$(TARGET)/$i))
     - rm $@
     $(REGMERGE) $@ /UCR $<
 
-$(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i)): \
+$(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)/$(TARGET)/$i)): \
         $(IDLTESTFILES)
-    - $(MKDIR) $(MISC)$/$(TARGET)
-    $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
+    - $(MKDIR) $(MISC)/$(TARGET)
+    $(IDLC) -O$(MISC)/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
 .ENDIF

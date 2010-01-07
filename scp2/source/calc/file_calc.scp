@@ -41,6 +41,12 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
+File gid_File_Oo_Office_Dataaccess_Calc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/calc.xcu";
+End
 STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Date, date)

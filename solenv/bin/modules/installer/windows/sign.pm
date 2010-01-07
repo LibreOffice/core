@@ -583,10 +583,8 @@ sub extract_cabs_from_database
     my $fullsuccess = 1;
     my $msidb = "msidb.exe";    # Has to be in the path
 
-    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
-        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-        $msidatabase =~ s/\//\\\\/g;
-    }
+    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $msidatabase =~ s/\//\\\\/g;
 
     foreach my $onefile ( keys %{$allcabfiles} )
     {
@@ -617,10 +615,8 @@ sub include_cabs_into_database
     my $fullsuccess = 1;
     my $msidb = "msidb.exe";    # Has to be in the path
 
-    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
-        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-        $msidatabase =~ s/\//\\\\/g;
-    }
+    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $msidatabase =~ s/\//\\\\/g;
 
     foreach my $onefile ( keys %{$allcabfiles} )
     {

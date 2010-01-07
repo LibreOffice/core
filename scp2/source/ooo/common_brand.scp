@@ -91,6 +91,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
+             gid_Brand_File_Lib_Mingw_GccS,
+             gid_Brand_File_Lib_Mingw_Stdcpp,
              gid_Brand_File_Lib_Mingwm10,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
@@ -99,12 +101,9 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
              gid_Brand_File_Oo_Office_Compatibility_Xcu,
-             gid_Brand_File_Registry_Spool_Oo_Inet_defaultsearchengine_Xcu_C01,
              gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu,
-             gid_Brand_File_Registry_Spool_Oo_Office_Writer_directcursor_Xcu_C01,
-             gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
              gid_Brand_File_Script_Unopkg,
              gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration,
              gid_Brand_File_Share_Xdg_Base,
@@ -460,6 +459,22 @@ File gid_Brand_File_Bin_Unopkgexe
 End
 #endif
 
+#ifdef WNT
+File gid_Brand_File_Bin_Rebaseoo
+	BIN_FILE_BODY;
+	Dir = gid_Brand_Dir_Program;
+	Styles = (PACKED);
+	Name = "rebaseoo.exe";
+End
+
+File gid_Brand_File_Bin_Rebasegui
+	BIN_FILE_BODY;
+	Dir = gid_Brand_Dir_Program;
+	Styles = (PACKED);
+	Name = "rebasegui.exe";
+End
+#endif
+
 #if defined UNX && !defined MACOSX
 File gid_Brand_File_Script_Unopkg
     BIN_FILE_BODY;
@@ -486,7 +501,10 @@ File gid_Brand_File_Bin_Unopkg
     Name = "unopkg.bin";
 End
 
-#if defined WNT && defined M1310
+#if defined WNT && \
+    (defined M1310 || \
+     ((defined M1400 || defined M1500) && \
+      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
 File gid_Brand_File_Bin_Msvcr71
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -689,6 +707,32 @@ File gid_Brand_File_Lib_Msvcr80
 End
 #endif
 #endif
+#endif
+
+#if defined(WNT) && defined( _gcc3 )
+
+#if defined(MINGW_GCCDLL)
+
+File gid_Brand_File_Lib_Mingw_GccS
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_Brand_File_Lib_Mingw_Stdcpp
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
 #endif
 
 #if defined(WNT)

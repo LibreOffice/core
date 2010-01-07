@@ -58,11 +58,17 @@ sub unpack_cabinet_file
     # But this wrong expand.exe is typically in the PATH before this expand.exe, to unpack
     # cabinet files.
 
+#   if ( $^O =~ /cygwin/i )
+#   {
+#       $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
+#       $expandfile =~ s/\\/\//;
+#       if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+#   }
+
     if ( $^O =~ /cygwin/i )
     {
-        $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
-        $expandfile =~ s/\\/\//;
-        if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+        $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
+        chomp $expandfile;
     }
 
     my $expandlogfile = $unpackdir . $installer::globals::separator . "expand.log";
@@ -73,10 +79,11 @@ sub unpack_cabinet_file
     my $systemcall = "";
     if ( $^O =~ /cygwin/i ) {
         my $localunpackdir = qx{cygpath -w "$unpackdir"};
+        chomp ($localunpackdir);
         $localunpackdir =~ s/\\/\\\\/g;
         $cabfilename =~ s/\\/\\\\/g;
         $cabfilename =~ s/\s*$//g;
-        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir;
+        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir . " \> " . $expandlogfile;
     }
     else
     {

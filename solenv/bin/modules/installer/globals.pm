@@ -82,8 +82,15 @@ BEGIN
         "dgo",
         "kok",
         "mni",
-        "sat"
-
+        "sat",
+        "ug",
+        "om",
+        "si",
+        "or",
+        "oc",
+        "ml",
+        "as",
+        "ast"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -134,6 +141,7 @@ BEGIN
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -183,6 +191,7 @@ BEGIN
     $englishlicenseset = 0;
     $englishlicense = "";
     $englishsolarislicensename = "LICENSE_en-US";
+    $solarisdontcompress = 0;
     $patharray = "";
 
     $is_special_epm = 0;
@@ -396,7 +405,7 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 25;
+    $unomaxservices = 1800; # regcomp -c argument length
     $javamaxservices = 15;
 
     $one_cab_file = 0;
@@ -447,6 +456,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
+    $macinstallfilename = "macinstall.ulf";
     $nsis204 = 0;
     $nsis231 = 0;
     $unicodensis = 0;
@@ -476,35 +486,11 @@ BEGIN
     @emptypackages = ();
     %fontpackageexists = ();
 
+    $exithandler = undef;
+
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
-        $checksumfile = "so_checksum.exe";
-        $unopkgfile = "unopkg.exe";
-        if ( $plat =~ /cygwin/i )
-        {
-            $separator = "/";
-            $pathseparator = "\:";
-            $quote = "\'";
-        }
-        else
-        {
-            $separator = "\\";
-            $pathseparator = "\;";
-            $quote = "\"";
-        }
-        $libextension = "\.dll";
-        $isunix = 0;
-        $iswin = 1;
-                $archiveformat = ".zip";
-        %savedmapping = ();
-        %savedrevmapping = ();
-        %savedrev83mapping = ();
-        %saved83dirmapping = ();
-    }
-    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+    if ( $plat =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";

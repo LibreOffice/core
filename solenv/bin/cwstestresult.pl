@@ -103,6 +103,7 @@ sub testresult
     my $result='';
 
     if ( defined($childws) ) {
+        $opt_resultPage=SOAP::Data->type(string => $opt_resultPage);
         my $id = $cws->eis_id();
         if ( is_valid_cws($cws) ) {
             $result=$eis->submitTestResult($id,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
@@ -110,6 +111,7 @@ sub testresult
          print STDERR "cws is not valid";
     }
     } else {
+        $opt_resultPage=SOAP::Data->type(string => $opt_resultPage);
         $result=$eis->submitTestResultMWS($masterws,$milestone,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
     }
 

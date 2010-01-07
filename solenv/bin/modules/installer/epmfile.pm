@@ -453,8 +453,9 @@ sub create_epm_header
 
         if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
 
-        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile
-        if ( $installer::globals::issolarispkgbuild )
+        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile. But not for all products
+
+        if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
             if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
 
@@ -838,6 +839,9 @@ sub find_epm_on_system
         elsif ( ($ENV{'EPM'} eq "no") || ($ENV{'EPM'} eq "internal") )
         {
             $epmname = "epm";
+            my $epmref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$epmname, $includepatharrayref, 0);
+            if ($$epmref eq "") { installer::exiter::exit_program("ERROR: Could not find program $epmname (EPM set to \"internal\" or \"no\")!", "find_epm_on_system"); }
+            $epmname = $$epmref;
         }
         else
         {
@@ -1089,10 +1093,10 @@ sub set_revision_in_pkginfo
                 my $micro = $3;
 
                 my $finalmajor = $major;
-                my $finalminor = 0;
+                my $finalminor = $minor;
                 my $finalmicro = 0;
 
-                if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
+                # if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
 
                 $version = "$finalmajor.$finalminor.$finalmicro";
             }
@@ -1928,10 +1932,8 @@ sub include_patchinfos_into_pkginfo
         $newline = "SUNW_REQUIRES=" . $requires . "\n";
         add_one_line_into_file($changefile, $newline, $filename);
     }
-
     $newline = "SUNW_PATCH_PROPERTIES=\n";
     add_one_line_into_file($changefile, $newline, $filename);
-
     # $newline = "SUNW_PKGTYPE=usr\n";
     # add_one_line_into_file($changefile, $newline, $filename);
 
@@ -1951,14 +1953,20 @@ sub get_solaris_language_for_langpack
     $sollanguage =~ s/\-/\_/;
 
     if ( $sollanguage eq "de" ) { $sollanguage = "de"; }
+    elsif ( $sollanguage eq "en_US" ) { $sollanguage = "en_AU,en_CA,en_GB,en_IE,en_MT,en_NZ,en_US,en_US.UTF-8"; }
     elsif ( $sollanguage eq "es" ) { $sollanguage = "es"; }
     elsif ( $sollanguage eq "fr" ) { $sollanguage = "fr"; }
+    elsif ( $sollanguage eq "hu" ) { $sollanguage = "hu_HU"; }
     elsif ( $sollanguage eq "it" ) { $sollanguage = "it"; }
+    elsif ( $sollanguage eq "nl" ) { $sollanguage = "nl_BE,nl_NL"; }
+    elsif ( $sollanguage eq "pl" ) { $sollanguage = "pl_PL"; }
     elsif ( $sollanguage eq "sv" ) { $sollanguage = "sv"; }
+    elsif ( $sollanguage eq "pt" ) { $sollanguage = "pt_PT"; }
     elsif ( $sollanguage eq "pt_BR" ) { $sollanguage = "pt_BR"; }
+    elsif ( $sollanguage eq "ru" ) { $sollanguage = "ru_RU"; }
     elsif ( $sollanguage eq "ja" ) { $sollanguage = "ja,ja_JP,ja_JP.PCK,ja_JP.UTF-8"; }
     elsif ( $sollanguage eq "ko" ) { $sollanguage = "ko,ko.UTF-8"; }
-    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN,zh_CN.GB18030,zh.UTF-8"; }
+    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN.GB18030,zh.UTF-8"; }
     elsif ( $sollanguage eq "zh_TW" ) { $sollanguage = "zh_TW,zh_TW.BIG5,zh_TW.UTF-8,zh_HK.BIG5HK,zh_HK.UTF-8"; }
 
     return $sollanguage;
@@ -2153,7 +2161,7 @@ sub prepare_packages
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
         if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref, $packagename); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
-        if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
+        if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" ) && ( $onepackage->{'language'} ne "en-US" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
@@ -2402,39 +2410,42 @@ sub create_packages_without_epm
 
         # compressing packages
 
-        my $faspac = "faspac-so.sh";
-
-        my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
-        if ($$compressorref ne "")
+        if ( ! $installer::globals::solarisdontcompress )
         {
-            # Saving original pkginfo, to set time stamp later
-            my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
-            my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
-            $systemcall = "cp -p $pkginfoorig $pkginfotmp";
-             make_systemcall($systemcall);
+            my $faspac = "faspac-so.sh";
 
-            $faspac = $$compressorref;
-            $infoline = "Found compressor: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
+            if ($$compressorref ne "")
+            {
+                # Saving original pkginfo, to set time stamp later
+                my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
+                my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
+                $systemcall = "cp -p $pkginfoorig $pkginfotmp";
+                 make_systemcall($systemcall);
 
-            installer::logger::print_message( "... $faspac ...\n" );
-            installer::logger::include_timestamp_into_logfile("Starting $faspac");
+                $faspac = $$compressorref;
+                $infoline = "Found compressor: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-             $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
-             make_systemcall($systemcall);
+                installer::logger::print_message( "... $faspac ...\n" );
+                installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-             # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
-             # updated the size and checksum, but not the time stamp.
-             $systemcall = "touch -r $pkginfotmp $pkginfoorig";
-             make_systemcall($systemcall);
-            if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+                 $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
+                 make_systemcall($systemcall);
 
-            installer::logger::include_timestamp_into_logfile("End of $faspac");
-        }
-        else
-        {
-            $infoline = "Not found: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+                 # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
+                 # updated the size and checksum, but not the time stamp.
+                 $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+                 make_systemcall($systemcall);
+                if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+
+                installer::logger::include_timestamp_into_logfile("End of $faspac");
+            }
+            else
+            {
+                $infoline = "Not found: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
         }
 
         # Setting unix rights to "775" for all created directories inside the package
@@ -3103,7 +3114,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {

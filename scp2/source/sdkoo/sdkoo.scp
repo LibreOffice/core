@@ -236,3 +236,13 @@ Unixlink gid_Unixlink_Cppuhelper_Link_Sdk
     Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
 End
 #endif
+
+#if (!defined(WNT) && !defined( MACOSX) )
+Unixlink gid_Unixlink_Purpenvhelper_Link_Sdk
+    BIN_FILE_BODY;
+    Styles = ();
+    Name = SCP2_URE_DL_UNO_COMID_NORMAL("purpenvhelper");
+    Dir = gid_Dir_Lib_Sdk;
+    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
+End
+#endif

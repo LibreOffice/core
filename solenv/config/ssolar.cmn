@@ -25,6 +25,7 @@ common
         rsc_once
         wrapper_override_cc_wrapper
         *zipdep
+		ALT_L10N_MODULE
         AWK
 		BIG_SVX
 		BIG_TOOLS
@@ -38,6 +39,7 @@ common
 		BUILD_OS_MINOR
 		BUILD_OS_REV
 		BUILD_OS_MAJOR
+		BUILD_PIXMAN
 		BUILD_TOOLS
         BUILD_TYPE
 		BUILD_SPECIAL
@@ -84,6 +86,7 @@ common
         ENABLE_KDE
         ENABLE_MEDIAWIKI
 		ENABLE_MINIMIZER
+		ENABLE_NSS_MODULE
         ENABLE_PASF
         ENABLE_RANDR
         ENABLE_REPORTBUILDER
@@ -114,7 +117,6 @@ common
 		GCRINC
 		GCRLIB
 		GCRPATH
-		GLIBC
 		GNUCOPY
 		GXX_INCLUDE_PATH
 		HBTOOLKIT
@@ -268,7 +270,6 @@ common
         NO_HIDS
         PAM_LINK
         PAM
-        PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN
         URE_BOOTSTRAP

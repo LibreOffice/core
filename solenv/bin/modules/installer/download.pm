@@ -576,6 +576,7 @@ sub set_download_filename
     my $type = get_installation_type();
     my $language = get_downloadname_language($languagestringref);
     my $addon = get_downloadname_addon();
+
     if ( $installer::globals::product =~ /_Dev\s*$/ )
     {
         my $localminor = "";
@@ -658,6 +659,10 @@ sub resolve_variables_in_downloadname
     my $productversion = "";
     if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
     $downloadname =~ s/\{productversion\}/$productversion/;
+
+    my $ppackageversion = "";
+    if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
+    $downloadname =~ s/\{packageversion\}/$packageversion/;
 
     my $extension = "";
     if ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) { $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
@@ -1526,7 +1531,7 @@ sub get_path_to_nsis_sdk
         # do we have nsis already in path ?
         @paths = split(/:/, $ENV{'PATH'});
         foreach $paths (@paths) {
-            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $paths =~ s/[\/\\]+$//; # remove trailing slashes;
             $nsispath = $paths . "/nsis";
 
             if ( -x $nsispath ) {
@@ -1543,11 +1548,11 @@ sub get_path_to_nsis_sdk
         $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
     }
 
-    if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
-        # We need a POSIX path for W32-4nt-cygwin-perl
-        $nsispath =~ s/\\/\\\\/g;
-        chomp( $nsispath = qx{cygpath -u "$nsispath"} );
-    }
+#   if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
+#       # We need a POSIX path for W32-4nt-cygwin-perl
+#       $nsispath =~ s/\\/\\\\/g;
+#       chomp( $nsispath = qx{cygpath -u "$nsispath"} );
+#   }
 
     if ( $nsispath eq "" )
     {

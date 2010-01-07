@@ -28,10 +28,13 @@ REM * <http://www.openoffice.org/license.html>
 REM * for a copy of the LGPLv3 License.
 REM ************************************************************************/
 
-echo off
+rem echo on
+
+call reportErrorCheckAPI.btm 0 running
 
 iff "%PROEXT" != ".pro" THEN
     echo ERROR: cwscheckapi works only on pro-versions >&2
+    call reportErrorCheckAPI.btm 2
     quit 1
 endiff
 
@@ -42,6 +45,7 @@ SET ATTACH=true
 SET MODULES=auto
 SET OOO=false
 SET KEEPOFFICE=false
+SET USE_INSTALLED_OFFICE=false
 
 for %opt in (%&%) DO (
     if "%opt%" == "-d" (SET DEBUG_I=true ^ SET DEBUG_T=true ^ shift)
@@ -51,6 +55,7 @@ for %opt in (%&%) DO (
     if "%opt%" == "-m" (SET MODULES=%2  ^ shift ^ shift)
     if "%opt%" == "-t" (SET DEBUG_T=true ^ shift)
     if "%opt%" == "-s" (SET INSTALL=false ^ shift)
+    if "%opt%" == "-u" (SET USE_INSTALLED_OFFICE=true ^ SET INSTALL=false ^ SET KEEPOFFICE=true ^ shift)
     if "%opt%" == "-a" (SET attach=false ^ shift)
     if "%opt%" == "-h" goto usage
     if "%opt%" == "/h" goto usage
@@ -81,25 +86,33 @@ iff "%INSTALL%" == "true" THEN
     
     IFF %? NE 0 THEN
         echo ERROR: coud not install office  >&2
+        call reportErrorCheckAPI.btm 2
         quit %?
     ENDIFF
 ENDIFF
 
 setlocal
 
-SET CWD=%_CWD%
-cdd %LOCALINSTALLDIR%
-SET ffindtxt="ffind.txt"
-ffind /s /f /m soffice.exe > %ffindtxt
-SET FindFile=%@FILEOPEN[%ffindtxt%, READ]
-SET OfficeBin=%@FILEREAD[%FindFile]
-set dummy=%@FILECLOSE[%FindFile]
-DEL /q %ffindtxt
-cdd %CWD
+IFF %USE_INSTALLED_OFFICE% == "false" then
 
-IFF NOT EXIST %OFFICEBIN% THEN
-    echo could not find 'soffice.exe' in subfolders of %OFFICEBIN%  >&2
-    quit 1
+    SET CWD=%_CWD%
+    cdd %LOCALINSTALLDIR%
+    SET ffindtxt="ffind.txt"
+    ffind /s /f /m soffice.exe > %ffindtxt
+    SET FindFile=%@FILEOPEN[%ffindtxt%, READ]
+    SET OfficeBin=%@FILEREAD[%FindFile]
+    set dummy=%@FILECLOSE[%FindFile]
+    DEL /q %ffindtxt
+    cdd %CWD
+
+    IFF NOT EXIST %OFFICEBIN% THEN
+        echo could not find 'soffice.exe' in subfolders of %OFFICEBIN%  >&2
+        call reportErrorCheckAPI.btm 2
+        quit 1
+    ENDIFF
+ELSE
+    SET OFFICEBIN=soffice.exe
+    echo "Use already installed office."
 ENDIFF
 
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
@@ -111,6 +124,7 @@ ELSEIFF "%JAVA_HOME%" != "" THEN
     SET JAVABIN=%JAVA_HOME%\bin\java
 ELSE
    echo please set environment variable JAVA_HOME  >&2
+   call reportErrorCheckAPI.btm 2
    quit 1
 ENDIFF
 
@@ -125,6 +139,7 @@ ELSE
     echo ######  >&2
     echo ERROR: could not determine your CWS or MWS version  >&2
     echo ######  >&2
+    call reportErrorCheckAPI.btm 2
     quit 1
 ENDIFF
 
@@ -148,6 +163,7 @@ set COMMANDO=%JAVABIN% -Xmx120m -cp %MYCLASSPATH% org.openoffice.Runner %PARAM% 
 echo %COMMANDO
 SET LOGFILE=%CWSCHECKAPIPATH%\cwscheckapi.log
 %COMMANDO |& tee %LOGFILE%
+set EXITVAL=%?
 
 IFF %KEEPOFFICE% == "false" THEN
     echo remove office instrallation in %LOCALINSTALLDIR%...
@@ -156,6 +172,12 @@ fi
 
 echo .
 echo A logfile could be found here: %LOGFILE%
+
+IFF %EXITVAL% NE 0 THEN
+    call reportErrorCheckAPI.btm 1
+ELSE
+    call reportErrorCheckAPI.btm 0 ok
+ENDIFF
 
 endlocal
 

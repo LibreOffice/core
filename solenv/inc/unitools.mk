@@ -8,7 +8,7 @@
 #
 # $RCSfile: unitools.mk,v $
 #
-# $Revision: 1.59 $
+# $Revision: 1.53.30.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,21 +30,27 @@
 #*************************************************************************
 
 # Common tools - move this to the end / consolidate
-TRANSEX*=$(AUGMENT_LIBRARY_PATH) transex3
-ULFEX*=$(AUGMENT_LIBRARY_PATH) ulfex
-XMLEX*=$(AUGMENT_LIBRARY_PATH) xmlex
-XRMEX*=$(AUGMENT_LIBRARY_PATH) xrmex
-CFGEX*=$(AUGMENT_LIBRARY_PATH) cfgex
+TRANSEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/transex3
+ULFEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/ulfex
+XMLEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xmlex
+XRMEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xrmex
+CFGEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cfgex
+AUTODOC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/autodoc
+LOCALIZE_SL*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/localize_sl
+GSICHECK*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/gsicheck
+
+.IF "$(SYSTEM_LIBXSLT)"!="YES"
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xsltproc
+.ELSE			# "$(SYSTEM_LIBXSLT)"!="YES"
 XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
+.ENDIF			# "$(SYSTEM_LIBXSLT)"!="YES"
 
-ULFCONV*=$(AUGMENT_LIBRARY_PATH) ulfconv
+ULFCONV*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/ulfconv
 
-MAKEDEPEND*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/makedepend
+MAKEDEPEND*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/makedepend
 
 SCP_CHECK_TOOL:=checkscp$E
 
-# Not 4nt means $(GUI)==UNX or $(GUI)==WNT with tcsh
-.IF "$(USE_SHELL)"!="4nt"
 # iz32110: Calling a cygwin application from a non-cygwin shell requires
 # backslashes to be escaped by another backslash: EES .. extra escape slash
 EES:=
@@ -58,14 +64,17 @@ USQ:="
 
 NULLDEV:=/dev/null
 
+
 # iz29609 helpmacro to check if file exists
 .IF "$(USE_SHELL)"=="bash"
-IFEXIST:=if test -e
-THEN:= ; then
+IFEXIST:=if [ -f 
+IFNOTEXIST:= if ! test -f
+THEN:= ] ; then
 FI:= ; fi
 PIPEERROR=2>&1 |
 .ELSE
 IFEXIST:=if ( -e
+IFNOTEXIST:=if ( ! -e
 THEN:= )
 FI:=
 PIPEERROR=|&
@@ -78,49 +87,23 @@ CHECKZIPRESULT:=|| ret=$$?; if [[ "$$ret" != "12" && "$$ret" != "1" ]] ; then ex
 CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
 .ENDIF
 
-.ELSE # "$(USE_SHELL)"!="4nt"
-# (\\ at line end is \)
-EES:=\\
-
-EMQ:=
-USQ:=
-
-NULLDEV:=nul
-
-# iz29609 helpmacro to check if file exists 4nt style
-IFEXIST:=+if exist
-THEN:=
-FI:=
-PIPEERROR=|&
-
-# iz31658
-CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
-
-# try the same for 4nt "copy /u"
-CHECKCOPYURESULT:=^ iff errorlevel == 2 then ( echo Nothing to update for copy ^ set somedummyvar=%somedummyvar)
-
-# tell makedepend to write windows native format
-#MKDEPFLAGS=-n
-
-.ENDIF # "$(USE_SHELL)"!="4nt"
-
 # Platform specific
 .IF "$(GUI)"=="WNT"
 AWK*=awk
 SORT*=sort
 SED*=sed
 GNUPATCH*=patch
-.IF "$(USE_SHELL)"!="4nt"
 # change drive and directory
 CDD=cd
 # expect cygwin tools to exist
 COPY*=cp
 COPYRECURSE=-r
+DEREFERENCE=-L
 COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
-FLIPCMD*=slfl.pl
+FLIPCMD*=$(PERL) $(SOLARENV)/bin/slfl.pl
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
@@ -130,33 +113,6 @@ PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
-.ELSE			# "$(USE_SHELL)"!="4nt"
-CDD=+cdd
-COPY*=+copy
-COPYRECURSE=/s
-COPYUPDATE=/u
-DELAY*=+delay
-ECHON*=+echos
-ECHONL=+echo.
-FIND*=$(BUILD_TOOLS)$/find.exe
-.IF "$(use_cygcp)"!=""
-GNUCOPY=$(BUILD_TOOLS)$/gnucp.exe
-.ENDIF			# "$(use_cygcp)"!=""
-GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
-GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
-GREP*=$(BUILD_TOOLS)$/grep.exe
-LS*=$(BUILD_TOOLS)$/ls.exe
-MKDIRHIER=+mkdir /sn
-#wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
-PERL*:=+call perl5.btm
-.EXPORT : PERL
-RENAME*=+ren
-RMDIR:=$(PERL) $(SOLARENV)$/bin$/rmdir.pl
-TOUCH*=$(PERL) $(SOLARENV)$/bin$/touch.pl
-TYPE*=+type
-XARGS*=tr -d "\015" | xargs
-4nt_force_shell:=+
-.ENDIF  "$(USE_SHELL)"!="4nt"
 DUMPBIN*=dumpbin
 
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
@@ -167,16 +123,22 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
+.IF "$(OS)"=="MACOSX"
+COPYRECURSE=-R
+.ELSE #"$(OS)"=="MACOSX"
 COPYRECURSE=-r
+.ENDIF
 .IF "$(OS)"=="SOLARIS"
 AWK*=nawk
 GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
-GNUTAR*=gtar
+GNUTAR*=/usr/sfw/bin/gtar
+DEREFERENCE=
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 GNUCOPY*=cp
 GNUPATCH*=patch
+DEREFERENCE=-L
 .ENDIF			# "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
 GNUMAKE*=make
@@ -216,6 +178,7 @@ FIND=find
 LS=ls
 DUMPBIN=echo
 4nt_force_shell:=+
+
 .ENDIF			# "$(GUI)"=="UNX"
 
 # (Global) Set if not set before
@@ -228,10 +191,10 @@ GNUTAR*:=tar
 TAR*:=tar
 
 RM+=$(RMFLAGS)
-ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) adjustvisibility
-CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
-EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
-GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl
+ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/adjustvisibility
+CONVERT*:=$(PERL) $(SOLARENV)/bin/leconvert.pl
+EXECTEST := $(PERL) -w $(SOLARENV)/bin/exectest.pl
+GCCINSTLIB:=$(PERL) -w $(SOLARENV)/bin/gccinstlib.pl
 
 # The dmake $(PWD) variable and the tcsh pwd command both apparantly produce
 # paths with symlinks resolved, while the bash pwd command by default produces

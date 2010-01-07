@@ -38,7 +38,7 @@ JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
 #not needed at the moment
-#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)

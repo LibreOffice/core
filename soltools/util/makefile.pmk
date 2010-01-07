@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,23 @@
 #*************************************************************************
 
 # find 'makedepend' in own output tree
-MAKEDEPEND=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/makedepend
+MAKEDEPEND=$(AUGMENT_LIBRARY_PATH) $(BIN)$/makedepend
 
 # find 'adjustvisibility' in own output tree
-ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/adjustvisibility
+ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(BIN)$/adjustvisibility
+
+# avoid STLPort
+NO_DEFAULT_STL=TRUE
+SOLARINC!:=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(SOLARINC))
+
+.IF "$(OS)"=="SOLARIS"
+# hack due to #i53089#
+.IF "$(COMPATH:+"x")" != "$(COMPATH:+"x":s/binx//)"
+HELP_COMPATH:=$(subst,/binx, $(COMPATH:+"x"))
+.ELSE			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
+HELP_COMPATH:=$(COMPATH)
+.ENDIF			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
+#SOLARINC+=-I$(HELP_COMPATH)/prod/include/CC/stlport4
+#SOLARLIB+=-L$(HELP_COMPATH)/prod/lib/stlport4
+SOLARINC+=-I$(HELP_COMPATH)/prod/include/CC/Cstd
+.ENDIF
