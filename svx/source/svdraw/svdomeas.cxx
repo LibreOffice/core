@@ -47,7 +47,7 @@
 #include "svdstr.hrc"    // Objektname
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedit.hxx>
@@ -55,11 +55,11 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnedcit.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editobj.hxx>
-#include <svx/svdfield.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/svdfield.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>

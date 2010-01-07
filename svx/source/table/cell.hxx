@@ -40,7 +40,7 @@
 #include <svl/style.hxx>
 #include "svx/sdtaitm.hxx"
 #include "tablemodel.hxx"
-#include "svx/unotext.hxx"
+#include "editeng/unotext.hxx"
 #include "svx/svdtext.hxx"
 
 // -----------------------------------------------------------------------------

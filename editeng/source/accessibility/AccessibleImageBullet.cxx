@@ -44,8 +44,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <editeng/unolingu.hxx>
-#include "AccessibleEditableTextPara.hxx"
-#include "AccessibleImageBullet.hxx"
+#include "editeng/AccessibleEditableTextPara.hxx"
+#include "editeng/AccessibleImageBullet.hxx"
 #include <editeng/eerdll.hxx>
 
 #include <editeng/editdata.hxx>

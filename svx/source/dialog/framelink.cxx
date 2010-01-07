@@ -34,7 +34,7 @@
 
 #include <math.h>
 #include <vcl/outdev.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/borderline.hxx>
 
 // ----------------------------------------------------------------------------
 

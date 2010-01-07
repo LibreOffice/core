@@ -49,7 +49,7 @@
 #include <svx/dialogs.hrc>
 #include "fontwork.hrc"
 #include <svx/fontwork.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 

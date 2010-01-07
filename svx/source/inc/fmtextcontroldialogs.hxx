@@ -33,7 +33,7 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tabdlg.hxx>
-#include <flstitem.hxx>
+#include <editeng/flstitem.hxx>
 
 //........................................................................
 namespace svx

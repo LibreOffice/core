@@ -34,7 +34,7 @@
 
 #include <sal/types.h>
 #include <svx/xenum.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdtaitm.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

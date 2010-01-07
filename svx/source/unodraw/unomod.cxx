@@ -41,10 +41,11 @@
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 #include <unofill.hxx>
-#include <unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
@@ -57,7 +58,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <svx/unomod.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdobj.hxx>
@@ -591,7 +592,7 @@ OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -751,7 +752,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
-#include <unonrule.hxx>
+#include <editeng/unonrule.hxx>
 com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
     SvxNumRule* pDefaultRule = NULL;

@@ -42,7 +42,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
 

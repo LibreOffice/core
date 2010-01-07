@@ -33,7 +33,7 @@
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 
 
 #endif  // _SVDITEXT_HXX

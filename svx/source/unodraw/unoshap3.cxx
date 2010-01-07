@@ -39,13 +39,14 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <svx/svdpool.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
 #include "globl3d.hxx"
 #include <svx/cube3d.hxx>
@@ -494,7 +495,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
     return aSeq;
 }
 
@@ -624,7 +625,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DCube");
     return aSeq;
 }
@@ -740,7 +741,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DSphere");
     return aSeq;
 }
@@ -948,7 +949,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DLathe");
     return aSeq;
 }
@@ -1059,7 +1060,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DExtrude");
     return aSeq;
 }
@@ -1204,7 +1205,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
     throw(uno::RuntimeException)
 {
     Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
                             "com.sun.star.drawing.Shape3DPolygon");
     return aSeq;
 }

@@ -31,7 +31,7 @@
 
 PRJ=..$/..
 
-PRJNAME=svx
+PRJNAME=editeng
 TARGET=outliner
 AUTOSEG=true
 ENABLE_EXCEPTIONS=TRUE

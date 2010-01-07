@@ -35,12 +35,8 @@
 
 #include <limits.h>
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
@@ -49,14 +45,14 @@
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-
+#include <svl/intitem.hxx>
 #define _SVX_PSZCTRL_CXX
 
 #include "pszctrl.hxx"
 
 #define PAINT_OFFSET    5
 
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include "stbctrls.h"

@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <vcl/window.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "svx/svxdllapi.h"
 
 // enum ------------------------------------------------------------------

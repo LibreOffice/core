@@ -61,8 +61,8 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 //#include <svx/xtable.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

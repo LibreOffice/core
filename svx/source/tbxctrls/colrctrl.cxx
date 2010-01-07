@@ -44,7 +44,7 @@
 
 #include <svx/svdview.hxx>
 #include "drawitem.hxx"
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>

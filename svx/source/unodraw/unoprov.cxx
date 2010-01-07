@@ -49,9 +49,9 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
 #include "unoapi.hxx"
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include "globl3d.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/svdpool.hxx>

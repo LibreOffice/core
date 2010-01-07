@@ -53,6 +53,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
@@ -72,7 +73,7 @@
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 

@@ -31,7 +31,7 @@
 
 PRJ=..$/..
 
-PRJNAME=svx
+PRJNAME=editeng
 TARGET=uno
 ENABLE_EXCEPTIONS=TRUE
 

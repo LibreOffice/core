@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "forbiddencharacterstable.hxx"
+#include "editeng/forbiddencharacterstable.hxx"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdetc.hxx>
@@ -43,15 +43,15 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <tools/config.hxx>
 #include <unotools/cacheoptions.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
-#include "fontitem.hxx"
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
+#include "editeng/fontitem.hxx"
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>

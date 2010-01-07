@@ -58,7 +58,7 @@
 #include "fileobj.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "unolingu.hxx"
+#include "editeng/unolingu.hxx"
 
 class SvxInternalLink : public sfx2::SvLinkSource
 {

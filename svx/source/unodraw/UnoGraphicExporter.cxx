@@ -65,11 +65,11 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include "xoutbmp.hxx"
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include "unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -77,9 +77,9 @@
 #include <svx/fmmodel.hxx>
 #include <svx/unopage.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 
 #include "boost/scoped_ptr.hpp"
 
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::task;
 #include <svx/sdr/contact/viewcontact.hxx>
 
 // #i102251#
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1013,7 +1013,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if( NULL == mpUnoPage )
         return sal_False;
 
-    GraphicFilter*              pFilter = GetGrfFilter();
+    GraphicFilter*              pFilter = GraphicFilter::GetGraphicFilter();
 
     if( NULL == pFilter || NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
         return sal_False;
@@ -1233,7 +1233,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 {
     const String aMimeTypeName( MimeTypeName );
 
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
@@ -1249,7 +1249,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException)
 {
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     sal_uInt16 nFound = 0;

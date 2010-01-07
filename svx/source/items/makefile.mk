@@ -50,7 +50,6 @@ LIBTARGET=NO
 SRS1NAME=svxitems
 SRC1FILES =  \
         svxerr.src		\
-        page.src \
         svxitems.src
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib

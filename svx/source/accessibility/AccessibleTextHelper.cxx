@@ -70,18 +70,18 @@
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshape.hxx>
-#include "unolingu.hxx"
-#include <svx/unotext.hxx>
+#include "editeng/unolingu.hxx"
+#include <editeng/unotext.hxx>
 
-#include "unoedhlp.hxx"
-#include "unopracc.hxx"
-#include "AccessibleParaManager.hxx"
-#include "AccessibleEditableTextPara.hxx"
+#include "editeng/unoedhlp.hxx"
+#include "editeng/unopracc.hxx"
+#include "editeng/AccessibleParaManager.hxx"
+#include "editeng/AccessibleEditableTextPara.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

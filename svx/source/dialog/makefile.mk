@@ -60,7 +60,6 @@ SRC1FILES =  \
         imapdlg.src \
         langbox.src \
         language.src \
-        lingu.src \
         passwd.src \
         prtqry.src \
         rubydialog.src\
@@ -81,11 +80,9 @@ LIB1OBJFILES= \
         $(SLO)$/dialmgr.obj\
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
-        $(SLO)$/hangulhanja.obj \
         $(SLO)$/langbox.obj \
         $(SLO)$/opengrf.obj \
         $(SLO)$/simptabl.obj \
-        $(SLO)$/splwrap.obj \
         $(SLO)$/svxdlg.obj \
         $(SLO)$/stddlg.obj \
 
@@ -131,7 +128,6 @@ LIB2OBJFILES= \
         $(SLO)$/srchdlg.obj \
         $(SLO)$/strarray.obj \
         $(SLO)$/svxbmpnumvalueset.obj\
-        $(SLO)$/svxbox.obj \
         $(SLO)$/svxgrahicitem.obj \
         $(SLO)$/svxruler.obj \
         $(SLO)$/swframeexample.obj \

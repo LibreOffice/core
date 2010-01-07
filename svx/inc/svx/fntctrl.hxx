@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <vcl/window.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include "svx/svxdllapi.h"
 
 #ifndef _RTL_USTRING_HXX_

@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: AccessibleImageBullet.hxx,v $
+ * $RCSfile: editeng/AccessibleImageBullet.hxx,v $
  * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
@@ -44,7 +44,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include "AccessibleParaManager.hxx"
+#include "editeng/AccessibleParaManager.hxx"
 #include <editeng/unoedsrc.hxx>
 
 namespace accessibility

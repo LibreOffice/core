@@ -46,7 +46,7 @@
 #include <svx/xdef.hxx>
 
 #include "unoapi.hxx"
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;

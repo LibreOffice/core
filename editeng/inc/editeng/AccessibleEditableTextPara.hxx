@@ -49,9 +49,10 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "AccessibleParaManager.hxx"
-#include "AccessibleImageBullet.hxx"
-#include "unoedprx.hxx"
+#include "editeng/AccessibleParaManager.hxx"
+#include "editeng/AccessibleImageBullet.hxx"
+#include "editeng/unoedprx.hxx"
+#include "editeng/editengdllapi.h"
 
 namespace accessibility
 {
@@ -66,7 +67,7 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class AccessibleEditableTextPara : public ::comphelper::OBaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
+    class EDITENG_DLLPUBLIC AccessibleEditableTextPara : public ::comphelper::OBaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
     {
 
     protected:

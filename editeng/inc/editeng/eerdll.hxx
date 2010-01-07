@@ -35,8 +35,9 @@ class GlobalEditData;
 
 #include <tools/resid.hxx>
 #include <tools/shl.hxx>
+#include <editeng/editengdllapi.h>
 
-class EditResId: public ResId
+class EDITENG_DLLPUBLIC EditResId: public ResId
 {
 public:
     EditResId( USHORT nId );

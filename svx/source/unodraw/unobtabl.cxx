@@ -40,10 +40,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
 #include "unoapi.hxx"
-#include "svx/impgrf.hxx"
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include "unofill.hxx"
+#include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

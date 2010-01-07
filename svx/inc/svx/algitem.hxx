@@ -35,7 +35,7 @@
 #include <svx/svxids.hrc>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "svx/svxdllapi.h"
 
 class SvStream;

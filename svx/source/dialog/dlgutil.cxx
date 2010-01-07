@@ -36,6 +36,7 @@
 #include "dlgutil.hxx"
 #include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/intitem.hxx>
 
 // -----------------------------------------------------------------------
 

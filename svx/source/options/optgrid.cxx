@@ -35,6 +35,7 @@
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svl/intitem.hxx>
 
 #define _SVX_OPTGRID_CXX
 

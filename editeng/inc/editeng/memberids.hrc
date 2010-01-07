@@ -30,6 +30,8 @@
 #ifndef _EDT_UNOMID_HXX
 #define _EDT_UNOMID_HXX
 
+#include <svl/memberid.hrc>
+
 #define MID_LOCATION            0x3c
 #define MID_TRANSPARENT         0x4b
 #define MID_BG_COLOR            0x22
@@ -56,11 +58,6 @@
 #define MID_HYPHEN_MIN_LEAD     1
 #define MID_HYPHEN_MIN_TRAIL    2
 #define MID_HYPHEN_MAX_HYPHENS  3
-
-// SvxSizeItem
-#define MID_SIZE_SIZE       0
-#define MID_SIZE_WIDTH      1
-#define MID_SIZE_HEIGHT     2
 
 // SvxBoxInfoItem
 #define MID_HORIZONTAL          1

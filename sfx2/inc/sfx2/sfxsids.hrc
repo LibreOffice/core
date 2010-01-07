@@ -34,7 +34,7 @@
 
 #include <svl/solar.hrc>
 #include <sfx2/cntids.hrc>
-#include <editeng/editids.hrc>
+#include <svl/memberid.hrc>
 
 // Please be careful:
 // Changing just one part here doesn't add new

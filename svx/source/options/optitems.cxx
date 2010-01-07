@@ -38,6 +38,8 @@
 #include "optitems.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/svxitems.hrc>
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
@@ -169,10 +171,10 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText += String::CreateFromInt32( nMinLead );
-            rText += String( ResId( RID_SVXITEMS_HYPHEN_MINLEAD, DIALOG_MGR() ) );
+            rText += String( EditResId( RID_SVXITEMS_HYPHEN_MINLEAD ) );
             rText += ',';
             rText += String::CreateFromInt32( nMinTrail );
-            rText += String( ResId( RID_SVXITEMS_HYPHEN_MINTRAIL, DIALOG_MGR() ) );
+            rText += String( EditResId( RID_SVXITEMS_HYPHEN_MINTRAIL ) );
             return ePres;
         }
         default:

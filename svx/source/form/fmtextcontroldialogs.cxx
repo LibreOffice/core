@@ -42,7 +42,7 @@
 #ifndef _SVX_PARAGRPH_HXX
 //#include "paragrph.hxx"
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _SVX_TABSTPGE_HXX
 //#include "tabstpge.hxx"
 #endif

@@ -35,7 +35,7 @@
 #include <svl/lstner.hxx>
 
 #include <memory>
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 
 class SdrObject;
 class SdrView;

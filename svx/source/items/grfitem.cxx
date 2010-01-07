@@ -34,7 +34,7 @@
 
 #include <tools/stream.hxx>
 #include <svx/grfcrop.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 using namespace ::com::sun::star;

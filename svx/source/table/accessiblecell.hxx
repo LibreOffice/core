@@ -38,10 +38,11 @@
 
 #include <rtl/ref.hxx>
 
-#include <svx/AccessibleContextBase.hxx>
-#include <svx/AccessibleComponentBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/AccessibleTextHelper.hxx>
+#include <svx/AccessibleShapeTreeInfo.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 

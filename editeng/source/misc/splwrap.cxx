@@ -41,10 +41,7 @@
 #ifndef __RSC
 #include <tools/errinf.hxx>
 #endif
-//#include <svxerr.hxx>
-//#include <dlgutil.hxx>
 #include <editeng/unolingu.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -56,6 +53,7 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/editids.hrc>
+#include <editeng/editerr.hxx>
 
 #define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
 

@@ -58,7 +58,7 @@
 #include <svx/svdpagv.hxx>
 #include "svdviter.hxx"
 #include <svx/svdview.hxx>
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbitmap.hxx>
@@ -67,7 +67,7 @@
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
 #include <svx/sdgcpitm.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/graphicproperties.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1158,7 +1158,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         mbIsPreview = sal_True;
                     }
 
-                    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream,
+                    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream,
                                                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
                     {
                         const String aUserData( pGraphic->GetUserData() );

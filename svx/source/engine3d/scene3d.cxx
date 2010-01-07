@@ -45,7 +45,7 @@
 #include <svx/e3dundo.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>

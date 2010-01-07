@@ -34,7 +34,7 @@
 #include <svl/eitem.hxx>
 
 
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/viewpt3d.hxx>
 #include <svx/svddef.hxx>

@@ -41,17 +41,17 @@
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
 #endif
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <gallery.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
-#include <flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <dlgutil.hxx>
 #ifndef _XTABLE_HXX //autogen
 
@@ -62,7 +62,7 @@
 #include <htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

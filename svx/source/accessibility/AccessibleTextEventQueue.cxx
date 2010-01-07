@@ -32,16 +32,16 @@
 #include "precompiled_svx.hxx"
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/unoshape.hxx>
-#include "unolingu.hxx"
-#include <svx/unotext.hxx>
+#include "editeng/unolingu.hxx"
+#include <editeng/unotext.hxx>
 
-#include "unoedhlp.hxx"
-#include "unopracc.hxx"
+#include "editeng/unoedhlp.hxx"
+#include "editeng/unopracc.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 
 namespace accessibility
 {

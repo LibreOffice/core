@@ -35,7 +35,7 @@
 #include "fmobj.hxx"
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdovirt.hxx>
 
 /** === begin UNO includes === **/

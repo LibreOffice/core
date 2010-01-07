@@ -276,8 +276,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
     new SfxErrorHandler(
-        (RID_SJ_START +1), ERRCODE_AREA_JAVA, ERRCODE_AREA_JAVA_END);
-    new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
 
     // diverse Pointer

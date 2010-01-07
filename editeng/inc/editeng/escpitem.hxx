@@ -33,8 +33,8 @@
 // include ---------------------------------------------------------------
 
 #include <svl/eitem.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/svxdllapi.h>
+#include <editeng/svxenum.hxx>
+#include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;
 namespace rtl
@@ -55,7 +55,7 @@ namespace rtl
     Dieses Item beschreibt die Schrift-Position.
 */
 
-class SVX_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
 {
     short nEsc;
     BYTE  nProp;

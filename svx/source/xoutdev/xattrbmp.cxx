@@ -38,13 +38,14 @@
 #include <vcl/bitmapex.hxx>
 #include <toolkit/unohlp.hxx>
 #include <svl/style.hxx>
+#include <editeng/memberids.hrc>
 
 #include <svx/dialogs.hrc>
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include "unoapi.hxx"
 #include <svx/svdmodel.hxx>

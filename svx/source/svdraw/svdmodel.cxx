@@ -53,7 +53,7 @@
 #include <svx/xlnstit.hxx>
 
 #include "svditext.hxx"
-#include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
+#include <editeng/editeng.hxx>   // Fuer EditEngine::CreatePool()
 
 #include <svx/xtable.hxx>
 
@@ -74,15 +74,15 @@
 
 
 #include "asiancfg.hxx"
-#include "fontitem.hxx"
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
+#include "editeng/fontitem.hxx"
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
 #include <tools/bigint.hxx>
-#include <svx/numitem.hxx>
-#include <bulitem.hxx>
-#include <svx/outlobj.hxx>
-#include "forbiddencharacterstable.hxx"
+#include <editeng/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/outlobj.hxx>
+#include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -93,7 +93,7 @@
 // #95114#
 #include <vcl/svapp.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 
 using namespace ::com::sun::star;

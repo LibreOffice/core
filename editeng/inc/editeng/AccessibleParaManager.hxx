@@ -40,6 +40,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include "editeng/editengdllapi.h"
 
 class SvxEditSourceAdapter;
 
@@ -144,7 +145,7 @@ namespace accessibility
         To facilitate automatic deletion of paragraphs no longer used,
         this class uses the WeakCppRef helper to hold the objects weakly.
      */
-    class AccessibleParaManager
+    class EDITENG_DLLPUBLIC AccessibleParaManager
     {
     public:
         typedef WeakCppRef < ::com::sun::star::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;

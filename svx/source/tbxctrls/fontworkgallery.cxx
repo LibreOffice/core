@@ -45,8 +45,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include "toolbarmenu.hxx"
 
 #include "fontworkgallery.hxx"

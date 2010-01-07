@@ -114,33 +114,8 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
     pCombiList->Insert(pNew);
 }
 
-/** this function checks if a SFX_METRIC_ITEM realy needs to be converted.
-    This check is for items that store either metric values if theire positiv
-    or percentage if theire negativ.
-*/
-#if 0
-sal_Bool SvxUnoCheckForConversion( const SfxItemSet&, sal_Int32 nWID, const uno::Any& rVal )
-{
-    sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
-
-    switch( nWID )
-    {
-    case XATTR_FILLBMP_SIZEX:
-    case XATTR_FILLBMP_SIZEY:
-        {
-            sal_Int32 nValue = 0;
-            if( rVal >>= nValue )
-                bConvert = nValue > 0;
-            break;
-        }
-    }
-
-    // the default is to always
-    return bConvert;
-}
-#endif
 //----------------------------------------------------------------------
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bConvert ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent ) const
 {
     uno::Any aVal;
     if(!pMap || !pMap->nWID)
@@ -150,7 +125,6 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     const SfxPoolItem* pItem = 0;
     SfxItemPool* pPool = rSet.GetPool();
 
-    // pMap->nWID != SDRATTR_XMLATTRIBUTES
     rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
 
     if( NULL == pItem && pPool )
@@ -169,19 +143,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     {
         pItem->QueryValue( aVal, nMemberId );
 
-        if( pMap->nMemberId & SFX_METRIC_ITEM )
-        {
-            // check for needed metric translation
-            if ( bConvert )
-//          if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-            {
-//              if( SvxUnoCheckForConversion( rSet, pMap->nWID, aVal ) )
-                    SvxUnoConvertToMM( eMapUnit, aVal );
-            }
-        }
         // convert typeless SfxEnumItem to enum type
-        else if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
-              aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        if ( !(pMap->nMemberId & SFX_METRIC_ITEM) && pMap->pType->getTypeClass() == uno::TypeClass_ENUM && aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
         {
             sal_Int32 nEnum;
             aVal >>= nEnum;
@@ -198,7 +161,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 }
 
 //----------------------------------------------------------------------
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bConvert ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet ) const
 {
     if(!pMap || !pMap->nWID)
         return;
@@ -227,18 +190,6 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         uno::Any aValue( rVal );
 
         const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-
-        if( pMap->nMemberId & SFX_METRIC_ITEM )
-        {
-            // check for needed metric translation
-            if ( bConvert )
-//          if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-            {
-//              if( SvxUnoCheckForConversion( rSet, pMap->nWID, aValue ) )
-                    SvxUnoConvertFromMM( eMapUnit, aValue );
-            }
-        }
-
         pNewItem = pItem->Clone();
 
         BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);

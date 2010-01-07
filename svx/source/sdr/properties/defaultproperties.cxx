@@ -39,7 +39,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

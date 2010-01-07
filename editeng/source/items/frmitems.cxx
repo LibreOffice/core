@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -94,6 +93,7 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.hrc>
+#include <editeng/editerr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1830,7 +1830,7 @@ int SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 // -----------------------------------------------------------------------
-table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConvert)
+table::BorderLine SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConvert)
 {
     table::BorderLine aLine;
     if(pLine)
@@ -1859,10 +1859,10 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         {
             // 4 Borders and 5 distances
             uno::Sequence< uno::Any > aSeq( 9 );
-            aSeq[0] = uno::makeAny( lcl_SvxLineToLine(GetLeft(), bConvert) );
-            aSeq[1] = uno::makeAny( lcl_SvxLineToLine(GetRight(), bConvert) );
-            aSeq[2] = uno::makeAny( lcl_SvxLineToLine(GetBottom(), bConvert) );
-            aSeq[3] = uno::makeAny( lcl_SvxLineToLine(GetTop(), bConvert) );
+            aSeq[0] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetLeft(), bConvert) );
+            aSeq[1] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetRight(), bConvert) );
+            aSeq[2] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetBottom(), bConvert) );
+            aSeq[3] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetTop(), bConvert) );
             aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( GetDistance()) : GetDistance()));
             aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nTopDist ) : nTopDist ));
             aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nBottomDist ) : nBottomDist ));
@@ -1874,22 +1874,22 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         case MID_LEFT_BORDER:
             bSerialize = sal_True;      // intentionally no break!
         case LEFT_BORDER:
-            aRetLine = lcl_SvxLineToLine(GetLeft(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(GetLeft(), bConvert);
             break;
         case MID_RIGHT_BORDER:
             bSerialize = sal_True;      // intentionally no break!
         case RIGHT_BORDER:
-            aRetLine = lcl_SvxLineToLine(GetRight(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
             break;
         case MID_BOTTOM_BORDER:
             bSerialize = sal_True;      // intentionally no break!
         case BOTTOM_BORDER:
-            aRetLine = lcl_SvxLineToLine(GetBottom(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
             break;
         case MID_TOP_BORDER:
             bSerialize = sal_True;      // intentionally no break!
         case TOP_BORDER:
-            aRetLine = lcl_SvxLineToLine(GetTop(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
             break;
         case BORDER_DISTANCE:
             nDist = GetDistance();
@@ -1936,7 +1936,7 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool lcl_LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
     rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
@@ -1967,7 +1967,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 table::BorderLine aBorderLine;
                 if ( aSeq[0] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT );
                 }
                 else
@@ -1975,7 +1975,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 if ( aSeq[1] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT );
                 }
                 else
@@ -1983,7 +1983,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 if ( aSeq[2] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM );
                 }
                 else
@@ -1991,7 +1991,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 if ( aSeq[3] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     SetLine(bSet ? &aLine : 0, BOX_LINE_TOP );
                 }
                 else
@@ -2101,7 +2101,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         else
             return sal_False;
 
-        sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+        sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
         SetLine(bSet ? &aLine : 0, nLine);
     }
 
@@ -2796,8 +2796,8 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         {
             // 2 BorderLines, flags, valid flags and distance
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 5 );
-            aSeq[0] = ::com::sun::star::uno::makeAny( lcl_SvxLineToLine( pHori, bConvert) );
-            aSeq[1] = ::com::sun::star::uno::makeAny( lcl_SvxLineToLine( pVert, bConvert) );
+            aSeq[0] = ::com::sun::star::uno::makeAny( SvxBoxItem::SvxLineToLine( pHori, bConvert) );
+            aSeq[1] = ::com::sun::star::uno::makeAny( SvxBoxItem::SvxLineToLine( pVert, bConvert) );
             if ( IsTable() )
                 nVal |= 0x01;
             if ( IsDist() )
@@ -2814,11 +2814,11 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 
         case MID_HORIZONTAL:
             bSerialize = sal_True;
-            aRetLine = lcl_SvxLineToLine( pHori, bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine( pHori, bConvert);
             break;
         case MID_VERTICAL:
             bSerialize = sal_True;
-            aRetLine = lcl_SvxLineToLine( pVert, bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine( pVert, bConvert);
             break;
         case MID_FLAGS:
             bIntMember = sal_True;
@@ -2885,7 +2885,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 sal_Int32 nVal( 0 );
                 if ( aSeq[0] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     if ( bSet )
                         SetLine( &aLine, BOXINFO_LINE_HORI );
                 }
@@ -2893,7 +2893,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     return sal_False;
                 if ( aSeq[1] >>= aBorderLine )
                 {
-                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
                     if ( bSet )
                         SetLine( &aLine, BOXINFO_LINE_VERT );
                 }
@@ -2977,7 +2977,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 return sal_False;
 
             SvxBorderLine aLine;
-            sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+            sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
             if ( bSet )
                 SetLine( &aLine, nMemberId == MID_HORIZONTAL ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT );
             break;
@@ -3275,7 +3275,7 @@ sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
     nMemId &= ~CONVERT_TWIPS;
     if ( nMemId == 0 )
     {
-        rVal <<= uno::makeAny( lcl_SvxLineToLine(pLine, bConvert) );
+        rVal <<= uno::makeAny( SvxBoxItem::SvxLineToLine(pLine, bConvert) );
         return sal_True;
     }
     else if ( pLine )
@@ -3309,7 +3309,7 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
         {
             if ( !pLine )
                 pLine = new SvxBorderLine;
-            if( !lcl_LineToSvxLine(aLine, *pLine, bConvert) )
+            if( !SvxBoxItem::LineToSvxLine(aLine, *pLine, bConvert) )
                 DELETEZ( pLine );
             return sal_True;
         }

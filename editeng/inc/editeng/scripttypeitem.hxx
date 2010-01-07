@@ -48,7 +48,7 @@ EDITENG_DLLPUBLIC USHORT GetI18NScriptTypeOfLanguage( USHORT nLang );
 USHORT GetItemScriptType( short nI18NType );
 short  GetI18NScriptType( USHORT nItemType );
 
-class SvxScriptTypeItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxScriptTypeItem : public SfxUInt16Item
 {
 public:
     TYPEINFO();

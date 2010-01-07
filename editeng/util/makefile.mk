@@ -62,7 +62,6 @@ SHL1STDLIBS= \
              $(XMLOFFLIB) \
              $(BASEGFXLIB) \
              $(LNGLIB) \
-             $(BASICLIB) \
              $(SVTOOLLIB) \
              $(TKLIB) \
              $(VCLLIB) \
@@ -89,9 +88,7 @@ DEFLIB1NAME=$(TARGET)
 # Resource files
 SRSFILELIST=\
         $(SRS)$/misc.srs \
-        $(SRS)$/items.srs \
-        $(SRS)$/editeng.srs \
-        $(SRS)$/outliner.srs
+        $(SRS)$/items.srs
 
 RESLIB1NAME=editeng
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw

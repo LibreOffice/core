@@ -33,7 +33,7 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
-#include <svx/svdfield.hxx>
+#include <editeng/svdfield.hxx>
 
 //************************************************************
 //   Vorausdeklarationen

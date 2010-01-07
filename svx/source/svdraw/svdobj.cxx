@@ -88,14 +88,14 @@
 #include <svx/xflftrit.hxx>
 #include "svx/xlinjoit.hxx"
 #include <svx/unopage.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svl/whiter.hxx>
 

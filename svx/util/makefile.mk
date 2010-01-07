@@ -67,7 +67,6 @@ LIB2FILES=\
     $(SLB)$/options.lib   \
     $(SLB)$/stbctrls.lib  \
     $(SLB)$/tbxctrls.lib  \
-    $(SLB)$/unoedit.lib   \
     $(SLB)$/smarttags.lib
 
 LIB3TARGET= $(SLB)$/$(TARGET)_3.lib
@@ -86,13 +85,11 @@ LIB4FILES=\
 # Objects needed for the svxcore library.
 LIB5TARGET= $(SLB)$/$(TARGET)_5.lib
 LIB5FILES=\
-    $(SLB)$/accessibility-core.lib \
     $(SLB)$/animation.lib \
     $(SLB)$/attribute.lib \
     $(SLB)$/contact.lib \
     $(SLB)$/customshapes-core.lib \
     $(SLB)$/dialogs-core.lib \
-    $(SLB)$/editeng.lib \
     $(SLB)$/engine3d-core.lib \
     $(SLB)$/event.lib \
     $(SLB)$/fmcomp-core.lib \
@@ -103,20 +100,16 @@ LIB5FILES=\
 
 LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
 LIB6FILES=\
-    $(SLB)$/outliner.lib \
     $(SLB)$/overlay.lib \
     $(SLB)$/primitive2d.lib \
     $(SLB)$/primitive3d.lib \
     $(SLB)$/properties.lib \
     $(SLB)$/svdraw-core.lib \
     $(SLB)$/svxlink.lib \
-    $(SLB)$/svxrtf-core.lib \
-    $(SLB)$/svxrtf.lib \
     $(SLB)$/table-core.lib \
     $(SLB)$/tbxctrls-core.lib  \
     $(SLB)$/toolbars.lib \
     $(SLB)$/unodraw-core.lib \
-    $(SLB)$/unoedit-core.lib   \
     $(SLB)$/xml.lib \
     $(SLB)$/xout.lib
 
@@ -129,6 +122,7 @@ SHL1USE_EXPORTS=name
 SHL1LIBS= $(LIB5TARGET) $(LIB6TARGET)
 
 SHL1STDLIBS= \
+             $(EDITENGLIB) \
              $(AVMEDIALIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \
@@ -165,6 +159,7 @@ SHL2DEPN=$(SHL1TARGETN)
 
 SHL2LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET) $(LIB4TARGET)
 SHL2STDLIBS= \
+            $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SFX2LIB) \
             $(XMLOFFLIB) \
@@ -205,8 +200,6 @@ SHL2STDLIBS += $(CPPUHELPERLIB)
 # Resource files
 SRSFILELIST=\
         $(SRS)$/svdstr.srs \
-        $(SRS)$/editeng.srs \
-        $(SRS)$/outliner.srs \
         $(SRS)$/dialogs.srs \
         $(SRS)$/drawdlgs.srs \
         $(SRS)$/mnuctrls.srs \

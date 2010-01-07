@@ -44,7 +44,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>

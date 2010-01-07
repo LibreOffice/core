@@ -41,7 +41,7 @@
 #include <svx/svdotext.hxx>
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen

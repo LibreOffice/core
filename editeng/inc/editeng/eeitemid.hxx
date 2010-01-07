@@ -31,7 +31,7 @@
 #ifndef _EEITEMID_HXX
 #define _EEITEMID_HXX
 
-#include <editing/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #ifdef ITEMID_FONT
 #undef ITEMID_FONT

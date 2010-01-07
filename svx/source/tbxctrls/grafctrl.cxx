@@ -56,8 +56,8 @@
 #include <svx/svxids.hrc>
 #include "grafctrl.hrc"
 #include <svx/dialogs.hrc>
-#include <svx/brshitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
 //CHINA001 #include "../dialog/grfpage.hxx"
 #include <svx/itemwin.hxx>

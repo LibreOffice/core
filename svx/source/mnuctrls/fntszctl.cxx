@@ -42,9 +42,9 @@
 
 #include <svx/fntszctl.hxx>     //
 #include <svx/dialogs.hrc>
-#include <svx/fhgtitem.hxx>
-#include "fontitem.hxx"
-#include "flstitem.hxx"
+#include <editeng/fhgtitem.hxx>
+#include "editeng/fontitem.hxx"
+#include "editeng/flstitem.hxx"
 
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>

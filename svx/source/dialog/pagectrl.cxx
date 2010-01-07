@@ -35,10 +35,10 @@
 
 
 #include <vcl/bitmap.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagectrl.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <algorithm>
 

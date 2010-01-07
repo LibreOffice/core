@@ -50,13 +50,14 @@
 #include <tools/gen.hxx>
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/mutex.hxx>
 #include "svx/svxdllapi.h"
 #include <rtl/ref.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <svx/svdouno.hxx>
 
@@ -86,6 +87,15 @@ protected:
 
 struct SvxShapeImpl;
 class SvxShapeMaster;
+class SvxItemPropertySet;
+class SvxItemPropertySimpleEntry;
+class SfxItemSet;
+
+void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap,
+        const com::sun::star::uno::Any& rVal, SfxItemSet& rSet );
+
+com::sun::star::uno::Any SvxItemPropertySet_getPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet );
+
 
 // WARNING: if you update the supported interfaces,
 //          also update SvxShape::_getTypes()
@@ -324,7 +334,7 @@ private:
     SVX_DLLPRIVATE void impl_construct();
 };
 
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
 class SVX_DLLPUBLIC SvxShapeText : public SvxShape, public SvxUnoTextBase
 {

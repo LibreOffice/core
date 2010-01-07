@@ -36,7 +36,7 @@
 
 class SdrModel;
 class SdrView;
-using namespace svx;
+
 #include <svx/dstribut_enum.hxx>
 #include <svx/rectenum.hxx> //add for enum RECT_POINT
 #include <com/sun/star/container/XIndexContainer.hpp> //add for FmShowColsDialog

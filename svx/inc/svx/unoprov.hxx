@@ -127,31 +127,7 @@ extern UHashMap aSdrShapeIdentifierMap;
 
 #define E3D_INVENTOR_FLAG           (0x80000000)
 
-#include <svx/unoipset.hxx>
-
-/***********************************************************************
-* class SvxServiceInfoHelper                                           *
-***********************************************************************/
-
-/** this class provides a basic helper for classes suporting the XServiceInfo Interface.
- *
- *  you can overload the <code>getSupprotedServiceNames</code> to implement a XServiceInfo.
- *  you can use the static helper methods to combine your services with that of parent
- *  or aggregatet classes.
- */
-class SVX_DLLPUBLIC SvxServiceInfoHelper : public ::com::sun::star::lang::XServiceInfo
-{
-public:
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-
-    // helper
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > concatSequences( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq1, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq2 ) throw();
-    static void addToSequence( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq,UINT16 nServices, /* sal_Char* */... ) throw();
-    static sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SupportedServices ) throw();
-};
+#include <editeng/unoipset.hxx>
 
 /***********************************************************************
 * class SvxPropertySetInfoPool                                         *

@@ -51,7 +51,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/captionproperties.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>

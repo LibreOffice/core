@@ -38,7 +38,7 @@
 #include <vcl/outdev.hxx>
 #endif
 #include <tools/shl.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include "svx/svxdllapi.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -42,17 +42,7 @@
 
 #include <svx/dialogs.hrc>
 #include "hdft.hrc"
-
-
-
-
-
-
-
-
-
-
-
+#include <svl/intitem.hxx>
 
 #define _SVX_HDFT_CXX
 
@@ -63,12 +53,12 @@
 #include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001

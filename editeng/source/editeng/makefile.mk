@@ -30,7 +30,7 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=svx
+PRJNAME=editeng
 TARGET=editeng
 AUTOSEG=true
 

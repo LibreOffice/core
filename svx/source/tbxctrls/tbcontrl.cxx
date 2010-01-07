@@ -59,9 +59,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/fontoptions.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 
 #include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
@@ -79,13 +77,13 @@
 #include "helpid.hrc"
 #include "htmlmode.hxx"
 #include <svx/xtable.hxx>
-#include "fontitem.hxx"
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/colritem.hxx>
-#include "flstitem.hxx"
-#include "bolnitem.hxx"
+#include "editeng/fontitem.hxx"
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/colritem.hxx>
+#include "editeng/flstitem.hxx"
+#include "editeng/bolnitem.hxx"
 #include "drawitem.hxx"
 #include <svx/tbcontrl.hxx>
 #include "dlgutil.hxx"
@@ -94,6 +92,8 @@
 #include <memory>
 
 #include <svx/tbxcolorupdate.hxx>
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc>
 
 // ------------------------------------------------------------------------
 
@@ -882,7 +882,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         ::Color aColWhite( COL_WHITE );
-        String aStrWhite( SVX_RES(RID_SVXITEMS_COLOR_WHITE) );
+        String aStrWhite( EditResId(RID_SVXITEMS_COLOR_WHITE) );
 
         if ( nCount > PALETTE_SIZE )
             // Show scrollbar if more than PALLETTE_SIZE colors are available

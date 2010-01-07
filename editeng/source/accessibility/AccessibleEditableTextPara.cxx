@@ -75,7 +75,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <editeng/unolingu.hxx>
 #include <editeng/unopracc.hxx>
-#include "AccessibleEditableTextPara.hxx"
+#include "editeng/AccessibleEditableTextPara.hxx"
 #include <svtools/colorcfg.hxx>
 
 

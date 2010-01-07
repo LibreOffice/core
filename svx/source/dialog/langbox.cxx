@@ -44,8 +44,8 @@
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <i18npool/lang.h>
-#include <svx/scripttypeitem.hxx>
-#include <unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

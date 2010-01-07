@@ -44,7 +44,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #include <tools/rtti.hxx>
-#include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
 
 #define _SVX_PARAITEM_CXX

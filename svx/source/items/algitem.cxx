@@ -53,7 +53,7 @@
 
 #include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
 
 using namespace ::rtl;

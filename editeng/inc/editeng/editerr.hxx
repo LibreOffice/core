@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svdoutl.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: svxids.hrc,v $
+ * $Revision: 1.10.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _EDIT_ERR_HRC
+#define _EDIT_ERR_HRC
 
-#ifndef _SVDOUTL_HXX
-#define _SVDOUTL_HXX
+#include <tools/errcode.hxx>
 
-#include <editeng/outliner.hxx>
-#include "svx/svxdllapi.h"
-#include <svx/svdobj.hxx>
+#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX)
 
-class SdrTextObj;
-class SdrPaintInfoRec;
-class SdrPage;
-
-class SVX_DLLPUBLIC SdrOutliner : public Outliner
-{
-protected:
-    SdrObjectWeakRef mpTextObj;
-    const SdrPage* mpVisualizedPage;
-
-public:
-    SdrOutliner( SfxItemPool* pItemPool, USHORT nMode );
-    virtual ~SdrOutliner() ;
-
-    void  SetTextObj( const SdrTextObj* pObj );
-    void SetTextObjNoInit( const SdrTextObj* pObj );
-    const SdrTextObj* GetTextObj() const;
-
-    void setVisualizedPage(const SdrPage* pPage) { if(pPage != mpVisualizedPage) mpVisualizedPage = pPage; }
-    const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
-
-    virtual String  CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor);
-};
-
-#endif //_SVDOUTL_HXX
-
+#define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT   (8UL | ERRCODE_AREA_SVX | \
+                                                ERRCODE_CLASS_READ )
+#endif

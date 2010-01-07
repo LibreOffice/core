@@ -51,8 +51,8 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
-#include "AccessibleParaManager.hxx"
-#include "AccessibleEditableTextPara.hxx"
+#include "editeng/AccessibleParaManager.hxx"
+#include "editeng/AccessibleEditableTextPara.hxx"
 
 
 using namespace ::com::sun::star;

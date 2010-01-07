@@ -53,7 +53,7 @@
 #include <svx/svdpool.hxx>
 
 #include <svl/solar.hrc>
-#include "xmlcnitm.hxx"
+#include "editeng/xmlcnitm.hxx"
 
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>    // fuer RGB_Color()
@@ -63,9 +63,9 @@
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"
 #include <svx/sdgcpitm.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
 
@@ -76,13 +76,13 @@
 
 #define ITEMID_BOX SDRATTR_TABLE_BORDER
 #define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER
-#include "svx/boxitem.hxx"
+#include "editeng/boxitem.hxx"
 
 #define ITEMID_SHADOW SDRATTR_TABLE_BORDER_SHADOW
-#include "svx/shaditem.hxx"
+#include "editeng/shaditem.hxx"
 
 #define ITEMID_LINE 0
-#include "bolnitem.hxx"
+#include "editeng/bolnitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

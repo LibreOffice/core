@@ -42,10 +42,10 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/ruler.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include "protitem.hxx"
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include "editeng/protitem.hxx"
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
 #include <svl/eitem.hxx>

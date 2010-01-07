@@ -31,7 +31,7 @@
 #ifndef _SVX_UNOVIWOU_HXX
 #define _SVX_UNOVIWOU_HXX
 
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <editeng/editengdllapi.h>
 
 class OutlinerView;

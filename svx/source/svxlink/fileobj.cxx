@@ -58,7 +58,6 @@
 #include <svx/dialogs.hrc>
 #include "xoutbmp.hxx"
 #include "opengrf.hxx"
-#include "svx/impgrf.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -337,7 +336,7 @@ BOOL SvFileObject::LoadFile_Impl()
 
 BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 {
-    GraphicFilter* pGF = GetGrfFilter();
+    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
 
     const USHORT nFilter = sFilter.Len() && pGF->GetImportFormatCount()
                             ? pGF->GetImportFormatNumber( sFilter )

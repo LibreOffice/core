@@ -79,9 +79,9 @@
 
 #define _SVX_USE_UNOGLOBALS_
 #include <svx/unoprov.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svl/itemprop.hxx>
 
 #include <svx/svxids.hrc>

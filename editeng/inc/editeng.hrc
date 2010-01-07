@@ -30,26 +30,7 @@
 #ifndef _EDITENG_HRC
 #define _EDITENG_HRC
 
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>
-#endif
-
-#define RID_EDITUNDO_DEL            ( RID_EDIT_START + 0 )
-#define RID_EDITUNDO_MOVE           ( RID_EDIT_START + 1 )
-#define RID_EDITUNDO_INSERT         ( RID_EDIT_START + 2 )
-#define RID_EDITUNDO_REPLACE        ( RID_EDIT_START + 3 )
-#define RID_EDITUNDO_SETATTRIBS     ( RID_EDIT_START + 4 )
-#define RID_EDITUNDO_SETSTYLE       ( RID_EDIT_START + 5 )
-#define RID_EDITUNDO_RESETATTRIBS   ( RID_EDIT_START + 6 )
-#define RID_EDITUNDO_INDENT         ( RID_EDIT_START + 7 )
-#define RID_EDITUNDO_TRANSLITERATE  ( RID_EDIT_START + 8 )
-
-#define RID_MENU_SPELL              ( RID_EDIT_START + 10 )
-#define RID_STR_PARAGRAPH           ( RID_EDIT_START + 11 )
-#define RID_STR_WORD                ( RID_EDIT_START + 12 )
-
-#define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION (RID_EDIT_START + 13)
-#define RID_SVXSTR_A11Y_IMAGEBULLET_NAME        (RID_EDIT_START + 14)
+#include <editeng/editrids.hrc>
 
 #define MN_SPELLING         1
 #define MN_INSERT           2
@@ -61,6 +42,5 @@
 #define MN_ALTSTART     1000
 #define MN_AUTOSTART    2000
 #define MN_DICTSTART    3000
-
 
 #endif  // _EDITENG_HRC

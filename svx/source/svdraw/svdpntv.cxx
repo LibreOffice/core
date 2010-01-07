@@ -45,7 +45,7 @@
 #include <svl/smplhint.hxx>
 
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -67,7 +67,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>

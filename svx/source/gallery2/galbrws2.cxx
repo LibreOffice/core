@@ -44,8 +44,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "svx/impgrf.hxx"
-#include <svx/brshitem.hxx>
+#include "svtools/filter.hxx"
+#include <editeng/brshitem.hxx>
 #include "helpid.hrc"
 #include "gallery.hxx"
 #include "galobj.hxx"
@@ -1154,7 +1154,7 @@ String GalleryBrowser2::GetFilterName() const
 
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
-            GraphicFilter*      pFilter = GetGrfFilter();
+            GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
             sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
 

@@ -47,7 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/fltcall.hxx>
-#include "svx/impgrf.hxx"
+#include <svtools/filter.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <svx/svdpool.hxx>
@@ -55,7 +55,7 @@
 #include <rtl/memory.h>
 #include <tools/urlobj.hxx>
 
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdobj.hxx>
@@ -1738,7 +1738,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
                     if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                     {
-                        GraphicFilter* pGrfFilter = GetGrfFilter();
+                        GraphicFilter* pGrfFilter = GraphicFilter::GetGraphicFilter();
                         aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                     }
                 }

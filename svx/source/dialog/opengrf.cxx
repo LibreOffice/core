@@ -126,8 +126,6 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 }
 
 
-GraphicFilter* GetGrfFilter();
-
 short SvxOpenGraphicDialog::Execute()
 {
     USHORT  nImpRet;
@@ -138,7 +136,7 @@ short SvxOpenGraphicDialog::Execute()
     {
         if( GetPath().Len() )
         {
-            GraphicFilter*  pFilter = GetGrfFilter();
+            GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
