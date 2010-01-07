@@ -1454,7 +1454,40 @@ XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
 void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
-    rStrm << GetValue();
+    rStrm << static_cast<sal_uInt16>(0x04B0);
+}
+
+// ============================================================================
+
+XclExpInterfaceEnd::XclExpInterfaceEnd() :
+    XclExpRecord(0x00E2, 0)
+{
+}
+
+XclExpInterfaceEnd::~XclExpInterfaceEnd()
+{
+}
+
+void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
+{
+    // Don't forget to re-enable encryption.
+    rStrm.EnableEncryption();
+}
+
+// ============================================================================
+
+XclExpMMS::XclExpMMS() :
+    XclExpRecord(0x00C1, 2)
+{
+}
+
+XclExpMMS::~XclExpMMS()
+{
+}
+
+void XclExpMMS::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
 }
 
 // ============================================================================

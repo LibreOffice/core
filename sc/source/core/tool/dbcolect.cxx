@@ -40,6 +40,7 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "document.hxx"
+#include "queryparam.hxx"
 #include "globstr.hrc"
 
 

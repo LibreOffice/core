@@ -60,6 +60,7 @@ class ScDPDimension;
 class ScDPCollection;
 struct ScDPCacheCell;
 struct ScDPItemData;
+struct ScQueryParam;
 class Date;
 
 // ----------------------------------------------------------------------------

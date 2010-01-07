@@ -259,6 +259,17 @@ void XclExpStream::WriteZeroBytes( sal_Size nBytes )
         WriteRawZeroBytes( nBytes );
 }
 
+void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
+{
+    if (!mbInRec)
+        // not in record.
+        return;
+
+    sal_uInt8 nZero = 0;
+    for (sal_Size i = 0; i < nBytes; ++i)
+        *this << nZero;
+}
+
 sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
 {
     sal_Size nStrmPos = rInStrm.Tell();

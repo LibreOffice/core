@@ -227,7 +227,7 @@ class ScDocument
 {
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;

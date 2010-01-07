@@ -60,6 +60,7 @@
 #include "progress.hxx"
 #include "cellform.hxx"
 #include "postit.hxx"
+#include "queryparam.hxx"
 
 #include <vector>
 

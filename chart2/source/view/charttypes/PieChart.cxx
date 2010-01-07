@@ -129,6 +129,8 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
         , m_bUseRings(false)
 {
+    ::rtl::math::setNan(&m_fMaxOffset);
+
     PlotterBase::m_pPosHelper = m_pPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pPosHelper;
     m_pPosHelper->m_fRadiusOffset = 0.0;
@@ -248,27 +250,31 @@ double PieChart::getMinimumX()
 {
     return 0.5;
 }
-double PieChart::getMaxOffset() const
+double PieChart::getMaxOffset()
 {
-    double fRet = 0.0;
+    if (!::rtl::math::isNan(m_fMaxOffset))
+        // Value already cached.  Use it.
+        return m_fMaxOffset;
+
+    m_fMaxOffset = 0.0;
     if( m_aZSlots.size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
     if( m_aZSlots[0].size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
 
     const ::std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
     if( rSeriesList.size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
 
     VDataSeries* pSeries = rSeriesList[0];
     uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
     if( !xSeriesProp.is() )
-        return fRet;
+        return m_fMaxOffset;
 
     double fExplodePercentage=0.0;
     xSeriesProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-    if(fExplodePercentage>fRet)
-        fRet=fExplodePercentage;
+    if(fExplodePercentage>m_fMaxOffset)
+        m_fMaxOffset=fExplodePercentage;
 
     uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
     if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
@@ -280,12 +286,12 @@ double PieChart::getMaxOffset() const
             {
                 fExplodePercentage=0.0;
                 xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-                if(fExplodePercentage>fRet)
-                    fRet=fExplodePercentage;
+                if(fExplodePercentage>m_fMaxOffset)
+                    m_fMaxOffset=fExplodePercentage;
             }
         }
     }
-    return fRet;
+    return m_fMaxOffset;
 }
 double PieChart::getMaximumX()
 {
@@ -357,6 +363,7 @@ void PieChart::createShapes()
         nExplodeableSlot = m_aZSlots[0].size()-1;
 
     m_aLabelInfoList.clear();
+    ::rtl::math::setNan(&m_fMaxOffset);
 
 //=============================================================================
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); aXSlotIter++, fSlotX+=1.0 )

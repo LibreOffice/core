@@ -49,7 +49,7 @@ class ScChartUnoData;
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
-class ScChartListener : public StrData, public SvtListener
+class SC_DLLPUBLIC ScChartListener : public StrData, public SvtListener
 {
 public:
     class ExternalRefListener : public ScExternalRefManager::LinkListener

@@ -748,19 +748,19 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
             // font used flag for underline -> 0 = used, 1 = default
             sal_uInt32 nFontFlags3 = mbUnderlUsed ? 0 : EXC_CF_FONT_UNDERL;
 
-            rStrm.WriteZeroBytes( 64 );
+            rStrm.WriteZeroBytesToRecord( 64 );
             rStrm   << nHeight
                     << nStyle
                     << maFontData.mnWeight
                     << EXC_FONTESC_NONE
                     << maFontData.mnUnderline;
-            rStrm.WriteZeroBytes( 3 );
+            rStrm.WriteZeroBytesToRecord( 3 );
             rStrm   << nColor
                     << sal_uInt32( 0 )
                     << nFontFlags1
                     << EXC_CF_FONT_ESCAPEM      // escapement never used -> set the flag
                     << nFontFlags3;
-            rStrm.WriteZeroBytes( 16 );
+            rStrm.WriteZeroBytesToRecord( 16 );
             rStrm   << sal_uInt16( 1 );         // must be 1
         }
 

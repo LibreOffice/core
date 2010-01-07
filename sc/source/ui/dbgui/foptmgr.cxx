@@ -45,6 +45,7 @@
 #include "dbcolect.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
+#include "queryparam.hxx"
 
 #define _FOPTMGR_CXX
 #include "foptmgr.hxx"
