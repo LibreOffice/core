@@ -315,17 +315,14 @@ void LdapConnection::loadModule()
     if ( !s_Ldap_Module )
     {
 #if defined(WIN) || defined(WNT)
-#       define LIBLDAP "nsldap32v50.dll"
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM("nsldap32v50.dll"));
 #else
-#   ifdef WITH_OPENLDAP
-#       define xstr(s) str(s)
-#       define str(s) #s
-#       define LIBLDAP "libldap-" xstr(LDAP_VENDOR_VERSION_MAJOR) "." xstr(LDAP_VENDOR_VERSION_MINOR) ".so." xstr(LDAP_VENDOR_VERSION_MAJOR)
-#   else
-#       define LIBLDAP "libldap50.so"
-#   endif
+#ifdef WITH_OPENLDAP
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM("libldap.so"));
+#else
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM("libldap50.so"));
 #endif
-        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(LIBLDAP));
+#endif
 
         // load the dbtools library
         s_Ldap_Module = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
