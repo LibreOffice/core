@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
