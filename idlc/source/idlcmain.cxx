@@ -56,11 +56,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     sal_Int32 nErrors = 0;
     if (options.readStdin()) {
-        fprintf(
-            stdout, "%s: compile stdin...\n",
-            options.getProgramName().getStr());
+        if ( !options.quiet() )
+            fprintf(
+                stdout, "%s: Compiling stdin\n",
+                options.getProgramName().getStr());
         nErrors = compileFile(0);
-        if (idlc()->getWarningCount() > 0) {
+        if ( ( idlc()->getWarningCount() > 0 ) && !options.quiet() ) {
             fprintf(
                 stdout, "%s: detected %lu warnings compiling stdin\n",
                 options.getProgramName().getStr(),
@@ -85,16 +86,23 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         idlc()->reset();
     }
     StringVector const & files = options.getInputFiles();
+    if ( options.verbose() )
+    {
+        fprintf( stdout, "%s: compiling %i source files ... \n",
+            options.getProgramName().getStr(), (int)files.size() );
+        fflush( stdout );
+    }
     for (StringVector::const_iterator i(files.begin());
          i != files.end() && nErrors == 0; ++i)
     {
         OString sysFileName( convertToAbsoluteSystemPath(*i) );
 
-        fprintf(stdout, "%s: compile '%s' ... \n",
-            options.getProgramName().getStr(), (*i).getStr());
+        if ( !options.quiet() )
+            fprintf(stdout, "Compiling: %s\n",
+                (*i).getStr());
         nErrors = compileFile(&sysFileName);
 
-        if ( idlc()->getWarningCount() )
+        if ( idlc()->getWarningCount() && !options.quiet() )
             fprintf(stdout, "%s: detected %lu warnings compiling file '%s'\n",
                     options.getProgramName().getStr(),
                     sal::static_int_cast< unsigned long >(
@@ -128,15 +136,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if ( nErrors > 0 )
     {
-        fprintf(stdout, "%s: detected %ld errors%s",
+        fprintf(stderr, "%s: detected %ld errors%s",
             options.getProgramName().getStr(),
             sal::static_int_cast< long >(nErrors),
             options.prepareVersion().getStr());
     } else
     {
-        fprintf(stdout, "%s: returned successful%s",
-            options.getProgramName().getStr(),
-            options.prepareVersion().getStr());
+        if ( options.verbose() )
+            fprintf(stdout, "%s: returned successful%s",
+                options.getProgramName().getStr(),
+                options.prepareVersion().getStr());
     }
     return nErrors;
 }

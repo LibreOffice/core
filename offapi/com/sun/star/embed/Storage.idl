@@ -347,6 +347,19 @@ service Storage
         </p>
      */
     [property, optional, readonly] boolean HasEncryptedEntries;
+
+    // -----------------------------------------------------------------------
+    /** allows to detect if the storage contains nonencrypted entries.
+
+        <p>
+        In case it is set to <TRUE/> the storage itself and/or a tree of
+        substorages contains nonencrypted streams. Usually in case this
+        property is supported the implementation supports
+        <type>XEncryptionProtectedSource</type> interface.
+        </p>
+     */
+    [property, optional, readonly] boolean HasNonEncryptedEntries;
+
 };
 
 //============================================================================

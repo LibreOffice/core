@@ -91,6 +91,31 @@ void MapReturn(const ia64::RegReturn &rRet, double dret, typelib_TypeDescription
 
 namespace ia64
 {
+    bool is_complex_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
+                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
+            {
+                typelib_TypeDescription * t = 0;
+                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
+                bool b = is_complex_struct(t);
+                TYPELIB_DANGER_RELEASE(t);
+                if (b) {
+                    return true;
+                }
+            }
+            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
+                return true;
+        }
+        if (p->pBaseTypeDescription != 0)
+            return is_complex_struct(&p->pBaseTypeDescription->aBase);
+        return false;
+    }
+
     bool is_complex_struct( typelib_TypeDescriptionReference *pTypeRef )
     {
         if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
@@ -98,7 +123,7 @@ namespace ia64
             typelib_TypeDescription * pTypeDescr = 0;
             TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
-            bool bRet = bridges::cpp_uno::shared::relatesToInterfaceType( pTypeDescr );
+            bool bRet = is_complex_struct( pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
 
             return bRet;

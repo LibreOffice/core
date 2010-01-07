@@ -55,7 +55,8 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   $(SLO)$/conditn.obj  \
+SLOFILES= \
+            $(SLO)$/conditn.obj  \
             $(SLO)$/diagnose.obj \
             $(SLO)$/semaphor.obj \
             $(SLO)$/socket.obj   \
@@ -68,19 +69,22 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
-            $(SLO)$/file.obj     \
             $(SLO)$/signal.obj   \
             $(SLO)$/pipe.obj   	 \
             $(SLO)$/system.obj	 \
             $(SLO)$/util.obj	 \
             $(SLO)$/tempfile.obj\
+            $(SLO)$/file.obj     \
+            $(SLO)$/file_misc.obj\
             $(SLO)$/file_url.obj\
             $(SLO)$/file_error_transl.obj\
             $(SLO)$/file_path_helper.obj\
+            $(SLO)$/file_stat.obj \
+            $(SLO)$/file_volume.obj \
             $(SLO)$/uunxapi.obj\
             $(SLO)$/process_impl.obj\
-            $(SLO)$/file_stat.obj \
             $(SLO)$/salinit.obj
+
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -96,18 +100,20 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/security.obj \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
-            $(OBJ)$/file.obj     \
             $(OBJ)$/signal.obj   \
             $(OBJ)$/pipe.obj   	 \
             $(OBJ)$/system.obj	 \
             $(OBJ)$/util.obj	 \
             $(OBJ)$/tempfile.obj\
+            $(OBJ)$/file.obj     \
+            $(OBJ)$/file_misc.obj\
             $(OBJ)$/file_url.obj\
             $(OBJ)$/file_error_transl.obj\
             $(OBJ)$/file_path_helper.obj\
+            $(OBJ)$/file_stat.obj \
+            $(OBJ)$/file_volume.obj \
             $(OBJ)$/uunxapi.obj\
             $(OBJ)$/process_impl.obj\
-            $(OBJ)$/file_stat.obj \
             $(OBJ)$/salinit.obj
             
 #.ENDIF

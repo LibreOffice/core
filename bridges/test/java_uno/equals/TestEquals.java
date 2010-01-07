@@ -91,10 +91,10 @@ public final class TestEquals {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTestFrame f = (XTestFrame) UnoRuntime.queryInterface(
+            XTestFrame f = UnoRuntime.queryInterface(
                 XTestFrame.class, getBridge(context).getInstance("TestFrame"));
             XAcceptor acceptor = Acceptor.create(context);
-            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            XBridgeFactory factory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));
@@ -160,17 +160,15 @@ public final class TestEquals {
                             public void run() {
                                 try {
                                     Object test1Aa = object1;
-                                    XBase test1Ab = (XBase)
-                                        UnoRuntime.queryInterface(
-                                            XBase.class, test1Aa);
-                                    XDerived test1Ac = (XDerived)
+                                    XBase test1Ab = UnoRuntime.queryInterface(
+                                        XBase.class, test1Aa);
+                                    XDerived test1Ac =
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test1Aa);
                                     Object test2Aa = object2;
-                                    XBase test2Ab = (XBase)
-                                        UnoRuntime.queryInterface(
-                                            XBase.class, test2Aa);
-                                    XDerived test2Ac = (XDerived)
+                                    XBase test2Ab = UnoRuntime.queryInterface(
+                                        XBase.class, test2Aa);
+                                    XDerived test2Ac =
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test2Aa);
 
@@ -182,16 +180,14 @@ public final class TestEquals {
                                             null, params);
                                     XMultiComponentFactory factory
                                         = context.getServiceManager();
-                                    XImplementationLoader loader
-                                        = (XImplementationLoader)
+                                    XImplementationLoader loader =
                                         UnoRuntime.queryInterface(
                                             XImplementationLoader.class,
                                             factory.createInstanceWithContext(
                                                 "com.sun.star.loader."
                                                 + "SharedLibrary",
                                                 context));
-                                    XSingleComponentFactory factory2
-                                        = (XSingleComponentFactory)
+                                    XSingleComponentFactory factory2 =
                                         UnoRuntime.queryInterface(
                                             XSingleComponentFactory.class,
                                             loader.activate(
@@ -199,7 +195,7 @@ public final class TestEquals {
                                                 + "testequals.impl",
                                                 "", "../lib/testequals.uno",
                                                 null));
-                                    XTestInterface test = (XTestInterface)
+                                    XTestInterface test =
                                         UnoRuntime.queryInterface(
                                             XTestInterface.class,
                                             factory2.createInstanceWithContext(
@@ -211,17 +207,15 @@ public final class TestEquals {
                                         PROTOCOL_DESCRIPTION);
 
                                     Object test1Ba = test.get(INSTANCE1);
-                                    XBase test1Bb = (XBase)
-                                        UnoRuntime.queryInterface(
-                                            XBase.class, test1Ba);
-                                    XDerived test1Bc = (XDerived)
+                                    XBase test1Bb = UnoRuntime.queryInterface(
+                                        XBase.class, test1Ba);
+                                    XDerived test1Bc =
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test1Ba);
                                     Object test2Ba = test.get(INSTANCE2);
-                                    XBase test2Bb = (XBase)
-                                        UnoRuntime.queryInterface(
-                                            XBase.class, test2Ba);
-                                    XDerived test2Bc = (XDerived)
+                                    XBase test2Bb = UnoRuntime.queryInterface(
+                                        XBase.class, test2Ba);
+                                    XDerived test2Bc =
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test2Ba);
 

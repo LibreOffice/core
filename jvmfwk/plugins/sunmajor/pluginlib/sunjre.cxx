@@ -74,8 +74,6 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
-        "/bin/client/jvm.dll",
-        "/bin/hotspot/jvm.dll"
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",

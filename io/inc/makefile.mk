@@ -36,16 +36,18 @@ TARGET=inc
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 # --- Targets -------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(ENABLE_PCH)"!=""
 ALLTAR : \
     $(SLO)$/precompiled.pch \
     $(SLO)$/precompiled_ex.pch
     
 .ENDIF			# "$(ENABLE_PCH)"!=""
+.ENDIF 		# L10N_framework
 

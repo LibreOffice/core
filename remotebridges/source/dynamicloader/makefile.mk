@@ -39,6 +39,7 @@ COMP1TYPELIST = dynamicloader
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 DLLPRE =
 
 # ------------------------------------------------------------------
@@ -65,6 +66,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 
+.ENDIF 		# L10N_framework
 
 # --- Targets ------------------------------------------------------
 

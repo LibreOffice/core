@@ -58,19 +58,19 @@ public class UrlResolver_Test
             Object initialObject = urlResolver.resolve(
                 "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
 
-            XMultiComponentFactory  xOfficeFactory= (XMultiComponentFactory) UnoRuntime.queryInterface(
+            XMultiComponentFactory  xOfficeFactory= UnoRuntime.queryInterface(
                 XMultiComponentFactory.class, initialObject );
 
             // retrieve the component context (it's not yet exported from the office)
             // Query for the XPropertySet interface.
-            XPropertySet xProperySet = ( XPropertySet ) UnoRuntime.queryInterface(
+            XPropertySet xProperySet = UnoRuntime.queryInterface(
                 XPropertySet.class, xOfficeFactory);
 
             // Get the default context from the office server.
             Object oDefaultContext = xProperySet.getPropertyValue( "DefaultContext" );
 
             // Query for the interface XComponentContext.
-            XComponentContext xOfficeComponentContext = ( XComponentContext ) UnoRuntime.queryInterface(
+            XComponentContext xOfficeComponentContext = UnoRuntime.queryInterface(
                 XComponentContext.class, oDefaultContext );
 
             // now create the desktop service

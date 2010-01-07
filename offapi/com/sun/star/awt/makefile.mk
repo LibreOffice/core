@@ -127,6 +127,7 @@ IDLFILES=\
     MessageBoxCommand.idl\
     MouseButton.idl\
     MouseEvent.idl\
+    MouseWheelBehavior.idl\
     PaintEvent.idl\
     Point.idl\
     PopupMenuDirection.idl\
@@ -304,6 +305,7 @@ IDLFILES=\
         XToggleButton.idl\
     XToolkit.idl\
     XTopWindow.idl\
+    XTopWindow2.idl\
     XTopWindowListener.idl\
     XUnitConversion.idl\
     XUnoControlContainer.idl\

@@ -102,7 +102,7 @@ public class UrlResolver {
             Object rootObject = null;
             XBridgeFactory xBridgeFactory= null;
             try {
-                xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
+                xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
             } catch (com.sun.star.uno.Exception e) {
                 throw new com.sun.star.uno.RuntimeException(e.getMessage());
@@ -117,7 +117,7 @@ public class UrlResolver {
                         throw new com.sun.star.uno.RuntimeException(e.getMessage());
                 }
 
-                XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
+                XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
 
                 // connect to the server
                 XConnection xConnection = connector_xConnector.connect(conDcp);
