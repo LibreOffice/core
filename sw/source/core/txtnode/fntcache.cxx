@@ -484,6 +484,11 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         pScrFont = pPrtFont;
 
         FontMetric aMet = pPrt->GetFontMetric( );
+        //Don't loose "faked" properties of the logical font that don't truly
+        //exist in the physical font metrics which vcl which fake up for us
+        aMet.SetWeight(pScrFont->GetWeight());
+        aMet.SetItalic(pScrFont->GetItalic());
+
         bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
 
         if ( USHRT_MAX == nGuessedLeading )
@@ -523,6 +528,11 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
                 pPrt->SetFont( aFnt2 );
                 aMet = pPrt->GetFontMetric( );
+                //Don't loose "faked" properties of the logical font that don't
+                //truly exist in the physical font metrics which vcl which fake
+                //up for us
+                aMet.SetWeight(aFnt2.GetWeight());
+                aMet.SetItalic(aFnt2.GetItalic());
             }
 
             const XubString aStandardStr( sStandardString,
