@@ -160,7 +160,7 @@ void SbiRuntime::StepPAD( UINT32 nOp1 )
 
 void SbiRuntime::StepJUMP( UINT32 nOp1 )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // #QUESTION shouln't this be
     // if( (BYTE*)( nOp1+pImagGetCode() ) >= pImg->GetCodeSize() )
     if( nOp1 >= pImg->GetCodeSize() )

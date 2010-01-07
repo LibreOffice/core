@@ -41,9 +41,9 @@
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <goodies/grfmgr.hxx>
 #include <vcl/svapp.hxx>
 
@@ -58,7 +58,7 @@
 #include <svx/svdpagv.hxx>
 #include "svdviter.hxx"
 #include <svx/svdview.hxx>
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbitmap.hxx>
@@ -682,7 +682,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 
     const SdrGrafObj& rGraf = (SdrGrafObj&) rObj;
 
-    pGraphic->SetGraphic( rGraf.GetGraphic() );
+    pGraphic->SetGraphic( rGraf.GetGraphic(), &rGraf.GetGraphicObject() );
     aCropRect = rGraf.aCropRect;
     aFileName = rGraf.aFileName;
     aFilterName = rGraf.aFilterName;

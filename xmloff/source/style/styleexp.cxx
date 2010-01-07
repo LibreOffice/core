@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSSORTDTOR_DECL
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"

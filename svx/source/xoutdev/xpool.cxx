@@ -36,7 +36,7 @@
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 /*************************************************************************
 |*

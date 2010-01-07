@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/ehdl.hxx>

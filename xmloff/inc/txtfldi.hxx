@@ -745,6 +745,11 @@ class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
     rtl::OUString aName;
     const ::rtl::OUString sPropertyName;
+    const ::rtl::OUString sPropertyNumberFormat;
+    const ::rtl::OUString sPropertyIsFixedLanguage;
+    sal_Int32   nFormat;
+    sal_Bool    bFormatOK;
+    sal_Bool    bIsDefaultLanguage;
 
 public:
 

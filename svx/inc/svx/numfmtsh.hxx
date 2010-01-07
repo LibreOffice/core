@@ -46,7 +46,7 @@
 #endif
 #include "svx/svxdllapi.h"
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 // forward ---------------------------------------------------------------
 

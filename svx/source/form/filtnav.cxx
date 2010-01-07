@@ -64,7 +64,7 @@
 #include <svx/fmshell.hxx>
 #include <fmshimp.hxx>
 #include <fmservs.hxx>
-#include <fmtools.hxx>
+#include <svx/fmtools.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>

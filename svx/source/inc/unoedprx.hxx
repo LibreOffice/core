@@ -32,7 +32,7 @@
 #define _SVX_UNOEDPRX_HXX
 
 #include <memory>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <svx/unoedsrc.hxx>
 
 #include <svx/editdata.hxx>

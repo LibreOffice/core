@@ -31,7 +31,7 @@
 #ifndef _SVX_XFLASIT_HXX
 #define _SVX_XFLASIT_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

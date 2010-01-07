@@ -50,20 +50,18 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BasePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        BasePrimitive3D::BasePrimitive3D()
+        :   BasePrimitive3DImplBase(m_aMutex)
         {
-            return Primitive3DSequence();
         }
 
-        BasePrimitive3D::BasePrimitive3D()
-        :   BasePrimitive3DImplBase(m_aMutex),
-            maLocalDecomposition()
+        BasePrimitive3D::~BasePrimitive3D()
         {
         }
 
         bool BasePrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const
         {
-            return (getPrimitiveID() == rPrimitive.getPrimitiveID());
+            return (getPrimitive3DID() == rPrimitive.getPrimitive3DID());
         }
 
         basegfx::B3DRange BasePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
@@ -71,17 +69,9 @@ namespace drawinglayer
             return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(rViewInformation), rViewInformation);
         }
 
-        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(!getLocalDecomposition().hasElements())
-            {
-                const Primitive3DSequence aNewSequence(createLocalDecomposition(rViewInformation));
-                const_cast< BasePrimitive3D* >(this)->setLocalDecomposition(aNewSequence);
-            }
-
-            return getLocalDecomposition();
+            return Primitive3DSequence();
         }
 
         Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
@@ -94,6 +84,38 @@ namespace drawinglayer
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));
+        }
+    } // end of namespace primitive3d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive3d
+    {
+        Primitive3DSequence BufferedDecompositionPrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            return Primitive3DSequence();
+        }
+
+        BufferedDecompositionPrimitive3D::BufferedDecompositionPrimitive3D()
+        :   BasePrimitive3D(),
+            maBuffered3DDecomposition()
+        {
+        }
+
+        Primitive3DSequence BufferedDecompositionPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getBuffered3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(create3DDecomposition(rViewInformation));
+                const_cast< BufferedDecompositionPrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
+            }
+
+            return getBuffered3DDecomposition();
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

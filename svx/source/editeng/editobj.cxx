@@ -50,8 +50,8 @@
 #include <svx/numitem.hxx>
 #include <svx/brshitem.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/intitem.hxx>
-#include <vcl/fontcvt.hxx>
+#include <svl/intitem.hxx>
+#include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
 DBG_NAME( EE_EditTextObject )
