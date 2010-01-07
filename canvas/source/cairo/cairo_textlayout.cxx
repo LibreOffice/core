@@ -44,6 +44,12 @@
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
 #endif
 #include <vcl/sysdata.hxx>
 

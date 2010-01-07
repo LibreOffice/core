@@ -430,9 +430,10 @@ BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
 #define CTRL_STATE_SELECTED     0x0040
 #define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
 */
-static ThemeDrawState getState( ControlState nState )
+UInt32 AquaSalGraphics::getState( ControlState nState )
 {
-    if( (nState & CTRL_STATE_ENABLED) == 0 )
+    bool bDrawActive = mpFrame ? ([mpFrame->getWindow() isKeyWindow] ? true : false) : true;
+    if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
     {
         if( (nState & CTRL_STATE_HIDDEN) == 0 )
             return kThemeStateInactive;
@@ -612,7 +613,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
             PushButtonValue* pPBVal = (PushButtonValue*)aValue.getOptionalVal();
-            int nPaintHeight = rc.size.height;
+            int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
             {
@@ -1162,8 +1163,10 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
         if( mxClipPath )
             aRect = CGPathGetBoundingBox( mxClipPath );
         if( aRect.size.width != 0 && aRect.size.height != 0 )
-            buttonRect.Intersection( Rectangle( Point( aRect.origin.x, aRect.origin.y ),
-                                                Size( aRect.size.width, aRect.size.height ) ) );
+            buttonRect.Intersection( Rectangle( Point( static_cast<long int>(aRect.origin.x),
+                            static_cast<long int>(aRect.origin.y) ),
+                                                Size(   static_cast<long int>(aRect.size.width),
+                            static_cast<long int>(aRect.size.height) ) ) );
     }
 
     RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );

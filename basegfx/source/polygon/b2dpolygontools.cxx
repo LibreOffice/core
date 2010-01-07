@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.cxx,v $
- * $Revision: 1.29.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,6 +191,9 @@ namespace basegfx
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
+
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());
 
@@ -272,6 +274,9 @@ namespace basegfx
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
+
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());
 
@@ -341,6 +346,9 @@ namespace basegfx
                     const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
+
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
 
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());
@@ -3268,6 +3276,9 @@ namespace basegfx
                 B2DPolygon aRetval;
                 B2DCubicBezier aBezier;
                 aBezier.setStartPoint(rCandidate.getB2DPoint(0));
+
+                // try to avoid costly reallocations
+                aRetval.reserve( nEdgeCount+1);
 
                 // add start point
                 aRetval.append(aBezier.getStartPoint());

@@ -185,14 +185,20 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsFillColor())
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
-        aB2DPP.transform( aTransform );
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
 
-        if( mpGraphics->DrawPolyPolygon( aB2DPP, fTransparency, this ) )
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, fTransparency, this))
         {
 #if 0
             // MetaB2DPolyPolygonAction is not implemented yet:
@@ -636,51 +642,105 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
             if( pVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
-                Bitmap      aPaint, aMask;
-                AlphaMask   aAlpha;
-                MapMode     aMap( GetMapMode() );
-                Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                const BOOL  bOldMap = mbMap;
+                if(GetAntialiasing())
+                {
+                    // #i102109#
+                    // For MetaFile replay (see task) it may now be neccessary to take
+                    // into account that the content is AntiAlialised and needs to be masked
+                    // like that. Instead of masking, i will use a copy-modify-paste cycle
+                    // here (as i already use in the VclPrimiziveRenderer with successs)
+                    pVDev->SetAntialiasing(GetAntialiasing());
 
-                aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
-                pVDev->SetMapMode( aMap );
-                const BOOL  bVDevOldMap = pVDev->IsMapModeEnabled();
+                    // create MapMode for buffer (offset needed) and set
+                    MapMode aMap(GetMapMode());
+                    const Point aOutPos(PixelToLogic(aDstRect.TopLeft()));
+                    aMap.SetOrigin(Point(-aOutPos.X(), -aOutPos.Y()));
+                    pVDev->SetMapMode(aMap);
 
-                // create paint bitmap
-                ( (GDIMetaFile&) rMtf ).WindStart();
-                ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
-                ( (GDIMetaFile&) rMtf ).WindStart();
-                pVDev->EnableMapMode( FALSE );
-                aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+                    // copy MapMode state and disable for target
+                    const bool bOrigMapModeEnabled(IsMapModeEnabled());
+                    EnableMapMode(false);
 
-                // create mask bitmap
-                pVDev->SetLineColor( COL_BLACK );
-                pVDev->SetFillColor( COL_BLACK );
-                pVDev->DrawRect( Rectangle( pVDev->PixelToLogic( Point() ), pVDev->GetOutputSize() ) );
-                pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                    DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
-                ( (GDIMetaFile&) rMtf ).WindStart();
-                ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
-                ( (GDIMetaFile&) rMtf ).WindStart();
-                pVDev->EnableMapMode( FALSE );
-                aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+                    // copy MapMode state and disable for buffer
+                    const bool bBufferMapModeEnabled(pVDev->IsMapModeEnabled());
+                    pVDev->EnableMapMode(false);
 
-                // create alpha mask from gradient
-                pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
-                pVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
-                pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                pVDev->EnableMapMode( FALSE );
-                pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
+                    // copy content from original to buffer
+                    pVDev->DrawOutDev(
+                        aPoint, pVDev->GetOutputSizePixel(), // dest
+                        aDstRect.TopLeft(), pVDev->GetOutputSizePixel(), // source
+                        *this);
 
-                aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
+                    // draw MetaFile to buffer
+                    pVDev->EnableMapMode(bBufferMapModeEnabled);
+                    ((GDIMetaFile&)rMtf).WindStart();
+                    ((GDIMetaFile&)rMtf).Play(pVDev, rPos, rSize);
+                    ((GDIMetaFile&)rMtf).WindStart();
 
-                delete pVDev;
+                    // get content bitmap from buffer
+                    pVDev->EnableMapMode(false);
+                    const Bitmap aPaint(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
 
-                EnableMapMode( FALSE );
-                DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
-                EnableMapMode( bOldMap );
+                    // create alpha mask from gradient and get as Bitmap
+                    pVDev->EnableMapMode(bBufferMapModeEnabled);
+                    pVDev->SetDrawMode(DRAWMODE_GRAYGRADIENT);
+                    pVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
+                    pVDev->SetDrawMode(DRAWMODE_DEFAULT);
+                    pVDev->EnableMapMode(false);
+                    const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
+
+                    // draw masked content to target and restore MapMode
+                    DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
+                    EnableMapMode(bOrigMapModeEnabled);
+                }
+                else
+                {
+                    Bitmap      aPaint, aMask;
+                    AlphaMask   aAlpha;
+                    MapMode     aMap( GetMapMode() );
+                    Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
+                    const BOOL  bOldMap = mbMap;
+
+                    aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
+                    pVDev->SetMapMode( aMap );
+                    const BOOL  bVDevOldMap = pVDev->IsMapModeEnabled();
+
+                    // create paint bitmap
+                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    pVDev->EnableMapMode( FALSE );
+                    aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+
+                    // create mask bitmap
+                    pVDev->SetLineColor( COL_BLACK );
+                    pVDev->SetFillColor( COL_BLACK );
+                    pVDev->DrawRect( Rectangle( pVDev->PixelToLogic( Point() ), pVDev->GetOutputSize() ) );
+                    pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                        DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
+                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    pVDev->EnableMapMode( FALSE );
+                    aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+
+                    // create alpha mask from gradient
+                    pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                    pVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
+                    pVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                    pVDev->EnableMapMode( FALSE );
+                    pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
+
+                    aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
+
+                    delete pVDev;
+
+                    EnableMapMode( FALSE );
+                    DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
+                    EnableMapMode( bOldMap );
+                }
             }
             else
                 delete pVDev;

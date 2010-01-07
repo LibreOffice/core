@@ -1040,6 +1040,14 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
         pParent->SetFlags( nFlags );
         GetModel()->InvalidateEntry( pParent ); // neu zeichnen
     }
+
+    // --> OD 2009-04-01 #i92103#
+    if ( bExpanded )
+    {
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_EXPANDED, pParent );
+    }
+    // <--
+
     return bExpanded;
 }
 
@@ -1059,6 +1067,14 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
         pHdlEntry = pParent;
         ExpandedHdl();
     }
+
+    // --> OD 2009-04-01 #i92103#
+    if ( bCollapsed )
+    {
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_COLLAPSED, pParent );
+    }
+    // <--
+
     return bCollapsed;
 }
 
@@ -1797,7 +1813,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
 
                 const Image* pImg = 0;
                 BmpColorMode eBitmapMode = BMP_COLOR_NORMAL;
-                if ( GetDisplayBackground().GetColor().IsDark() )
+                if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
                     eBitmapMode = BMP_COLOR_HIGHCONTRAST;
 
                 if( IsExpanded(pEntry) )

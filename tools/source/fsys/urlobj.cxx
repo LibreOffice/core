@@ -407,7 +407,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "out", "out://", 0, true, false, false, false, false, false,
           false, false },
         { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
-          false, true, false, true, false },
+          false, true, true, true, false },
         { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
           false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
@@ -1523,8 +1523,15 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
             else if (pEnd - q >= 2 && q[0] == '\\' && q[1] == '\\')
             {
                 q += 2;
-                if (scanDomain(q, pEnd) > 0 && (q == pEnd || *q == '\\'))
+                sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
+                    q, pEnd - q, '\\');
+                sal_Unicode const * qe = n == -1 ? pEnd : q + n;
+                if (parseHostOrNetBiosName(
+                        q, qe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
+                        true, NULL))
+                {
                     bFSys = true; // 1st
+                }
             }
             if (bFSys)
             {
@@ -4818,9 +4825,8 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
             break;
     }
 
-    rtl::OUStringBuffer aSynAbsURIRef(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://"),
-        RTL_TEXTENCODING_ASCII_US));
+    rtl::OUStringBuffer aSynAbsURIRef(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")));
+
     switch (eStyle)
     {
         case FSYS_VOS:

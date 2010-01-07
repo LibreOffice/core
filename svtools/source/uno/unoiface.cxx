@@ -48,12 +48,14 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <svtools/fmtfield.hxx>
-#include <numuno.hxx>
+#include <svl/numuno.hxx>
 #include <calendar.hxx>
 #include <prgsbar.hxx>
 
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
+#include "svtxgridcontrol.hxx"
+#include <svtools/table/tablecontrol.hxx>
 
 namespace
 {
@@ -83,8 +85,6 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         if ( pParent )
         {
             pWindow = new MultiLineEdit( pParent, nWinBits|WB_IGNORETAB);
-            static_cast< MultiLineEdit* >( pWindow )->DisableSelectionOnFocus();
-                // #i89821# / 2008-12-17 / frank.schoenheit@sun.com
             *ppNewComp = new VCLXMultiLineEdit;
         }
         else
@@ -132,7 +132,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     }
     else if (aServiceName.EqualsIgnoreCaseAscii("roadmap") )
     {
-        pWindow = new ::svt::ORoadmap( pParent, WB_DIALOGCONTROL);
+        pWindow = new ::svt::ORoadmap( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
     else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )
@@ -160,6 +160,19 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         {
             pWindow = new ::svt::FixedHyperlink( pParent, nWinBits );
             *ppNewComp = new VCLXFixedHyperlink;
+        }
+        else
+        {
+            *ppNewComp = NULL;
+            return NULL;
+        }
+    }
+    else if ( aServiceName.EqualsIgnoreCaseAscii( "Grid" ) )
+    {
+        if ( pParent )
+        {
+            pWindow = new ::svt::table::TableControl(pParent, nWinBits);
+            *ppNewComp = new SVTXGridControl;
         }
         else
         {

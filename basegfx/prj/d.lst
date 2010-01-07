@@ -96,6 +96,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tools
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\color
 ..\inc\basegfx\color\bcolor.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolor.hxx
+..\inc\basegfx\color\bcolortools.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolortools.hxx
 ..\inc\basegfx\color\bcolormodifier.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolormodifier.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\pixel

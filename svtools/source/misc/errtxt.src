@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #define __RSC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include "sfxecode.hxx"
  // pragma ----------------------------------------------------------------
 Resource RID_ERRCTX
@@ -478,6 +478,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
     };
+    String ERRCODE_SFX_INCOMPLETE_ENCRYPTION
+    {
+        Text [ en-US ] = "The encrypted document contains unexpected non-encrypted streams.\n\nThis could be the result of document manipulation.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
+    };
 
     String ERRCODE_IO_INVALIDLENGTH
     {
@@ -502,6 +506,10 @@ Resource RID_ERRHDL
     String ERRCODE_IO_WRITEPROTECTED
     {
         Text [ en-US ] = "Function not possible: write protected." ;
+    };
+    String ERRCODE_SFX_SHARED_NOPASSWORDCHANGE
+    {
+        Text [ en-US ] = "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first.";
     };
 };
 

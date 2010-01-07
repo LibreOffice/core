@@ -13,7 +13,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: localize.pl,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.18.6.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,10 +39,12 @@ use Getopt::Long;
 use IO::Handle;
 use File::Find;
 use File::Temp;
+use File::Path;
 use File::Copy;
 use File::Glob qw(:glob csh_glob);
 use Cwd;
 
+my $CVS_BINARY = "/usr/bin/cvs";
 # ver 1.1
 #
 #### module lookup
@@ -61,16 +63,24 @@ BEGIN {
 use lib (@lib_dirs);
 
 #### globals ####
-my $sdffile = '';
-my $no_sort = '';
-my $outputfile = '';
-my $mode = '';
-my $bVerbose="0";
-my $srcpath = '';
+my $sdffile                 = '';
+my $no_sort                 = '';
+my $create_dirs             = '';
+my $multi_localize_files    = '';
+my $module_to_merge         = '';
+my $sort_sdf_before         = '';
+my $outputfile              = '';
+my $no_gsicheck             = '';
+my $mode                    = '';
+my $bVerbose                = "0";
+my $srcpath                 = '';
 my $WIN;
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
+my %is_ooo_module;
+my %is_so_module;
+my $DELIMITER;
 
          #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
@@ -82,21 +92,38 @@ my @sdfparticles;
 
 #### main ####
 parse_options();
+check_modules_scm();
 
 if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $WIN = 'TRUE';
+   $DELIMITER = "\\";
 }
  else {
    $WIN = '';
+   $DELIMITER = "/";
+}
+
+my $binpath = '';
+if( defined $ENV{UPDMINOREXT} )
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$ENV{UPDMINOREXT}.$DELIMITER ;
+}
+else
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$DELIMITER ;
 }
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
 
 if   ( $mode eq "merge"    )    {
-    merge_gsicheck();
+    if ( ! $no_gsicheck ){
+        merge_gsicheck();
+    }
     splitfile( $sdffile );
-    unlink $sdffile;             # remove temp file!
+    if ( ! $no_gsicheck ){
+        unlink $sdffile;             # remove temp file!
+    }
 }
 elsif( $mode eq "extract"  )    {
     collectfiles( $outputfile );
@@ -126,6 +153,12 @@ sub splitfile{
     open MYFILE , "< $sdffile"
     or die "Can't open '$sdffile'\n";
 
+#    my %lang_hash;
+    my %string_hash_ooo;
+    my %string_hash_so;
+    my %so_modules;
+    $so_modules{ "extras_full" } = "TRUE";
+
     while( <MYFILE>){
          if( /$sdf_regex/ ){
             my $line           = defined $_ ? $_ : '';
@@ -137,182 +170,186 @@ sub splitfile{
             my $lang           = defined $12 ? $12 : '';
             my $plattform      = defined $10 ? $10 : '';
             my $helpid         = defined $9 ? $9 : '';
-
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
-            $currentFile  = $srcpath . '\\' . $prj . '\\' . $file;
-            if ( $WIN ) { $currentFile  =~ s/\//\\/g; }
-            else        { $currentFile  =~ s/\\/\//g; }
 
-            $cur_sdffile = $currentFile;
-            #if( $cur_sdffile =~ /\.$file_types[\s]*$/ ){
-                if( $WIN ) { $cur_sdffile =~ s/\\[^\\]*\.$file_types[\s]*$/\\localize.sdf/; }
-                else       { $cur_sdffile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
-            #}
-
-            # Set default date
-            if( $line =~ /(.*)\t[^\t\$]*$/ ){
-                $line = $1."\t".$default_date;
-            }
-
-            if( $start ){
-                $start='';
-                $lastFile = $currentFile; # ?
-                $last_sdffile = $cur_sdffile;
-            }
-
-            if( $lang eq "en-US" ){}
-            elsif( $cur_sdffile eq $last_sdffile )
+            if( is_openoffice_module( $prj ) )
             {
-                $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
+                $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
             }
             else
             {
-                writesdf( $lastFile , \%block );
-                $lastFile = $currentFile; #?
-                $last_sdffile = $cur_sdffile;
-                %block = ();
-                #if( ! $lang eq "en-US"  ) {
-                $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
-                #}
-
+                $string_hash_so{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
             }
-        } #else { print STDOUT "splitfile REGEX kaputt\n";}
-
+        }
     }
-    writesdf( $lastFile , \%block );
-    %block = ();
     close( MYFILE );
 
+    if( !defined $ENV{SRC_ROOT} ){
+        print "Error, no SRC_ROOT in env found.\n";
+        exit( -1 );
+    }
+    my $src_root = $ENV{SRC_ROOT};
+    #print $WIN eq "TRUE" ? $src_root."\\l10n_so\n" : $src_root."/l10n_so\n";
+    my $so_l10n_path  = $WIN eq "TRUE" ? $src_root."\\l10n_so\\source" : $src_root."/l10n_so/source";
+    my $ooo_l10n_path = $WIN eq "TRUE" ? $src_root."\\l10n\\source"    : $src_root."/l10n/source";
+
+    #print "$so_l10n_path\n";
+    #print "$ooo_l10n_path\n";
+
+    write_sdf( \%string_hash_so , $so_l10n_path );
+    write_sdf( \%string_hash_ooo , $ooo_l10n_path );
+
 }
-#########################################################
+sub check_modules_scm
+{
+    #my @ooo_modules;
+    #my @so_modules;
+    my $src_path        = $ENV{ SRC_ROOT } ;
+    my $last_dir        = getcwd();
+    chdir $src_path ;
+    my @modules         = <*/.svn/entries>;
 
-#sub fetch_sourcelanguage_dirlist
-#{
-#
-#    my $working_path = getcwd();
-#    my %sl_dirlist;
-#
-#    chdir $srcpath;
-#    my @all_dirs = csh_glob( "*" );
-#
-#    foreach my $file ( @all_dirs )
-#    {
-#        if( -d $file )
-#        {
-#            my $module = $file;
-#            $file .= "/prj/l10n";
-#            $file =~ s/\//\\/ , if( $WIN ) ;
-#
-#            if( -f $file )                                        # Test file <module>/prj/l10n
-#            {
-#                $sl_dirlist{ $module } = 1;
-#                if( $bVerbose eq "1" ) { print STDOUT "$module: de and en-US source language detected\n"; }
-#            }
-#        }
-#    }
-#
-#    chdir $working_path;
-#
-#    return %sl_dirlist;
-#}
+    foreach my $module ( @modules )
+    {
+        #print "$module \n";
+        if( open ( FILE , "<$module" ) )
+        {
+            while( <FILE> )
+            {
 
-#sub has_two_sourcelanguages
-#{
-#    my $module          = shift;
-#    return defined $sl_modules{ $module } ;
-#}
-sub writesdf{
+                my @path = split ( "/" , $module ) ;
 
-    my $lastFile        = shift;
-    my $blockhash_ref   = shift;
-    my $localizeFile    = $lastFile;
-    my %index=();
-
-    if( $localizeFile =~ /\.$file_types[\s]*$/ ){
-        if( $WIN ) { $localizeFile =~ s/\\[^\\]*\.$file_types[\s]*$/\\localize.sdf/; }
-        else       { $localizeFile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
-        }else {
-            print STDERR "Strange filetype found '$localizeFile'\n";
-            return;
+                if( /svn.services.openoffice.org/ )
+                {
+                    my $mod = $path[ 0 ];
+                    #push @ooo_modules , $mod;
+                    $is_ooo_module{ $mod } = "true";
+                    # print "$module -> ooo ";
+                }
+                elsif ( /jumbo2.germany.sun.com/ )
+                {
+                    my $mod = $path[ 0 ];
+                    #push @so_modules , $mod;
+                    # print "$module -> so ";
+                    #$so_lookup_hash{ $mod } = "true";
+                }
+                #else
+                #{
+                #    print "ERROR: Is $module a SO or OOo module? Can not parese the $module/.svn/entries file ... please check mwsfinnish/merge/splitsdf.pl line 280\n";
+                # exit -1;
+                #}
+            }
         }
-        if( $bVerbose ){ print STDOUT "$localizeFile\n"; }
-        if( open DESTFILE , "< $localizeFile" ){
+    }
+    chdir $last_dir ;
+    #print "OOO\n";
+    #print @ooo_modules;
+    #print "\nSO\n";
+    #print @so_modules;
+}
 
-        #or die "Can't open/create '\$localizeFile'";
 
-        #### Build hash
-        while(<DESTFILE>){
-         if( /$sdf_regex/ ){
-            my $line           = defined $_ ? $_ : '';
-            my $prj            = defined $3 ? $3 : '';
-            my $file           = defined $4 ? $4 : '';
-            my $type           = defined $6 ? $6 : '';
-            my $gid            = defined $7 ? $7 : '';
-            my $lid            = defined $8 ? $8 : '';
-            my $lang           = defined $12 ? $12 : '';
-            my $plattform      = defined $10 ? $10 : '';
-            my $helpid         = defined $9 ? $9 : '';
+#sub parse
+#{
+#    my $command = "$CVS_BINARY -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs co -c";
+#    my $output  = `$command`;
+#    my $rc = $? << 8;
+#    if ( $output eq "" || $rc < 0 ){
+#        print STDERR "ERROR: Can not fetch cvs alias list, please login to the cvs server and press at the password prompt just return\ncvs -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs login\n";
+#        exit ( -1 );
+#    }
+#    my @list = split /\n/ , $output ;
+#    foreach my $string( @list )
+#    {
+#
+#        #        print "Found '$1'\n" , if( $string =~ /^(\w*)/ && $1 ne "" );
+#
+#        $is_ooo_module{ $1 } = "TRUE", if( $string =~ /^(\w*)/ && $1 ne "" );
+#    }
+#    #    foreach my $key( keys( %is_ooo_module ) )
+#    #{
+#        #    print "$key\n";
+#        #}
+#}
+sub is_openoffice_module
+{
+    my $module              = shift;
+    return "TRUE", if defined $is_ooo_module{ $module };
+    return "";
+}
 
-            chomp( $line );
-            $index{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
+sub write_sdf
+{
+    my $string_hash         = shift;
+    my $l10n_file           = shift;
 
-         } #else { print STDOUT "writesdf REGEX kaputt $_\n";}
+    foreach my $lang( keys( %{ $string_hash } ) )
+    {
+        my @sdf_file;
 
+        # mkdir!!!!
+        my $current_l10n_file = $WIN eq "TRUE" ? $l10n_file."\\$lang\\localize.sdf" : $l10n_file."/$lang/localize.sdf";
+        print "Writing '$current_l10n_file'\n";
+        if( open DESTFILE , "< $current_l10n_file" ){
+
+            while(<DESTFILE>){
+                if( /$sdf_regex/ ){
+                    my $line           = defined $_ ? $_ : '';
+                    my $prj            = defined $3 ? $3 : '';
+                    my $file           = defined $4 ? $4 : '';
+                    my $type           = defined $6 ? $6 : '';
+                    my $gid            = defined $7 ? $7 : '';
+                    my $lid            = defined $8 ? $8 : '';
+                    my $lang           = defined $12 ? $12 : '';
+                    my $plattform      = defined $10 ? $10 : '';
+                    my $helpid         = defined $9 ? $9 : '';
+
+                    chomp( $line );
+                    if ( defined $string_hash->{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } )
+                    {
+                        # Changed String!
+                        push @sdf_file , $string_hash->{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } ;
+                        $string_hash->{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = undef;
+                    }
+                    else
+                    {
+                        # No new string
+                        push @sdf_file , $line;
+                    }
+                }
+            }
         }
         close( DESTFILE );
-    }
-    #### Copy new strings
-    my @mykeys = keys( %{ $blockhash_ref } );
-    my $isDirty = "FALSE";
-    foreach my $key( @mykeys ){
-        if( ! defined $index{ $key } ){
-            # Add new entry
-            $index{ $key }  = $blockhash_ref->{ $key} ;
-            $isDirty = "TRUE";
-        }elsif( $index{ $key } ne $blockhash_ref->{ $key } ){
-            # Overwrite old entry
-            $index{ $key } = $blockhash_ref->{ $key };
-            $isDirty = "TRUE";
-        }else {
+        #Now just append the enw strings
+        #FIXME!!! Implement insertion in the correct order
+        foreach my $key ( keys ( %{ $string_hash->{ $lang } } ) )
+        {
+            push @sdf_file , $string_hash->{ $lang }{ $key } , if ( defined $string_hash->{ $lang }{ $key } );
+            #print "WARNING: Not defined = ".$string_hash->{ $lang }{ $key }."\n", if( ! defined  $string_hash->{ $lang }{ $key } );
         }
-    }
 
-    #### Write file
-
-    if( !$bVerbose ){ print STDOUT "."; }
-    if( $isDirty eq "TRUE" ){
-        if( open DESTFILE , "+> $localizeFile" ){
+        # Write the new file
+        my ( $TMPFILE , $tmpfile ) = File::Temp::tempfile();
+        if( open DESTFILE , "+> $tmpfile " ){
             print DESTFILE get_license_header();
-            @mykeys = sort keys( %index );
-            foreach my $key( @mykeys ){
-                print DESTFILE ( $index{ $key } , "\n" );
+            foreach my $string( @sdf_file ){
+                print DESTFILE "$string\n";
             }
-            close DESTFILE;
-         }else {
-            print STDOUT "WARNING: File $localizeFile is not writable , try to merge ...\n";
-            my ( $TMPFILE , $tmpfile ) = File::Temp::tempfile();
-            if( open DESTFILE , "+> $tmpfile " ){
-                @mykeys = keys( %index );
-                foreach my $key( @mykeys ){
-                    print DESTFILE ( $index{ $key } , "\n" );
-                }
-                close DESTFILE;
-                if( move( $localizeFile , $localizeFile.".backup" ) ){
-                    if( copy( $tmpfile , $localizeFile ) ){
-                        unlink $localizeFile.".backup";
-                    } else { print STDERR "Can't open/create '$localizeFile', original file is renamed to  $localizeFile.backup\n"; }
-                } else { print STDERR "Can't open/create '$localizeFile'\n"; }
-            }else{
-                print STDERR "WARNING: Can't open/create '$localizeFile'\n";
-            }
-            unlink $tmpfile;
-        }
-    }
-#    if( $no_sort eq '' ){
-#        sort_outfile( $localizeFile );
-#    }
+            close ( DESTFILE );
+            if( move( $current_l10n_file , $current_l10n_file.".backup" ) ){
+                if( copy( $tmpfile , $current_l10n_file ) ){
+                    unlink $l10n_file.".backup";
+                 } else { print STDERR "Can't open/create '$l10n_file', original file is renamed to $l10n_file.backup\n"; }
+            } else { print STDERR "Can't open/create '$l10n_file'\n"; }
+         }else{
+            print STDERR "WARNING: Can't open/create '$l10n_file'\n";
+         }
+         unlink $tmpfile;
+     }
 }
+
+#########################################################
 
 sub get_license_header{
     return
@@ -398,6 +435,41 @@ sub wanted
     }
 }
 
+sub add_paths
+{
+    my $langhash_ref            = shift;
+    my $root_dir = $ENV{ SRC_ROOT };
+    my $ooo_l10n_dir = "$root_dir"."$DELIMITER"."l10n"."$DELIMITER"."source";
+    my $so_l10n_dir  = "$root_dir"."$DELIMITER"."l10n_so"."$DELIMITER"."source";
+
+    if( -e $ooo_l10n_dir )
+    {
+        foreach my $lang ( keys( %{ $langhash_ref } ) )
+        {
+            my $loc_file = "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            if( -e $loc_file )
+            {
+                push @sdfparticles , "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            }
+            else { print "WARNING: $loc_file not found ....\n"; }
+        }
+    }
+    else { die "ERROR: Can not find directory $ooo_l10n_dir!!!" }
+    if( -e $so_l10n_dir )
+    {
+        foreach my $lang ( keys( %{ $langhash_ref } ) )
+        {
+            my $loc_file = "$so_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            if( -e $loc_file )
+            {
+                push @sdfparticles , "$ooo_l10n_dir"."$DELIMITER"."$lang"."$DELIMITER"."localize.sdf";
+            }
+            else { #print "WARNING: $loc_file not found ....\n";
+            }
+        }
+
+    }
+}
 sub collectfiles{
     print STDOUT "### Localize\n";
     my $localizehash_ref;
@@ -408,14 +480,14 @@ sub collectfiles{
     STDOUT->autoflush( 1 );
 
     ### Search sdf particles
-    print STDOUT "### Searching sdf particles\n";
+    #print STDOUT "### Searching sdf particles\n";
     my $working_path = getcwd();
-    chdir $srcpath;
-    find ( { wanted => \&wanted , follow => 1 }, getcwd() );
-    chdir $working_path;
-
-    my $nFound  = $#sdfparticles +1;
-    print "\n    $nFound files found !\n";
+    #chdir $srcpath;
+    #find ( { wanted => \&wanted , follow => 1 }, getcwd() );
+    #chdir $working_path;
+    add_paths( $langhash_ref );
+    #my $nFound  = $#sdfparticles +1;
+    #print "\n    $nFound files found !\n";
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();
     close( $LOCALIZEPARTICLE );
@@ -425,18 +497,18 @@ sub collectfiles{
     my ( $LOCALIZE_LOG , $my_localize_log ) = File::Temp::tempfile();
     close( $LOCALIZE_LOG );
 
-    ## Get the localize de,en-US extract
+    ## Get the localize en-US extract
     if( $bAll || $bUseLocalize ){
         print "### Fetching source language strings\n";
         my $command = "";
         my $args    = "";
 
         if( $ENV{WRAPCMD} ){
-            $command = "$ENV{WRAPCMD} localize_sl";
+            $command = $ENV{WRAPCMD}.$binpath."localize_sl";
         }else{
-            $command = "localize_sl";
+            $command = $binpath."localize_sl";
         }
-
+        print $command;
         # -e
         # if ( -x $command ){
         if( $command ){
@@ -480,7 +552,8 @@ sub collectfiles{
 
     }
     ## Get sdf particles
-   open ALLPARTICLES_MERGED , "+>> $particleSDF_merged"
+#*****************
+    open ALLPARTICLES_MERGED , "+>> $particleSDF_merged"
     or die "Can't open $particleSDF_merged";
 
     ## Fill fackback hash
@@ -542,7 +615,7 @@ sub collectfiles{
         }
     }
     close ALLPARTICLES_MERGED;
-
+#***************
 
     # Hash of array
     my %output;
@@ -1040,7 +1113,8 @@ sub parse_options{
     my $merge;
     my $extract;
     my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
-                             'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date );
+                             'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date , 'c' => \$create_dirs ,
+                             'n' => \$no_gsicheck );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
@@ -1068,13 +1142,16 @@ sub parse_options{
     if( $extract ){ $mode = "extract"; }
     else          { $mode = "merge";   }
 }
+#my $multi_localize_files    = ''; h
+#my $module_to_merge         = ''; i
+#my $sort_sdf_before         = ''; g
 
 #########################################################
 sub usage{
 
     print STDERR "Usage: localize.pl\n";
     print STDERR "Split or collect SDF files\n";
-    print STDERR "           merge: -m -f <sdffile>    -l l1[=f1][,l2[=f2]][...] [ -s <sourceroot> ]\n";
+    print STDERR "           merge: -m -f <sdffile>    -l l1[=f1][,l2[=f2]][...] [ -s <sourceroot> ] [ -c ]\n";
     print STDERR "         extract: -e -f <outputfile> -l <lang> [ -s <sourceroot> ] [-d]\n";
     print STDERR "Options:\n";
     print STDERR "    -h              help\n";
@@ -1085,6 +1162,11 @@ sub usage{
     print STDERR "    -s <sourceroot> Path to the modules, if no \$SRC_ROOT is set\n";
     print STDERR "    -l ( all | <isocode> | <isocode>=fallback ) comma seperated languages\n";
     print STDERR "    -d              Use default date in extracted sdf file\n";
+    print STDERR "    -c              Create needed directories\n";
+    print STDERR "    -g              Sort sdf file before mergeing\n";
+    print STDERR "    -h              File with localize.sdf's\n!";
+    print STDERR "    -n              No gsicheck\n";
+    print STDERR "    -i              Module to merge\n";
     print STDERR "    -v              Verbose\n";
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";

@@ -35,6 +35,8 @@
 #include "Cocoa/Cocoa.h"
 #include "postmac.h"
 
+class AquaSalFrame;
+
 @interface CocoaThreadEnabler : NSObject
 {
 }
@@ -59,12 +61,13 @@
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification;
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
--(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
 -(void)applicationWillBecomeActive: (NSNotification *)pNotification;
 -(void)applicationWillResignActive: (NSNotification *)pNotification;
 -(MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
+-(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
+-(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame;
 @end
 
 #endif

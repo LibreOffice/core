@@ -37,7 +37,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
@@ -66,7 +66,7 @@ struct SvParser_Impl
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SvFileStream aOut;
 #endif
 
@@ -100,7 +100,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     pTokenStack = new TokenStackType[ nTokenStackSize ];
     pTokenStackPos = pTokenStack;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
     // wenn die Datei schon existiert, dann Anhaengen:
     if( !pImplData )
@@ -119,7 +119,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
 
 SvParser::~SvParser()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << "\n\n >>>>>>>>>>>>>>> Dump Ende <<<<<<<<<<<<<<<\n";
     pImplData->aOut.Close();
@@ -417,7 +417,7 @@ sal_Unicode SvParser::GetNextChar()
             return sal_Unicode(EOF);
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << ByteString::ConvertFromUnicode( c,
                                                 RTL_TEXTENCODING_MS_1251 );
@@ -664,6 +664,66 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
     }
 
     return 0;
+}
+
+/*========================================================================
+ *
+ * SvKeyValueIterator.
+ *
+ *======================================================================*/
+SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4)
+SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
+
+/*
+ * SvKeyValueIterator.
+ */
+SvKeyValueIterator::SvKeyValueIterator (void)
+    : m_pList (new SvKeyValueList_Impl),
+      m_nPos  (0)
+{
+}
+
+/*
+ * ~SvKeyValueIterator.
+ */
+SvKeyValueIterator::~SvKeyValueIterator (void)
+{
+    delete m_pList;
+}
+
+/*
+ * GetFirst.
+ */
+BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
+{
+    m_nPos = m_pList->Count();
+    return GetNext (rKeyVal);
+}
+
+/*
+ * GetNext.
+ */
+BOOL SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
+{
+    if (m_nPos > 0)
+    {
+        rKeyVal = *m_pList->GetObject(--m_nPos);
+        return TRUE;
+    }
+    else
+    {
+        // Nothing to do.
+        return FALSE;
+    }
+}
+
+/*
+ * Append.
+ */
+void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
+{
+    SvKeyValue *pKeyVal = new SvKeyValue (rKeyVal);
+    m_pList->C40_INSERT(SvKeyValue, pKeyVal, m_pList->Count());
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

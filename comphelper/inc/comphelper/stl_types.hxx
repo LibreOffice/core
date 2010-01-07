@@ -49,6 +49,7 @@
 
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -189,6 +190,59 @@ template <class _Tp, class _Arg>
 inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
 {
     return mem_fun1_t<_Tp,_Arg>(__f);
+}
+
+//.........................................................................
+/** output iterator that appends OUStrings into an OUStringBuffer.
+ */
+class OUStringBufferAppender :
+    public ::std::iterator< ::std::output_iterator_tag, void, void, void, void>
+{
+public:
+    typedef OUStringBufferAppender Self;
+    typedef ::std::output_iterator_tag iterator_category;
+    typedef void value_type;
+    typedef void reference;
+    typedef void pointer;
+    typedef size_t difference_type;
+
+    OUStringBufferAppender(::rtl::OUStringBuffer & i_rBuffer)
+        : m_rBuffer(i_rBuffer) { }
+    Self & operator=(::rtl::OUString const & i_rStr)
+    {
+        m_rBuffer.append( i_rStr );
+        return *this;
+    }
+    Self & operator*() { return *this; } // so operator= works
+    Self & operator++() { return *this; }
+    Self & operator++(int) { return *this; }
+
+private:
+    ::rtl::OUStringBuffer & m_rBuffer;
+};
+
+//.........................................................................
+/** algorithm similar to std::copy, but inserts a separator between elements.
+ */
+template< typename ForwardIter, typename OutputIter, typename T >
+OutputIter intersperse(
+    ForwardIter start, ForwardIter end, OutputIter out, T const & separator)
+{
+    if (start != end) {
+        *out = *start;
+        ++start;
+        ++out;
+    }
+
+    while (start != end) {
+        *out = separator;
+        ++out;
+        *out = *start;
+        ++start;
+        ++out;
+    }
+
+    return out;
 }
 
 //.........................................................................

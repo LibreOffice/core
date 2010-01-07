@@ -55,15 +55,24 @@
 #include "saltimer.h"
 #include "vclnsapp.h"
 
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include "premac.h"
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
 #include "apple_remote/RemoteControl.h"
 #include "postmac.h"
-
+#include <tools/solarmutex.hxx>
 
 using namespace std;
+using namespace ::com::sun::star;
 
 extern BOOL ImplSVMain();
 
@@ -140,10 +149,6 @@ bool AquaSalInstance::isOnCommandLine( const rtl::OUString& rArg )
 // returns an NSAutoreleasePool that must be released when the event loop begins
 static void initNSApp()
 {
-    SInt32 major  = NULL;
-    SInt32 minor  = NULL;
-    SInt32 bugFix = NULL;
-
     // create our cocoa NSApplication
     [VCL_NSApplication sharedApplication];
 
@@ -176,7 +181,17 @@ static void initNSApp()
                                           object: nil ];
 
     // get System Version and store the value in GetSalData()->mnSystemVersion
-    [NSApp getSystemVersionMajor: (unsigned int *)major minor:(unsigned int *)minor bugFix:(unsigned int *)bugFix ];
+    OSErr err = noErr;
+    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
+    if( (err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr )
+    {
+        GetSalData()->mnSystemVersion = systemVersion;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
+#endif
+    }
+    else
+        NSLog(@"Unable to obtain system version: %ld", (long)err);
 
      // Initialize Apple Remote
     GetSalData()->mpMainController = [[MainController alloc] init];
@@ -457,6 +472,7 @@ AquaSalInstance::AquaSalInstance()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
     maMainThread = vos::OThread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
@@ -467,6 +483,7 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );
@@ -809,6 +826,18 @@ bool AquaSalInstance::AnyInput( USHORT nType )
             return false;
     }
 
+    if( nType & INPUT_TIMER )
+    {
+        if( AquaSalTimer::pRunningTimer )
+        {
+            NSDate* pDt = [AquaSalTimer::pRunningTimer fireDate];
+            if( pDt && [pDt timeIntervalSinceNow] < 0 )
+            {
+                return true;
+            }
+        }
+    }
+
     unsigned/*NSUInteger*/ nEventMask = 0;
     if( nType & INPUT_MOUSE)
         nEventMask |=
@@ -822,7 +851,7 @@ bool AquaSalInstance::AnyInput( USHORT nType )
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & INPUT_OTHER)
         nEventMask |= NSTabletPoint;
-    // TODO: INPUT_PAINT / INPUT_TIMER / more INPUT_OTHER
+    // TODO: INPUT_PAINT / more INPUT_OTHER
     if( !nType)
         return false;
 
@@ -1010,6 +1039,83 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
     rReturnedType   = AsciiCString;
     return (void*)"";
 }
+
+// We need to re-encode file urls because osl_getFileURLFromSystemPath converts
+// to UTF-8 before encoding non ascii characters, which is not what other apps expect.
+static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
+{
+    rtl::OUString extUrl;
+
+    uno::Reference< lang::XMultiServiceFactory > sm = comphelper::getProcessServiceFactory();
+    if (sm.is())
+    {
+        uno::Reference< beans::XPropertySet > pset;
+        sm->queryInterface( getCppuType( &pset )) >>= pset;
+        if (pset.is())
+        {
+            uno::Reference< uno::XComponentContext > context;
+            static const rtl::OUString DEFAULT_CONTEXT( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) );
+            pset->getPropertyValue(DEFAULT_CONTEXT) >>= context;
+            if (context.is())
+                extUrl = uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
+        }
+    }
+    return extUrl;
+}
+
+// #i104525# many versions of OSX have problems with some URLs:
+// when an app requests OSX to add one of these URLs to the "Recent Items" list
+// then this app gets killed (TextEdit, Preview, etc. and also OOo)
+static bool isDangerousUrl( const rtl::OUString& rUrl )
+{
+    // use a heuristic that detects all known cases since there is no official comment
+    // on the exact impact and root cause of the OSX bug
+    const int nLen = rUrl.getLength();
+    const sal_Unicode* p = rUrl.getStr();
+    for( int i = 0; i < nLen-3; ++i, ++p ) {
+        if( p[0] != '%' )
+            continue;
+        // escaped percent?
+        if( (p[1] == '2') && (p[2] == '5') )
+            return true;
+        // escapes are considered to be UTF-8 encoded
+        // => check for invalid UTF-8 leading byte
+        if( (p[1] != 'f') && (p[1] != 'F') )
+            continue;
+        int cLowNibble = p[2];
+        if( (cLowNibble >= '0' ) && (cLowNibble <= '9'))
+            return false;
+        if( cLowNibble >= 'a' )
+            cLowNibble -= 'a' - 'A';
+        if( (cLowNibble < 'A') || (cLowNibble >= 'C'))
+            return true;
+    }
+
+    return false;
+}
+
+void AquaSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& /*rMimeType*/)
+{
+    // Convert file URL for external use (see above)
+    rtl::OUString externalUrl = translateToExternalUrl(rFileUrl);
+    if( 0 == externalUrl.getLength() )
+        externalUrl = rFileUrl;
+
+    if( externalUrl.getLength() && !isDangerousUrl( externalUrl ) )
+    {
+        NSString* pString = CreateNSString( externalUrl );
+        NSURL* pURL = [NSURL URLWithString: pString];
+
+        if( pURL )
+        {
+            NSDocumentController* pCtrl = [NSDocumentController sharedDocumentController];
+            [pCtrl noteNewRecentDocumentURL: pURL];
+        }
+        if( pString )
+            [pString release];
+    }
+}
+
 
 // -----------------------------------------------------------------------
 

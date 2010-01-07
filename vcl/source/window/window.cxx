@@ -68,7 +68,7 @@
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/toolbox.h"
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
@@ -292,6 +292,13 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
+    // reset high contrast to false, so the system can either update it
+    // or AutoDetectSystemHC can kick in (see below)
+    StyleSettings aTmpSt( rSettings.GetStyleSettings() );
+    aTmpSt.SetHighContrastMode( FALSE );
+    rSettings.SetStyleSettings( aTmpSt );
+    ImplGetFrame()->UpdateSettings( rSettings );
+
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
     bool bUseSystemFont = rSettings.GetStyleSettings().GetUseSystemUIFonts();
@@ -303,7 +310,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = vcl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = utl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
@@ -472,7 +479,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     rSettings.SetStyleSettings( aStyleSettings );
 
 
-    // #104427# auto detect HC mode ?
+    // auto detect HC mode; if the system already set it to "yes"
+    // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
@@ -728,7 +736,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
             nStyle |= WB_BORDER;
         }
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL), nBorderTypeStyle );
+        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
         ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -783,6 +791,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nFrameStyle = SAL_FRAME_STYLE_FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
                 nFrameStyle |= (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_NOSHADOW);
+            if( nStyle & WB_NEEDSFOCUS )
+                nFrameStyle |= SAL_FRAME_STYLE_FLOAT_FOCUSABLE;
         }
         else if( mpWindowImpl->mbFloatWin )
             nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
@@ -923,7 +933,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
              ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN))
              )
         {
-            mpWindowImpl->mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
+            // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = TRUE;
@@ -5844,18 +5854,15 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     ImplInitResolutionSettings();
 
     /* #i73785#
-    *  do not overwrite a NoWheelActionWithoutFocus with false
-    *  this looks kind of a hack, but NoWheelActionWithoutFocus
+    *  do not overwrite a WheelBehavior with false
+    *  this looks kind of a hack, but WheelBehavior
     *  is always a local change, not a system property,
-    *  so we can spare all our users the hassel of reacting on
+    *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    if( aOldSettings.GetMouseSettings().GetNoWheelActionWithoutFocus() )
-    {
-        MouseSettings aSet( maSettings.GetMouseSettings() );
-        aSet.SetNoWheelActionWithoutFocus( TRUE );
-        maSettings.SetMouseSettings( aSet );
-    }
+    MouseSettings aSet( maSettings.GetMouseSettings() );
+    aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
+    maSettings.SetMouseSettings( aSet );
 
     if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {
@@ -6224,6 +6231,15 @@ void Window::SetParent( Window* pNewParent )
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
 
     ImplSetFrameParent( pNewParent );
 
@@ -6352,6 +6368,9 @@ void Window::SetParent( Window* pNewParent )
 
     if( bChangeTaskPaneList )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
+
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+        ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
         Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -6495,7 +6514,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             // nach vorne, wenn es gewuenscht ist
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
-                ImplStartToTop( 0 );
+                ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, FALSE );
             }
 
@@ -9733,6 +9752,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     EnableOutput();
 
     DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
+        return;
 
     // preserve graphicsstate
     Push();

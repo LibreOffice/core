@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -73,12 +70,13 @@ private:
     // to prevent ATS overflowing the Fixed16.16 values
     // ATS font requests get size limited by downscaling huge fonts
     // in these cases the font scale becomes something bigger than 1.0
-    float           mfFontScale;
+    float               mfFontScale;
 
 private:
     bool    InitGIA( ImplLayoutArgs* pArgs = NULL ) const;
     bool    GetIdealX() const;
     bool    GetDeltaY() const;
+    void    InvalidateMeasurements();
 
     int Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
     int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
@@ -305,17 +303,15 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
-        mnTrailingSpaceWidth = 0;
         int i = mnCharCount;
-        while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
-            mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
-        if( i <= 0 )
+        while( (--i >= 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) ) {}
+        if( i < 0 ) // nothing to do if the text is all spaces
             return;
         // #i91685# trailing letters are left aligned (right aligned for RTL)
-        mnTrailingSpaceWidth += rArgs.mpDXArray[i];
+        mnTrailingSpaceWidth = rArgs.mpDXArray[ mnCharCount-1 ];
         if( i > 0 )
-            mnTrailingSpaceWidth -= rArgs.mpDXArray[i-1];
-        InitGIA(); // ensure valid mpCharWidths[]
+            mnTrailingSpaceWidth -= rArgs.mpDXArray[ i-1 ];
+        InitGIA(); // ensure valid mpCharWidths[], TODO: use GetIdealX() instead?
         mnTrailingSpaceWidth -= Fixed2Vcl( mpCharWidths[i] );
         // ignore trailing space for calculating the available width
         nOrigWidth -= mnTrailingSpaceWidth;
@@ -329,10 +325,14 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !nPixelWidth )
         return;
 
-    // HACK: justification requests which change the width by just one pixel are probably
+    // HACK: justification requests which change the width by just one pixel were probably
     // #i86038# introduced by lossy conversions between integer based coordinate system
+    // => ignoring such requests has many more benefits than eventual drawbacks
     if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
         return;
+
+    // changing the layout will make all previous measurements invalid
+    InvalidateMeasurements();
 
     ATSUAttributeTag nTags[3];
     ATSUAttributeValuePtr nVals[3];
@@ -357,7 +357,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( eStatus != noErr )
         return;
 
-    // check result of the justied layout
+    // update the measurements of the justified layout to match the justification request
     if( rArgs.mpDXArray )
         InitGIA( &rArgs );
 }
@@ -431,8 +431,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
             if( rAquaGraphics.mnATSUIRotation != 0 )
             {
                 const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);
-                nXOfsFixed = +rSubPortion.mnXOffset * cos( fRadians );
-                nYOfsFixed = +rSubPortion.mnXOffset * sin( fRadians );
+                nXOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * cos( fRadians ));
+                nYOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * sin( fRadians ));
             }
 
             // draw sub-portions
@@ -745,6 +745,8 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
+    if( nPixelWidth <= 0 )
+        return mnMinCharPos;
 
     // check assumptions
     DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
@@ -1070,6 +1072,23 @@ bool ATSLayout::GetDeltaY() const
 #endif
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+#define DELETEAZ( X ) { delete[] X; X = NULL; }
+
+void ATSLayout::InvalidateMeasurements()
+{
+    mnGlyphCount = -1;
+    DELETEAZ( mpGlyphIds );
+    DELETEAZ( mpCharWidths );
+    DELETEAZ( mpChars2Glyphs );
+    DELETEAZ( mpGlyphs2Chars );
+    DELETEAZ( mpGlyphRTLFlags );
+    DELETEAZ( mpGlyphAdvances );
+    DELETEAZ( mpGlyphOrigAdvs );
+    DELETEAZ( mpDeltaY );
 }
 
 // =======================================================================

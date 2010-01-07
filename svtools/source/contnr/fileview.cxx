@@ -37,7 +37,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -78,8 +78,8 @@
 #include <vcl/sound.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/urlfilter.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/urlfilter.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -167,7 +167,7 @@ namespace
 
 static sal_Bool isHighContrast( const Window* _pView )
 {
-    return _pView->GetDisplayBackground().GetColor().IsDark();
+    return _pView->GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // -----------------------------------------------------------------------
@@ -1065,7 +1065,10 @@ BOOL ViewTabListBox_Impl::DoubleClickHdl()
     ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
     if ( ::svt::BBTYPE_TABLECELL == _eType )
     {
-        sal_Int32 nRow = _nPos / GetColumnCount();
+        sal_Int32 nRow = -1;
+        const sal_uInt16 nColumnCount = GetColumnCount();
+        if (nColumnCount > 0)
+            nRow = _nPos / nColumnCount;
         SvLBoxEntry* pEntry = GetEntry( nRow );
         if ( pEntry )
         {

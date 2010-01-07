@@ -72,6 +72,7 @@
 #include "tools/debug.hxx"
 
 #include "sal/alloca.h"
+#include <com/sun/star/uno/Exception.hpp>
 
 #include <algorithm>
 
@@ -425,15 +426,26 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 &&
-            SelectAppIconPixmap( pDisplay_, m_nScreen,
-                                 mnIconID != 1 ? mnIconID :
-                                 (mpParent ? mpParent->mnIconID : 1), 32,
-                                 Hints.icon_pixmap, Hints.icon_mask ))
+        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 )
         {
-            Hints.flags     |= IconPixmapHint;
-            if( Hints.icon_mask )
-                Hints.flags |= IconMaskHint;
+            bool bOk=false;
+            try
+            {
+                bOk=SelectAppIconPixmap( pDisplay_, m_nScreen,
+                                         mnIconID != 1 ? mnIconID :
+                                         (mpParent ? mpParent->mnIconID : 1), 32,
+                                         Hints.icon_pixmap, Hints.icon_mask );
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+                // can happen - no ucb during early startup
+            }
+            if( bOk )
+            {
+                Hints.flags     |= IconPixmapHint;
+                if( Hints.icon_mask )
+                    Hints.flags |= IconMaskHint;
+            }
         }
 
         // find the top level frame of the transience hierarchy
@@ -918,12 +930,13 @@ void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     pGraphics_      = NULL;
 }
 
-void X11SalFrame::updateGraphics()
+void X11SalFrame::updateGraphics( bool bClear )
 {
+    Drawable aDrawable = bClear ? None : GetWindow();
     if( pGraphics_ )
-        pGraphics_->SetDrawable( GetWindow(), m_nScreen );
+        pGraphics_->SetDrawable( aDrawable, m_nScreen );
     if( pFreeGraphics_ )
-        pFreeGraphics_->SetDrawable( GetWindow(), m_nScreen );
+        pFreeGraphics_->SetDrawable( aDrawable, m_nScreen );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1200,7 +1213,12 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 
         XLIB_Time nUserTime = 0;
         if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-            nUserTime = pDisplay_->GetLastUserEventTime();
+        {
+            if( GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") )
+                nUserTime = pDisplay_->GetLastUserEventTime( true );
+            else
+                nUserTime = pDisplay_->GetLastUserEventTime();
+        }
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
 
         // actually map the window
@@ -2709,6 +2727,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
     }
 
     // first deinit frame
+    updateGraphics(true);
     if( mpInputContext )
     {
         mpInputContext->UnsetICFocus( this );
@@ -2731,7 +2750,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
         Init( nStyle_ & ~SAL_FRAME_STYLE_PLUG, nScreen, NULL, true );
 
     // update graphics if necessary
-    updateGraphics();
+    updateGraphics(false);
 
     if( m_aTitle.Len() )
         SetTitle( m_aTitle );

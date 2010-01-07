@@ -45,6 +45,7 @@
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <unotools/fontdefs.hxx>
 
 #include <vector>
 
@@ -103,8 +104,12 @@ namespace awt {
 
 typedef std::vector< Rectangle > MetricVector;
 
-namespace vcl { class PDFWriterImpl; }
-namespace vcl { class ExtOutDevData; }
+namespace vcl
+{
+    class PDFWriterImpl;
+    class ExtOutDevData;
+    class ITextLayout;
+}
 
 #define OUTDEV_BUFFER_SIZE  128
 
@@ -260,31 +265,6 @@ struct KerningPair
 #define FONT_SUBSTITUTE_ALWAYS          ((USHORT)0x0001)
 #define FONT_SUBSTITUTE_SCREENONLY      ((USHORT)0x0002)
 
-// Default-Font
-#define DEFAULTFONT_SANS_UNICODE        ((USHORT)1)
-#define DEFAULTFONT_SANS                ((USHORT)2)
-#define DEFAULTFONT_SERIF               ((USHORT)3)
-#define DEFAULTFONT_FIXED               ((USHORT)4)
-#define DEFAULTFONT_SYMBOL              ((USHORT)5)
-#define DEFAULTFONT_UI_SANS             ((USHORT)1000)
-#define DEFAULTFONT_UI_FIXED            ((USHORT)1001)
-#define DEFAULTFONT_LATIN_TEXT          ((USHORT)2000)
-#define DEFAULTFONT_LATIN_PRESENTATION  ((USHORT)2001)
-#define DEFAULTFONT_LATIN_SPREADSHEET   ((USHORT)2002)
-#define DEFAULTFONT_LATIN_HEADING       ((USHORT)2003)
-#define DEFAULTFONT_LATIN_DISPLAY       ((USHORT)2004)
-#define DEFAULTFONT_LATIN_FIXED         ((USHORT)2005)
-#define DEFAULTFONT_CJK_TEXT            ((USHORT)3000)
-#define DEFAULTFONT_CJK_PRESENTATION    ((USHORT)3001)
-#define DEFAULTFONT_CJK_SPREADSHEET     ((USHORT)3002)
-#define DEFAULTFONT_CJK_HEADING         ((USHORT)3003)
-#define DEFAULTFONT_CJK_DISPLAY         ((USHORT)3004)
-#define DEFAULTFONT_CTL_TEXT            ((USHORT)4000)
-#define DEFAULTFONT_CTL_PRESENTATION    ((USHORT)4001)
-#define DEFAULTFONT_CTL_SPREADSHEET     ((USHORT)4002)
-#define DEFAULTFONT_CTL_HEADING         ((USHORT)4003)
-#define DEFAULTFONT_CTL_DISPLAY         ((USHORT)4004)
-
 #define DEFAULTFONT_FLAGS_ONLYONE       ((ULONG)0x00000001)
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
@@ -431,9 +411,13 @@ public:
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
     SAL_DLLPRIVATE long         ImplGetTextWidth( const SalLayout& ) const;
-    SAL_DLLPRIVATE void         ImplDrawText( const Rectangle& rRect,
+    static
+    SAL_DLLPRIVATE XubString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rStr,
+                                                       long nMaxWidth, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
+    static
+    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const String& rOrigStr, USHORT nStyle,
-                                              MetricVector* pVector, String* pDisplayText );
+                                              MetricVector* pVector, String* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, BOOL bWordLine, BOOL bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
@@ -456,7 +440,8 @@ public:
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle ) const;
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
@@ -563,6 +548,20 @@ public:
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
 
+    // #i101491#
+    // Helper which holds the old line geometry creation and is extended to use AA when
+    // switched on. Advantage is that line geometry is only temporarily used for paint
+    SAL_DLLPRIVATE void ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
+    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
+
 protected:
                         OutputDevice();
 
@@ -635,10 +634,12 @@ public:
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
                                   const XubString& rStr, USHORT nStyle = 0,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL );
+                                  MetricVector* pVector = NULL, String* pDisplayText = NULL,
+                                  ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
                                      const XubString& rStr, USHORT nStyle = TEXT_DRAW_WORDBREAK,
-                                     TextRectInfo* pInfo = NULL ) const;
+                                     TextRectInfo* pInfo = NULL,
+                                     const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
     XubString           GetEllipsisString( const XubString& rStr, long nMaxWidth,
                                            USHORT nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
@@ -655,20 +656,20 @@ public:
     void                GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) const;
 
     BOOL                GetTextBoundRect( Rectangle& rRect,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN ) const;
+                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutline( PolyPolygon&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( PolyPolyVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 

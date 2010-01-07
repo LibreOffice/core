@@ -352,6 +352,8 @@ void Description_Print( struct Description* pThis, char* name )
   fprintf( f, "#define __SIZEOFDOUBLE\t%d\n", sizeof( double ) );
   fprintf( f, "#define __IEEEDOUBLE\n" );
   fprintf( f, "#define _SOLAR_NODESCRIPTION\n" );
+
+  fclose(f);
 }
 
 int

@@ -38,6 +38,7 @@
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
 #include "com/sun/star/lang/Locale.hpp"
+#include <unotools/syslocale.hxx>
 
 class CollatorWrapper;
 class LocaleDataWrapper;
@@ -139,7 +140,7 @@ private:
     ULONG                           mnMenuDelay;
     ULONG                           mnFollow;
     USHORT                          mnMiddleButtonAction;
-    BOOL                            mbNoWheelActionWithoutFocus;
+    USHORT                          mnWheelBehavior;
     BOOL                            mbAlign1;
 };
 
@@ -157,6 +158,10 @@ private:
 #define MOUSE_MIDDLE_NOTHING        ((USHORT)0)
 #define MOUSE_MIDDLE_AUTOSCROLL     ((USHORT)1)
 #define MOUSE_MIDDLE_PASTESELECTION ((USHORT)2)
+
+#define MOUSE_WHEEL_DISABLE         ((USHORT)0)
+#define MOUSE_WHEEL_FOCUS_ONLY      ((USHORT)1)
+#define MOUSE_WHEEL_ALWAYS          ((USHORT)2)
 
 class VCL_DLLPUBLIC MouseSettings
 {
@@ -257,10 +262,10 @@ public:
     USHORT                          GetMiddleButtonAction() const
                                         { return mpData->mnMiddleButtonAction; }
 
-    void                            SetNoWheelActionWithoutFocus( BOOL bAction )
-                                        { CopyData(); mpData->mbNoWheelActionWithoutFocus = bAction; }
-    BOOL                            GetNoWheelActionWithoutFocus() const
-                                        { return mpData->mbNoWheelActionWithoutFocus; }
+    void                            SetWheelBehavior( USHORT nBehavior )
+                                        { CopyData(); mpData->mnWheelBehavior = nBehavior; }
+    USHORT                          GetWheelBehavior() const
+                                        { return mpData->mnWheelBehavior; }
 
     const MouseSettings&            operator =( const MouseSettings& rSet );
 
@@ -375,6 +380,7 @@ private:
     Color                           maMenuHighlightColor;
     Color                           maMenuHighlightTextColor;
     Color                           maMenuTextColor;
+    Color                           maMenuBarTextColor;
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
@@ -516,9 +522,10 @@ private:
 #define STYLE_SYMBOLS_HICONTRAST    ((ULONG)2)
 #define STYLE_SYMBOLS_INDUSTRIAL    ((ULONG)3)
 #define STYLE_SYMBOLS_CRYSTAL       ((ULONG)4)
-#define STYLE_SYMBOLS_TANGO     ((ULONG)5)
-#define STYLE_SYMBOLS_CLASSIC       ((ULONG)6)
-#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)6)
+#define STYLE_SYMBOLS_TANGO         ((ULONG)5)
+#define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
+#define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
+#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -685,6 +692,10 @@ public:
                                         { CopyData(); mpData->maMenuTextColor = rColor; }
     const Color&                    GetMenuTextColor() const
                                         { return mpData->maMenuTextColor; }
+    void                            SetMenuBarTextColor( const Color& rColor )
+                                        { CopyData(); mpData->maMenuBarTextColor = rColor; }
+    const Color&                    GetMenuBarTextColor() const
+                                        { return mpData->maMenuBarTextColor; }
     void                            SetMenuHighlightColor( const Color& rColor )
                                         { CopyData(); mpData->maMenuHighlightColor = rColor; }
     const Color&                    GetMenuHighlightColor() const
@@ -938,6 +949,8 @@ public:
     void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
     ULONG                           GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
+    // check whether the symbols style is supported (icons are installed)
+    bool                            CheckSymbolStyle( ULONG nStyle ) const;
     ULONG                           GetAutoSymbolsStyle() const;
 
     ULONG                           GetCurrentSymbolsStyle() const;
@@ -984,7 +997,6 @@ class ImplMiscData
 
 private:
     ULONG                           mnRefCount;
-    USHORT                          mnTwoDigitYearStart;
     USHORT                          mnEnableATT;
     BOOL                            mbEnableLocalizedDecimalSep;
     USHORT                          mnDisablePrinting;
@@ -1006,10 +1018,6 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
-    void                            SetTwoDigitYearStart( USHORT nYearStart )
-                                        { CopyData(); mpData->mnTwoDigitYearStart = nYearStart; }
-    USHORT                          GetTwoDigitYearStart() const
-                                        { return mpData->mnTwoDigitYearStart; }
     void                            SetEnableATToolSupport( BOOL bEnable );
     BOOL                            GetEnableATToolSupport() const;
     void                            SetDisablePrinting( BOOL bEnable );
@@ -1132,7 +1140,7 @@ public:
 // -----------------------
 // - ImplAllSettingsData -
 // -----------------------
-
+class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
     friend class    AllSettings;
@@ -1162,6 +1170,8 @@ private:
     CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
+    LocaleConfigurationListener*            mpLocaleCfgListener;
+    SvtSysLocale                            maSysLocale;
 };
 
 // ---------------
@@ -1278,6 +1288,8 @@ public:
     BOOL                                    operator ==( const AllSettings& rSet ) const;
     BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
+    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
+    SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }
 };
 
 #endif // _SV_SETTINGS_HXX

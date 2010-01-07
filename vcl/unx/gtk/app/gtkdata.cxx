@@ -138,8 +138,6 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
                                                GdkEvent*,
                                                gpointer data )
 {
-    GTK_YIELD_GRAB();
-
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
 
     XEvent *pEvent = (XEvent *)sys_event;
@@ -149,6 +147,8 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     if( GetSalData()->m_pInstance->
         CallEventCallback( pEvent, sizeof( XEvent ) ) )
         aFilterReturn = GDK_FILTER_REMOVE;
+
+    GTK_YIELD_GRAB();
 
     if (pDisplay->GetDisplay() == pEvent->xany.display )
     {

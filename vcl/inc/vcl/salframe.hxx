@@ -102,6 +102,8 @@ struct SystemEnvData;
 #define SAL_FRAME_STYLE_SYSTEMCHILD         ((ULONG)0x08000000)
 // floating window
 #define SAL_FRAME_STYLE_FLOAT               ((ULONG)0x20000000)
+// floating window that needs to be focusable
+#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((ULONG)0x04000000)
 // toolwindows should be painted with a smaller decoration
 #define SAL_FRAME_STYLE_TOOLWINDOW          ((ULONG)0x40000000)
 // the window containing the intro bitmap, aka splashscreen
@@ -168,6 +170,7 @@ public:
 
     virtual void                SetTitle( const XubString& rTitle ) = 0;
     virtual void                SetIcon( USHORT nIcon ) = 0;
+    virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                    SetMenu( SalMenu *pSalMenu ) = 0;
     virtual void                    DrawMenuBar() = 0;
 

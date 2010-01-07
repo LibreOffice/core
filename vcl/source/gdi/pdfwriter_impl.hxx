@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: pdfwriter_impl.hxx,v $
- * $Revision: 1.55.134.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -57,7 +54,7 @@
 
 class ImplFontSelectData;
 class ImplFontMetricData;
-struct FontSubsetInfo;
+class FontSubsetInfo;
 class ZCodec;
 
 // the maximum password length
@@ -314,6 +311,8 @@ public:
     {
         sal_Int32                       m_nNormalFontID;
         std::list< EmbedEncoding >      m_aExtendedEncodings;
+
+        EmbedFont() : m_nNormalFontID( 0 ) {}
     };
     typedef std::map< const ImplFontData*, EmbedFont > FontEmbedData;
 
@@ -399,6 +398,7 @@ public:
         USHORT                      m_nTextStyle;
         rtl::OUString               m_aValue;
         rtl::OString                m_aDAString;
+        rtl::OString                m_aDRDict;
         rtl::OString                m_aMKDict;
         rtl::OString                m_aMKDictCAString;  // i12626, added to be able to encrypt the /CA text string
                                                         // since the object number is not known at the moment
@@ -615,6 +615,7 @@ private:
     FontSubsetData                      m_aSubsets;
     bool                                m_bEmbedStandardFonts;
     FontEmbedData                       m_aEmbeddedFonts;
+    FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
@@ -682,6 +683,7 @@ private:
                 m_aOverlineColor( COL_TRANSPARENT ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
+                m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
                 m_nFlags( 0xffff ),
                 m_nUpdateFlags( 0xffff )
@@ -696,6 +698,7 @@ private:
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
+                m_aDigitLanguage( rState.m_aDigitLanguage ),
                 m_nTransparentPercent( rState.m_nTransparentPercent ),
                 m_nFlags( rState.m_nFlags ),
                 m_nUpdateFlags( rState.m_nUpdateFlags )
@@ -713,6 +716,7 @@ private:
             m_aClipRegion           = rState.m_aClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
+            m_aDigitLanguage        = rState.m_aDigitLanguage;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
             m_nFlags                = rState.m_nFlags;
             m_nUpdateFlags          = rState.m_nUpdateFlags;
@@ -900,6 +904,8 @@ i12626
     sal_Int32 emitBuiltinFont( const ImplFontData*, sal_Int32 nObject = -1 );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const ImplFontData*, EmbedFont& );
+    /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
+    std::map< sal_Int32, sal_Int32 > emitSystemFont( const ImplFontData*, EmbedFont& );
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
@@ -986,6 +992,7 @@ i12626
     sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
     sal_Int32 getBestBuiltinFont( const Font& rFont );
+    sal_Int32 getSystemFont( const Font& i_rFont );
 
     // used for edit and listbox
     Font drawFieldBorder( PDFWidget&, const PDFWriter::AnyWidget&, const StyleSettings& );

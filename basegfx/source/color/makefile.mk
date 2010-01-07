@@ -45,6 +45,7 @@ TARGET=color
 
 SLOFILES= \
                 $(SLO)$/bcolor.obj			\
+                $(SLO)$/bcolortools.obj		\
                 $(SLO)$/bcolormodifier.obj
 
 # --- Targets ----------------------------------

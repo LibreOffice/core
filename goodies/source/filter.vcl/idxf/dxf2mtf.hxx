@@ -33,6 +33,7 @@
 
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>
+#include <vcl/lineinfo.hxx>
 
 // MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
@@ -40,6 +41,7 @@ enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
                   BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
                   BRUSH_25, BRUSH_50, BRUSH_75,
                   BRUSH_BITMAP };
+
 
 class DXF2GDIMetaFile {
 private:
@@ -56,9 +58,9 @@ private:
     ULONG nMainEntitiesCount;
 
     long        nBlockColor;
-    PenStyle    eBlockPStyle;
+    DXFLineInfo aBlockDXFLineInfo;
     long        nParentLayerColor;
-    PenStyle    eParentLayerPStyle;
+    DXFLineInfo aParentLayerDXFLineInfo;
     Color       aActLineColor;
     Color       aActFillColor;
     Font        aActFont;
@@ -71,9 +73,9 @@ private:
 
     long GetEntityColor(const DXFBasicEntity & rE);
 
-    PenStyle LTypeToPStyle(const char * sLineType);
+    DXFLineInfo LTypeToDXFLineInfo(const char * sLineType);
 
-    PenStyle GetEntityPStyle(const DXFBasicEntity & rE);
+    DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
     BOOL SetLineAttribute(const DXFBasicEntity & rE, ULONG nWidth=0);
 

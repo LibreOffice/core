@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/Style.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -63,6 +64,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 
@@ -75,6 +77,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
+using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
@@ -82,6 +85,7 @@ using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
+namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 
 //====================================================================
@@ -226,6 +230,8 @@ private:
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
+    sal_Bool                            mbEnableVisible;
+    sal_Bool                            mbDirectVisible;
 
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
@@ -272,6 +278,15 @@ public:
         live longer then the object just being constructed.
     */
     VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps );
+
+    /** synchronously mbEnableVisible
+    */
+    void    setEnableVisible( sal_Bool bEnableVisible ) { mbEnableVisible = bEnableVisible; }
+    sal_Bool    isEnableVisible() { return mbEnableVisible; }
+    /** synchronously mbDirectVisible;
+    */
+    void    setDirectVisible( sal_Bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
+    sal_Bool    isDirectVisible() { return mbDirectVisible; }
 
     /** asynchronously notifies a mouse event to the VCLXWindow's XMouseListeners
     */
@@ -347,6 +362,8 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, 
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
     ,mbDrawingOntoParent( false )
+    ,mbEnableVisible(sal_True)
+    ,mbDirectVisible(sal_True)
     ,maListenerContainerMutex( )
     ,maWindow2Listeners( maListenerContainerMutex )
     ,maDockableWindowListeners( maListenerContainerMutex )
@@ -539,48 +556,6 @@ void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pW
     pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
 }
 
-void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.GetKeyCode().IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.GetKeyCode().IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.GetKeyCode().IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-        if ( rEvt.GetKeyCode().IsMod3() )
-                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
-
-    rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
-    rEvent.KeyChar = rEvt.GetCharCode();
-    rEvent.KeyFunc = sal::static_int_cast< sal_Int16 >(
-        rEvt.GetKeyCode().GetFunction());
-}
-
-void ImplInitMouseEvent( awt::MouseEvent& rEvent, const MouseEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.IsMod1() )
-    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-
-    rEvent.Buttons = 0;
-    if ( rEvt.IsLeft() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
-    if ( rEvt.IsRight() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
-    if ( rEvt.IsMiddle() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
-
-    rEvent.X = rEvt.GetPosPixel().X();
-    rEvent.Y = rEvt.GetPosPixel().Y();
-    rEvent.ClickCount = rEvt.GetClicks();
-    rEvent.PopupTrigger = sal_False;
-}
-
 //  ----------------------------------------------------
 //  class VCLXWindow
 //  ----------------------------------------------------
@@ -625,7 +600,12 @@ void VCLXWindow::SetWindow( Window* pWindow )
     SetOutputDevice( pWindow );
 
     if ( GetWindow() )
+    {
         GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        sal_Bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
+        mpImpl->setDirectVisible( bDirectVisible );
+    }
+
 }
 
 void VCLXWindow::suspendVclEventListening( )
@@ -870,9 +850,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *(KeyEvent*)rVclWindowEvent.GetData(), *this
+                ) );
                 mpImpl->getKeyListeners().keyPressed( aEvent );
             }
         }
@@ -881,9 +861,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *(KeyEvent*)rVclWindowEvent.GetData(), *this
+                ) );
                 mpImpl->getKeyListeners().keyReleased( aEvent );
             }
         }
@@ -905,9 +885,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 }
 
                 MouseEvent aMEvt( aWhere, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, aMEvt );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
                 aEvent.PopupTrigger = sal_True;
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
@@ -918,10 +896,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             MouseEvent* pMouseEvt = (MouseEvent*)rVclWindowEvent.GetData();
             if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *pMouseEvt );
-
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 mpImpl->notifyMouseEvent(
                     aEvent,
                     pMouseEvt->IsEnterWindow() ? EVENT_MOUSE_ENTERED : EVENT_MOUSE_EXITED
@@ -930,11 +905,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *pMouseEvt );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 aEvent.ClickCount = 0;  // #92138#
-
                 if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
                     mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
@@ -946,9 +918,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *(MouseEvent*)rVclWindowEvent.GetData(), *this ) );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
         }
@@ -957,9 +927,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *(MouseEvent*)rVclWindowEvent.GetData(), *this ) );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_RELEASED );
             }
         }
@@ -1226,7 +1194,8 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
             }
         }
 */
-        pWindow->Show( bVisible );
+        mpImpl->setDirectVisible( bVisible );
+        pWindow->Show( bVisible &&  mpImpl->isEnableVisible() );
     }
 }
 
@@ -1529,6 +1498,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
                          BASEPROPERTY_HELPURL,
                          BASEPROPERTY_TEXT,
                          BASEPROPERTY_PRINTABLE,
+                         BASEPROPERTY_ENABLEVISIBLE, // for visibility
                          BASEPROPERTY_TABSTOP,
                          0);
 
@@ -1617,6 +1587,18 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
     {
+        case BASEPROPERTY_REFERENCE_DEVICE:
+        {
+            Control* pControl = dynamic_cast< Control* >( pWindow );
+            OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+            if ( !pControl )
+                break;
+            Reference< XDevice > xDevice( Value, UNO_QUERY );
+            OutputDevice* pDevice = VCLUnoHelper::GetOutputDevice( xDevice );
+            pControl->SetReferenceDevice( pDevice );
+        }
+        break;
+
         case BASEPROPERTY_CONTEXT_WRITING_MODE:
         {
             OSL_VERIFY( Value >>= mpImpl->mnContextWritingMode );
@@ -1634,19 +1616,27 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         }
         break;
 
-        case BASEPROPERTY_WHEELWITHOUTFOCUS:
+        case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
         {
-            sal_Bool bWheelOnHover( sal_True );
-            if ( Value >>= bWheelOnHover )
+            sal_uInt16 nWheelBehavior( MouseWheelBehavior::SCROLL_FOCUS_ONLY );
+            OSL_VERIFY( Value >>= nWheelBehavior );
+
+            AllSettings aSettings = pWindow->GetSettings();
+            MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+            USHORT nVclBehavior( MOUSE_WHEEL_FOCUS_ONLY );
+            switch ( nWheelBehavior )
             {
-                AllSettings aSettings = pWindow->GetSettings();
-                MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-
-                aMouseSettings.SetNoWheelActionWithoutFocus( !bWheelOnHover );
-                aSettings.SetMouseSettings( aMouseSettings );
-
-                pWindow->SetSettings( aSettings, TRUE );
+            case MouseWheelBehavior::SCROLL_DISABLED:   nVclBehavior = MOUSE_WHEEL_DISABLE;     break;
+            case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MOUSE_WHEEL_FOCUS_ONLY;  break;
+            case MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MOUSE_WHEEL_ALWAYS;      break;
+            default:
+                OSL_ENSURE( false, "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
+
+            aMouseSettings.SetWheelBehavior( nWheelBehavior );
+            aSettings.SetMouseSettings( aMouseSettings );
+            pWindow->SetSettings( aSettings, TRUE );
         }
         break;
 
@@ -1670,6 +1660,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             sal_Bool b = sal_Bool();
             if ( Value >>= b )
                 setEnable( b );
+        }
+        break;
+        case BASEPROPERTY_ENABLEVISIBLE:
+        {
+            sal_Bool b = sal_False;
+            if ( Value >>= b )
+            {
+                if( b != mpImpl->isEnableVisible() )
+                {
+                    mpImpl->setEnableVisible( b );
+                    pWindow->Show( b && mpImpl->isDirectVisible() );
+                }
+            }
         }
         break;
         case BASEPROPERTY_TEXT:
@@ -2114,6 +2117,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_REFERENCE_DEVICE:
+            {
+                Control* pControl = dynamic_cast< Control* >( GetWindow() );
+                OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+                if ( !pControl )
+                    break;
+
+                VCLXDevice* pDevice = new VCLXDevice;
+                pDevice->SetOutputDevice( pControl->GetReferenceDevice() );
+                aProp <<= Reference< XDevice >( pDevice );
+            }
+            break;
+
             case BASEPROPERTY_CONTEXT_WRITING_MODE:
                 aProp <<= mpImpl->mnContextWritingMode;
                 break;
@@ -2122,10 +2138,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aProp <<= mpImpl->mnWritingMode;
                 break;
 
-            case BASEPROPERTY_WHEELWITHOUTFOCUS:
+            case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
             {
-                sal_Bool bWheelOnHover = !GetWindow()->GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus();
-                aProp <<= bWheelOnHover;
+                USHORT nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
+                sal_Int16 nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
+                switch ( nVclBehavior )
+                {
+                case MOUSE_WHEEL_DISABLE:       nBehavior = MouseWheelBehavior::SCROLL_DISABLED;    break;
+                case MOUSE_WHEEL_FOCUS_ONLY:    nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;  break;
+                case MOUSE_WHEEL_ALWAYS:        nBehavior = MouseWheelBehavior::SCROLL_ALWAYS;      break;
+                default:
+                    OSL_ENSURE( false, "VCLXWindow::getProperty( 'MouseWheelBehavior' ): illegal VCL value!" );
+                }
+                aProp <<= nBehavior;
             }
             break;
 
@@ -2135,6 +2160,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_ENABLED:
                 aProp <<= (sal_Bool) GetWindow()->IsEnabled();
+                break;
+
+            case BASEPROPERTY_ENABLEVISIBLE:
+                aProp <<= (sal_Bool) mpImpl->isEnableVisible();
                 break;
 
             case BASEPROPERTY_TEXT:
@@ -2411,7 +2440,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     if ( !pWindow )
         return;
 
-    if ( pWindow )
+    if ( isDesignMode() || mpImpl->isEnableVisible() )
     {
         TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
         if ( pTabPage )
@@ -2481,7 +2510,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
             bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
                                || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
-                               || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
+                               || ( pPDFExport != NULL );
             if ( bDrawSimple )
             {
                 pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
@@ -2504,7 +2533,14 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
-        GetWindow()->SetZoom( Fraction( fZoomX ) );
+    {
+        // Fraction::Fraction takes a double, but we have a float only.
+        // The implicit conversion from float to double can result in a precision loss, i.e. 1.2 is converted to
+        // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
+        double nZoom( fZoomX );
+        nZoom = ::rtl::math::round( nZoom, 4 );
+        GetWindow()->SetZoom( Fraction( nZoom ) );
+    }
 }
 
 // ::com::sun::star::lang::XEventListener

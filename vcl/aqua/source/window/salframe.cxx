@@ -43,6 +43,7 @@
 #include "aqua11yfactory.h"
 #include "vcl/salwtype.hxx"
 #include "vcl/window.hxx"
+#include "vcl/timer.hxx"
 
 #include "premac.h"
 // needed for theming
@@ -53,10 +54,7 @@
 #include "boost/assert.hpp"
 #include "vcl/svapp.hxx"
 #include "rtl/ustrbuf.hxx"
-
-#include <premac.h>
-#include <CoreFoundation/CoreFoundation.h>
-#include <postmac.h>
+#include "osl/file.h"
 
 using namespace std;
 
@@ -328,8 +326,25 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetIcon( USHORT nIcon )
+void AquaSalFrame::SetIcon( USHORT )
 {
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalFrame::SetRepresentedURL( const rtl::OUString& i_rDocURL )
+{
+    if( i_rDocURL.indexOfAsciiL( "file:", 5 ) == 0 )
+    {
+        rtl::OUString aSysPath;
+        osl_getSystemPathFromFileURL( i_rDocURL.pData, &aSysPath.pData );
+        NSString* pStr = CreateNSString( aSysPath );
+        if( pStr )
+        {
+            [pStr autorelease];
+            [mpWindow setRepresentedFilename: pStr];
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -520,8 +535,16 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
 
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    rWidth  = mbShown ? maGeometry.nWidth : 0;
-    rHeight = mbShown ? maGeometry.nHeight : 0;
+    if( mbShown || mbInitShow )
+    {
+        rWidth  = maGeometry.nWidth;
+        rHeight = maGeometry.nHeight;
+    }
+    else
+    {
+        rWidth  = 0;
+        rHeight = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -741,16 +764,37 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 // -----------------------------------------------------------------------
 
+class PreventSleepTimer : public AutoTimer
+{
+public:
+    PreventSleepTimer()
+    {
+        SetTimeout( 30000 );
+        Start();
+    }
+
+    virtual ~PreventSleepTimer()
+    {
+    }
+
+    virtual void Timeout()
+    {
+        UpdateSystemActivity(OverallAct);
+    }
+};
+
 void AquaSalFrame::StartPresentation( BOOL bStart )
 {
     if( bStart )
     {
+        mpActivityTimer.reset( new PreventSleepTimer() );
         [mpWindow setLevel: NSScreenSaverWindowLevel];
         if( mbShown )
             [mpWindow makeMainWindow];
     }
     else
     {
+        mpActivityTimer.reset();
         [mpWindow setLevel: NSNormalWindowLevel];
     }
 }
@@ -1165,6 +1209,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuTextColor( getColor( [NSColor textColor],
                                     aStyleSettings.GetMenuTextColor(), mpWindow ) );
     aStyleSettings.SetMenuTextColor( aMenuTextColor );
+    aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 
@@ -1174,7 +1219,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getAppleScrollBarVariant();
 
     // set scrollbar size
-    aStyleSettings.SetScrollBarSize( [NSScroller scrollerWidth] );
+    aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
 
     // images in menus false for MacOSX
     aStyleSettings.SetUseImagesInMenus( false );
@@ -1195,7 +1240,15 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
 
 void AquaSalFrame::Beep( SoundType eSoundType )
 {
-    NSBeep();
+    switch( eSoundType )
+    {
+    case SOUND_DISABLE:
+        // don't beep
+        break;
+    default:
+        NSBeep();
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1232,7 +1285,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
             if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
                 nX = mpParent->maGeometry.nWidth - nWidth-1 - nX;
             else
-                nX = mpParent->maGeometry.nWidth - aContentRect.size.width-1 - nX;
+                nX = mpParent->maGeometry.nWidth - static_cast<long int>( aContentRect.size.width-1) - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpWindow frame];
         aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];

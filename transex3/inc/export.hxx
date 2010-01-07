@@ -51,6 +51,12 @@
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
 #include <queue>
+#include <string>
+
+#include <unistd.h>
+#ifdef WNT
+#include <direct.h>
+#endif
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
@@ -326,7 +332,6 @@ public:
 
 
     static bool skipProject( ByteString sPrj ) ;
-    static ByteString sIsoCode99;
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );
     static std::vector<ByteString> GetLanguages();
@@ -349,12 +354,12 @@ public:
 
     static bool isSourceLanguage( const ByteString &sLanguage );
     static bool isAllowed( const ByteString &sLanguage );
-    //static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
     static void getRandomName( ByteString& sRandStr );
+    static void getCurrentDir( std::string& dir );
 
     static void replaceEncoding( ByteString& rString );
 
@@ -510,13 +515,13 @@ private:
     SvFileStream aErrLog;
     ByteStringSet aLanguageSet;
     MergeDataHashMap aMap;
-    std::vector<ByteString> aLanguages;
+    ByteStringHashMap aLanguageMap;
+    std::vector<ByteString> aLanguageList;
+    ByteStringHashMap aFilenames;
 
 
 public:
     MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
-//    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet
-//            );
     ~MergeDataFile();
 
 
@@ -536,7 +541,6 @@ public:
     static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
 
     ByteString Dump();
-//  void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
 };
 

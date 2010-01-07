@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygoncutandtouch.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +109,10 @@ namespace basegfx
         {
             // #i76891# mergeTemporaryPointsAndPolygon redesigned to be able to correctly handle
             // single edges with/without control points
-            if(rTempPoints.size())
+            // #i101491# added counter for non-changing element count
+            const sal_uInt32 nTempPointCount(rTempPoints.size());
+
+            if(nTempPointCount)
             {
                 B2DPolygon aRetval;
                 const sal_uInt32 nCount(rCandidate.count());
@@ -138,7 +140,7 @@ namespace basegfx
                             double fLeftStart(0.0);
 
                             // now add all points targeted to be at this index
-                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                            while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
 
@@ -160,7 +162,7 @@ namespace basegfx
                         else
                         {
                             // add all points targeted to be at this index
-                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                            while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
                                 const B2DPoint aNewPoint(rTempPoint.getPoint());
@@ -427,6 +429,7 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             aTempPolygonEdge.append(rCurrB);
@@ -467,8 +470,10 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
+            aTempPolygonB.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonB.append(rCubicB.getStartPoint());
             rCubicB.adaptiveSubdivideByCount(aTempPolygonB, SUBDIVIDE_FOR_CUT_TEST_COUNT);
 
@@ -494,6 +499,13 @@ namespace basegfx
             const B2DCubicBezier& rCubicA,
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
+            // avoid expensive part of this method if possible
+            // TODO: use hasAnyExtremum() method instead when it becomes available
+            double fDummy;
+            const bool bHasAnyExtremum = rCubicA.getMinimumExtremumPosition( fDummy );
+            if( !bHasAnyExtremum )
+                return;
+
             // find all self-intersections on the given bezier segment. Add an entry to the tempPoints
             // for each self intersection point with the cut value describing the relative position on given
             // bezier segment.
@@ -502,6 +514,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findCuts(aTempPolygon, aTempPointVector);
@@ -554,7 +567,14 @@ namespace basegfx
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // only overlapping segments need to be tested
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
@@ -596,7 +616,13 @@ namespace basegfx
                                 const B2DPoint aNextB(rCandidate.getB2DPoint(b + 1L == nPointCount ? 0L : b + 1L));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPoints, rTempPoints);
                                 }
@@ -685,6 +711,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findTouches(aTempPolygon, rPointPolygon, aTempPointVector);
@@ -793,7 +820,13 @@ namespace basegfx
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
@@ -835,7 +868,13 @@ namespace basegfx
                                 const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1L == nPointCountB ? 0L : b + 1L));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     // test for simple edge-edge cuts
                                     findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPointsA, rTempPointsB);

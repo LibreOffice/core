@@ -799,6 +799,25 @@ main()
                 bSuccess = false;
             }
         }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "\\\\unc_host\\path")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM("file://unc_host/path"))
+                || !bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"\\\\unc_host\\path\")\n");
+                bSuccess = false;
+            }
+        }
     }
 
     if (true)

@@ -429,7 +429,7 @@ void SvpSalGraphics::copyArea( long nDestX,
 {
     B2IRange aSrcRect( nSrcX, nSrcY, nSrcX+nSrcWidth, nSrcY+nSrcHeight );
     B2IRange aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
-    m_aDevice->drawBitmap( m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -444,7 +444,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    m_aDevice->drawBitmap( pSrc->m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -519,7 +519,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
                            m_aDevice );
     B2IRange aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     B2IRange aDestRect( 0, 0, nWidth, nHeight );
-    aCopy->drawBitmap( m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT );
+    aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT );
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->setBitmap( aCopy );

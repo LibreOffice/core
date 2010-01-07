@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
@@ -51,6 +51,7 @@ SHL1OBJS=  \
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
+    $(TESTSHL2LIB)\
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
@@ -65,16 +66,19 @@ SHL1VERSIONMAP = export.map
 SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
-
+.IF "$(L10N_framework)"==""
 unittest : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        $(AUGMENT_LIBRARY_PATH) testshl2 -sf $(mktmp ) $(SHL1TARGETN)
+        $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
 
 ALLTAR : unittest
+.ENDIF 		# L10N_framework
+

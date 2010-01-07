@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,6 +119,12 @@ X11SalGraphics::X11SalGraphics()
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
+#ifdef ENABLE_GRAPHITE
+    // check if graphite fonts have been disabled
+    static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
+    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : FALSE;
+#endif
+
     pBrushGC_           = NULL;
     nBrushPixel_            = 0;
     nBrushColor_        = MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ); // White
@@ -160,10 +166,10 @@ X11SalGraphics::~X11SalGraphics()
 void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
-    
+
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
-    
+
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
     if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
@@ -510,7 +516,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
-    
+
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
     if( !pDisplay->GetExactResolution() && rDPIY < 96 )
@@ -523,12 +529,12 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         rDPIX = Divide( rDPIX * 200, rDPIY );
         rDPIY = 200;
     }
-    
+
     // #i12705# equalize x- and y-resolution if they are close enough
     if( rDPIX != rDPIY )
     {
         // different x- and y- resolutions are usually artifacts of
-        // a wrongly calculated screen size. 
+        // a wrongly calculated screen size.
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
@@ -582,7 +588,7 @@ void X11SalGraphics::ResetClipRegion()
         bInvert50GC_    = FALSE;
         bStippleGC_     = FALSE;
         bTrackingGC_    = FALSE;
-        
+
         XDestroyRegion( pClipRegion_ );
         pClipRegion_    = NULL;
     }
@@ -607,9 +613,9 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
     aRect.y         = (short)nY;
     aRect.width     = (unsigned short)nDX;
     aRect.height    = (unsigned short)nDY;
-    
+
     XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-    
+
     return TRUE;
 }
 
@@ -632,7 +638,7 @@ void X11SalGraphics::EndSetClipRegion()
     bInvert50GC_    = FALSE;
     bStippleGC_     = FALSE;
     bTrackingGC_    = FALSE;
-    
+
     if( XEmptyRegion( pClipRegion_ ) )
     {
         XDestroyRegion( pClipRegion_ );
@@ -771,7 +777,7 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     if( nSalColor != SALCOLOR_NONE )
     {
         Display *pDisplay = GetXDisplay();
-        
+
         if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
         {
             SetLineColor( nSalColor );
@@ -782,12 +788,12 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
         else
         {
             GC pGC = SelectPen();
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, GetPixel( nSalColor ) );
-            
+
             XDrawPoint( pDisplay, GetDrawable(), pGC, nX, nY );
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, nPenPixel_ );
         }
@@ -842,7 +848,7 @@ void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool b
     if( nPenColor_ != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
-        
+
         DrawLines( nPoints, Points, SelectPen(), bClose );
     }
 }
@@ -852,7 +858,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
-    
+
     if( nPoints < 3 )
     {
         if( !bXORMode_ )
@@ -865,9 +871,9 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         }
         return;
     }
-    
+
     SalPolyLine Points( nPoints, pPtAry );
-    
+
     nPoints++;
 
     /* WORKAROUND: some Xservers (Xorg, VIA chipset in this case)
@@ -901,15 +907,15 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                 if( Points[i].x < 0 )
                     Points[i].x = 0;
         }
-    }       
-    
+    }
+
     if( nBrushColor_ != SALCOLOR_NONE )
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
-    
+
     if( nPenColor_ != 0xFFFFFFFF )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
@@ -923,7 +929,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
     {
         ULONG       i, n;
         XLIB_Region pXRegA  = NULL;
-        
+
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
             SalPolyLine Points( n, pPtAry[i] );
@@ -939,24 +945,24 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 }
             }
         }
-        
+
         if( pXRegA )
         {
             XRectangle aXRect;
             XClipBox( pXRegA, &aXRect );
-            
+
             GC pGC = SelectBrush();
             SetClipRegion( pGC, pXRegA ); // ??? doppelt
             XDestroyRegion( pXRegA );
             bBrushGC_ = FALSE;
-            
+
             XFillRectangle( GetXDisplay(),
                             GetDrawable(),
                             pGC,
                             aXRect.x, aXRect.y, aXRect.width, aXRect.height );
         }
    }
-        
+
    if( nPenColor_ != SALCOLOR_NONE )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
@@ -991,7 +997,7 @@ void X11SalGraphics::invert( ULONG nPoints,
                              SalInvert nFlags )
 {
     SalPolyLine Points ( nPoints, pPtAry );
-    
+
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
         pGC = GetInvert50GC();
@@ -1000,7 +1006,7 @@ void X11SalGraphics::invert( ULONG nPoints,
             pGC = GetTrackingGC();
         else
             pGC = GetInvertGC();
-    
+
     if( SAL_INVERT_TRACKFRAME & nFlags )
         DrawLines ( nPoints, Points, pGC, true );
     else
@@ -1022,11 +1028,12 @@ BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 
 XID X11SalGraphics::GetXRenderPicture()
 {
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+
     if( !m_aRenderPicture )
     {
         // check xrender support for matching visual
         // find a XRenderPictFormat compatible with the Drawable
-        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
         XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
         if( !pVisualFormat )
         {
@@ -1047,7 +1054,15 @@ XID X11SalGraphics::GetXRenderPicture()
     // TODO: avoid clipping if already set correctly
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    else
 #endif
+    {
+        // reset clip region
+        // TODO: avoid clip reset if already done
+        XRenderPictureAttributes aAttr;
+        aAttr.clip_mask = None;
+        rRenderPeer.ChangePicture( m_aRenderPicture, CPClipMask, &aAttr );
+    }
 
     return m_aRenderPicture;
 }
@@ -1090,6 +1105,7 @@ bool IsLeftOf( const XLineFixed& rA, const XLineFixed& rB )
     const XFixed aXDiff = rU.p2.x - rU.p1.x;
     const XFixed aYDiff = rU.p2.y - rU.p1.y;
 
+    // compare upper point of lower segment with line through upper segment
     if( (rU.p1.y != rL.p1.y) || (rU.p1.x != rL.p1.x) )
     {
         const sal_Int64 n1 = (sal_Int64)aXDiff * (rL.p1.y - rU.p1.y);
@@ -1098,6 +1114,7 @@ bool IsLeftOf( const XLineFixed& rA, const XLineFixed& rB )
             return ((n1 < n2) == bAbove);
     }
 
+    // compare lower point of lower segment with line through upper segment
     if( (rU.p2.y != rL.p2.y) || (rU.p2.x != rL.p2.x) )
     {
         const sal_Int64 n3 = (sal_Int64)aXDiff * (rL.p2.y - rU.p1.y);
@@ -1116,10 +1133,14 @@ struct HalfTrapezoid
     //    maLine.p1.y <= mnY < maLine.p2.y
     XLineFixed  maLine;
     XFixed      mnY;
+
+    XFixed  getXMin() const { return std::min( maLine.p1.x, maLine.p2.x); }
+    XFixed  getXMax() const { return std::max( maLine.p1.x, maLine.p2.x); }
 };
 
-struct HalfTrapCompare
+class HalfTrapCompare
 {
+public:
     bool operator()( const HalfTrapezoid& rA, const HalfTrapezoid& rB ) const
     {
         bool bIsTopLeft = false;
@@ -1132,14 +1153,15 @@ struct HalfTrapCompare
     }
 };
 
-typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueueBase;
+typedef std::vector< HalfTrapezoid > HTVector;
+typedef std::priority_queue< HalfTrapezoid, HTVector, HalfTrapCompare > HTQueueBase;
 // we need a priority queue with a reserve() to prevent countless reallocations
 class HTQueue
 :   public HTQueueBase
 {
 public:
     void    reserve( size_t n ) { c.reserve( n ); }
-    int     capacity() { return c.capacity(); }
+    void    swapvec( HTVector& v ) { c.swap( v ); }
 };
 
 typedef std::vector<XTrapezoid> TrapezoidVector;
@@ -1167,14 +1189,18 @@ public:
 };
 
 typedef std::multiset< int, TrapezoidYCompare > VerticalTrapSet;
+
+#ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+void splitIntersectingSegments( HTVector&);
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 } // end of anonymous namespace
 
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency)
 {
     // nothing to do for empty polypolygons
-    const int nPolygonCount = rPolyPoly.count();
-    if( nPolygonCount <= 0 )
+    const int nOrigPolyCount = rOrigPolyPoly.count();
+    if( nOrigPolyCount <= 0 )
         return TRUE;
 
     // nothing to do if everything is transparent
@@ -1203,28 +1229,22 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
-    const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
+    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rOrigPolyPoly );
+    const bool bNeedViewClip = aPolyRange.isInside( aViewRange );
     if( !aPolyRange.overlaps( aViewRange ) )
         return true;
 
     // convert the polypolygon to trapezoids
 
-    // first convert the B2DPolyPolygon to HalfTrapezoids
-    // #i100922# try to prevent priority-queue reallocations by reservering enough
+    // prepare the polypolygon for the algorithm below:
+    // - clip it against the view range
+    // - make sure it contains no self-intersections
+    // while we are at it guess the number of involved polygon points
     int nHTQueueReserve = 0;
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
+    basegfx::B2DPolyPolygon aGoodPolyPoly;
+    for( int nOrigPolyIdx = 0; nOrigPolyIdx < nOrigPolyCount; ++nOrigPolyIdx )
     {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
-        const int nPointCount = aOuterPolygon.count();
-        nHTQueueReserve += aOuterPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
-    }
-    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
-    HTQueue aHTQueue;
-    aHTQueue.reserve( nHTQueueReserve );
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
-    {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+        const ::basegfx::B2DPolygon aOuterPolygon = rOrigPolyPoly.getB2DPolygon( nOrigPolyIdx );
 
         // render-trapezoids should be inside the view => clip polygon against view range
         basegfx::B2DPolyPolygon aClippedPolygon( aOuterPolygon );
@@ -1232,36 +1252,68 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         {
             aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
             DBG_ASSERT( aClippedPolygon.count(), "polygon confirmed to overlap with view should not get here" );
-            if( !aClippedPolygon.count() )
-                continue;
         }
+        const int nClippedPolyCount = aClippedPolygon.count();
+        if( !nClippedPolyCount )
+            continue;
+
+#ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+          for( int nClippedPolyIdx = 0; nClippedPolyIdx < nClippedPolyCount; ++nClippedPolyIdx )
+        {
+            const ::basegfx::B2DPolygon aSolvedPolygon = aClippedPolygon.getB2DPolygon( nClippedPolyIdx );
+            const int nPointCount = aSolvedPolygon.count();
+            aGoodPolyPoly.append( aSolvedPolygon );
+            nHTQueueReserve += aSolvedPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
+        }
+#else // DISABLE_SOLVECROSSOVER_WORKAROUND
+        // #i103259# polypoly.solveCrossover() fails to remove self-intersections
+        // but polygon.solveCrossover() works. Use it to build the intersection-free polypolygon
+        // TODO: if the self-intersection prevention is too expensive make the trap-algorithm tolerate intersections
+        for( int nClippedPolyIdx = 0; nClippedPolyIdx < nClippedPolyCount; ++nClippedPolyIdx )
+        {
+            ::basegfx::B2DPolygon aUnsolvedPolygon = aClippedPolygon.getB2DPolygon( nClippedPolyIdx );
+            basegfx::B2DPolyPolygon aSolvedPolyPoly( basegfx::tools::solveCrossovers( aUnsolvedPolygon) );
+            const int nSolvedPolyCount = aSolvedPolyPoly.count();
+            for( int nSolvedPolyIdx = 0; nSolvedPolyIdx < nSolvedPolyCount; ++nSolvedPolyIdx )
+            {
+                // build the intersection-free polypolygon one by one
+                const ::basegfx::B2DPolygon aSolvedPolygon = aSolvedPolyPoly.getB2DPolygon( nSolvedPolyIdx );
+                aGoodPolyPoly.append( aSolvedPolygon );
+                // and while we are at it use the conviently available point count to guess the number of needed half-traps
+                const int nPointCount = aSolvedPolygon.count();
+                nHTQueueReserve += aSolvedPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
+            }
+        }
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
+    }
+    // #i100922# try to prevent priority-queue reallocations by reservering enough
+    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
+    HTVector aHTVector;
+    aHTVector.reserve( nHTQueueReserve );
+
+    // first convert the B2DPolyPolygon to HalfTrapezoids
+    const int nGoodPolyCount = aGoodPolyPoly.count();
+    for( int nGoodPolyIdx = 0; nGoodPolyIdx < nGoodPolyCount; ++nGoodPolyIdx )
+    {
+        ::basegfx::B2DPolygon aInnerPolygon = aGoodPolyPoly.getB2DPolygon( nGoodPolyIdx );
 
         // render-trapezoids have linear edges => get rid of bezier segments
-        if( aClippedPolygon.areControlPointsUsed() )
-            aClippedPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aClippedPolygon, 0.125 );
+        if( aInnerPolygon.areControlPointsUsed() )
+            aInnerPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aInnerPolygon, 0.125 );
 
-        // test and remove self intersections
-        // TODO: make code intersection save, then remove this test
-        basegfx::B2DPolyPolygon aInnerPolyPoly(basegfx::tools::solveCrossovers( aClippedPolygon));
-        const int nInnerPolyCount = aInnerPolyPoly.count();
-        for( int nInnerPolyIdx = 0; nInnerPolyIdx < nInnerPolyCount; ++nInnerPolyIdx )
+        const int nPointCount = aInnerPolygon.count();
+        if( nPointCount >= 3 )
         {
-            ::basegfx::B2DPolygon aInnerPolygon = aInnerPolyPoly.getB2DPolygon( nInnerPolyIdx );
-            const int nPointCount = aInnerPolygon.count();
-            if( !nPointCount )
-                continue;
-
-            aHTQueue.reserve( aHTQueue.size() + 8 * nPointCount );
-
             // convert polygon point pairs to HalfTrapezoids
             // connect the polygon point with the first one if needed
             XPointFixed aOldXPF = { 0, 0 };
             XPointFixed aNewXPF;
             for( int nPointIdx = 0; nPointIdx <= nPointCount; ++nPointIdx, aOldXPF = aNewXPF )
             {
+                // auto-close the polygon if needed
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
-                
+
                 // convert the B2DPoint into XRENDER units
                 if(getAntiAliasB2DDraw())
                 {
@@ -1276,9 +1328,6 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
                 // check if enough data is available for a new HalfTrapezoid
                 if( nPointIdx == 0 )
-                    continue;
-                // ignore vertical segments
-                if( aNewXPF.y == aOldXPF.y )
                     continue;
 
                 // construct HalfTrapezoid as topdown segment
@@ -1304,13 +1353,32 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 #endif
 
                 // queue up the HalfTrapezoid
-                aHTQueue.push( aHT );
+                aHTVector.push_back( aHT );
             }
         }
     }
 
-    if( aHTQueue.empty() )
+    if( aHTVector.empty() )
         return TRUE;
+
+#ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+    // find intersecting halftraps and split them up
+    // TODO: remove when solveCrossOvers gets fast enough so its use can be enabled above
+    // FAQ: why should segment intersection be handled before adaptiveSubdivide()?
+    // Answer: because it is conceptually much faster
+    // Example: consider two intersecting circles with a diameter of 1000 pixels
+    //      before subdivision: eight bezier segments
+    //      after subdivision: more than a thousand line segments
+    //      since even the best generic intersection finders have a complexity of O((n+k)*log(n+k))
+    //      it shows that testing while the segment count is still low is a much better approach.
+    splitIntersectingSegments( aHTVector);
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
+
+    // build queue from vector of intersection-free segments
+    // TODO: is replacing the priority-queue by a sorted vector worth it?
+    std::make_heap( aHTVector.begin(), aHTVector.end(), HalfTrapCompare());
+    HTQueue aHTQueue;
+    aHTQueue.swapvec( aHTVector);
 
     // then convert the HalfTrapezoids into full Trapezoids
     TrapezoidVector aTrapVector;
@@ -1327,24 +1395,28 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         XTrapezoid aTrapezoid;
 
         // convert a HalfTrapezoid pair
+        // get the left side of the trapezoid
         const HalfTrapezoid& rLeft = aHTQueue.top();
         aTrapezoid.top = rLeft.mnY;
-        aTrapezoid.bottom = rLeft.maLine.p2.y;
         aTrapezoid.left = rLeft.maLine;
+        aHTQueue.pop();
 
-#if 0
-        // ignore empty trapezoids
-        if( aTrapezoid.bottom <= aTrapezoid.top )
+        // ignore left segment that would result in an empty trapezoid
+        if( aTrapezoid.left.p2.y <= aTrapezoid.top )
             continue;
-#endif
 
-        aHTQueue.pop();
-        if( aHTQueue.empty() ) // TODO: assert
-            break;
-        const HalfTrapezoid& rRight = aHTQueue.top();
-        aTrapezoid.right = rRight.maLine;
-        aHTQueue.pop();
+        // get the right side of the trapezoid
+        aTrapezoid.right.p2.y = aTrapezoid.bottom;
+        while( !aHTQueue.empty() ) {
+            const HalfTrapezoid& rRight = aHTQueue.top();
+            aTrapezoid.right = rRight.maLine;
+            aHTQueue.pop();
+            // ignore right segment that would result in an empty trapezoid
+        if( aTrapezoid.right.p2.y > aTrapezoid.top )
+                break;
+        }
 
+        // the topmost endpoint determines the trapezoid bottom
         aTrapezoid.bottom = aTrapezoid.left.p2.y;
         if( aTrapezoid.bottom > aTrapezoid.right.p2.y )
             aTrapezoid.bottom = aTrapezoid.right.p2.y;
@@ -1352,44 +1424,49 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         // keep the full Trapezoid candidate
         aTrapVector.push_back( aTrapezoid );
 
-        // unless it splits an older trapezoid
+        // unless it splits another trapezoid that is still active
         bool bSplit = false;
-        for(;;)
+        ActiveTrapSet::iterator aActiveTrapsIt = aActiveTraps.begin();
+        for(; aActiveTrapsIt != aActiveTraps.end(); ++aActiveTrapsIt )
         {
-            // check if the new trapezoid overlaps with an old trapezoid
-            ActiveTrapSet::iterator aActiveTrapsIt
-                = aActiveTraps.upper_bound( aTrapVector.size()-1 );
-            if( aActiveTrapsIt == aActiveTraps.begin() )
-                break;
-            --aActiveTrapsIt;
-
             XTrapezoid& rLeftTrap = aTrapVector[ *aActiveTrapsIt ];
+
+            // skip until first overlap candidate
+            // TODO: use stl::*er_bound() instead
+            if( IsLeftOf( aTrapezoid.left, rLeftTrap.left) )
+                continue;
 
             // in the ActiveTrapSet there are still trapezoids where
             // a vertical overlap with new trapezoids is no longer possible
             // they could have been removed in the verticaltraps loop below
-            // but this would have been expensive and is not needed as we can
-            // simply ignore them now and remove them from the ActiveTrapSet
-            // so they won't bother us in the future
+            // but this would be expensive and is not needed as we can
+            // simply ignore them until we stumble upon them here.
             if( rLeftTrap.bottom <= aTrapezoid.top )
             {
-                aActiveTraps.erase( aActiveTrapsIt );
+                ActiveTrapSet::iterator it = aActiveTrapsIt;
+                if( aActiveTrapsIt != aActiveTraps.begin() )
+                    --aActiveTrapsIt;
+                aActiveTraps.erase( it );
                 continue;
             }
 
             // check if there is horizontal overlap
             // aTrapezoid.left==rLeftTrap.right is allowed though
             if( !IsLeftOf( aTrapezoid.left, rLeftTrap.right ) )
-                break;
+                continue;
 
-            // split the old trapezoid and keep its upper part
+            // prepare to split the old trapezoid and keep its upper part
             // find the old trapezoids entry in the VerticalTrapSet and remove it
             typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
             VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
             VerticalTrapSet::iterator aVTSit = aVTSPair.first;
-            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit ) ;
-            if( aVTSit != aVTSPair.second )
+            for(; aVTSit != aVTSPair.second; ++aVTSit )
+            {
+                if( *aVTSit != *aActiveTrapsIt )
+                    continue;
                 aVerticalTraps.erase( aVTSit );
+                break;
+            }
             // then update the old trapezoid's bottom
             rLeftTrap.bottom = aTrapezoid.top;
             // enter the updated old trapzoid in VerticalTrapSet
@@ -1422,24 +1499,26 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         // mark trapezoids that can no longer be split as inactive
         // and recycle their sides which were not fully resolved
         static const XFixed nMaxTop = +0x7FFFFFFF;
-        XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
+        const XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
         while( !aVerticalTraps.empty() )
         {
+            // check the next trapezoid to be retired
             const XTrapezoid& rOldTrap = aTrapVector[ *aVerticalTraps.begin() ];
             if( nNewTop < rOldTrap.bottom )
                 break;
-            // the reference Trapezoid can no longer be split
+            // this trapezoid can no longer be split
             aVerticalTraps.erase( aVerticalTraps.begin() );
 
             // recycle its sides that were not fully resolved
             HalfTrapezoid aHT;
             aHT.mnY = rOldTrap.bottom;
-            if( rOldTrap.left.p2.y > rOldTrap.bottom )
+
+            if( rOldTrap.left.p2.y > aHT.mnY )
             {
                 aHT.maLine = rOldTrap.left;
                 aHTQueue.push( aHT );
             }
-            if( rOldTrap.right.p2.y > rOldTrap.bottom )
+            if( rOldTrap.right.p2.y > aHT.mnY )
             {
                 aHT.maLine = rOldTrap.right;
                 aHTQueue.push( aHT );
@@ -1482,6 +1561,14 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
 bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
 {
+    // #i101491#
+    if(rPolygon.count() > 1000)
+    {
+        // the used basegfx::tools::createAreaGeometry is simply too
+        // expensive with very big polygons; fallback to caller (who
+        // should use ImplLineConverter normally)
+        return false;
+    }
     const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     if( !rRenderPeer.AreTrapezoidsSupported() )
         return false;
@@ -1497,14 +1584,21 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
         aPolygon.transform( aAnisoMatrix );
     }
 
-    // AW: reSegment no longer needed; new createAreaGeometry will remove exteme positions
-    // and create bezier polygons
-    //if( aPolygon.areControlPointsUsed() )
-    //    aPolygon = basegfx::tools::reSegmentPolygonEdges( aPolygon, 8, true, false );
-    //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
-    //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
-    const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
-    
+    // special handling for hairlines to improve the drawing performance
+    // TODO: revisit after basegfx performance related changes
+    const bool bIsHairline = (rLineWidth.getX() < 1.2) && (rLineWidth.getY() < 1.2);
+    if( bIsHairline )
+    {
+        // for hairlines the linejoin style becomes irrelevant
+        eLineJoin = basegfx::B2DLINEJOIN_NONE;
+        // createAreaGeometry is still too expensive when beziers are involved
+        if( aPolygon.areControlPointsUsed() )
+            aPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aPolygon, 0.125 );
+    }
+
+    // create the area-polygon for the line
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin) );
+
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {
@@ -1537,3 +1631,260 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+// TODO: move the intersection solver into basegfx
+//    and then support bezier-intersection finding too
+
+namespace { // anonymous namespace to prevent export
+
+typedef HalfTrapezoid LineSeg;
+typedef HTVector LSVector;
+
+inline bool operator==( const LineSeg& r1, const LineSeg& r2)
+{
+    if( r1.maLine.p2.y != r2.maLine.p2.y) return false;
+    if( r1.maLine.p2.x != r2.maLine.p2.x) return false;
+    if( r1.maLine.p1.y != r2.maLine.p1.y) return false;
+    if( r1.maLine.p1.x != r2.maLine.p1.x) return false;
+    return true;
+}
+
+struct LSYMinCmp
+{
+    bool operator()( const LineSeg& r1, const LineSeg& r2) const
+        { return r2.maLine.p1.y < r1.maLine.p1.y; }
+};
+
+struct LSYMaxCmp
+{
+    bool operator()( const LineSeg& r1, const LineSeg& r2) const
+        { return r2.maLine.p2.y < r1.maLine.p2.y; }
+};
+
+struct LSXMinCmp
+{
+    bool operator()( const LineSeg& r1, const LineSeg& r2) const
+        { return( r1.getXMin() < r2.getXMin()); }
+};
+
+struct CutPoint
+{
+    XFixed      mnSegmentId;
+    float       mfCutParam;
+    XPointFixed maPoint;
+};
+
+struct CutPointCmp
+{
+    bool operator()( const CutPoint& r1, const CutPoint& r2) const
+    {
+            if( r1.mnSegmentId != r2.mnSegmentId)
+                return (r1.mnSegmentId < r2.mnSegmentId);
+        return (r1.mfCutParam < r2.mfCutParam);
+    }
+};
+
+bool findIntersection( const LineSeg& rLS1, const LineSeg& rLS2, CutPoint aCutPoints[2])
+{
+    // segments intersect at r1.p1 + s*(r1.p2-r1.p1) == r2.p1 + t*(r2.p2-r2.p1)
+    // when both segment-parameters are ((0 <s<1) && (0<t<1))
+    // (r1.p1 - r2.p1) == s * (r1.p1 - r1.p2) + t * (r2.p2 - r2.p1)
+    // =>
+    // (r1.p1x - r2.p1x) == s * (r1.p1x - r1.p2x) + t * (r2.p2x - r2.p1x)
+    // (r1.p1y - r2.p1y) == s * (r1.p1y - r1.p2y) + t * (r2.p2y - r2.p1y)
+    // check if lines are identical or parallel => not intersecting
+    const XLineFixed& r1 = rLS1.maLine;
+    const XLineFixed& r2 = rLS2.maLine;
+    const double fDet = (double)(r1.p1.x - r1.p2.x) * (r2.p2.y - r2.p1.y)
+            - (double)(r2.p2.x - r2.p1.x) * (r1.p1.y - r1.p2.y);
+    static const double fEps = 1e-8;
+    if( fabs(fDet) < fEps)
+        return false;
+    // check if intersecting with first segment
+    const double fS1 = (double)(r2.p2.y - r2.p1.y) * (r1.p1.x - r2.p1.x);
+    const double fS2 = (double)(r2.p2.x - r2.p1.x) * (r2.p1.y - r1.p1.y);
+    const double fS = (fS1 + fS2) / fDet;
+    if( (fS <= +fEps) || (fS >= 1-fEps))
+        return false;
+    // check if intersecting with second segment
+    const double fT1 = (double)(r1.p2.y - r1.p1.y) * (r1.p1.x - r2.p1.x);
+    const double fT2 = (double)(r1.p2.x - r1.p1.x) * (r2.p1.y - r1.p1.y);
+    const double fT = (fT1 + fT2) / fDet;
+    if( (fT <= +fEps) || (fT >= 1-fEps))
+        return false;
+    // force the intersection point to be exactly identical on both segments
+    aCutPoints[0].maPoint.x = (XFixed)(r1.p1.x + fS * (r1.p2.x - r1.p1.x));
+    aCutPoints[0].maPoint.y = (XFixed)(r1.p1.y + fS * (r1.p2.y - r1.p1.y));
+    aCutPoints[1].maPoint.x = aCutPoints[0].maPoint.x;
+    aCutPoints[1].maPoint.y = aCutPoints[0].maPoint.y;
+    aCutPoints[0].mnSegmentId = rLS1.mnY;
+    aCutPoints[0].mfCutParam = (float)fS;
+    aCutPoints[1].mnSegmentId = rLS2.mnY;
+    aCutPoints[1].mfCutParam = (float)fT;
+    return true;
+}
+
+typedef std::priority_queue< LineSeg, LSVector, LSYMinCmp> LSYMinQueueBase;
+typedef std::priority_queue< LineSeg, LSVector, LSYMaxCmp> LSYMaxQueueBase;
+typedef std::multiset< LineSeg, LSXMinCmp> LSXMinSet;
+typedef std::set< CutPoint, CutPointCmp> CutPointSet;
+
+class LSYMinQueue : public LSYMinQueueBase
+{
+public:
+    void    reserve( size_t n)      { c.reserve(n);}
+    void    swapvec( LSVector& v)       { c.swap(v);}
+};
+
+class LSYMaxQueue : public LSYMaxQueueBase
+{
+public:
+    void    reserve( size_t n)      { c.reserve(n);}
+};
+
+void addAndCutSegment( LSVector& rLSVector, const LineSeg& rLS, CutPointSet& rCutPointSet)
+{
+    // short circuit when no segment was cut
+    if( rCutPointSet.empty()) {
+        rLSVector.push_back( rLS);
+        return;
+    }
+
+    // find the first cut point for this segment
+    LineSeg aCS = rLS;
+    CutPoint aMinCutPoint;
+    aMinCutPoint.mnSegmentId = rLS.mnY;
+    aMinCutPoint.mfCutParam = 0.0;
+    CutPointSet::iterator itFirst = rCutPointSet.lower_bound( aMinCutPoint);
+    CutPointSet::iterator it = itFirst;
+    // iterate through all cut points of this segment
+    for(; it != rCutPointSet.end(); ++it) {
+        const CutPoint rCutPoint = (*it);
+        if( rCutPoint.mnSegmentId != rLS.mnY)
+            break;
+        // cut segment at the cutpoint
+        aCS.maLine.p2 = rCutPoint.maPoint;
+        rLSVector.push_back( aCS);
+        // prepare for next segment cut
+        aCS.maLine.p1 = aCS.maLine.p2;
+    }
+    // remove cutparams that will no longer be needed
+    // TODO: is it worth it or should we just keep the cutparams?
+    rCutPointSet.erase( itFirst, it);
+
+    // add segment part remaining after last cut
+    aCS.maLine.p2 = rLS.maLine.p2;
+    rLSVector.push_back( aCS);
+}
+
+void splitIntersectingSegments( LSVector& rLSVector)
+{
+    // get a unique id for each lineseg, temporarily abuse the mnY member
+    LSVector::iterator aLSit = rLSVector.begin();
+    for( int i = 0; aLSit != rLSVector.end(); ++aLSit) {
+        LineSeg& rLS = *aLSit;
+        rLS.mnY = i++;
+    }
+    // get an y-sorted queue from the input vector
+    LSYMinQueue aYMinQueue;
+    std::make_heap( rLSVector.begin(), rLSVector.end(), LSYMinCmp());
+    aYMinQueue.swapvec( rLSVector);
+
+    // prepare the result vector
+    // try to avoid reallocations by guessing a reasonable result size
+    rLSVector.reserve( aYMinQueue.size() * 3/2 );
+
+    // find all intersections
+    CutPointSet aCutPointSet;
+    LSXMinSet aXMinSet;
+    LSYMaxQueue aYMaxQueue;
+    aYMaxQueue.reserve( aYMinQueue.size());
+    // sweep-down and check all segment-pairs that overlap
+    while( !aYMinQueue.empty()) {
+        // get next input-segment
+        const LineSeg& rLS = aYMinQueue.top();
+        // retire obsoleted segments
+        const XFixed fYCur = rLS.maLine.p1.y;
+        while( !aYMaxQueue.empty()) {
+            // check next segment to be retired
+            const LineSeg& rOS = aYMaxQueue.top();
+            if( fYCur < rOS.maLine.p2.y)
+                break;
+            // emit resolved segment into result
+            addAndCutSegment( rLSVector, rOS, aCutPointSet);
+            // find segment to be retired in xmin-compare-set
+            LSXMinSet::iterator itR = aXMinSet.lower_bound( rOS);
+            while( !(*itR == rOS)) ++itR;
+            // retire segment from xmin-compare-set
+            aXMinSet.erase( itR);
+            // this segment is pining for the fjords
+            aYMaxQueue.pop();
+        }
+
+        // iterate over all segments that might overlap
+        // skip over the leftmost segments that cannot overlap
+        const XFixed fXMax = rLS.getXMax();
+        LSXMinSet::const_iterator itC = aXMinSet.begin();
+        for(; itC != aXMinSet.end(); ++itC)
+            if( (*itC).getXMin() <= fXMax)
+                break;
+        // TODO: if the linear search becomes too expensive
+        // then use an XMaxQueue based approach to replace it
+        const XFixed fXMin = rLS.getXMin();
+        for(; itC != aXMinSet.end(); ++itC) {
+            const LineSeg& rOS = *itC;
+            if( fXMin >= rOS.getXMax())
+                continue;
+            if( fXMax < rOS.getXMin())
+                break;
+            CutPoint aCutPoints[2];
+            if( !findIntersection( rLS, rOS, aCutPoints))
+                continue;
+            // remember cut parameters
+            // TODO: std::set seems to use individual allocations
+            //  which results in perf-problems for many entries
+            //  => pre-allocate nodes by using a non-default allocator
+            aCutPointSet.insert( aCutPoints[0]);
+            aCutPointSet.insert( aCutPoints[1]);
+        }
+        // add segment to xmin-compare-set
+         // TODO: do we have a good insertion hint?
+        aXMinSet.insert( /*itC,*/ rLS);
+        // register segment for retirement
+        aYMaxQueue.push( rLS);
+        aYMinQueue.pop();
+    }
+
+    // retire the remaining segments
+    aXMinSet.clear();
+    while( !aYMaxQueue.empty()) {
+        // emit segments and cut them up if needed
+        const LineSeg& rLS = aYMaxQueue.top();
+        addAndCutSegment( rLSVector, rLS, aCutPointSet);
+        aYMaxQueue.pop();
+    }
+
+    // get the segments ready to be consumed by the drawPolygon() caller
+    aLSit = rLSVector.begin();
+    LSVector::iterator aLSit2 = aLSit;
+    for(; aLSit != rLSVector.end(); ++aLSit) {
+        LineSeg& rLS = *aLSit;
+        // restore the segment top member
+        rLS.mnY = rLS.maLine.p1.y;
+        // remove horizontal segments for now
+        // TODO: until the trapezoid converter is adjusted to handle them
+        if( rLS.maLine.p1.y == rLS.maLine.p2.y )
+            continue;
+        *(aLSit2++) = rLS;
+    }
+    if(aLSit2 != aLSit)
+        rLSVector.resize( aLSit2 - rLSVector.begin() );
+}
+
+} // end anonymous namespace
+
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+

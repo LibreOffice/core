@@ -142,6 +142,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_MAX );
         ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_MIN );
         ImplRegisterProperty( BASEPROPERTY_ENABLED );
+        ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
         ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
         ImplRegisterProperty( BASEPROPERTY_FORMATKEY );
         ImplRegisterProperty( BASEPROPERTY_FORMATSSUPPLIER );
@@ -161,6 +162,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
         ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
+        ImplRegisterProperty( BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR );
 
         Any aTreatAsNumber;
         aTreatAsNumber <<= (sal_Bool) sal_True;

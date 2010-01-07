@@ -481,6 +481,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
@@ -1778,6 +1779,7 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel()
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
@@ -3594,6 +3596,7 @@ UnoControlProgressBarModel::UnoControlProgressBarModel()
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
     ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
@@ -3723,6 +3726,7 @@ UnoControlFixedLineModel::UnoControlFixedLineModel()
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );

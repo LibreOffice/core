@@ -36,6 +36,9 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+// --> OD 2009-04-14 #i93269#
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
+// <--
 #include <cppuhelper/implbase1.hxx>
 #include <vos/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -86,6 +89,34 @@ atk_wrapper_focus_idle_handler (gpointer data)
             fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
             atk_focus_tracker_notify(atk_obj);
+            // --> OD 2009-04-14 #i93269#
+            // emit text_caret_moved event for <XAccessibleText> object,
+            // if cursor is inside the <XAccessibleText> object.
+            // also emit state-changed:focused event under the same condition.
+            {
+                AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
+                if( !wrapper_obj->mpText && wrapper_obj->mpContext )
+                {
+                    uno::Any any = wrapper_obj->mpContext->queryInterface( accessibility::XAccessibleText::static_type(NULL) );
+                    if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&
+                         any.pReserved != 0 )
+                    {
+                        wrapper_obj->mpText = reinterpret_cast< accessibility::XAccessibleText * > (any.pReserved);
+                        if ( wrapper_obj->mpText != 0 )
+                        {
+                            wrapper_obj->mpText->acquire();
+                            gint caretPos = wrapper_obj->mpText->getCaretPosition();
+
+                            if ( caretPos != -1 )
+                            {
+                                atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
+                                g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
+                            }
+                        }
+                    }
+                }
+            }
+            // <--
             g_object_unref(atk_obj);
         }
     }
@@ -190,7 +221,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
             }
-            catch(lang::IndexOutOfBoundsException e)
+            catch(const lang::IndexOutOfBoundsException &e)
             {
                 g_warning("Focused object has invalid index in parent");
             }
@@ -546,7 +577,14 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
         if( g_aWindowList.find(pWindow) == g_aWindowList.end() )
         {
             g_aWindowList.insert(pWindow);
-            aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            try
+            {
+                aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            }
+            catch( const uno::Exception &e )
+            {
+                g_warning( "Exception caught processing focus events" );
+            }
         }
 #ifdef ENABLE_TRACING
         else
@@ -577,7 +615,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
             }
         }
     }
-    catch( uno::Exception e )
+    catch( const uno::Exception& e )
     {
         g_warning( "Exception caught processing menu highlight events" );
     }

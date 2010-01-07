@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.111.36.3 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -77,7 +73,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/fixed.hxx       \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/font.hxx        \
-            $(INC)$/vcl$/fontcvt.hxx     \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/graph.hxx       \
             $(INC)$/vcl$/group.hxx       \
@@ -162,6 +157,9 @@ LIB1FILES+= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
+.IF "$(GUIBASE)" == "aqua"
+LIB1FILES+= $(SLB)$/dtransaqua.lib
+.ENDIF
 .ENDIF
 
 SHL1TARGET= vcl$(DLLPOSTFIX)
@@ -170,8 +168,9 @@ SHL1STDLIBS+=\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
+            $(I18NPAPERLIB)     \
             $(I18NISOLANGLIB)   \
-            $(I18NUTILLIB)   \
+            $(I18NUTILLIB)      \
             $(COMPHELPERLIB)	\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
@@ -183,12 +182,23 @@ SHL1STDLIBS+=\
             $(ICUDATALIB)		\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
+
+.IF "$(GUI)" == "UNX"
+.IF "$(ENABLE_GRAPHITE)" != ""
+.IF "$(SYSTEM_GRAPHITE)" == "YES"
+SHL1STDLIBS+= $(GRAPHITE_LIBS)
+.ELSE
+SHL1STDLIBS+= $(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)/libgraphite.a
+.ENDIF
+.ENDIF
+.ENDIF
 SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
 SHL1STDLIBS+= \
     $(BASEBMPLIB) \
-    -lAppleRemote$(DLLPOSTFIX)
+    -lAppleRemote$(DLLPOSTFIX) \
+    -framework QuickTime
 
 LIB1FILES+= \
             $(SLB)$/sala11y.lib
@@ -197,12 +207,16 @@ LIB1FILES+= \
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIB)
+.ELSE
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+    LIB1FILES +=    $(SLB)$/glyphs.lib
+.ENDIF
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 .IF "$(COM)"!="GCC"
-SHL1OBJS=   $(SLO)$/salshl.obj
+#SHL1OBJS=   $(SLO)$/salshl.obj
 .ENDIF
 .ENDIF
 
@@ -221,6 +235,14 @@ DEFLIB1NAME =vcl
 # --- W32 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
+
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += -lgraphite
+.ELSE
+SHL1STDLIBS += graphite_dll.lib
+.ENDIF
+.ENDIF
 
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
@@ -249,9 +271,20 @@ STDSHL1 += ft2lib.lib
 # UNX sal plugins
 .IF "$(GUI)" == "UNX" && "$(GUIBASE)" != "aqua"
 
+# desktop detector
+LIB7TARGET=$(SLB)$/idet
+LIB7FILES=$(SLB)$/dtdetect.lib
+SHL7TARGET=desktop_detector$(DLLPOSTFIX)
+SHL7STDLIBS=\
+            $(SALLIB) \
+            $(X11LINK_DYNAMIC)
+SHL7IMPLIB=idet
+SHL7LIBS=$(LIB7TARGET)
+
 # basic pure X11 plugin
 LIB2TARGET=$(SLB)$/ipure_x
 LIB2FILES= \
+            $(SLB)$/dtransX11.lib  \
             $(SLB)$/printergfx.lib  \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
@@ -264,9 +297,13 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
+            $(I18NPAPERLIB)     \
             $(TOOLSLIB)         \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
+            $(UNOTOOLSLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
             $(SALLIB)
 
 # prepare linking of Xinerama
@@ -294,7 +331,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 .IF "$(GUIBASE)"=="unx"
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF
@@ -342,7 +379,8 @@ SHL4STDLIBS+=\
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \
-            $(SALLIB)
+            $(SALLIB)           \
+            $(X11LINK_DYNAMIC)
 
 .IF "$(ENABLE_RANDR)" != ""
 .IF "$(XRANDR_DLOPEN)" == "FALSE"
@@ -364,13 +402,14 @@ SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
 SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
-SHL5STDLIBS=$(KDE_LIBS)
+SHL5LINKFLAGS+=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
         $(TOOLSLIB)     \
         $(VOSLIB)       \
-        $(SALLIB)
+        $(SALLIB)       \
+        $(X11LINK_DYNAMIC)
 
 .IF "$(ENABLE_RANDR)" != ""
 .IF "$(XRANDR_DLOPEN)" == "FALSE"
@@ -379,6 +418,36 @@ SHL5STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 
 .ENDIF # "$(ENABLE_KDE)" != ""
+
+# KDE4 plugin
+.IF "$(ENABLE_KDE4)" != ""
+.IF "$(KDE4_ROOT)"!=""
+EXTRALIBPATHS+=-L$(KDE4_ROOT)$/lib
+.ENDIF
+LIB6TARGET=$(SLB)$/ikde4_plug_
+LIB6FILES=$(SLB)$/kde4plug.lib
+SHL6TARGET=vclplug_kde4$(DLLPOSTFIX)
+SHL6IMPLIB=ikde4_plug_
+SHL6LIBS=$(LIB6TARGET)
+SHL6DEPN=$(SHL2TARGETN)
+# libs for KDE4 plugin
+SHL6LINKFLAGS+=$(KDE4_LIBS)
+SHL6STDLIBS+=-l$(SHL2TARGET)
+SHL6STDLIBS+=\
+        $(VCLLIB)       \
+        $(PSPLIB)	\
+        $(TOOLSLIB)     \
+        $(VOSLIB)       \
+        $(SALLIB)   \
+        $(X11LINK_DYNAMIC)
+
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+SHL6STDLIBS+= $(XRANDR_LIBS)
+.ENDIF
+.ENDIF
+
+.ENDIF # "$(ENABLE_KDE4)" != ""
 
 .ENDIF # UNX
 

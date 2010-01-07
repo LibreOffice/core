@@ -203,6 +203,22 @@ namespace basegfx
             sense to use reserve(4) at the vector as preparation.
         */
         void getAllExtremumPositions(::std::vector< double >& rResults) const;
+
+        /** Get optimum-split position on this segment
+
+            This method calculates the positions of all points of the segment
+            that have the maximimum distance to the corresponding line from
+            startpoint-endpoint. This helps to approximate the bezier curve
+            with a minimum number of line segments
+
+            @param fResults
+             Result positions are in the range ]0.0 .. 1.0[
+            Cubic beziers have at most two of these positions
+
+            @return
+            Returns the number of split positions found
+        */
+        int getMaxDistancePositions( double fResults[2]) const;
     };
 } // end of namespace basegfx
 

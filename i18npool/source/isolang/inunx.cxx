@@ -60,11 +60,11 @@ static const sal_Char* getLangFromEnvironment()
     const sal_Char *pLang = NULL;
 
     pLang = getenv ( "LC_ALL" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_CTYPE" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv( "LANG" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = pFallback;
 
     return pLang;
@@ -79,13 +79,13 @@ static const sal_Char* getUILangFromEnvironment()
     const sal_Char *pLang = NULL;
 
     pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_ALL" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_MESSAGES" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv( "LANG" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = pFallback;
 
     return pLang;

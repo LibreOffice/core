@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dcubicbezier.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -443,21 +442,32 @@ namespace basegfx
                 bool bAIsTrivial(aVecA.equalZero());
                 bool bBIsTrivial(aVecB.equalZero());
 
+                // #i102241# prepare inverse edge length to normalize cross values;
+                // else the small compare value used in fTools::equalZero
+                // will be length dependent and this detection will work as less
+                // precise as longer the edge is. In principle, the length of the control
+                // vector would need to be used too, but to be trivial it is assumed to
+                // be of roughly equal length to the edge, so edge length can be used
+                // for both. Only needed when one of both is not trivial per se.
+                const double fInverseEdgeLength(bAIsTrivial && bBIsTrivial
+                    ? 1.0
+                    : 1.0 / aEdge.getLength());
+
                 // if A is not zero, check if it could be
                 if(!bAIsTrivial)
                 {
-                    // parallel to edge? Check aVecA, aEdge
-                    // B2DVector::areParallel is too correct, uses differences in the e15 region,
-                    // thus do own test here
-                    const double fValA(aVecA.getX() * aEdge.getY());
-                    const double fValB(aVecA.getY() * aEdge.getX());
+                    // #i102241# parallel to edge? Check aVecA, aEdge. Use cross() which does what
+                    // we need here with the precision we need
+                    const double fCross(aVecA.cross(aEdge) * fInverseEdgeLength);
 
-                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
+                    if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecA.getX() / aEdge.getX() : aVecA.getY() / aEdge.getY());
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecA.getX() / aEdge.getX()
+                            : aVecA.getY() / aEdge.getY());
 
-                        // end point of vector in edge range?
+                        // relative end point of vector in edge range?
                         if(fTools::moreOrEqual(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
                         {
                             bAIsTrivial = true;
@@ -470,13 +480,14 @@ namespace basegfx
                 if(bAIsTrivial && !bBIsTrivial)
                 {
                     // parallel to edge? Check aVecB, aEdge
-                    const double fValA(aVecB.getX() * aEdge.getY());
-                    const double fValB(aVecB.getY() * aEdge.getX());
+                    const double fCross(aVecB.cross(aEdge) * fInverseEdgeLength);
 
-                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
+                    if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecB.getX() / aEdge.getX() : aVecB.getY() / aEdge.getY());
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecB.getX() / aEdge.getX()
+                            : aVecB.getY() / aEdge.getY());
 
                         // end point of vector in edge range? Caution: controlB is directed AGAINST edge
                         if(fTools::lessOrEqual(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))
@@ -1033,6 +1044,65 @@ namespace basegfx
             impCheckExtremumResult(fCY / (2 * fBY), rResults);
         }
     }
+
+    int B2DCubicBezier::getMaxDistancePositions( double pResult[2]) const
+    {
+        // the distance from the bezier to a line through start and end
+        // is proportional to (ENDx-STARTx,ENDy-STARTy)*(+BEZIERy(t),-BEZIERx(t))
+        // this distance becomes zero for at least t==0 and t==1
+        // its extrema that are between 0..1 are interesting as split candidates
+        // its derived function has the form dD/dt = fA*t^2 + 2*fB*t + fC
+        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
+        const double fA = 3 * (maEndPoint.getX() - maControlPointB.getX()) * aRelativeEndPoint.getY()
+                - 3 * (maEndPoint.getY() - maControlPointB.getY()) * aRelativeEndPoint.getX();
+        const double fB = (maControlPointB.getX() - maControlPointA.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointB.getY() - maControlPointA.getY()) * aRelativeEndPoint.getX();
+        const double fC = (maControlPointA.getX() - maStartPoint.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointA.getY() - maStartPoint.getY()) * aRelativeEndPoint.getX();
+
+        // test for degenerated case: non-cubic curve
+        if( fTools::equalZero(fA) )
+        {
+            // test for degenerated case: straight line
+            if( fTools::equalZero(fB) )
+                return 0;
+
+            // degenerated case: quadratic bezier
+            pResult[0] = -fC / (2*fB);
+
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+            return nCount;
+        }
+
+        // derivative is polynomial of order 2
+        // check if the polynomial has non-imaginary roots
+        const double fD = fB*fB - fA*fC;
+        if( fD >= 0.0 ) // TODO: is this test needed? geometrically not IMHO
+        {
+            // calculate the first root
+            const double fS = sqrt(fD);
+            const double fQ = fB + ((fB >= 0) ? +fS : -fS);
+            pResult[0] = fQ / fA;
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+
+            // ignore multiplicit roots
+            if( !fTools::equalZero(fD) )
+            {
+                 // calculate the second root
+                const double fRoot = fC / fQ;
+                pResult[ nCount ] = fC / fQ;
+                // test root: ignore it when it is outside the curve
+                nCount += ((fRoot > 0) && (fRoot < 1));
+            }
+
+            return nCount;
+        }
+
+        return 0;
+    }
+
 } // end of namespace basegfx
 
 // eof

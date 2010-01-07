@@ -36,7 +36,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/spin.h"
 #include "vcl/spinfld.hxx"
-#include "vcl/controllayout.hxx"
+#include "vcl/controldata.hxx"
 #include "vcl/svdata.hxx"
 
 // =======================================================================
@@ -599,7 +599,12 @@ long SpinField::Notify( NotifyEvent& rNEvt )
     {
         if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
-            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+            USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
+                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+                    &&  HasChildPathFocus()
+                    )
+                )
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
@@ -632,7 +637,7 @@ void SpinField::FillLayoutData() const
 {
     if( mbSpin )
     {
-        mpLayoutData = new vcl::ControlLayoutData();
+        mpControlData->mpLayoutData = new vcl::ControlLayoutData();
         AppendLayoutData( *GetSubEdit() );
         GetSubEdit()->SetLayoutDataParent( this );
     }

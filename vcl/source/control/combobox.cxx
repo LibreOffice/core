@@ -44,7 +44,7 @@
 #include <vcl/subedit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 
 
 
@@ -142,23 +142,19 @@ void ComboBox::ImplCalcEditHeight()
     if ( !IsDropDownBox() )
         mnDDHeight += 4;
 
-    // FIXME: currently only on aqua; see if we can use this on other platforms
-    if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+    Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
+    Region aBoundRegion, aContentRegion;
+    ImplControlValue aControlValue;
+    ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
+    if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
+                                aCtrlRegion,
+                                CTRL_STATE_ENABLED,
+                                aControlValue, rtl::OUString(),
+                                aBoundRegion, aContentRegion ) )
     {
-        Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
-        Region aBoundRegion, aContentRegion;
-        ImplControlValue aControlValue;
-        ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
-        if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
-                                    aCtrlRegion,
-                                    CTRL_STATE_ENABLED,
-                                    aControlValue, rtl::OUString(),
-                                    aBoundRegion, aContentRegion ) )
-        {
-            const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
-            if( mnDDHeight < nNCHeight )
-                mnDDHeight = sal::static_int_cast<USHORT>( nNCHeight );
-        }
+        const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
+        if( mnDDHeight < nNCHeight )
+            mnDDHeight = sal::static_int_cast<USHORT>( nNCHeight );
     }
 }
 
@@ -291,6 +287,7 @@ BOOL ComboBox::IsAutocompleteEnabled() const
 
 IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
     if ( !mpImplLB->GetEntryList()->GetMRUCount() )
         ImplUpdateFloatSelection();
@@ -527,6 +524,7 @@ void ComboBox::ToggleDropDown()
                 ImplUpdateFloatSelection();
             else
                 mpImplLB->SelectEntry( 0 , TRUE );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpBtn->SetPressed( TRUE );
             SetSelection( Selection( 0, SELECTION_MAX ) );
             mpFloatWin->StartFloat( TRUE );
@@ -691,7 +689,7 @@ void ComboBox::Resize()
 
 void ComboBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     AppendLayoutData( *mpSubEdit );
     mpSubEdit->SetLayoutDataParent( this );
     Control* pMainWindow = mpImplLB->GetMainWindow();
@@ -804,14 +802,8 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 long ComboBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
 
-    if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
-    {
-        mpSubEdit->GrabFocus();
-    }
-
-    return nDone ? nDone : Edit::PreNotify( rNEvt );
+    return Edit::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -834,6 +826,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                 ImplUpdateFloatSelection();
                 if( ( nKeyCode == KEY_DOWN ) && mpFloatWin && !mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
                 {
+                    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                     mpBtn->SetPressed( TRUE );
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , TRUE );
@@ -876,10 +869,23 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
              (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
              (rNEvt.GetWindow() == mpSubEdit) )
     {
-        if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+        USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+        if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
+            ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+                &&  HasChildPathFocus()
+                )
+            )
+        {
             nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+        }
         else
+        {
             nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+        }
+    }
+    else if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
+    {
+        mpSubEdit->GrabFocus();
     }
 
     return nDone ? nDone : Edit::Notify( rNEvt );
@@ -1528,7 +1534,7 @@ void ComboBox::SetBorderStyle( USHORT nBorderStyle )
 
 long ComboBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all

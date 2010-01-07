@@ -33,7 +33,7 @@
 
 #include <vcl/salbtype.hxx>
 #include "wmfwr.hxx"
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
@@ -438,16 +438,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     BYTE nPitchFamily;
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
-
-    if ( !rFont.GetSize().Width() )
-    {
-        VirtualDevice aDev;
-        FontMetric aMetric( aDev.GetFontMetric( rFont ) );
-        WriteHeightWidth(Size(aMetric.GetWidth(),-rFont.GetSize().Height()));
-    }
-    else
-        WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
-
+    WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
     *pWMF << (short)rFont.GetOrientation() << (short)rFont.GetOrientation();
 
     switch (rFont.GetWeight()) {
@@ -764,7 +755,7 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
     nSize = aSimplePoly.GetSize();
@@ -779,7 +770,7 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
     USHORT nSize,i;
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
     nSize=aSimplePoly.GetSize();
@@ -801,7 +792,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
         if ( aSimplePolyPoly[ i ].HasFlags() )
         {
             Polygon aSimplePoly;
-            aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+            aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
             aSimplePolyPoly[ i ] = aSimplePoly;
         }
     }

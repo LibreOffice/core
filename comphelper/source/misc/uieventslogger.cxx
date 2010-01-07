@@ -218,11 +218,15 @@ namespace comphelper
     // public UiEventsLogger interface
     sal_Bool UiEventsLogger::isEnabled()
     {
-        try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
-            return UiEventsLogger_Impl::getInstance()->m_Active;
-        } catch(...) { return false; } // never throws
+        if ( UiEventsLogger_Impl::getEnabledFromCfg() )
+        {
+            try {
+                UiEventsLogger_Impl::prepareMutex();
+                Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+                return UiEventsLogger_Impl::getInstance()->m_Active;
+            } catch(...) { return false; } // never throws
+        } // if ( )
+        return sal_False;
     }
 
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
@@ -375,9 +379,20 @@ namespace comphelper
         }
         else
             logdata[2] = UNKNOWN_ORIGIN;
-        logdata[3] = url.Complete;
         if(url.Complete.match(URL_FILE))
             logdata[3] = URL_FILE;
+        else
+            logdata[3] = url.Main;
+        OSL_TRACE("UiEventsLogger Logging: %s,%s,%s,%s,%s,%s,%s,%s",
+            OUStringToOString(logdata[0],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[1],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[2],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[3],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[4],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[5],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[6],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }
@@ -386,6 +401,16 @@ namespace comphelper
     {
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);
         logdata[0] = ETYPE_ROTATED;
+        OSL_TRACE("UiEventsLogger Logging: %s,%s,%s,%s,%s,%s,%s,%s",
+            OUStringToOString(logdata[0],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[1],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[2],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[3],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[4],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[5],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[6],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
     }
 
@@ -407,6 +432,16 @@ namespace comphelper
         logdata[6] = id;
         logdata[7] = method;
         logdata[8] = param;
+        OSL_TRACE("UiEventsLogger Logging: %s,%s,%s,%s,%s,%s,%s,%s",
+            OUStringToOString(logdata[0],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[1],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[2],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[3],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[4],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[5],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[6],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }

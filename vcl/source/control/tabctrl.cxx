@@ -45,7 +45,7 @@
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/sound.hxx>
 
 #include <vcl/window.h>
@@ -169,31 +169,25 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
         EnableChildTransparentMode( TRUE );
 }
 
+// -----------------------------------------------------------------
+
+const Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetAppFont();
+}
+
+// -----------------------------------------------------------------
+const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetButtonTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void TabControl::ImplInitSettings( BOOL bFont,
                                    BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetButtonTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Control::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -232,9 +226,9 @@ void TabControl::ImplInitSettings( BOOL bFont,
 
 void TabControl::ImplFreeLayoutData()
 {
-    if( mpLayoutData )
+    if( HasLayoutData() )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         mpTabCtrlData->maLayoutPageIdToLine.clear();
         mpTabCtrlData->maLayoutLineToPageId.clear();
     }
@@ -864,9 +858,9 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
     if( bLayout )
     {
-        if( ! mpLayoutData )
+        if( !HasLayoutData() )
         {
-            mpLayoutData = new vcl::ControlLayoutData();
+            mpControlData->mpLayoutData = new vcl::ControlLayoutData();
             mpTabCtrlData->maLayoutLineToPageId.clear();
             mpTabCtrlData->maLayoutPageIdToLine.clear();
             mpTabCtrlData->maTabRectangles.clear();
@@ -1010,8 +1004,8 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
     if( bLayout )
     {
-        int nLine = mpLayoutData->m_aLineIndices.size();
-        mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+        int nLine = mpControlData->mpLayoutData->m_aLineIndices.size();
+        mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.Len() );
         mpTabCtrlData->maLayoutPageIdToLine[ (int)pItem->mnId ] = nLine;
         mpTabCtrlData->maLayoutLineToPageId[ nLine ] = (int)pItem->mnId;
         mpTabCtrlData->maTabRectangles.push_back( aRect );
@@ -1044,8 +1038,8 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         DrawCtrlText( Point( nXPos + aImageSize.Width(), nYPos ),
                       pItem->maFormatText,
                       0, STRING_LEN, nStyle,
-                      bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL,
-                      bLayout ? &mpLayoutData->m_aDisplayText : NULL
+                      bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
+                      bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
                       );
     }
 
@@ -2108,17 +2102,17 @@ Rectangle TabControl::GetCharacterBounds( USHORT nPageId, long nIndex ) const
 {
     Rectangle aRet;
 
-    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
         FillLayoutData();
 
-    if( mpLayoutData )
+    if( HasLayoutData() )
     {
         std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
-            Pair aPair = mpLayoutData->GetLineStartEnd( it->second );
+            Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( it->second );
             if( (aPair.B() - aPair.A()) >= nIndex )
-                aRet = mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
+                aRet = mpControlData->mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
         }
     }
 
@@ -2131,20 +2125,20 @@ long TabControl::GetIndexForPoint( const Point& rPoint, USHORT& rPageId ) const
 {
     long nRet = -1;
 
-    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
         FillLayoutData();
 
-    if( mpLayoutData )
+    if( HasLayoutData() )
     {
-        int nIndex = mpLayoutData->GetIndexForPoint( rPoint );
+        int nIndex = mpControlData->mpLayoutData->GetIndexForPoint( rPoint );
         if( nIndex != -1 )
         {
             // what line (->pageid) is this index in ?
-            int nLines = mpLayoutData->GetLineCount();
+            int nLines = mpControlData->mpLayoutData->GetLineCount();
             int nLine = -1;
             while( ++nLine < nLines )
             {
-                Pair aPair = mpLayoutData->GetLineStartEnd( nLine );
+                Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( nLine );
                 if( aPair.A() <= nIndex && aPair.B() >= nIndex )
                 {
                     nRet = nIndex - aPair.A();
@@ -2173,10 +2167,10 @@ Rectangle TabControl::GetTabPageBounds( USHORT nPage ) const
 {
     Rectangle aRet;
 
-    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
         FillLayoutData();
 
-    if( mpLayoutData )
+    if( HasLayoutData() )
     {
         std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )

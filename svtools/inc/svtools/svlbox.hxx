@@ -52,7 +52,7 @@
 #include <vcl/mnemonicengine.hxx>
 #include <tools/gen.hxx>
 #include <svtools/treelist.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/transfer.hxx>
 
 class Application;
@@ -327,6 +327,9 @@ protected:
     virtual void WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     // wird an der Target-View aufgerufen (im Drop-Handler)
     virtual void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
+
+    // invalidate children on enable/disable
+    virtual void StateChanged( StateChangedType );
 
     virtual ULONG Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,ULONG nPos=LIST_APPEND);
     virtual ULONG Insert( SvLBoxEntry* pEntry,ULONG nRootPos = LIST_APPEND );

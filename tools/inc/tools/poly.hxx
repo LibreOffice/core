@@ -182,7 +182,6 @@ public:
     void                Clip( const Rectangle& rRect, BOOL bPolygon = TRUE );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( Polygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the
@@ -260,7 +259,6 @@ private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
 //#if 0 // _SOLAR__PRIVATE
-    TOOLS_DLLPRIVATE void *ImplCreateGPCPolygon() const;
     TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const;
     TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
@@ -289,7 +287,6 @@ public:
     void                Clip( const Rectangle& rRect );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( PolyPolygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the

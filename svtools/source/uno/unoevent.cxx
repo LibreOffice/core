@@ -40,7 +40,7 @@
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
 #include "unoevent.hxx"
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -492,7 +492,7 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
             delete aMacros[i];
     }
 
-    delete aMacros;
+    delete [] aMacros;
 }
 
 sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const

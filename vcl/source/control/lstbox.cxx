@@ -31,21 +31,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/event.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/subedit.hxx>
-#include <vcl/ilstbox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
-#include <tools/debug.hxx>
+#include "tools/rc.h"
+
+#include "vcl/svdata.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/event.hxx"
+#include "vcl/scrbar.hxx"
+#include "vcl/button.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/subedit.hxx"
+#include "vcl/ilstbox.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/controldata.hxx"
+
+#include "tools/debug.hxx"
 
 
 
@@ -127,9 +127,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        // FIXME: this is currently only on mac/aqua
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
+        if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
@@ -305,6 +303,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
         mpFloatWin->StartFloat( TRUE );
@@ -365,6 +364,7 @@ void ListBox::ToggleDropDown()
             mpFloatWin->EndPopupMode();
         else
         {
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( TRUE );
             mpFloatWin->StartFloat( TRUE );
@@ -650,6 +650,7 @@ void ListBox::Resize()
         long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
+        // note: in case of no border, pBorder will actually be this
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
@@ -678,6 +679,17 @@ void ListBox::Resize()
 
                 // use the themes drop down size
                 Rectangle aContentRect = aContent.GetBoundRect();
+                if( ! (GetStyle() & WB_BORDER) && ImplGetSVData()->maNWFData.mbNoFocusRects )
+                {
+                    // no border but focus ring behavior -> we have a problem; the
+                    // native rect relies on the border to draw the focus
+                    // let's do the best we can and center vertically, so it doesn't look
+                    // completely wrong.
+                    Size aSz( GetOutputSizePixel() );
+                    long nDiff = aContentRect.Top() - (aSz.Height() - aContentRect.GetHeight())/2;
+                    aContentRect.Top() -= nDiff;
+                    aContentRect.Bottom() -= nDiff;
+                }
                 mpImplWin->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
             }
             else
@@ -707,7 +719,7 @@ void ListBox::Resize()
 
 void ListBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const Control* pMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {
@@ -731,7 +743,7 @@ void ListBox::FillLayoutData() const
 
 long ListBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all
@@ -909,6 +921,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( mpFloatWin && !mpFloatWin->IsInPopupMode() &&
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                         mpBtn->SetPressed( TRUE );
                         mpFloatWin->StartFloat( FALSE );
                         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
@@ -959,10 +972,19 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                   (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
-            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+            USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
+                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+                    &&  HasChildPathFocus()
+                    )
+                )
+            {
                 nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            }
             else
+            {
                 nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+            }
         }
     }
 
@@ -1264,6 +1286,26 @@ Size ListBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        if( aSz.Height() < mnDDHeight )
+        {
+            aSz.Height() = mnDDHeight;
+            // FIXME: this is currently only on mac/aqua
+            if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+                IsNativeWidgetEnabled() &&
+                const_cast<ListBox*>(this)->IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
+            {
+                ImplControlValue aControlValue;
+                Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 20, mnDDHeight ) ) );
+                Region aBoundingRgn( aCtrlRegion );
+                Region aContentRgn( aCtrlRegion );
+                // adjust the size of the edit field
+                if( const_cast<ListBox*>(this)->GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL,
+                                   aCtrlRegion, 0, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn) )
+                {
+                    aSz.Height() = aContentRgn.GetBoundRect().GetHeight();
+                }
+            }
+        }
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
         aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }

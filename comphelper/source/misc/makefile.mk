@@ -57,7 +57,10 @@ SLOFILES=   \
             $(SLO)$/componentcontext.obj \
             $(SLO)$/componentmodule.obj \
             $(SLO)$/configurationhelper.obj \
+            $(SLO)$/docpasswordhelper.obj \
+            $(SLO)$/docpasswordrequest.obj \
             $(SLO)$/documentinfo.obj \
+            $(SLO)$/documentiologring.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/ihwrapnofilter.obj \
             $(SLO)$/instancelocker.obj \
