@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_DLGUTIL_HXX
-#define _SVX_DLGUTIL_HXX
+#ifndef _SVT_UNITCONV_HXX
+#define _SVT_UNITCONV_HXX
 
 // include ---------------------------------------------------------------
 #include <vcl/field.hxx>
@@ -43,8 +43,8 @@ typedef long (*FUNC_CONVERT)(long);
 
 // Functions -------------------------------------------------------------
 
-SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, SfxMapUnit eUnit, BOOL bAll = FALSE );
-SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, SfxMapUnit eUnit, BOOL bAll = FALSE );
+SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, BOOL bAll = FALSE );
+SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit, BOOL bAll = FALSE );
 
 SVT_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor );

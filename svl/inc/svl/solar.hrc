@@ -79,46 +79,31 @@
 #define RID_EXTENSIONS_END          (RID_LIB_START+5799)
 
 #define RID_EDIT_START              (RID_LIB_START+5800)
-#define RID_EDIT_END                (RID_LIB_START+5899)
+#define RID_EDIT_END                (RID_LIB_START+6369)
 
-#define RID_EDIT_START              (RID_LIB_START+5800)
-#define RID_EDIT_END                (RID_LIB_START+5899)
+#define RID_SVTOOLS_START           (RID_LIB_START+6370)
+#define RID_SVTOOLS_END             (RID_LIB_START+6499)
 
-#define RID_OUTL_START              (RID_LIB_START+5900)
-#define RID_OUTL_END                (RID_LIB_START+5919)
+#define RID_INET_START              (RID_LIB_START+6500)
+#define RID_INET_END                (RID_LIB_START+6559)
 
-#define RID_SVTOOLS_START           (RID_LIB_START+5920)
-#define RID_SVTOOLS_END             (RID_LIB_START+5999)
+#define RID_SO2_START               (RID_LIB_START+6560)
+#define RID_SO2_END                 (RID_LIB_START+6599)
 
-#define RID_INET_START              (RID_LIB_START+6000)
-#define RID_INET_END                (RID_LIB_START+6059)
+#define RID_SI_START                (RID_LIB_START+6600)
+#define RID_SI_END                  (RID_LIB_START+6799)
 
-#define RID_SO2_START               (RID_LIB_START+6060)
-#define RID_SO2_END                 (RID_LIB_START+6099)
+#define RID_DLG_START               (RID_LIB_START+6800)
+#define RID_DLG_END                 (RID_LIB_START+6899)
 
-#define RID_GOODIES_START           (RID_LIB_START+6100)
-#define RID_GOODIES_END             (RID_LIB_START+6149)
+#define RID_OFA_START               (RID_LIB_START+6900)
+#define RID_OFA_END                 (RID_LIB_START+7399)
 
-#define RID_SJ_START                (RID_LIB_START+6150)
-#define RID_SJ_END                  (RID_LIB_START+6199)
+#define RID_CHANNEL_START           (RID_LIB_START+7400)
+#define RID_CHANNEL_END             (RID_LIB_START+7899)
 
-#define RID_SI_START                (RID_LIB_START+6200)
-#define RID_SI_END                  (RID_LIB_START+6399)
-
-#define RID_DLG_START               (RID_LIB_START+6400)
-#define RID_DLG_END                 (RID_LIB_START+6499)
-
-#define RID_OFA_START               (RID_LIB_START+6500)
-#define RID_OFA_END                 (RID_LIB_START+6999)
-
-#define RID_CHANNEL_START           (RID_LIB_START+7000)
-#define RID_CHANNEL_END             (RID_LIB_START+7499)
-
-#define RID_CHAOS_START             (RID_LIB_START+7500)
-#define RID_CHAOS_END               (RID_LIB_START+7599)
-
-#define RID_EDITITEMS_START         (RID_LIB_START+7600)
-#define RID_EDITITEMS_END           (RID_LIB_START+7999)
+#define RID_CHAOS_START             (RID_LIB_START+7900)
+#define RID_CHAOS_END               (RID_LIB_START+7999)
 
 #define RID_FORMS_START             (RID_LIB_START+8000)
 #define RID_FORMS_END               (RID_LIB_START+8999)
@@ -213,8 +198,8 @@
 #define HID_GOODIES_START           (HID_LIB_START+2100)
 #define HID_GOODIES_END             (HID_LIB_START+2199)
 
-#define HID_SCHEDULE_START          (HID_LIB_START+2200)
-#define HID_SCHEDULE_END            (HID_LIB_START+3399)
+#define HID_EDIT_START          (HID_LIB_START+2200)
+#define HID_EDIT_END            (HID_LIB_START+3399)
 
 #define HID_CHANNEL_START           (HID_LIB_START+3400)
 #define HID_CHANNEL_END             (HID_LIB_START+3499)
@@ -331,18 +316,18 @@
 #define SID_BASICIDE_START          (SID_SMA_END + 1)
 #define SID_BASICIDE_END            (SID_BASICIDE_START + 256)
 
-#define SID_EDIT_START              SID_LIB_START
-#define SID_EDIT_END                (SID_EDIT_START + 500)
-#define SID_SVX_START               (SID_EDIT_END + 1)
-#define SID_SVX_END                 (SID_SVX_START + 2000)
+#define SID_SVX_START               SID_LIB_START
+#define SID_SVX_END                 (SID_SVX_START + 1199)
+#define SID_EDIT_START              (SID_SVX_END + 1)
+#define SID_EDIT_END                (SID_EDIT_START + 499)
 #define SID_OPTIONS_START           (SID_SVX_END + 1)
-#define SID_OPTIONS_END             (SID_OPTIONS_START + 100)
+#define SID_OPTIONS_END             (SID_OPTIONS_START + 99)
 #define SID_SBA_START               (SID_OPTIONS_END + 1)
 #define SID_SBA_END                 (SID_SBA_START + 149)
 #define SID_DBACCESS_START          (SID_SBA_END + 1)
-#define SID_DBACCESS_END            (SID_DBACCESS_START + 200)
+#define SID_DBACCESS_END            (SID_DBACCESS_START + 199)
 #define SID_RPTUI_START             (SID_DBACCESS_END + 1)
-#define SID_RPTUI_END               (SID_RPTUI_START + 200)
+#define SID_RPTUI_END               (SID_RPTUI_START + 199)
 
 #endif
 
