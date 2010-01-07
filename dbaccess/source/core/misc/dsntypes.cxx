@@ -185,7 +185,7 @@ String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension)
 {
-    String sURL;
+    String sURL, sFallbackURL;
     const uno::Sequence< ::rtl::OUString > aURLs = m_aDriverConfig.getURLs();
     const ::rtl::OUString* pIter = aURLs.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
@@ -200,8 +200,14 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
                 sURL = *pIter;
                 break;
             }
+            if ( !sFileExtension.getLength() && _sExtension.getLength() )
+                sFallbackURL = *pIter;
         }
     } // for(;pIter != pEnd;++pIter )
+
+    if ( !sURL.Len() && sFallbackURL.Len() )
+        sURL = sFallbackURL;
+
     sURL.EraseTrailingChars('*');
     return sURL;
 }
