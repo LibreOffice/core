@@ -127,9 +127,6 @@ SHL1STDLIBS= -Bdynamic -ldl -lpthread -lposix4 -lsocket -lnsl
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
-.IF "$(OS)"=="IRIX"
-SHL1STDLIBS= -lexc
-.ENDIF
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
