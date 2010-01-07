@@ -31,7 +31,7 @@
 #ifndef RPT_DATAPROVIDER_HXX
 #define RPT_DATAPROVIDER_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -49,7 +49,7 @@
 // #endif
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <map>
 #include <list>

@@ -35,19 +35,19 @@
 #include "dsmeta.hxx"
 
 #ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>

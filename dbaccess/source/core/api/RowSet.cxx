@@ -81,7 +81,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
