@@ -2984,7 +2984,7 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
 class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( GetObjectShell() )
     {
         SvGlobalName aName( aIdentifier );
