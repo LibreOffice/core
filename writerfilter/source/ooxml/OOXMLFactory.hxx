@@ -65,7 +65,8 @@ enum ResourceType_t {
     RT_TextTableCell,
     RT_TextTableRow,
     RT_TextTable,
-    RT_PropertyTable
+    RT_PropertyTable,
+    RT_Any
 };
 
 struct AttributeInfo

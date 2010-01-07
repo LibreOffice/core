@@ -255,6 +255,9 @@ NS_<namespace/@alias>
     </xsl:for-each>
   </xsl:variable>
   <xsl:choose>
+    <xsl:when test="$name='BUILT_IN_ANY_TYPE'">
+      <xsl:text>Any</xsl:text>
+    </xsl:when>
     <xsl:when test="string-length($resourcesamens) = 0">
       <xsl:for-each select="key('context-resource', @name)[1]">
 	<xsl:value-of select="@resource"/>
@@ -274,6 +277,9 @@ NS_<namespace/@alias>
       </xsl:for-each>
     </xsl:variable>
     <xsl:choose>
+      <xsl:when test="$name='BUILT_IN_ANY_TYPE'">
+	<xsl:text>0</xsl:text>
+      </xsl:when>
       <xsl:when test="string-length($result1) = 0">
 	<xsl:for-each select="(ancestor::model/namespace/rng:grammar/rng:define[@name=$name])[1]">
 	  <xsl:call-template name="idfordefine"/>

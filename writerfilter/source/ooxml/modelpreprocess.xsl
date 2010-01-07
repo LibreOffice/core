@@ -102,7 +102,7 @@
     <xsl:value-of select="ancestor::namespace/rng:grammar/@ns"/>
   </xsl:template>
 
-  <xsl:template match="rng:element[@name] | rng:attribute[@name] | element | attribute">
+  <xsl:template match="rng:element[@name|./rng:anyName] | rng:attribute[@name] | element | attribute">
     <xsl:variable name="prefix">
       <xsl:choose>
         <xsl:when test="contains(@name, ':')">
@@ -142,6 +142,9 @@
         <xsl:when test="contains(@name, ':')">
           <xsl:value-of select="substring-after(@name, ':')"/>
         </xsl:when>
+	<xsl:when test="./rng:anyName">
+	  <xsl:text>FAST_TOKENS_END</xsl:text>
+	</xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@name"/>
         </xsl:otherwise>

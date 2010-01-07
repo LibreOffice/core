@@ -127,6 +127,9 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
                 </xsl:if>
             </xsl:for-each>
             <xsl:text>
+	    case RT_Any:
+	        aResult.set(createFastChildContextFromStart(pHandler, Element));
+		break;
             default:
                 break;
             }
