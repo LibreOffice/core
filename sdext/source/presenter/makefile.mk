@@ -247,7 +247,8 @@ PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 COMPONENT_HELP= 								\
     $(ZIP1DIR)$/help/component.txt				\
-    $(ZIP1DIR)$/help$/en-US$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
+    $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
+#	$(ZIP1DIR)$/help$/en-US$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
 
 # no localization yet - see #i107498#
 #	$(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
@@ -282,14 +283,10 @@ $(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
-    @echo copying $@ to $<
-    $(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-#$(COMPONENT_FILES) : $$(@:f)
-#	-$(MKDIRHIER) $(@:d)
-#	$(COPY) $< $@
+$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
+    @echo creating $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" > $@
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)

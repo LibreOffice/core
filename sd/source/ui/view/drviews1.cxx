@@ -1196,25 +1196,15 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
-
-                sal_uInt16 nPgNum = 0;
                 SdrObject* pObj = 0;
+
                 while( (pObj = rShapeList.getNextShape(pObj)) != 0 )
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
-                        const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
-
-                        if(nDestinationPageNum < GetDoc()->GetPageCount())
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
-                        }
-                        else
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0L);
-                        }
-
-                        nPgNum++;
+                        // #i105146# We want no content to be displayed for PK_HANDOUT,
+                        // so just never set a page as content
+                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0);
                     }
                 }
             }

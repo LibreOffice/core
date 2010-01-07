@@ -37,6 +37,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "slidechangebase.hxx"
@@ -179,9 +180,10 @@ void SlideChangeBase::renderBitmap(
             viewTransform * basegfx::B2DPoint() );
         const cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
             pCanvas->clone() );
-        basegfx::B2DHomMatrix transform;
+
         // render at output position, don't modify bitmap object (no move!):
-        transform.translate( pageOrigin.getX(), pageOrigin.getY() );
+        const basegfx::B2DHomMatrix transform(basegfx::tools::createTranslateB2DHomMatrix(
+            pageOrigin.getX(), pageOrigin.getY()));
 
         pDevicePixelCanvas->setTransformation( transform );
         pSlideBitmap->draw( pDevicePixelCanvas );

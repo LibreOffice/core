@@ -156,10 +156,10 @@ public:
     virtual                 ~SVGAttributeWriter();
 
     ::rtl::OUString         GetFontStyle( const Font& rFont );
-    ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor );
+    ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
 
     void                    SetFontAttr( const Font& rFont );
-    void                    SetPaintAttr( const Color& rLineColor, const Color& rFillColor );
+    void                    SetPaintAttr( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo = 0);
 };
 
 // -------------------
@@ -192,6 +192,7 @@ private:
     long                    ImplMap( sal_Int32 nVal ) const;
     Point                   ImplMap( const Point& rPt ) const;
     Size                    ImplMap( const Size& rSz ) const;
+    LineInfo                ImplMap( const LineInfo& rLineInfo ) const;
     inline Rectangle        ImplMap( const Rectangle& rRect ) const { return Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) ); }
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL, const ::rtl::OUString* pStyle = NULL );

@@ -51,6 +51,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
@@ -524,10 +525,9 @@ namespace slideshow
         {
             if( !pAttr )
             {
-                ::basegfx::B2DHomMatrix aTransform;
-
-                aTransform.scale( rShapeBounds.getWidth(), rShapeBounds.getHeight() );
-                aTransform.translate( rShapeBounds.getMinX(), rShapeBounds.getMinY() );
+                const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rShapeBounds.getWidth(), rShapeBounds.getHeight(),
+                    rShapeBounds.getMinX(), rShapeBounds.getMinY()));
 
                 return aTransform;
             }

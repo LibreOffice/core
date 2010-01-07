@@ -34,7 +34,7 @@ PRJ=..$/..
 PRJNAME=cpputools
 TARGET=sp2bv
 TARGETTYPE=CUI
-.IF "$(OS)"!="IRIX" && "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX"
 # hack to get stdc++ linked
 NO_DEFAULT_STL=TRUE
 .ENDIF

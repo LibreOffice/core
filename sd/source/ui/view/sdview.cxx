@@ -99,6 +99,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
 
@@ -447,20 +448,19 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(
-                                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                            const drawinglayer::attribute::FontAttribute aFontAttribute(
+                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
                                     aTextSizeAttribute,
                                     aVclFont,
                                     false,
                                     false));
 
                             // fill text matrix
-                            basegfx::B2DHomMatrix aTextMatrix;
-
-                            aTextMatrix.scale(aTextSizeAttribute.getX(), aTextSizeAttribute.getY());
-                            aTextMatrix.shearX(fShearX);
-                            aTextMatrix.rotate(fRotate);
-                            aTextMatrix.translate(fPosX, fPosY);
+                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
+                                fShearX,
+                                fRotate,
+                                fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
                             const ::std::vector< double > aDXArray;
@@ -476,7 +476,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     0,
                                     nTextLength,
                                     aDXArray,
-                                    aFontAttributes,
+                                    aFontAttribute,
                                     aLocale,
                                     aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);

@@ -67,7 +67,7 @@ NSS_MODULE_RUNTIME_LIST:= \
     plds4 \
     smime3 \
     softokn3 \
-    sqlite3 \
+    sqlite/sqlite3 \
     ssl3
 
 BIN_RUNTIMELIST= \
@@ -307,8 +307,8 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     echo >& $(NULLDEV)
 .IF "$(ENABLE_NSS_MODULE)" == "YES"
 # We add the libraries from the separate nss module
-    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
-    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
+    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(file:d:d)/$(DLLPRE)$(file:f)$(DLLPOST) \
+    $(RUNTIME_DIR)$/$(DLLPRE)$(file:f)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .ENDIF
 .ELSE # .IF "$(GUI)" == "UNX"

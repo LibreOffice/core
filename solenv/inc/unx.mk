@@ -151,18 +151,6 @@
 .INCLUDE : unxfbsd.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C730IRIXM"
-.INCLUDE : unxirxm3.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCIRIXM"
-.INCLUDE : unxirgm.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "C710IRIXM"
-.INCLUDE : unxirxm.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
 .INCLUDE : unxmacxp.mk
 .ENDIF

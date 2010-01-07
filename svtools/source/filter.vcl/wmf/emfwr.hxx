@@ -42,6 +42,9 @@
 // - EMFWriter -
 // -------------
 
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
+
 class EMFWriter
 {
 private:
@@ -86,6 +89,7 @@ private:
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
+    void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );
 
 public:

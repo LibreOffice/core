@@ -45,27 +45,58 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** GroupPrimitive2D class
+
+            Baseclass for all grouping 2D primitives
+
+            The grouping primitive in it's basic form is capable of holding
+            a child primitive content and returns it on decomposition on default.
+            It is used for two main purposes, but more may apply:
+
+            - to transport extended information, e.g. for text classification,
+              see e.g. TextHierarchy*Primitive2D implementations. Since they
+              decompose to their child content, renderers not aware/interested
+              in that extra information will just ignore these primitives
+
+            - to encapsulate common geometry, e.g. the ShadowPrimitive2D implements
+              applying a generic shadow to a child sequence by adding the needed
+              offset and color stuff in the decomposition
+
+            In most cases the decomposition is straightforward, so by default
+            this primitive will not buffer the result and is not derived from
+            BufferedDecompositionPrimitive2D, but from BasePrimitive2D.
+
+            A renderer has to take GroupPrimitive2D derivations into account which
+            are used to hold a state.
+
+            Current Basic 2D StatePrimitives are:
+
+            - AlphaPrimitive2D (objects with freely defined transparence)
+            - InvertPrimitive2D (for XOR)
+            - MaskPrimitive2D (for masking)
+            - ModifiedColorPrimitive2D (for a stack of color modifications)
+            - TransformPrimitive2D (for a transformation stack)
+         */
         class GroupPrimitive2D : public BasePrimitive2D
         {
         private:
-            // the children. Declared private since this shall never be changed at all after construction
+            /// the children. Declared private since this shall never be changed at all after construction
             Primitive2DSequence                             maChildren;
 
-        protected:
-            // local decomposition. Implementation will just return children
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
-            // constructor
+            /// constructor
             GroupPrimitive2D(const Primitive2DSequence& rChildren);
 
-            // data access
+            /// data read access
             const Primitive2DSequence& getChildren() const { return maChildren; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            // provide unique ID
+            /// local decomposition. Implementation will just return children
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

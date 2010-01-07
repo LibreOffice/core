@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        // Slice3D types
+        /** SliceType3D definition */
         enum SliceType3D
         {
             SLICETYPE3D_REGULAR,        // normal geoemtry Slice3D
@@ -61,7 +61,7 @@ namespace drawinglayer
             SLICETYPE3D_BACKCAP         // back cap
         };
 
-        // class to hold one Slice3D
+        /// class to hold one Slice3D
         class Slice3D
         {
         protected:
@@ -92,10 +92,10 @@ namespace drawinglayer
             SliceType3D getSliceType() const { return maSliceType; }
         };
 
-        // typedef for a group of Slice3Ds
+        /// typedef for a group of Slice3Ds
         typedef ::std::vector< Slice3D > Slice3DVector;
 
-        // helpers for creation
+        /// helpers for creation
         void createLatheSlices(
             Slice3DVector& rSliceVector,
             const basegfx::B2DPolyPolygon& rSource,
@@ -117,7 +117,7 @@ namespace drawinglayer
             bool bCloseFront,
             bool bCloseBack);
 
-        // helpers for geometry extraction
+        /// helpers for geometry extraction
         basegfx::B3DPolyPolygon extractHorizontalLinesFromSlice(const Slice3DVector& rSliceVector, bool bCloseHorLines);
         basegfx::B3DPolyPolygon extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
 

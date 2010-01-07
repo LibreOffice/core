@@ -40,6 +40,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -85,7 +86,7 @@ namespace drawinglayer
             return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, &aLineStartEnd);
         }
 
-        Primitive2DSequence SdrMeasurePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             SdrBlockTextPrimitive2D* pBlockText = 0L;
@@ -97,10 +98,8 @@ namespace drawinglayer
             const double fAngle(atan2(aLine.getY(), aLine.getX()));
             bool bAutoUpsideDown(false);
             const attribute::SdrTextAttribute* pTextAttribute = getSdrLSTAttribute().getText();
-
-            basegfx::B2DHomMatrix aObjectMatrix;
-            aObjectMatrix.rotate(fAngle);
-            aObjectMatrix.translate(getStart().getX(), getStart().getY());
+            const basegfx::B2DHomMatrix aObjectMatrix(
+                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
             if(pTextAttribute)
             {
@@ -430,7 +429,7 @@ namespace drawinglayer
 
                 // apply to existing text primitive
                 SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
-                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::createLocalDecomposition: Could not create transformed clone of text primitive (!)");
+                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
                 delete pBlockText;
 
                 // add to local primitives
@@ -460,7 +459,7 @@ namespace drawinglayer
             bool bBelow,
             bool bTextRotation,
             bool bTextAutoAngle)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maStart(rStart),
             maEnd(rEnd),
@@ -479,7 +478,7 @@ namespace drawinglayer
 
         bool SdrMeasurePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrMeasurePrimitive2D& rCompare = (SdrMeasurePrimitive2D&)rPrimitive;
 

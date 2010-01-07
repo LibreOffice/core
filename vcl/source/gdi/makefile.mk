@@ -57,7 +57,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
-            $(SLO)$/configsettings.obj 	\
+                    $(SLO)$/configsettings.obj 	\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/image.obj		\
                     $(SLO)$/impimage.obj		\
@@ -75,7 +75,8 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/impprn.obj \
                     $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj \
-                    $(SLO)$/textlayout.obj
+                    $(SLO)$/textlayout.obj   \
+                    $(SLO)$/lineinfo.obj
 
 SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/animate.obj 	\
@@ -100,8 +101,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/impbmp.obj		\
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impvect.obj 	\
-            $(SLO)$/implncvt.obj	\
-            $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
             $(SLO)$/octree.obj		\

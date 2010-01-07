@@ -234,19 +234,19 @@ namespace drawinglayer
                 texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
                 // create texture
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getBitmap();
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getFillBitmapAttribute();
 
                 if(rFillBitmapAttribute.getTiling())
                 {
                     mpGeoTexSvx = new texture::GeoTexSvxBitmapTiled(
-                        rFillBitmapAttribute.getBitmap(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }
                 else
                 {
                     mpGeoTexSvx = new texture::GeoTexSvxBitmap(
-                        rFillBitmapAttribute.getBitmap(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }
@@ -468,8 +468,8 @@ namespace drawinglayer
 
         void DefaultProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)
         {
-            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-            switch(rBasePrimitive.getPrimitiveID())
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
+            switch(rBasePrimitive.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :
                 {

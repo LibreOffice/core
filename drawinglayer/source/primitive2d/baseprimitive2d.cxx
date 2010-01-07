@@ -50,20 +50,18 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BasePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        BasePrimitive2D::BasePrimitive2D()
+        :   BasePrimitive2DImplBase(m_aMutex)
         {
-            return Primitive2DSequence();
         }
 
-        BasePrimitive2D::BasePrimitive2D()
-        :   BasePrimitive2DImplBase(m_aMutex),
-            maLocalDecomposition()
+        BasePrimitive2D::~BasePrimitive2D()
         {
         }
 
         bool BasePrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
         {
-            return (getPrimitiveID() == rPrimitive.getPrimitiveID());
+            return (getPrimitive2DID() == rPrimitive.getPrimitive2DID());
         }
 
         basegfx::B2DRange BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
@@ -71,17 +69,9 @@ namespace drawinglayer
             return getB2DRangeFromPrimitive2DSequence(get2DDecomposition(rViewInformation), rViewInformation);
         }
 
-        Primitive2DSequence BasePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence BasePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(!getLocalDecomposition().hasElements())
-            {
-                const Primitive2DSequence aNewSequence(createLocalDecomposition(rViewInformation));
-                const_cast< BasePrimitive2D* >(this)->setLocalDecomposition(aNewSequence);
-            }
-
-            return getLocalDecomposition();
+            return Primitive2DSequence();
         }
 
         Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
@@ -94,6 +84,38 @@ namespace drawinglayer
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
+        }
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence BufferedDecompositionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            return Primitive2DSequence();
+        }
+
+        BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
+        :   BasePrimitive2D(),
+            maBuffered2DDecomposition()
+        {
+        }
+
+        Primitive2DSequence BufferedDecompositionPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getBuffered2DDecomposition().hasElements())
+            {
+                const Primitive2DSequence aNewSequence(create2DDecomposition(rViewInformation));
+                const_cast< BufferedDecompositionPrimitive2D* >(this)->setBuffered2DDecomposition(aNewSequence);
+            }
+
+            return getBuffered2DDecomposition();
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -124,6 +124,9 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
         if ( ! pSetup->ChooseLanguage( nLanguage ) )
             throw pSetup->GetError();
 
+        if ( ! pSetup->InstallRuntimes() )
+            throw pSetup->GetError();
+
         if ( ! pSetup->Install( nLanguage ) )
             throw pSetup->GetError();
     }

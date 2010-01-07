@@ -300,13 +300,14 @@ class AsynchReader: public Thread
 public:
 
     AsynchReader(oslFileHandle & rHandle);
-
+#if OSL_DEBUG_LEVEL >= 2
     /** only call this function after this thread has finished.
 
         That is, call join on this instance and then call getData.
 
      */
     OString getData();
+#endif
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
@@ -314,11 +315,13 @@ AsynchReader::AsynchReader(oslFileHandle & rHandle):
 {
 }
 
+#if OSL_DEBUG_LEVEL >= 2
 OString AsynchReader::getData()
 {
     OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
+#endif
 
 void AsynchReader::run()
 {

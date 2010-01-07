@@ -49,7 +49,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BorderLinePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence xRetval;
 
@@ -194,7 +194,7 @@ namespace drawinglayer
             bool bCreateInside,
             bool bCreateOutside,
             const basegfx::BColor& rRGBColor)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
             mfLeftWidth(fLeftWidth),
@@ -212,7 +212,7 @@ namespace drawinglayer
 
         bool BorderLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const BorderLinePrimitive2D& rCompare = (BorderLinePrimitive2D&)rPrimitive;
 

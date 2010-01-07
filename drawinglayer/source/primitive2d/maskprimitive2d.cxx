@@ -69,6 +69,11 @@ namespace drawinglayer
             return false;
         }
 
+        basegfx::B2DRange MaskPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            return getMask().getB2DRange();
+        }
+
         // provide unique ID
         ImplPrimitrive2DIDBlock(MaskPrimitive2D, PRIMITIVE2D_ID_MASKPRIMITIVE2D)
 

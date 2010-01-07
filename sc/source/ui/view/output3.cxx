@@ -50,10 +50,6 @@
 #include "tabvwsh.hxx"
 #include "fillinfo.hxx"
 
-
-#ifdef IRIX
-#include <basic/sbx.hxx>
-#endif
 #include <svx/fmview.hxx>
 
 // STATIC DATA -----------------------------------------------------------

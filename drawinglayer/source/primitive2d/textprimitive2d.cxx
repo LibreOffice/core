@@ -42,31 +42,11 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        bool FontAttributes::operator==(const FontAttributes& rCompare) const
-        {
-            return (getFamilyName() == rCompare.getFamilyName()
-                && getStyleName() == rCompare.getStyleName()
-                && getWeight() == rCompare.getWeight()
-                && getSymbol() == rCompare.getSymbol()
-                && getVertical() == rCompare.getVertical()
-                && getItalic() == rCompare.getItalic()
-                && getOutline() == rCompare.getOutline()
-                && getRTL() == rCompare.getRTL()
-                && getBiDiStrong() == rCompare.getBiDiStrong());
-        }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -155,8 +135,8 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(
-                        getFontAttributes(),
+                    aTextLayouter.setFontAttribute(
+                        getFontAttribute(),
                         aFontScale.getX(),
                         aFontScale.getY(),
                         getLocale());
@@ -199,17 +179,14 @@ namespace drawinglayer
                     if(nCount)
                     {
                         // prepare object transformation for polygons
-                        rTransformation.identity();
-                        rTransformation.scale(aScale.getX(), aScale.getY());
-                        rTransformation.shearX(fShearX);
-                        rTransformation.rotate(fRotate);
-                        rTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        rTransformation = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aScale, fShearX, fRotate, aTranslate);
                     }
                 }
             }
         }
 
-        Primitive2DSequence TextSimplePortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence TextSimplePortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -238,7 +215,7 @@ namespace drawinglayer
                         aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
                     }
 
-                    if(getFontAttributes().getOutline())
+                    if(getFontAttribute().getOutline())
                     {
                         // decompose polygon transformation to single values
                         basegfx::B2DVector aScale, aTranslate;
@@ -266,16 +243,16 @@ namespace drawinglayer
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
-            const FontAttributes& rFontAttributes,
+            const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
             maTextPosition(aTextPosition),
             maTextLength(aTextLength),
             maDXArray(rDXArray),
-            maFontAttributes(rFontAttributes),
+            maFontAttribute(rFontAttribute),
             maLocale(rLocale),
             maFontColor(rFontColor),
             maB2DRange()
@@ -287,7 +264,7 @@ namespace drawinglayer
 #endif
         }
 
-        bool impLocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
+        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
         {
             return (rA.Language == rB.Language
                 && rA.Country == rB.Country
@@ -296,7 +273,7 @@ namespace drawinglayer
 
         bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const TextSimplePortionPrimitive2D& rCompare = (TextSimplePortionPrimitive2D&)rPrimitive;
 
@@ -305,8 +282,8 @@ namespace drawinglayer
                     && getTextPosition() == rCompare.getTextPosition()
                     && getTextLength() == rCompare.getTextLength()
                     && getDXArray() == rCompare.getDXArray()
-                    && getFontAttributes() == rCompare.getFontAttributes()
-                    && impLocalesAreEqual(getLocale(), rCompare.getLocale())
+                    && getFontAttribute() == rCompare.getFontAttribute()
+                    && LocalesAreEqual(getLocale(), rCompare.getLocale())
                     && getFontColor() == rCompare.getFontColor());
             }
 
@@ -332,8 +309,8 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(
-                        getFontAttributes(),
+                    aTextLayouter.setFontAttribute(
+                        getFontAttribute(),
                         aFontScale.getX(),
                         aFontScale.getY(),
                         getLocale());
@@ -345,12 +322,8 @@ namespace drawinglayer
                     if(!aNewRange.isEmpty())
                     {
                         // prepare object transformation for range
-                        basegfx::B2DHomMatrix aRangeTransformation;
-
-                        aRangeTransformation.scale(aScale.getX(), aScale.getY());
-                        aRangeTransformation.shearX(fShearX);
-                        aRangeTransformation.rotate(fRotate);
-                        aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        const basegfx::B2DHomMatrix aRangeTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aScale, fShearX, fRotate, aTranslate));
 
                         // apply range transformation to it
                         aNewRange.transform(aRangeTransformation);

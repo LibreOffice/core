@@ -270,8 +270,8 @@ void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
                     sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
         }
 
-        if(pRange && pRange->GetDoc()  == GetDoc() ||
-            pCursor && pCursor->GetDoc()  == GetDoc())
+        if( (pRange && pRange->GetDoc()  == GetDoc()) ||
+            (pCursor && pCursor->GetDoc()  == GetDoc()) )
         {
             const SwStartNode* pOwnStartNode = GetStartNode();
             if(pCursor)

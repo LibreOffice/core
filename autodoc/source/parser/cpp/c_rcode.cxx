@@ -42,27 +42,6 @@
 #include <x_parse.hxx>
 #include "pe_file.hxx"
 
-#ifdef IRIX
-// see i19418 incomplete type for cpp::PE_Namespace
-#include "pe_namsp.hxx"
-#include "pe_ignor.hxx"
-#include "pe_defs.hxx"
-#include "pe_vafu.hxx"
-#include "pe_tydef.hxx"
-#include "pe_tpltp.hxx"
-#include "pe_type.hxx"
-#include "pe_vari.hxx"
-#include "pe_funct.hxx"
-#include "pe_enum.hxx"
-#include "pe_param.hxx"
-#include "pe_class.hxx"
-#include "pe_expression.hxx"
-#include "pe_base.hxx"
-#include "pe_enum.hxx"
-#include "pe_enval.hxx"
-#endif
-
-
 const uintt C_nNO_TRY = uintt(-1);
 
 

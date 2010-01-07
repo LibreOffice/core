@@ -32,9 +32,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdio.h>
-#if defined(IRIX)
-#include <ctime>
-#endif
 #include <sys/time.h>
 #include <sys/times.h>
 #include <time.h>

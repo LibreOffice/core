@@ -60,7 +60,7 @@
 
 #include <list>
 #include <set>
-
+#include <string.h>
 
 using namespace utl;
 using namespace osl;

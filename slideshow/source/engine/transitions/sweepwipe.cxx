@@ -34,6 +34,7 @@
 #include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "clockwipe.hxx"
 #include "sweepwipe.hxx"
 #include "transitiontools.hxx"
@@ -52,22 +53,26 @@ namespace internal {
 
     ::basegfx::B2DPolygon poly( ClockWipe::calcCenteredClock( 0.25 + t ) );
     ::basegfx::B2DHomMatrix aTransform;
-    if (m_center) {
-        aTransform.translate( 0.5, 0.0 );
+
+    if (m_center)
+    {
+        aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.0);
         poly.transform( aTransform );
     }
     ::basegfx::B2DPolyPolygon res(poly);
 
-    if (! m_single) {
-        aTransform.identity();
-        if (m_oppositeVertical) {
-            aTransform.scale( 1.0, -1.0 );
+    if (! m_single)
+    {
+        if (m_oppositeVertical)
+        {
+            aTransform = basegfx::tools::createScaleB2DHomMatrix(1.0, -1.0);
             aTransform.translate( 0.0, 1.0 );
             poly.transform( aTransform );
             poly.flip();
         }
-        else {
-            aTransform.translate( -0.5, -0.5 );
+        else
+        {
+            aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
             aTransform.rotate( M_PI );
             aTransform.translate( 0.5, 0.5 );
             poly.transform( aTransform );

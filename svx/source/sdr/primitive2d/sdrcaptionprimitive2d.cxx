@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCaptionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCaptionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
             Primitive2DSequence aHitTestContent;
@@ -142,7 +142,7 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rTail,
             double fCornerRadiusX,
             double fCornerRadiusY)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maTail(rTail),
@@ -160,7 +160,7 @@ namespace drawinglayer
 
         bool SdrCaptionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCaptionPrimitive2D& rCompare = (SdrCaptionPrimitive2D&)rPrimitive;
 

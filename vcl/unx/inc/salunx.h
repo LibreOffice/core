@@ -38,12 +38,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <strings.h>
-#elif defined IRIX
-#ifdef __cplusplus
-#include <ctime>
-#endif
-#include <sys/time.h>
-#include <unistd.h>
 #endif
 #include <svunx.h>
 #include <salstd.hxx>

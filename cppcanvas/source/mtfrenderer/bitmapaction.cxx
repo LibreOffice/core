@@ -35,25 +35,21 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
-
 #include <vcl/bitmapex.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
-
 #include <canvas/canvastools.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/tools/canvastools.hxx>
-
 #include <boost/utility.hpp>
-
 #include "cachedprimitivebase.hxx"
 #include "bitmapaction.hxx"
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -112,9 +108,7 @@ namespace cppcanvas
 
                 // Setup transformation such that the next render call is
                 // moved rPoint away.
-                ::basegfx::B2DHomMatrix aLocalTransformation;
-                aLocalTransformation.translate( rDstPoint.getX(),
-                                                rDstPoint.getY() );
+                const basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createTranslateB2DHomMatrix(rDstPoint));
                 ::canvas::tools::appendToRenderState( maState,
                                                       aLocalTransformation );
 
@@ -144,15 +138,12 @@ namespace cppcanvas
                 // moved rPoint away, and scaled according to the ratio
                 // given by src and dst size.
                 const ::Size aBmpSize( rBmpEx.GetSizePixel() );
-                ::basegfx::B2DHomMatrix aLocalTransformation;
 
                 const ::basegfx::B2DVector aScale( rDstSize.getX() / aBmpSize.Width(),
                                                    rDstSize.getY() / aBmpSize.Height() );
-                aLocalTransformation.scale( aScale.getX(), aScale.getY() );
-                aLocalTransformation.translate( rDstPoint.getX(),
-                                                rDstPoint.getY() );
-                ::canvas::tools::appendToRenderState( maState,
-                                                      aLocalTransformation );
+                const basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aScale, rDstPoint));
+                ::canvas::tools::appendToRenderState( maState, aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
                 tools::modifyClip( maState,

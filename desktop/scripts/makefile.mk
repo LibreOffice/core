@@ -54,7 +54,18 @@ UNIXTEXT= \
     $(MISC)$/unopkg.sh
 
 .IF "$(OS)" != "MACOSX"
+
+ALLTAR: $(MISC)$/soffice.sh-expanded
+
+$(MISC)/soffice.sh-expanded: $(MISC)/soffice.sh
+.IF "$(OS)" == "LINUX" && "$(CPUNAME)" == "POWERPC"
+    $(SED) 's/^#@# //' $< > $@
+.ELSE
+    $(COPY) $< $@
+.ENDIF
+
 UNIXTEXT+= $(MISC)$/soffice.sh
+
 .ENDIF
 
 .INCLUDE :  target.mk

@@ -38,6 +38,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 namespace slideshow {
@@ -57,8 +58,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     const double e = (sqrt(area) / 2.0);
     const sal_Int32 edge = (static_cast<sal_Int32>(e) * 2);
 
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.translate( -0.5, -0.5 );
+    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5));
     const double edge_ = ::basegfx::pruneScaleValue(
         static_cast<double>(edge) / m_sqrtElements );
     aTransform.scale( edge_, edge_ );
@@ -75,8 +75,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
             const sal_Int32 alen = (len > edge1 ? edge1 : len);
             len -= alen;
             poly = createUnitRect();
-            aTransform.identity();
-            aTransform.scale(
+            aTransform = basegfx::tools::createScaleB2DHomMatrix(
                 ::basegfx::pruneScaleValue( static_cast<double>(alen) / m_sqrtElements ),
                 ::basegfx::pruneScaleValue( 1.0 / m_sqrtElements ) );
             aTransform.translate(

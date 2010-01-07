@@ -36,7 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
@@ -56,7 +56,7 @@ namespace drawinglayer
     {
         class FillBitmapAttribute
         {
-            Bitmap                                      maBitmap;
+            BitmapEx                                    maBitmapEx;
             basegfx::B2DPoint                           maTopLeft;
             basegfx::B2DVector                          maSize;
 
@@ -64,11 +64,15 @@ namespace drawinglayer
             unsigned                                    mbTiling : 1;
 
         public:
-            FillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling);
+            FillBitmapAttribute(
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DPoint& rTopLeft,
+                const basegfx::B2DVector& rSize,
+                bool bTiling);
             bool operator==(const FillBitmapAttribute& rCandidate) const;
 
             // data access
-            const Bitmap& getBitmap() const { return maBitmap; }
+            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             bool getTiling() const { return mbTiling; }

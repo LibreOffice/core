@@ -42,13 +42,13 @@
 #include <svx/svdogrp.hxx>
 #include <svx/eeitem.hxx>
 
-
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -264,9 +264,8 @@ void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::b
     const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
     const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmall));
     const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
-    ::basegfx::B2DHomMatrix aTrans;
 
-    aTrans.translate(-aSrcPos.getX(), -aSrcPos.getY());
+    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-aSrcPos.getX(), -aSrcPos.getY()));
     aTrans.scale(aDstSize.getWidth() / aSrcSize.getWidth(), aDstSize.getHeight() / aSrcSize.getHeight());
     aTrans.translate(aDstPos.getX(), aDstPos.getY());
 
@@ -499,16 +498,15 @@ sal_Bool FuMorph::ImpMorphPolygons(
         for(sal_uInt16 i(0); i < nSteps; i++)
         {
             fValue += fFactor;
-            ::basegfx::B2DPolyPolygon* pNewPolyPoly3D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
+            ::basegfx::B2DPolyPolygon* pNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
 
-            const ::basegfx::B2DRange aNewPolySize(::basegfx::tools::getRange(*pNewPolyPoly3D));
+            const ::basegfx::B2DRange aNewPolySize(::basegfx::tools::getRange(*pNewPolyPoly2D));
             const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
             const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
-            ::basegfx::B2DHomMatrix aTrans;
             const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
-            aTrans.translate(aDiff.getX(), aDiff.getY());
-            pNewPolyPoly3D->transform(aTrans);
-            rPolyPolyList3D.Insert(pNewPolyPoly3D, LIST_APPEND);
+
+            pNewPolyPoly2D->transform(basegfx::tools::createTranslateB2DHomMatrix(aDiff));
+            rPolyPolyList3D.Insert(pNewPolyPoly2D, LIST_APPEND);
         }
     }
     return TRUE;

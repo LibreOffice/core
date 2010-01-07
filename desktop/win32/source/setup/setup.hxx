@@ -119,12 +119,13 @@ private:
                                  LPTSTR *pNext, boolean bStripQuotes = false );
     boolean     IsAdmin();
 
-
     boolean     GetCommandLine();
 
     boolean     IsTerminalServerInstalled() const;
     void        AddFileToPatchList( TCHAR* pPath, TCHAR* pFile );
     boolean     IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName );
+    boolean     InstallRuntimes( TCHAR* pProductCode, TCHAR* pFileName );
+
 public:
                     SetupAppX();
                    ~SetupAppX();
@@ -136,6 +137,7 @@ public:
     virtual boolean ChooseLanguage( long& rLanguage );
     virtual boolean CheckVersion();
     virtual boolean CheckForUpgrade();
+    virtual boolean InstallRuntimes();
     virtual boolean Install( long nLanguage );
 
     virtual UINT    GetError() const;

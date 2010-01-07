@@ -196,7 +196,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SwVirtFlyDrawObjPrimitive : public BasePrimitive2D
+        class SwVirtFlyDrawObjPrimitive : public BufferedDecompositionPrimitive2D
         {
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
@@ -204,13 +204,13 @@ namespace drawinglayer
 
         protected:
             // method which is to be used to implement the local decomposition of a 2D primitive
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             SwVirtFlyDrawObjPrimitive(
                 const SwVirtFlyDrawObj& rSwVirtFlyDrawObj,
                 const basegfx::B2DRange &rOuterRange)
-            :   BasePrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj),
                 maOuterRange(rOuterRange)
             {
@@ -239,7 +239,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -269,7 +269,7 @@ namespace drawinglayer
 
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SwVirtFlyDrawObjPrimitive& rCompare = (SwVirtFlyDrawObjPrimitive&)rPrimitive;
 
@@ -295,7 +295,7 @@ namespace drawinglayer
             getSwVirtFlyDrawObj().wrap_DoPaintObject();
 
             // call parent
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence HelplinePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence HelplinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             std::vector< BasePrimitive2D* > aTempPrimitiveTarget;
 
@@ -167,7 +167,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColA,
             const basegfx::BColor& rRGBColB,
             double fDiscreteDashLength)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPosition(rPosition),
             maDirection(rDirection),
             meStyle(eStyle),
@@ -181,7 +181,7 @@ namespace drawinglayer
 
         bool HelplinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const HelplinePrimitive2D& rCompare = (HelplinePrimitive2D&)rPrimitive;
 
@@ -200,16 +200,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< HelplinePrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
@@ -217,7 +217,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

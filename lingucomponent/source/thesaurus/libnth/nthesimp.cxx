@@ -54,6 +54,7 @@
 
 #include <list>
 #include <set>
+#include <string.h>
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0

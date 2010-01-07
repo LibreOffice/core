@@ -2343,7 +2343,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) ((__OSL_MSDOS_SUPER_MAGIC != (a).f_type))
 #endif /* LINUX */
 
-#if defined(SOLARIS) || defined(IRIX)
+#if defined(SOLARIS)
 #   define __OSL_STATFS_STRUCT                   struct statvfs
 #   define __OSL_STATFS(dir, sfs)                statvfs((dir), (sfs))
 #   define __OSL_STATFS_BLKSIZ(a)                ((sal_uInt64)((a).f_frsize))
@@ -2355,7 +2355,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
    of the target platforms fix it!!!! */
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
-#endif /* SOLARIS || IRIX*/
+#endif /* SOLARIS */
 
 #   define __OSL_STATFS_INIT(a)         (memset(&(a), 0, sizeof(__OSL_STATFS_STRUCT)))
 

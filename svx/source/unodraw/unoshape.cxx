@@ -98,6 +98,7 @@
 #include "unomaster.hxx"
 #include <svx/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <vector>
 
@@ -2516,10 +2517,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
-
-                            basegfx::B2DHomMatrix aMatrix;
-                            aMatrix.translate( aPoint.X(), aPoint.Y() );
-                            aNewPolyPolygon.transform( aMatrix );
+                            aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aPoint.X(), aPoint.Y()));
                         }
                         pEdgeObj->SetEdgeTrackPath( aNewPolyPolygon );
                         return true;
@@ -2952,10 +2950,7 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     if( mpModel->IsWriter() )
                     {
                         Point aPoint( mpObj->GetAnchorPos() );
-
-                        basegfx::B2DHomMatrix aMatrix;
-                        aMatrix.translate( -aPoint.X(), -aPoint.Y() );
-                        aPolyPoly.transform( aMatrix );
+                        aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
                     }
                     drawing::PolyPolygonBezierCoords aRetval;
                     SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);

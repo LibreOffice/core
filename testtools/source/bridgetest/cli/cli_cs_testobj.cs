@@ -247,6 +247,11 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         return arg;
     }
 
+    public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 )
+    {
+        return i2;
+    }
+
     // Attributes
     public bool Bool
     {

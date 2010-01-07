@@ -34,6 +34,7 @@
 #include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "clockwipe.hxx"
 #include "pinwheelwipe.hxx"
 
@@ -43,23 +44,17 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon PinWheelWipe::operator () ( double t )
 {
-    ::basegfx::B2DHomMatrix aTransform;
     ::basegfx::B2DPolygon poly( ClockWipe::calcCenteredClock(
                                     t / m_blades,
                                     2.0 /* max edge when rotating */ ) );
     ::basegfx::B2DPolyPolygon res;
     for ( sal_Int32 i = m_blades; i--; )
     {
-        aTransform.identity();
-        aTransform.rotate( (i * 2.0 * M_PI) / m_blades );
         ::basegfx::B2DPolygon p(poly);
-        p.transform( aTransform );
+        p.transform(basegfx::tools::createRotateB2DHomMatrix((i * 2.0 * M_PI) / m_blades));
         res.append( p );
     }
-    aTransform.identity();
-    aTransform.scale( 0.5, 0.5 );
-    aTransform.translate( 0.5, 0.5 );
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
     return res;
 }
 

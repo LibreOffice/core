@@ -45,23 +45,42 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** ModifiedColorPrimitive2D class
+
+            This primitive is a grouping primitive and allows to define
+            how the colors of it's child content shall be modified for
+            visualisation. This can be (and is) used e.g. for generic shadow
+            visualisation by forcing all color usages of the contained
+            sub-content to the shadow color.
+
+            For the possibilities of color modifications, please refer
+            to the basegfx::BColorModifier definitions in basegfx. For
+            processing there is tooling in basegfx to build a stack of
+            BColorModifiers to always be able to proccess the correct
+            colors.
+
+            If a renderer does not handle this primitive, the content will
+            be visualized unchanged.
+         */
         class ModifiedColorPrimitive2D : public GroupPrimitive2D
         {
         private:
+            /// The ColorModifier to use
             basegfx::BColorModifier                 maColorModifier;
 
         public:
+            /// constructor
             ModifiedColorPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const basegfx::BColorModifier& rColorModifier);
 
-            // get data
+            /// data read access
             const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

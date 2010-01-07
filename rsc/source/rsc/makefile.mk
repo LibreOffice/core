@@ -40,10 +40,6 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-NOOPTFILES=  $(OBJ)$/rsc.obj
-.ENDIF
-
 OBJFILES=	 $(OBJ)$/rsc.obj
 
 .INCLUDE :  target.mk

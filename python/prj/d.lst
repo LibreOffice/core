@@ -94,6 +94,7 @@ symlink: %_DEST%\lib%_EXT%\libpython2.6.so.1.0 %_DEST%\lib%_EXT%\libpython2.6.so
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\python26.dll %_DEST%\bin%_EXT%\python26.dll
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\python26.lib %_DEST%\lib%_EXT%\python26.lib
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\_socket.pyd %_DEST%\lib%_EXT%\python\_socket.pyd
+..\%__SRC%\misc\build\Python-2.6.1\PCbuild\_ssl.pyd %_DEST%\lib%_EXT%\python\_ssl.pyd
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\select.pyd %_DEST%\lib%_EXT%\python\select.pyd
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\unicodedata.pyd %_DEST%\lib%_EXT%\python\unicodedata.pyd
 ..\%__SRC%\misc\build\Python-2.6.1\PCbuild\winsound.pyd %_DEST%\lib%_EXT%\python\winsound.pyd

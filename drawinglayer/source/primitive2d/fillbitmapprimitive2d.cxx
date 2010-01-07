@@ -54,9 +54,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillBitmapPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence FillBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const Size aTileSizePixel(getFillBitmap().getBitmap().GetSizePixel());
+            const Size aTileSizePixel(getFillBitmap().getBitmapEx().GetSizePixel());
             Primitive2DSequence aRetval;
 
             // is there a tile with some size at all?
@@ -79,7 +79,7 @@ namespace drawinglayer
                         aNewMatrix *= getTransformation();
 
                         // create bitmap primitive and add to result
-                        const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aNewMatrix));
+                        const Primitive2DReference xRef(new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aNewMatrix));
                         aRetval[a] = xRef;
                     }
                 }
@@ -94,7 +94,7 @@ namespace drawinglayer
                     aObjectTransform *= getTransformation();
 
                     // create bitmap primitive and add exclusive to decomposition (hand over ownership)
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aObjectTransform));
+                    const Primitive2DReference xRef(new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aObjectTransform));
                     aRetval = Primitive2DSequence(&xRef, 1L);
                 }
             }
@@ -105,7 +105,7 @@ namespace drawinglayer
         FillBitmapPrimitive2D::FillBitmapPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             maFillBitmap(rFillBitmap)
         {
@@ -113,7 +113,7 @@ namespace drawinglayer
 
         bool FillBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const FillBitmapPrimitive2D& rCompare = static_cast< const FillBitmapPrimitive2D& >(rPrimitive);
 

@@ -47,31 +47,39 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** TexturePrimitive3D class
+
+            This 3D grouping primitive is used to define a texture for
+            3d geometry by embedding it. It is used as bae class for
+            extended texture definitions
+         */
         class TexturePrimitive3D : public GroupPrimitive3D
         {
         private:
+            /// texture geometry definition
             basegfx::B2DVector                          maTextureSize;
 
-            // bitfield
-            // flag if texture shall be modulated with white interpolated color
+            /// bitfield
+            /// flag if texture shall be modulated with white interpolated color
             unsigned                                    mbModulate : 1;
 
-            // flag if texture shall be filtered
+            /// flag if texture shall be filtered
             unsigned                                    mbFilter : 1;
 
         public:
+            /// constructor
             TexturePrimitive3D(
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
     } // end of namespace primitive3d
@@ -83,27 +91,34 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** UnifiedAlphaTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a unified
+            alpha (transparence) texture definition. All 3D primitives
+            embedded here will be shown with the given transparency.
+         */
         class UnifiedAlphaTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// transparency definition
             double                                      mfTransparence;
 
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
+            /// constructor
             UnifiedAlphaTexturePrimitive3D(
                 double fTransparence,
                 const Primitive3DSequence& rChildren);
 
-            // get data
+            /// data read access
             double getTransparence() const { return mfTransparence; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// local decomposition.
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -115,16 +130,20 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** GradientTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a gradient texture
+            definition. All 3D primitives embedded here will be shown with the
+            defined gradient.
+         */
         class GradientTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// the gradient definition
             attribute::FillGradientAttribute        maGradient;
 
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
+            /// constructor
             GradientTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
                 const Primitive3DSequence& rChildren,
@@ -132,13 +151,13 @@ namespace drawinglayer
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const attribute::FillGradientAttribute& getGradient() const { return maGradient; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -150,30 +169,34 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** BitmapTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a bitmap texture
+            definition. All 3D primitives embedded here will be shown with the
+            defined bitmap (maybe tiled if defined).
+         */
         class BitmapTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
-            attribute::FillBitmapAttribute      maBitmap;
-
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            /// bitmap fill attribute
+            attribute::FillBitmapAttribute      maFillBitmapAttribute;
 
         public:
+            /// constructor
             BitmapTexturePrimitive3D(
-                const attribute::FillBitmapAttribute& rBitmap,
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
-            // get data
-            const attribute::FillBitmapAttribute& getBitmap() const { return maBitmap; }
+            /// data read access
+            const attribute::FillBitmapAttribute& getFillBitmapAttribute() const { return maFillBitmapAttribute; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
@@ -185,18 +208,26 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** AlphaTexturePrimitive3D class
+
+            This 3D primitive expands TexturePrimitive3D to a alpha texture
+            definition. For alpha definition, a gradient is used. The values in
+            that gradient will be interpreted as luminance Alpha-Values. All 3D
+            primitives embedded here will be shown with the defined transparence.
+         */
         class AlphaTexturePrimitive3D : public GradientTexturePrimitive3D
         {
         public:
+            /// constructor
             AlphaTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize);
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

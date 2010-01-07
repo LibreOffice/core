@@ -90,8 +90,7 @@ namespace sdr
             sdr::event::TimerEventHandler*                  mpEventHandler;
 
             // The redirector. If set it is used to pipe all supported calls
-            // to the redirector. When one is set at the ViewContact too, the one at
-            // the ViewContact will win.
+            // to the redirector
             ViewObjectContactRedirector*                    mpViewObjectContactRedirector;
 
             // the Primitive2DParameters containing view information

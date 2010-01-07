@@ -55,6 +55,9 @@
 #include "dlgepct.hrc"
 #include "dlgepct.hxx"
 
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+
 //============================== PictWriter ===================================
 
 struct PictWriterAttrStackMember {
@@ -76,7 +79,6 @@ enum PictDrawingMethod {
 struct PictPattern {
     sal_uInt32 nLo, nHi;
 };
-
 
 class PictWriter {
 
@@ -178,6 +180,7 @@ private:
 
     void WriteTextArray(Point & rPoint, const String& rString, const sal_Int32 * pDXAry);
 
+    void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteOpcodes(const GDIMetaFile & rMTF);
 
     void WriteHeader(const GDIMetaFile & rMTF);
@@ -1371,6 +1374,65 @@ void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal
     }
 }
 
+void PictWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
+{
+    if(rLinePolygon.count())
+    {
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
+        {
+            aLinePolyPolygon = aLinePolyPolygon.getDefaultAdaptiveSubdivision();
+            const sal_uInt32 nPolyCount(aLinePolyPolygon.count());
+            SetAttrForFrame();
+
+            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            {
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                const sal_uInt32 nPointCount(aCandidate.count());
+
+                if(nPointCount)
+                {
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount + 1 : nPointCount);
+                    const basegfx::B2DPoint aCurr(aCandidate.getB2DPoint(0));
+                    Point nCurr(basegfx::fround(aCurr.getX()), basegfx::fround(aCurr.getY()));
+
+                    for(sal_uInt32 b(0); b < nEdgeCount; b++)
+                    {
+                        const sal_uInt32 nNextIndex((b + 1) % nPointCount);
+                        const basegfx::B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
+                        const Point nNext(basegfx::fround(aNext.getX()), basegfx::fround(aNext.getY()));
+
+                        WriteOpcode_Line(nCurr, nNext);
+                        nCurr = nNext;
+                    }
+                }
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(aLineColor);
+            const Color aOldFillColor(aFillColor);
+
+            aLineColor = Color( COL_TRANSPARENT );
+            aFillColor = aOldLineColor;
+            SetAttrForPaint();
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a).getDefaultAdaptiveSubdivision());
+                WriteOpcode_Poly(PDM_PAINT, aPolygon);
+            }
+
+            aLineColor = aOldLineColor;
+            aFillColor = aOldFillColor;
+        }
+    }
+}
 
 void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 {
@@ -1417,8 +1479,19 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 if( aLineColor != Color( COL_TRANSPARENT ) )
                 {
-                    SetAttrForFrame();
-                    WriteOpcode_Line( pA->GetStartPoint(),pA->GetEndPoint() );
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        SetAttrForFrame();
+                        WriteOpcode_Line( pA->GetStartPoint(),pA->GetEndPoint() );
+                    }
+                    else
+                    {
+                        // LineInfo used; handle Dash/Dot and fat lines
+                        basegfx::B2DPolygon aPolygon;
+                        aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
+                        aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
+                        HandleLineInfoPolyPolygons(pA->GetLineInfo(), aPolygon);
+                    }
                 }
                 break;
             }
@@ -1571,24 +1644,35 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 {
                     const Polygon&  rPoly = pA->GetPolygon();
 
-                    Polygon aSimplePoly;
-                    if ( rPoly.HasFlags() )
-                        rPoly.AdaptiveSubdivide( aSimplePoly );
-                    else
-                        aSimplePoly = rPoly;
-
-                    const USHORT    nSize = aSimplePoly.GetSize();
-                    Point           aLast;
-
-                    if ( nSize )
+                    if( rPoly.GetSize() )
                     {
-                        SetAttrForFrame();
-                        aLast = aSimplePoly[0];
-
-                        for ( USHORT i = 1; i < nSize; i++ )
+                        if(pA->GetLineInfo().IsDefault())
                         {
-                            WriteOpcode_Line( aLast, aSimplePoly[i] );
-                            aLast = aSimplePoly[i];
+                            Polygon aSimplePoly;
+                            if ( rPoly.HasFlags() )
+                                rPoly.AdaptiveSubdivide( aSimplePoly );
+                            else
+                                aSimplePoly = rPoly;
+
+                            const USHORT    nSize = aSimplePoly.GetSize();
+                            Point           aLast;
+
+                            if ( nSize )
+                            {
+                                SetAttrForFrame();
+                                aLast = aSimplePoly[0];
+
+                                for ( USHORT i = 1; i < nSize; i++ )
+                                {
+                                    WriteOpcode_Line( aLast, aSimplePoly[i] );
+                                    aLast = aSimplePoly[i];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // LineInfo used; handle Dash/Dot and fat lines
+                            HandleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
                         }
                     }
                 }

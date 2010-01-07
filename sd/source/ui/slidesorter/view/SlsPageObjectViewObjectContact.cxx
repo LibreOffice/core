@@ -256,7 +256,7 @@ namespace sd { namespace slidesorter { namespace view {
 // class for all derived SdPageObjectPrimitives. The SdPageObjectBasePrimitive itself
 // is pure virtual
 
-class SdPageObjectBasePrimitive : public drawinglayer::primitive2d::BasePrimitive2D
+class SdPageObjectBasePrimitive : public drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
 {
 private:
     // the inner range of the SdPageObject visualisation
@@ -275,7 +275,7 @@ public:
 };
 
 SdPageObjectBasePrimitive::SdPageObjectBasePrimitive(const basegfx::B2DRange& rRange)
-:   drawinglayer::primitive2d::BasePrimitive2D(),
+:   drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
     maRange(rRange)
 {
 }
@@ -286,7 +286,7 @@ SdPageObjectBasePrimitive::~SdPageObjectBasePrimitive()
 
 bool SdPageObjectBasePrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
 {
-    if(drawinglayer::primitive2d::BasePrimitive2D::operator==(rPrimitive))
+    if(drawinglayer::primitive2d::BufferedDecompositionPrimitive2D::operator==(rPrimitive))
     {
         const SdPageObjectBasePrimitive& rCompare = static_cast< const SdPageObjectBasePrimitive& >(rPrimitive);
         return (getPageObjectRange() == rCompare.getPageObjectRange());
@@ -306,7 +306,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -325,7 +325,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-Primitive2DSequence SdPageObjectPageBitmapPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectPageBitmapPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     // add bitmap primitive
     // to avoid scaling, use the Bitmap pixel size as primitive size
@@ -385,7 +385,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -399,7 +399,7 @@ public:
 const sal_Int32 SdPageObjectSelectPrimitive::mnSelectionIndicatorOffset(1);
 const sal_Int32 SdPageObjectSelectPrimitive::mnSelectionIndicatorThickness(3);
 
-Primitive2DSequence SdPageObjectSelectPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectSelectPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     Primitive2DSequence xRetval(2);
 
@@ -470,7 +470,7 @@ class SdPageObjectBorderPrimitive : public SdPageObjectBasePrimitive
 {
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -481,7 +481,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-Primitive2DSequence SdPageObjectBorderPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectBorderPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     // since old Width/Height calculations always added a single pixel value,
     // it is necessary to create a inner range which is one display unit less
@@ -524,7 +524,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -537,7 +537,7 @@ public:
 
 const sal_Int32 SdPageObjectFocusPrimitive::mnFocusIndicatorOffset(2);
 
-Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectFocusPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     Primitive2DSequence xRetval(2);
 
@@ -633,7 +633,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -683,6 +683,7 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
     return *mpFadeEffectIconBitmap;
 }
 
+
 const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnCommentsIndicatorOffset(9);
 BitmapEx* SdPageObjectFadeNameNumberPrimitive::mpCommentsIconBitmap = 0;
 
@@ -701,7 +702,7 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getCommentsIconBitmap() con
     return *mpCommentsIconBitmap;
 }
 
-Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     const xub_StrLen nTextLength(getPageName().Len());
     const sal_uInt32 nCount(
@@ -727,8 +728,8 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
 
     // get font attributes
     basegfx::B2DVector aTextSizeAttribute;
-    const drawinglayer::primitive2d::FontAttributes aFontAttributes(
-        drawinglayer::primitive2d::getFontAttributesFromVclFont(
+    const drawinglayer::attribute::FontAttribute aFontAttribute(
+        drawinglayer::primitive2d::getFontAttributeFromVclFont(
             aTextSizeAttribute,
             getPageNameFont(),
             false,
@@ -834,7 +835,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
                 0,
                 aPageName.Len(),
                 aDXArray,
-                aFontAttributes,
+                aFontAttribute,
                 aLocale,
                 aFontColor));
     }
@@ -875,7 +876,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
                 0,
                 nNumberLen,
                 aDXArray,
-                aFontAttributes,
+                aFontAttribute,
                 aLocale,
                 aFontColor));
 
@@ -1190,12 +1191,16 @@ void PageObjectViewObjectContact::ActionChanged (void)
     // Even when we are called from destructor we still have to invalide
     // the preview bitmap in the cache.
     const SdrPage* pPage = GetPage();
-    SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
-    if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
+
+    if(pPage)
     {
-        cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
-            pDocument->getUnoModel(),
-            GetPage());
+        SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
+        if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
+        {
+            cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
+                pDocument->getUnoModel(),
+                pPage);
+        }
     }
 
     // call parent
@@ -1211,7 +1216,7 @@ void PageObjectViewObjectContact::ActionChanged (void)
 // Very simple primitive which just remembers the discrete data and applies
 // it at decomposition time.
 
-class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BasePrimitive2D
+class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
 {
 private:
     basegfx::B2DRange           maLogicRange;
@@ -1220,7 +1225,7 @@ private:
     basegfx::BColor             maRGBColor;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -1229,7 +1234,7 @@ public:
         sal_uInt32 nDiscreteOffset,
         sal_uInt32 nDiscreteWidth,
         const basegfx::BColor& rRGBColor)
-    :   drawinglayer::primitive2d::BasePrimitive2D(),
+    :   drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
         maLogicRange(rLogicRange),
         mnDiscreteOffset(nDiscreteOffset),
         mnDiscreteWidth(nDiscreteWidth),
@@ -1247,7 +1252,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     // get logic sizes in object coordinate system
@@ -1277,7 +1282,7 @@ drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::createL
 
 bool MouseOverEffectPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
 {
-    if(drawinglayer::primitive2d::BasePrimitive2D::operator==(rPrimitive))
+    if(drawinglayer::primitive2d::BufferedDecompositionPrimitive2D::operator==(rPrimitive))
     {
         const MouseOverEffectPrimitive& rCompare = static_cast< const MouseOverEffectPrimitive& >(rPrimitive);
 

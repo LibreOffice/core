@@ -129,7 +129,6 @@ SCP1FILES +=                           \
              folder_ooo.par            \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
-             mergemodules_ooo.par      \
              vc_redist.par             \
              registryitem_writer.par   \
              folderitem_writer.par     \
@@ -283,7 +282,6 @@ SCP2FILES +=                           \
              folder_ooo.par            \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
-             mergemodules_ooo.par      \
              vc_redist.par             \
              registryitem_writer.par   \
              folderitem_writer.par     \

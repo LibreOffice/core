@@ -46,7 +46,6 @@
 #include "tabline.hrc"
 #include "helpid.hrc"
 #include <svx/dialmgr.hxx>
-
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include "svx/drawitem.hxx"
@@ -61,6 +60,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/dialogs.hrc>
 
 #define DLGWIN this->GetParent()->GetParent()
@@ -456,9 +456,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
         // Normalisieren
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(-aNewRange.getMinX(), -aNewRange.getMinY());
-        aNewPolyPolygon.transform(aMatrix);
+        aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
+            -aNewRange.getMinX(), -aNewRange.getMinY()));
 
         // Loeschen des angelegten PolyObjektes
         SdrObject::Free( pConvPolyObj );

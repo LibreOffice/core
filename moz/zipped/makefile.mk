@@ -175,6 +175,8 @@ FREEBL=freebl3
 .ENDIF # "$(OS)" == "SOLARIS" 
 
 
+#On Linux/Unix sqlite is delivered to $(SOLARLIBDIR)/sqlite/libsqlite3.so
+#See readme.txt  in module nss
 NSS_MODULE_RUNTIME_LIST:= \
     $(FREEBL) \
     nspr4 \
@@ -186,7 +188,7 @@ NSS_MODULE_RUNTIME_LIST:= \
     plds4 \
     smime3 \
     softokn3 \
-    sqlite3 \
+    sqlite/sqlite3 \
     ssl3
 
 
@@ -200,13 +202,13 @@ $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
         echo >& $(NULLDEV)
     $(foreach,lib,$(LIBLIST) rm -f $(LB)$/$(lib) &&) \
     echo >& $(NULLDEV)
-    $(foreach,lib,$(BIN_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib)$(DLLPOST) &&) \
+    $(foreach,lib,$(BIN_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib:f)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .IF "$(GUI)"=="WNT"
-    $(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARBINDIR)$/$(DLLPRE)$(lib)$(DLLPOST) &&) \
+    +$(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARBINDIR)$/$(DLLPRE)$(lib:f)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .ELSE
-    $(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARLIBDIR)$/$(DLLPRE)$(lib)$(DLLPOST) &&) \
+    +$(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARLIBDIR)$/$(lib:d)$(DLLPRE)$(lib:f)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .ENDIF
     $(TOUCH) $@     

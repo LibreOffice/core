@@ -43,10 +43,6 @@ USE_DEFFILE=TRUE
 
 # --- Allgemein -----------------------------------------------------------
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
-.ENDIF
-
 sw_res_files= \
     $(SRS)$/app.srs          \
     $(SRS)$/dialog.srs       \

@@ -44,8 +44,12 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        FillBitmapAttribute::FillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling)
-        :   maBitmap(rBitmap),
+        FillBitmapAttribute::FillBitmapAttribute(
+            const BitmapEx& rBitmapEx,
+            const basegfx::B2DPoint& rTopLeft,
+            const basegfx::B2DVector& rSize,
+            bool bTiling)
+        :   maBitmapEx(rBitmapEx),
             maTopLeft(rTopLeft),
             maSize(rSize),
             mbTiling(bTiling)
@@ -54,10 +58,10 @@ namespace drawinglayer
 
         bool FillBitmapAttribute::operator==(const FillBitmapAttribute& rCandidate) const
         {
-            return (maBitmap == rCandidate.maBitmap
-                && maTopLeft == rCandidate.maTopLeft
-                && maSize == rCandidate.maSize
-                && mbTiling == rCandidate.mbTiling);
+            return (getBitmapEx() == rCandidate.getBitmapEx()
+                && getTopLeft() == rCandidate.getTopLeft()
+                && getSize() == rCandidate.getSize()
+                && getTiling() == rCandidate.getTiling());
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

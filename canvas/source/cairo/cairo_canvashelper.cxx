@@ -958,6 +958,7 @@ namespace cairocanvas
 
     void CanvasHelper::doPolyPolygonPath( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                         Operation aOperation,
+                        bool bNoLineJoin,
                         const uno::Sequence< rendering::Texture >* pTextures,
                         Cairo* pCairo ) const
     {
@@ -967,10 +968,46 @@ namespace cairocanvas
         if( !pCairo )
             pCairo = mpCairo.get();
 
-        doPolyPolygonImplementation( rPolyPoly, aOperation,
-                                     pCairo, pTextures,
-                                     mpSurfaceProvider,
-                                     xPolyPolygon->getFillRule() );
+        if(bNoLineJoin && Stroke == aOperation)
+        {
+            // emulate rendering::PathJoinType::NONE by painting single edges
+            for(sal_uInt32 a(0); a < rPolyPoly.count(); a++)
+            {
+                const basegfx::B2DPolygon aCandidate(rPolyPoly.getB2DPolygon(a));
+                const sal_uInt32 nPointCount(aCandidate.count());
+
+                if(nPointCount)
+                {
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount + 1: nPointCount);
+                    basegfx::B2DPolygon aEdge;
+                    aEdge.append(aCandidate.getB2DPoint(0));
+                    aEdge.append(basegfx::B2DPoint(0.0, 0.0));
+
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    {
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        aEdge.setB2DPoint(1, aCandidate.getB2DPoint(nNextIndex));
+                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(a));
+                        aEdge.setPrevControlPoint(1, aCandidate.getPrevControlPoint(nNextIndex));
+
+                        doPolyPolygonImplementation( aEdge, aOperation,
+                                                     pCairo, pTextures,
+                                                     mpSurfaceProvider,
+                                                     xPolyPolygon->getFillRule() );
+
+                        // prepare next step
+                        aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+                    }
+                }
+            }
+        }
+        else
+        {
+            doPolyPolygonImplementation( rPolyPoly, aOperation,
+                                         pCairo, pTextures,
+                                         mpSurfaceProvider,
+                                         xPolyPolygon->getFillRule() );
+        }
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          ,
@@ -1039,9 +1076,12 @@ namespace cairocanvas
                 break;
         }
 
+        bool bNoLineJoin(false);
+
         switch( strokeAttributes.JoinType ) {
             // cairo doesn't have join type NONE so we use MITER as it's pretty close
             case rendering::PathJoinType::NONE:
+                bNoLineJoin = true;
             case rendering::PathJoinType::MITER:
                 cairo_set_line_join( mpCairo.get(), CAIRO_LINE_JOIN_MITER );
                 break;
@@ -1063,7 +1103,7 @@ namespace cairocanvas
 
         // TODO(rodo) use LineArray of strokeAttributes
 
-        doPolyPolygonPath( xPolyPolygon, Stroke );
+        doPolyPolygonPath( xPolyPolygon, Stroke, bNoLineJoin );
 
         cairo_restore( mpCairo.get() );
     } else

@@ -366,8 +366,8 @@ namespace
             {
                 const impPathTextPortion* pCandidate = rTextPortions[a];
                 basegfx::B2DVector aFontScaling;
-                const drawinglayer::primitive2d::FontAttributes aCandidateFontAttributes(
-                    drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
+                    drawinglayer::primitive2d::getFontAttributeFromVclFont(
                         aFontScaling,
                         pCandidate->getFont(),
                         pCandidate->isRTL(),
@@ -520,7 +520,7 @@ namespace
                                         nPortionIndex,
                                         nNextGlyphLen,
                                         aNewDXArray,
-                                        aCandidateFontAttributes,
+                                        aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBShadowColor);
 
@@ -545,7 +545,7 @@ namespace
                                     nPortionIndex,
                                     nNextGlyphLen,
                                     aNewDXArray,
-                                    aCandidateFontAttributes,
+                                    aCandidateFontAttribute,
                                     pCandidate->getLocale(),
                                     aRGBColor);
 

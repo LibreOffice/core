@@ -372,8 +372,8 @@ inline sal_Bool OReaderThread::readFlags( struct MessageFlags *pFlags )
                 }
                 pFlags->bSynchronous = ( HDRFLAG_SYNCHRONOUS & moreFlags );
                 pFlags->bMustReply = ( HDRFLAG_MUSTREPLY & moreFlags );
-                OSL_ENSURE( pFlags->bSynchronous && pFlags->bMustReply ||
-                            ! pFlags->bSynchronous && !pFlags->bMustReply,
+                OSL_ENSURE( (pFlags->bSynchronous && pFlags->bMustReply) ||
+                            (!pFlags->bSynchronous && !pFlags->bMustReply),
                             "urp-bridge : customized calls currently not supported !");
             }
 

@@ -266,7 +266,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Install
@@ -275,7 +275,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
@@ -284,7 +284,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,PATCH);
+	Styles = (ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Officeinstall
@@ -293,7 +293,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH,UPGRADEKEY);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,UPGRADEKEY);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Productversion
@@ -302,7 +302,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "ProductVersion";
 	Value = "[ProductVersion]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Officeinstall
@@ -311,7 +311,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Productversion
@@ -320,7 +320,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "ProductVersion";
 	Value = "[ProductVersion]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
@@ -329,7 +329,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,PATCH);
+	Styles = (ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Basisinstall
@@ -338,7 +338,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[BASISINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Basisinstall
@@ -347,7 +347,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[BASISINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
@@ -356,7 +356,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[BASISINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION,PATCH);
+	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstall
@@ -365,7 +365,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstal
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[BASISINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,PATCH);
+	Styles = (ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
@@ -374,7 +374,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Ureinstall
@@ -383,7 +383,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
-	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
@@ -392,7 +392,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION,PATCH);
+	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
@@ -401,7 +401,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,PATCH);
+	Styles = (ALWAYS_REQUIRED);
 End
 
 RegistryItem gid_Regitem_Sog

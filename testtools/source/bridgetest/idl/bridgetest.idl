@@ -269,6 +269,11 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
      */
     AllFloats echoAllFloats( [in] AllFloats aStruct );
 
+    /**
+     * register return test 4 (i107182)
+     */
+    long testPPCAlignment( [in] hyper l1, [in] hyper l2, [in] long i1, [in] hyper l3, [in] long i2 );
+
     [attribute] boolean                  Bool;
     [attribute] byte                     Byte;
     [attribute] char                     Char;

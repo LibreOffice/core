@@ -33,7 +33,7 @@
 #include <osl/process.h>
 #include <rtl/memory.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 #include <pthread.h>
 #ifndef MACOSX
  #include <locale.h>
@@ -42,7 +42,7 @@
 #include <osl/module.h>
 #include <osl/thread.h>
 #endif  /* !MACOSX */
-#endif  /* LINUX || SOLARIS || IRIX || NETBSD || MACOSX */
+#endif  /* LINUX || SOLARIS || NETBSD || MACOSX */
 
 #include <string.h>
 
@@ -229,13 +229,12 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
  * from nl_langinfo(CODESET) to rtl_textencoding defines.
- * nl_langinfo() is supported only on Linux and Solaris.
- * nl_langinfo() is supported only on Linux, Solaris and IRIX,
+ * nl_langinfo() is supported only on Linux, Solaris,
  * >= NetBSD 1.6 and >= FreeBSD 4.4
  *
  * This routine is SLOW because of the setlocale call, so
@@ -299,24 +298,6 @@ const _pair _nl_language_list[] = {
 
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
-#elif defined(IRIX)
-
-const _pair _nl_language_list[] = {
-   { "big5",        RTL_TEXTENCODING_BIG5       }, /* China - Traditional Chinese */
-   { "eucCN",       RTL_TEXTENCODING_EUC_CN     }, /* China */
-   { "eucgbk",      RTL_TEXTENCODING_DONTKNOW   }, /* China - Simplified Chinese */
-   { "eucJP",       RTL_TEXTENCODING_EUC_JP     }, /* Japan */
-   { "eucKR",       RTL_TEXTENCODING_EUC_KR     }, /* Korea */
-   { "eucTW",       RTL_TEXTENCODING_EUC_TW     }, /* Taiwan - Traditional Chinese */
-   { "gbk",     RTL_TEXTENCODING_GBK        }, /* China - Simplified Chinese */
-   { "ISO8859-1",   RTL_TEXTENCODING_ISO_8859_1 }, /* Western */
-   { "ISO8859-2",   RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
-   { "ISO8859-5",   RTL_TEXTENCODING_ISO_8859_5     }, /* Cyrillic */
-   { "ISO8859-7",   RTL_TEXTENCODING_ISO_8859_7     }, /* Greek */
-   { "ISO8859-9",   RTL_TEXTENCODING_ISO_8859_9     }, /* Turkish */
-   { "ISO8859-15",  RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
-   { "sjis",        RTL_TEXTENCODING_SHIFT_JIS  } /* Japan */
-};
 
 #elif defined(LINUX) || defined(NETBSD)
 
@@ -552,7 +533,7 @@ const _pair _nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef SOLARIS IRIX LINUX FREEBSD NETBSD */
+#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -927,9 +908,6 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
-#ifdef IRIX
-    char env_buf[80];
-#endif
     char locale_buf[64];
 
     /* convert rtl_Locale to locale string */
@@ -937,11 +915,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LC_ALL=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -949,11 +923,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LC_CTYPE" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LC_CTYPE=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -961,11 +931,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LANG" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LANG=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );

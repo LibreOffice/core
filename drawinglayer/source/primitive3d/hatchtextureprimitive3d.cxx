@@ -59,7 +59,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HatchTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence HatchTexturePrimitive3D::impCreate3DDecomposition() const
         {
             Primitive3DSequence aRetval;
 
@@ -81,9 +81,9 @@ namespace drawinglayer
 
                         if(pBasePrimitive)
                         {
-                            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
+                            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
                             // not all content is needed, remove transparencies and ModifiedColorPrimitives
-                            switch(pBasePrimitive->getPrimitiveID())
+                            switch(pBasePrimitive->getPrimitive3DID())
                             {
                                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {
@@ -287,7 +287,8 @@ namespace drawinglayer
             bool bModulate,
             bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maHatch(rHatch)
+            maHatch(rHatch),
+            maBuffered3DDecomposition()
         {
         }
 
@@ -301,6 +302,19 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        Primitive3DSequence HatchTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getBuffered3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(impCreate3DDecomposition());
+                const_cast< HatchTexturePrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
+            }
+
+            return getBuffered3DDecomposition();
         }
 
         // provide unique ID

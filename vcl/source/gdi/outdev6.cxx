@@ -1158,9 +1158,11 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
+bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
+    bool bDrawn(true);
+
     if ( mpMetaFile )
     {
         GDIMetaFile aSubst;
@@ -1172,20 +1174,20 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     }
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return;
+        return bDrawn;
 
     if( mbOutputClipped )
-        return;
+        return bDrawn;
 
     Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+
     if( !aRect.IsEmpty() )
     {
         // draw the real EPS graphics
-        bool bDrawn = FALSE;
         if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
         {
             if( !mpGraphics && !ImplGetGraphics() )
-                return;
+                return bDrawn;
 
             if( mbInitClipRegion )
                 ImplInitClipRegion();
@@ -1208,4 +1210,6 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
+
+    return bDrawn;
 }

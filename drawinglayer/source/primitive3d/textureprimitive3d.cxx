@@ -81,7 +81,27 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        UnifiedAlphaTexturePrimitive3D::UnifiedAlphaTexturePrimitive3D(
+            double fTransparence,
+            const Primitive3DSequence& rChildren)
+        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
+            mfTransparence(fTransparence)
+        {
+        }
+
+        bool UnifiedAlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        {
+            if(TexturePrimitive3D::operator==(rPrimitive))
+            {
+                const UnifiedAlphaTexturePrimitive3D& rCompare = (UnifiedAlphaTexturePrimitive3D&)rPrimitive;
+
+                return (getTransparence() == rCompare.getTransparence());
+            }
+
+            return false;
+        }
+
+        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             if(0.0 == getTransparence())
             {
@@ -103,26 +123,6 @@ namespace drawinglayer
             }
         }
 
-        UnifiedAlphaTexturePrimitive3D::UnifiedAlphaTexturePrimitive3D(
-            double fTransparence,
-            const Primitive3DSequence& rChildren)
-        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
-            mfTransparence(fTransparence)
-        {
-        }
-
-        bool UnifiedAlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const UnifiedAlphaTexturePrimitive3D& rCompare = (UnifiedAlphaTexturePrimitive3D&)rPrimitive;
-
-                return (getTransparence() == rCompare.getTransparence());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive3DIDBlock(UnifiedAlphaTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D)
 
@@ -135,11 +135,6 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence GradientTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            return getChildren();
-        }
-
         GradientTexturePrimitive3D::GradientTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
             const Primitive3DSequence& rChildren,
@@ -175,18 +170,13 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BitmapTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            return getChildren();
-        }
-
         BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
-            const attribute::FillBitmapAttribute& rBitmap,
+            const attribute::FillBitmapAttribute& rFillBitmapAttribute,
             const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maBitmap(rBitmap)
+            maFillBitmapAttribute(rFillBitmapAttribute)
         {
         }
 
@@ -196,7 +186,7 @@ namespace drawinglayer
             {
                 const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
 
-                return (getBitmap() == rCompare.getBitmap());
+                return (getFillBitmapAttribute() == rCompare.getFillBitmapAttribute());
             }
 
             return false;

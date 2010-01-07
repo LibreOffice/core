@@ -32,6 +32,7 @@
 #include "precompiled_filter.hxx"
 #include "swfwriter.hxx"
 #include <vcl/virdev.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <math.h>
 
@@ -608,10 +609,7 @@ struct GradRecord
 void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
     vector< struct GradRecord > aGradientRecords;
-
-    ::basegfx::B2DHomMatrix m; // #i73264#
-
-    m.rotate( (maGradient.GetAngle() - 900) * F_PI1800 );
+    basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix((maGradient.GetAngle() - 900) * F_PI1800));
 
     switch( maGradient.GetStyle() )
     {

@@ -42,6 +42,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -78,9 +79,7 @@ namespace slideshow
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
 
-            ::basegfx::B2DHomMatrix aTranslation;
-            aTranslation.translate( maOutputPos.getX(),
-                                    maOutputPos.getY() );
+            const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(maOutputPos));
             ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
             try

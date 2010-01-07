@@ -134,7 +134,7 @@ File gid_File_Exe_Javaldx
     BIN_FILE_BODY;
     Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(javaldx);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, PATCH);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "291B5981-3E41-40E2-9C3F-115A7DF1C6A1";
 End
 #endif
@@ -269,7 +269,7 @@ File gid_File_Dl_Sal
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("sal", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID,PATCH);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "B1EF3AB6-611E-4027-958A-736583EB82E6";
 End
 
@@ -336,7 +336,7 @@ File gid_File_Dl_Sunjavaplugin
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("sunjavaplugin");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, PATCH);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0AC6C688-876C-40C5-B24E-9257003FDC3E";
 End
 #endif
@@ -839,7 +839,7 @@ File gid_File_Dl_Libxml2
 #else
     Name = SCP2_URE_DL_VER("xml2", "2");
 #endif
-    Styles = (PACKED, PATCH, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "BE6FAD97-F84C-43E3-8392-6FE2CDA04D8E";
 End
 #endif
@@ -1208,7 +1208,7 @@ Profile gid_Profile_Version_Ini_Ure
     ModuleID = gid_Module_Root_Ure_Hidden;
     Name = PROFILENAME(version);
     Dir = gid_Dir_Ure_Bin;
-    Styles = (PATCH);
+    Styles = ();
 End
 
 ProfileItem gid_Ure_Profileitem_Version_Buildid

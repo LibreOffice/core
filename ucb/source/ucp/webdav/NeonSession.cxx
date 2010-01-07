@@ -329,8 +329,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 #ifdef NE_FEATURE_SSPI
     bCanUseSystemCreds = (attempt == 0) && // avoid endless loops
                          ne_has_support( NE_FEATURE_SSPI ) && // Windows-only feature.
-                         ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
-                         ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 );
+                         ( ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
+                           ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
 #endif
 
     // #i97003# (tkr): Ask XMasterPasswordHandling if we should store the

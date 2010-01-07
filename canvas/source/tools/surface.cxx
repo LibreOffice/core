@@ -33,6 +33,7 @@
 
 #include "surface.hxx"
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
 
@@ -150,9 +151,8 @@ namespace canvas
         // 4) scale to normalized device coordinates
         // 5) flip y-axis
         // 6) translate to account for viewport transform
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate(maSourceOffset.getX(),
-                             maSourceOffset.getY());
+        basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+            maSourceOffset.getX(), maSourceOffset.getY()));
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
                              ::basegfx::fround(rPos.getY()));
@@ -277,8 +277,7 @@ namespace canvas
         // 1) offset of surface subarea
         // 2) surface transform
         // 3) translation to output position [rPos]
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate(aPos1.getX(),aPos1.getY());
+        basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(aPos1.getX(), aPos1.getY()));
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
                              ::basegfx::fround(rPos.getY()));
@@ -380,7 +379,7 @@ namespace canvas
         // be transformed by the overall transform and uv coordinates will
         // be calculated from the result, and this is why we need to use
         // integer coordinates here...
-        ::basegfx::B2DHomMatrix aTransform;
+        basegfx::B2DHomMatrix aTransform;
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
                              ::basegfx::fround(rPos.getY()));

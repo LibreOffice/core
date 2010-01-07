@@ -37,7 +37,7 @@
 <meta>
       <topic id="textpresenterxml" indexer="include" status="PUBLISH">
          <title xml-lang="en-US" id="tit" l10n="NEW">Sun Presenter Console Keyboard Shortcuts</title>
-         <filename>/com.sun.PresenterScreen-linux_x86_64/presenter.xhp</filename>
+         <filename>/com.sun.PresenterScreen-PLATFORMID/presenter.xhp</filename>
       </topic>
    </meta>
    <body>

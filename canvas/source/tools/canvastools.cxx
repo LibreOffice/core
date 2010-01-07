@@ -63,6 +63,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/instance.hxx>
@@ -679,9 +680,8 @@ namespace canvas
                                        i_transformation );
 
             // now move resulting left,top point of bounds to (0,0)
-            ::basegfx::B2DHomMatrix aCorrectedTransform;
-            aCorrectedTransform.translate( -aTransformedRect.getMinX(),
-                                           -aTransformedRect.getMinY() );
+            const basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
             // prepend to original transformation
             o_transform = aCorrectedTransform * i_transformation;
@@ -745,9 +745,8 @@ namespace canvas
                                        transformation );
 
             // now move resulting left,top point of bounds to (0,0)
-            ::basegfx::B2DHomMatrix aCorrectedTransform;
-            aCorrectedTransform.translate( -aTransformedRect.getMinX(),
-                                           -aTransformedRect.getMinY() );
+            basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
             // scale to match outRect
             const double xDenom( aTransformedRect.getWidth() );

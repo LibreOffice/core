@@ -61,11 +61,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
-
-#include "implncvt.hxx"
-
 #include "cppuhelper/implbase1.hxx"
 #include <icc/sRGB-IEC61966-2.1.hxx>
+#include <vcl/lineinfo.hxx>
 
 using namespace vcl;
 using namespace rtl;

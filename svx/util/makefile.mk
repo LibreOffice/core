@@ -42,10 +42,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
 # --- Svx - DLL ----------
