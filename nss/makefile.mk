@@ -45,18 +45,19 @@ all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
 .ENDIF	
 
-TARFILE_NAME=nss_3_12_4
+TARFILE_NAME=nss_3_12_5
 TARFILE_ROOTDIR=mozilla
-PATCH_FILES=nss.patch dtoa.patch
-    # Note: dtoa.patch fixes https://bugzilla.mozilla.org/show_bug.cgi?id=516396. It can be removed as soon as
-    # we upgrade to a new NSS version which already contains this fix.
+PATCH_FILES=nss.patch
+
+.IF "$(OS)"=="MACOSX"
+PATCH_FILES+=nss_macosx.patch
+.ENDIF # "$(OS)"=="MACOSX"
 
 .IF "$(debug)" != ""
 .ELSE
 BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
-
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
@@ -67,13 +68,21 @@ USE_64:=1
 .ENDIF			# "$(CPU)"=="X"
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
+.IF "$(OS)$(COM)"=="FREEBSDGCC"
+.IF "$(CPU)"=="X"
+# force 64-bit buildmode
+USE_64:=1
+.EXPORT : USE_64
+.ENDIF			# "$(CPU)"=="X"
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)"=="MACOSX"
 .IF "$(EXTRA_CFLAGS)"!=""
 CPP:=gcc -E $(EXTRA_CFLAGS)
 CXX:=g++ $(EXTRA_CFLAGS)
 CC:=gcc $(EXTRA_CFLAGS)
-.EXPORT : CPP
+MACOS_SDK_DIR*=$(MACDEVSDK)
+.EXPORT : CPP MACOS_SDK_DIR
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
@@ -81,6 +90,10 @@ OUT2LIB=dist$/out$/lib$/*$(DLLPOST)
 
 BUILD_DIR=security$/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all
+#See #i105566# && moz#513024#
+.IF "$(OS)"=="LINUX"
+BUILD_ACTION+=FREEBL_NO_DEPEND=1
+.ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"
 

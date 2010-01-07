@@ -492,7 +492,7 @@
 +#endif
 --- misc/neon-0.28.2/src/makefile.mk	2009-12-10 13:29:15.000000000 +0100
 +++ misc/build/neon-0.28.2/src/makefile.mk	2009-12-10 13:21:58.000000000 +0100
-@@ -1 +1,99 @@
+@@ -1 +1,100 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
@@ -501,6 +501,7 @@
 +LIBTARGET=NO
 +USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +
@@ -633,8 +634,8 @@
  static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
                             struct auth_challenge *chall, char *pwbuf) 
  {
--    if (chall->handler->creds(chall->handler->userdata, sess->realm, 
-+    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm, 
+-    if (chall->handler->creds(chall->handler->userdata, sess->realm,
++    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm,
                                chall->handler->attempt++, sess->username, pwbuf) == 0) {
          return 0;
      } else {
@@ -642,9 +643,9 @@
      int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
      int status;
      char *response = NULL;
--    
+-
 +    char password[NE_ABUFSIZ];
-+ 
++
      NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
      
      if (!sess->sspi_context) {
@@ -1630,12 +1631,12 @@
          return -1;
      }
  
-+    return 0; 
++    return 0;
 +}
 +
 +/*
 + * Simplification wrapper arround AcquireCredentialsHandle as most of
-+ * the parameters do not change. 
++ * the parameters do not change.
 + */
 +static int acquireCredentialsHandleForUsername(CredHandle * credentials, char *package, const char *username, const char *password)
 +{
@@ -1688,7 +1689,7 @@
  
          /* Reset any existing context since we are starting over */
          resetContext(sspiContext);
-+		
++
 +	if (strlen(username) != 0) {
 +	  if (acquireCredentialsHandleForUsername
 +	        (&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
