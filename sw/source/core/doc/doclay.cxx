@@ -659,14 +659,14 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     // Anker noch nicht gesetzt ?
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
                                   : pFmt->GetAnchor().GetAnchorId();
-    if( !pAnchor ||
-        (FLY_PAGE != pAnchor->GetAnchorId() &&
-          //Nur Page und nicht:
-//        FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-//        FLY_IN_CNTNT == pAnchor->GetAnchorId() ||
-//        FLY_AT_FLY == pAnchor->GetAnchorId() ||
-//        FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-        !pAnchor->GetCntntAnchor() ))
+    // --> OD 2010-01-07 #i107811#
+    // Assure that at-page anchored fly frames have a page num or a content anchor set.
+    if ( !pAnchor ||
+         ( FLY_PAGE != pAnchor->GetAnchorId() &&
+           !pAnchor->GetCntntAnchor() ) ||
+         ( FLY_PAGE == pAnchor->GetAnchorId() &&
+           !pAnchor->GetCntntAnchor() &&
+           pAnchor->GetPageNum() == 0 ) )
     {
         // dann setze ihn, wird im Undo gebraucht
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
@@ -680,15 +680,20 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         {
             if( eRequestId != aAnch.GetAnchorId() &&
                 SFX_ITEM_SET != pFmt->GetItemState( RES_ANCHOR, sal_True ) )
+            {
                 aAnch.SetType( eRequestId );
+            }
 
             eAnchorId = aAnch.GetAnchorId();
-            if ( FLY_PAGE != eAnchorId )
-            //Nur Page und nicht:
-//          if( FLY_AT_CNTNT == eAnchorId || FLY_IN_CNTNT == eAnchorId ||
-//              FLY_AT_FLY == eAnchorId || FLY_AUTO_CNTNT == eAnchorId )
+            if ( FLY_PAGE != eAnchorId ||
+                 ( FLY_PAGE == eAnchorId &&
+                   ( !pAnchor ||
+                     aAnch.GetPageNum() == 0 ) ) )
+            {
                 aAnch.SetAnchor( &rAnchPos );
+            }
         }
+        // <--
         pFmt->SetFmtAttr( aAnch );
     }
     else
