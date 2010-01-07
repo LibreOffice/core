@@ -1109,8 +1109,38 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                     ::rtl::OUString sPath = sCommand.getToken( 0, '/', nIndex );
                     pObject = m_pTreeView->getListBox().GetEntryPosByName(sPath, pCommandType);
                     pCommandType = pObject;
-                    if (_bExpandAncestors && nIndex >= 0 )
-                        m_pTreeView->getListBox().Expand(pCommandType);
+                    if ( nIndex >= 0 )
+                    {
+                        if (ensureEntryObject(pObject))
+                        {
+                            DBTreeListUserData* pParentData = static_cast< DBTreeListUserData* >( pObject->GetUserData() );
+                            Reference< XNameAccess > xCollection( pParentData->xContainer, UNO_QUERY );
+                            sal_Int32 nIndex2 = nIndex;
+                            sPath = sCommand.getToken( 0, '/', nIndex2 );
+                            try
+                            {
+                                if ( xCollection->hasByName(sPath) )
+                                {
+                                    if(!m_pTreeView->getListBox().GetEntryPosByName(sPath,pObject))
+                                    {
+                                        Reference<XNameAccess> xChild(xCollection->getByName(sPath),UNO_QUERY);
+                                        DBTreeListUserData* pEntryData = new DBTreeListUserData;
+                                        pEntryData->eType = etQuery;
+                                        if ( xChild.is() )
+                                        {
+                                            pEntryData->eType = etQueryContainer;
+                                        }
+                                        implAppendEntry( pObject, sPath, pEntryData, pEntryData->eType );
+                                    }
+                                }
+                            }
+                            catch(Exception&)
+                            {
+                                DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+                            }
+                        }
+                    }
+                     //   m_pTreeView->getListBox().Expand(pCommandType);
                 }
                 while ( nIndex >= 0 );
             }
