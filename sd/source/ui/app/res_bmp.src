@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include <sfx2/sfx.hrc>
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
@@ -553,4 +553,12 @@ Bitmap BMP_FADE_EFFECT_INDICATOR
 Bitmap BMP_FADE_EFFECT_INDICATOR_H
 {
     File = "fade_effect_indicator_hc.bmp";
+};
+Bitmap BMP_COMMENTS_INDICATOR
+{
+    File = "comments_indicator.bmp";
+};
+Bitmap BMP_COMMENTS_INDICATOR_H
+{
+    File = "comments_indicator_hc.bmp";
 };

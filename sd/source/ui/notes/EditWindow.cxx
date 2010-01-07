@@ -34,17 +34,19 @@
 #include "EditWindow.hxx"
 
 #include "sdmod.hxx"
+#include <i18npool/mslangid.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/eeitem.hxx>
 #include "sdresid.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fhgtitem.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/editstat.hxx>
 
@@ -174,9 +176,9 @@ EditEngine* EditWindow::CreateEditEngine (void)
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
-        aTable[0].nLang = aOpt.nDefaultLanguage;
-        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
+        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
+        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
         //
         for (int i = 0;  i < 3;  ++i)
         {

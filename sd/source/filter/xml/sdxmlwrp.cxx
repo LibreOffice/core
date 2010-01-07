@@ -67,11 +67,11 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 // #80365# include necessary for XML progress bar at load time
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
 
 #include "sderror.hxx"
@@ -265,6 +265,24 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -295,7 +313,10 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r )
     {
-        (void)r;
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 

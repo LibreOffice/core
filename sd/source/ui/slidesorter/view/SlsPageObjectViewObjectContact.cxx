@@ -90,11 +90,9 @@ PageObjectViewObjectContact::PageObjectViewObjectContact (
     const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : ViewObjectContactOfPageObj(rObjectContact, rViewContact),
       mbInDestructor(false),
-      mbIsBackgroundColorUpdatePending(true),
       mxCurrentPageContents(),
       mpCache(rpCache),
-      mpProperties(rpProperties),
-      maBackgroundColor()
+      mpProperties(rpProperties)
 {
     SharedPageDescriptor pDescriptor (GetPageDescriptor());
     OSL_ASSERT(pDescriptor.get()!=NULL);
@@ -522,6 +520,7 @@ class SdPageObjectFocusPrimitive : public SdPageObjectBasePrimitive
 private:
     /// Gap between border of page object and inside of focus rectangle.
     static const sal_Int32 mnFocusIndicatorOffset;
+    const bool mbContrastToSelected;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -529,7 +528,7 @@ protected:
 
 public:
     // constructor and destructor
-    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange);
+    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast);
     ~SdPageObjectFocusPrimitive();
 
     // provide unique ID
@@ -558,19 +557,26 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     // create polygon
     const basegfx::B2DPolygon aIndicatorPolygon(basegfx::tools::createPolygonFromRect(aFocusIndicatorRange));
 
-    // white rectangle
+    const StyleSettings& rStyleSettings(Application::GetSettings().GetStyleSettings());
+
+    // "background" rectangle
+    const Color aBackgroundColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightColor() : rStyleSettings.GetWindowColor());
     xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aIndicatorPolygon, Color(COL_WHITE).getBColor()));
 
     // dotted black rectangle with same geometry
     ::std::vector< double > aDotDashArray;
 
-    aDotDashArray.push_back(aDiscretePixel.getX());
-    aDotDashArray.push_back(aDiscretePixel.getX());
+    const sal_Int32 nFocusIndicatorWidth (3);
+    aDotDashArray.push_back(nFocusIndicatorWidth *aDiscretePixel.getX());
+    aDotDashArray.push_back(nFocusIndicatorWidth * aDiscretePixel.getX());
 
     // prepare line and stroke attributes
-    const drawinglayer::attribute::LineAttribute aLineAttribute(Color(COL_BLACK).getBColor());
-    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDotDashArray, 2.0 * aDiscretePixel.getX());
+    const Color aLineColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightTextColor() : rStyleSettings.GetWindowTextColor());
+    const drawinglayer::attribute::LineAttribute aLineAttribute(aLineColor.getBColor());
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+        aDotDashArray, 2.0 * nFocusIndicatorWidth * aDiscretePixel.getX());
+
 
     xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aIndicatorPolygon, aLineAttribute, aStrokeAttribute));
@@ -578,8 +584,9 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     return xRetval;
 }
 
-SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange)
-:   SdPageObjectBasePrimitive(rRange)
+SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast)
+    :   SdPageObjectBasePrimitive(rRange),
+        mbContrastToSelected(bContrast)
 {
 }
 
@@ -598,12 +605,16 @@ private:
     /// Size of width and height of the fade effect indicator in pixels.
     static const sal_Int32              mnFadeEffectIndicatorOffset;
 
+    /// Size of width and height of the comments indicator in pixels.
+    static const sal_Int32              mnCommentsIndicatorOffset;
+
     /// Gap between border of page object and number rectangle.
     static const sal_Int32              mnPageNumberOffset;
 
-    /// the FadeEffect bitmap. Static since it is usable outside this primitive
+    /// the indicator bitmaps. Static since it is usable outside this primitive
     /// for size comparisons
     static BitmapEx*                    mpFadeEffectIconBitmap;
+    static BitmapEx*                    mpCommentsIconBitmap;
 
     /// page name, number and needed infos
     String                              maPageName;
@@ -613,10 +624,12 @@ private:
 
     // bitfield
     bool mbShowFadeEffectIcon : 1;
+    bool mbShowCommentsIcon : 1;
     bool mbExcluded : 1;
 
     // private helpers
     const BitmapEx& getFadeEffectIconBitmap() const;
+    const BitmapEx& getCommentsIconBitmap() const;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -631,6 +644,7 @@ public:
         const Font& rPageNameFont,
         const Size& rPageNumberAreaModelSize,
         bool bShowFadeEffectIcon,
+        bool bShowCommentsIcon,
         bool bExcluded);
     ~SdPageObjectFadeNameNumberPrimitive();
 
@@ -640,6 +654,7 @@ public:
     const Font& getPageNameFont() const { return maPageNameFont; }
     const Size& getPageNumberAreaModelSize() const { return maPageNumberAreaModelSize; }
     bool getShowFadeEffectIcon() const { return mbShowFadeEffectIcon; }
+    bool getShowCommentsIcon() const { return mbShowCommentsIcon; }
     bool getExcluded() const { return mbExcluded; }
 
     // compare operator
@@ -668,6 +683,24 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
     return *mpFadeEffectIconBitmap;
 }
 
+const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnCommentsIndicatorOffset(9);
+BitmapEx* SdPageObjectFadeNameNumberPrimitive::mpCommentsIconBitmap = 0;
+
+const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getCommentsIconBitmap() const
+{
+    if(mpCommentsIconBitmap == NULL)
+    {
+        // prepare CommentsIconBitmap on demand
+        const sal_uInt16 nIconId(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+            ? BMP_COMMENTS_INDICATOR_H
+            : BMP_COMMENTS_INDICATOR);
+        const BitmapEx aCommentsIconBitmap(IconCache::Instance().GetIcon(nIconId).GetBitmapEx());
+        const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->mpCommentsIconBitmap = new BitmapEx(aCommentsIconBitmap);
+    }
+
+    return *mpCommentsIconBitmap;
+}
+
 Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     const xub_StrLen nTextLength(getPageName().Len());
@@ -693,15 +726,13 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
     aTextLayouter.setFont(getPageNameFont());
 
     // get font attributes
-    ::basegfx::B2DVector aTextSizeAttribute;
-    const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-        aTextSizeAttribute,
-        getPageNameFont(),
-        false,
-        false));
-
-    // prepare DXTextArray (can be empty one)
-    const ::std::vector< double > aDXArray;
+    basegfx::B2DVector aTextSizeAttribute;
+    const drawinglayer::primitive2d::FontAttributes aFontAttributes(
+        drawinglayer::primitive2d::getFontAttributesFromVclFont(
+            aTextSizeAttribute,
+            getPageNameFont(),
+            false,
+            false));
 
     // prepare locale; this may need some more information in the future
     const ::com::sun::star::lang::Locale aLocale;
@@ -785,16 +816,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         }
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive and add to target
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageName, 0, aPageName.Len(), aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageName,
+                0,
+                aPageName.Len(),
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
     }
 
     {
@@ -815,16 +857,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         const double fStartY(aNumberRange.getMinY() + fTextHeight + aDiscretePixel.getX());
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageNumber, 0, nNumberLen, aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageNumber,
+                0,
+                nNumberLen,
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
 
         if(getExcluded())
         {
@@ -853,6 +906,7 @@ SdPageObjectFadeNameNumberPrimitive::SdPageObjectFadeNameNumberPrimitive(
     const Font& rPageNameFont,
     const Size& rPageNumberAreaModelSize,
     bool bShowFadeEffectIcon,
+    bool bShowCommentsIcon,
     bool bExcluded)
 :   SdPageObjectBasePrimitive(rRange),
     maPageName(rPageName),
@@ -860,6 +914,7 @@ SdPageObjectFadeNameNumberPrimitive::SdPageObjectFadeNameNumberPrimitive(
     maPageNameFont(rPageNameFont),
     maPageNumberAreaModelSize(rPageNumberAreaModelSize),
     mbShowFadeEffectIcon(bShowFadeEffectIcon),
+    mbShowCommentsIcon(bShowCommentsIcon),
     mbExcluded(bExcluded)
 {
 }
@@ -967,6 +1022,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         sal_uInt32 nPageNumber(0);
         Size aPageNumberAreaModelSize;
         bool bShowFadeEffectIcon(false);
+        bool bShowCommentsIcon(false);
         bool bExcluded(false);
 
         if(GetPage())
@@ -978,6 +1034,8 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
             {
                 bShowFadeEffectIcon = true;
             }
+
+            bShowCommentsIcon = !pPage->getAnnotations().empty();
 
             // prepare PageName, PageNumber, font and AreaModelSize
             aPageName = pPage->GetName();
@@ -1032,6 +1090,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
                 aPageNameFont,
                 aPageNumberAreaModelSize,
                 bShowFadeEffectIcon,
+                bShowCommentsIcon,
                 bExcluded));
         }
 
@@ -1044,7 +1103,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         if(bCreateFocused)
         {
             // add focus indicator if used
-            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange, bCreateSelected));
         }
 
         return xRetval;
@@ -1139,71 +1198,128 @@ void PageObjectViewObjectContact::ActionChanged (void)
             GetPage());
     }
 
-    mbIsBackgroundColorUpdatePending = true;
-
     // call parent
     ViewObjectContactOfPageObj::ActionChanged();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// helper MouseOverEffectPrimitive
+//
+// Used to allow view-dependent primitive definition. For that purpose, the
+// initially created primitive (here: in createMouseOverEffectPrimitive2DSequence())
+// always has to be view-independent, but the decomposition is made view-dependent.
+// Very simple primitive which just remembers the discrete data and applies
+// it at decomposition time.
 
-
-
-void PageObjectViewObjectContact::PaintMouseOverEffect (
-    OutputDevice& rDevice,
-    bool bVisible) const
+class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BasePrimitive2D
 {
-    // When the selection frame is painted the mouse over frame is not
-    // visible and does not have to be painted.
-    if (GetPageDescriptor()->IsSelected())
-        if (mpProperties.get()!=NULL && mpProperties->IsShowSelection())
-            return;
+private:
+    basegfx::B2DRange           maLogicRange;
+    sal_uInt32                  mnDiscreteOffset;
+    sal_uInt32                  mnDiscreteWidth;
+    basegfx::BColor             maRGBColor;
 
-    ULONG nPreviousDrawMode = rDevice.GetDrawMode();
-    rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-    Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
-    rDevice.EnableMapMode (FALSE);
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
-    Color aSelectionColor (GetColor(rDevice, CS_SELECTION));
-    Color aBackgroundColor (GetColor(rDevice, CS_BACKGROUND));
-    Color aFrameColor (bVisible ? aSelectionColor : aBackgroundColor);
-    Color aCornerColor (aBackgroundColor);
+public:
+    MouseOverEffectPrimitive(
+        const basegfx::B2DRange& rLogicRange,
+        sal_uInt32 nDiscreteOffset,
+        sal_uInt32 nDiscreteWidth,
+        const basegfx::BColor& rRGBColor)
+    :   drawinglayer::primitive2d::BasePrimitive2D(),
+        maLogicRange(rLogicRange),
+        mnDiscreteOffset(nDiscreteOffset),
+        mnDiscreteWidth(nDiscreteWidth),
+        maRGBColor(rRGBColor)
+    {}
 
-    rDevice.SetFillColor ();
-    rDevice.SetLineColor (aFrameColor);
+    // data access
+    const basegfx::B2DRange& getLogicRange() const { return maLogicRange; }
+    sal_uInt32 getDiscreteOffset() const { return mnDiscreteOffset; }
+    sal_uInt32 getDiscreteWidth() const { return mnDiscreteWidth; }
+    const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
-    // Paint the frame.
-    for (int nOffset=mnMouseOverEffectOffset;
-         nOffset<mnMouseOverEffectOffset+mnMouseOverEffectThickness;
-         nOffset++)
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+
+    DeclPrimitrive2DIDBlock()
+};
+
+drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::createLocalDecomposition(
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+{
+    // get logic sizes in object coordinate system
+    const double fDiscreteWidth((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+    const double fOffset(fDiscreteWidth * getDiscreteOffset());
+    const double fWidth(fDiscreteWidth * getDiscreteWidth());
+
+    // create range (one pixel less to get a good fitting)
+    basegfx::B2DRange aRange(
+        getLogicRange().getMinimum(),
+        getLogicRange().getMaximum() - basegfx::B2DTuple(fDiscreteWidth, fDiscreteWidth));
+
+    // grow range
+    aRange.grow(fOffset - (fWidth * 0.5));
+
+    // create fat line with parameters. The formerly hand-painted edge
+    // roundings will now be done using rounded edges of this fat line
+    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRange));
+    const drawinglayer::attribute::LineAttribute aLineAttribute(getRGBColor(), fWidth);
+    const drawinglayer::primitive2d::Primitive2DReference xReference(
+        new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+            aPolygon,
+            aLineAttribute));
+
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+}
+
+bool MouseOverEffectPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
+{
+    if(drawinglayer::primitive2d::BasePrimitive2D::operator==(rPrimitive))
     {
-        Rectangle aFrame (aInner);
-        aFrame.Left() -= nOffset;
-        aFrame.Top() -= nOffset;
-        aFrame.Right() += nOffset;
-        aFrame.Bottom() += nOffset;
-        rDevice.DrawRect (rDevice.PixelToLogic(aFrame));
+        const MouseOverEffectPrimitive& rCompare = static_cast< const MouseOverEffectPrimitive& >(rPrimitive);
+
+        return (getLogicRange() == rCompare.getLogicRange()
+            && getDiscreteOffset() == rCompare.getDiscreteOffset()
+            && getDiscreteWidth() == rCompare.getDiscreteWidth()
+            && getRGBColor() == rCompare.getRGBColor());
     }
 
-    // Paint the four corner pixels in backround color for a rounded effect.
-    int nFrameWidth (mnMouseOverEffectOffset
-        + mnMouseOverEffectThickness - 1);
-    Rectangle aOuter (aInner);
-    aOuter.Left() -= nFrameWidth;
-    aOuter.Top() -= nFrameWidth;
-    aOuter.Right() += nFrameWidth;
-    aOuter.Bottom() += nFrameWidth;
-    Point aCorner (aOuter.TopLeft());
+    return false;
+}
 
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.TopRight();
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.BottomLeft();
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.BottomRight();
-    rDevice.DrawPixel (aCorner, aCornerColor);
+ImplPrimitrive2DIDBlock(MouseOverEffectPrimitive, PRIMITIVE2D_ID_SDMOUSEOVEREFFECTPRIMITIVE)
 
-    rDevice.EnableMapMode (TRUE);
-    rDevice.SetDrawMode(nPreviousDrawMode);
+//////////////////////////////////////////////////////////////////////////////
+
+drawinglayer::primitive2d::Primitive2DSequence PageObjectViewObjectContact::createMouseOverEffectPrimitive2DSequence()
+{
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+
+    if(GetPageDescriptor()->IsSelected() && mpProperties.get() && mpProperties->IsShowSelection())
+    {
+        // When the selection frame is visualized the mouse over frame is not
+        // visible and does not have to be created.
+    }
+    else
+    {
+        const PageObjectViewContact& rPaObVOC(static_cast<PageObjectViewContact&>(GetViewContact()));
+        const Rectangle aBoundingBox(rPaObVOC.GetPageObject().GetLastBoundRect());
+        const basegfx::B2DRange aLogicRange(aBoundingBox.Left(), aBoundingBox.Top(), aBoundingBox.Right(), aBoundingBox.Bottom());
+        const basegfx::BColor aSelectionColor(mpProperties->GetSelectionColor().getBColor());
+        const drawinglayer::primitive2d::Primitive2DReference aReference(
+            new MouseOverEffectPrimitive(
+                aLogicRange,
+                mnMouseOverEffectOffset,
+                mnMouseOverEffectThickness,
+                aSelectionColor));
+
+        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+    }
+
+    return aRetval;
 }
 
 
@@ -1293,54 +1409,6 @@ model::SharedPageDescriptor
     PageObject& rPageObject (
         static_cast<PageObject&>(rViewContact.GetPageObject()));
     return rPageObject.GetDescriptor();
-}
-
-
-
-
-
-Color PageObjectViewObjectContact::GetColor (
-    const OutputDevice& rDevice,
-    const ColorSpec eSpec,
-    const double nOpacity) const
-{
-    (void)rDevice;
-    if (mbIsBackgroundColorUpdatePending)
-    {
-        mbIsBackgroundColorUpdatePending = false;
-        maBackgroundColor = mpProperties->GetBackgroundColor();
-    }
-
-    Color aColor;
-
-    switch (eSpec)
-    {
-        case CS_SELECTION:
-            aColor = mpProperties->GetSelectionColor();
-            break;
-
-        case CS_BACKGROUND:
-            if (mpProperties.get()!=NULL
-                && mpProperties->IsHighlightCurrentSlide()
-                && GetPageDescriptor()->IsCurrentPage())
-            {
-                aColor = mpProperties->GetHighlightColor();
-            }
-            else
-                aColor = maBackgroundColor;
-            break;
-
-        case CS_WINDOW:
-            aColor = maBackgroundColor;
-            break;
-
-        case CS_TEXT:
-        default:
-            aColor = mpProperties->GetTextColor();
-            break;
-    }
-    aColor.Merge(maBackgroundColor, BYTE(255*(nOpacity) + 0.5));
-    return aColor;
 }
 
 

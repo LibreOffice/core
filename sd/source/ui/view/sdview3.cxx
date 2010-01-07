@@ -36,11 +36,11 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
@@ -55,7 +55,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sot/clsids.hxx>
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
@@ -94,6 +94,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 // --------------
 // - Namespaces -
@@ -327,7 +328,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     if( bDrag )
     {
         SdrPageView* pPV = NULL;
-        PickObj( rPos, pPickObj, pPV );
+        PickObj( rPos, getHitTolLog(), pPickObj, pPV );
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
@@ -721,7 +722,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                         SdrObject*      pObj = pModel->GetSdPage( 0, PK_STANDARD )->GetObj( 0 );
                         SdrObject*      pPickObj2 = NULL;
                         SdrPageView*    pPV = NULL;
-                        PickObj( rPos, pPickObj2, pPV );
+                        PickObj( rPos, getHitTolLog(), pPickObj2, pPV );
 
                         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
                         {
@@ -1311,11 +1312,11 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 aHitPosT.Y() += n2HitLog;
                 aHitPosB.Y() -= n2HitLog;
 
-                if( bClosed                                          &&
-                    pPickObj->IsHit( aHitPosR, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosL, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosT, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosB, nHitLog, pVisiLayer ) )
+                if( bClosed &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, nHitLog, *GetSdrPageView(), pVisiLayer, false) )
                 {
                     // area fill
                     if(eFill == XFILL_SOLID )

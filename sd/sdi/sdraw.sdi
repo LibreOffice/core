@@ -339,7 +339,6 @@ SfxVoidItem Break SID_BREAK
     GroupId = GID_MODIFY;
 ]
 
-//--------------------------------------------------------------------------
 SfxVoidItem CapturePoint SID_CAPTUREPOINT
 ()
 [
@@ -1921,7 +1920,7 @@ SfxVoidItem DeleteLayer SID_DELETE_LAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -1946,7 +1945,7 @@ SfxVoidItem DeletePage SID_DELETE_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -5261,31 +5260,6 @@ SfxBoolItem ParaspaceIncrease SID_PARASPACE_INCREASE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem PasteClipboard SID_PASTE2
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem PickThrough SID_PICK_THROUGH
 
 [
@@ -6772,7 +6746,7 @@ SfxVoidItem DeleteMasterPage SID_DELETE_MASTER_PAGE()
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,

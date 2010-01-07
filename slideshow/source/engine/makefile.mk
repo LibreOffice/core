@@ -47,6 +47,8 @@ CDEFS+=-DENABLE_PRESENTER_EXTRA_UI
 
 # --- Common ----------------------------------------------------------
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 .IF "$(OS)"=="SOLARIS"
 .IF "$(CCNUMVER)"=="00050009"
 # SunStudio12: anachronism warning in boost code (smilfunctionparser.cxx)
@@ -74,6 +76,7 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/color.obj \
             $(SLO)$/delayevent.obj \
+            $(SLO)$/effectrewinder.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \
@@ -91,7 +94,8 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/unoviewcontainer.obj \
             $(SLO)$/usereventqueue.obj \
             $(SLO)$/waitsymbol.obj \
-            $(SLO)$/wakeupevent.obj
+            $(SLO)$/wakeupevent.obj \
+            $(SLO)$/debug.obj
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
 SLOFILES +=  $(SLO)$/sp_debug.obj

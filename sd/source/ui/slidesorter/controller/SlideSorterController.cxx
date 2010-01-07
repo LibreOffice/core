@@ -431,7 +431,7 @@ bool SlideSorterController::Command (
                 // would take place.
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().SetPosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Show();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(true);
             }
 
             pWindow->ReleaseMouse();
@@ -477,7 +477,7 @@ bool SlideSorterController::Command (
                 // finds the right place to insert a new slide.
                 GetSelectionManager()->SetInsertionPosition(
                     mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex());
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
             }
             bEventHasBeenHandled = true;
         }
@@ -603,11 +603,8 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
 
             case VCLEVENT_WINDOW_GETFOCUS:
-                // Show focus but only when the focus was not set to the
-                // window as a result of a mouse click.
                 if (pActiveWindow != NULL && pWindow == pActiveWindow)
-                    if (pWindow->GetPointerState().mnState==0)
-                        GetFocusManager().ShowFocus();
+                    GetFocusManager().ShowFocus(false);
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:

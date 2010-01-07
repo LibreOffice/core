@@ -46,8 +46,8 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/ulspitem.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itemset.hxx>
 
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
@@ -100,7 +100,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         EDGERADIUS_PROPERTIES
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
-        SPECIAL_DIMENSIONING_PROPERTIES
+        SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
         {0,0,0,0,0,0}
     };
 

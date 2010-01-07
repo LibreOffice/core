@@ -35,20 +35,16 @@
 
 #include <limits.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/basedlgs.hxx>
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
 #include <svx/grfflt.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/grafctrl.hxx>
 
 
@@ -71,8 +67,6 @@ using namespace sd;
 
 namespace sd {
 
-
-SFX_DECL_TYPE( 13 );
 
 
 // -----------------------
@@ -179,8 +173,10 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
                     mpView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
-                    mpView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    mpView->EndUndo();
+                    ::sd::View* const pView = mpView;
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                    pView->EndUndo();
+                    return;
                 }
             }
         }

@@ -37,6 +37,9 @@
 
 #include <sfx2/viewfrm.hxx>
 
+#include <svx/outliner.hxx>
+ 
+#include <svx/editview.hxx>
 
 #include "app.hrc"
 #include "helpids.h"
@@ -1203,6 +1206,40 @@ void Window::DropScroll(const Point& rMousePos)
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
     return ::Window::CreateAccessible ();
+    }
+}
+
+XubString Window::GetSurroundingText() const
+{
+    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+    {
+        return XubString();
+    }
+    else if ( mpViewShell->GetView()->IsTextEdit() )
+    {
+        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        return pOLV->GetEditView().GetSurroundingText();
+    }
+    else
+    {
+        return XubString();
+    }
+}
+
+Selection Window::GetSurroundingTextSelection() const
+{
+    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+    {
+        return Selection( 0, 0 );
+    }
+    else if ( mpViewShell->GetView()->IsTextEdit() )
+    {
+        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        return pOLV->GetEditView().GetSurroundingTextSelection();
+    }
+    else
+    {
+        return Selection( 0, 0 );
     }
 }
 

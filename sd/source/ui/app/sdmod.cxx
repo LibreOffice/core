@@ -30,8 +30,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-#include <svtools/pathoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -39,14 +39,14 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/status.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/ehdl.hxx>
 
@@ -146,6 +146,13 @@ SdModule::~SdModule()
             Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
         }
     }
+
+    mpResourceContainer.reset();
+
+    // Mark the module in the global AppData structure as deleted.
+    SdModule** ppShellPointer = (SdModule**)GetAppData(SHL_DRAW);
+    if (ppShellPointer != NULL)
+        (*ppShellPointer) = NULL;
 
     delete mpErrorHdl;
     delete static_cast< VirtualDevice* >( mpVirtualRefDevice );

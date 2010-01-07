@@ -35,7 +35,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <sfx2/viewsh.hxx>
 #ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
@@ -246,6 +246,10 @@ SfxPopupWindow* SdTbxControl::CreatePopupWindow()
             aTbxResName.appendAscii( "textbar" );
             aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
+        case SID_DRAWTBX_RECTANGLES:
+            aTbxResName.appendAscii( "rectanglesbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
+        break;
         case SID_DRAWTBX_ELLIPSES:
             aTbxResName.appendAscii( "ellipsesbar" );
             aToolBarResStr = aTbxResName.makeStringAndClear();
@@ -307,7 +311,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
-                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
 
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )

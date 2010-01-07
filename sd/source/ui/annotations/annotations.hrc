@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: TableDesignPane.hrc,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SD_ANNOTATIONPANE_HRC
+#define _SD_ANNOTATIONPANE_HRC
+
+#include "glob.hrc"
+
+// strings
+#define STR_ANNOTATION_TODAY                (RID_ANNOTATIONS_START+1)
+#define STR_ANNOTATION_YESTERDAY            (RID_ANNOTATIONS_START+2)
+#define STR_ANNOTATION_NOAUTHOR             (RID_ANNOTATIONS_START+3)
+#define STR_ANNOTATION_WRAP_FORWARD         (RID_ANNOTATIONS_START+4)
+#define STR_ANNOTATION_WRAP_BACKWARD        (RID_ANNOTATIONS_START+5)
+#define STR_ANNOTATION_WRAP_FORWARD_DRAW    (RID_ANNOTATIONS_START+6)
+#define STR_ANNOTATION_WRAP_BACKWARD_DRAW   (RID_ANNOTATIONS_START+7)
+#define STR_ANNOTATION_UNDO_INSERT          (RID_ANNOTATIONS_START+8)
+#define STR_ANNOTATION_UNDO_DELETE          (RID_ANNOTATIONS_START+9)
+#define STR_ANNOTATION_UNDO_MOVE            (RID_ANNOTATIONS_START+10)
+#define STR_ANNOTATION_UNDO_EDIT            (RID_ANNOTATIONS_START+11)
+#define STR_ANNOTATION_UNDO_REPLY           (RID_ANNOTATIONS_START+12)
+#define STR_ANNOTATION_REPLY                (RID_ANNOTATIONS_START+13)
+
+// menus
+#define RID_ANNOTATION_CONTEXTMENU          (RID_ANNOTATIONS_START+0)
+#define RID_ANNOTATION_TAG_CONTEXTMENU      (RID_ANNOTATIONS_START+1)
+
+#define BTN_NEW     1
+#define BTN_DELETE  2
+#define BTN_NEXT    3
+#define BTN_PREV    4
+
+#define TBX_TOOLBAR 1
+#define FT_AUTHOR   1
+#define ED_AUTHOR   2
+#define FT_DATE     3
+#define ED_DATE     4
+
+#define CT_TEXT     5
+
+#endif // _SD_ANNOTATIONPANE_HRC

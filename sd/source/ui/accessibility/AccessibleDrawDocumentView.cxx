@@ -33,26 +33,18 @@
 #include "AccessibleDrawDocumentView.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#ifndef _COM_SUN_STAR_LANG_XMULSTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <rtl/ustring.h>
-#ifndef _SFXFRAME_HXX
 #include<sfx2/viewfrm.hxx>
-#endif
 
 #include <svx/AccessibleShape.hxx>
 
@@ -73,11 +65,14 @@
 #include "sdresid.hxx"
 #include <vos/mutex.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 class SfxViewFrame;
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace accessibility {
 
@@ -93,6 +88,7 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
       mpChildrenManager (NULL)
 {
     OSL_TRACE ("AccessibleDrawDocumentView");
+    UpdateAccessibleName();
 }
 
 
@@ -238,7 +234,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ThrowIfDisposed ();
 
@@ -309,6 +305,9 @@ void SAL_CALL
     if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")))
     {
         OSL_TRACE ("    current page changed");
+
+        // Update the accessible name to reflect the current slide.
+        UpdateAccessibleName();
 
         // The current page changed.  Update the children manager accordingly.
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
@@ -696,6 +695,48 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
 
     // Forward call to base classes.
     AccessibleDocumentViewBase::disposing ();
+}
+
+
+
+
+void AccessibleDrawDocumentView::UpdateAccessibleName (void)
+{
+    OUString sNewName (CreateAccessibleName());
+    sNewName += A2S(": ");
+
+    // Add the number of the current slide.
+    uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
+    if (xView.is())
+    {
+        uno::Reference<beans::XPropertySet> xProperties (xView->getCurrentPage(), UNO_QUERY);
+        if (xProperties.is())
+            try
+            {
+                sal_Int16 nPageNumber (0);
+                if (xProperties->getPropertyValue(A2S("Number")) >>= nPageNumber)
+                {
+                    sNewName += OUString::valueOf(sal_Int32(nPageNumber));
+                }
+            }
+            catch (beans::UnknownPropertyException&)
+            {
+            }
+    }
+
+    // Add the number of pages/slides.
+    Reference<drawing::XDrawPagesSupplier> xPagesSupplier (mxModel, UNO_QUERY);
+    if (xPagesSupplier.is())
+    {
+        Reference<container::XIndexAccess> xPages (xPagesSupplier->getDrawPages(), UNO_QUERY);
+        if (xPages.is())
+        {
+            sNewName += A2S(" / ");
+            sNewName += OUString::valueOf(xPages->getCount());
+        }
+    }
+
+    SetAccessibleName (sNewName, AutomaticallyCreated);
 }
 
 

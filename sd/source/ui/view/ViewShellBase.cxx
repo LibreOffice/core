@@ -31,6 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/frame/UnknownModuleException.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include "ViewShellBase.hxx"
 #include <algorithm>
 #include "EventMultiplexer.hxx"
@@ -83,7 +90,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "fubullet.hxx"
@@ -94,6 +101,11 @@ using namespace sd;
 
 using ::sd::framework::FrameworkHelper;
 using ::rtl::OUString;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 
 namespace {
 
@@ -503,32 +515,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case SFX_EVENT_CREATEDOC:
-                //                mpPaneManager->InitPanes();
-                break;
-
-            case SFX_EVENT_ACTIVATEDOC:
-                break;
-
-            case SFX_EVENT_STARTAPP:
-            case SFX_EVENT_CLOSEAPP:
-            case SFX_EVENT_CLOSEDOC:
-            case SFX_EVENT_SAVEDOC:
-            case SFX_EVENT_SAVEASDOC:
-            case SFX_EVENT_DEACTIVATEDOC:
-            case SFX_EVENT_PRINTDOC:
-            case SFX_EVENT_ONERROR:
-            case SFX_EVENT_LOADFINISHED:
-            case SFX_EVENT_SAVEFINISHED:
-            case SFX_EVENT_MODIFYCHANGED:
-            case SFX_EVENT_PREPARECLOSEDOC:
-            case SFX_EVENT_NEWMESSAGE:
-            case SFX_EVENT_TOGGLEFULLSCREENMODE:
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
-            case SFX_EVENT_MOUSEOVER_OBJECT:
-            case SFX_EVENT_MOUSECLICK_OBJECT:
-            case SFX_EVENT_MOUSEOUT_OBJECT:
+            default:
                 break;
         }
     }
@@ -1235,6 +1222,47 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
     return *mpImpl->mpCustomHandleManager.get();
 }
 
+::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+{
+    ::rtl::OUString aLabel;
+
+    if ( aCmdURL.getLength() > 0 ) try
+    {
+        Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+
+        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+
+        ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
+
+        if( aModuleIdentifier.getLength() > 0 )
+        {
+            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ) ) ), UNO_QUERY );
+            if( xNameAccess.is() )
+            {
+                Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+                Sequence< PropertyValue > aPropSeq;
+                if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                {
+                    for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        {
+                            aPropSeq[i].Value >>= aLabel;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return aLabel;
+}
+
 
 
 //===== ViewShellBase::Implementation =========================================
@@ -1378,10 +1406,12 @@ void ViewShellBase::Implementation::SetPaneVisibility (
     {
         Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY_THROW);
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         Reference<XResourceId> xPaneId (ResourceId::create(
-            comphelper_getProcessComponentContext(), rsPaneURL));
+            xContext, rsPaneURL));
         Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
-            comphelper_getProcessComponentContext(), rsViewURL, rsPaneURL));
+            xContext, rsViewURL, rsPaneURL));
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
@@ -1448,6 +1478,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
         while (nItemId > 0)
@@ -1460,25 +1492,22 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                 {
                     case SID_LEFT_PANE_IMPRESS:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftImpressPaneURL);
+                            xContext, FrameworkHelper::msLeftImpressPaneURL);
                         break;
 
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftDrawPaneURL);
+                            xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
                     case SID_RIGHT_PANE:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                                FrameworkHelper::msRightPaneURL);
+                            xContext, FrameworkHelper::msRightPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msImpressViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1486,14 +1515,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     case SID_DIAMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_OUTLINEMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1502,14 +1531,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         // There is only the master page mode for the handout
                         // view so ignore the master page flag.
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msHandoutViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_NOTESMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msNotesViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;

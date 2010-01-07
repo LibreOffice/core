@@ -63,10 +63,10 @@
 
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -83,7 +83,7 @@
 #include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -244,7 +244,7 @@ SdFilterDetect::~SdFilterDetect()
                 {
                     // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
                     // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
-                    uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+                    uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
 
                     //TODO/LATER: move error handling to central place! (maybe even complete own filters)
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
@@ -252,7 +252,7 @@ SdFilterDetect::~SdFilterDetect()
                         // error during storage creation means _here_ that the medium
                         // is broken, but we can not handle it in medium since unpossibility
                         // to create a storage does not _always_ means that the medium is broken
-                        aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                        aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                         if ( xInteraction.is() )
                         {
                             OUString empty;

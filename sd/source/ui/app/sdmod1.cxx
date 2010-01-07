@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svtools/lckbitem.hxx>
+#include <svl/lckbitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include "framework/FrameworkHelper.hxx"
 
 #include <svx/dialogs.hrc>
@@ -49,7 +49,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -751,8 +751,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
                             }
 
-                            pDoc->SetChanged(!bIsDocEmpty);
-
                             // clear document info
                             using namespace ::com::sun::star;
                             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -764,6 +762,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 SvtUserOptions().GetFullName() );
                             xDocProps->setTemplateName(xDocProps->getTitle());
                             xDocProps->setTemplateURL(pPilotDlg->GetDocPath());
+
+                            pDoc->SetChanged(!bIsDocEmpty);
 
                             pDocShell->SetUseUserData(TRUE);
 
@@ -853,9 +853,9 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
                 // Der Printer gibt leider kein exaktes
                 // Format (z.B. A4) zurueck
                 Size aSize(pPrinter->GetPaperSize());
-                SvxPaper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
+                Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
 
-                if (ePaper != SVX_PAPER_USER)
+                if (ePaper != PAPER_USER)
                 {
                     // Korrekte Size holen
                     aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);

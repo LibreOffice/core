@@ -31,7 +31,7 @@
 #ifndef SD_VIEW_SHELL_HINT_HXX
 #define SD_VIEW_SHELL_HINT_HXX
 
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
 namespace sd {
 

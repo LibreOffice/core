@@ -85,6 +85,7 @@ public:
     virtual ~SdOptionsItem();
 
     virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
@@ -276,6 +277,7 @@ private:
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
     BOOL    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
+    BOOL    bShowComments           : 1;    // Misc/ShowComments
 
     sal_Bool    bPreviewNewEffects;
     sal_Bool    bPreviewChangedEffects;
@@ -320,6 +322,7 @@ public:
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
+
     /** Return the currently selected printer independent layout mode.
         @return
             Returns 1 for printer independent layout enabled and 0 when it
@@ -372,6 +375,9 @@ public:
     void    SetPreviewNewEffects( sal_Bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
     void    SetPreviewChangedEffects( sal_Bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
     void    SetPreviewTransitions( sal_Bool bOn )  { if( bPreviewTransitions != bOn ) { OptionsChanged(); bPreviewTransitions = bOn; } }
+
+    BOOL    IsShowComments() const { Init(); return bShowComments; }
+    void    SetShowComments( BOOL bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
 };
 
 // -----------------------------------------------------------------------------

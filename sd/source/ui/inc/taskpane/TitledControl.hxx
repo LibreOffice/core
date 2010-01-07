@@ -135,6 +135,8 @@ public:
     */
     virtual bool IsExpandable (void) const;
 
+    virtual void SetEnabledState(bool bFlag);
+
     /** Ownership of the given data remains with the caller.  The data
         is thus not destroyed when the destructor of this class is
         called.

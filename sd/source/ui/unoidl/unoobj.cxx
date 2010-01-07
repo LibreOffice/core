@@ -40,8 +40,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/stl_types.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/style.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
@@ -1007,6 +1007,9 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
         if( pParaObj )
         {
             delete pParaObj;
+        }
+        else
+        {
             return sal_True;
         }
     }

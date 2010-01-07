@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: formatclipboard.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: AnnotationManager.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,37 +28,35 @@
  *
  ************************************************************************/
 
-#ifndef _SDFORMATCLIPBOARD_HXX
-#define _SDFORMATCLIPBOARD_HXX
+#ifndef _SD_ANNOTATIONMANAGER_HXX
+#define _SD_ANNOTATIONMANAGER_HXX
 
-#include "View.hxx"
-// header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <memory>
 
-//-----------------------------------------------------------------------------
-/** This class acts as data container and execution class for the format paintbrush feature in draw and impress.
-*/
+#include <rtl/ref.hxx>
 
-class SdFormatClipboard
+namespace sd
+{
+
+class ViewShellBase;
+class AnnotationManagerImpl;
+
+// --------------------------------------------------------------------
+
+class AnnotationManager
 {
 public:
-    SdFormatClipboard();
-    virtual ~SdFormatClipboard();
+    AnnotationManager( ViewShellBase& rViewShellBase );
+    ~AnnotationManager();
 
-    bool HasContent() const;
-    bool CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
-    bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
-
-    void Copy( ::sd::View& rDrawView, bool bPersistentCopy=false );
-    void Paste( ::sd::View& rDrawView
-        , bool bNoCharacterFormats=false, bool bNoParagraphFormats=false );
-    void Erase();
+    void ExecuteAnnotation (SfxRequest& rRequest);
+    void GetAnnotationState (SfxItemSet& rItemSet);
 
 private:
-    SfxItemSet* m_pItemSet;
-    bool   m_bPersistentCopy;
-    UINT32 m_nType_Inventor;
-    UINT16 m_nType_Identifier;
+    ::rtl::Reference< AnnotationManagerImpl > mxImpl;
 };
 
-#endif
+}
+
+#endif // _SD_ANNOTATIONMANAGER_HXX

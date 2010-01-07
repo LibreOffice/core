@@ -185,6 +185,18 @@ void SlideSorterViewShell::Initialize (void)
         mpVerticalScrollBar,
         mpScrollBarBox);
     mpView = &mpSlideSorter->GetView();
+
+    // For accessibility we have to shortly hide the content window.
+    // This triggers the construction of a new accessibility object for
+    // the new view shell.  (One is created earlier while the construtor
+    // of the base class is executed.  At that time the correct
+    // accessibility object can not be constructed.)
+    ::Window* pWindow = mpSlideSorter->GetActiveWindow();
+    if (pWindow != NULL)
+    {
+        pWindow->Hide();
+        pWindow->Show();
+    }
 }
 
 

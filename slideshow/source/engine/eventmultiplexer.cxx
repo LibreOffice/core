@@ -368,7 +368,8 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
         mpEventQueue->addEvent(
             makeEvent( boost::bind( &EventMultiplexerImpl::mousePressed,
                                     mpEventMultiplexer,
-                                    e ) ) );
+                                    e ),
+                       "EventMultiplexerImpl::mousePressed") );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseReleased(
@@ -382,7 +383,8 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
         mpEventQueue->addEvent(
             makeEvent( boost::bind( &EventMultiplexerImpl::mouseReleased,
                                     mpEventMultiplexer,
-                                    e ) ) );
+                                    e ),
+                       "EventMultiplexerImpl::mouseReleased") );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseEntered(
@@ -409,7 +411,8 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
         mpEventQueue->addEvent(
             makeEvent( boost::bind( &EventMultiplexerImpl::mouseDragged,
                                     mpEventMultiplexer,
-                                    e )) );
+                                    e ),
+                       "EventMultiplexerImpl::mouseDragged") );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseMoved(
@@ -423,7 +426,8 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
         mpEventQueue->addEvent(
             makeEvent( boost::bind( &EventMultiplexerImpl::mouseMoved,
                                     mpEventMultiplexer,
-                                    e )) );
+                                    e ),
+                       "EventMultiplexerImpl::mouseMoved") );
 }
 
 
@@ -447,7 +451,15 @@ void EventMultiplexerImpl::forEachView( XSlideShowViewFunc pViewMethod )
         for( UnoViewVector::const_iterator aIter( mrViewContainer.begin() ),
                  aEnd( mrViewContainer.end() ); aIter != aEnd; ++aIter )
         {
-            ((*aIter)->getUnoView().get()->*pViewMethod)( mxListener.get() );
+            uno::Reference<presentation::XSlideShowView> xView ((*aIter)->getUnoView());
+            if (xView.is())
+            {
+                (xView.get()->*pViewMethod)( mxListener.get() );
+            }
+            else
+            {
+                OSL_ASSERT(xView.is());
+            }
         }
     }
 }
@@ -519,7 +531,8 @@ void EventMultiplexerImpl::scheduleTick()
     EventSharedPtr pEvent(
         makeDelay( boost::bind( &EventMultiplexerImpl::tick,
                                 this ),
-                   mnTimeout ));
+                   mnTimeout,
+                   "EventMultiplexerImpl::tick with delay"));
 
     // store weak reference to generated event, to notice when
     // the event queue gets cleansed (we then have to

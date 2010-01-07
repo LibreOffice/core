@@ -35,7 +35,7 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
@@ -86,7 +86,13 @@ public:
 };
 
 
-BOOL SdPageObjsTLB::bIsInDrag = FALSE;
+BOOL SD_DLLPRIVATE SdPageObjsTLB::bIsInDrag = FALSE;
+
+BOOL SdPageObjsTLB::IsInDrag()
+{
+    return bIsInDrag;
+}
+
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
 
 // -----------------------------------------

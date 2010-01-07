@@ -34,16 +34,16 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <osl/module.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/svxerr.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include "sdpptwrp.hxx"
-#include "pptin.hxx"
+#include "ppt/pptin.hxx"
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
-#include <svx/msfiltertracer.hxx>
+#include <filter/msfilter/msfiltertracer.hxx>
 
 // --------------
 // - Namespaces -
@@ -54,11 +54,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-
 typedef BOOL ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
+
+typedef sal_Bool ( SAL_CALL *ImportPPT )( const ::rtl::OUString&, Sequence< PropertyValue >*,
+                                          SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+
+typedef BOOL ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
 
 // ---------------
 // - SdPPTFilter -
@@ -108,19 +112,21 @@ sal_Bool SdPPTFilter::Import()
             aConfigData[ 0 ] = aPropValue;
 
             if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
-                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
+                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
-                MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
-                aTracer.StartTracing();
+                ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+                if ( pLibrary )
+                {
+                    ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImportPPT" ) ) ) );
+                    if ( PPTImport )
+                        bRet = PPTImport( aTraceConfigPath, &aConfigData, &mrDocument, *pDocStream, *pStorage, mrMedium );
 
-                SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
-                if ( ( bRet = pImport->Import() ) == sal_False )
-                    mrMedium.SetError( SVSTREAM_WRONGVERSION );
-
-                aTracer.EndTracing();
-                delete pImport;
+                    if ( !bRet )
+                        mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                }
             }
+
             delete pDocStream;
         }
     }
@@ -183,32 +189,13 @@ void SdPPTFilter::PreSaveBasic()
     SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
     if( pFilterOptions && pFilterOptions->IsLoadPPointBasicStorage() )
     {
-        SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
-        SvxImportMSVBasic aMSVBas( (SfxObjectShell&) mrDocShell, *xDest, FALSE, FALSE );
-        aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
-
-        SvStorageRef xOverhead = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
-        if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+        ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+        if( pLibrary )
         {
-            SvStorageRef xOverhead2 = xOverhead->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
-            if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
+            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("SaveVBA") ));
+            if( pSaveVBA )
             {
-                SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
-                if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
-                {
-                    UINT32 nLen = xTemp->GetSize();
-                    if ( nLen )
-                    {
-                        char* pTemp = new char[ nLen ];
-                        if ( pTemp )
-                        {
-                            xTemp->Seek( STREAM_SEEK_TO_BEGIN );
-                            xTemp->Read( pTemp, nLen );
-                            pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
-                            pBas->ObjectOwnsMemory( TRUE );
-                        }
-                    }
-                }
+                pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
             }
         }
     }

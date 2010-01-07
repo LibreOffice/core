@@ -86,4 +86,6 @@
 #define CT_PAGE5_PAGELIST           62
 #define CB_PAGE5_SUMMARY            63
 
+#define STR_CREATE                  64
+#define STR_OPEN                    65
 #define DLG_ASS 900

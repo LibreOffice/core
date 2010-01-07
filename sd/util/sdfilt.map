@@ -1,7 +1,8 @@
 PPTEXPORTER_1_0 {
         global:
                 ExportPPT;
-
+                ImportPPT;
+                SaveVBA;
         local:
                 *;
 };

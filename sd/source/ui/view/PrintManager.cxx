@@ -52,7 +52,7 @@
 #include <sfx2/progress.hxx>
 #include <svtools/printdlg.hxx>
 #include <tools/multisel.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/prtqry.hxx>
 #include "WindowUpdater.hxx"
@@ -71,7 +71,7 @@
 #include "printdlg.hrc"
 #include "prntopts.hrc"
 #include "app.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/xlnclit.hxx>
 #include "printdialog.hxx"
@@ -161,6 +161,10 @@ USHORT PrintManager::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL _bShowDialog)
 {
+    SfxPrinter* pOld = mrBase.GetDocShell()->GetPrinter( FALSE );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     mrBase.GetDocShell()->SetPrinter(pNewPrinter);
 
     if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
@@ -364,16 +368,16 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
         if( pPrintOpts )
         {
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            ::utl::MiscCfg aMisc;
 
             if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getDate( Date() );
                 aTimeDateStr += (sal_Unicode)' ';
             }
 
             if( pPrintOpts->GetOptionsPrint().IsTime() )
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getTime( Time(), FALSE, FALSE );
 
             if( pPrintOpts->GetOptionsPrint().IsOutline() )
                 bPrintOutline = TRUE;
@@ -394,9 +398,9 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 ePageKind = PK_NOTES;
             }
 
-            pPrintOpts->GetOptionsPrint().SetWarningPrinter( pMisc->IsNotFoundWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningSize( pMisc->IsPaperSizeWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningPrinter( aMisc.IsNotFoundWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningSize( aMisc.IsPaperSizeWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningOrientation( aMisc.IsPaperOrientationWarning() );
 
             UINT16  nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
             ULONG   nMode = DRAWMODE_DEFAULT;
@@ -1721,8 +1725,8 @@ bool PrintManager::IsScreenFormat (void)
         Swap(aPaperSize);
 
     // Check whether paper size is 'Screen'
-    SvxPaper ePaper (SvxPaperInfo::GetPaper(aPaperSize, MAP_100TH_MM, TRUE));
-    return (ePaper == SVX_PAPER_SCREEN);
+    Paper ePaper(SvxPaperInfo::GetSvxPaper(aPaperSize, MAP_100TH_MM, TRUE));
+    return (ePaper == PAPER_SCREEN);
 }
 
 

@@ -48,8 +48,6 @@ CDEFS+= -DDBG_ANIM_LOG
 
 SLOFILES =\
         $(SLO)$/sdfilter.obj	\
-        $(SLO)$/pptin.obj		\
-        $(SLO)$/propread.obj	\
         $(SLO)$/sdpptwrp.obj	
 
 EXCEPTIONSFILES= \

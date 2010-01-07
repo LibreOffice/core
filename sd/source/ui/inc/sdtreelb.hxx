@@ -40,7 +40,7 @@
 #include "sddllapi.h"
 #include <tools/string.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
 
@@ -71,7 +71,7 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static BOOL             bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static BOOL  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
 public:
 
@@ -219,7 +219,7 @@ public:
 
     BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
 
-    static BOOL             IsInDrag()  { return bIsInDrag; }
+    static BOOL             IsInDrag();
     using SvLBox::ExecuteDrop;
 
 private:

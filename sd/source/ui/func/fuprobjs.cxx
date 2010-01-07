@@ -36,9 +36,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/outliner.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 #include "app.hrc"
@@ -134,7 +134,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     {
         String aStyleName = aLayoutName;
         aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
-        USHORT nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+        USHORT nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
         PresentationObjects ePO;
 
         if( bPage )

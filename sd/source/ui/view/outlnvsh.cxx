@@ -55,9 +55,9 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
@@ -67,7 +67,7 @@
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <sfx2/srchitem.hxx>
 #include <svx/editobj.hxx>
@@ -84,9 +84,7 @@
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "fuoltext.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "zoomlist.hxx"
 #include "stlsheet.hxx"
 #include "slideshow.hxx"
@@ -122,8 +120,6 @@ namespace sd {
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
@@ -797,7 +793,7 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -1545,8 +1541,8 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     // Pruefen und Unterscheiden von CursorBewegungs- oder Eingabe-Keys
     KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
-    if( aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS ||
-        GetActualPage() != pLastPage )
+    if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
+        (GetActualPage() != pLastPage) )
     {
         Invalidate( SID_PREVIEW_STATE );
     }

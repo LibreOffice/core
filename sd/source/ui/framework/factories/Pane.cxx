@@ -117,6 +117,63 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
 
 
 
+//----- XPane2 ----------------------------------------------------------------
+
+sal_Bool SAL_CALL Pane::isVisible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    const ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        return pWindow->IsVisible();
+    else
+        return false;
+}
+
+
+
+
+void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        pWindow->Show(bIsVisible);
+}
+
+
+
+
+Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        return pWindow->GetAccessible(FALSE);
+    else
+        return NULL;
+}
+
+
+
+
+void SAL_CALL Pane::setAccessible (
+    const Reference<accessibility::XAccessible>& rxAccessible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        pWindow->SetAccessible(rxAccessible);
+}
+
+
+
+
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL Pane::getResourceId (void)

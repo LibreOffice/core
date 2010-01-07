@@ -38,7 +38,7 @@
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
@@ -85,7 +85,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -756,7 +756,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
 
-        List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
 
         FontCollection          maFontCollection;
@@ -774,6 +773,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          ImplVBAInfoContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
+
+    public:
+        static void         WriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     protected:
 
@@ -835,7 +837,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
 
         sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
-        void                                ImplWriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     public:
                                 PPTWriter( SvStorageRef& rSvStorage,

@@ -39,7 +39,7 @@
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/outlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 #include <tools/list.hxx>
@@ -60,10 +60,14 @@
 
 // #90477#
 #include <tools/tenccvt.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::office;
+
+extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const Reference< XInterface >& xSource );
 
 /*************************************************************************
 |*
@@ -585,4 +589,63 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
 {
     mfTransitionDuration = fTranstionDuration;
     ActionChanged();
+}
+
+namespace sd {
+extern void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage );
+extern SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation >& xAnnotation, bool bInsert );
+}
+
+void SdPage::createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
+{
+    sd::createAnnotation( xAnnotation, this );
+}
+
+void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIndex )
+{
+    if( (nIndex == -1) || (nIndex > (int)maAnnotations.size()) )
+    {
+        maAnnotations.push_back( xAnnotation );
+    }
+    else
+    {
+        maAnnotations.insert( maAnnotations.begin() + nIndex, xAnnotation );
+    }
+
+    if( pModel && pModel->IsUndoEnabled() )
+    {
+        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
+        if( pAction )
+            pModel->AddUndo( pAction );
+    }
+
+    SetChanged();
+
+    if( pModel )
+    {
+        pModel->SetChanged();
+        Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationInserted" ) ), xSource );
+    }
+}
+
+void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
+{
+    if( pModel && pModel->IsUndoEnabled() )
+    {
+        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, false );
+        if( pAction )
+            pModel->AddUndo( pAction );
+    }
+
+    AnnotationVector::iterator iter = std::find( maAnnotations.begin(), maAnnotations.end(), xAnnotation );
+    if( iter != maAnnotations.end() )
+        maAnnotations.erase( iter );
+
+    if( pModel )
+    {
+        pModel->SetChanged();
+        Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationRemoved" ) ), xSource );
+    }
 }

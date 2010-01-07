@@ -34,6 +34,7 @@
 #include "PageListWatcher.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
@@ -41,9 +42,8 @@
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
-#ifndef _OFA_MISCCFG_HXX
-#include <svtools/misccfg.hxx>
-#endif
+#include <unotools/useroptions.hxx>
+
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
@@ -54,30 +54,30 @@
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/xtable.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/outlobj.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PATHOPTIONS_HXX_
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -222,7 +222,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Vorlagen existieren.
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-    rOutliner.SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+    SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
     {
@@ -230,9 +230,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SvtLinguOptions         aOptions;
         aLinguConfig.GetOptions( aOptions );
 
-        SetLanguage( aOptions.nDefaultLanguage, EE_CHAR_LANGUAGE );
-        SetLanguage( aOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK );
-        SetLanguage( aOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
+            ::com::sun::star::i18n::ScriptType::LATIN), EE_CHAR_LANGUAGE );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK,
+            ::com::sun::star::i18n::ScriptType::ASIAN), EE_CHAR_LANGUAGE_CJK );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
+            ::com::sun::star::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
         mbOnlineSpell = aOptions.bIsSpellAuto;
     }
@@ -256,7 +259,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     // DefTab und SpellOptions setzen
-    //OfaMiscCfg* pOfaMiscCfg = SFX_APP()->GetMiscConfig();
     // Jetzt am Modul (SD)
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
@@ -315,7 +317,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
-    pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
+    SetCalcFieldValueHdl( pHitTestOutliner );
 
     try
     {
@@ -1068,5 +1070,36 @@ void SdDrawDocument::MasterPageListChanged()
     mpMasterPageListWatcher->Invalidate();
 }
 
+void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
+{
+    pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+}
+
+sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAuthor )
+{
+    // force current user to have first color
+    if( maAnnotationAuthors.empty() )
+    {
+        SvtUserOptions aUserOptions;
+        maAnnotationAuthors.push_back( aUserOptions.GetFullName() );
+    }
+
+    sal_uInt16 idx = 0;
+    for( std::vector< OUString >::iterator iter( maAnnotationAuthors.begin() ); iter != maAnnotationAuthors.end(); iter++ )
+    {
+        if( (*iter) == rAuthor )
+        {
+            break;
+        }
+        idx++;
+    }
+
+    if( idx == maAnnotationAuthors.size() )
+    {
+        maAnnotationAuthors.push_back( rAuthor );
+    }
+
+    return idx;
+}
 
 // eof

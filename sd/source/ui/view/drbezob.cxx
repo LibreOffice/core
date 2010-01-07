@@ -38,13 +38,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -79,8 +77,6 @@ namespace sd {
 |*
 \************************************************************************/
 
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
