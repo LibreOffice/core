@@ -41,6 +41,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <boost/shared_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -90,13 +91,16 @@ namespace drawinglayer
             basegfx::BColorModifierStack                        maBColorModifierStack;
 
             // the current active texture
-            texture::GeoTexSvx*                                 mpGeoTexSvx;
+            boost::shared_ptr< texture::GeoTexSvx >             mpGeoTexSvx;
 
             // the current active transparence texture
-            texture::GeoTexSvx*                                 mpTransparenceGeoTexSvx;
+            boost::shared_ptr< texture::GeoTexSvx >             mpTransparenceGeoTexSvx;
 
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                        maDrawinglayerOpt;
+
+            // counter for entered transparence textures
+            sal_uInt32                                          mnTransparenceCounter;
 
             // bitfield
             unsigned                                            mbModulate : 1;
@@ -135,8 +139,9 @@ namespace drawinglayer
 
             // data read access renderer stuff
             const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
-            const texture::GeoTexSvx* getGeoTexSvx() const { return mpGeoTexSvx; }
-            const texture::GeoTexSvx* getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+            const boost::shared_ptr< texture::GeoTexSvx >& getGeoTexSvx() const { return mpGeoTexSvx; }
+            const boost::shared_ptr< texture::GeoTexSvx >& getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+            sal_uInt32 getTransparenceCounter() const { return mnTransparenceCounter; }
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
             bool getSimpleTextureActive() const { return mbSimpleTextureActive; }

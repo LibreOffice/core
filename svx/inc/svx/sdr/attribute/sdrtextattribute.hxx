@@ -81,6 +81,7 @@ namespace drawinglayer
             unsigned                                mbScroll : 1;
             unsigned                                mbInEditMode : 1;
             unsigned                                mbFixedCellHeight : 1;
+            unsigned                                mbWrongSpell : 1;
 
         public:
             SdrTextAttribute(
@@ -99,7 +100,8 @@ namespace drawinglayer
                 bool bBlink,
                 bool bScroll,
                 bool bInEditMode,
-                bool bFixedCellHeight);
+                bool bFixedCellHeight,
+                bool bWrongSpell);
             ~SdrTextAttribute();
 
             // copy constructor and assigment operator
@@ -119,6 +121,7 @@ namespace drawinglayer
             bool isScroll() const { return mbScroll; }
             bool isInEditMode() const { return mbInEditMode; }
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
+            bool isWrongSpell() const { return mbWrongSpell; }
             const SdrFormTextAttribute* getSdrFormTextAttribute() const { return mpSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }

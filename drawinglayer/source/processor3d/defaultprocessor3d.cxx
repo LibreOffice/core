@@ -71,8 +71,8 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                const bool bOldSimpleTextureActive(mbSimpleTextureActive);
-                texture::GeoTexSvx* pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+                const bool bOldSimpleTextureActive(getSimpleTextureActive());
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
@@ -82,7 +82,7 @@ namespace drawinglayer
                 const basegfx::BColor aStart(rFillGradient.getStartColor());
                 const basegfx::BColor aEnd(rFillGradient.getEndColor());
                 const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-                texture::GeoTexSvx* pNewTex = 0L;
+                boost::shared_ptr< texture::GeoTexSvx > pNewTex;
 
                 if(nMaxSteps)
                 {
@@ -106,32 +106,32 @@ namespace drawinglayer
                     {
                         case attribute::GRADIENTSTYLE_LINEAR:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_AXIAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RADIAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY());
+                            pNewTex.reset(new texture::GeoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_ELLIPTICAL:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_SQUARE:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RECT:
                         {
-                            pNewTex = new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex.reset(new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
                             break;
                         }
                     }
@@ -141,7 +141,7 @@ namespace drawinglayer
                 else
                 {
                     // no color distance -> same color, use simple texture
-                    pNewTex = new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance());
+                    pNewTex.reset(new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance()));
                     mbSimpleTextureActive = true;
                 }
 
@@ -157,9 +157,6 @@ namespace drawinglayer
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete pNewTex;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -186,7 +183,7 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // calculate logic pixel size in object coordinates. Create transformation view
                 // to object by inverting ObjectToView
@@ -206,14 +203,10 @@ namespace drawinglayer
                 const double fLogicTexSize(fLogicTexSizeX > fLogicTexSizeY ? fLogicTexSizeX : fLogicTexSizeY);
 
                 // create texture and set
-                texture::GeoTexSvxMultiHatch* pNewTex = new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize);
-                mpGeoTexSvx = pNewTex;
+                mpGeoTexSvx.reset(new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize));
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete mpGeoTexSvx;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -231,31 +224,28 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
+                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getFillBitmapAttribute();
 
                 if(rFillBitmapAttribute.getTiling())
                 {
-                    mpGeoTexSvx = new texture::GeoTexSvxBitmapTiled(
+                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmapTiled(
                         rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
+                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
                 else
                 {
-                    mpGeoTexSvx = new texture::GeoTexSvxBitmap(
+                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmap(
                         rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
+                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
 
                 // process sub-list
                 process(rSubSequence);
-
-                // delete texture
-                delete mpGeoTexSvx;
 
                 // restore values
                 mbModulate = bOldModulate;
@@ -320,7 +310,7 @@ namespace drawinglayer
             if(bPaintIt)
             {
                 // get rid of texture coordinates if there is no texture
-                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx() && !getTransparenceGeoTexSvx())
+                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx().get() && !getTransparenceGeoTexSvx().get())
                 {
                     aFill.clearTextureCoordinates();
                 }
@@ -507,7 +497,9 @@ namespace drawinglayer
                 {
                     // AlphaTexturePrimitive3D
                     const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(rBasePrimitive);
+                    mnTransparenceCounter++;
                     impRenderGradientTexturePrimitive3D(rPrimitive, true);
+                    mnTransparenceCounter--;
                     break;
                 }
                 case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
@@ -556,8 +548,10 @@ namespace drawinglayer
             mrSdrLightingAttribute(rSdrLightingAttribute),
             maRasterRange(),
             maBColorModifierStack(),
-            mpGeoTexSvx(0),
-            mpTransparenceGeoTexSvx(0),
+            mpGeoTexSvx(),
+            mpTransparenceGeoTexSvx(),
+            maDrawinglayerOpt(),
+            mnTransparenceCounter(0),
             mbModulate(false),
             mbFilter(false),
             mbSimpleTextureActive(false)
