@@ -45,7 +45,7 @@
 #include <tools/debug.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>

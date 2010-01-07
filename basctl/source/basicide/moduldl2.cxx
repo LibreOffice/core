@@ -72,7 +72,7 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
