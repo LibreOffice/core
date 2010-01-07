@@ -210,7 +210,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final Boolean escapeProcessing = (Boolean) parameters.get(ESCAPE_PROCESSING);
             final String filter = (String) parameters.get(UNO_FILTER);
             final Integer maxRows = (Integer) parameters.get("MaxRows");
-            RowSetProperties rowSetProps = new RowSetProperties(escapeProcessing, commandType, command, filter, maxRows);
+            final RowSetProperties rowSetProps = new RowSetProperties(escapeProcessing, commandType, command, filter, maxRows);
 
             final Object[] p = createRowSet(rowSetProps, parameters);
             final XRowSet rowSet = (XRowSet) p[0];
@@ -260,7 +260,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     final Object[] pair = (Object[]) groupExpressions.get(i);
                     String expression = (String) pair[0];
 
-                    if (columns.hasByName(expression))
+                    if (!expression.startsWith(quote) && columns.hasByName(expression))
                     {
                         expression = quote + expression + quote;
                     }
