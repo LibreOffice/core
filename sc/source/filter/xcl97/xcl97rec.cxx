@@ -1454,7 +1454,7 @@ XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
 void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
-    rStrm << static_cast<sal_uInt16>(0x04B0);
+    rStrm << GetValue();
 }
 
 // ============================================================================
