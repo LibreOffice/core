@@ -526,7 +526,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
         ScQueryEntry& rEntry = mpParam->GetEntry(i);
         sal_uInt32 nIndex = 0;
         rEntry.bQueryByString =
-                !(mpDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
+            !(mpDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
     }
     nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
     pAttrArray = 0;

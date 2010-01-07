@@ -1460,13 +1460,9 @@ void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 // ============================================================================
 
 XclExpInterfaceEnd::XclExpInterfaceEnd() :
-    XclExpRecord(0x00E2, 0)
-{
-}
+    XclExpRecord(0x00E2, 0) {}
 
-XclExpInterfaceEnd::~XclExpInterfaceEnd()
-{
-}
+XclExpInterfaceEnd::~XclExpInterfaceEnd() {}
 
 void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
 {
