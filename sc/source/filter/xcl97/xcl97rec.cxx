@@ -1476,22 +1476,6 @@ void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
 
 // ============================================================================
 
-XclExpMMS::XclExpMMS() :
-    XclExpRecord(0x00C1, 2)
-{
-}
-
-XclExpMMS::~XclExpMMS()
-{
-}
-
-void XclExpMMS::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << static_cast<sal_uInt16>(0x0000);
-}
-
-// ============================================================================
-
 XclExpWriteAccess::XclExpWriteAccess() :
     XclExpRecord(0x005C, 112)
 {

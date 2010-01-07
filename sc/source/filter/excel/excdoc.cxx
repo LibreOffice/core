@@ -235,7 +235,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             Add( new XclExpFilePass( GetRoot() ) );
         Add( new XclExpInterfaceHdr( nCodePage ) );
         Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
-        Add( new XclExpEmptyRecord( EXC_ID_INTERFACEEND ) );
+        Add( new XclExpInterfaceEnd );
         Add( new XclExpWriteAccess );
     }
 
