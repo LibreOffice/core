@@ -95,6 +95,8 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
+
 .ENDIF
 # END ------------------------------------------------------------------
 
