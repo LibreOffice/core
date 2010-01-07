@@ -283,7 +283,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         aDate.day = 0;
         aDate.month = 0;
         aDate.year = 0;
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
         return Date(aDate.day,aDate.month,aDate.year);
     }
     else
@@ -434,7 +434,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     ::rtl::OUString aVal;
     if(columnIndex <= m_nDriverColumnCount)
-        aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)SQL_C_WCHAR,m_bWasNull,**this,m_nTextEncoding);
+        aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,impl_getColumnType_nothrow(columnIndex),m_bWasNull,**this,m_nTextEncoding);
     else
         m_bWasNull = sal_True;
 
@@ -454,7 +454,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     TIME_STRUCT aTime={0,0,0};
     if(columnIndex <= m_nDriverColumnCount)
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
     else
         m_bWasNull = sal_True;
     return Time(0,aTime.second,aTime.minute,aTime.hour);
@@ -472,7 +472,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
     if(columnIndex <= m_nDriverColumnCount)
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
     else
         m_bWasNull = sal_True;
     return DateTime((sal_uInt16)aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
@@ -1316,5 +1316,11 @@ void ODatabaseMetaDataResultSet::checkColumnCount()
 }
 // -----------------------------------------------------------------------------
 
-
+SWORD ODatabaseMetaDataResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
+{
+    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    if ( aFind == m_aODBCColumnTypes.end() )
+        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pConnection,m_aStatementHandle,*this,columnIndex))).first;
+    return aFind->second;
+}
 
