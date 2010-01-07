@@ -155,6 +155,10 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         @param xPage
         The slide to display.
 
+        @param xDrawPages
+    For future use.
+    This parameter can be NULL when the ENABLE_PRESENTER_EXTRA_UI feature is disabled.
+
         @param xAnimationNode
         The animation node determine the animations to display.
 
