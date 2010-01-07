@@ -45,6 +45,7 @@
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -59,6 +60,8 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -96,6 +99,8 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XShape;
+
+using ::com::sun::star::chart::XDiagramPositioning;
 
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::XDiagram;
@@ -265,6 +270,15 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_uInt16 nPosX ) const
 sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_uInt16 nPosY ) const
 {
     return static_cast< sal_Int32 >( mxChData->mfUnitSizeY * nPosY + mxChData->mnBorderGapY + 0.5 );
+}
+
+::com::sun::star::awt::Rectangle XclImpChRoot::CalcHmmFromChartRect( const XclChRectangle& rRect ) const
+{
+    return ::com::sun::star::awt::Rectangle(
+        CalcHmmFromChartX( rRect.mnX ),
+        CalcHmmFromChartY( rRect.mnY ),
+        CalcHmmFromChartX( rRect.mnWidth ),
+        CalcHmmFromChartY( rRect.mnHeight ) );
 }
 
 double XclImpChRoot::CalcRelativeFromChartX( sal_uInt16 nPosX ) const
@@ -1119,12 +1133,14 @@ void lclUpdateText( XclImpChTextRef& rxText, XclImpChTextRef xDefText )
         rxText = xDefText;
 }
 
-void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText )
+void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText, const String& rAutoTitle )
 {
     /*  Do not update a title, if it is not visible (if rxTitle is null).
         Existing reference indicates enabled title. */
     if( rxTitle.is() )
     {
+        if( !rxTitle->HasString() )
+            rxTitle->SetString( rAutoTitle );
         if( rxTitle->HasString() )
             rxTitle->UpdateText( xDefText.get() );
         else
@@ -2301,6 +2317,10 @@ void XclImpChLegend::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
+        case EXC_ID_CHFRAMEPOS:
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
+        break;
         case EXC_ID_CHTEXT:
             mxText.reset( new XclImpChText( GetChRoot() ) );
             mxText->ReadRecordGroup( rStrm );
@@ -2326,7 +2346,9 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
     Reference< XLegend > xLegend( ScfApiHelper::CreateInstance( SERVICE_CHART2_LEGEND ), UNO_QUERY );
     if( xLegend.is() )
     {
+        namespace cssc = ::com::sun::star::chart2;
         ScfPropertySet aLegendProp( xLegend );
+        aLegendProp.SetBoolProperty( EXC_CHPROP_SHOW, true );
 
         // frame properties
         if( mxFrame.is() )
@@ -2334,8 +2356,69 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
         // text properties
         if( mxText.is() )
             mxText->ConvertFont( aLegendProp );
-        // special legend properties
-        GetChartPropSetHelper().WriteLegendProperties( aLegendProp, maData );
+
+        /*  Legend position and size. Default positions are used only if the
+            plot area is positioned automatically (Excel sets the plot area to
+            manual mode, if the legend is moved or resized). With manual plot
+            areas, Excel ignores the value in maData.mnDockMode completely. */
+        cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
+        cssc::LegendExpansion eApiExpand = cssc::LegendExpansion_BALANCED;
+        if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
+        {
+            case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  eApiExpand = cssc::LegendExpansion_HIGH;    break;
+            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    eApiExpand = cssc::LegendExpansion_HIGH;    break;
+            case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  eApiExpand = cssc::LegendExpansion_WIDE;    break;
+            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    eApiExpand = cssc::LegendExpansion_WIDE;    break;
+            // top-right not supported
+            case EXC_CHLEGEND_CORNER:   eApiPos = cssc::LegendPosition_LINE_END;    eApiExpand = cssc::LegendExpansion_HIGH;    break;
+        }
+
+        // no automatic position: try to find the correct position and size
+        if( eApiPos == cssc::LegendPosition_CUSTOM )
+        {
+            const XclChFramePos* pFramePos = mxFramePos.is() ? &mxFramePos->GetFramePosData() : 0;
+
+            /*  Legend position. Only the settings from the CHFRAMEPOS record
+                are used by Excel, the position in the CHLEGEND record will be
+                ignored. */
+            if( pFramePos )
+            {
+                RelativePosition aRelPos;
+                aRelPos.Primary = CalcRelativeFromChartX( pFramePos->maRect.mnX );
+                aRelPos.Secondary = CalcRelativeFromChartY( pFramePos->maRect.mnY );
+                aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+                aLegendProp.SetProperty( EXC_CHPROP_RELATIVEPOSITION, aRelPos );
+            }
+            else
+            {
+                // no manual position found, just go for the default
+                eApiPos = cssc::LegendPosition_LINE_END;
+            }
+
+
+            /*  Legend size. #i71697# It is not possible to set the legend size
+                directly in the Chart, do some magic here. */
+            if( !pFramePos || (pFramePos->mnBRMode != EXC_CHFRAMEPOS_ABSSIZE_POINTS) ||
+                (pFramePos->maRect.mnWidth == 0) || (pFramePos->maRect.mnHeight == 0) )
+            {
+                // automatic size: determine entry direction from flags
+                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
+                    cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
+            }
+            else
+            {
+                // legend size is given in points, not in chart units
+                double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
+                if( fRatio > 1.5 )
+                    eApiExpand = cssc::LegendExpansion_WIDE;
+                else if( fRatio < 0.75 )
+                    eApiExpand = cssc::LegendExpansion_HIGH;
+                else
+                    eApiExpand = cssc::LegendExpansion_BALANCED;
+            }
+        }
+        aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );
+        aLegendProp.SetProperty( EXC_CHPROP_EXPANSION, eApiExpand );
     }
     return xLegend;
 }
@@ -3156,8 +3239,8 @@ void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAMEPOS:
-            mxPos.reset( new XclImpChFramePos );
-            mxPos->ReadChFramePos( rStrm );
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHAXIS:
             ReadChAxis( rStrm );
@@ -3208,9 +3291,10 @@ void XclImpChAxesSet::Finalize()
 
         // finalize axis titles
         XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
-        lclFinalizeTitle( mxXAxisTitle, xDefText );
-        lclFinalizeTitle( mxYAxisTitle, xDefText );
-        lclFinalizeTitle( mxZAxisTitle, xDefText );
+        String aAutoTitle = CREATE_STRING( "Axis Title" );
+        lclFinalizeTitle( mxXAxisTitle, xDefText, aAutoTitle );
+        lclFinalizeTitle( mxYAxisTitle, xDefText, aAutoTitle );
+        lclFinalizeTitle( mxZAxisTitle, xDefText, aAutoTitle );
 
         // #i47745# missing plot frame -> invisible border and area
         if( !mxPlotFrame )
@@ -3536,6 +3620,12 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
+bool XclImpChChart::IsManualPlotArea() const
+{
+    // there is no real automatic mode in BIFF5 charts
+    return (GetBiff() <= EXC_BIFF5) || ::get_flag( maProps.mnFlags, EXC_CHPROPS_USEMANPLOTAREA );
+}
+
 void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress, const Rectangle& rChartRect ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
@@ -3572,13 +3662,15 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
 
     /*  Following all conversions needing the old Chart1 API that involves full
         initialization of the chart view. */
-    Reference< com::sun::star::chart::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
+    Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
     if( xChart1Doc.is() )
     {
+        Reference< ::com::sun::star::chart::XDiagram > xDiagram1 = xChart1Doc->getDiagram();
+
         /*  Set the 'IncludeHiddenCells' property via the old API as only this
             ensures that the data provider and all created sequences get this
             flag correctly. */
-        ScfPropertySet aDiaProp( xChart1Doc->getDiagram() );
+        ScfPropertySet aDiaProp( xDiagram1 );
         bool bShowVisCells = ::get_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY );
         aDiaProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
 
@@ -3588,7 +3680,20 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
             mxTitle->ConvertMainTitlePos( xChart1Doc->getTitle() );
 
         // plot area position and size (there is no real automatic mode in BIFF5 charts)
-        bool bManualPlotArea = (GetBiff() <= EXC_BIFF5) || ::get_flag( maProps.mnFlags, EXC_CHPROPS_USEMANPLOTAREA );
+        XclImpChFramePosRef xPlotAreaPos = mxPrimAxesSet->GetPlotAreaPosition();
+        if( IsManualPlotArea() && xPlotAreaPos.is() ) try
+        {
+            const XclChFramePos& rFramePos = xPlotAreaPos->GetFramePosData();
+            if( (rFramePos.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rFramePos.mnBRMode == EXC_CHFRAMEPOS_PARENT) )
+            {
+                Reference< XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
+                ::com::sun::star::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
+                xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+            }
+        }
+        catch( Exception& )
+        {
+        }
     }
 
     // unlock the model
@@ -3707,21 +3812,24 @@ void XclImpChChart::FinalizeDataFormats()
 
 void XclImpChChart::FinalizeTitle()
 {
-    if( (!mxTitle || (!mxTitle->IsDeleted() && !mxTitle->HasString())) && !mxSecnAxesSet->IsValidAxesSet() )
+    // special handling for auto-generated title
+    String aAutoTitle;
+    if( !mxTitle || (!mxTitle->IsDeleted() && !mxTitle->HasString()) )
     {
-        /*  Chart title is auto-generated from series title, if there is only
-            one series with title in the chart. */
-        const String& rSerTitle = mxPrimAxesSet->GetSingleSeriesTitle();
-        if( rSerTitle.Len() > 0 )
+        // automatic title from first series name (if there are no series on secondary axes set)
+        if( !mxSecnAxesSet->IsValidAxesSet() )
+            aAutoTitle = mxPrimAxesSet->GetSingleSeriesTitle();
+        if( mxTitle.is() || (aAutoTitle.Len() > 0) )
         {
             if( !mxTitle )
                 mxTitle.reset( new XclImpChText( GetChRoot() ) );
-            mxTitle->SetString( rSerTitle );
+            if( aAutoTitle.Len() == 0 )
+                aAutoTitle = CREATE_STRING( "Chart Title" );
         }
     }
 
-    // will reset mxTitle, if it does not contain a string
-    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ) );
+    // will reset mxTitle, if it does not contain a string and no auto title exists
+    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ), aAutoTitle );
 }
 
 Reference< XDiagram > XclImpChChart::CreateDiagram() const

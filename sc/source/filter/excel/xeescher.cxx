@@ -806,7 +806,7 @@ XclExpChartObj::XclExpChartObj( const XclExpRoot& rRoot, Reference< XShape > xSh
     aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
     ::com::sun::star::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
-    Rectangle aChartRect( aBoundRect.X, aBoundRect.Y, aBoundRect.Width, aBoundRect.Height );
+    Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
     mxChart.reset( new XclExpChart( rRoot, xModel, aChartRect ) );
 }
 

@@ -77,6 +77,7 @@ class XclRoot;
 #define SERVICE_CHART2_TITLE                CREATE_OUSTRING( "com.sun.star.chart2.Title" )
 
 // property names
+#define EXC_CHPROP_ANCHORPOSITION           CREATE_OUSTRING( "AnchorPosition" )
 #define EXC_CHPROP_ARRANGEORDER             CREATE_OUSTRING( "ArrangeOrder" )
 #define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
 #define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
@@ -99,6 +100,7 @@ class XclRoot;
 #define EXC_CHPROP_ERRORBARSTYLE            CREATE_OUSTRING( "ErrorBarStyle" )
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
 #define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
+#define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
 #define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
@@ -122,6 +124,7 @@ class XclRoot;
 #define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
 #define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
+#define EXC_CHPROP_RELATIVEPOSITION         CREATE_OUSTRING( "RelativePosition" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
@@ -1096,7 +1099,7 @@ struct XclChAxis
 
 struct XclChAxesSet
 {
-    XclChRectangle      maRect;             /// Position of the axes set.
+    XclChRectangle      maRect;             /// Position of the axes set (inner plot area).
     sal_uInt16          mnAxesSetId;        /// Primary/secondary axes set.
 
     explicit            XclChAxesSet();
@@ -1370,10 +1373,6 @@ public:
     sal_uInt16          ReadRotationProperties(
                             const ScfPropertySet& rPropSet,
                             bool bSupportsStacked );
-    /** Reads all legend properties from the passed property set. */
-    void                ReadLegendProperties(
-                            XclChLegend& rLegend,
-                            const ScfPropertySet& rPropSet );
 
     /** Writes all line properties to the passed property set. */
     void                WriteLineProperties(
@@ -1404,10 +1403,6 @@ public:
                             ScfPropertySet& rPropSet,
                             sal_uInt16 nRotation,
                             bool bSupportsStacked );
-    /** Writes all legend properties to the passed property set. */
-    void                WriteLegendProperties(
-                            ScfPropertySet& rPropSet,
-                            const XclChLegend& rLegend );
 
 private:
     /** Returns a line property set helper according to the passed property mode. */
@@ -1430,7 +1425,6 @@ private:
     ScfPropSetHelper    maHatchHlpCommon;   /// Properties for hatches in common objects.
     ScfPropSetHelper    maHatchHlpFilled;   /// Properties for hatches in filled series.
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
-    ScfPropSetHelper    maLegendHlp;        /// Properties for legend.
 };
 
 // ============================================================================

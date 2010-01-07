@@ -45,6 +45,10 @@
 #include "xiroot.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace awt
+    {
+        struct Rectangle;
+    }
     namespace frame
     {
         class XModel;
@@ -122,10 +126,16 @@ public:
     /** Returns the data provider for the chart document. */
     XDataProviderRef    GetDataProvider() const;
 
+    /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
     sal_Int32           CalcHmmFromChartX( sal_uInt16 nPosX ) const;
+    /** Converts the passed vertical coordinate from Excel chart units into 1/100 mm. */
     sal_Int32           CalcHmmFromChartY( sal_uInt16 nPosY ) const;
+    /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
+    ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
 
+    /** Converts the passed horizontal coordinate from Excel chart units into a relative position. */
     double              CalcRelativeFromChartX( sal_uInt16 nPosX ) const;
+    /** Converts the passed vertical coordinate from Excel chart units into a relative position. */
     double              CalcRelativeFromChartY( sal_uInt16 nPosY ) const;
 
     /** Writes all line properties to the passed property set. */
@@ -936,8 +946,8 @@ typedef ScfRef< XclImpChChart3d > XclImpChChart3dRef;
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
-    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAME group,
-    CHTEXT group, CHEND.
+    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAMEPOS, CHFRAME
+    group, CHTEXT group, CHEND.
  */
 class XclImpChLegend : public XclImpChGroupBase, protected XclImpChRoot
 {
@@ -959,6 +969,7 @@ public:
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
+    XclImpChFramePosRef mxFramePos;         /// Legend frame position (CHFRAMEPOS record).
     XclImpChTextRef     mxText;             /// Legend text format (CHTEXT group).
     XclImpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
@@ -1279,6 +1290,8 @@ public:
     /** Returns the axes set index used by the chart API. */
     inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
 
+    /** Returns the outer plot area position, if existing. */
+    inline XclImpChFramePosRef GetPlotAreaPosition() const { return mxFramePos; }
     /** Returns the specified chart type group. */
     inline XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const { return maTypeGroups.get( nGroupIdx ); }
     /** Returns the first chart type group. */
@@ -1318,7 +1331,7 @@ private:
     typedef ScfRefMap< sal_uInt16, XclImpChTypeGroup > XclImpChTypeGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
-    XclImpChFramePosRef mxPos;              /// Position of the axes set (CHFRAMEPOS record).
+    XclImpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
     XclImpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
     XclImpChAxisRef     mxYAxis;            /// The Y axis (CHAXIS group).
     XclImpChAxisRef     mxZAxis;            /// The Z axis (CHAXIS group).
@@ -1365,6 +1378,8 @@ public:
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the specified default text. */
     XclImpChTextRef     GetDefaultText( XclChTextType eTextType ) const;
+    /** Returns true, if the plot area has benn moved and/or resized manually. */
+    bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 

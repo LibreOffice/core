@@ -41,9 +41,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
@@ -682,10 +679,6 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-/** Property names for legend properties. */
-const sal_Char* const sppcLegendNames[] =
-    { "Show", "AnchorPosition", "Expansion", "RelativePosition", 0 };
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -700,8 +693,7 @@ XclChPropSetHelper::XclChPropSetHelper() :
     maGradHlpFilled( sppcGradNamesFilled ),
     maHatchHlpCommon( sppcHatchNamesCommon ),
     maHatchHlpFilled( sppcHatchNamesFilled ),
-    maBitmapHlp( sppcBitmapNames ),
-    maLegendHlp( sppcLegendNames )
+    maBitmapHlp( sppcBitmapNames )
 {
 }
 
@@ -959,46 +951,6 @@ sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPr
         XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
 }
 
-void XclChPropSetHelper::ReadLegendProperties( XclChLegend& rLegend, const ScfPropertySet& rPropSet )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // read the properties
-    bool bShow;
-    cssc::LegendPosition eApiPos;
-    cssc::LegendExpansion eApiExpand;
-    Any aRelPosAny;
-    maLegendHlp.ReadFromPropertySet( rPropSet );
-    maLegendHlp >> bShow >> eApiPos >> eApiExpand >> aRelPosAny;
-    DBG_ASSERT( bShow, "XclChPropSetHelper::ReadLegendProperties - legend must be visible" );
-
-    // legend position
-    switch( eApiPos )
-    {
-        case cssc::LegendPosition_LINE_START:   rLegend.mnDockMode = EXC_CHLEGEND_LEFT;     break;
-        case cssc::LegendPosition_LINE_END:     rLegend.mnDockMode = EXC_CHLEGEND_RIGHT;    break;
-        case cssc::LegendPosition_PAGE_START:   rLegend.mnDockMode = EXC_CHLEGEND_TOP;      break;
-        case cssc::LegendPosition_PAGE_END:     rLegend.mnDockMode = EXC_CHLEGEND_BOTTOM;   break;
-        default:                                rLegend.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
-    }
-    // legend expansion
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc::LegendExpansion_WIDE );
-    // legend position
-    if( rLegend.mnDockMode == EXC_CHLEGEND_NOTDOCKED )
-    {
-        cssc::RelativePosition aRelPos;
-        if( aRelPosAny >>= aRelPos )
-        {
-            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * 4000.0, 0, 4000 );
-            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * 4000.0, 0, 4000 );
-        }
-        else
-            rLegend.mnDockMode = EXC_CHLEGEND_LEFT;
-    }
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_DOCKED, rLegend.mnDockMode != EXC_CHLEGEND_NOTDOCKED );
-}
-
 // write properties -----------------------------------------------------------
 
 void XclChPropSetHelper::WriteLineProperties(
@@ -1209,51 +1161,6 @@ void XclChPropSetHelper::WriteRotationProperties(
     }
 }
 
-void XclChPropSetHelper::WriteLegendProperties(
-        ScfPropertySet& rPropSet, const XclChLegend& rLegend )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // legend position
-    cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
-    switch( rLegend.mnDockMode )
-    {
-        case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  break;
-        case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    break;
-        case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  break;
-        case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    break;
-    }
-    // legend expansion
-    cssc::LegendExpansion eApiExpand = ::get_flagvalue(
-        rLegend.mnFlags, EXC_CHLEGEND_STACKED, cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
-    // legend position
-    Any aRelPosAny;
-    if( eApiPos == cssc::LegendPosition_CUSTOM )
-    {
-        // #i71697# it is not possible to set the size directly, do some magic here
-        double fRatio = ((rLegend.maRect.mnWidth > 0) && (rLegend.maRect.mnHeight > 0)) ?
-            (static_cast< double >( rLegend.maRect.mnWidth ) / rLegend.maRect.mnHeight) : 1.0;
-        if( fRatio > 1.5 )
-            eApiExpand = cssc::LegendExpansion_WIDE;
-        else if( fRatio < 0.75 )
-            eApiExpand = cssc::LegendExpansion_HIGH;
-        else
-            eApiExpand = cssc::LegendExpansion_BALANCED;
-        // set position
-        cssc::RelativePosition aRelPos;
-        aRelPos.Primary = rLegend.maRect.mnX / 4000.0;
-        aRelPos.Secondary = rLegend.maRect.mnY / 4000.0;
-        aRelPos.Anchor = cssd::Alignment_TOP_LEFT;
-        aRelPosAny <<= aRelPos;
-    }
-
-    // write the properties
-    maLegendHlp.InitializeWrite();
-    maLegendHlp << true << eApiPos << eApiExpand << aRelPosAny;
-    maLegendHlp.WriteToPropertySet( rPropSet );
-}
-
 // private --------------------------------------------------------------------
 
 ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode )
@@ -1326,8 +1233,9 @@ void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChar
     mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
     mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
 
-    mfUnitSizeX = static_cast< double >( maChartRect.GetWidth() - 2 * mnBorderGapX ) / EXC_CHART_TOTALUNITS;
-    mfUnitSizeY = static_cast< double >( maChartRect.GetHeight() - 2 * mnBorderGapY ) / EXC_CHART_TOTALUNITS;
+    // size of a chart unit in 1/100 mm
+    mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
