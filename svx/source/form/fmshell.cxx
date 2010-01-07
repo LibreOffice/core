@@ -684,15 +684,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, nSlot, sal_False );
-            if ( !pShowItem )
-                GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
-            else
-            {
-                const sal_Bool bShow = pShowItem->GetValue();
-                GetViewShell()->GetViewFrame()->ShowChildWindow( nSlot, bShow );
-            }
-
+            GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
