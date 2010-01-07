@@ -34,7 +34,7 @@
 #include <tools/shl.hxx>
 #include <vcl/metaact.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 
@@ -1212,7 +1212,7 @@ void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBmpMask::ApplyStyle()
 {
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
 }

@@ -52,13 +52,13 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -230,7 +230,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     maCbbTarget.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
        SvtMiscOptions aMiscOptions;
-    aMiscOptions.AddListener( LINK( this, SvxIMapDlg, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, SvxIMapDlg, MiscHdl ) );
 
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );
@@ -1042,7 +1042,7 @@ IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 
 void SvxIMapDlg::ApplyImageList()
 {
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
 

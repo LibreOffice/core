@@ -74,7 +74,7 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
-    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
+    meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( TRUE ),
@@ -268,7 +268,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        BmpColorMode eMode = GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
+        BmpColorMode eMode = GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
         if( eMode != meBmpMode )
         {
             meBmpMode = eMode;
@@ -279,26 +279,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineBox::FillControl()
 {
-    Clear();
-
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-
-    Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
-
-    ::Color aSourceColors[2];
-    ::Color aDestColors[2];
-
-    aSourceColors[0] = ::Color( COL_WHITE );
-    aSourceColors[1] = ::Color( COL_BLACK );
-
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    aDestColors[0] = rStyles.GetFieldColor();
-    aDestColors[1] = rStyles.GetFieldTextColor();
-
-    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
-    Image aSolidLine ( aBitmap );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID), aSolidLine );
-
+    FillStyles();
     if ( !mpSh )
         mpSh = SfxObjectShell::Current();
 
@@ -308,6 +289,7 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
+
 
 //  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }

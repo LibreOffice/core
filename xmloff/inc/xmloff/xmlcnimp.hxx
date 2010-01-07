@@ -35,11 +35,11 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 namespace rtl { class OUString; }
 

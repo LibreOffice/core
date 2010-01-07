@@ -50,11 +50,11 @@
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/editdata.hxx>
 #include <svx/unoedsrc.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/outliner.hxx>
 #include <svx/unoforou.hxx>

@@ -70,7 +70,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 /*DRAFT
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 */
 
 //_________________________________________________________________________________________________________________

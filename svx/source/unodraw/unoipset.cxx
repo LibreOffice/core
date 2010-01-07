@@ -31,12 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/list.hxx>
 
 #include <hash_map>
 #include <vector>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <svx/unoipset.hxx>
 #include <svx/svdpool.hxx>

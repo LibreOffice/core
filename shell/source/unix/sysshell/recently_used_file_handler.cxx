@@ -49,18 +49,6 @@
 #include <string.h>
 
 namespace /* private */ {
-
-    const rtl::OUString ENVV_UPDATE_RECENTLY_USED =
-        rtl::OUString::createFromAscii("ENABLE_UPDATE_RECENTLY_USED");
-
-    //########################################
-    inline rtl::OString get_file_extension(const rtl::OString& file_url)
-    {
-        sal_Int32 index = file_url.lastIndexOf('.');
-        OSL_ENSURE((index != -1) && ((index + 1) < file_url.getLength()), "Invalid file url");
-        return file_url.copy(index + 1);
-    }
-
     //########################################
     typedef std::vector<string_t> string_container_t;
 
@@ -473,14 +461,6 @@ namespace /* private */ {
             item_list.begin(),
             item_list.end(),
             greater_recently_used_item());
-    }
-
-    //##############################
-    bool update_recently_used_enabled()
-    {
-        rtl::OUString tmp;
-        osl_getEnvironment(ENVV_UPDATE_RECENTLY_USED.pData, &tmp.pData);
-        return (tmp.getLength() > 0);
     }
 
     //------------------------------------------------

@@ -239,7 +239,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_SESSION_SAVE              =  64,
             E_SESSION_RESTORE           = 128,
             E_DISABLE_AUTORECOVERY      = 256,
-            E_SET_AUTOSAVE_STATE        = 512
+            E_SET_AUTOSAVE_STATE        = 512,
+            E_SESSION_QUIET_QUIT        = 1024
         };
 
         //---------------------------------------
@@ -881,6 +882,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         //---------------------------------------
         // TODO document me
         void implts_doSessionSave(const DispatchParams& aParams);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_doSessionQuietQuit(const DispatchParams& aParams);
 
         //---------------------------------------
         // TODO document me

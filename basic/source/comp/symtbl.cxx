@@ -175,7 +175,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
     {
         if( pDef->pIn )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             // schon in einem anderen Pool drin!
             pParser->Error( SbERR_INTERNAL_ERROR, "Dbl Pool" );
 #endif

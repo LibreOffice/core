@@ -36,12 +36,13 @@
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include "gallery.hxx"
-#include "galmisc.hxx"
+#include "gallery.hrc"
+#include "svx/galmisc.hxx"
 #include "galtheme.hxx"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
@@ -919,3 +920,7 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
             ImplDeleteCachedTheme( pTheme );
     }
 }
+
+BOOL GalleryThemeEntry::IsDefault() const
+{ return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
+
