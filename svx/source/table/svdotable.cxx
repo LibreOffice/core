@@ -2594,7 +2594,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
 
 FASTBOOL SdrTableObj::BegCreate(SdrDragStat& rStat)
 {
-    rStat.SetOrtho4Possible();5
+    rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
