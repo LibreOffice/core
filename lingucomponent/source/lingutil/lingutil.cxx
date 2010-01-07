@@ -57,9 +57,12 @@
 
 #include <set>
 #include <vector>
+#include <string.h>
 
 #include <lingutil.hxx>
 #include <dictmgr.hxx>
+
+
 
 
 using ::com::sun::star::lang::Locale;
