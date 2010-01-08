@@ -4644,6 +4644,13 @@ ULONG ScDocument::GetCellCount() const
     return nCellCount;
 }
 
+SCSIZE ScDocument::GetCellCount(SCTAB nTab, SCCOL nCol) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    return pTab[nTab]->GetCellCount(nCol);
+}
 
 ULONG ScDocument::GetCodeCount() const
 {

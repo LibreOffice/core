@@ -177,6 +177,7 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
+    SCSIZE      GetCellCount(SCCOL nCol) const;
     ULONG       GetCellCount() const;
     ULONG       GetWeightedCount() const;
     ULONG       GetCodeCount() const;       // RPN-Code in Formeln

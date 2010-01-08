@@ -1819,6 +1819,11 @@ BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStri
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }
 
+SCSIZE ScTable::GetCellCount(SCCOL nCol) const
+{
+    return aCol[nCol].GetCellCount();
+}
+
 ULONG ScTable::GetCellCount() const
 {
     ULONG nCellCount = 0;

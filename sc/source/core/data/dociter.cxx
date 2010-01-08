@@ -507,6 +507,24 @@ ScDBQueryDataIterator::DataAccess::~DataAccess()
 {
 }
 
+SCROW ScDBQueryDataIterator::GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
+{
+    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    return pCol->pItems[nColRow].nRow;
+}
+
+ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
+{
+    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    return pCol->pItems[nColRow].pCell;
+}
+
+ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
+{
+    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    return pCol->pAttrArray;
+}
+
 // ----------------------------------------------------------------------------
 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
@@ -539,7 +557,6 @@ ScDBQueryDataIterator::DataAccessInternal::~DataAccessInternal()
 
 bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
 {
-    ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
     SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
     for ( ;; )
     {
@@ -550,13 +567,15 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             return false;
         }
 
-        while ( (nColRow < pCol->nCount) && (pCol->pItems[nColRow].nRow < nRow) )
-            nColRow++;
+        SCSIZE nCellCount = mpDoc->GetCellCount(nTab, nCol);
+        SCROW nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
+        while ( (nColRow < nCellCount) && (nThisRow < nRow) )
+            nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, ++nColRow);
 
-        if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= mpParam->nRow2 )
+        if ( nColRow < nCellCount && nThisRow <= mpParam->nRow2 )
         {
-            nRow = pCol->pItems[nColRow].nRow;
-            ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
+            nRow = nThisRow;
+            ScBaseCell* pCell = ScDBQueryDataIterator::GetCellByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
             if ( (mpDoc->pTab[nTab])->ValidQuery( nRow, *mpParam, NULL,
                     (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL) ) )
             {
@@ -568,8 +587,10 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                             rValue.mbIsNumber = true;
                             if ( bCalcAsShown )
                             {
+                                const ScAttrArray* pNewAttrArray =
+                                    ScDBQueryDataIterator::GetAttrArrayByCol(*mpDoc, nTab, nCol);
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                    nAttrEndRow, pCol->pAttrArray, nRow, mpDoc );
+                                    nAttrEndRow, pNewAttrArray, nRow, mpDoc );
                                 rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
                             }
                             nNumFmtType = NUMBERFORMAT_NUMBER;

@@ -146,6 +146,10 @@ public:
     };
 
 private:
+    static SCROW        GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow);
+    static ScBaseCell*  GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow);
+    static ScAttrArray* GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol);
+
     class DataAccess
     {
     public:

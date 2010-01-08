@@ -420,6 +420,7 @@ private:
 
 public:
     SC_DLLPUBLIC ULONG          GetCellCount() const;       // alle Zellen
+    SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
     ULONG           GetWeightedCount() const;   // Formeln und Edit staerker gewichtet
     ULONG           GetCodeCount() const;       // RPN-Code in Formeln
     DECL_LINK( GetUserDefinedColor, USHORT * );
