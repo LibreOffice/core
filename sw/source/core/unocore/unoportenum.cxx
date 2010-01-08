@@ -481,8 +481,9 @@ lcl_CreateTOXMarkPortion(
         ->GetTOXMark(rTOXMark);
     if (!xContent.is())
     {
-        xContent = new SwXDocumentIndexMark(rTOXMark.GetTOXType(),
-                       &rTOXMark, pDoc);
+        xContent.set( SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
+                    *const_cast<SwTOXType*>(rTOXMark.GetTOXType()), rTOXMark),
+            uno::UNO_QUERY);
     }
 
     SwXTextPortion* pPortion = 0;

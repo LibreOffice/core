@@ -78,18 +78,8 @@ SwXFootnote* SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
 /* -----------------------------27.11.00 17:15--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& rMark)
+SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& /*rMark*/)
 {
-    SwClientIter aIter( *this );
-    SwXDocumentIndexMark* pxIndexMark = (SwXDocumentIndexMark*)aIter.First( TYPE( SwXDocumentIndexMark ));
-    while(pxIndexMark)
-    {
-        const SwTOXMark* pMark = pxIndexMark->GetTOXMark();
-        if(pMark == &rMark)
-            return pxIndexMark;
-
-        pxIndexMark = (SwXDocumentIndexMark*)aIter.Next( );
-    }
     return 0;
 }
 

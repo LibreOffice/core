@@ -36,14 +36,13 @@
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#include <unoevtlstnr.hxx>
 #include <unocoll.hxx>
 #include <toxe.hxx>
 
 
-class SfxItemPropertySet;
 class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
@@ -189,87 +188,129 @@ public:
 /* -----------------07.12.98 10:08-------------------
  *
  * --------------------------------------------------*/
-class SwXDocumentIndexMark : public cppu::WeakImplHelper4
-<
-    ::com::sun::star::text::XDocumentIndexMark,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::beans::XPropertySet,
-    ::com::sun::star::lang::XUnoTunnel
->,
-        public SwClient
+typedef ::cppu::WeakImplHelper4
+<   ::com::sun::star::lang::XUnoTunnel
+,   ::com::sun::star::lang::XServiceInfo
+,   ::com::sun::star::beans::XPropertySet
+,   ::com::sun::star::text::XDocumentIndexMark
+> SwXDocumentIndexMark_Base;
+
+class SwXDocumentIndexMark
+    : public SwXDocumentIndexMark_Base
 {
-    SwEventListenerContainer    aLstnrCntnr;
-    SwDepend                    aTypeDepend;
-    SwDoc*                      m_pDoc;
-    const SwTOXMark*            m_pTOXMark;
-    const SfxItemPropertySet*   m_pPropSet;
 
-    sal_Bool                    bIsDescriptor;
-    sal_Bool                    bMainEntry;
-    TOXTypes                    eType;
-    sal_uInt16                      nLevel;
-    String                      sAltText;
-    String                      sPrimaryKey;
-    String                      sSecondaryKey;
-    String                      sTextReading;
-    String                      sPrimaryKeyReading;
-    String                      sSecondaryKeyReading;
-    String                      sUserIndexName;
+private:
 
-    void                InitMap(TOXTypes eToxType);
-protected:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     virtual ~SwXDocumentIndexMark();
+
+    SwXDocumentIndexMark(SwDoc & rDoc,
+                SwTOXType & rType, const SwTOXMark & rMark);
+
 public:
-    SwXDocumentIndexMark(TOXTypes eToxType);
-    SwXDocumentIndexMark(const SwTOXType* pType,
-                        const SwTOXMark* pMark,
-                        SwDoc* pDc);
 
+    /// descriptor
+    SwXDocumentIndexMark(const TOXTypes eToxType);
 
-    TYPEINFO();
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XDocumentIndexMark>
+        CreateXDocumentIndexMark(SwDoc & rDoc,
+                SwTOXType & rType, const SwTOXMark & rMark);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(
+            const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier)
+        throw (::com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getMarkEntry(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL setMarkEntry(const rtl::OUString& aIndexEntry) throw( ::com::sun::star::uno::RuntimeException );
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(
+            const ::rtl::OUString& rServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    //XTextContent
-    virtual void SAL_CALL attach(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  SAL_CALL getAnchor(void) throw( ::com::sun::star::uno::RuntimeException );
+    // XComponent
+    virtual void SAL_CALL dispose()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XEventListener > & xListener)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XEventListener > & xListener)
+        throw (::com::sun::star::uno::RuntimeException);
 
-    //XComponent
-    virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Any& rValue)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+            const ::rtl::OUString& rPropertyName)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertyChangeListener >& xListener)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertyChangeListener >& xListener)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XVetoableChangeListener >& xListener)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XVetoableChangeListener >& xListener)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 
-    //XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    // XTextContent
+    virtual void SAL_CALL attach(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > & xTextRange)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > SAL_CALL getAnchor()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    // XDocumentIndexMark
+    virtual rtl::OUString SAL_CALL getMarkEntry()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMarkEntry(const rtl::OUString& rIndexEntry)
+        throw (::com::sun::star::uno::RuntimeException);
 
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
-    void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-
-    SwTOXType*          GetTOXType() const {return (SwTOXType*)aTypeDepend.GetRegisteredIn();}
-    const SwTOXMark*    GetTOXMark() const {return m_pTOXMark;}
-
-    static SwXDocumentIndexMark*    GetObject(SwTOXType* pType, const SwTOXMark* pMark,
-                                                SwDoc* pDoc);
-    void                Invalidate();
 };
 
 /* -----------------05.05.99 12:27-------------------

@@ -70,6 +70,7 @@
 #include <docsh.hxx>
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <unoevtlstnr.hxx>
 
 
 using namespace ::com::sun::star;
@@ -326,7 +327,7 @@ SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl(
 }
 
 static sal_uInt16
-lcl_TypeToPropertyMap(const TOXTypes eType)
+lcl_TypeToPropertyMap_Index(const TOXTypes eType)
 {
     switch (eType)
     {
@@ -363,7 +364,7 @@ public:
             SwTOXBaseSection const*const pBaseSection)
         : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
         , m_rPropSet(
-            *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap(eType)))
+            *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_bIsDescriptor(0 == pBaseSection)
@@ -1264,8 +1265,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 for(USHORT i = 0; i < aMarks.Count(); i++)
                 {
                     pMark = aMarks.GetObject(i);
-                    pxMarks[i] = SwXDocumentIndexMark::GetObject(
-                        const_cast<SwTOXType*>(pType), pMark, m_pImpl->m_pDoc);
+                    pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
+                        *m_pImpl->m_pDoc,
+                        *const_cast<SwTOXType*>(pType), *pMark);
                 }
                 aRet <<= aXMarks;
             }
@@ -1552,6 +1554,165 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
 /******************************************************************
  * SwXDocumentIndexMark
  ******************************************************************/
+/* -----------------21.04.99 09:36-------------------
+ *
+ * --------------------------------------------------*/
+static sal_uInt16
+lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
+{
+    switch (eType)
+    {
+        case TOX_INDEX:         return PROPERTY_MAP_INDEX_MARK;
+        case TOX_CONTENT:       return PROPERTY_MAP_CNTIDX_MARK;
+        //case TOX_USER:
+        default:
+            return PROPERTY_MAP_USER_MARK;
+    }
+}
+
+class SwXDocumentIndexMark::Impl
+    : public SwClient
+{
+
+public:
+
+    SfxItemPropertySet const&   m_rPropSet;
+    const TOXTypes              m_eTOXType;
+    SwEventListenerContainer    m_ListenerContainer;
+    bool                        m_bIsDescriptor;
+    SwDepend                    m_TypeDepend;
+    const SwTOXMark *           m_pTOXMark;
+    SwDoc *                     m_pDoc;
+
+    sal_Bool                    m_bMainEntry;
+    sal_uInt16                  m_nLevel;
+    OUString                    m_sAltText;
+    OUString                    m_sPrimaryKey;
+    OUString                    m_sSecondaryKey;
+    OUString                    m_sTextReading;
+    OUString                    m_sPrimaryKeyReading;
+    OUString                    m_sSecondaryKeyReading;
+    OUString                    m_sUserIndexName;
+
+    Impl(   SwXDocumentIndexMark & rThis,
+            SwDoc *const pDoc,
+            const enum TOXTypes eType,
+            SwTOXType *const pType, SwTOXMark const*const pMark)
+        : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
+        , m_rPropSet(
+            *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
+        , m_eTOXType(eType)
+        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_bIsDescriptor(0 == pMark)
+        , m_TypeDepend(this, pType)
+        , m_pTOXMark(pMark)
+        , m_pDoc(pDoc)
+        , m_bMainEntry(sal_False)
+        , m_nLevel(0)
+    {
+    }
+
+    SwTOXType * GetTOXType() const {
+        return static_cast<SwTOXType*>(
+                const_cast<SwModify *>(m_TypeDepend.GetRegisteredIn()));
+    }
+
+    void    Invalidate();
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+/* -----------------------------16.10.00 11:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXDocumentIndexMark::Impl::Invalidate()
+{
+    if (GetRegisteredIn())
+    {
+        const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+        if (m_TypeDepend.GetRegisteredIn())
+        {
+            const_cast<SwModify*>(m_TypeDepend.GetRegisteredIn())->Remove(
+                &m_TypeDepend);
+        }
+    }
+    m_ListenerContainer.Disposing();
+    m_pDoc = 0;
+    m_pTOXMark = 0;
+}
+
+/*-- 14.12.98 10:25:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXDocumentIndexMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+
+    if (!GetRegisteredIn()) // removed => dispose
+    {
+        Invalidate();
+    }
+    else if (pOld)
+    {
+        switch (pOld->Which())
+        {
+            case RES_TOXMARK_DELETED:
+                if (static_cast<const void*>(m_pTOXMark) ==
+                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                {
+                    Invalidate();
+                }
+                break;
+        }
+    }
+}
+
+/*-- 14.12.98 10:25:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
+    : m_pImpl( new SwXDocumentIndexMark::Impl(*this, 0, eToxType, 0, 0) )
+{
+}
+/*-- 14.12.98 10:25:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
+                SwTOXType & rType, const SwTOXMark & rMark)
+    : m_pImpl( new SwXDocumentIndexMark::Impl(*this, &rDoc, rType.GetType(),
+                    &rType, &rMark) )
+{
+}
+/*-- 14.12.98 10:25:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXDocumentIndexMark::~SwXDocumentIndexMark()
+{
+}
+
+uno::Reference<text::XDocumentIndexMark>
+SwXDocumentIndexMark::CreateXDocumentIndexMark(
+        SwDoc & rDoc, SwTOXType & rType, const SwTOXMark & rMark)
+{
+    // #i105557#: do not iterate over the registered clients: race condition
+    // to do this properly requires the SwXDocumentIndexMark to register at the
+    // format directly, not at the unocallback
+#if 0
+    SwClientIter aIter(*pType);
+    SwXDocumentIndexMark::Impl* pxMark = (SwXDocumentIndexMark::Impl*)
+                            aIter.First(TYPE(SwXDocumentIndexMark::Impl));
+    while( pxMark )
+    {
+        if(pxMark->m_pTOXMark == pMark)
+            return pxMark->m_rThis;
+        pxMark = (SwXDocumentIndexMark::Impl*)aIter.Next();
+    }
+#endif
+    return new SwXDocumentIndexMark(rDoc, rType, rMark);
+}
+
 /* -----------------------------10.03.00 18:02--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1563,55 +1724,62 @@ const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 /* -----------------------------10.03.00 18:04--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int64 SAL_CALL SwXDocumentIndexMark::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL
+SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
+throw (uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return ::sw::UnoTunnelImpl<SwXDocumentIndexMark>(rId, this);
 }
 
-TYPEINIT1(SwXDocumentIndexMark, SwClient)
-const sal_Char cBaseMark[]      = "com.sun.star.text.BaseIndexMark";
-const sal_Char cContentMark[]   = "com.sun.star.text.ContentIndexMark";
-const sal_Char cIdxMark[]       = "com.sun.star.text.DocumentIndexMark";
-const sal_Char cIdxMarkAsian[]  = "com.sun.star.text.DocumentIndexMarkAsian";
-const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
-const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
+static const sal_Char cBaseMark[]      = "com.sun.star.text.BaseIndexMark";
+static const sal_Char cContentMark[]   = "com.sun.star.text.ContentIndexMark";
+static const sal_Char cIdxMark[]       = "com.sun.star.text.DocumentIndexMark";
+static const sal_Char cIdxMarkAsian[]  = "com.sun.star.text.DocumentIndexMarkAsian";
+static const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
+static const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
+
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXDocumentIndexMark::getImplementationName(void) throw( uno::RuntimeException )
+OUString SAL_CALL
+SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException)
 {
     return C2U("SwXDocumentIndexMark");
 }
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXDocumentIndexMark::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
 {
-    return !rServiceName.compareToAscii(cBaseMark)||
-        !rServiceName.compareToAscii(cTextContent) ||
-        (eType == TOX_USER && !rServiceName.compareToAscii(cUserMark)) ||
-        (eType == TOX_CONTENT && !rServiceName.compareToAscii(cContentMark)) ||
-        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMark)) ||
-        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMarkAsian));
+    vos::OGuard g(Application::GetSolarMutex());
+
+    return rServiceName.equalsAscii(cBaseMark)
+        || rServiceName.equalsAscii(cTextContent)
+        || ((m_pImpl->m_eTOXType == TOX_USER)
+                && rServiceName.equalsAscii(cUserMark))
+        || ((m_pImpl->m_eTOXType == TOX_CONTENT)
+                && rServiceName.equalsAscii(cContentMark))
+        || ((m_pImpl->m_eTOXType == TOX_INDEX)
+                && rServiceName.equalsAscii(cIdxMark))
+        || ((m_pImpl->m_eTOXType == TOX_INDEX)
+                && rServiceName.equalsAscii(cIdxMarkAsian));
 }
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXDocumentIndexMark::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL
+SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    INT32 nCnt = (eType == TOX_INDEX) ? 4 : 3;
+    vos::OGuard g(Application::GetSolarMutex());
+
+    const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U(cBaseMark);
     pArray[1] = C2U(cTextContent);
-    switch(eType)
+    switch (m_pImpl->m_eTOXType)
     {
         case TOX_USER:
             pArray[2] = C2U(cUserMark);
@@ -1629,97 +1797,47 @@ uno::Sequence< OUString > SwXDocumentIndexMark::getSupportedServiceNames(void) t
     }
     return aRet;
 }
-/*-- 14.12.98 10:25:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXDocumentIndexMark::SwXDocumentIndexMark(TOXTypes eToxType) :
-    aLstnrCntnr( (text::XTextContent*)this),
-    aTypeDepend(this, 0),
-    m_pDoc(0),
-    m_pTOXMark(0),
-    bIsDescriptor(sal_True),
-    bMainEntry(sal_False),
-    eType(eToxType),
-    nLevel(0)
-{
-    InitMap(eToxType);
-}
-/*-- 14.12.98 10:25:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXDocumentIndexMark::SwXDocumentIndexMark(const SwTOXType* pType,
-                                    const SwTOXMark* pMark,
-                                    SwDoc* pDc) :
-    aLstnrCntnr( (text::XTextContent*)this),
-    aTypeDepend(this, (SwTOXType*)pType),
-    m_pDoc(pDc),
-    m_pTOXMark(pMark),
-    bIsDescriptor(sal_False),
-    bMainEntry(sal_False),
-    eType(pType->GetType()),
-    nLevel(0)
-{
-    m_pDoc->GetUnoCallBack()->Add(this);
-    InitMap(eType);
-}
-/*-- 14.12.98 10:25:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXDocumentIndexMark::~SwXDocumentIndexMark()
-{
-
-}
-/* -----------------21.04.99 09:36-------------------
- *
- * --------------------------------------------------*/
-void SwXDocumentIndexMark::InitMap(TOXTypes eToxType)
-{
-    sal_uInt16 nMapId = PROPERTY_MAP_USER_MARK; //case TOX_USER:
-    switch( eToxType )
-    {
-        case TOX_INDEX:
-            nMapId = PROPERTY_MAP_INDEX_MARK ;
-        break;
-        case TOX_CONTENT:
-            nMapId = PROPERTY_MAP_CNTIDX_MARK;
-        break;
-        //case TOX_USER:
-
-        default:
-            ;
-    }
-    m_pPropSet = aSwMapProvider.GetPropertySet(nMapId);
-}
 /*-- 14.12.98 10:25:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXDocumentIndexMark::getMarkEntry(void) throw( uno::RuntimeException )
+OUString SAL_CALL
+SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
+
     OUString sRet;
-    if(pType && m_pTOXMark)
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (pType && m_pImpl->m_pTOXMark)
     {
-        sRet = OUString(m_pTOXMark->GetAlternativeText());
+        sRet = OUString(m_pImpl->m_pTOXMark->GetAlternativeText());
     }
-    else if(bIsDescriptor)
-         sRet = sAltText;
+    else if (m_pImpl->m_bIsDescriptor)
+    {
+        sRet = m_pImpl->m_sAltText;
+    }
     else
+    {
         throw uno::RuntimeException();
+    }
     return sRet;
 }
 /*-- 14.12.98 10:25:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
-    if(pType && m_pTOXMark)
+
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (pType && m_pImpl->m_pTOXMark)
     {
-        SwTOXMark aMark(*m_pTOXMark);
+        SwTOXMark aMark(*m_pImpl->m_pTOXMark);
         aMark.SetAlternativeText(rIndexEntry);
-        const SwTxtTOXMark* pTxtMark = m_pTOXMark->GetTxtTOXMark();
+        SwTxtTOXMark const*const pTxtMark =
+            m_pImpl->m_pTOXMark->GetTxtTOXMark();
         SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
         aPam.SetMark();
         if(pTxtMark->GetEnd())
@@ -1729,9 +1847,9 @@ void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( uno:
         else
             aPam.GetPoint()->nContent++;
 
-        //die alte Marke loeschen
-        m_pDoc->DeleteTOXMark(m_pTOXMark);
-        m_pTOXMark = 0;
+        // delete old mark
+        m_pImpl->m_pDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
+        m_pImpl->m_pTOXMark = 0;
 
         SwTxtAttr* pTxtAttr = 0;
         sal_Bool bInsAtPos = aMark.IsAlternativeText();
@@ -1740,311 +1858,377 @@ void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( uno:
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
-            m_pDoc->InsertPoolItem( aTmp, aMark, 0 );
+            m_pImpl->m_pDoc->InsertPoolItem( aTmp, aMark, 0 );
             pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                         pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK);
         }
         else if( *pEnd != *pStt )
         {
-            m_pDoc->InsertPoolItem( aPam, aMark,
+            m_pImpl->m_pDoc->InsertPoolItem( aPam, aMark,
                         nsSetAttrMode::SETATTR_DONTEXPAND );
             pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
                                 pStt->nContent, RES_TXTATR_TOXMARK);
         }
-        //und sonst - Marke geloescht?
         if(pTxtAttr)
-            m_pTOXMark = &pTxtAttr->GetTOXMark();
+        {
+            m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
+        }
     }
-    else if(bIsDescriptor)
+    else if (m_pImpl->m_bIsDescriptor)
     {
-        sAltText = rIndexEntry;
+        m_pImpl->m_sAltText = rIndexEntry;
     }
     else
+    {
         throw uno::RuntimeException();
+    }
 }
+
 /* -----------------18.02.99 13:40-------------------
  *
  * --------------------------------------------------*/
-void SwXDocumentIndexMark::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-                throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::attach(
+        const uno::Reference< text::XTextRange > & xTextRange)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!bIsDescriptor)
+
+    if (!m_pImpl->m_bIsDescriptor)
+    {
         throw uno::RuntimeException();
-
-    uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
-    SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
-
-    if(pDoc )
+    const uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
+    SwXTextRange *const pRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper *const pCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwDoc *const pDoc =
+        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+    if (!pDoc)
     {
-        const SwTOXType* pTOXType = 0;
-        switch(eType)
-        {
-            case TOX_INDEX:
-            case TOX_CONTENT:
-                pTOXType = pDoc->GetTOXType( eType, 0 );
-            break;
-            case TOX_USER:
-            {
-                if(!sUserIndexName.Len())
-                    pTOXType = pDoc->GetTOXType( eType, 0 );
-                else
-                {
-                    sal_uInt16 nCount = pDoc->GetTOXTypeCount( eType);
-                    for(sal_uInt16 i = 0; i < nCount; i++)
-                    {
-                        const SwTOXType* pTemp = pDoc->GetTOXType( eType, i );
-                        if(sUserIndexName == pTemp->GetTypeName())
-                        {
-                            pTOXType = pTemp;
-                            break;
-                        }
-                    }
-                    if(!pTOXType)
-                    {
-                        SwTOXType aUserType(TOX_USER, sUserIndexName);
-                        pTOXType = pDoc->InsertTOXType(aUserType);
-                    }
-                }
-            }
-            break;
-
-            default:
-                ;
-        }
-        if(!pTOXType)
-            throw lang::IllegalArgumentException();
-        pDoc->GetUnoCallBack()->Add(this);
-        ((SwTOXType*)pTOXType)->Add(&aTypeDepend);
-
-        SwUnoInternalPaM aPam(*pDoc);
-        //das muss jetzt sal_True liefern
-        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
-        SwTOXMark aMark (pTOXType);
-        if(sAltText.Len())
-            aMark.SetAlternativeText(sAltText);
-        switch(eType)
-        {
-            case TOX_INDEX:
-                if(sPrimaryKey.Len())
-                    aMark.SetPrimaryKey(sPrimaryKey);
-                if(sSecondaryKey.Len())
-                    aMark.SetSecondaryKey(sSecondaryKey);
-                if(sTextReading.Len())
-                    aMark.SetTextReading(sTextReading);
-                if(sPrimaryKeyReading.Len())
-                    aMark.SetPrimaryKeyReading(sPrimaryKeyReading);
-                if(sSecondaryKeyReading.Len())
-                    aMark.SetSecondaryKeyReading(sSecondaryKeyReading);
-                aMark.SetMainEntry(bMainEntry);
-            break;
-            case TOX_USER:
-            case TOX_CONTENT:
-                if(USHRT_MAX != nLevel)
-                    aMark.SetLevel(nLevel+1);
-            break;
-
-            default:
-                ;
-        }
-        UnoActionContext aAction(pDoc);
-        sal_Bool bMark = *aPam.GetPoint() != *aPam.GetMark();
-        // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
-        // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
-        if(!bMark && !aMark.GetAlternativeText().Len())
-            aMark.SetAlternativeText( String(' ') );
-
-        SwXTextCursor const*const pTextCursor(
-                dynamic_cast<SwXTextCursor*>(pCursor));
-        const bool bForceExpandHints( (!bMark && pTextCursor)
-                ? pTextCursor->IsAtEndOfMeta() : false );
-        const SetAttrMode nInsertFlags = (bForceExpandHints)
-            ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-                | nsSetAttrMode::SETATTR_DONTEXPAND)
-            : nsSetAttrMode::SETATTR_DONTEXPAND;
-
-        pDoc->InsertPoolItem(aPam, aMark, nInsertFlags);
-        if( bMark && *aPam.GetPoint() > *aPam.GetMark())
-            aPam.Exchange();
-
-        SwTxtAttr* pTxtAttr = 0;
-        if( bMark )
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
-                            aPam.GetPoint()->nContent, RES_TXTATR_TOXMARK );
-        else
-        {
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
-        }
-
-        if(pTxtAttr)
-        {
-            m_pTOXMark = &pTxtAttr->GetTOXMark();
-            m_pDoc = pDoc;
-            bIsDescriptor = sal_False;
-        }
-        else
-            throw uno::RuntimeException();
+        throw lang::IllegalArgumentException();
     }
-}
-/*-- 14.12.98 10:25:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
-                throw( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    attachToRange( xTextRange );
-}
-/*-- 14.12.98 10:25:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXDocumentIndexMark::getAnchor(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextRange >  aRet;
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
-    if(pType && m_pTOXMark)
+    const SwTOXType* pTOXType = 0;
+    switch (m_pImpl->m_eTOXType)
     {
-        if( m_pTOXMark->GetTxtTOXMark() )
+        case TOX_INDEX:
+        case TOX_CONTENT:
+            pTOXType = pDoc->GetTOXType( m_pImpl->m_eTOXType, 0 );
+        break;
+        case TOX_USER:
         {
-            const SwTxtTOXMark* pTxtMark = m_pTOXMark->GetTxtTOXMark();
-            SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
-            aPam.SetMark();
-            if(pTxtMark->GetEnd())
+            if (!m_pImpl->m_sUserIndexName.getLength())
             {
-                aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
+                pTOXType = pDoc->GetTOXType( m_pImpl->m_eTOXType, 0 );
             }
             else
-                aPam.GetPoint()->nContent++;
-            uno::Reference< frame::XModel >  xModel = m_pDoc->GetDocShell()->GetBaseModel();
-            uno::Reference< text::XTextDocument > xTDoc(xModel, uno::UNO_QUERY);
-            aRet = new SwXTextRange(aPam, xTDoc->getText());
+            {
+                const sal_uInt16 nCount =
+                    pDoc->GetTOXTypeCount(m_pImpl->m_eTOXType);
+                for (sal_uInt16 i = 0; i < nCount; i++)
+                {
+                    SwTOXType const*const pTemp =
+                        pDoc->GetTOXType( m_pImpl->m_eTOXType, i );
+                    if (m_pImpl->m_sUserIndexName ==
+                            OUString(pTemp->GetTypeName()))
+                    {
+                        pTOXType = pTemp;
+                        break;
+                    }
+                }
+                if (!pTOXType)
+                {
+                    SwTOXType aUserType(TOX_USER, m_pImpl->m_sUserIndexName);
+                    pTOXType = pDoc->InsertTOXType(aUserType);
+                }
+            }
         }
-    }
-    if(!aRet.is())
-        throw uno::RuntimeException();
-    return aRet;
-}
-/*-- 14.12.98 10:25:45---------------------------------------------------
+        break;
 
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::dispose(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
-    if(pType && m_pTOXMark)
+        default:
+        break;
+    }
+    if (!pTOXType)
     {
-        m_pDoc->DeleteTOXMark(m_pTOXMark);
+        throw lang::IllegalArgumentException();
+    }
+    pDoc->GetUnoCallBack()->Add(m_pImpl.get());
+    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
+
+    SwUnoInternalPaM aPam(*pDoc);
+    //das muss jetzt sal_True liefern
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+    SwTOXMark aMark (pTOXType);
+    if (m_pImpl->m_sAltText.getLength())
+    {
+        aMark.SetAlternativeText(m_pImpl->m_sAltText);
+    }
+    switch (m_pImpl->m_eTOXType)
+    {
+        case TOX_INDEX:
+            if (m_pImpl->m_sPrimaryKey.getLength())
+            {
+                aMark.SetPrimaryKey(m_pImpl->m_sPrimaryKey);
+            }
+            if (m_pImpl->m_sSecondaryKey.getLength())
+            {
+                aMark.SetSecondaryKey(m_pImpl->m_sSecondaryKey);
+            }
+            if (m_pImpl->m_sTextReading.getLength())
+            {
+                aMark.SetTextReading(m_pImpl->m_sTextReading);
+            }
+            if (m_pImpl->m_sPrimaryKeyReading.getLength())
+            {
+                aMark.SetPrimaryKeyReading(m_pImpl->m_sPrimaryKeyReading);
+            }
+            if (m_pImpl->m_sSecondaryKeyReading.getLength())
+            {
+                aMark.SetSecondaryKeyReading(m_pImpl->m_sSecondaryKeyReading);
+            }
+            aMark.SetMainEntry(m_pImpl->m_bMainEntry);
+        break;
+        case TOX_USER:
+        case TOX_CONTENT:
+            if (USHRT_MAX != m_pImpl->m_nLevel)
+            {
+                aMark.SetLevel(m_pImpl->m_nLevel+1);
+            }
+        break;
+
+        default:
+        break;
+    }
+    UnoActionContext aAction(pDoc);
+    const sal_Bool bMark = *aPam.GetPoint() != *aPam.GetMark();
+    // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
+    // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
+    if (!bMark && !aMark.GetAlternativeText().Len())
+    {
+        aMark.SetAlternativeText( String(' ') );
+    }
+
+    SwXTextCursor const*const pTextCursor(
+            dynamic_cast<SwXTextCursor*>(pCursor));
+    const bool bForceExpandHints( (!bMark && pTextCursor)
+            ? pTextCursor->IsAtEndOfMeta() : false );
+    const SetAttrMode nInsertFlags = (bForceExpandHints)
+        ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+            | nsSetAttrMode::SETATTR_DONTEXPAND)
+        : nsSetAttrMode::SETATTR_DONTEXPAND;
+
+    pDoc->InsertPoolItem(aPam, aMark, nInsertFlags);
+    if (bMark && *aPam.GetPoint() > *aPam.GetMark())
+    {
+        aPam.Exchange();
+    }
+
+    SwTxtAttr* pTxtAttr = 0;
+    if (bMark)
+    {
+        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                        aPam.GetPoint()->nContent, RES_TXTATR_TOXMARK );
     }
     else
+    {
+        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+            aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
+    }
+
+    if (!pTxtAttr)
+    {
         throw uno::RuntimeException();
+    }
+
+    m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
+    m_pImpl->m_pDoc = pDoc;
+    m_pImpl->m_bIsDescriptor = sal_False;
+}
+
+/*-- 14.12.98 10:25:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextRange > SAL_CALL
+SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (!pType || !m_pImpl->m_pTOXMark)
+    {
+        throw uno::RuntimeException();
+    }
+    if (!m_pImpl->m_pTOXMark->GetTxtTOXMark())
+    {
+        throw uno::RuntimeException();
+    }
+    const SwTxtTOXMark* pTxtMark = m_pImpl->m_pTOXMark->GetTxtTOXMark();
+    SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
+    aPam.SetMark();
+    if(pTxtMark->GetEnd())
+    {
+        aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
+    }
+    else
+    {
+        aPam.GetPoint()->nContent++;
+    }
+    const uno::Reference< frame::XModel > xModel =
+        m_pImpl->m_pDoc->GetDocShell()->GetBaseModel();
+    const uno::Reference< text::XTextDocument > xTDoc(xModel, uno::UNO_QUERY);
+    const uno::Reference< text::XTextRange >  xRet =
+        new SwXTextRange(aPam, xTDoc->getText());
+
+    return xRet;
+}
+
+/*-- 14.12.98 10:25:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SAL_CALL
+SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (pType && m_pImpl->m_pTOXMark)
+    {
+        m_pImpl->m_pDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
+    }
 }
 /*-- 14.12.98 10:25:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
-    throw( uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::addEventListener(
+        const uno::Reference< lang::XEventListener > & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
+    vos::OGuard g(Application::GetSolarMutex());
+
+    if (!m_pImpl->GetRegisteredIn())
+    {
         throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    }
+    m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
-    throw( uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::removeEventListener(
+        const uno::Reference< lang::XEventListener > & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
+    vos::OGuard g(Application::GetSolarMutex());
+
+    if (!m_pImpl->GetRegisteredIn() ||
+        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
+    {
         throw uno::RuntimeException();
+    }
 }
+
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< beans::XPropertySetInfo >  SwXDocumentIndexMark::getPropertySetInfo(void)
-    throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
+    vos::OGuard g(Application::GetSolarMutex());
+
     static uno::Reference< beans::XPropertySetInfo >  xInfos[3];
     int nPos = 0;
-    switch(eType)
+    switch (m_pImpl->m_eTOXType)
     {
-        case TOX_INDEX: nPos = 0; break;
-        case TOX_CONTENT: nPos = 1; break;
-        case TOX_USER:  nPos = 2; break;
+        case TOX_INDEX:     nPos = 0; break;
+        case TOX_CONTENT:   nPos = 1; break;
+        case TOX_USER:      nPos = 2; break;
         default:
             ;
     }
     if(!xInfos[nPos].is())
     {
-        uno::Reference< beans::XPropertySetInfo >  xInfo = m_pPropSet->getPropertySetInfo();
+        const uno::Reference< beans::XPropertySetInfo > xInfo =
+            m_pImpl->m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xInfos[nPos] = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
+            aSwMapProvider.GetPropertyMapEntries(
+                PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
             aPropSeq );
     }
     return xInfos[nPos];
 }
+
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
-                                            const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-        lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::setPropertyValue(
+        const OUString& rPropertyName, const uno::Any& rValue)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+    lang::IllegalArgumentException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
-    if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if(pType && m_pTOXMark)
-    {
-        SwDoc* pLocalDoc = m_pDoc;
 
-        SwTOXMark aMark(*m_pTOXMark);
+    SfxItemPropertySimpleEntry const*const pEntry =
+        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+    if (!pEntry)
+    {
+        throw beans::UnknownPropertyException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                + rPropertyName,
+            static_cast<cppu::OWeakObject *>(this));
+    }
+    if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+    {
+        throw beans::PropertyVetoException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+                + rPropertyName,
+            static_cast<cppu::OWeakObject *>(this));
+    }
+
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (pType && m_pImpl->m_pTOXMark)
+    {
+        SwDoc* pLocalDoc = m_pImpl->m_pDoc;
+
+        SwTOXMark aMark(*m_pImpl->m_pTOXMark);
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                aMark.SetAlternativeText(lcl_AnyToString(aValue));
+                aMark.SetAlternativeText(lcl_AnyToString(rValue));
             break;
             case WID_LEVEL:
-                aMark.SetLevel(Min( (sal_Int8) ( MAXLEVEL ),
-                                    (sal_Int8)(lcl_AnyToInt16(aValue)+1)));
+                aMark.SetLevel(Min( static_cast<sal_Int8>( MAXLEVEL ),
+                            static_cast<sal_Int8>(lcl_AnyToInt16(rValue)+1)));
             break;
             case WID_PRIMARY_KEY  :
-                aMark.SetPrimaryKey(lcl_AnyToString(aValue));
+                aMark.SetPrimaryKey(lcl_AnyToString(rValue));
             break;
             case WID_SECONDARY_KEY:
-                aMark.SetSecondaryKey(lcl_AnyToString(aValue));
+                aMark.SetSecondaryKey(lcl_AnyToString(rValue));
             break;
             case WID_MAIN_ENTRY:
-                aMark.SetMainEntry(lcl_AnyToBool(aValue));
+                aMark.SetMainEntry(lcl_AnyToBool(rValue));
             break;
             case WID_TEXT_READING:
-                aMark.SetTextReading(lcl_AnyToString(aValue));
+                aMark.SetTextReading(lcl_AnyToString(rValue));
             break;
             case WID_PRIMARY_KEY_READING:
-                aMark.SetPrimaryKeyReading(lcl_AnyToString(aValue));
+                aMark.SetPrimaryKeyReading(lcl_AnyToString(rValue));
             break;
             case WID_SECONDARY_KEY_READING:
-                aMark.SetSecondaryKeyReading(lcl_AnyToString(aValue));
+                aMark.SetSecondaryKeyReading(lcl_AnyToString(rValue));
             break;
         }
-        const SwTxtTOXMark* pTxtMark = m_pTOXMark->GetTxtTOXMark();
+        SwTxtTOXMark const*const pTxtMark =
+            m_pImpl->m_pTOXMark->GetTxtTOXMark();
         SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
         aPam.SetMark();
         if(pTxtMark->GetEnd())
@@ -2052,15 +2236,17 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
         }
         else
+        {
             aPam.GetPoint()->nContent++;
+        }
 
         //delete the old mark
-        pLocalDoc->DeleteTOXMark(m_pTOXMark);
-        m_pTOXMark = 0;
+        pLocalDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
+        m_pImpl->m_pTOXMark = 0;
 
         sal_Bool bInsAtPos = aMark.IsAlternativeText();
-        const SwPosition *pStt = aPam.Start(),
-                            *pEnd = aPam.End();
+        const SwPosition *pStt = aPam.Start();
+        const SwPosition *pEnd = aPam.End();
 
         SwTxtAttr* pTxtAttr = 0;
         if( bInsAtPos )
@@ -2077,101 +2263,120 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
                             pStt->nContent, RES_TXTATR_TOXMARK );
         }
-        m_pDoc = pLocalDoc;
+        m_pImpl->m_pDoc = pLocalDoc;
 
         if(pTxtAttr)
         {
-            m_pTOXMark = &pTxtAttr->GetTOXMark();
-            m_pDoc->GetUnoCallBack()->Add(this);
-            pType->Add(&aTypeDepend);
+            m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
+            m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
+            pType->Add(&m_pImpl->m_TypeDepend);
         }
     }
-    else if(bIsDescriptor)
+    else if (m_pImpl->m_bIsDescriptor)
     {
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                sAltText = lcl_AnyToString(aValue);
+                m_pImpl->m_sAltText = lcl_AnyToString(rValue);
             break;
             case WID_LEVEL:
             {
-                sal_Int16 nVal = lcl_AnyToInt16(aValue);
+                const sal_Int16 nVal = lcl_AnyToInt16(rValue);
                 if(nVal >= 0 && nVal < MAXLEVEL)
-                    nLevel = nVal;
+                {
+                    m_pImpl->m_nLevel = nVal;
+                }
                 else
+                {
                     throw lang::IllegalArgumentException();
+                }
             }
             break;
-            case WID_PRIMARY_KEY  :
-                sPrimaryKey = lcl_AnyToString(aValue);
+            case WID_PRIMARY_KEY:
+                m_pImpl->m_sPrimaryKey = lcl_AnyToString(rValue);
             break;
             case WID_SECONDARY_KEY:
-                sSecondaryKey = lcl_AnyToString(aValue);
+                m_pImpl->m_sSecondaryKey = lcl_AnyToString(rValue);
             break;
             case WID_TEXT_READING:
-                sTextReading = lcl_AnyToString(aValue);
+                m_pImpl->m_sTextReading = lcl_AnyToString(rValue);
             break;
             case WID_PRIMARY_KEY_READING:
-                sPrimaryKeyReading = lcl_AnyToString(aValue);
+                m_pImpl->m_sPrimaryKeyReading = lcl_AnyToString(rValue);
             break;
             case WID_SECONDARY_KEY_READING:
-                sSecondaryKeyReading = lcl_AnyToString(aValue);
+                m_pImpl->m_sSecondaryKeyReading = lcl_AnyToString(rValue);
             break;
-            case WID_USER_IDX_NAME :
+            case WID_USER_IDX_NAME:
             {
-                OUString sTmp(lcl_AnyToString(aValue));
+                OUString sTmp(lcl_AnyToString(rValue));
                 lcl_ConvertTOUNameToUserName(sTmp);
-                sUserIndexName = sTmp;
+                m_pImpl->m_sUserIndexName = sTmp;
             }
             break;
             case WID_MAIN_ENTRY:
-                bMainEntry = lcl_AnyToBool(aValue);
+                m_pImpl->m_bMainEntry = lcl_AnyToBool(rValue);
             break;
         }
     }
     else
+    {
         throw uno::RuntimeException();
+    }
 }
+
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL
+SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     uno::Any aRet;
-    SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    SfxItemPropertySimpleEntry const*const pEntry =
+        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    {
+        throw beans::UnknownPropertyException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                + rPropertyName,
+            static_cast<cppu::OWeakObject *>(this));
+    }
     if (::sw::GetDefaultTextContentValue(aRet, rPropertyName, pEntry->nWID))
     {
         return aRet;
     }
-    if(pType && m_pTOXMark)
+
+    SwTOXType *const pType = m_pImpl->GetTOXType();
+    if (pType && m_pImpl->m_pTOXMark)
     {
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                aRet <<= OUString(m_pTOXMark->GetAlternativeText());
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetAlternativeText());
             break;
             case WID_LEVEL:
-                aRet <<= (sal_Int16)(m_pTOXMark->GetLevel() - 1);
+                aRet <<= static_cast<sal_Int16>(
+                            m_pImpl->m_pTOXMark->GetLevel() - 1);
             break;
             case WID_PRIMARY_KEY  :
-                aRet <<= OUString(m_pTOXMark->GetPrimaryKey());
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetPrimaryKey());
             break;
             case WID_SECONDARY_KEY:
-                aRet <<= OUString(m_pTOXMark->GetSecondaryKey());
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetSecondaryKey());
             break;
             case WID_TEXT_READING:
-                aRet <<= OUString(m_pTOXMark->GetTextReading());
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetTextReading());
             break;
             case WID_PRIMARY_KEY_READING:
-                aRet <<= OUString(m_pTOXMark->GetPrimaryKeyReading());
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetPrimaryKeyReading());
             break;
             case WID_SECONDARY_KEY_READING:
-                aRet <<= OUString(m_pTOXMark->GetSecondaryKeyReading());
+                aRet <<= OUString(
+                        m_pImpl->m_pTOXMark->GetSecondaryKeyReading());
             break;
             case WID_USER_IDX_NAME :
             {
@@ -2182,136 +2387,101 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_MAIN_ENTRY:
             {
-                sal_Bool bTemp = m_pTOXMark->IsMainEntry();
-                aRet.setValue(&bTemp, ::getBooleanCppuType());
+                const sal_Bool bTemp = m_pImpl->m_pTOXMark->IsMainEntry();
+                aRet <<= bTemp;
             }
             break;
         }
     }
-    else if(bIsDescriptor)
+    else if (m_pImpl->m_bIsDescriptor)
     {
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                aRet <<= OUString(sAltText);
+                aRet <<= m_pImpl->m_sAltText;
             break;
             case WID_LEVEL:
-                aRet <<= (sal_Int16)nLevel;
+                aRet <<= static_cast<sal_Int16>(m_pImpl->m_nLevel);
             break;
-            case WID_PRIMARY_KEY  :
-                aRet <<= OUString(sPrimaryKey);
+            case WID_PRIMARY_KEY:
+                aRet <<= m_pImpl->m_sPrimaryKey;
             break;
             case WID_SECONDARY_KEY:
-                aRet <<= OUString(sSecondaryKey);
+                aRet <<= m_pImpl->m_sSecondaryKey;
             break;
             case WID_TEXT_READING:
-                aRet <<= OUString(sTextReading);
+                aRet <<= m_pImpl->m_sTextReading;
             break;
             case WID_PRIMARY_KEY_READING:
-                aRet <<= OUString(sPrimaryKeyReading);
+                aRet <<= m_pImpl->m_sPrimaryKeyReading;
             break;
             case WID_SECONDARY_KEY_READING:
-                aRet <<= OUString(sSecondaryKeyReading);
+                aRet <<= m_pImpl->m_sSecondaryKeyReading;
             break;
             case WID_USER_IDX_NAME :
-                aRet <<= OUString(sUserIndexName);
+                aRet <<= m_pImpl->m_sUserIndexName;
             break;
             case WID_MAIN_ENTRY:
             {
-                aRet.setValue(&bMainEntry, ::getBooleanCppuType());
+                aRet <<= static_cast<sal_Bool>(m_pImpl->m_bMainEntry);
             }
             break;
         }
     }
     else
+    {
         throw uno::RuntimeException();
+    }
     return aRet;
 }
+
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::addPropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false,
+        "SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
 }
-/*-- 14.12.98 10:25:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::removePropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false,
+    "SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
 }
-/*-- 14.12.98 10:25:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::addVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false,
+        "SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
 }
-/*-- 14.12.98 10:25:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXDocumentIndexMark::removeVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false,
+    "SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
-/*-- 14.12.98 10:25:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXDocumentIndexMark*   SwXDocumentIndexMark::GetObject(SwTOXType* pType,
-                                    const SwTOXMark* pMark, SwDoc* pDoc)
-{
-    SwClientIter aIter(*pType);
-    SwXDocumentIndexMark* pxMark = (SwXDocumentIndexMark*)
-                                            aIter.First(TYPE(SwXDocumentIndexMark));
-    while( pxMark )
-    {
-        if(pxMark->m_pTOXMark == pMark)
-            return pxMark;
-        pxMark = (SwXDocumentIndexMark*)aIter.Next();
-    }
-    return new SwXDocumentIndexMark(pType, pMark, pDoc);
-}
-/*-- 14.12.98 10:25:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
-{
-    switch( pOld ? pOld->Which() : 0 )
-    {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            Invalidate();
-        break;
-
-    case RES_FMT_CHG:
-        // wurden wir an das neue umgehaengt und wird das alte geloscht?
-        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
-            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
-            Invalidate();
-        break;
-    case  RES_TOXMARK_DELETED:
-        if( (void*)m_pTOXMark == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            Invalidate();
-        break;
-    }
-}
-/* -----------------------------16.10.00 11:24--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwXDocumentIndexMark::Invalidate()
-{
-    if(GetRegisteredIn())
-    {
-        ((SwModify*)GetRegisteredIn())->Remove(this);
-        if(aTypeDepend.GetRegisteredIn())
-            ((SwModify*)aTypeDepend.GetRegisteredIn())->Remove(&aTypeDepend);
-        aLstnrCntnr.Disposing();
-        m_pTOXMark = 0;
-        m_pDoc = 0;
-    }
-}
 
 /******************************************************************
  * SwXDocumentIndexes
