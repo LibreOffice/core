@@ -661,7 +661,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
 {
     if (mpParam->bHasHeader)
         nRow++;
-//  nColRow = 0;
+
     nColRow = ScDBQueryDataIterator::SearchColEntryIndex(*mpDoc, nTab, nRow, nCol);
     return getCurrent(rValue);
 }
