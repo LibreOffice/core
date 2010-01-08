@@ -199,7 +199,6 @@ class SwLayouter;
 class SdrView;
 class SdrMarkList;
 class SwAuthEntry;
-class SwUnoCallBack;
 class SwLayoutCache;
 class IStyleAccess;
 struct SwCallMouseEvent;
@@ -391,7 +390,7 @@ class SW_DLLPUBLIC SwDoc :
     SwLayoutCache   *pLayoutCache;  // Layout cache to read and save with the
                                     // document for a faster formatting
 
-    SwUnoCallBack   *pUnoCallBack;
+    SwModify *pUnoCallBack;
     IGrammarContact *mpGrammarContact;   // for grammar checking in paragraphs during editing
 
     mutable  comphelper::ImplementationReference< SwChartDataProvider

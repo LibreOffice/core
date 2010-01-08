@@ -84,7 +84,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
-#include <unoclbck.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>

@@ -45,7 +45,6 @@
 #include <unocrsr.hxx>
 #include <docary.hxx>
 #include <tox.hxx>
-#include <unoclbck.hxx>
 #include <unomid.h>
 #include <unoparaframeenum.hxx>
 #include <unocrsrhelper.hxx>
@@ -429,9 +428,7 @@ lcl_CreateRefMarkPortion(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwFmtRefMark& rRefMark =
         static_cast<const SwFmtRefMark&>(rAttr.GetAttr());
-    Reference<XTextContent> xContent =
-        static_cast<SwUnoCallBack*>(pDoc->GetUnoCallBack())
-        ->GetRefMark(rRefMark);
+    Reference<XTextContent> xContent;
     if (!xContent.is())
     {
         xContent = new SwXReferenceMark(pDoc, &rRefMark);
@@ -476,15 +473,10 @@ lcl_CreateTOXMarkPortion(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwTOXMark& rTOXMark = static_cast<const SwTOXMark&>(rAttr.GetAttr());
 
-    Reference<XTextContent> xContent =
-        static_cast<SwUnoCallBack*>(pDoc->GetUnoCallBack())
-        ->GetTOXMark(rTOXMark);
-    if (!xContent.is())
-    {
-        xContent.set( SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
+    Reference<XTextContent> xContent(
+        SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
                     *const_cast<SwTOXType*>(rTOXMark.GetTOXType()), rTOXMark),
-            uno::UNO_QUERY);
-    }
+        uno::UNO_QUERY);
 
     SwXTextPortion* pPortion = 0;
     if (!bEnd)

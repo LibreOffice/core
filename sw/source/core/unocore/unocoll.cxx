@@ -43,7 +43,6 @@
 #include <poolfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
-#include <unoclbck.hxx>
 #include <fmtanchr.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>

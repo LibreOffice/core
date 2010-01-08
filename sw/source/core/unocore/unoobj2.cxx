@@ -75,7 +75,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
-#include <unoclbck.hxx>
 #include <unoparaframeenum.hxx>
 #include <unofootnote.hxx>
 #include <unotextbodyhf.hxx>
