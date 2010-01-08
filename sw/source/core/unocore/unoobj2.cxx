@@ -699,28 +699,22 @@ uno::Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Ru
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText");
+    if (!pParentText)
+    {
+        throw uno::RuntimeException();
+    }
 
-    SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pUnoCrsr->GetPoint());
+    ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+        pUnoCrsr->GetDoc()->CreateUnoCrsr(*pUnoCrsr->GetPoint()) );
     if(pUnoCrsr->HasMark())
     {
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *pUnoCrsr->GetMark();
     }
-    CursorType eSetType = eType == CURSOR_TBLTEXT ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    SwXParagraphEnumeration *pEnum =
+    const CursorType eSetType = (CURSOR_TBLTEXT == eType)
+            ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+    const uno::Reference< XEnumeration > xRet =
         new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType);
-    uno::Reference< XEnumeration > xRet = pEnum;
-    if (eType == CURSOR_TBLTEXT)
-    {
-        // for import of tables in tables we have to remember the actual
-        // table and start node of the current position in the enumeration.
-        SwTableNode *pStartN = pUnoCrsr->GetPoint()->nNode.GetNode().FindTableNode();
-        if (pStartN)
-        {
-            pEnum->SetOwnTable( &pStartN->GetTable() );
-            pEnum->SetOwnStartNode( pStartN );
-        }
-    }
 
     return xRet;
 }
@@ -959,103 +953,180 @@ void SwXTextCursor::GetCrsrAttr( SwPaM& rPam,
 /******************************************************************
  * SwXParagraphEnumeration
  ******************************************************************/
-/* -----------------------------06.04.00 16:33--------------------------------
 
- ---------------------------------------------------------------------------*/
-OUString SwXParagraphEnumeration::getImplementationName(void) throw( RuntimeException )
+static SwStartNode *
+lcl_InitStartNode(const CursorType eType, SwUnoCrsr *const pCursor)
 {
-    return C2U("SwXParagraphEnumeration");
-}
-/* -----------------------------06.04.00 16:33--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL SwXParagraphEnumeration::supportsService(const OUString& rServiceName) throw( RuntimeException )
-{
-    return C2U("com.sun.star.text.ParagraphEnumeration") == rServiceName;
-}
-/* -----------------------------06.04.00 16:33--------------------------------
-
- ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXParagraphEnumeration::getSupportedServiceNames(void) throw( RuntimeException )
-{
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.ParagraphEnumeration");
-    return aRet;
-}
-/*-- 10.12.98 11:52:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
-                                                    SwPosition& rPos,
-                                                    CursorType eType) :
-        xParentText(pParent),
-        nFirstParaStart(-1),
-        nLastParaEnd(-1),
-        nEndIndex(rPos.nNode.GetIndex()),
-        eCursorType(eType),
-        bFirstParagraph(sal_True)
-{
-    pOwnTable = 0;
-    pOwnStartNode = 0;
-    SwUnoCrsr* pUnoCrsr = pParent->GetDoc()->CreateUnoCrsr(rPos, sal_False);
-    pUnoCrsr->Add(this);
-}
-
-/*-- 10.12.98 11:52:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
-                                                SwUnoCrsr*  pCrsr,
-                                                CursorType eType) :
-        SwClient(pCrsr),
-        xParentText(pParent),
-        nFirstParaStart(-1),
-        nLastParaEnd(-1),
-        nEndIndex(pCrsr->End()->nNode.GetIndex()),
-        eCursorType(eType),
-        bFirstParagraph(sal_True)
-{
-    pOwnTable = 0;
-    pOwnStartNode = 0;
-    if(CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
+    switch (eType)
     {
-        if(*pCrsr->GetPoint() > *pCrsr->GetMark())
-            pCrsr->Exchange();
-        nFirstParaStart = pCrsr->GetPoint()->nContent.GetIndex();
-        nLastParaEnd = pCrsr->GetMark()->nContent.GetIndex();
-        if(pCrsr->HasMark())
-            pCrsr->DeleteMark();
+        case CURSOR_TBLTEXT: // table cell: pCursor points at first paragraph
+            return pCursor->Start()->nNode.GetNode().StartOfSectionNode();
+        case CURSOR_SELECTION_IN_TABLE: // table
+            return pCursor->Start()->nNode.GetNode().FindTableNode();
+        default:
+            return 0;
     }
+}
+
+static SwTable const*
+lcl_InitTable(const CursorType eType, SwStartNode const*const pStartNode)
+{
+    switch (eType)
+    {
+        case CURSOR_TBLTEXT: // table cell
+            return & pStartNode->FindTableNode()->GetTable();
+        case CURSOR_SELECTION_IN_TABLE: // table
+            return & static_cast<SwTableNode const*>(pStartNode)->GetTable();
+        default:
+            return 0;
+    }
+}
+
+class SwXParagraphEnumeration::Impl
+    : public SwClient
+{
+
+public:
+
+    uno::Reference< text::XText > const     m_xParentText;
+    const CursorType        m_eCursorType;
+    /// Start node of the cell _or_ table the enumeration belongs to.
+    /// Used to restrict the movement of the UNO cursor to the cell and its
+    /// embedded tables.
+    SwStartNode const*const m_pOwnStartNode;
+    SwTable const*const     m_pOwnTable;
+    const ULONG             m_nEndIndex;
+    sal_Int32               m_nFirstParaStart;
+    sal_Int32               m_nLastParaEnd;
+    bool                    m_bFirstParagraph;
+    uno::Reference< text::XTextContent >    m_xNextPara;
+
+    Impl(   uno::Reference< text::XText > const& xParent,
+            ::std::auto_ptr<SwUnoCrsr> pCursor,
+            const CursorType eType)
+        : SwClient( pCursor.release() )
+        , m_xParentText( xParent )
+        , m_eCursorType( eType )
+        // remember table and start node for later travelling
+        // (used in export of tables in tables)
+        , m_pOwnStartNode( lcl_InitStartNode(eType, GetCursor()) )
+        // for import of tables in tables we have to remember the actual
+        // table and start node of the current position in the enumeration.
+        , m_pOwnTable( lcl_InitTable(eType, m_pOwnStartNode) )
+        , m_nEndIndex( GetCursor()->End()->nNode.GetIndex() )
+        , m_nFirstParaStart( -1 )
+        , m_nLastParaEnd( -1 )
+        , m_bFirstParagraph( true )
+    {
+        OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
+        OSL_ENSURE(GetRegisteredIn(),  "SwXParagraphEnumeration: no cursor?");
+
+        if ((CURSOR_SELECTION == m_eCursorType) ||
+            (CURSOR_SELECTION_IN_TABLE == m_eCursorType))
+        {
+            SwUnoCrsr & rCursor = *GetCursor();
+            rCursor.Normalize();
+            m_nFirstParaStart = rCursor.GetPoint()->nContent.GetIndex();
+            m_nLastParaEnd = rCursor.GetMark()->nContent.GetIndex();
+            rCursor.DeleteMark();
+        }
+    }
+
+    ~Impl() {
+        // Impl owns the cursor; delete it here: SolarMutex is locked
+        delete GetRegisteredIn();
+    }
+
+    SwUnoCrsr * GetCursor() {
+        return static_cast<SwUnoCrsr*>(
+                const_cast<SwModify*>(GetRegisteredIn()));
+    }
+
+    uno::Reference< text::XTextContent > NextElement_Impl()
+        throw (container::NoSuchElementException, lang::WrappedTargetException,
+                uno::RuntimeException);
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+void SwXParagraphEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+}
+
+/*-- 10.12.98 11:52:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXParagraphEnumeration::SwXParagraphEnumeration(
+        uno::Reference< text::XText > const& xParent,
+        ::std::auto_ptr<SwUnoCrsr> pCursor,
+        const CursorType eType)
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType) )
+{
 }
 /*-- 10.12.98 11:52:12---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXParagraphEnumeration::~SwXParagraphEnumeration()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-        delete pUnoCrsr;
-
 }
+
+/* -----------------------------06.04.00 16:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXParagraphEnumeration::getImplementationName() throw (uno::RuntimeException)
+{
+    return C2U("SwXParagraphEnumeration");
+}
+/* -----------------------------06.04.00 16:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+static char const*const g_ServicesParagraphEnum[] =
+{
+    "com.sun.star.text.ParagraphEnumeration",
+};
+static const size_t g_nServicesParagraphEnum(
+    sizeof(g_ServicesParagraphEnum)/sizeof(g_ServicesParagraphEnum[0]));
+
+sal_Bool SAL_CALL
+SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+            g_nServicesParagraphEnum, g_ServicesParagraphEnum, rServiceName);
+}
+/* -----------------------------06.04.00 16:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Sequence< OUString > SAL_CALL
+SwXParagraphEnumeration::getSupportedServiceNames()
+throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesParagraphEnum, g_ServicesParagraphEnum);
+}
+
 /*-- 10.12.98 11:52:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return bFirstParagraph ? sal_True : xNextPara.is();
+
+    return (m_pImpl->m_bFirstParagraph) ? sal_True : m_pImpl->m_xNextPara.is();
 }
 /*-- 14.08.03 13:10:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 
 //!! compare to SwShellTableCrsr::FillRects() in viscrs.cxx
-SwTableNode * lcl_FindTopLevelTable(
-        /*SwUnoCrsr* pUnoCrsr ,*/
-        SwTableNode *pTblNode,
-        const SwTable *pOwnTable )
+static SwTableNode *
+lcl_FindTopLevelTable(
+        SwTableNode *const pTblNode, SwTable const*const pOwnTable)
 {
     // find top-most table in current context (section) level
 
@@ -1070,14 +1141,14 @@ SwTableNode * lcl_FindTopLevelTable(
 }
 
 
-BOOL lcl_CursorIsInSection(
-        const SwUnoCrsr *pUnoCrsr,
-        const SwStartNode *pOwnStartNode )
+static bool
+lcl_CursorIsInSection(
+        SwUnoCrsr const*const pUnoCrsr, SwStartNode const*const pOwnStartNode)
 {
     // returns true if the cursor is in the section (or in a sub section!)
     // represented by pOwnStartNode
 
-    BOOL bRes = TRUE;
+    bool bRes = true;
     if (pUnoCrsr && pOwnStartNode)
     {
         const SwEndNode * pOwnEndNode = pOwnStartNode->EndOfSectionNode();
@@ -1088,123 +1159,133 @@ BOOL lcl_CursorIsInSection(
 }
 
 
-uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Impl(void)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Reference< text::XTextContent >
+SwXParagraphEnumeration::Impl::NextElement_Impl()
+throw (container::NoSuchElementException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
-    uno::Reference< XTextContent >  aRef;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
+    SwUnoCrsr *const pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
     {
-        // check for exceeding selections
-        if(!bFirstParagraph &&
-            (CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType))
-        {
-            SwPosition* pStart = pUnoCrsr->Start();
-            ::std::auto_ptr<SwUnoCrsr> aNewCrsr( pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
-            //man soll hier auch in Tabellen landen duerfen
-            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
-                aNewCrsr->SetRemainInSection( sal_False );
+        throw uno::RuntimeException();
+    }
 
-            // os 2005-01-14: This part is only necessary to detect movements out of a selection
-            // if there is no selection we don't have to care
-            SwTableNode* pTblNode = aNewCrsr->GetNode()->FindTableNode();
-            if((CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType) && pTblNode)
-            {
-                aNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
-                aNewCrsr->Move(fnMoveForward, fnGoNode);
-            }
-            else
-                aNewCrsr->MovePara(fnParaNext, fnParaStart);
-            if(nEndIndex < aNewCrsr->Start()->nNode.GetIndex())
-                return aRef;    // empty reference
+    // check for exceeding selections
+    if (!m_bFirstParagraph &&
+        ((CURSOR_SELECTION == m_eCursorType) ||
+         (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
+    {
+        SwPosition* pStart = pUnoCrsr->Start();
+        const ::std::auto_ptr<SwUnoCrsr> aNewCrsr(
+            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
+        // one may also go into tables here
+        if ((CURSOR_TBLTEXT != m_eCursorType) &&
+            (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
+        {
+            aNewCrsr->SetRemainInSection( sal_False );
         }
 
-        XText* pText = xParentText.get();
-        sal_Bool bInTable = sal_False;
-        if(!bFirstParagraph)
+        // os 2005-01-14: This part is only necessary to detect movements out
+        // of a selection; if there is no selection we don't have to care
+        SwTableNode *const pTblNode = aNewCrsr->GetNode()->FindTableNode();
+        if (((CURSOR_TBLTEXT != m_eCursorType) &&
+            (CURSOR_SELECTION_IN_TABLE != m_eCursorType)) && pTblNode)
         {
-            //man soll hier auch in Tabellen landen duerfen
-            //if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
-            {
-                //BOOL bRemain = sal_False;
-                //pUnoCrsr->SetRemainInSection( bRemain );
-                pUnoCrsr->SetRemainInSection( sal_False );
-                //was mache ich, wenn ich schon in einer Tabelle stehe?
-                SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-                pTblNode = lcl_FindTopLevelTable( /*pUnoCrsr,*/ pTblNode, pOwnTable );
-                if(pTblNode  &&  &pTblNode->GetTable() != pOwnTable)
-                {
-                    // wir haben es mit einer fremden Tabelle zu tun - also ans Ende
-                    pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
-                    if(!pUnoCrsr->Move(fnMoveForward, fnGoNode))
-                        return aRef;
-                    else
-                        bInTable = sal_True;
-
-                }
-            }
+            aNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
+            aNewCrsr->Move(fnMoveForward, fnGoNode);
         }
-
-        // the cursor must remain in the current section or a subsection
-        // before AND after the movement...
-        if( lcl_CursorIsInSection( pUnoCrsr, pOwnStartNode ) &&
-            (bFirstParagraph || bInTable ||
-            (pUnoCrsr->MovePara(fnParaNext, fnParaStart) &&
-                lcl_CursorIsInSection( pUnoCrsr, pOwnStartNode ) ) ) )
+        else
         {
-            SwPosition* pStart = pUnoCrsr->Start();
-            sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
-            sal_Int32 nLastContent = nEndIndex ==  pStart->nNode.GetIndex() ? nLastParaEnd : -1;
-            //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
-
-            SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-            pTblNode = lcl_FindTopLevelTable( /*pUnoCrsr,*/ pTblNode, pOwnTable );
-            if(/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
-                pTblNode  &&  &pTblNode->GetTable() != pOwnTable)
-            {
-                // wir haben es mit einer fremden Tabelle zu tun
-                SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                XTextTable* pTable = SwXTextTables::GetObject( *pTableFmt );
-                aRef =  (XTextContent*)(SwXTextTable*)pTable;
-            }
-            else
-            {
-                aRef = SwXParagraph::CreateXParagraph(*pUnoCrsr->GetDoc(),
-                    *pStart->nNode.GetNode().GetTxtNode(),
-                    static_cast<SwXText*>(pText), nFirstContent, nLastContent);
-            }
+            aNewCrsr->MovePara(fnParaNext, fnParaStart);
+        }
+        if (m_nEndIndex < aNewCrsr->Start()->nNode.GetIndex())
+        {
+            return 0;
         }
     }
-    else
-        throw uno::RuntimeException();
 
-    return aRef;
+    sal_Bool bInTable = sal_False;
+    if (!m_bFirstParagraph)
+    {
+        pUnoCrsr->SetRemainInSection( sal_False );
+        // what to do if already in a table?
+        SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+        pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
+        if (pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
+        {
+            // this is a foreign table: go to end
+            pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
+            if (!pUnoCrsr->Move(fnMoveForward, fnGoNode))
+            {
+                return 0;
+            }
+            bInTable = sal_True;
+        }
+    }
+
+    uno::Reference< text::XTextContent >  xRef;
+    // the cursor must remain in the current section or a subsection
+    // before AND after the movement...
+    if (lcl_CursorIsInSection( pUnoCrsr, m_pOwnStartNode ) &&
+        (m_bFirstParagraph || bInTable ||
+        (pUnoCrsr->MovePara(fnParaNext, fnParaStart) &&
+            lcl_CursorIsInSection( pUnoCrsr, m_pOwnStartNode ))))
+    {
+        SwPosition* pStart = pUnoCrsr->Start();
+        const sal_Int32 nFirstContent =
+            (m_bFirstParagraph) ? m_nFirstParaStart : -1;
+        const sal_Int32 nLastContent =
+            (m_nEndIndex == pStart->nNode.GetIndex()) ? m_nLastParaEnd : -1;
+
+        // position in a table, or in a simple paragraph?
+        SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+        pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
+        if (/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
+            pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
+        {
+            // this is a foreign table
+            SwFrmFmt* pTableFmt =
+                static_cast<SwFrmFmt*>(pTblNode->GetTable().GetFrmFmt());
+            text::XTextTable *const pTable =
+                SwXTextTables::GetObject( *pTableFmt );
+            xRef = static_cast<text::XTextContent*>(
+                    static_cast<SwXTextTable*>(pTable));
+        }
+        else
+        {
+            text::XText *const pText = m_xParentText.get();
+            xRef = SwXParagraph::CreateXParagraph(*pUnoCrsr->GetDoc(),
+                *pStart->nNode.GetNode().GetTxtNode(),
+                static_cast<SwXText*>(pText), nFirstContent, nLastContent);
+        }
+    }
+
+    return xRef;
 }
 /*-- 10.12.98 11:52:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXParagraphEnumeration::nextElement(void)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL SwXParagraphEnumeration::nextElement()
+throw (container::NoSuchElementException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< XTextContent >  aRef;
 
-    if (bFirstParagraph)
+    if (m_pImpl->m_bFirstParagraph)
     {
-        xNextPara = NextElement_Impl();
-        bFirstParagraph = sal_False;
+        m_pImpl->m_xNextPara = m_pImpl->NextElement_Impl();
+        m_pImpl->m_bFirstParagraph = false;
     }
-    aRef = xNextPara;
-    if (!aRef.is())
+    const uno::Reference< text::XTextContent > xRef = m_pImpl->m_xNextPara;
+    if (!xRef.is())
+    {
         throw container::NoSuchElementException();
-    xNextPara = NextElement_Impl();
+    }
+    m_pImpl->m_xNextPara = m_pImpl->NextElement_Impl();
 
-    uno::Any aRet(&aRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+    uno::Any aRet;
+    aRet <<= xRef;
     return aRet;
-}
-void SwXParagraphEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
 }
 
 /******************************************************************
@@ -1727,7 +1808,7 @@ uno::Reference< XEnumeration > SwXTextRange::createEnumeration(void) throw( Runt
     ::sw::mark::IMark const * const pBkmk = GetBookmark();
     if(!pBkmk) throw RuntimeException();
     const SwPosition& rPoint = pBkmk->GetMarkPos();
-    SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
+    ::std::auto_ptr<SwUnoCrsr> pNewCrsr(pDoc->CreateUnoCrsr(rPoint, sal_False));
     if(pBkmk->IsExpanded() && pBkmk->GetOtherMarkPos() != rPoint)
     {
         pNewCrsr->SetMark();
@@ -1741,8 +1822,14 @@ uno::Reference< XEnumeration > SwXTextRange::createEnumeration(void) throw( Runt
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText");
-    CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    uno::Reference< XEnumeration > xRet =
+    if (!pParentText)
+    {
+        throw uno::RuntimeException();
+    }
+
+    const CursorType eSetType = (RANGE_IN_CELL == eRangePosition)
+            ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+    const uno::Reference< XEnumeration > xRet =
         new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType);
     return xRet;
 }

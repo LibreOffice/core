@@ -2700,14 +2700,15 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     if(pFmt)
     {
         SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
-        SwUnoCrsr* pUnoCrsr = GetDoc()->CreateUnoCrsr(aPos, sal_False);
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
+        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+                GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        pUnoCursor->Move(fnMoveForward, fnGoNode);
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
 //          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
 //          throw  uno::RuntimeException() );
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_FRAME);
+        aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
 }

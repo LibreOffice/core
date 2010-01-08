@@ -439,10 +439,10 @@ uno::Reference< container::XEnumeration >  SwXFootnote::createEnumeration() thro
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         SwPosition aPos( *pTxtFtn->GetStartNode() );
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, aPos, CURSOR_FOOTNOTE, GetDoc());
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_FOOTNOTE);
+        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+            GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        pUnoCursor->Move(fnMoveForward, fnGoNode);
+        aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
     }
     return aRef;
 }

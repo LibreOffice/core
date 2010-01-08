@@ -32,6 +32,8 @@
 #ifndef SW_UNOPARAGRAPH_HXX
 #define SW_UNOPARAGRAPH_HXX
 
+#include <memory>
+
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -47,16 +49,13 @@
 
 #include <sfx2/Metadatable.hxx>
 
-#include <calbck.hxx>
 #include <unobaseclass.hxx>
 
 
 struct SwPosition;
 class SwPaM;
 class SwUnoCrsr;
-class SwStartNode;
 class SwTxtNode;
-class SwTable;
 class SwXText;
 
 
@@ -327,60 +326,23 @@ public:
 --------------------------------------------------*/
 class SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
-    , public SwClient
 {
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        xParentText;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
-        xNextPara;
-
-    const SwTable *     pOwnTable;
-    /// Start node of the cell the enumeration belongs to.
-    /// Used to restrict the movement of the UNO cursor to the cell and its
-    /// embedded tables.
-    const SwStartNode * pOwnStartNode;
-    sal_Int32           nFirstParaStart;
-    sal_Int32           nLastParaEnd;
-    ULONG               nEndIndex;
-    CursorType          eCursorType;
-    BOOL                bFirstParagraph;
-
-    SwUnoCrsr*          GetCrsr() {return (SwUnoCrsr*)GetRegisteredIn();}
-
-protected:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXParagraphEnumeration();
 
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextContent > SAL_CALL
-        NextElement_Impl()
-        throw (::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-
 public:
 
+    /// takes ownership of cursor
     SwXParagraphEnumeration(
-            SwXText* pParent, SwPosition& rPos, CursorType eType);
-    SwXParagraphEnumeration(
-            SwXText* pParent, SwUnoCrsr* pCrsr, CursorType eType);
-
-    // non-Uno functions
-
-    void                SetOwnTable(const SwTable* pTable)
-        { pOwnTable = pTable; }
-    const SwTable*      GetOwnTable() const
-        { return pOwnTable; }
-    void                SetOwnStartNode(const SwStartNode* pNode)
-        { pOwnStartNode = pNode; }
-    const SwStartNode*  GetOwnStartNode() const
-        { return pOwnStartNode; }
-
-    // SwClient
-    virtual void        Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+                const & xParent,
+            ::std::auto_ptr<SwUnoCrsr> pCursor,
+            const CursorType eType);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
