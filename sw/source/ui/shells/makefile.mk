@@ -77,6 +77,7 @@ SLOFILES =  \
         $(SLO)$/txtnum.obj
 
 EXCEPTIONSFILES =  \
+        $(SLO)$/basesh.obj \
         $(SLO)$/annotsh.obj \
         $(SLO)$/drwtxtsh.obj \
         $(SLO)$/textsh.obj \

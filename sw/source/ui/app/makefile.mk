@@ -73,6 +73,7 @@ SLOFILES = \
 EXCEPTIONSFILES= \
         $(SLO)$/docsh.obj    \
         $(SLO)$/docst.obj    \
+        $(SLO)$/docshini.obj \
         $(SLO)$/swmodule.obj \
         $(SLO)$/swmodul1.obj \
             $(SLO)$/apphdl.obj   \

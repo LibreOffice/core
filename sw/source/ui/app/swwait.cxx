@@ -41,25 +41,25 @@
 
 void SwDocShell::EnterWait( BOOL bLockDispatcher )
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, 0, FALSE );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, FALSE );
     while ( pFrame )
     {
         pFrame->GetWindow().EnterWait();
         if ( bLockDispatcher )
             pFrame->GetDispatcher()->Lock( TRUE );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, 0, FALSE );
+        pFrame = SfxViewFrame::GetNext( *pFrame, this, FALSE );
     }
 }
 
 void SwDocShell::LeaveWait( BOOL bLockDispatcher )
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, 0, FALSE );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, FALSE );
     while ( pFrame )
     {
         pFrame->GetWindow().LeaveWait();
         if ( bLockDispatcher )
             pFrame->GetDispatcher()->Lock( FALSE );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, 0, FALSE );
+        pFrame = SfxViewFrame::GetNext( *pFrame, this, FALSE );
     }
 }
 

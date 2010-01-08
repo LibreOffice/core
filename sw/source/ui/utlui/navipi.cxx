@@ -503,7 +503,7 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus
 {
 //    SfxBindings& rBind = GetCreateView()->GetViewFrame()->GetBindings();
 //    rBind.ENTERREGISTRATIONS();
-    Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame()->GetFrameInterface();
+    Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
         SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
                           xFrame );

@@ -89,6 +89,7 @@ SLOFILES = \
     $(SLO2FILES)
 
 EXCEPTIONSFILES =   \
+        $(SLO)$/register.obj  \
         $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/document.obj \

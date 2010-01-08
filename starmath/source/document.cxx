@@ -684,8 +684,8 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport) :
-    SfxObjectShell(eMode),
+SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell( i_nSfxCreationFlags ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
@@ -703,9 +703,6 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport)
 
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
-
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
 
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
                                     //! im Destruktor nicht explizit geloescht werden.

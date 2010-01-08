@@ -732,7 +732,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
 
-            pTempViewFrame = SfxViewFrame::CreateViewFrame( *pDocSh, 0, sal_True );
+            pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
             pDoc->GetEditShell( &pVSh );
         }

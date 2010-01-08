@@ -759,7 +759,7 @@ bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId 
     }
     if(sCommand.Len())
     {
-        uno::Reference< frame::XFrame >  xFrame = rViewFrame.GetFrame()->GetFrameInterface();
+        uno::Reference< frame::XFrame >  xFrame = rViewFrame.GetFrame().GetFrameInterface();
         uno::Reference < frame::XDispatchProvider > xProv( xFrame, uno::UNO_QUERY );
         util::URL aURL;
         aURL.Complete = sCommand;

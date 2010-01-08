@@ -69,9 +69,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SwDLL::Init();
-    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
-    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
-    SfxObjectShell* pShell = new SwDocShell( eCreateMode, bScriptSupport );
+    SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 

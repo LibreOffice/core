@@ -438,7 +438,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
-            GetView()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 

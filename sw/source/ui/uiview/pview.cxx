@@ -46,7 +46,6 @@
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -130,8 +129,7 @@ SFX_IMPL_INTERFACE(SwPagePreView, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
 
 TYPEINIT1(SwPagePreView,SfxViewShell)
 
-#define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|SFX_VIEW_OPTIMIZE_EACH|  \
-                      SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
 
 #define MIN_PREVIEW_ZOOM 25
 #define MAX_PREVIEW_ZOOM 600
@@ -1824,7 +1822,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     pPageUpBtn(0),
     pPageDownBtn(0),
     pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
-        pViewFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+        pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
     // OD 09.01.2003 #106334#
     mbResetFormDesignMode( false ),
@@ -1909,15 +1907,13 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     delete pPageDownBtn;
 
 /*    SfxObjectShell* pDocSh = GetDocShell();
-    TypeId aType = TYPE( SfxTopViewFrame );
-
-    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh, aType );
-        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh, aType ) )
+    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh );
+        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
         if( pFrame != GetViewFrame() )
         {
             // es gibt noch eine weitere Sicht auf unser Dokument, also
             // aktiviere dieses
-            pFrame->GetFrame()->Appear();
+            pFrame->GetFrame().Appear();
             break;
         }
 */}
@@ -2094,8 +2090,11 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
     //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
-    if ( pVScrollbar )
-        ScrollDocSzChg();
+    if ( pVScrollbar &&
+             aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+        {
+            ScrollDocSzChg();
+        }
 }
 
 /*--------------------------------------------------------------------

@@ -1327,7 +1327,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
-                SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
+                SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
                 SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
 
@@ -1447,7 +1447,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         if (xWorkDocSh->DoLoad(pWorkMed))
                         {
                             //create a view frame for the document
-                            SfxViewFrame* pWorkFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                            SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                             //request the layout calculation
                             SwWrtShell& rWorkShell =
                                     static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
@@ -2892,7 +2892,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )
                 {
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
                     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
                     //set the current DBMgr
@@ -3183,14 +3183,14 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
+        SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
         //the created window has to be located at the same position as the source window
-        Window& rTargetWindow = pTargetFrame->GetFrame()->GetWindow();
-        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame()->GetWindow();
+        Window& rTargetWindow = pTargetFrame->GetFrame().GetWindow();
+        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame().GetWindow();
         rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
 
-//        pTargetFrame->GetFrame()->Appear();
+//        pTargetFrame->GetFrame().Appear();
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
         //initiate SelectShell() to create sub shells
@@ -3244,7 +3244,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 xWorkDocSh->DoInitNew();
             }
             //create a ViewFrame
-            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, sal_True )->GetViewShell() );
+            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
             pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
 

@@ -354,7 +354,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 {
     BOOL bCallBase = TRUE;
-    if ( !pViewShell->GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !pViewShell->GetViewFrame()->GetFrame().IsInPlace() )
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -1640,7 +1640,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_ZOOM:
         {
-            if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+            if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
                 //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
@@ -1767,7 +1767,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_FITINWINDOW:
-            if ( GetViewFrame()->GetFrame()->IsInPlace() )
+            if ( GetViewFrame()->GetFrame().IsInPlace() )
                 rSet.DisableItem( nWh );
             break;
 
@@ -1811,7 +1811,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
-    SfxViewShell(pFrame_, SFX_VIEW_DISABLE_ACCELS | SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
+    SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
     aGraphic(this),
     aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings()),
     pImpl( new SmViewShell_Impl )

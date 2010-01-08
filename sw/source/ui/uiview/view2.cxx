@@ -90,7 +90,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
 #include <svx/linkmgr.hxx>
@@ -1052,7 +1051,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
-                SfxHelp::OpenHelpAgent( pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
+                SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
