@@ -149,7 +149,7 @@ protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextCursor >
-        createCursor()
+        CreateCursor()
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwXHeadFootText();

@@ -186,12 +186,18 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
 protected:
     virtual const SwStartNode *GetStartNode() const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextCursor >
+        CreateCursor()
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ~SwXTextFrame();
 public:
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
 
+    // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
+    void SetDoc(SwDoc *const pDoc) { SwXText::SetDoc(pDoc); };
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();

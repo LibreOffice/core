@@ -1164,7 +1164,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     if(pText)
     {
         const uno::Reference< text::XTextCursor > xTextCursor =
-            pText->createCursor();
+            pText->CreateCursor();
         xTextCursor->gotoEnd(sal_True);
         const uno::Reference<lang::XUnoTunnel> xCrsrTunnel(
                 xTextCursor, uno::UNO_QUERY);

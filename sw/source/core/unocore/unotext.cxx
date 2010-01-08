@@ -84,12 +84,91 @@ using ::rtl::OUString;
 
 
 const sal_Char cInvalidObject[] = "this object is invalid";
+
 /******************************************************************
  * SwXText
  ******************************************************************/
+
+class SwXText::Impl
+{
+
+public:
+    SwXText &                   m_rThis;
+    SfxItemPropertySet const&   m_rPropSet;
+    const enum CursorType       m_eType;
+    SwDoc *                     m_pDoc;
+    bool                        m_bIsValid;
+
+    Impl(   SwXText & rThis,
+            SwDoc *const pDoc, const enum CursorType eType)
+        : m_rThis(rThis)
+        , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
+        , m_eType(eType)
+        , m_pDoc(pDoc)
+        , m_bIsValid(0 != pDoc)
+    {
+    }
+
+    uno::Reference< text::XTextRange >
+        finishOrAppendParagraph(
+            const bool bFinish,
+            const uno::Sequence< beans::PropertyValue >&
+                rCharacterAndParagraphProperties)
+        throw (lang::IllegalArgumentException, uno::RuntimeException);
+
+    sal_Int16 ComparePositions(
+            const uno::Reference<text::XTextRange>& xPos1,
+            const uno::Reference<text::XTextRange>& xPos2)
+        throw (lang::IllegalArgumentException, uno::RuntimeException);
+
+    bool CheckForOwnMember(const SwPaM & rPaM)
+        throw (lang::IllegalArgumentException, uno::RuntimeException);
+};
+
+/* -----------------------------15.03.2002 12:39------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXText::SwXText(SwDoc *const pDoc, const enum CursorType eType)
+    : m_pImpl( new SwXText::Impl(*this, pDoc, eType) )
+{
+}
+/*-- 09.12.98 12:43:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXText::~SwXText()
+{
+}
+
 /*-- 09.12.98 12:44:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
+const SwDoc * SwXText::GetDoc() const
+{
+    return m_pImpl->m_pDoc;
+}
+      SwDoc * SwXText::GetDoc()
+{
+    return m_pImpl->m_pDoc;
+}
+
+bool SwXText::IsValid() const
+{
+    return m_pImpl->m_bIsValid;
+}
+
+void SwXText::Invalidate()
+{
+    m_pImpl->m_bIsValid = false;
+}
+
+void SwXText::SetDoc(SwDoc *const pDoc)
+{
+    OSL_ENSURE(!m_pImpl->m_pDoc || !pDoc,
+        "SwXText::SetDoc: already have a doc?");
+    m_pImpl->m_pDoc = pDoc;
+    m_pImpl->m_bIsValid = (0 != pDoc);
+}
 
 void
 SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
@@ -99,7 +178,7 @@ SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
 bool SwXText::CheckForOwnMemberMeta(const SwPaM &, const bool)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ASSERT(CURSOR_META != eCrsrType, "should not be called!");
+    ASSERT(CURSOR_META != m_pImpl->m_eType, "should not be called!");
     return false;
 }
 
@@ -108,7 +187,8 @@ const SwStartNode *SwXText::GetStartNode() const
     return GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
 }
 
-uno::Reference< text::XTextCursor >   SwXText::createCursor() throw (uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXText::CreateCursor() throw (uno::RuntimeException)
 {
     uno::Reference< text::XTextCursor >  xRet;
     if(IsValid())
@@ -116,525 +196,457 @@ uno::Reference< text::XTextCursor >   SwXText::createCursor() throw (uno::Runtim
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
         SwPosition aPos(rNode);
         xRet = static_cast<text::XWordCursor*>(
-                new SwXTextCursor(*GetDoc(), this, GetTextType(), aPos));
+                new SwXTextCursor(*GetDoc(), this, m_pImpl->m_eType, aPos));
         xRet->gotoStart(sal_False);
     }
     return xRet;
 }
-/* -----------------------------15.03.2002 12:39------------------------------
 
- ---------------------------------------------------------------------------*/
-SwXText::SwXText(SwDoc* pDc, CursorType eType) :
-    pDoc(pDc),
-    bObjectValid(0 != pDc),
-    eCrsrType(eType),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
-{
-}
-/*-- 09.12.98 12:43:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXText::~SwXText()
-{
-}
 /*-- 09.12.98 12:43:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL
+SwXText::queryInterface(const uno::Type& rType) throw (uno::RuntimeException)
 {
-    const uno::Type& rXTextType = ::getCppuType((uno::Reference< text::XText >*)0);
-    const uno::Type& rXTextRangeCompareType = ::getCppuType((uno::Reference< text::XTextRangeCompare >*)0);
-    const uno::Type& rXSimpleTextType = ::getCppuType((const uno::Reference< XSimpleText >*)0);
-    const uno::Type& rXTextRangeType = ::getCppuType((uno::Reference< text::XTextRange >*)0);
-    const uno::Type& rXTypeProviderType = ::getCppuType((uno::Reference< lang::XTypeProvider >*)0);
-    const uno::Type& rXTextContentInsert = ::getCppuType((uno::Reference< text::XRelativeTextContentInsert >*)0);
-    const uno::Type& rXTextContentRemove = ::getCppuType((uno::Reference< text::XRelativeTextContentRemove >*)0);
-    const uno::Type& rXPropertySet = ::getCppuType((uno::Reference<beans::XPropertySet>*)0);
-    const uno::Type& rXUnoTunnel = ::getCppuType((uno::Reference< lang::XUnoTunnel >*)0);
-    const uno::Type& rXTextPortionAppend = ::getCppuType((uno::Reference< text::XTextPortionAppend >*)0);
-    const uno::Type& rXParagraphAppend = ::getCppuType((uno::Reference< text::XParagraphAppend >*)0);
-    const uno::Type& rXTextContentAppend = ::getCppuType((uno::Reference< text::XTextContentAppend >*)0);
-    const uno::Type& rXTextConvert = ::getCppuType((uno::Reference< text::XTextConvert >*)0);
-    const uno::Type& rXTextAppend = ::getCppuType((uno::Reference< text::XTextAppend >*)0);
-    const uno::Type& rXTextAppendAndConvert = ::getCppuType((uno::Reference< text::XTextAppendAndConvert >*)0);
-
     uno::Any aRet;
-    if(rType == rXTextType)
+    if (rType == text::XText::static_type())
     {
-        uno::Reference< text::XText > xRet = this;
-        aRet.setValue(&xRet, rXTextType);
+        aRet <<= uno::Reference< text::XText >(this);
     }
-    else if(rType == rXSimpleTextType)
+    else if (rType == text::XSimpleText::static_type())
     {
-        uno::Reference< XSimpleText > xRet = this;
-        aRet.setValue(&xRet, rXSimpleTextType);
+        aRet <<= uno::Reference< text::XSimpleText >(this);
     }
-    else if(rType == rXTextRangeType)
+    else if (rType == text::XTextRange::static_type())
     {
-        uno::Reference< text::XTextRange > xRet = this;
-        aRet.setValue(&xRet, rXTextRangeType);
+        aRet <<= uno::Reference< text::XTextRange>(this);
     }
-    else if(rType == rXTextRangeCompareType)
+    else if (rType == text::XTextRangeCompare::static_type())
     {
-        uno::Reference< text::XTextRangeCompare > xRet = this;
-        aRet.setValue(&xRet, rXTextRangeCompareType);
+        aRet <<= uno::Reference< text::XTextRangeCompare >(this);
     }
-    else if(rType == rXTypeProviderType)
+    else if (rType == lang::XTypeProvider::static_type())
     {
-        uno::Reference< lang::XTypeProvider > xRet = this;
-        aRet.setValue(&xRet, rXTypeProviderType);
+        aRet <<= uno::Reference< lang::XTypeProvider >(this);
     }
-    else if(rType == rXTextContentInsert)
+    else if (rType == text::XRelativeTextContentInsert::static_type())
     {
-        uno::Reference< text::XRelativeTextContentInsert > xRet = this;
-        aRet.setValue(&xRet, rXTextContentInsert);
+        aRet <<= uno::Reference< text::XRelativeTextContentInsert >(this);
     }
-    else if(rType == rXTextContentRemove)
+    else if (rType == text::XRelativeTextContentRemove::static_type())
     {
-        uno::Reference< text::XRelativeTextContentRemove > xRet = this;
-        aRet.setValue(&xRet, rXTextContentRemove);
+        aRet <<= uno::Reference< text::XRelativeTextContentRemove >(this);
     }
-    else if(rType == rXPropertySet)
+    else if (rType == beans::XPropertySet::static_type())
     {
-        uno::Reference< beans::XPropertySet > xRet = this;
-        aRet.setValue(&xRet, rXPropertySet);
+        aRet <<= uno::Reference< beans::XPropertySet >(this);
     }
-    else if(rType == rXUnoTunnel )
+    else if (rType == lang::XUnoTunnel::static_type())
     {
-        uno::Reference< lang::XUnoTunnel > xRet = this;
-        aRet.setValue(&xRet, rXUnoTunnel);
+        aRet <<= uno::Reference< lang::XUnoTunnel >(this);
     }
-    else if(rType == rXTextAppendAndConvert )
+    else if (rType == text::XTextAppendAndConvert::static_type())
     {
-        uno::Reference< XTextAppendAndConvert > xRet = this;
-        aRet.setValue(&xRet, rXTextAppendAndConvert);
+        aRet <<= uno::Reference< text::XTextAppendAndConvert >(this);
     }
-    else if(rType == rXTextAppend )
+    else if (rType == text::XTextAppend::static_type())
     {
-        uno::Reference< XTextAppend > xRet = this;
-        aRet.setValue(&xRet, rXTextAppend);
+        aRet <<= uno::Reference< text::XTextAppend >(this);
     }
-    else if(rType == rXTextPortionAppend )
+    else if (rType == text::XTextPortionAppend::static_type())
     {
-        uno::Reference< XTextPortionAppend > xRet = this;
-        aRet.setValue(&xRet, rXTextPortionAppend);
+        aRet <<= uno::Reference< text::XTextPortionAppend >(this);
     }
-    else if(rType == rXParagraphAppend )
+    else if (rType == text::XParagraphAppend::static_type())
     {
-        uno::Reference< XParagraphAppend > xRet = this;
-        aRet.setValue(&xRet, rXParagraphAppend );
+        aRet <<= uno::Reference< text::XParagraphAppend >(this);
     }
-    else if(rType == rXTextConvert )
+    else if (rType == text::XTextConvert::static_type() )
     {
-        uno::Reference< XTextConvert > xRet = this;
-        aRet.setValue(&xRet, rXParagraphAppend );
+        aRet <<= uno::Reference< text::XTextConvert >(this);
     }
-    else if(rType == rXTextContentAppend )
+    else if (rType == text::XTextContentAppend::static_type())
     {
-        uno::Reference< XTextContentAppend > xRet = this;
-        aRet.setValue(&xRet, rXTextContentAppend );
+        aRet <<= uno::Reference< text::XTextContentAppend >(this);
     }
     return aRet;
 }
 /* -----------------------------15.03.00 17:42--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< uno::Type > SAL_CALL SwXText::getTypes() throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL
+SwXText::getTypes() throw (uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aRet(12);
     uno::Type* pTypes = aRet.getArray();
-    pTypes[0] = ::getCppuType((uno::Reference< text::XText >*)0);
-    pTypes[1] = ::getCppuType((uno::Reference< text::XTextRangeCompare >*)0);
-    pTypes[2] = ::getCppuType((uno::Reference< text::XRelativeTextContentInsert >*)0);
-    pTypes[3] = ::getCppuType((uno::Reference< text::XRelativeTextContentRemove >*)0);
-    pTypes[4] = ::getCppuType((uno::Reference< lang::XUnoTunnel >*)0);
-    pTypes[5] = ::getCppuType((uno::Reference< beans::XPropertySet >*)0);
-    pTypes[6] = ::getCppuType((uno::Reference< text::XTextPortionAppend >*)0);
-    pTypes[7] = ::getCppuType((uno::Reference< text::XParagraphAppend >*)0);
-    pTypes[8] = ::getCppuType((uno::Reference< text::XTextContentAppend >*)0);
-    pTypes[9] = ::getCppuType((uno::Reference< text::XTextConvert >*)0);
-    pTypes[10] = ::getCppuType((uno::Reference< text::XTextAppend >*)0);
-    pTypes[11] = ::getCppuType((uno::Reference< text::XTextAppendAndConvert >*)0);
+    pTypes[0] = text::XText::static_type();
+    pTypes[1] = text::XTextRangeCompare::static_type();
+    pTypes[2] = text::XRelativeTextContentInsert::static_type();
+    pTypes[3] = text::XRelativeTextContentRemove::static_type();
+    pTypes[4] = lang::XUnoTunnel::static_type();
+    pTypes[5] = beans::XPropertySet::static_type();
+    pTypes[6] = text::XTextPortionAppend::static_type();
+    pTypes[7] = text::XParagraphAppend::static_type();
+    pTypes[8] = text::XTextContentAppend::static_type();
+    pTypes[9] = text::XTextConvert::static_type();
+    pTypes[10] = text::XTextAppend::static_type();
+    pTypes[11] = text::XTextAppendAndConvert::static_type();
 
     return aRet;
 }
 
 // belongs the range in the text ? insert it then.
-void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
-    const OUString& aString,
-    sal_Bool bAbsorb)
-        throw( uno::RuntimeException )
+void SAL_CALL
+SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
+    const OUString& rString, sal_Bool bAbsorb)
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(GetDoc() && xTextRange.is())
+
+    if (!xTextRange.is())
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pRange = 0;
-        OTextCursorHelper* pCursor = 0;
-        if(xRangeTunnel.is())
+        throw uno::RuntimeException();
+    }
+    if (!GetDoc())
+    {
+        throw uno::RuntimeException();
+    }
+    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange,
+            uno::UNO_QUERY);
+    SwXTextRange *const pRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper *const pCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    if ((!pRange  || pRange ->GetDoc() != GetDoc()) &&
+        (!pCursor || pCursor->GetDoc() != GetDoc()))
+    {
+        throw uno::RuntimeException();
+    }
+
+    const SwStartNode *const pOwnStartNode = GetStartNode();
+    SwPaM aPam(GetDoc()->GetNodes());
+    const SwPaM * pPam(0);
+    if (pCursor)
+    {
+        pPam = pCursor->GetPaM();
+    }
+    else // pRange
+    {
+        if (pRange->GetPositions(aPam))
         {
-            pRange  = reinterpret_cast< SwXTextRange * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-            pCursor = reinterpret_cast< OTextCursorHelper * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+            pPam = &aPam;
         }
+    }
+    if (!pPam)
+    {
+        throw uno::RuntimeException();
+    }
 
-        if(pRange && pRange->GetDoc()  == GetDoc() ||
-            pCursor && pCursor->GetDoc()  == GetDoc())
+    const SwStartNode* pTmp(pPam->GetNode()->StartOfSectionNode());
+    while (pTmp && pTmp->IsSectionNode())
+    {
+        pTmp = pTmp->StartOfSectionNode();
+    }
+    if (!pOwnStartNode || (pOwnStartNode != pTmp))
+    {
+        throw uno::RuntimeException();
+    }
+
+    bool bForceExpandHints( false );
+    if (CURSOR_META == m_pImpl->m_eType)
+    {
+        try
         {
-            const SwStartNode *const pOwnStartNode = GetStartNode();
-            SwPaM aPam(GetDoc()->GetNodes());
-            const SwPaM * pPam(0);
-            if (pCursor)
+            bForceExpandHints = CheckForOwnMemberMeta(*pPam, bAbsorb);
+        }
+        catch (lang::IllegalArgumentException & iae)
+        {
+            // stupid method not allowed to throw iae
+            throw uno::RuntimeException(iae.Message, 0);
+        }
+    }
+    if (bAbsorb)
+    {
+        //!! scan for CR characters and inserting the paragraph breaks
+        //!! has to be done in the called function.
+        //!! Implemented in SwXTextRange::DeleteAndInsert
+        if (pCursor)
+        {
+            SwXTextCursor * const pTextCursor(
+                dynamic_cast<SwXTextCursor*>(pCursor) );
+            if (pTextCursor)
             {
-                pPam = pCursor->GetPaM();
-            }
-            else // pRange
-            {
-                if (pRange->GetPositions(aPam))
-                {
-                    pPam = &aPam;
-                }
-            }
-            if (!pPam)
-            {
-                throw uno::RuntimeException();
-            }
-            else
-            {
-                const SwStartNode* pTmp(pPam->GetNode()->StartOfSectionNode());
-                while (pTmp && pTmp->IsSectionNode())
-                {
-                    pTmp = pTmp->StartOfSectionNode();
-                }
-                if (!pOwnStartNode || (pOwnStartNode != pTmp))
-                {
-                    throw uno::RuntimeException();
-                }
-            }
-
-            bool bForceExpandHints( false );
-            if (CURSOR_META == eCrsrType)
-            {
-                try
-                {
-                    bForceExpandHints = CheckForOwnMemberMeta(*pPam, bAbsorb);
-                }
-                catch (lang::IllegalArgumentException & iae)
-                {
-                    // stupid method not allowed to throw iae
-                    throw uno::RuntimeException(iae.Message, 0);
-                }
-            }
-            if(bAbsorb)
-            {
-                //!! scan for CR characters and inserting the paragraph breaks
-                //!! has to be done in the called function.
-                //!! Implemented in SwXTextRange::DeleteAndInsert
-                if (pCursor)
-                {
-                    SwXTextCursor * const pTextCursor( dynamic_cast<SwXTextCursor*>(pCursor) );
-                    if (pTextCursor)
-                    {
-                        pTextCursor->DeleteAndInsert(aString, bForceExpandHints);
-                    }
-                    else
-                    {
-                        xTextRange->setString(aString);
-                    }
-                }
-                else
-                {
-                    pRange->DeleteAndInsert(aString, bForceExpandHints);
-                }
+                pTextCursor->DeleteAndInsert(rString, bForceExpandHints);
             }
             else
             {
-                //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
-                //Text davor eingefuegt wird
-                UnoActionContext aContext(GetDoc());
-                SwPaM aInsertPam(*pPam->Start());
-                const sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
-                GetDoc()->DoGroupUndo(sal_False);
-
-                SwUnoCursorHelper::DocInsertStringSplitCR(
-                    *GetDoc(), aInsertPam, aString, bForceExpandHints );
-                GetDoc()->DoGroupUndo(bGroupUndo);
+                xTextRange->setString(rString);
             }
         }
         else
-            throw uno::RuntimeException();
+        {
+            pRange->DeleteAndInsert(rString, bForceExpandHints);
+        }
     }
     else
-        throw uno::RuntimeException();
+    {
+        // create a PaM positioned before the parameter PaM,
+        // so the text is inserted before
+        UnoActionContext aContext(GetDoc());
+        SwPaM aInsertPam(*pPam->Start());
+        const sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
+        GetDoc()->DoGroupUndo(sal_False);
+
+        SwUnoCursorHelper::DocInsertStringSplitCR(
+            *GetDoc(), aInsertPam, rString, bForceExpandHints );
+        GetDoc()->DoGroupUndo(bGroupUndo);
+    }
 }
 
 /*-- 09.12.98 12:43:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & xTextRange,
-                sal_Int16 nControlCharacter, sal_Bool bAbsorb)
-                throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SAL_CALL
+SwXText::insertControlCharacter(
+        const uno::Reference< text::XTextRange > & xTextRange,
+        sal_Int16 nControlCharacter, sal_Bool bAbsorb)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if (!xTextRange.is())
-        throw lang::IllegalArgumentException();
-    if (GetDoc())
     {
-        SwUnoInternalPaM aPam(*GetDoc());
-        if (::sw::XTextRangeToSwPaM(aPam, xTextRange))
+        throw lang::IllegalArgumentException();
+    }
+    if (!GetDoc())
+    {
+        throw uno::RuntimeException();
+    }
+
+    SwUnoInternalPaM aPam(*GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, xTextRange))
+    {
+        throw uno::RuntimeException();
+    }
+    const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
+
+    const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+        (bForceExpandHints)
+        ? static_cast<IDocumentContentOperations::InsertFlags>(
+                IDocumentContentOperations::INS_FORCEHINTEXPAND |
+                IDocumentContentOperations::INS_EMPTYEXPAND)
+        : IDocumentContentOperations::INS_EMPTYEXPAND;
+
+    SwPaM aTmp(*aPam.Start());
+    if (bAbsorb && aPam.HasMark())
+    {
+        m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+    }
+
+    sal_Unicode cIns = 0;
+    switch (nControlCharacter)
+    {
+        case text::ControlCharacter::PARAGRAPH_BREAK :
+            // a table cell now becomes an ordinary text cell!
+            m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
+            m_pImpl->m_pDoc->SplitNode( *aTmp.GetPoint(), sal_False );
+            break;
+        case text::ControlCharacter::APPEND_PARAGRAPH:
         {
-            const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
+            m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
+            m_pImpl->m_pDoc->AppendTxtNode( *aTmp.GetPoint() );
 
-            const enum IDocumentContentOperations::InsertFlags nInsertFlags =
-                (bForceExpandHints)
-                ? static_cast<IDocumentContentOperations::InsertFlags>(
-                        IDocumentContentOperations::INS_FORCEHINTEXPAND |
-                        IDocumentContentOperations::INS_EMPTYEXPAND)
-                : IDocumentContentOperations::INS_EMPTYEXPAND;
-
-            //Steuerzeichen einfuegen
-            SwPaM aTmp(*aPam.Start());
-            if(bAbsorb && aPam.HasMark())
+            const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
+                    xTextRange, uno::UNO_QUERY);
+            SwXTextRange *const pRange =
+                ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+            OTextCursorHelper *const pCursor =
+                ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(
+                            xRangeTunnel);
+            if (pRange)
             {
-                pDoc->DeleteAndJoin(aPam);
+                pRange->SetPositions(aTmp);
             }
-
-            sal_Unicode cIns = 0;
-            switch( nControlCharacter )
+            else if (pCursor)
             {
-                case text::ControlCharacter::PARAGRAPH_BREAK :
-                    // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
-                    pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-                    pDoc->SplitNode( *aTmp.GetPoint(), sal_False );
-                    break;
-                case text::ControlCharacter::APPEND_PARAGRAPH:
-                {
-                    pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-                    pDoc->AppendTxtNode( *aTmp.GetPoint() );
-
-                    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-                    SwXTextRange* pRange = 0;
-                    OTextCursorHelper* pCursor = 0;
-                    if(xRangeTunnel.is())
-                    {
-                        pRange  = reinterpret_cast< SwXTextRange * >(
-                                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-                        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-                    }
-                    if(pRange)
-                    {
-                        pRange->SetPositions(aTmp);
-                    }
-                    else if(pCursor)
-                    {
-                        SwPaM* pCrsr = pCursor->GetPaM();
-                        *pCrsr->GetPoint() = *aTmp.GetPoint();
-                        pCrsr->DeleteMark();
-                    }
-                }
-                break;
-                case text::ControlCharacter::LINE_BREAK:    cIns = 10;      break;
-                case text::ControlCharacter::SOFT_HYPHEN:   cIns = CHAR_SOFTHYPHEN; break;
-                case text::ControlCharacter::HARD_HYPHEN:   cIns = CHAR_HARDHYPHEN; break;
-                case text::ControlCharacter::HARD_SPACE:    cIns = CHAR_HARDBLANK;  break;
+                SwPaM *const pCrsr = pCursor->GetPaM();
+                *pCrsr->GetPoint() = *aTmp.GetPoint();
+                pCrsr->DeleteMark();
             }
-            if( cIns )
+        }
+        break;
+        case text::ControlCharacter::LINE_BREAK:  cIns = 10;              break;
+        case text::ControlCharacter::SOFT_HYPHEN: cIns = CHAR_SOFTHYPHEN; break;
+        case text::ControlCharacter::HARD_HYPHEN: cIns = CHAR_HARDHYPHEN; break;
+        case text::ControlCharacter::HARD_SPACE:  cIns = CHAR_HARDBLANK;  break;
+    }
+    if (cIns)
+    {
+        m_pImpl->m_pDoc->InsertString( aTmp, cIns, nInsertFlags );
+    }
+
+    if (bAbsorb)
+    {
+        const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
+                xTextRange, uno::UNO_QUERY);
+        SwXTextRange *const pRange =
+            ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        OTextCursorHelper *const pCursor =
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+
+        SwCursor aCrsr(*aTmp.GetPoint(),0,false);
+        SwUnoCursorHelper::SelectPam(aCrsr, true);
+        aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        //hier muss der uebergebene PaM umgesetzt werden:
+        if (pRange)
+        {
+            pRange->SetPositions(aCrsr);
+        }
+        else
+        {
+            SwPaM *const pUnoCrsr = pCursor->GetPaM();
+            *pUnoCrsr->GetPoint() = *aCrsr.GetPoint();
+            if (aCrsr.HasMark())
             {
-                pDoc->InsertString( aTmp, cIns, nInsertFlags );
+                pUnoCrsr->SetMark();
+                *pUnoCrsr->GetMark() = *aCrsr.GetMark();
             }
-
-            if(bAbsorb)
+            else
             {
-                uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-                SwXTextRange* pRange = 0;
-                OTextCursorHelper* pCursor = 0;
-                if(xRangeTunnel.is())
-                {
-                    pRange  = reinterpret_cast< SwXTextRange * >(
-                            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-                    pCursor = reinterpret_cast< OTextCursorHelper * >(
-                            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-                }
-
-                SwCursor aCrsr(*aTmp.GetPoint(),0,false);
-                SwUnoCursorHelper::SelectPam(aCrsr, true);
-                aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
-                //hier muss der uebergebene PaM umgesetzt werden:
-                if(pRange)
-                {
-                    pRange->SetPositions(aCrsr);
-                }
-                else
-                {
-                    SwPaM* pUnoCrsr = pCursor->GetPaM();
-                    *pUnoCrsr->GetPoint() = *aCrsr.GetPoint();
-                    if(aCrsr.HasMark())
-                    {
-                        pUnoCrsr->SetMark();
-                        *pUnoCrsr->GetMark() = *aCrsr.GetMark();
-                    }
-                    else
-                        pUnoCrsr->DeleteMark();
-                }
+                pUnoCrsr->DeleteMark();
             }
         }
     }
-    else
-        throw uno::RuntimeException();
 }
+
 /*-- 09.12.98 12:43:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-
-void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRange,
-                const uno::Reference< text::XTextContent > & xContent, sal_Bool bAbsorb)
-                throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SAL_CALL
+SwXText::insertTextContent(
+        const uno::Reference< text::XTextRange > & xRange,
+        const uno::Reference< text::XTextContent > & xContent,
+        sal_Bool bAbsorb)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    // erstmal testen, ob der Range an der richtigen Stelle ist und dann
-    // am Sw-Content attachToRange aufrufen
+
+    if (!xRange.is())
+    {
+        lang::IllegalArgumentException aIllegal;
+        aIllegal.Message = C2U("first parameter invalid;");
+        throw aIllegal;
+    }
+    if (!xContent.is())
+    {
+        lang::IllegalArgumentException aIllegal;
+        aIllegal.Message += C2U("second parameter invalid");
+        throw aIllegal;
+    }
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
-    if(xRange.is() && xContent.is())
-    {
-        SwUnoInternalPaM aPam(*GetDoc());
-        if (::sw::XTextRangeToSwPaM(aPam, xRange))
-        {
-            uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-            SwXTextRange* pRange = 0;
-            OTextCursorHelper* pCursor = 0;
-            SwXTextPortion* pPortion = 0;
-            SwXText* pText = 0;
-            if(xRangeTunnel.is())
-            {
-                pRange  = reinterpret_cast< SwXTextRange * >(
-                        sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-                pCursor = reinterpret_cast< OTextCursorHelper * >(
-                        sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-                pPortion = reinterpret_cast< SwXTextPortion * >(
-                        sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
-                pText   = reinterpret_cast< SwXText * >(
-                        sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-            }
 
-
-            uno::Reference< text::XTextCursor >  xOwnCursor = createCursor();
-            uno::Reference<lang::XUnoTunnel> xOwnTunnel( xOwnCursor, uno::UNO_QUERY);
-//          OTextCursorHelper* pOwnCursor = reinterpret_cast< OTextCursorHelper * >(
-//                  sal::static_int_cast< sal_IntPtr >( xOwnTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-
-            const SwStartNode* pOwnStartNode = GetStartNode();
-            SwStartNodeType eSearchNodeType = SwNormalStartNode;
-            switch(eCrsrType)
-            {
-                case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
-                case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
-                case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
-                case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
-                case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
-                //case CURSOR_INVALID:
-                //case CURSOR_BODY:
-                default:
-                    ;
-            }
-
-            const SwStartNode* pTmp =
-                aPam.GetNode()->FindSttNodeByType(eSearchNodeType);
-
-            //SectionNodes ueberspringen
-            while(pTmp && pTmp->IsSectionNode())
-            {
-                pTmp = pTmp->StartOfSectionNode();
-            }
-            //if the document starts with a section
-            while(pOwnStartNode->IsSectionNode())
-            {
-                pOwnStartNode = pOwnStartNode->StartOfSectionNode();
-            }
-            //this checks if (this) and xRange are in the same text::XText interface
-            if(pOwnStartNode != pTmp)
-            {
-                uno::RuntimeException aRunException;
-                aRunException.Message = C2U("text interface and cursor not related");
-                throw aRunException;
-            }
-
-            const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
-
-            // Sonderbehandlung fuer Contents, die den Range nicht ersetzen, sonder darueber gelegt werden
-            // Bookmarks, IndexEntry
-            uno::Reference<lang::XUnoTunnel> xContentTunnel( xContent, uno::UNO_QUERY);
-            if(!xContentTunnel.is())
-            {
-                lang::IllegalArgumentException aArgException;
-                aArgException.Message = C2U("text content doesn't support lang::XUnoTunnel");
-                throw aArgException;
-            }
-            SwXDocumentIndexMark* pDocumentIndexMark = reinterpret_cast< SwXDocumentIndexMark * >(
-                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXDocumentIndexMark::getUnoTunnelId()) ));
-            SwXTextSection* pSection = reinterpret_cast< SwXTextSection * >(
-                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXTextSection::getUnoTunnelId()) ));
-            SwXBookmark* pBookmark = reinterpret_cast< SwXBookmark * >(
-                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXBookmark::getUnoTunnelId()) ));
-            SwXReferenceMark* pReferenceMark = reinterpret_cast< SwXReferenceMark * >(
-                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXReferenceMark::getUnoTunnelId()) ));
-            SwXMeta *const pMeta = reinterpret_cast< SwXMeta* >(
-                sal::static_int_cast< sal_IntPtr >(
-                    xContentTunnel->getSomething( SwXMeta::getUnoTunnelId())));
-
-            const bool bAttribute = pBookmark || pDocumentIndexMark
-                || pSection || pReferenceMark || pMeta;
-
-            if(bAbsorb && !bAttribute)
-            {
-                xRange->setString(aEmptyStr);
-            }
-            //hier wird tatsaechlich eingefuegt
-            uno::Reference< text::XTextRange >  xTempRange;
-            if(bAttribute && bAbsorb)
-                xTempRange = xRange;
-            else
-                xTempRange = xRange->getStart();
-            if (bForceExpandHints)
-            {
-                // if necessary, replace xTempRange with a new SwXTextCursor
-                PrepareForAttach(xTempRange, aPam);
-            }
-            xContent->attach(xTempRange);
-        }
-        else
-        {
-            lang::IllegalArgumentException aIllegal;
-            aIllegal.Message = C2U("first parameter invalid");
-            throw aIllegal;
-        }
-    }
-    else
+    SwUnoInternalPaM aPam(*GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, xRange))
     {
         lang::IllegalArgumentException aIllegal;
-        if(!xRange.is())
-            aIllegal.Message = C2U("first parameter invalid;");
-        if(!xContent.is())
-            aIllegal.Message += C2U("second parameter invalid");
+        aIllegal.Message = C2U("first parameter invalid");
         throw aIllegal;
     }
+    // first test if the range is at the right position, then call
+    // xContent->attach
+    const SwStartNode* pOwnStartNode = GetStartNode();
+    SwStartNodeType eSearchNodeType = SwNormalStartNode;
+    switch (m_pImpl->m_eType)
+    {
+        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
+        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
+        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
+        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
+        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
+        //case CURSOR_INVALID:
+        //case CURSOR_BODY:
+        default:
+            break;
+    }
 
+    const SwStartNode* pTmp =
+        aPam.GetNode()->FindSttNodeByType(eSearchNodeType);
+
+    // ignore SectionNodes
+    while (pTmp && pTmp->IsSectionNode())
+    {
+        pTmp = pTmp->StartOfSectionNode();
+    }
+    // if the document starts with a section
+    while (pOwnStartNode->IsSectionNode())
+    {
+        pOwnStartNode = pOwnStartNode->StartOfSectionNode();
+    }
+    // this checks if (this) and xRange are in the same text::XText interface
+    if (pOwnStartNode != pTmp)
+    {
+        uno::RuntimeException aRunException;
+        aRunException.Message = C2U("text interface and cursor not related");
+        throw aRunException;
+    }
+
+    const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
+
+    // special treatment for Contents that do not replace the range, but
+    // instead are "overlaid"
+    const uno::Reference<lang::XUnoTunnel> xContentTunnel(xContent,
+            uno::UNO_QUERY);
+    if (!xContentTunnel.is())
+    {
+        lang::IllegalArgumentException aArgException;
+        aArgException.Message =
+            C2U("text content does not support lang::XUnoTunnel");
+        throw aArgException;
+    }
+    SwXDocumentIndexMark *const pDocumentIndexMark =
+        ::sw::UnoTunnelGetImplementation<SwXDocumentIndexMark>(xContentTunnel);
+    SwXTextSection *const pSection =
+        ::sw::UnoTunnelGetImplementation<SwXTextSection>(xContentTunnel);
+    SwXBookmark *const pBookmark =
+        ::sw::UnoTunnelGetImplementation<SwXBookmark>(xContentTunnel);
+    SwXReferenceMark *const pReferenceMark =
+        ::sw::UnoTunnelGetImplementation<SwXReferenceMark>(xContentTunnel);
+    SwXMeta *const pMeta =
+        ::sw::UnoTunnelGetImplementation<SwXMeta>(xContentTunnel);
+
+    const bool bAttribute = pBookmark || pDocumentIndexMark
+        || pSection || pReferenceMark || pMeta;
+
+    if (bAbsorb && !bAttribute)
+    {
+        xRange->setString(aEmptyStr);
+    }
+    uno::Reference< text::XTextRange > xTempRange =
+        (bAttribute && bAbsorb) ? xRange : xRange->getStart();
+    if (bForceExpandHints)
+    {
+        // if necessary, replace xTempRange with a new SwXTextCursor
+        PrepareForAttach(xTempRange, aPam);
+    }
+    xContent->attach(xTempRange);
 }
+
 /* -----------------------------10.07.00 15:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXText::insertTextContentBefore(
+void SAL_CALL
+SwXText::insertTextContentBefore(
     const uno::Reference< text::XTextContent>& xNewContent,
     const uno::Reference< text::XTextContent>& xSuccessor)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
@@ -646,35 +658,37 @@ void SwXText::insertTextContentBefore(
             uno::UNO_QUERY);
     SwXParagraph *const pPara =
             ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
-    if(!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
+    if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
+    {
         throw lang::IllegalArgumentException();
+    }
 
     sal_Bool bRet = sal_False;
     const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
-    SwXTextTable* pXTable = SwXTextTable::GetImplementation(xSuccessor );
-    SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
+    SwXTextTable *const pXTable =
+            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
+    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
     SwTxtNode * pTxtNode = 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
-        SwTable* pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode* pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFmt );
+        SwTableNode *const pTblNode = pTable->GetTableNode();
 
-        SwNodeIndex aTblIdx(  *pTblNode, -1 );
+        const SwNodeIndex aTblIdx( *pTblNode, -1 );
         SwPosition aBefore(aTblIdx);
         bRet = GetDoc()->AppendTxtNode( aBefore );
         pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
     }
-    else if(pXSection &&
-        pXSection->GetFmt() &&
+    else if (pXSection && pXSection->GetFmt() &&
             pXSection->GetFmt()->GetDoc() == GetDoc())
     {
-        SwSectionFmt* pSectFmt = pXSection->GetFmt();
-        SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
+        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
 
-        SwNodeIndex aSectIdx(  *pSectNode, -1 );
+        const SwNodeIndex aSectIdx( *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
         bRet = GetDoc()->AppendTxtNode( aBefore );
         pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
@@ -683,55 +697,59 @@ void SwXText::insertTextContentBefore(
     {
         throw lang::IllegalArgumentException();
     }
-    else
-    {
-        pPara->attachToText(*this, *pTxtNode);
-    }
-
+    pPara->attachToText(*this, *pTxtNode);
 }
+
 /* -----------------------------10.07.00 15:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXText::insertTextContentAfter(
+void SAL_CALL
+SwXText::insertTextContentAfter(
     const uno::Reference< text::XTextContent>& xNewContent,
     const uno::Reference< text::XTextContent>& xPredecessor)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!GetDoc())
+    {
         throw uno::RuntimeException();
+    }
+
     const uno::Reference<lang::XUnoTunnel> xParaTunnel(xNewContent,
             uno::UNO_QUERY);
     SwXParagraph *const pPara =
             ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
+    {
         throw lang::IllegalArgumentException();
+    }
 
     const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
-    SwXTextTable* pXTable = SwXTextTable::GetImplementation(xPredecessor );
-    SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
+    SwXTextTable *const pXTable =
+            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
+    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
     sal_Bool bRet = sal_False;
     SwTxtNode * pTxtNode = 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
-        SwTable* pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode* pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFmt );
+        SwTableNode *const pTblNode = pTable->GetTableNode();
 
-        SwEndNode* pTableEnd = pTblNode->EndOfSectionNode();
+        SwEndNode *const pTableEnd = pTblNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
         bRet = GetDoc()->AppendTxtNode( aTableEnd );
         pTxtNode = aTableEnd.nNode.GetNode().GetTxtNode();
     }
-    else if(pXSection &&
-        pXSection->GetFmt() &&
+    else if (pXSection && pXSection->GetFmt() &&
             pXSection->GetFmt()->GetDoc() == GetDoc())
     {
-        SwSectionFmt* pSectFmt = pXSection->GetFmt();
-        SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
-        SwEndNode* pEnd = pSectNode->EndOfSectionNode();
+        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
+        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
         bRet = GetDoc()->AppendTxtNode( aEnd );
         pTxtNode = aEnd.nNode.GetNode().GetTxtNode();
@@ -740,19 +758,19 @@ void SwXText::insertTextContentAfter(
     {
         throw lang::IllegalArgumentException();
     }
-    else
-    {
-        pPara->attachToText(*this, *pTxtNode);
-    }
+    pPara->attachToText(*this, *pTxtNode);
 }
+
 /* -----------------------------10.07.00 15:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXText::removeTextContentBefore(
+void SAL_CALL
+SwXText::removeTextContentBefore(
     const uno::Reference< text::XTextContent>& xSuccessor)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
@@ -765,28 +783,28 @@ void SwXText::removeTextContentBefore(
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
-    SwXTextTable* pXTable = SwXTextTable::GetImplementation( xSuccessor );
-    SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
+    SwXTextTable *const pXTable =
+            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
+    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
-        SwTable* pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode* pTblNode = pTable->GetTableNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFmt );
+        SwTableNode *const pTblNode = pTable->GetTableNode();
 
-        SwNodeIndex aTblIdx(  *pTblNode, -1 );
+        const SwNodeIndex aTblIdx( *pTblNode, -1 );
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aTblIdx);
             bRet = GetDoc()->DelFullPara( aBefore );
         }
     }
-    else if(pXSection &&
-        pXSection->GetFmt() &&
+    else if (pXSection && pXSection->GetFmt() &&
             pXSection->GetFmt()->GetDoc() == GetDoc())
     {
-        SwSectionFmt* pSectFmt = pXSection->GetFmt();
-        SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
+        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
+        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
 
-        SwNodeIndex aSectIdx(  *pSectNode, -1 );
+        const SwNodeIndex aSectIdx(  *pSectNode, -1 );
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aSectIdx);
@@ -794,15 +812,21 @@ void SwXText::removeTextContentBefore(
         }
     }
     if(!bRet)
+    {
         throw lang::IllegalArgumentException();
+    }
 }
+
 /* -----------------------------10.07.00 15:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXText::removeTextContentAfter(const uno::Reference< text::XTextContent>& xPredecessor)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL
+SwXText::removeTextContentAfter(
+        const uno::Reference< text::XTextContent>& xPredecessor)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!GetDoc())
     {
         uno::RuntimeException aRuntime;
@@ -815,29 +839,29 @@ void SwXText::removeTextContentAfter(const uno::Reference< text::XTextContent>& 
             uno::UNO_QUERY);
     SwXTextSection *const pXSection =
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
-    SwXTextTable* pXTable = SwXTextTable::GetImplementation(xPredecessor );
-    SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
+    SwXTextTable *const pXTable =
+            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
+    SwFrmFmt *const pTableFmt = (pXTable) ? pXTable->GetFrmFmt() : 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
     {
-        SwTable* pTable = SwTable::FindTable( pTableFmt );
-        SwTableNode* pTblNode = pTable->GetTableNode();
-        SwEndNode* pTableEnd = pTblNode->EndOfSectionNode();
+        SwTable *const pTable = SwTable::FindTable( pTableFmt );
+        SwTableNode *const pTblNode = pTable->GetTableNode();
+        SwEndNode *const pTableEnd = pTblNode->EndOfSectionNode();
 
-        SwNodeIndex aTblIdx(  *pTableEnd, 1 );
+        const SwNodeIndex aTblIdx( *pTableEnd, 1 );
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aPaM(aTblIdx);
             bRet = GetDoc()->DelFullPara( aPaM );
         }
     }
-    else if(pXSection &&
-        pXSection->GetFmt() &&
+    else if (pXSection && pXSection->GetFmt() &&
             pXSection->GetFmt()->GetDoc() == GetDoc())
     {
-        SwSectionFmt* pSectFmt = pXSection->GetFmt();
-        SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
-        SwEndNode* pEnd = pSectNode->EndOfSectionNode();
-        SwNodeIndex aSectIdx(  *pEnd, 1 );
+        SwSectionFmt *const pSectFmt = pXSection->GetFmt();
+        SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
+        SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
+        const SwNodeIndex aSectIdx(  *pEnd, 1 );
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aAfter(aSectIdx);
@@ -845,42 +869,50 @@ void SwXText::removeTextContentAfter(const uno::Reference< text::XTextContent>& 
         }
     }
     if(!bRet)
+    {
         throw lang::IllegalArgumentException();
+    }
 }
+
 /*-- 09.12.98 12:43:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::removeTextContent(const uno::Reference< text::XTextContent > & xContent)
-    throw( container::NoSuchElementException, uno::RuntimeException )
+void SAL_CALL
+SwXText::removeTextContent(
+        const uno::Reference< text::XTextContent > & xContent)
+throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    // forward: need no solar mutex here
     if(!xContent.is())
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U("first parameter invalid");
         throw aRuntime;
     }
-    else
-        xContent->dispose();
+    xContent->dispose();
 }
+
 /*-- 09.12.98 12:43:22---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XText >  SwXText::getText(void)
-        throw( uno::RuntimeException )
+uno::Reference< text::XText > SAL_CALL
+SwXText::getText() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XText >  xRet = (SwXText*)this;
-    return xRet;
 
+    const uno::Reference< text::XText > xRet(this);
+    return xRet;
 }
+
 /*-- 09.12.98 12:43:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXText::getStart(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::getStart() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  xRef = createCursor();
+
+    const uno::Reference< text::XTextCursor > xRef = CreateCursor();
     if(!xRef.is())
     {
         uno::RuntimeException aRuntime;
@@ -888,16 +920,18 @@ uno::Reference< text::XTextRange >  SwXText::getStart(void) throw( uno::RuntimeE
         throw aRuntime;
     }
     xRef->gotoStart(sal_False);
-    uno::Reference< text::XTextRange >  xRet(xRef, uno::UNO_QUERY);
+    const uno::Reference< text::XTextRange > xRet(xRef, uno::UNO_QUERY);
     return xRet;
 }
 /*-- 09.12.98 12:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXText::getEnd(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::getEnd() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  xRef = createCursor();
+
+    const uno::Reference< text::XTextCursor > xRef = CreateCursor();
     if(!xRef.is())
     {
         uno::RuntimeException aRuntime;
@@ -905,42 +939,52 @@ uno::Reference< text::XTextRange >  SwXText::getEnd(void) throw( uno::RuntimeExc
         throw aRuntime;
     }
     xRef->gotoEnd(sal_False);
-    uno::Reference< text::XTextRange >  xRet(xRef, uno::UNO_QUERY);
+    const uno::Reference< text::XTextRange >  xRet(xRef, uno::UNO_QUERY);
     return xRet;
 }
+
 /*-- 09.12.98 12:43:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXText::getString(void) throw( uno::RuntimeException )
+OUString SAL_CALL SwXText::getString() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  xRet = createCursor();
+
+    const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
-    else
-    {
-        xRet->gotoEnd(sal_True);
-    }
+    xRet->gotoEnd(sal_True);
     return xRet->getString();
 }
 /*-- 09.12.98 12:43:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
+void SAL_CALL
+SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!GetDoc())
+    {
+        uno::RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
+
     const SwStartNode* pStartNode = GetStartNode();
-    if(!pStartNode)
+    if (!pStartNode)
+    {
         throw uno::RuntimeException();
+    }
 
     GetDoc()->StartUndo(UNDO_START, NULL);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
-    if (CURSOR_META != eCrsrType)
+    if (CURSOR_META != m_pImpl->m_eType)
     {
         SwPosition aStartPos(*pStartNode);
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
@@ -972,7 +1016,7 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
         }
     }
 
-    uno::Reference< text::XTextCursor >  xRet = createCursor();
+    const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
         GetDoc()->EndUndo(UNDO_END, NULL);
@@ -980,36 +1024,28 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
-    else
-    {
-        xRet->gotoEnd(sal_True);
-    }
-    xRet->setString(aString);
+    xRet->gotoEnd(sal_True);
+    xRet->setString(rString);
     GetDoc()->EndUndo(UNDO_END, NULL);
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
 //  Description: Checks if pRange/pCursor are member of the same text interface.
 //              Only one of the pointers has to be set!
-sal_Bool SwXText::CheckForOwnMember(
-    const SwXTextRange* pRange,
-    const OTextCursorHelper* pCursor)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+bool SwXText::Impl::CheckForOwnMember(
+    const SwPaM & rPaM)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    DBG_ASSERT((!pRange || !pCursor) && (pRange || pCursor), "only one pointer will be checked" );
-    uno::Reference<text::XTextCursor> xOwnCursor = createCursor();
+    const uno::Reference<text::XTextCursor> xOwnCursor(m_rThis.CreateCursor());
 
-    uno::Reference<lang::XUnoTunnel> xTunnel( xOwnCursor, uno::UNO_QUERY);
-    OTextCursorHelper* pOwnCursor = 0;
-    if(xTunnel.is())
-    {
-        pOwnCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId()) ));
-    }
+    const uno::Reference<lang::XUnoTunnel> xTunnel(xOwnCursor, uno::UNO_QUERY);
+    OTextCursorHelper *const pOwnCursor =
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
     DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
-    const SwStartNode* pOwnStartNode = pOwnCursor->GetPaM()->GetNode()->StartOfSectionNode();
+    const SwStartNode* pOwnStartNode =
+        pOwnCursor->GetPaM()->GetNode()->StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
-    switch(eCrsrType)
+    switch (m_eType)
     {
         case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
         case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
@@ -1022,101 +1058,62 @@ sal_Bool SwXText::CheckForOwnMember(
             ;
     }
 
-    const SwNode* pSrcNode;
-    if (pCursor)
-    {
-        pSrcNode = pCursor->GetPaM()->GetNode();
-    }
-    else // pRange
-    {
-        SwPaM aPam(pRange->GetDoc()->GetNodes().GetEndOfContent());
-        if (pRange->GetPositions(aPam))
-        {
-            pSrcNode = aPam.GetNode();
-        }
-    }
-    if (!pSrcNode) { return sal_False; }
+    SwNode const*const pSrcNode(rPaM.GetNode());
+    if (!pSrcNode) { return false; }
     const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
     //SectionNodes ueberspringen
     while(pTmp && pTmp->IsSectionNode())
+    {
         pTmp = pTmp->StartOfSectionNode();
+    }
 
     //if the document starts with a section
     while(pOwnStartNode->IsSectionNode())
+    {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
+    }
 
     //this checks if (this) and xRange are in the same text::XText interface
-    return(pOwnStartNode == pTmp);
+    return (pOwnStartNode == pTmp);
 }
 
-sal_Int16 SwXText::ComparePositions(
+sal_Int16
+SwXText::Impl::ComparePositions(
     const uno::Reference<text::XTextRange>& xPos1,
     const uno::Reference<text::XTextRange>& xPos2)
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    sal_Int16 nCompare = 0;
-    SwUnoInternalPaM aPam1(*GetDoc());
-    SwUnoInternalPaM aPam2(*GetDoc());
+    SwUnoInternalPaM aPam1(*m_pDoc);
+    SwUnoInternalPaM aPam2(*m_pDoc);
 
-    BOOL bExcept = FALSE;
-    if (::sw::XTextRangeToSwPaM(aPam1, xPos1) &&
-        ::sw::XTextRangeToSwPaM(aPam2, xPos2))
+    if (!::sw::XTextRangeToSwPaM(aPam1, xPos1) ||
+        !::sw::XTextRangeToSwPaM(aPam2, xPos2))
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel1( xPos1, uno::UNO_QUERY);
-        SwXTextRange* pRange1 = 0;
-        OTextCursorHelper* pCursor1 = 0;
-        if(xRangeTunnel1.is())
-        {
-            pRange1     = reinterpret_cast< SwXTextRange * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel1->getSomething( SwXTextRange::getUnoTunnelId()) ));
-            pCursor1    = reinterpret_cast< OTextCursorHelper * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel1->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        }
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel2( xPos2, uno::UNO_QUERY);
-        SwXTextRange* pRange2 = 0;
-        OTextCursorHelper* pCursor2 = 0;
-        if(xRangeTunnel2.is())
-        {
-            pRange2 = reinterpret_cast< SwXTextRange * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel2->getSomething( SwXTextRange::getUnoTunnelId()) ));
-            pCursor2 = reinterpret_cast< OTextCursorHelper * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel2->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        }
+        throw lang::IllegalArgumentException();
+    }
+    if (!CheckForOwnMember(aPam1) || !CheckForOwnMember(aPam2))
+    {
+        throw lang::IllegalArgumentException();
+    }
 
-        if((pRange1||pCursor1) && (pRange2||pCursor2))
-        {
-            if(CheckForOwnMember(pRange1, pCursor1)
-                && CheckForOwnMember( pRange2, pCursor2))
-            {
-                SwPosition const*const pStart1 = aPam1.Start();
-                SwPosition const*const pStart2 = aPam2.Start();
-
-                if(pStart1 && pStart2)
-                {
-                    if(*pStart1 < *pStart2)
-                        nCompare = 1;
-                    else if(*pStart1 > *pStart2)
-                        nCompare = -1;
-                    else
-                    {
-                        DBG_ASSERT(*pStart1 == *pStart2, "SwPositions should be equal here");
-                        nCompare = 0;
-                    }
-                }
-                else
-                    bExcept = TRUE;
-            }
-            else
-                bExcept = TRUE;
-        }
-        else
-            bExcept = TRUE;
+    sal_Int16 nCompare = 0;
+    SwPosition const*const pStart1 = aPam1.Start();
+    SwPosition const*const pStart2 = aPam2.Start();
+    if (*pStart1 < *pStart2)
+    {
+        nCompare = 1;
+    }
+    else if (*pStart1 > *pStart2)
+    {
+        nCompare = -1;
     }
     else
-        bExcept = TRUE;
-    if(bExcept)
-        throw lang::IllegalArgumentException();
+    {
+        DBG_ASSERT(*pStart1 == *pStart2,
+                "SwPositions should be equal here");
+        nCompare = 0;
+    }
 
     return nCompare;
 }
@@ -1124,50 +1121,64 @@ sal_Int16 SwXText::ComparePositions(
 /*-- 28.03.00 10:37:22---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int16 SwXText::compareRegionStarts(
-    const uno::Reference<text::XTextRange>& xR1,
-    const uno::Reference<text::XTextRange>& xR2)
-            throw(lang::IllegalArgumentException, uno::RuntimeException)
+sal_Int16 SAL_CALL
+SwXText::compareRegionStarts(
+    const uno::Reference<text::XTextRange>& xRange1,
+    const uno::Reference<text::XTextRange>& xRange2)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!xR1.is() || !xR2.is())
-        throw lang::IllegalArgumentException();
-    uno::Reference<text::XTextRange> xStart1 = xR1->getStart();
-    uno::Reference<text::XTextRange> xStart2 = xR2->getStart();
 
-    return ComparePositions(xStart1, xStart2);
+    if (!xRange1.is() || !xRange2.is())
+    {
+        throw lang::IllegalArgumentException();
+    }
+    const uno::Reference<text::XTextRange> xStart1 = xRange1->getStart();
+    const uno::Reference<text::XTextRange> xStart2 = xRange2->getStart();
+
+    return m_pImpl->ComparePositions(xStart1, xStart2);
 }
 /*-- 28.03.00 10:37:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int16 SwXText::compareRegionEnds(
-    const uno::Reference<text::XTextRange>& xR1,
-    const uno::Reference<text::XTextRange>& xR2)
-                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+sal_Int16 SAL_CALL
+SwXText::compareRegionEnds(
+    const uno::Reference<text::XTextRange>& xRange1,
+    const uno::Reference<text::XTextRange>& xRange2)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!xR1.is() || !xR2.is())
-        throw lang::IllegalArgumentException();
-    uno::Reference<text::XTextRange> xEnd1 = xR1->getEnd();
-    uno::Reference<text::XTextRange> xEnd2 = xR2->getEnd();
 
-    return ComparePositions(xEnd1, xEnd2);
+    if (!xRange1.is() || !xRange2.is())
+    {
+        throw lang::IllegalArgumentException();
+    }
+    uno::Reference<text::XTextRange> xEnd1 = xRange1->getEnd();
+    uno::Reference<text::XTextRange> xEnd2 = xRange2->getEnd();
+
+    return m_pImpl->ComparePositions(xEnd1, xEnd2);
 }
 
 /*-- 15.03.2002 12:30:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< beans::XPropertySetInfo > SwXText::getPropertySetInfo(  )
-    throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+SwXText::getPropertySetInfo() throw(uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo = m_pPropSet->getPropertySetInfo();
+    vos::OGuard g(Application::GetSolarMutex());
+
+    static uno::Reference< beans::XPropertySetInfo > xInfo =
+        m_pImpl->m_rPropSet.getPropertySetInfo();
     return xInfo;
 }
+
 /*-- 15.03.2002 12:30:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
-    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+void SAL_CALL
+SwXText::setPropertyValue(const ::rtl::OUString& /*aPropertyName*/,
+        const uno::Any& /*aValue*/)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
@@ -1176,100 +1187,113 @@ void SwXText::setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, const 
 /*-- 15.03.2002 12:30:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXText::getPropertyValue(
-    const ::rtl::OUString& rPropertyName )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException)
+uno::Any SAL_CALL
+SwXText::getPropertyValue(
+    const ::rtl::OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
-        throw  uno::RuntimeException();
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
-    uno::Any aRet;
-    if(pEntry)
     {
-        switch(pEntry->nWID)
-        {
-//          no code necessary - the redline is always located at the end node
-//            case FN_UNO_REDLINE_NODE_START:
-//            break;
-            case FN_UNO_REDLINE_NODE_END:
-            {
-                const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-                USHORT nRedTblCount = rRedTbl.Count();
-                if ( nRedTblCount > 0 )
-                {
-                    const SwStartNode* pStartNode = GetStartNode();
-                    ULONG nOwnIndex = pStartNode->EndOfSectionIndex();
-                    for(USHORT nRed = 0; nRed < nRedTblCount; nRed++)
-                    {
-                        const SwRedline* pRedline = rRedTbl[nRed];
-                        const SwPosition* pRedStart = pRedline->Start();
-                        const SwNodeIndex nRedNode = pRedStart->nNode;
-                        if(nOwnIndex == nRedNode.GetIndex())
-                        {
-                            aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, TRUE);
-                            break;
-                        }
-                    }
-                }
-            }
-            break;
-        }
+        throw  uno::RuntimeException();
     }
-    else
+
+    SfxItemPropertySimpleEntry const*const pEntry =
+        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+    if (!pEntry)
     {
         beans::UnknownPropertyException aExcept;
         aExcept.Message = C2U("Unknown property: ");
         aExcept.Message += rPropertyName;
         throw aExcept;
     }
-    return aRet;
 
+    uno::Any aRet;
+    switch (pEntry->nWID)
+    {
+//          no code necessary - the redline is always located at the end node
+//            case FN_UNO_REDLINE_NODE_START:
+//            break;
+        case FN_UNO_REDLINE_NODE_END:
+        {
+            const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+            const USHORT nRedTblCount = rRedTbl.Count();
+            if (nRedTblCount > 0)
+            {
+                SwStartNode const*const pStartNode = GetStartNode();
+                const ULONG nOwnIndex = pStartNode->EndOfSectionIndex();
+                for (USHORT nRed = 0; nRed < nRedTblCount; nRed++)
+                {
+                    SwRedline const*const pRedline = rRedTbl[nRed];
+                    SwPosition const*const pRedStart = pRedline->Start();
+                    const SwNodeIndex nRedNode = pRedStart->nNode;
+                    if (nOwnIndex == nRedNode.GetIndex())
+                    {
+                        aRet <<= SwXRedlinePortion::CreateRedlineProperties(
+                                *pRedline, TRUE);
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    return aRet;
 }
+
 /*-- 15.03.2002 12:30:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::addPropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+void SAL_CALL
+SwXText::addPropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    throw uno::RuntimeException();
+    OSL_ENSURE(false,
+        "SwXText::addPropertyChangeListener(): not implemented");
 }
 /*-- 15.03.2002 12:30:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::removePropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-            uno::RuntimeException)
+void SAL_CALL
+SwXText::removePropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    throw uno::RuntimeException();
+    OSL_ENSURE(false,
+        "SwXText::removePropertyChangeListener(): not implemented");
 }
 /*-- 15.03.2002 12:30:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::addVetoableChangeListener(
-    const ::rtl::OUString& /*PropertyName*/,
-    const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+void SAL_CALL
+SwXText::addVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-    throw uno::RuntimeException();
+    OSL_ENSURE(false,
+        "SwXText::addVetoableChangeListener(): not implemented");
 }
 /*-- 15.03.2002 12:30:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXText::removeVetoableChangeListener(
-    const ::rtl::OUString& /*rPropertyName*/,
-    const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+void SAL_CALL
+SwXText::removeVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    throw uno::RuntimeException();
+    OSL_ENSURE(false,
+        "SwXText::removeVetoableChangeListener(): not implemented");
 }
 
 /* -----------------------------08.01.01 09:07--------------------------------
@@ -1283,488 +1307,527 @@ const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 /* -----------------------------08.01.01 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int64 SwXText::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL
+SwXText::getSomething(const uno::Sequence< sal_Int8 >& rId)
+throw (uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return ::sw::UnoTunnelImpl<SwXText>(rId, this);
 }
+
 /*-- 23.06.2006 08:56:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange > SwXText::appendParagraph(
-                const uno::Sequence< beans::PropertyValue > & rProperties )
-                throw (lang::IllegalArgumentException, uno::RuntimeException)
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::appendParagraph(
+        const uno::Sequence< beans::PropertyValue > & rProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    return finishOrAppendParagraph(false, rProperties);
+    vos::OGuard g(Application::GetSolarMutex());
+
+    return m_pImpl->finishOrAppendParagraph(false, rProperties);
 }
 /*-- 23.06.2006 08:56:22---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange > SwXText::finishParagraph(
-                const uno::Sequence< beans::PropertyValue > & rProperties )
-                throw (lang::IllegalArgumentException, uno::RuntimeException)
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::finishParagraph(
+        const uno::Sequence< beans::PropertyValue > & rProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    return finishOrAppendParagraph(true, rProperties);
+    vos::OGuard g(Application::GetSolarMutex());
+
+    return m_pImpl->finishOrAppendParagraph(true, rProperties);
 }
 
 /*-- 08.05.2006 13:26:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
-        bool bFinish,
-        const uno::Sequence< beans::PropertyValue > & rProperties )
-            throw (lang::IllegalArgumentException, uno::RuntimeException)
-
+uno::Reference< text::XTextRange >
+SwXText::Impl::finishOrAppendParagraph(
+        const bool bFinish,
+        const uno::Sequence< beans::PropertyValue > & rProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw  uno::RuntimeException();
-    uno::Reference< text::XTextRange > xRet;
-
-    const SwStartNode* pStartNode = GetStartNode();
-    if(!pStartNode)
-        throw  uno::RuntimeException();
+    if (!m_bIsValid)
     {
-        bool bIllegalException = false;
-        bool bRuntimeException = false;
-        ::rtl::OUString sMessage;
-        pDoc->StartUndo(UNDO_START , NULL);
-        //find end node, go backward - don't skip tables because the new paragraph has to be the last node
-        //aPam.Move( fnMoveBackward, fnGoNode );
-        SwPosition aInsertPosition( SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
-        SwPaM aPam(aInsertPosition);
-        pDoc->AppendTxtNode( *aPam.GetPoint() );
-        //remove attributes from the previous paragraph
-        pDoc->ResetAttrs(aPam);
-        //in case of finishParagraph the PaM needs to be moved to the previous paragraph
-        if(bFinish)
-            aPam.Move( fnMoveBackward, fnGoNode );
-        if(rProperties.getLength())
-        {
-            // now set the properties
-            const SfxItemPropertySet* pParaPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
-            const SfxItemPropertyMap* pParagraphMap = pParaPropSet->getPropertyMap();
+        throw  uno::RuntimeException();
+    }
 
-            const beans::PropertyValue* pValues = rProperties.getConstArray();
+    const SwStartNode* pStartNode = m_rThis.GetStartNode();
+    if(!pStartNode)
+    {
+        throw  uno::RuntimeException();
+    }
 
-            for( sal_Int32 nProp = 0; nProp < rProperties.getLength(); ++nProp)
-            {
-                if(pParagraphMap->getByName( pValues[nProp].Name ))
-                {
-                    try
-                    {
-                        SwUnoCursorHelper::SetPropertyValue(
-                            aPam, *pParaPropSet,
-                            pValues[nProp].Name, pValues[nProp].Value);
-                    }
-                    catch( lang::IllegalArgumentException& rIllegal )
-                    {
-                        sMessage = rIllegal.Message;
-                        bIllegalException = true;
-                    }
-                    catch( uno::RuntimeException& rRuntime )
-                    {
-                        sMessage = rRuntime.Message;
-                        bRuntimeException = true;
-                    }
-                }
-                else
-                    bIllegalException = true;
-                if( bIllegalException || bRuntimeException )
-                {
-                    break;
-                }
-            }
-        }
-        pDoc->EndUndo(UNDO_END, NULL);
-        if( bIllegalException || bRuntimeException )
+    uno::Reference< text::XTextRange > xRet;
+    bool bIllegalException = false;
+    bool bRuntimeException = false;
+    ::rtl::OUString sMessage;
+    m_pDoc->StartUndo(UNDO_START , NULL);
+    // find end node, go backward - don't skip tables because the new
+    // paragraph has to be the last node
+    //aPam.Move( fnMoveBackward, fnGoNode );
+    SwPosition aInsertPosition(
+            SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
+    SwPaM aPam(aInsertPosition);
+    m_pDoc->AppendTxtNode( *aPam.GetPoint() );
+    // remove attributes from the previous paragraph
+    m_pDoc->ResetAttrs(aPam);
+    // in case of finishParagraph the PaM needs to be moved to the
+    // previous paragraph
+    if (bFinish)
+    {
+        aPam.Move( fnMoveBackward, fnGoNode );
+    }
+    if (rProperties.getLength())
+    {
+        // now set the properties
+        SfxItemPropertySet const*const pParaPropSet =
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
+        SfxItemPropertyMap const*const pParagraphMap =
+            pParaPropSet->getPropertyMap();
+
+        const beans::PropertyValue* pValues = rProperties.getConstArray();
+
+        for (sal_Int32 nProp = 0; nProp < rProperties.getLength(); ++nProp)
         {
-            SwUndoIter aUndoIter( &aPam, UNDO_EMPTY );
-            pDoc->Undo(aUndoIter);
-            if(bIllegalException)
+            if (!pParagraphMap->getByName(pValues[nProp].Name))
             {
-                lang::IllegalArgumentException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
+                bIllegalException = true;
+                break;
             }
-            else //if(bRuntimeException)
+            try
             {
-                uno::RuntimeException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
+                SwUnoCursorHelper::SetPropertyValue(aPam, *pParaPropSet,
+                    pValues[nProp].Name, pValues[nProp].Value);
+            }
+            catch (lang::IllegalArgumentException& rIllegal)
+            {
+                sMessage = rIllegal.Message;
+                bIllegalException = true;
+                break;
+            }
+            catch (uno::RuntimeException& rRuntime)
+            {
+                sMessage = rRuntime.Message;
+                bRuntimeException = true;
+                break;
             }
         }
-        SwTxtNode * pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
-        OSL_ENSURE(pTxtNode, "no SwTxtNode?");
-        if (pTxtNode)
+    }
+    m_pDoc->EndUndo(UNDO_END, NULL);
+    if (bIllegalException || bRuntimeException)
+    {
+        SwUndoIter aUndoIter( &aPam, UNDO_EMPTY );
+        m_pDoc->Undo(aUndoIter);
+        if (bIllegalException)
         {
-            xRet.set(SwXParagraph::CreateXParagraph(*pDoc, *pTxtNode, this), uno::UNO_QUERY);
+            lang::IllegalArgumentException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
         }
+        else // if(bRuntimeException)
+        {
+            uno::RuntimeException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
+        }
+    }
+    SwTxtNode *const pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
+    OSL_ENSURE(pTxtNode, "no SwTxtNode?");
+    if (pTxtNode)
+    {
+        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, *pTxtNode, &m_rThis),
+                uno::UNO_QUERY);
     }
 
     return xRet;
 }
+
 /*-- 08.05.2006 13:28:26---------------------------------------------------
     Append text portions at the end of the last paragraph of the text
     interface. Support of import filters.
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange > SwXText::appendTextPortion(
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::appendTextPortion(
         const ::rtl::OUString& rText,
-        const uno::Sequence< beans::PropertyValue > & rCharacterAndParagraphProperties )
-            throw (lang::IllegalArgumentException, uno::RuntimeException)
+        const uno::Sequence< beans::PropertyValue > &
+            rCharacterAndParagraphProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
+    {
         throw  uno::RuntimeException();
-   uno::Reference< text::XTextRange > xRet;
-    uno::Reference< text::XTextCursor > xTextCursor = createCursor();
+    }
+    uno::Reference< text::XTextRange > xRet;
+    const uno::Reference< text::XTextCursor > xTextCursor = CreateCursor();
     xTextCursor->gotoEnd(sal_False);
 
-    uno::Reference< lang::XUnoTunnel > xRangeTunnel( xTextCursor, uno::UNO_QUERY_THROW );
-    SwXTextCursor* pTextCursor = reinterpret_cast< SwXTextCursor * >(
-            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextCursor::getUnoTunnelId())));
-    {
-        bool bIllegalException = false;
-        bool bRuntimeException = false;
-        ::rtl::OUString sMessage;
-        pDoc->StartUndo(UNDO_INSERT, NULL);
+    const uno::Reference< lang::XUnoTunnel > xRangeTunnel(
+            xTextCursor, uno::UNO_QUERY_THROW );
+    SwXTextCursor *const pTextCursor =
+        ::sw::UnoTunnelGetImplementation<SwXTextCursor>(xRangeTunnel);
+
+    bool bIllegalException = false;
+    bool bRuntimeException = false;
+    ::rtl::OUString sMessage;
+    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
 
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
-        //aPam.Move( fnMoveBackward, fnGoNode );
-        SwUnoCrsr * pCursor = pTextCursor->GetCursor();
-        pCursor->MovePara( fnParaCurr, fnParaEnd );
-        pDoc->DontExpandFmt( *pCursor->Start() );
+    //aPam.Move( fnMoveBackward, fnGoNode );
+    SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
+    pCursor->MovePara( fnParaCurr, fnParaEnd );
+    m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
 
-        if(rText.getLength())
-        {
-            xub_StrLen nContentPos = pCursor->GetPoint()->nContent.GetIndex();
-            SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *pCursor, rText,
-                false );
-            SwUnoCursorHelper::SelectPam(*pCursor, true);
-            pCursor->GetPoint()->nContent = nContentPos;
-        }
-
-        if(rCharacterAndParagraphProperties.getLength())
-        {
-            const SfxItemPropertyMap* pCursorMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap();
-            const beans::PropertyValue* pValues = rCharacterAndParagraphProperties.getConstArray();
-            const SfxItemPropertySet* pCursorPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
-            for( sal_Int32 nProp = 0; nProp < rCharacterAndParagraphProperties.getLength(); ++nProp)
-            {
-                if( pCursorMap->getByName( pValues[nProp].Name ) )
-                {
-                    try
-                    {
-                        SwUnoCursorHelper::SetPropertyValue(
-                            *pCursor, *pCursorPropSet,
-                            pValues[nProp].Name, pValues[nProp].Value,
-                            nsSetAttrMode::SETATTR_NOFORMATATTR);
-                    }
-                    catch( lang::IllegalArgumentException& rIllegal )
-                    {
-                        sMessage = rIllegal.Message;
-                        bIllegalException = true;
-                    }
-                    catch( uno::RuntimeException& rRuntime )
-                    {
-                        sMessage = rRuntime.Message;
-                        bRuntimeException = true;
-                    }
-                }
-                else
-                    bIllegalException = true;
-                if( bIllegalException || bRuntimeException )
-                {
-                    break;
-                }
-            }
-        }
-        pDoc->EndUndo(UNDO_INSERT, NULL);
-        if( bIllegalException || bRuntimeException )
-        {
-            SwUndoIter aUndoIter( pCursor, UNDO_EMPTY );
-            pDoc->Undo(aUndoIter);
-            delete pCursor;
-            pCursor = 0;
-            if(bIllegalException)
-            {
-                lang::IllegalArgumentException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-            else //if(bRuntimeException)
-            {
-                uno::RuntimeException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-        }
-        xRet = new SwXTextRange(*pCursor, this);
-        delete pCursor;
+    if (rText.getLength())
+    {
+        const xub_StrLen nContentPos = pCursor->GetPoint()->nContent.GetIndex();
+        SwUnoCursorHelper::DocInsertStringSplitCR(
+            *m_pImpl->m_pDoc, *pCursor, rText, false);
+        SwUnoCursorHelper::SelectPam(*pCursor, true);
+        pCursor->GetPoint()->nContent = nContentPos;
     }
-   return xRet;
+
+    if (rCharacterAndParagraphProperties.getLength())
+    {
+        SfxItemPropertyMap const*const pCursorMap =
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)
+                ->getPropertyMap();
+        beans::PropertyValue const*const pValues =
+            rCharacterAndParagraphProperties.getConstArray();
+        SfxItemPropertySet const*const pCursorPropSet =
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
+        const sal_Int32 nLen(rCharacterAndParagraphProperties.getLength());
+        for (sal_Int32 nProp = 0; nProp < nLen; ++nProp)
+        {
+            if (!pCursorMap->getByName( pValues[nProp].Name ))
+            {
+                bIllegalException = true;
+                break;
+            }
+            try
+            {
+                SwUnoCursorHelper::SetPropertyValue(
+                    *pCursor, *pCursorPropSet,
+                    pValues[nProp].Name, pValues[nProp].Value,
+                    nsSetAttrMode::SETATTR_NOFORMATATTR);
+            }
+            catch( lang::IllegalArgumentException& rIllegal )
+            {
+                sMessage = rIllegal.Message;
+                bIllegalException = true;
+                break;
+            }
+            catch( uno::RuntimeException& rRuntime )
+            {
+                sMessage = rRuntime.Message;
+                bRuntimeException = true;
+                break;
+            }
+        }
+    }
+    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
+    if (bIllegalException || bRuntimeException)
+    {
+        SwUndoIter aUndoIter( pCursor, UNDO_EMPTY );
+        m_pImpl->m_pDoc->Undo(aUndoIter);
+        if (bIllegalException)
+        {
+            lang::IllegalArgumentException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
+        }
+        else //if(bRuntimeException)
+        {
+            uno::RuntimeException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
+        }
+    }
+    xRet = new SwXTextRange(*pCursor, this);
+    return xRet;
 }
+
 /*-- 11.05.2006 15:46:26---------------------------------------------------
     enable appending text contents like graphic objects, shapes and so on
     to support import filters
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange > SwXText::appendTextContent(
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::appendTextContent(
     const uno::Reference< text::XTextContent >& xTextContent,
-    const uno::Sequence< beans::PropertyValue >& rCharacterAndParagraphProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+    const uno::Sequence< beans::PropertyValue >&
+        rCharacterAndParagraphProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw  uno::RuntimeException();
-    const SwStartNode* pStartNode = GetStartNode();
-    if(!pStartNode)
-        throw  uno::RuntimeException();
-    uno::Reference< text::XTextRange > xRet;
-    {
-        pDoc->StartUndo(UNDO_INSERT, NULL);
-        //find end node, go backward - don't skip tables because the new paragraph has to be the last node
-        SwPaM aPam(*pStartNode->EndOfSectionNode());
-        aPam.Move( fnMoveBackward, fnGoNode );
-        //set cursor to the end of the last text node
-        SwCursor* pCursor = new SwCursor( *aPam.Start(),0,false );
-        xRet = new SwXTextRange(*pCursor, this);
-        pCursor->MovePara( fnParaCurr, fnParaEnd );
-        pDoc->DontExpandFmt( *pCursor->Start() );
-        //now attach the text content here
-        insertTextContent( xRet, xTextContent, false );
-        //now apply the properties to the anchor
-        if( rCharacterAndParagraphProperties.getLength())
-        {
-            try
-            {
-                uno::Reference< beans::XPropertySet > xAnchor( xTextContent->getAnchor(), uno::UNO_QUERY);
-                if( xAnchor.is() )
-                {
-                    for( sal_Int32 nElement = 0; nElement < rCharacterAndParagraphProperties.getLength(); ++nElement )
-                    {
-                        xAnchor->setPropertyValue( rCharacterAndParagraphProperties[nElement].Name, rCharacterAndParagraphProperties[nElement].Value );
-                    }
-                }
 
-            }
-            catch(const uno::Exception&)
+    if (!IsValid())
+    {
+        throw  uno::RuntimeException();
+    }
+    SwStartNode const*const pStartNode = GetStartNode();
+    if(!pStartNode)
+    {
+        throw  uno::RuntimeException();
+    }
+
+    uno::Reference< text::XTextRange > xRet;
+    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
+    // find end node, go backward - don't skip tables because the
+    // new paragraph has to be the last node
+    SwPaM aPam(*pStartNode->EndOfSectionNode());
+    aPam.Move( fnMoveBackward, fnGoNode );
+    // set cursor to the end of the last text node
+    SwCursor aCursor( *aPam.Start(), 0, false );
+    xRet = new SwXTextRange(aCursor, this);
+    aCursor.MovePara( fnParaCurr, fnParaEnd );
+    m_pImpl->m_pDoc->DontExpandFmt( *aCursor.Start() );
+    // now attach the text content here
+    insertTextContent( xRet, xTextContent, false );
+    // now apply the properties to the anchor
+    if (rCharacterAndParagraphProperties.getLength())
+    {
+        try
+        {
+            const sal_Int32 nLen(rCharacterAndParagraphProperties.getLength());
+            const uno::Reference< beans::XPropertySet > xAnchor(
+                xTextContent->getAnchor(), uno::UNO_QUERY);
+            if (xAnchor.is())
             {
-                throw uno::RuntimeException();
+                for (sal_Int32 nElement = 0; nElement < nLen; ++nElement)
+                {
+                    xAnchor->setPropertyValue(
+                        rCharacterAndParagraphProperties[nElement].Name,
+                        rCharacterAndParagraphProperties[nElement].Value);
+                }
             }
         }
-        delete pCursor;
-        pDoc->EndUndo(UNDO_INSERT, NULL);
+        catch (const uno::Exception&)
+        {
+            throw uno::RuntimeException();
+        }
     }
+    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
     return xRet;
 }
 
 // move previously appended paragraphs into a text frames
 // to support import filters
-uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
+uno::Reference< text::XTextContent > SAL_CALL
+SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xStart,
     const uno::Reference< text::XTextRange >& xEnd,
-    const uno::Sequence< beans::PropertyValue >& rFrameProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+    const uno::Sequence< beans::PropertyValue >& rFrameProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
+    {
         throw  uno::RuntimeException();
+    }
     uno::Reference< text::XTextContent > xRet;
     SwUnoInternalPaM aStartPam(*GetDoc());
-    std::auto_ptr < SwUnoInternalPaM > pEndPam( new SwUnoInternalPaM(*GetDoc()));
-    if (::sw::XTextRangeToSwPaM(aStartPam, xStart) &&
-        ::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
+    std::auto_ptr< SwUnoInternalPaM > pEndPam(new SwUnoInternalPaM(*GetDoc()));
+    if (!::sw::XTextRangeToSwPaM(aStartPam, xStart) ||
+        !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
-        uno::Reference<lang::XUnoTunnel> xStartRangeTunnel( xStart, uno::UNO_QUERY);
-        SwXTextRange* pStartRange  = reinterpret_cast< SwXTextRange * >(
-                   sal::static_int_cast< sal_IntPtr >( xStartRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        uno::Reference<lang::XUnoTunnel> xEndRangeTunnel( xEnd, uno::UNO_QUERY);
-        SwXTextRange* pEndRange  = reinterpret_cast< SwXTextRange * >(
-                   sal::static_int_cast< sal_IntPtr >( xEndRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        //bookmarks have to be removed before the referenced text node is deleted in DelFullPara
-        if(pStartRange)
+        throw lang::IllegalArgumentException();
+    }
+
+    const uno::Reference<lang::XUnoTunnel> xStartRangeTunnel(xStart,
+            uno::UNO_QUERY);
+    SwXTextRange *const pStartRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xStartRangeTunnel);
+    const uno::Reference<lang::XUnoTunnel> xEndRangeTunnel(xEnd,
+            uno::UNO_QUERY);
+    SwXTextRange *const pEndRange   =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xEndRangeTunnel);
+    // bookmarks have to be removed before the referenced text node
+    // is deleted in DelFullPara
+    if (pStartRange)
+    {
+        pStartRange->Invalidate();
+    }
+    if (pEndRange)
+    {
+        pEndRange->Invalidate();
+    }
+
+    m_pImpl->m_pDoc->StartUndo( UNDO_START, NULL );
+    bool bIllegalException = false;
+    bool bRuntimeException = false;
+    ::rtl::OUString sMessage;
+    SwStartNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
+    while (pStartStartNode && pStartStartNode->IsSectionNode())
+    {
+        pStartStartNode = pStartStartNode->StartOfSectionNode();
+    }
+    SwStartNode* pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
+    while (pEndStartNode && pEndStartNode->IsSectionNode())
+    {
+        pEndStartNode = pEndStartNode->StartOfSectionNode();
+    }
+    bool bParaAfterInserted = false;
+    bool bParaBeforeInserted = false;
+    if (pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
+    {
+        // todo: if the start/end is in a table then insert a paragraph
+        // before/after, move the start/end nodes, then convert and
+        // remove the addtional paragraphs in the end
+        if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            pStartRange->Invalidate();
+            SwTableNode *const pSartTableNode(pStartStartNode->FindTableNode());
+            const SwNodeIndex aTblIdx(  *pSartTableNode, -1 );
+            SwPosition aBefore(aTblIdx);
+            bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
+            aStartPam.DeleteMark();
+            *aStartPam.GetPoint() = aBefore;
+            pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
         }
-        if(pEndRange)
+        if (pEndStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            pEndRange->Invalidate();
+            SwTableNode *const pEndTableNode = pEndStartNode->FindTableNode();
+            SwEndNode *const pTableEnd = pEndTableNode->EndOfSectionNode();
+            SwPosition aTableEnd(*pTableEnd);
+            bParaAfterInserted = GetDoc()->AppendTxtNode( aTableEnd );
+            pEndPam->DeleteMark();
+            *pEndPam->GetPoint() = aTableEnd;
+            pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
+        }
+        // now we should have the positions in the same hierarchy
+        if ((pStartStartNode != pEndStartNode) ||
+            (pStartStartNode != GetStartNode()))
+        {
+            // if not - remove the additional paragraphs and throw
+            if (bParaBeforeInserted)
+            {
+                SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
+                aDelete.MovePara(fnParaCurr, fnParaStart);
+                aDelete.SetMark();
+                aDelete.MovePara(fnParaCurr, fnParaEnd);
+                GetDoc()->DelFullPara(aDelete);
+            }
+            if (bParaAfterInserted)
+            {
+                SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
+                aDelete.MovePara(fnParaCurr, fnParaStart);
+                aDelete.SetMark();
+                aDelete.MovePara(fnParaCurr, fnParaEnd);
+                GetDoc()->DelFullPara(aDelete);
+            }
+            throw lang::IllegalArgumentException();
+        }
+    }
+
+    // make a selection from aStartPam to a EndPam
+    SwSelBoxes aBoxes;
+    SfxItemSet aFrameItemSet(m_pImpl->m_pDoc->GetAttrPool(),
+                    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+                    0 );
+
+    aStartPam.SetMark();
+    *aStartPam.End() = *pEndPam->End();
+    pEndPam.reset(0);
+
+    SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
+    const uno::Reference< text::XTextFrame > xNewFrame = pNewFrame;
+    pNewFrame->SetSelection( aStartPam );
+    try
+    {
+        const beans::PropertyValue* pValues = rFrameProperties.getConstArray();
+        for (sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
+        {
+            pNewFrame->SwXFrame::setPropertyValue(
+                    pValues[nProp].Name, pValues[nProp].Value);
         }
 
-        pDoc->StartUndo( UNDO_START, NULL );
-        bool bIllegalException = false;
-        bool bRuntimeException = false;
-        ::rtl::OUString sMessage;
-        SwStartNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
-        while(pStartStartNode && pStartStartNode->IsSectionNode())
-        {
-            pStartStartNode = pStartStartNode->StartOfSectionNode();
+        {   // has to be in a block to remove the SwIndexes before
+            // DelFullPara is called
+            const uno::Reference< text::XTextRange> xInsertTextRange =
+                new SwXTextRange(aStartPam, this);
+            pNewFrame->attach( xInsertTextRange );
+            pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
-        SwStartNode* pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
-        while(pEndStartNode && pEndStartNode->IsSectionNode())
+
+        if (!aStartPam.GetTxt().Len())
         {
-            pEndStartNode = pEndStartNode->StartOfSectionNode();
-        }
-        bool bParaAfterInserted = false;
-        bool bParaBeforeInserted = false;
-        if(pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
-        {
-            //todo: if the start/end is in a table then insert a paragraph before/after, move
-            //the start/end nodes, then convert and remove the addtional paragraphs in the end
-            if( pStartStartNode->GetStartNodeType() == SwTableBoxStartNode )
+            bool bMoved = false;
+            {   // has to be in a block to remove the SwIndexes before
+                // DelFullPara is called
+                SwPaM aMovePam( *aStartPam.GetNode() );
+                if (aMovePam.Move( fnMoveForward, fnGoCntnt ))
+                {
+                    // move the anchor to the next paragraph
+                    SwFmtAnchor aNewAnchor(pNewFrame->GetFrmFmt()->GetAnchor());
+                    aNewAnchor.SetAnchor( aMovePam.Start() );
+                    m_pImpl->m_pDoc->SetAttr(
+                        aNewAnchor, *pNewFrame->GetFrmFmt() );
+                }
+                bMoved = true;
+            }
+            if (bMoved)
             {
-                SwTableNode* pSartTableNode = pStartStartNode->FindTableNode();
-                SwNodeIndex aTblIdx(  *pSartTableNode, -1 );
-                SwPosition aBefore(aTblIdx);
-                bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
                 aStartPam.DeleteMark();
-                *aStartPam.GetPoint() = aBefore;
-                pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
-            }
-            if( pEndStartNode->GetStartNodeType() == SwTableBoxStartNode )
-            {
-                SwTableNode* pEndTableNode = pEndStartNode->FindTableNode();
-                SwEndNode* pTableEnd = pEndTableNode->EndOfSectionNode();
-                SwPosition aTableEnd(*pTableEnd);
-                bParaAfterInserted = GetDoc()->AppendTxtNode( aTableEnd );
-                pEndPam->DeleteMark();
-                *pEndPam->GetPoint() = aTableEnd;
-                pEndStartNode  = pEndPam->GetNode()->StartOfSectionNode();
-            }
-            //now we should have the positions in the same hierarchy
-            if(pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
-            {
-                //if not - remove the additional paragraphs and throw
-                if( bParaBeforeInserted )
-                {
-                    SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
-                    aDelete.MovePara(fnParaCurr, fnParaStart);
-                    aDelete.SetMark();
-                    aDelete.MovePara(fnParaCurr, fnParaEnd);
-                    GetDoc()->DelFullPara(aDelete);
-                }
-                if( bParaAfterInserted )
-                {
-                    SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
-                    aDelete.MovePara(fnParaCurr, fnParaStart);
-                    aDelete.SetMark();
-                    aDelete.MovePara(fnParaCurr, fnParaEnd);
-                    GetDoc()->DelFullPara(aDelete);
-                }
-                throw lang::IllegalArgumentException();
-            }
-        }
-
-        //make a selection from aStartPam to a EndPam
-        SwSelBoxes aBoxes;
-        SfxItemSet aFrameItemSet(pDoc->GetAttrPool(),
-                                    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                   0 );
-
-        aStartPam.SetMark();
-        *aStartPam.End() = *pEndPam->End();
-        pEndPam.reset(0);
-
-        SwXTextFrame* pNewFrame;
-        uno::Reference< text::XTextFrame > xNewFrame = pNewFrame = new SwXTextFrame( pDoc );
-        pNewFrame->SetSelection( aStartPam );
-        try
-        {
-            const beans::PropertyValue* pValues = rFrameProperties.getConstArray();
-            for(sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
-                pNewFrame->SwXFrame::setPropertyValue(pValues[nProp].Name, pValues[nProp].Value);
-
-            {//has to be in a block to remove the SwIndexes before DelFullPara is called
-                uno::Reference< text::XTextRange> xInsertTextRange = new SwXTextRange(aStartPam, this);
-                pNewFrame->attach( xInsertTextRange );
-                pNewFrame->setName(pDoc->GetUniqueFrameName());
-            }
-
-            if( !aStartPam.GetTxt().Len() )
-            {
-
-                bool bMoved = false;
-                {//has to be in a block to remove the SwIndexes before DelFullPara is called
-                    SwPaM aMovePam( *aStartPam.GetNode() );
-                    if( aMovePam.Move( fnMoveForward, fnGoCntnt ) )
-                    {
-                        //move the anchor to the next paragraph
-                        SwFmtAnchor aNewAnchor( pNewFrame->GetFrmFmt()->GetAnchor() );
-                        aNewAnchor.SetAnchor( aMovePam.Start() );
-                        pDoc->SetAttr( aNewAnchor, *pNewFrame->GetFrmFmt() );
-                    }
-                    bMoved = true;
-                }
-                if(bMoved)
-                {
-                    aStartPam.DeleteMark();
 //                    SwPaM aDelPam( *aStartPam.GetNode() );
-                    pDoc->DelFullPara(aStartPam/*aDelPam*/);
-                }
-            }
-        }
-        catch( lang::IllegalArgumentException& rIllegal )
-        {
-            sMessage = rIllegal.Message;
-            bIllegalException = true;
-        }
-        catch( uno::RuntimeException& rRuntime )
-        {
-            sMessage = rRuntime.Message;
-            bRuntimeException = true;
-        }
-        xRet = pNewFrame;
-        uno::Reference<text::XTextCursor> xFrameTextCursor;
-        if( bParaBeforeInserted )
-        {
-            //todo: remove paragraph before frame
-            xFrameTextCursor = pNewFrame->createTextCursor();
-            uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor, uno::UNO_QUERY);
-            SwXTextCursor* pFrameCursor = reinterpret_cast< SwXTextCursor* >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextCursor::getUnoTunnelId()) ));
-            pDoc->DelFullPara(*pFrameCursor->GetPaM());
-        }
-        if( bParaAfterInserted )
-        {
-            //todo: remove paragraph after frame
-            if( xFrameTextCursor.is() )
-                xFrameTextCursor = pNewFrame->createTextCursor();
-            xFrameTextCursor->gotoEnd( false );
-            uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor, uno::UNO_QUERY);
-            SwXTextCursor* pFrameCursor = reinterpret_cast< SwXTextCursor* >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextCursor::getUnoTunnelId()) ));
-            pDoc->DelFullPara(*pFrameCursor->GetPaM());
-        }
-
-        pDoc->EndUndo(UNDO_END, NULL);
-        if( bIllegalException || bRuntimeException )
-        {
-            SwUndoIter aUndoIter( &aStartPam, UNDO_EMPTY );
-            pDoc->Undo(aUndoIter);
-            if(bIllegalException)
-            {
-                lang::IllegalArgumentException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-            else //if(bRuntimeException)
-            {
-                uno::RuntimeException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
+                m_pImpl->m_pDoc->DelFullPara(aStartPam/*aDelPam*/);
             }
         }
     }
-    else
-        throw lang::IllegalArgumentException();
+    catch (lang::IllegalArgumentException& rIllegal)
+    {
+        sMessage = rIllegal.Message;
+        bIllegalException = true;
+    }
+    catch (uno::RuntimeException& rRuntime)
+    {
+        sMessage = rRuntime.Message;
+        bRuntimeException = true;
+    }
+    xRet = pNewFrame;
+    if (bParaBeforeInserted || bParaAfterInserted)
+    {
+        const uno::Reference<text::XTextCursor> xFrameTextCursor =
+            pNewFrame->createTextCursor();
+        const uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor,
+                uno::UNO_QUERY);
+        SwXTextCursor *const pFrameCursor =
+            ::sw::UnoTunnelGetImplementation<SwXTextCursor>(xTunnel);
+        if (bParaBeforeInserted)
+        {
+            // todo: remove paragraph before frame
+            m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+        }
+        if (bParaAfterInserted)
+        {
+            xFrameTextCursor->gotoEnd(sal_False);
+            m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+        }
+    }
+
+    m_pImpl->m_pDoc->EndUndo(UNDO_END, NULL);
+    if (bIllegalException || bRuntimeException)
+    {
+        SwUndoIter aUndoIter( &aStartPam, UNDO_EMPTY );
+        m_pImpl->m_pDoc->Undo(aUndoIter);
+        if (bIllegalException)
+        {
+            lang::IllegalArgumentException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
+        }
+        else //if(bRuntimeException)
+        {
+            uno::RuntimeException aEx;
+            aEx.Message = sMessage;
+            throw aEx;
+        }
+    }
     return xRet;
 }
+
 /*-- 11.05.2006 15:46:26---------------------------------------------------
     Move previously imported paragraphs into a new text table.
 
@@ -1788,12 +1851,15 @@ bool lcl_SimilarPosition( sal_Int32 nPos1, sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
-uno::Reference< text::XTextTable > SwXText::convertToTable(
-    const uno::Sequence< uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > > >& rTableRanges,
-   const uno::Sequence< uno::Sequence< uno::Sequence< beans::PropertyValue > > >& rCellProperties,
+uno::Reference< text::XTextTable > SAL_CALL
+SwXText::convertToTable(
+    const uno::Sequence< uno::Sequence< uno::Sequence<
+        uno::Reference< text::XTextRange > > > >& rTableRanges,
+   const uno::Sequence< uno::Sequence< uno::Sequence<
+        beans::PropertyValue > > >& rCellProperties,
    const uno::Sequence< uno::Sequence< beans::PropertyValue > >& rRowProperties,
-   const uno::Sequence< beans::PropertyValue >& rTableProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+   const uno::Sequence< beans::PropertyValue >& rTableProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
@@ -1804,7 +1870,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
     std::auto_ptr < SwPaM > pFirstPaM;
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     bool bExcept = false;
-    SwPaM aLastPaM(pDoc->GetNodes());
+    SwPaM aLastPaM(m_pImpl->m_pDoc->GetNodes());
     for( sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength()); ++nRow)
     {
         std::vector<SwNodeRange> aRowNodes;
@@ -1817,8 +1883,8 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                 throw lang::IllegalArgumentException();
             const uno::Reference< text::XTextRange > xStartRange = pRow[nCell][0];
             const uno::Reference< text::XTextRange > xEndRange = pRow[nCell][1];
-            SwUnoInternalPaM aStartCellPam(*pDoc);
-            SwUnoInternalPaM aEndCellPam(*pDoc);
+            SwUnoInternalPaM aStartCellPam(*m_pImpl->m_pDoc);
+            SwUnoInternalPaM aEndCellPam(*m_pImpl->m_pDoc);
 
             // !!! TODO - PaMs in tables and sections do not work here - the same applies to PaMs in frames !!!
 
@@ -1865,7 +1931,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
             {
                 //align the beginning - if necessary
                 if(aStartCellPam.Start()->nContent.GetIndex())
-                    pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+                    m_pImpl->m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
             }
             else
             {
@@ -1880,7 +1946,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                         bExcept = true;
                     else
                     {
-                        pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+                        m_pImpl->m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
                     }
                 }
                 else if(nStartCellNodeIndex == ( nLastNodeEndIndex + 1))
@@ -1898,7 +1964,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
            //now check if there's a need to insert another paragraph break
             if( aEndCellPam.End()->nContent.GetIndex() < aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
            {
-               pDoc->SplitNode(*aEndCellPam.End(), sal_False);
+               m_pImpl->m_pDoc->SplitNode(*aEndCellPam.End(), sal_False);
                 //take care that the new start/endcell is moved to the right position
                //aStartCellPam has to point to the start of the new (previous) node
                //aEndCellPam has to point the the end of the new (previous) node
@@ -1931,7 +1997,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
     if(bExcept)
     {
         SwUndoIter aUndoIter( &aLastPaM, UNDO_EMPTY );
-        pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->Undo(aUndoIter);
         throw lang::IllegalArgumentException();
     }
 
@@ -1939,7 +2005,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
     std::vector< TableColumnSeparators > aRowSeparators(rRowProperties.getLength());
     std::vector<VerticallyMergedCell>       aMergedCells;
 
-    const SwTable* pTable = pDoc->TextToTable( aTableNodes );
+    const SwTable* pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
     SwXTextTable* pTextTable = 0;
     uno::Reference< text::XTextTable > xRet = pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
     uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
@@ -2159,12 +2225,12 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
         bool bIllegalException = false;
         bool bRuntimeException = false;
         ::rtl::OUString sMessage;
-        pDoc->StartUndo(UNDO_START, NULL);
-        pDoc->EndUndo(UNDO_START, NULL);
+        m_pImpl->m_pDoc->StartUndo(UNDO_START, NULL);
+        m_pImpl->m_pDoc->EndUndo(UNDO_START, NULL);
         if( bIllegalException || bRuntimeException )
         {
             SwUndoIter aUndoIter( pFirstPaM.get(), UNDO_EMPTY );
-            pDoc->Undo(aUndoIter);
+            m_pImpl->m_pDoc->Undo(aUndoIter);
             if(bIllegalException)
             {
                 lang::IllegalArgumentException aEx;
@@ -2493,7 +2559,8 @@ const SwStartNode *SwXHeadFootText::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXHeadFootText::createCursor() throw(uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXHeadFootText::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }

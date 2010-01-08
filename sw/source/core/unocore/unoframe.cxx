@@ -2611,7 +2611,8 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXTextFrame::createCursor() throw ( uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }

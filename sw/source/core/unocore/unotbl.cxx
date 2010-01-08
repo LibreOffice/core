@@ -893,25 +893,32 @@ const SwStartNode *SwXCell::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXCell::createCursor() throw (uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXCell::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
 /*-- 11.12.98 10:56:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwXCell::IsValid()
+bool SwXCell::IsValid() const
 {
+    // FIXME: this is now a const method, to make SwXText::IsValid invisible
+    // but the const_cast here are still ridiculous. TODO: find a better way.
     SwFrmFmt* pTblFmt = pBox ? GetFrmFmt() : 0;
     if(!pTblFmt)
-        pBox = 0;
+    {
+        const_cast<SwXCell*>(this)->pBox = 0;
+    }
     else
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
-        const SwTableBox* pFoundBox ;
-        pFoundBox =  FindBox(pTable, pBox);
-        if(!pFoundBox)
-            pBox = 0;
+        SwTableBox const*const pFoundBox =
+            const_cast<SwXCell*>(this)->FindBox(pTable, pBox);
+        if (!pFoundBox)
+        {
+            const_cast<SwXCell*>(this)->pBox = 0;
+        }
     }
     return 0 != pBox;
 }

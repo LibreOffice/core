@@ -106,13 +106,15 @@ class SwXCell : public SwXCellBaseClass,
     // table position where pBox was found last
     sal_uInt16              nFndPos;
 
-    using SwXText::IsValid;
-
 protected:
     virtual const SwStartNode *GetStartNode() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Bool    IsValid();
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextCursor >
+        CreateCursor()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    bool IsValid() const;
 
     virtual ~SwXCell();
 

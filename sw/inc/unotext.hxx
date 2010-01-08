@@ -40,8 +40,6 @@
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
-#include <tools/debug.hxx>
-
 #include <unobaseclass.hxx>
 
 
@@ -75,27 +73,23 @@ class SwXText
 
 private:
 
-    SwDoc*                      pDoc;
-    BOOL                        bObjectValid;
-    CursorType                  eCrsrType;
-    const SfxItemPropertySet*   m_pPropSet;
-
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > SAL_CALL
-        finishOrAppendParagraph(
-            bool bFinish,
-            const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue >&
-                rCharacterAndParagraphProperties)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual void PrepareForAttach(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xRange,
             SwPaM const & rPam);
+    virtual bool CheckForOwnMemberMeta(
+            const SwPaM & rPam, const bool bAbsorb)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
 
 protected:
+
+    bool            IsValid() const;
+    void            Invalidate();
+    void            SetDoc(SwDoc *const pDoc);
 
     virtual ~SwXText();
 
@@ -104,41 +98,16 @@ public: /*not protected because C++ is retarded*/
 
 public:
 
-    SwXText(SwDoc* pDc, CursorType eType);
+    SwXText(SwDoc *const pDoc, const enum CursorType eType);
 
-    const SwDoc*    GetDoc() const  { return pDoc; }
-    SwDoc*          GetDoc()        { return pDoc; }
-
-    // SwDoc is set when SwXText is attached
-    void            SetDoc(SwDoc* pDc) {
-        DBG_ASSERT(!pDoc || !pDc, "Doc schon gesetzt?");
-        pDoc = pDc;
-        bObjectValid = 0 != pDc;
-    }
-
-    void            Invalidate() { bObjectValid = sal_False; }
-    BOOL            IsValid() const { return bObjectValid; }
-
-    CursorType      GetTextType() { return eCrsrType; }
+    const SwDoc*    GetDoc() const;
+          SwDoc*    GetDoc();
 
     virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor > createCursor()
+                ::com::sun::star::text::XTextCursor >
+        CreateCursor()
         throw (::com::sun::star::uno::RuntimeException);
-    INT16   ComparePositions(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange>& xPos1,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange>& xPos2)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
-    BOOL    CheckForOwnMember(const SwXTextRange* pRange1,
-                const OTextCursorHelper* pCursor1)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
-    virtual bool CheckForOwnMemberMeta(
-            const SwPaM & rPam, const bool bAbsorb)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
+
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

@@ -594,10 +594,13 @@ private:
 protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual uno::Reference< text::XTextCursor >
-        createCursor() throw (uno::RuntimeException);
+        CreateCursor() throw (uno::RuntimeException);
 
 public:
     SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta);
+
+    /// make available for SwXMeta
+    void Invalidate() { SwXText::Invalidate(); };
 
     // XInterface
     virtual void SAL_CALL acquire() throw()
@@ -649,7 +652,7 @@ bool SwXMetaText::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return m_rMeta.CheckForOwnMemberMeta(rPam, bAbsorb);
 }
 
-uno::Reference< text::XTextCursor > SwXMetaText::createCursor()
+uno::Reference< text::XTextCursor > SwXMetaText::CreateCursor()
 throw (uno::RuntimeException)
 {
     uno::Reference< text::XTextCursor > xRet;
@@ -680,7 +683,7 @@ SwXMetaText::getImplementationId() throw (uno::RuntimeException)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXMetaText::createTextCursor() throw (uno::RuntimeException)
 {
-    return createCursor();
+    return CreateCursor();
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL
@@ -688,7 +691,7 @@ SwXMetaText::createTextCursorByRange(
         const uno::Reference<text::XTextRange> & xTextPosition)
     throw (uno::RuntimeException)
 {
-    const uno::Reference<text::XTextCursor> xCursor( createCursor() );
+    const uno::Reference<text::XTextCursor> xCursor( CreateCursor() );
     xCursor->gotoRange(xTextPosition, sal_False);
     return xCursor;
 }

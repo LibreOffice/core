@@ -375,7 +375,8 @@ const SwStartNode *SwXFootnote::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXFootnote::createCursor() throw ( uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXFootnote::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
