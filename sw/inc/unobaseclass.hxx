@@ -164,6 +164,13 @@ namespace sw {
         return 0;
     }
 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    GetSupportedServiceNamesImpl(
+            size_t const nServices, char const*const pServices[]);
+    sal_Bool SupportsServiceImpl(
+            size_t const nServices, char const*const pServices[],
+            ::rtl::OUString const & rServiceName);
+
 } // namespace sw
 
 #endif // SW_UNOBASECLASS_HXX

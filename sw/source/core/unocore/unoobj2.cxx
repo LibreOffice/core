@@ -146,6 +146,37 @@ using namespace ::com::sun::star::drawing;
 using ::rtl::OUString;
 
 
+namespace sw {
+
+sal_Bool SupportsServiceImpl(
+        size_t const nServices, char const*const pServices[],
+        ::rtl::OUString const & rServiceName)
+{
+    for (size_t i = 0; i < nServices; ++i)
+    {
+        if (rServiceName.equalsAscii(pServices[i]))
+        {
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+uno::Sequence< ::rtl::OUString >
+GetSupportedServiceNamesImpl(
+        size_t const nServices, char const*const pServices[])
+{
+    uno::Sequence< ::rtl::OUString > ret(nServices);
+    for (size_t i = 0; i < nServices; ++i)
+    {
+        ret[i] = C2U(pServices[i]);
+    }
+    return ret;
+}
+
+} // namespace sw
+
+
 struct FrameDependSortListLess
 {
     bool operator() (FrameDependSortListEntry const& r1,
