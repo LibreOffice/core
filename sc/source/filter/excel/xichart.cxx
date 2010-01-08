@@ -3688,7 +3688,12 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
             {
                 Reference< XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
                 ::com::sun::star::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
-                xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+                // for pie charts, always set inner plot area size to exclude the data labels as Excel does
+                const XclImpChTypeGroup* pFirstTypeGroup = mxPrimAxesSet->GetFirstTypeGroup().get();
+                if( pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )
+                    xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+                else
+                    xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
             }
         }
         catch( Exception& )

@@ -3013,7 +3013,11 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
         maData.maRect = CalcChartRectFromHmm( xPositioning->calculateDiagramPositionExcludingAxes() );
         // the embedded CHFRAMEPOS record contains the outer plot area
         mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT, EXC_CHFRAMEPOS_PARENT ) );
-        mxFramePos->GetFramePosData().maRect = CalcChartRectFromHmm( xPositioning->calculateDiagramPositionIncludingAxes() );
+        // for pie charts, always use inner plot area size to exclude the data labels as Excel does
+        const XclExpChTypeGroup* pFirstTypeGroup = GetFirstTypeGroup().get();
+        bool bPieChart = pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE);
+        mxFramePos->GetFramePosData().maRect = bPieChart ? maData.maRect :
+            CalcChartRectFromHmm( xPositioning->calculateDiagramPositionIncludingAxes() );
     }
     catch( Exception& )
     {
