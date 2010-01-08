@@ -31,14 +31,14 @@
 
 #include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -67,7 +67,7 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svx3ditems.hxx>
@@ -556,7 +556,7 @@ namespace drawinglayer
                 const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
-                const bool bCompletelyTransparent(0xff == nStartLuminance == nEndLuminance);
+                const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
 
                 if(!bCompletelyTransparent)
                 {

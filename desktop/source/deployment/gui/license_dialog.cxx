@@ -43,7 +43,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "svtools/svmedit.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/lstner.hxx"
 #include "svtools/xtextedt.hxx"
 #include <vcl/scrbar.hxx>
 #include "vcl/threadex.hxx"
