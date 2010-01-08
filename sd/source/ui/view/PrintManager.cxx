@@ -37,7 +37,7 @@
 
 #include "PrintManager.hxx"
 
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "optsitem.hxx"
 #include "sdattr.hxx"
 #include "sdpage.hxx"
@@ -72,7 +72,7 @@
 #include "prntopts.hrc"
 #include "app.hrc"
 #include <svl/intitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/xlnclit.hxx>
 #include "printdialog.hxx"
 

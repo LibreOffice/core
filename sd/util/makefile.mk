@@ -66,6 +66,7 @@ SHL1IMPLIB= sdi
 
 # dynamic libraries
 SHL1STDLIBS+= \
+    $(EDITENGLIB) \
     $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
@@ -197,6 +198,7 @@ LIB4FILES=	\
 
 SHL4STDLIBS= \
     $(ISDLIB) \
+    $(EDITENGLIB) \
     $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
@@ -248,6 +250,7 @@ SHL5LIBS      = $(SLB)$/ppt.lib $(SLB)$/eppt.lib
 DEF5NAME=$(SHL5TARGET)
 
 SHL5STDLIBS = $(ISDLIB) \
+              $(EDITENGLIB)       \
               $(SVXCORELIB)       \
               $(MSFILTERLIB)   \
               $(SFX2LIB)          \

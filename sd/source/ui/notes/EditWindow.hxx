@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/timer.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 
 class EditEngine;

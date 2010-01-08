@@ -58,7 +58,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 
 #include "misc.hxx"

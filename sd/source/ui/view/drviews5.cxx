@@ -33,7 +33,7 @@
 
 #include "DrawViewShell.hxx"
 #include "PresentationViewShell.hxx"
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
@@ -43,7 +43,7 @@
 #include <vcl/scrbar.hxx>
 #include <tools/poly.hxx>
 #include <svx/fmshell.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include "AccessibleDrawDocumentView.hxx"
 

@@ -58,10 +58,11 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "Outliner.hxx"
 #include "sdresid.hxx"
+#include <comphelper/serviceinfohelper.hxx>
 
 #include "anminfo.hxx"
 #include "unohelp.hxx"
@@ -957,7 +958,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
 {
     uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
 
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
                                                   "com.sun.star.document.LinkTarget" );
 
     SdrObject* pObj = mpShape->GetSdrObject();
@@ -967,10 +968,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
         switch( nInventor )
         {
         case OBJ_TITLETEXT:
-            SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.TitleTextShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.TitleTextShape" );
             break;
         case OBJ_OUTLINETEXT:
-            SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.OutlinerShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.OutlinerShape" );
             break;
         }
     }

@@ -58,8 +58,8 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/multisel.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>

@@ -43,7 +43,7 @@
 #endif
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/printer.hxx>
@@ -51,7 +51,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/dispatch.hxx>

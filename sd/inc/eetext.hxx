@@ -30,7 +30,7 @@
 #ifndef _EETEXT_HXX
 #define _EETEXT_HXX
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #endif  // EETEXT_HXX
 

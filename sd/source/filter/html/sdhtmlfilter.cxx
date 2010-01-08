@@ -41,7 +41,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frame.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xoutbmp.hxx>

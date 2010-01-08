@@ -43,6 +43,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include "unopback.hxx"
 #include "unohelp.hxx"
@@ -212,7 +213,7 @@ OUString SAL_CALL SdUnoPageBackground::getImplementationName()
 sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
@@ -332,7 +333,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
                 // Hole Wert aus ItemSet
-                aAny = mpPropSet->getPropertyValue( pEntry, aSet );
+                aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
             }
         }
         else
@@ -460,7 +461,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
             SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
             aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
-            aAny = mpPropSet->getPropertyValue( pEntry, aSet );
+            aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
         }
     }
     return aAny;

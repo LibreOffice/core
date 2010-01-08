@@ -41,9 +41,9 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/flagsdef.hxx>
 
 #include "eetext.hxx"

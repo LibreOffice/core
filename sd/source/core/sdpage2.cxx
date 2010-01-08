@@ -32,15 +32,15 @@
 #include "precompiled_sd.hxx"
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SVXLINK_HXX
 #include <svx/linkmgr.hxx>
 #endif
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 #include <tools/list.hxx>
 

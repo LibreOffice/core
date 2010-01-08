@@ -45,8 +45,8 @@
 #include <sot/exchange.hxx>
 #include <svx/ruler.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/viewfac.hxx>
@@ -56,7 +56,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
 #include <svl/whiter.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
@@ -64,13 +64,13 @@
 #include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hdl>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include "fubullet.hxx"
 #include "optsitem.hxx"
 

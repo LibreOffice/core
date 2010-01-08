@@ -31,14 +31,14 @@
 #ifndef _SD_TEXTAPI_HXX_
 #define _SD_TEXTAPI_HXX_
 
-#include <svx/unoedsrc.hxx>
-#include <svx/unotext.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/unotext.hxx>
+#include <editeng/eeitem.hxx>
 #include <rtl/ref.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unoforou.hxx>
-#include <svx/unoipset.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoipset.hxx>
 
 class SdDrawDocument;
 

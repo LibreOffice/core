@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-#include <svx/unoedhlp.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
 
 #ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDIT_SOURCE_HXX

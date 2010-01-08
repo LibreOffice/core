@@ -38,12 +38,12 @@
 #include <svl/whiter.hxx>
 
 #include <svx/svdoutl.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 
 #include "drawdoc.hxx"
 #include "glob.hxx"

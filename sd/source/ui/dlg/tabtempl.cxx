@@ -35,7 +35,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 
 #include <svx/svxids.hrc>
 

@@ -50,14 +50,11 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
-
-#include <svx/impgrf.hxx>
-
 #include <avmedia/mediawindow.hxx>
 #include "filedlg.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
-
+#include <svtools/filter.hxx>
 
 
 //-----------------------------------------------------------------------------
@@ -352,7 +349,7 @@ SdExportFileDialog::SdExportFileDialog(BOOL bHaveCheckbox) :
 {
     // setup filter
     const String    aHTMLFilter( SdResId( STR_EXPORT_HTML_NAME ) );
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     const USHORT    nFilterCount = pFilter->GetExportFormatCount();
 
     // add HTML filter

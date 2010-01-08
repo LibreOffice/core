@@ -31,9 +31,9 @@
 #ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #define SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 
-#include <svx/AccessibleContextBase.hxx>
-#include <svx/AccessibleComponentBase.hxx>
-#include <svx/AccessibleSelectionBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
+#include <editeng/AccessibleSelectionBase.hxx>
 #include "AccessibleViewForwarder.hxx"
 #include "AccessiblePageShape.hxx"
 #include <svx/ChildrenManager.hxx>

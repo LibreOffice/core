@@ -50,7 +50,7 @@
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -103,10 +103,10 @@
 #include <sot/clsids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 /*
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdmodel.hxx>
 */
 #include <svtools/fltcall.hxx>

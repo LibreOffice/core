@@ -33,12 +33,12 @@
 
 
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include "eetext.hxx"
 #include <svx/svxids.hrc>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/galbrws.hxx>

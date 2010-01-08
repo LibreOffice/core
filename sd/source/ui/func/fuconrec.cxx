@@ -55,7 +55,7 @@
 #include <svx/svdocirc.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xtable.hxx>
 
 // #88751#
@@ -67,7 +67,7 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 // #109583#
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 

@@ -40,7 +40,7 @@
 #include <tools/poly.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include "View.hxx"

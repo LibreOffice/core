@@ -41,8 +41,8 @@
 #include <vcl/virdev.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 

@@ -44,23 +44,17 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
-#ifndef _TOOLKIT_UNOIFACE_HXX
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unomodel.hxx>
 #include <unopage.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <sdresid.hxx>
 #include <glob.hrc>
-#ifndef _SD_PAGE_HXX //autogen
 #include <sdpage.hxx>
-#endif
 #include <unoprnms.hxx>
 #include <sdattr.hxx>
 #include <drawdoc.hxx>
@@ -71,6 +65,7 @@
 #include <svl/style.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <comphelper/extract.hxx>
 #include <list>
@@ -1432,7 +1427,7 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
                                                   "com.sun.star.document.LinkTarget",
                                                   "com.sun.star.document.LinkTargetSupplier");
     return aSeq;
@@ -1972,7 +1967,7 @@ OUString SAL_CALL SdPageLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
@@ -2204,10 +2199,10 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
 
     if( mbIsImpressDocument )
-        SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.DrawPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.DrawPage" );
 
     return aSeq;
 }
@@ -2792,10 +2787,10 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
 
     if( SvxFmDrawPage::mpPage && ((SdPage*)SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
-        SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
 
     return aSeq;
 }

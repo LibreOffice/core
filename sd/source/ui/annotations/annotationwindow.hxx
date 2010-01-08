@@ -44,7 +44,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 
 class OutlinerView;
 class Outliner;

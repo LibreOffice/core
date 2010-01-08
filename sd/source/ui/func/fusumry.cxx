@@ -33,11 +33,11 @@
 
 
 #include "fusumry.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "strings.hrc"
 

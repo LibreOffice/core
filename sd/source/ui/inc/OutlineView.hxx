@@ -32,7 +32,7 @@
 #define SD_OUTLINE_VIEW_HXX
 
 #include <vcl/image.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include "View.hxx"
 
 class SdPage;

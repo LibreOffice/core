@@ -40,9 +40,9 @@
 #ifndef _GLOBL3D_HXX //autogen
 #include <svx/globl3d.hxx>
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>

@@ -52,7 +52,6 @@
 #include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/linkmgr.hxx>
 #include <svx/svdetc.hxx>
@@ -70,7 +69,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #ifndef _EDITENG_HXX //autogen
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #endif
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
@@ -187,7 +186,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
         else
         {
-            SdGRFFilter::HandleGraphicFilterError( (USHORT)nError, GetGrfFilter()->GetLastError().nStreamError );
+            SdGRFFilter::HandleGraphicFilterError( (USHORT)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
         }
     }
 }

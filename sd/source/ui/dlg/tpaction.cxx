@@ -35,7 +35,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-
+#include <svx/svxids.hrc>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -58,7 +58,7 @@
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/aeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>

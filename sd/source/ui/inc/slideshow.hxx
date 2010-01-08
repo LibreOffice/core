@@ -41,7 +41,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <memory>
 #include <boost/shared_ptr.hpp>

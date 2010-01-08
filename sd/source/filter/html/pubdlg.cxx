@@ -52,9 +52,8 @@
 #include <svtools/valueset.hxx>
 #include <vcl/graph.hxx>
 #include <svl/eitem.hxx>
-#include <svx/impgrf.hxx>
 #include <svtools/colrdlg.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <tools/list.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>

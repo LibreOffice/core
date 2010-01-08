@@ -41,9 +41,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>

@@ -36,7 +36,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>

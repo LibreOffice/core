@@ -56,14 +56,14 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/zcodec.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/wmf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 
 #define PPT_TRANSITION_TYPE_NONE            0

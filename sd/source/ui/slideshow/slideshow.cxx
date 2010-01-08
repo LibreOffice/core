@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -278,7 +279,7 @@ OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
 }
 
 // --------------------------------------------------------------------

@@ -46,7 +46,7 @@
 
 #include <svl/style.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

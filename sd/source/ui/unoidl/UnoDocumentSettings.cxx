@@ -70,7 +70,7 @@
 #else
 #include <svx/svdoutl.hxx>
 #endif
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
 #define MAP_LEN(x) x, sizeof(x)-1

@@ -35,7 +35,7 @@
 #include <svx/svdoutl.hxx>
 #include "pres.hxx"
 #include "OutlinerIterator.hxx"
-#include <svx/SpellPortions.hxx>
+#include <editeng/SpellPortions.hxx>
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
@@ -121,7 +121,7 @@ public:
             <const>OUTLINERMODE_TITLEOBJECT</const>,
             <const>OUTLINERMODE_OUTLINEOBJECT</const>, and
             <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
-            svx/outliner.hxx.
+            editeng/outliner.hxx.
     */
     Outliner( SdDrawDocument* pDoc, USHORT nMode );
     virtual ~Outliner();

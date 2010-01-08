@@ -55,7 +55,7 @@
 #include <svx/svdocirc.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/tbxcustomshapes.hxx>
@@ -71,7 +71,7 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 // #109583#
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
 #include <com/sun/star/uno/Any.hxx>

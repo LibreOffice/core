@@ -39,9 +39,9 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -50,7 +50,7 @@
 #ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
 #endif
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
@@ -58,7 +58,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
 
 

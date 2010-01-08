@@ -39,8 +39,8 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/flstitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/flagitem.hxx>
 #include <sot/storage.hxx>

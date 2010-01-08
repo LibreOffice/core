@@ -39,16 +39,16 @@
 #include "eetext.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>
 #include <svx/tabline.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/graph.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"

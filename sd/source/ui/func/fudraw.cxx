@@ -32,10 +32,10 @@
 #include "precompiled_sd.hxx"
 
 #include <sot/object.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/waitobj.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>

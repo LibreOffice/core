@@ -43,19 +43,20 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <comphelper/sequence.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <unomodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/UnoForbiddenCharsTable.hxx>
+#include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
@@ -66,12 +67,12 @@
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unonrule.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unonrule.hxx>
+#include <editeng/eeitem.hxx>
 
 // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -2988,7 +2989,7 @@ OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()

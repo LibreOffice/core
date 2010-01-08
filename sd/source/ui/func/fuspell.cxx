@@ -34,7 +34,7 @@
 
 #include "fuspell.hxx"
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <sfx2/bindings.hxx>
 
 #include <sfx2/viewfrm.hxx>

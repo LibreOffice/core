@@ -32,10 +32,10 @@
 #include "precompiled_sd.hxx"
 
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

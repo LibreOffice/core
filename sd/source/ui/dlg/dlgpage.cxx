@@ -50,7 +50,7 @@
 #include "DrawDocShell.hxx"
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 /*************************************************************************
 |*

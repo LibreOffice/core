@@ -56,7 +56,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <comphelper/servicehelper.hxx>
 

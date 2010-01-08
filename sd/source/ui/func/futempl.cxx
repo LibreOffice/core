@@ -38,18 +38,18 @@
 
 #include "futempl.hxx"
 
-#include <svx/editdata.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
 #include <sfx2/bindings.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
 

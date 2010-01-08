@@ -41,7 +41,7 @@
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -52,12 +52,12 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/eitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmglob.hxx>

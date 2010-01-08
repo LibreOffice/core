@@ -54,11 +54,11 @@
 #include <svx/svdpagv.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/urlbmk.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>
 #include <sot/formats.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svditer.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>

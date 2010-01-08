@@ -36,7 +36,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 
 #include <svx/gallery.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>

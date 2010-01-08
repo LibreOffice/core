@@ -45,9 +45,9 @@
 #include <svx/zoomitem.hxx>
 #endif
 #include <vcl/msgbox.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editstat.hxx>
 #include "optsitem.hxx"
 #include <unotools/useroptions.hxx>
 

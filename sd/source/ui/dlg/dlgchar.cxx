@@ -37,7 +37,7 @@
 
 
 #include <svx/dialogs.hrc>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/objsh.hxx>
 

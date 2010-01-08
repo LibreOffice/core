@@ -46,12 +46,12 @@
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>

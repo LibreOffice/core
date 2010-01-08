@@ -33,6 +33,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -198,7 +199,7 @@ OUString SAL_CALL SdStyleFamily::getImplementationName() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 // ----------------------------------------------------------

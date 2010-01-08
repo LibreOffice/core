@@ -37,9 +37,9 @@
 
 #include <textapi.hxx>
 #include <drawdoc.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 #include "Outliner.hxx"
 #include <svx/svdpool.hxx>
 

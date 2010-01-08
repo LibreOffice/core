@@ -37,7 +37,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _VIEW3D_HXX //autogen
 #include <svx/view3d.hxx>
 #endif
@@ -49,10 +49,10 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 
 #include <sfx2/viewfrm.hxx>

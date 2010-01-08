@@ -36,19 +36,19 @@
 #include "sdmod.hxx"
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/scrbar.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "sdresid.hxx"
 #include <svl/itempool.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/editstat.hxx>
 
 #define SCROLL_LINE         24
 
