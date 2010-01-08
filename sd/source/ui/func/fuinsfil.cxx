@@ -38,7 +38,7 @@
 #ifndef _EDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
@@ -48,7 +48,7 @@
 #include <svx/svdoutl.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sot/formats.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>

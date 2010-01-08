@@ -44,8 +44,8 @@
 #include <sfx2/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/flstitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/printer.hxx>
 #ifndef _SFX_DOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -55,16 +55,16 @@
 #include <svx/drawitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/filter.hxx>
 #ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
 #include <sfx2/topfrm.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/visitem.hxx>
 
 #include <svx/svdoutl.hxx>
 

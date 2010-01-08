@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "PrintManager.hxx"
 
@@ -52,7 +53,7 @@
 #include <sfx2/progress.hxx>
 #include <svtools/printdlg.hxx>
 #include <tools/multisel.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/prtqry.hxx>
 #include "WindowUpdater.hxx"
@@ -71,7 +72,7 @@
 #include "printdlg.hrc"
 #include "prntopts.hrc"
 #include "app.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/xlnclit.hxx>
 #include "printdialog.hxx"
@@ -368,7 +369,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
         if( pPrintOpts )
         {
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            ::utl::MiscCfg aMisc;
 
             if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
@@ -398,9 +399,9 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 ePageKind = PK_NOTES;
             }
 
-            pPrintOpts->GetOptionsPrint().SetWarningPrinter( pMisc->IsNotFoundWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningSize( pMisc->IsPaperSizeWarning() );
-            pPrintOpts->GetOptionsPrint().SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningPrinter( aMisc.IsNotFoundWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningSize( aMisc.IsPaperSizeWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningOrientation( aMisc.IsPaperOrientationWarning() );
 
             UINT16  nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
             ULONG   nMode = DRAWMODE_DEFAULT;
@@ -1779,10 +1780,10 @@ void PrintManager::InitHandoutTemplate( PrintInfo& /*rInfo*/, USHORT nSlidesPerH
             aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );
             aPoly.insert(1, basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
 
-            basegfx::B2DHomMatrix aMatrix;
-            aMatrix.translate( 0.0, static_cast< double >( aRect.GetHeight() / 7 ) );
-
+            const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+                0.0, static_cast< double >( aRect.GetHeight() / 7 )));
             basegfx::B2DPolyPolygon aPathPoly;
+
             for( sal_uInt16 nLine = 0; nLine < 7; nLine++ )
             {
                 aPoly.transform( aMatrix );

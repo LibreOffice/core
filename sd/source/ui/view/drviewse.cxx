@@ -40,10 +40,10 @@
 
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/editstat.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 #include <vcl/scrbar.hxx>
@@ -51,7 +51,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -64,11 +64,11 @@
 #include <svx/svdouno.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/docfile.hxx>
 

@@ -34,15 +34,13 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#ifndef _SD_PPTANIMATIONS_HXX
 #include "pptanimations.hxx"
-#endif
 #include <animations.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 
 #include <list>
 

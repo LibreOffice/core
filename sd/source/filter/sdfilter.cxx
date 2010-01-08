@@ -39,7 +39,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "../ui/inc/strings.hrc"

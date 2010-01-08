@@ -44,13 +44,13 @@
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
