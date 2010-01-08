@@ -54,60 +54,17 @@
 
 //=============================================================================
 
-/** is used to connect to a data access bean. A data access bean represents a
-    database connection and provides additional information related to the connection
-    such as forms, reports, or queries.
+/** is not to be used anymore
+    @deprecated
  */
 published interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 {
-
-    /** indicates that connections already exist.
-        @returns
-            <TRUE/> if so
-     */
     boolean hasConnections();
-    //-------------------------------------------------------------------------
-
-    /** attempts to establish a database connection, that can not be shared with
-        other components. This should be used for transaction processing.
-        @param user
-            the user name
-        @param password
-            the password
-        @returns
-            an isolated connection object
-        @throws com::sun::star::sdbc::SQLException
-            if a database access error occurs.
-        @see com::sun::star::sdbc::XConnection
-     */
     com::sun::star::sdbc::XConnection getIsolatedConnection([in]string user, [in]string password)
       raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** closes the all connections to database. This request could be aborted by
-        listeners of the component.
-        @throws com::sun::star::sdbc::SQLException
-            if a database access error occurs.
-     */
     boolean suspendConnections() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** adds the specified listener to receive the events "connectionChanged",
-        "approveConnectionClose", and "connectionClosing".
-        @param  listener
-            the listener to append
-        @see com::sun::star::sdb::XDatabaseAccessListener
-     */
     [oneway] void addDatabaseAccessListener([in]XDatabaseAccessListener listener);
-    //-------------------------------------------------------------------------
-
-    /** removes the specified listener.
-        @param  listener
-            the listener to append
-        @see com::sun::star::sdb::XDatabaseAccessListener
-     */
-    [oneway] void removeDatabaseAccessListener(
-            [in]XDatabaseAccessListener listener);
+    [oneway] void removeDatabaseAccessListener([in]XDatabaseAccessListener listener);
 };
 
 //=============================================================================

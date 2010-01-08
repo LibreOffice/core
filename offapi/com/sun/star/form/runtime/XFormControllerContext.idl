@@ -1,0 +1,57 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __offapi_com_sun_star_form_runtime_XFormControllerContext_idl__
+#define __offapi_com_sun_star_form_runtime_XFormControllerContext_idl__
+
+#include <com/sun/star/awt/XControl.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module form { module runtime {
+
+//=============================================================================
+
+/** provides a context for a <type>FormController</type>
+
+<p>A <type>FormController</type> knows about the controls it is responsible
+    for, and about the control container which those controls live in. However, it doesn't know
+    about a possible larger context, like a scrollable view which the controls are embedded into.
+    To compensate this, it can be provided a <code>XFormControllerContext</code>.</p>
+ */
+interface XFormControllerContext
+{
+    /** ensures the given control is visible, by scrolling the view if necessary.
+    */
+    void    makeVisible( [in] ::com::sun::star::awt::XControl _Control );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
