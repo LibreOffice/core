@@ -37,7 +37,6 @@
 #include <unomid.h>
 #include <unotextrange.hxx>
 #include <unorefmark.hxx>
-#include <unoparagraph.hxx>
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
@@ -510,7 +509,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     // does not seem to need SolarMutex
     uno::Any aRet;
-    if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+    if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         throw beans::UnknownPropertyException();
     }

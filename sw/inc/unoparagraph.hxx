@@ -111,9 +111,6 @@ public:
     /// for SwXText
     void attachToText(SwXText & rParent, SwTxtNode & rTxtNode);
 
-    static bool getDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
-        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
-
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >

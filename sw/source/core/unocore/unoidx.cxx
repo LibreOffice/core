@@ -57,7 +57,6 @@
 #include <pagedesc.hxx>
 #include <fmtcntnt.hxx>
 #include <unomap.hxx>
-#include <unoparagraph.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <doctxm.hxx>
@@ -1784,8 +1783,10 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if(SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName, pEntry->nWID))
+    if (::sw::GetDefaultTextContentValue(aRet, rPropertyName, pEntry->nWID))
+    {
         return aRet;
+    }
     if(pType && m_pTOXMark)
     {
         switch(pEntry->nWID)

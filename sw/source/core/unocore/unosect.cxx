@@ -47,7 +47,6 @@
 #include <fmtclds.hxx>
 #include <unotextrange.hxx>
 #include <unosection.hxx>
-#include <unoparagraph.hxx>
 #include <TextCursorHelper.hxx>
 #include <unoredline.hxx>
 #include <redline.hxx>
@@ -1186,7 +1185,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case  FN_UNO_ANCHOR_TYPES:
             case  FN_UNO_TEXT_WRAP:
             case  FN_UNO_ANCHOR_TYPE:
-                SwXParagraph::getDefaultTextContentValue(
+                ::sw::GetDefaultTextContentValue(
                         pRet[nProperty], OUString(), pEntry->nWID);
             break;
             case FN_UNO_REDLINE_NODE_START:
@@ -1756,7 +1755,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case  FN_UNO_ANCHOR_TYPES:
         case  FN_UNO_TEXT_WRAP:
         case  FN_UNO_ANCHOR_TYPE:
-            SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
+            ::sw::GetDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
         break;
         default:
         if(pFmt && pEntry->nWID <= SFX_WHICH_MAX)

@@ -526,7 +526,7 @@ uno::Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+    if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
                 rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))

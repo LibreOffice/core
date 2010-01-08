@@ -512,8 +512,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
-        if (!SwXParagraph::getDefaultTextContentValue(
-            pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
+        if (! ::sw::GetDefaultTextContentValue(
+                pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
         {
             beans::PropertyState eTemp;
             const bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
@@ -788,7 +788,7 @@ throw (uno::RuntimeException)
                     // get property value
                     // (compare to SwXParagraph::getPropertyValue(s))
                     uno::Any aValue;
-                    if (!SwXParagraph::getDefaultTextContentValue(
+                    if (! ::sw::GetDefaultTextContentValue(
                                 aValue, pProp[i], pEntry->nWID ) )
                     {
                         SwPosition aPos( rTxtNode );
@@ -848,7 +848,7 @@ throw (uno::RuntimeException)
 /* -----------------------------12.09.00 11:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-bool SwXParagraph::getDefaultTextContentValue(
+bool ::sw::GetDefaultTextContentValue(
         uno::Any& rAny, const OUString& rPropertyName, USHORT nWID)
 {
     if(!nWID)
@@ -1158,7 +1158,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     SwTxtNode & rTxtNode(m_pImpl->GetTxtNodeOrThrow());
 
     uno::Any aRet;
-    if (SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+    if (::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         return aRet;
     }

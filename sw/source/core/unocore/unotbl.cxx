@@ -3472,7 +3472,8 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 case  FN_UNO_ANCHOR_TYPES:
                 case  FN_UNO_TEXT_WRAP:
                 case  FN_UNO_ANCHOR_TYPE:
-                    SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
+                    ::sw::GetDefaultTextContentValue(
+                            aRet, OUString(), pEntry->nWID);
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {

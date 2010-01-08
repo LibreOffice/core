@@ -84,6 +84,9 @@ namespace sw {
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
+    bool GetDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
+        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
+
 } // namespace sw
 
 

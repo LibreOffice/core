@@ -37,7 +37,6 @@
 
 #include <TextCursorHelper.hxx>
 #include <unotextrange.hxx>
-#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoevtlstnr.hxx>
@@ -461,7 +460,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     vos::OGuard g(Application::GetSolarMutex());
 
     uno::Any aRet;
-    if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+    if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
         {
