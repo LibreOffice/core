@@ -42,13 +42,12 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include <calbck.hxx>
-#include <unocrsr.hxx>
+#include <unobaseclass.hxx>
 
 
+class SwDepend;
 class SwNodeIndex;
 class SwPaM;
-class SwUnoCrsr;
 class SwFrmFmt;
 
 
@@ -80,10 +79,12 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
  *
  * --------------------------------------------------*/
 
-#define PARAFRAME_PORTION_PARAGRAPH     0
-#define PARAFRAME_PORTION_CHAR          1
-#define PARAFRAME_PORTION_TEXTRANGE     2
-
+enum ParaFrameMode
+{
+    PARAFRAME_PORTION_PARAGRAPH,
+    PARAFRAME_PORTION_CHAR,
+    PARAFRAME_PORTION_TEXTRANGE,
+};
 
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
@@ -92,27 +93,19 @@ typedef ::cppu::WeakImplHelper2
 
 class SwXParaFrameEnumeration
     : public SwXParaFrameEnumeration_Base
-    , public SwClient
 {
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
-        m_xNextObject;    // created by hasMoreElements
-    FrameDependList_t m_Frames;
-
-    SwUnoCrsr*          GetCursor() const
-    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXParaFrameEnumeration();
 
 public:
 
     SwXParaFrameEnumeration(const SwPaM& rPaM,
-        sal_uInt8 nParaFrameMode, SwFrmFmt* pFmt = 0);
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+        const enum ParaFrameMode eParaFrameMode, SwFrmFmt *const pFmt = 0);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()

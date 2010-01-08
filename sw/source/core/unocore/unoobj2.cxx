@@ -2359,6 +2359,68 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
  * SwXParaFrameEnumeration
  ******************************************************************/
 
+class SwXParaFrameEnumeration::Impl
+    : public SwClient
+{
+
+public:
+
+    // created by hasMoreElements
+    uno::Reference< text::XTextContent > m_xNextObject;
+    FrameDependList_t m_Frames;
+
+    Impl(SwPaM const & rPaM)
+        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), sal_False))
+    {
+        if (rPaM.HasMark())
+        {
+            GetCursor()->SetMark();
+            *GetCursor()->GetMark() = *rPaM.GetMark();
+        }
+    }
+
+    ~Impl() {
+        // Impl owns the cursor; delete it here: SolarMutex is locked
+        delete GetRegisteredIn();
+    }
+
+    SwUnoCrsr * GetCursor() {
+        return static_cast<SwUnoCrsr*>(
+                const_cast<SwModify*>(GetRegisteredIn()));
+    }
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+/*-- 23.03.99 13:22:37---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
+struct InvalidFrameDepend {
+    bool operator() (::boost::shared_ptr<SwDepend> const & rEntry)
+    { return !rEntry->GetRegisteredIn(); }
+};
+
+void SwXParaFrameEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+    {
+        m_Frames.clear();
+        m_xNextObject = 0;
+    }
+    else
+    {
+        // check if any frame went away...
+        FrameDependList_t::iterator const iter =
+            ::std::remove_if(m_Frames.begin(), m_Frames.end(),
+                    InvalidFrameDepend());
+        m_Frames.erase(iter, m_Frames.end());
+    }
+}
+
 /* -----------------23.03.99 13:38-------------------
  *
  * --------------------------------------------------*/
@@ -2370,7 +2432,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     if (!i_rFrames.size())
         return sal_False;
 
-    SwFrmFmt* pFormat = static_cast<SwFrmFmt*>(const_cast<SwModify*>(
+    SwFrmFmt *const pFormat = static_cast<SwFrmFmt*>(const_cast<SwModify*>(
                 i_rFrames.front()->GetRegisteredIn()));
     i_rFrames.pop_front();
     // the format should be valid here, otherwise the client
@@ -2391,7 +2453,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     {
         const SwNodeIndex* pIdx = pFormat->GetCntnt().GetCntntIdx();
         DBG_ASSERT(pIdx, "where is the index?");
-        const SwNode* pNd =
+        SwNode const*const pNd =
             i_rUnoCrsr.GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 
         const FlyCntType eType = (!pNd->IsNoTxtNode()) ? FLYCNTTYPE_FRM
@@ -2410,11 +2472,12 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
                 and fill the frame into the array
  ---------------------------------------------------------------------------*/
 static void
-lcl_FillFrame(SwXParaFrameEnumeration & rEnum, SwUnoCrsr& rUnoCrsr,
+lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
         FrameDependList_t & rFrames)
 {
     // search for objects at the cursor - anchored at/as char
-    const SwTxtAttr * pTxtAttr = rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttr(
+    SwTxtAttr const*const pTxtAttr =
+        rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttr(
                     rUnoCrsr.GetPoint()->nContent, RES_TXTATR_FLYCNT);
     if (pTxtAttr)
     {
@@ -2425,93 +2488,64 @@ lcl_FillFrame(SwXParaFrameEnumeration & rEnum, SwUnoCrsr& rUnoCrsr,
     }
 }
 
-/* -----------------------------06.04.00 16:39--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString SwXParaFrameEnumeration::getImplementationName()
-throw( RuntimeException )
-{
-    return C2U("SwXParaFrameEnumeration");
-}
-/* -----------------------------06.04.00 16:39--------------------------------
-
- ---------------------------------------------------------------------------*/
-sal_Bool SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)
-throw( RuntimeException )
-{
-    return C2U("com.sun.star.util.ContentEnumeration") == rServiceName;
-}
-/* -----------------------------06.04.00 16:39--------------------------------
-
- ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXParaFrameEnumeration::getSupportedServiceNames()
-throw( RuntimeException )
-{
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.util.ContentEnumeration");
-    return aRet;
-}
 /*-- 23.03.99 13:22:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwPaM& rPaM,
-                                                sal_uInt8 nParaFrameMode,
-                                                SwFrmFmt* pFmt)
+SwXParaFrameEnumeration::SwXParaFrameEnumeration(
+        const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode,
+        SwFrmFmt *const pFmt)
+    : m_pImpl( new SwXParaFrameEnumeration::Impl(rPaM) )
 {
-    SwDoc* pDoc = rPaM.GetDoc();
-    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*rPaM.GetPoint(), sal_False);
-    if (rPaM.HasMark())
-    {
-        pUnoCrsr->SetMark();
-        *pUnoCrsr->GetMark() = *rPaM.GetMark();
-    }
-    pUnoCrsr->Add(this);
-
-    if (PARAFRAME_PORTION_PARAGRAPH == nParaFrameMode)
+    if (PARAFRAME_PORTION_PARAGRAPH == eParaFrameMode)
     {
         FrameDependSortList_t frames;
-        ::CollectFrameAtNode( *this, rPaM.GetPoint()->nNode, frames, false );
+        ::CollectFrameAtNode(*m_pImpl.get(), rPaM.GetPoint()->nNode,
+                frames, false);
         ::std::transform(frames.begin(), frames.end(),
-            ::std::back_inserter(m_Frames),
+            ::std::back_inserter(m_pImpl->m_Frames),
             ::boost::bind(&FrameDependSortListEntry::pFrameDepend, _1));
     }
     else if (pFmt)
     {
-        //jetzt einen SwDepend anlegen und in das Array einfuegen
-        SwDepend* pNewDepend = new SwDepend(this, pFmt);
-        m_Frames.push_back( ::boost::shared_ptr<SwDepend>(pNewDepend) );
+        // create SwDepend for frame and insert into array
+        SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFmt);
+        m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
     }
-    else if((PARAFRAME_PORTION_CHAR == nParaFrameMode) ||
-            (PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode))
+    else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
+             (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
     {
-        if(PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode)
+        if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
-            pDoc->GetAllFlyFmts(aFlyFrms, pUnoCrsr);//, bDraw);
+            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
             for(USHORT i = 0; i < aFlyFrms.Count(); i++)
             {
                 SwPosFlyFrm* pPosFly = aFlyFrms[i];
-                SwFrmFmt* pFrmFmt = (SwFrmFmt*)&pPosFly->GetFmt();
-                //jetzt einen SwDepend anlegen und in das Array einfuegen
-                SwDepend* pNewDepend = new SwDepend(this, pFrmFmt);
-                m_Frames.push_back( ::boost::shared_ptr<SwDepend>(pNewDepend) );
+                SwFrmFmt *const pFrmFmt =
+                    const_cast<SwFrmFmt*>(&pPosFly->GetFmt());
+                // create SwDepend for frame and insert into array
+                SwDepend *const pNewDepend =
+                    new SwDepend(m_pImpl.get(), pFrmFmt);
+                m_pImpl->m_Frames.push_back(
+                        ::boost::shared_ptr<SwDepend>(pNewDepend) );
             }
             //created from any text range
-            if(pUnoCrsr->HasMark())
+            if (m_pImpl->GetCursor()->HasMark())
             {
-                if(pUnoCrsr->Start() != pUnoCrsr->GetPoint())
-                    pUnoCrsr->Exchange();
+                m_pImpl->GetCursor()->Normalize();
                 do
                 {
-                    lcl_FillFrame(*this, *pUnoCrsr, m_Frames);
-                    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+                    lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(),
+                            m_pImpl->m_Frames);
+                    m_pImpl->GetCursor()->Right(
+                            1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 }
-                while(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark());
+                while (*m_pImpl->GetCursor()->GetPoint() <
+                        *m_pImpl->GetCursor()->GetMark());
             }
         }
-        lcl_FillFrame(*this, *pUnoCrsr, m_Frames);
+        lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);
     }
 }
 /*-- 23.03.99 13:22:30---------------------------------------------------
@@ -2519,89 +2553,92 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwPaM& rPaM,
   -----------------------------------------------------------------------*/
 SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    delete pUnoCrsr;
 }
 
 /*-- 23.03.99 13:22:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXParaFrameEnumeration::hasMoreElements()
-throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if (!GetCursor())
+    if (!m_pImpl->GetCursor())
         throw uno::RuntimeException();
 
-    return m_xNextObject.is() ? sal_True :
-        lcl_CreateNextObject(*GetCursor(), m_xNextObject, m_Frames);
+    return (m_pImpl->m_xNextObject.is())
+        ? sal_True
+        : lcl_CreateNextObject(*m_pImpl->GetCursor(),
+            m_pImpl->m_xNextObject, m_pImpl->m_Frames);
 }
 /*-- 23.03.99 13:22:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXParaFrameEnumeration::nextElement()
-    throw( container::NoSuchElementException,
-           lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL SwXParaFrameEnumeration::nextElement()
+throw (container::NoSuchElementException,
+        lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if (!GetCursor())
-        throw uno::RuntimeException();
-
-    if (!m_xNextObject.is() && m_Frames.size())
+    if (!m_pImpl->GetCursor())
     {
-        lcl_CreateNextObject(*GetCursor(), m_xNextObject, m_Frames);
+        throw uno::RuntimeException();
     }
-    if(!m_xNextObject.is())
+
+    if (!m_pImpl->m_xNextObject.is() && m_pImpl->m_Frames.size())
+    {
+        lcl_CreateNextObject(*m_pImpl->GetCursor(),
+                m_pImpl->m_xNextObject, m_pImpl->m_Frames);
+    }
+    if (!m_pImpl->m_xNextObject.is())
+    {
         throw container::NoSuchElementException();
-    uno::Any aRet(&m_xNextObject,
-            ::getCppuType((uno::Reference<XTextContent>*)0));
-    m_xNextObject = 0;
+    }
+    uno::Any aRet;
+    aRet <<= m_pImpl->m_xNextObject;
+    m_pImpl->m_xNextObject = 0;
     return aRet;
 }
 
-struct InvalidFrameDepend {
-    bool operator() (::boost::shared_ptr<SwDepend> const & rEntry)
-    { return !rEntry->GetRegisteredIn(); }
-};
+/* -----------------------------06.04.00 16:39--------------------------------
 
-/*-- 23.03.99 13:22:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void    SwXParaFrameEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXParaFrameEnumeration::getImplementationName() throw (uno::RuntimeException)
 {
-    switch( pOld ? pOld->Which() : 0 )
-    {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
-        break;
-
-    case RES_FMT_CHG:
-        // wurden wir an das neue umgehaengt und wird das alte geloscht?
-        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
-            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
-        break;
-    }
-    if(!GetRegisteredIn())
-    {
-        m_Frames.clear();
-        m_xNextObject = 0;
-    }
-    else
-    {
-        // check if any frame went away...
-        FrameDependList_t::iterator iter =
-            ::std::remove_if(m_Frames.begin(), m_Frames.end(),
-                    InvalidFrameDepend());
-        m_Frames.erase(iter, m_Frames.end());
-    }
+    return C2U("SwXParaFrameEnumeration");
 }
+
+/* -----------------------------06.04.00 16:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
+static char const*const g_ServicesParaFrameEnum[] =
+{
+    "com.sun.star.util.ContentEnumeration",
+};
+static const size_t g_nServicesParaFrameEnum(
+    sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
+
+sal_Bool SAL_CALL
+SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+            g_nServicesParaFrameEnum, g_ServicesParaFrameEnum, rServiceName);
+}
+
+/* -----------------------------06.04.00 16:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Sequence< OUString > SAL_CALL
+SwXParaFrameEnumeration::getSupportedServiceNames()
+throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesParaFrameEnum, g_ServicesParaFrameEnum);
+}
+
+
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( SwXTextCursor,SwXTextCursor_Base )
 
