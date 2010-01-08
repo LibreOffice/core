@@ -547,22 +547,20 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    Reference< XController2 > xController;
     if ( bSuccess )
     {
         try
         {
             Reference< XModel2 > xModel2( xModel, UNO_QUERY_THROW );
-            xController = xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame );
+            Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_QUERY_THROW );
 
-            bSuccess = xController.is();
-            if ( bSuccess )
-            {
-                xController->attachModel( xModel );
-                rFrame->setComponent( xController->getComponentWindow(), xController.get() );
-                xController->attachFrame( rFrame );
-                xModel->setCurrentController( xController.get() );
-            }
+            xController->attachModel( xModel );
+            xModel->connectController( xController.get() );
+            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xController->attachFrame( rFrame );
+            xModel->setCurrentController( xController.get() );
+
+            bSuccess = sal_True;
         }
         catch( const Exception& )
         {

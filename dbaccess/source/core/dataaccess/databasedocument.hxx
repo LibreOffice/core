@@ -60,11 +60,12 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
 /** === end UNO includes === **/
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 17
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -143,7 +144,7 @@ private:
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::WeakComponentImplHelper16 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
@@ -159,6 +160,7 @@ typedef ::comphelper::WeakComponentImplHelper16 <   ::com::sun::star::frame::XMo
                                                 ,   ::com::sun::star::script::provider::XScriptProviderSupplier
                                                 ,   ::com::sun::star::document::XEventsSupplier
                                                 ,   ::com::sun::star::frame::XLoadable
+                                                ,   ::com::sun::star::document::XDocumentRecovery
                                                 >   ODatabaseDocument_OfficeDocument;
 
 typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
@@ -424,6 +426,10 @@ public:
     // XLoadable
     virtual void SAL_CALL initNew(  ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // css.document.XDocumentRecovery
+    virtual void SAL_CALL doEmergencySave( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void SAL_CALL recoverDocument( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
 
     // XTitle
     virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
