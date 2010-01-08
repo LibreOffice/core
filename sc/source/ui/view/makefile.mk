@@ -160,6 +160,9 @@ EXCEPTIONSFILES= \
         $(SLO)$/scextopt.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
+    $(SLO)$/viewfunc.obj \
+    $(SLO)$/viewfun2.obj \
+    $(SLO)$/viewfun3.obj \
     $(SLO)$/viewfun5.obj \
     $(SLO)$/viewfun7.obj
 
