@@ -69,6 +69,7 @@
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>
+#include <doctxm.hxx>
 #include <fchrfmt.hxx>
 #include <svx/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -331,9 +332,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference< XDocumentIndex > aRef =
-                        SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
-                    pAny->setValue(&aRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
+                    const uno::Reference< text::XDocumentIndex > xRef =
+                        SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
+                            *static_cast<SwTOXBaseSection const*>(pBase));
+                    (*pAny) <<= xRef;
                 }
             }
             else
