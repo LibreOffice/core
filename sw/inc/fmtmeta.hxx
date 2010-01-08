@@ -31,6 +31,8 @@
 #ifndef SW_FMTMETA_HXX
 #define SW_FMTMETA_HXX
 
+#include <cppuhelper/weakref.hxx>
+
 #include <svtools/poolitem.hxx>
 #include <sfx2/Metadatable.hxx>
 
@@ -141,7 +143,10 @@ class Meta
 {
 protected:
     friend class ::SwFmtMeta; // SetFmtMeta, NotifyChangeTxtNode
-    friend class ::SwXMeta; // GetTxtNode, GetTxtAttr
+    friend class ::SwXMeta; // GetTxtNode, GetTxtAttr, Get/SetXMeta
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::rdf::XMetadatable> m_wXMeta;
 
     SwFmtMeta * m_pFmt;
 
@@ -152,6 +157,13 @@ protected:
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
 
     void NotifyChangeTxtNode();
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::rdf::XMetadatable> const& GetXMeta() const
+            { return m_wXMeta; }
+    void SetXMeta(::com::sun::star::uno::Reference<
+                    ::com::sun::star::rdf::XMetadatable> const& xMeta)
+            { m_wXMeta = xMeta; }
 
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);

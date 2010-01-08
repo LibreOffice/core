@@ -31,19 +31,21 @@
 #ifndef SW_UNOMETA_HXX
 #define SW_UNOMETA_HXX
 
-#include "calbck.hxx"
-
-#include <sfx2/Metadatable.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <deque>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-#include <deque>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase5.hxx>
+
+#include <sfx2/Metadatable.hxx>
+
+#include <unobaseclass.hxx>
 
 
 typedef ::std::deque<
@@ -52,42 +54,78 @@ typedef ::std::deque<
 
 class SwXTextRange;
 class SwPaM;
-class SwTxtMeta;
+class SwTxtNode;
+
 namespace sw {
     class Meta;
     class MetaField;
 }
 
-typedef
-::cppu::ImplInheritanceHelper5
-< ::sfx2::MetadatableMixin
-, ::com::sun::star::lang::XUnoTunnel
-, ::com::sun::star::lang::XServiceInfo
-, ::com::sun::star::text::XTextContent
-, ::com::sun::star::text::XText
-, ::com::sun::star::container::XEnumerationAccess
-> SwXMetaBaseClass;
+typedef ::cppu::ImplInheritanceHelper5
+<   ::sfx2::MetadatableMixin
+,   ::com::sun::star::lang::XUnoTunnel
+,   ::com::sun::star::lang::XServiceInfo
+,   ::com::sun::star::container::XEnumerationAccess
+,   ::com::sun::star::text::XTextContent
+,   ::com::sun::star::text::XText
+> SwXMeta_Base;
 
 class SwXMeta
-    : public SwXMetaBaseClass
-    , public SwClient
+    : public SwXMeta_Base
     , private ::boost::noncopyable
 {
-private:
-    struct Impl;
-    ::std::auto_ptr<Impl> m_pImpl;
-
-protected:
-    virtual ~SwXMeta();
 
 public:
-    SwXMeta(SwDoc *const pDoc,
+
+    class Impl;
+
+protected:
+
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
+    virtual void SAL_CALL AttachImpl(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > & xTextRange,
+            const USHORT nWhich)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual ~SwXMeta();
+
+    /// @param pDoc and pMeta != 0, but not & because of ImplInheritanceHelper
+    SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText> const&
             xParentText,
-        TextRangeList_t * const pPortions, SwTxtMeta * const pHint);
+        TextRangeList_t const*const pPortions);
+
+public:
+
     SwXMeta(SwDoc *const pDoc);
 
-    TYPEINFO();
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::rdf::XMetadatable >
+        CreateXMeta(
+            ::sw::Meta & rMeta,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
+                const& xParentText = 0,
+            ::std::auto_ptr<TextRangeList_t const> pPortions =
+                ::std::auto_ptr<TextRangeList_t const>(0));
+
+    /// init params with position of the attribute content (w/out CH_TXTATR)
+    bool SetContentRange(
+            SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+        GetParentText() const;
+
+    bool CheckForOwnMemberMeta(const SwXTextRange* const pRange,
+            const SwPaM* const pPam, bool bAbsorb)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
+
+    // MetadatableMixin
+    virtual ::sfx2::Metadatable * GetCoreObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        GetModel();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -116,6 +154,18 @@ public:
     virtual void SAL_CALL removeEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XEventListener > & xListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::container::XEnumeration >  SAL_CALL
+        createEnumeration()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XTextContent
@@ -180,72 +230,37 @@ public:
         throw (::com::sun::star::container::NoSuchElementException,
             ::com::sun::star::uno::RuntimeException);
 
-    // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XEnumeration >  SAL_CALL
-        createEnumeration()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // MetadatableMixin
-    virtual ::sfx2::Metadatable * GetCoreObject();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        GetModel();
-
-    // SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-
-    /// init params with position of the attribute content (w/out CH_TXTATR)
-    bool SetContentRange(
-            SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        GetParentText() const;
-
-    bool CheckForOwnMemberMeta(const SwXTextRange* const pRange,
-            const SwPaM* const pPam, bool bAbsorb)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-
-protected:
-    virtual void SAL_CALL AttachImpl(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextRange,
-            const USHORT nWhich)
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException );
-
-private:
-    inline const ::sw::Meta * GetMeta() const;
-
 };
 
 
-typedef
-::cppu::ImplInheritanceHelper2
-< SwXMeta
-, ::com::sun::star::beans::XPropertySet
-, ::com::sun::star::text::XTextField
-> SwXMetaFieldBaseClass;
+typedef ::cppu::ImplInheritanceHelper2
+<   SwXMeta
+,   ::com::sun::star::beans::XPropertySet
+,   ::com::sun::star::text::XTextField
+> SwXMetaField_Base;
 
 class SwXMetaField
-    : public SwXMetaFieldBaseClass
+    : public SwXMetaField_Base
 {
+
 private:
+
     virtual ~SwXMetaField();
 
-private:
-    inline const ::sw::MetaField * GetMetaField() const;
+    friend ::com::sun::star::uno::Reference<
+            ::com::sun::star::rdf::XMetadatable >
+        SwXMeta::CreateXMeta(::sw::Meta &,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
+                const&,
+            ::std::auto_ptr<TextRangeList_t const> pPortions);
 
-public:
-    SwXMetaField(SwDoc *const pDoc,
+    SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText> const&
             xParentText,
-        TextRangeList_t * const pPortions, SwTxtMeta * const pHint);
+        TextRangeList_t const*const pPortions);
+
+public:
+
     SwXMetaField(SwDoc *const pDoc);
 
     // XServiceInfo
@@ -268,16 +283,6 @@ public:
     virtual void SAL_CALL removeEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XEventListener > & xListener)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // XTextContent
-    virtual void SAL_CALL attach(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextRange)
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange > SAL_CALL getAnchor()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
@@ -326,6 +331,16 @@ public:
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
+
+    // XTextContent
+    virtual void SAL_CALL attach(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > & xTextRange)
+        throw ( ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextRange > SAL_CALL getAnchor()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XTextField
     virtual rtl::OUString SAL_CALL getPresentation(sal_Bool bShowCommand)

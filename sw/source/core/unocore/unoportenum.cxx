@@ -54,6 +54,7 @@
 #include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
+#include <fmtmeta.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
 #include <frmfmt.hxx>
@@ -493,6 +494,33 @@ lcl_CreateTOXMarkPortion(
 }
 
 //-----------------------------------------------------------------------------
+static uno::Reference<text::XTextRange>
+lcl_CreateMetaPortion(
+    uno::Reference<text::XText> const& xParent,
+    const SwUnoCrsr * const pUnoCrsr,
+    SwTxtAttr & rAttr, ::std::auto_ptr<TextRangeList_t const> & pPortions)
+{
+    const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
+            *static_cast<SwFmtMeta &>(rAttr.GetAttr()).GetMeta(),
+            xParent, pPortions));
+    SwXTextPortion * pPortion(0);
+    if (RES_TXTATR_META == rAttr.Which())
+    {
+        const uno::Reference<text::XTextContent> xContent(xMeta,
+                uno::UNO_QUERY);
+        pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_META);
+        pPortion->SetMeta(xContent);
+    }
+    else
+    {
+        const uno::Reference<text::XTextField> xField(xMeta, uno::UNO_QUERY);
+        pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD);
+        pPortion->SetTextField(xField);
+    }
+    return pPortion;
+}
+
+//-----------------------------------------------------------------------------
 static void
 lcl_ExportBookmark(
     TextRangeList_t & rPortions,
@@ -692,30 +720,13 @@ lcl_ExportHints(
                         }
                         else
                         {
-                            TextRangeList_t *const pCurrentPortions(Top.first);
+                            ::std::auto_ptr<const TextRangeList_t>
+                                pCurrentPortions(Top.first);
                             rPortionStack.pop();
-                            SwXTextPortion * pPortion;
-                            if (RES_TXTATR_META == nWhich)
-                            {
-                                SwXMeta * const pMeta =
-                                    new SwXMeta(pDoc, xParent,
-                                        pCurrentPortions,
-                                        static_cast<SwTxtMeta * const>(pAttr));
-                                pPortion = new SwXTextPortion(
-                                    pUnoCrsr, xParent, PORTION_META);
-                                pPortion->SetMeta(pMeta);
-                            }
-                            else
-                            {
-                                SwXMetaField * const pMeta =
-                                    new SwXMetaField(pDoc, xParent,
-                                        pCurrentPortions,
-                                        static_cast<SwTxtMeta * const>(pAttr));
-                                pPortion = new SwXTextPortion(
-                                    pUnoCrsr, xParent, PORTION_FIELD);
-                                pPortion->SetTextField(pMeta);
-                            }
-                            rPortionStack.top().first->push_back(pPortion);
+                            const uno::Reference<text::XTextRange> xPortion(
+                                lcl_CreateMetaPortion(xParent, pUnoCrsr,
+                                    *pAttr, pCurrentPortions));
+                            rPortionStack.top().first->push_back(xPortion);
                         }
                     }
                     break;

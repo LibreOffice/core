@@ -493,6 +493,8 @@ public:
             const uno::Reference< text::XTextRange > & xTextPosition)
         throw (uno::RuntimeException);
 
+    SwXMeta & GetXMeta() { return m_rMeta; }
+
 };
 
 SwXMetaText::SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta)
@@ -598,8 +600,12 @@ SwXMetaText::createTextCursorByRange(
 // this list is created by SwXTextPortionEnumeration
 // the Meta listens at the SwTxtNode and throws away the cache when it changes
 
-struct SwXMeta::Impl
+class SwXMeta::Impl
+    : public SwClient
 {
+
+public:
+
     SwEventListenerContainer m_ListenerContainer;
     ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
     // 3 possible states: not attached, attached, disposed
@@ -608,26 +614,47 @@ struct SwXMeta::Impl
     uno::Reference<text::XText> m_xParentText;
     SwXMetaText m_Text;
 
-    Impl(SwXMeta & rThis, SwDoc & rDoc,
+    Impl(   SwXMeta & rThis, SwDoc & rDoc,
+            ::sw::Meta * const pMeta,
             uno::Reference<text::XText> const& xParentText,
-            TextRangeList_t const * const pPortions,
-            SwTxtMeta const * const pHint)
-        : m_ListenerContainer(
-                static_cast< ::cppu::OWeakObject* >(&rThis))
+            TextRangeList_t const * const pPortions)
+        : SwClient(pMeta)
+        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_pTextPortions( pPortions )
         , m_bIsDisposed( false )
-        , m_bIsDescriptor( 0 == pHint )
+        , m_bIsDescriptor(0 == pMeta)
         , m_xParentText(xParentText)
         , m_Text(rDoc, rThis)
     {
     }
+
+    inline const ::sw::Meta * GetMeta() const;
+    // only for SwXMetaField!
+    inline const ::sw::MetaField * GetMetaField() const;
+
+    // SwClient
+    virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
 };
 
-TYPEINIT1(SwXMeta, SwClient);
-
-inline const ::sw::Meta * SwXMeta::GetMeta() const
+inline const ::sw::Meta * SwXMeta::Impl::GetMeta() const
 {
     return static_cast< const ::sw::Meta * >(GetRegisteredIn());
+}
+
+// SwModify
+void SwXMeta::Impl::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
+
+    ClientModify(this, pOld, pNew);
+
+    if (!GetRegisteredIn()) // removed => dispose
+    {
+        m_ListenerContainer.Disposing();
+        m_bIsDisposed = true;
+        m_Text.Invalidate();
+    }
 }
 
 uno::Reference<text::XText> SwXMeta::GetParentText() const
@@ -635,10 +662,84 @@ uno::Reference<text::XText> SwXMeta::GetParentText() const
     return m_pImpl->m_xParentText;
 }
 
+SwXMeta::SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
+        uno::Reference<text::XText> const& xParentText,
+        TextRangeList_t const*const pPortions)
+    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, pMeta, xParentText, pPortions) )
+{
+}
+
+SwXMeta::SwXMeta(SwDoc *const pDoc)
+    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, 0, 0, 0) )
+{
+}
+
+SwXMeta::~SwXMeta()
+{
+}
+
+uno::Reference<rdf::XMetadatable>
+SwXMeta::CreateXMeta(::sw::Meta & rMeta,
+            uno::Reference<text::XText> const& i_xParent,
+            ::std::auto_ptr<TextRangeList_t const> pPortions)
+{
+    // re-use existing SwXMeta
+    // #i105557#: do not iterate over the registered clients: race condition
+    uno::Reference<rdf::XMetadatable> xMeta(rMeta.GetXMeta());
+    if (xMeta.is())
+    {
+        if (pPortions.get()) // set cache in the XMeta to the given portions
+        {
+            const uno::Reference<lang::XUnoTunnel> xUT(xMeta, uno::UNO_QUERY);
+            SwXMeta *const pXMeta(
+                ::sw::UnoTunnelGetImplementation<SwXMeta>(xUT));
+            OSL_ENSURE(pXMeta, "no pXMeta?");
+            // NB: the meta must always be created with the complete content
+            // if SwXTextPortionEnumeration is created for a selection,
+            // it must be checked that the Meta is contained in the selection!
+            pXMeta->m_pImpl->m_pTextPortions = pPortions;
+            // ??? is this necessary?
+            if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
+            {
+                OSL_ENSURE(false, "SwXMeta with different parent?");
+                pXMeta->m_pImpl->m_xParentText.set(i_xParent);
+            }
+        }
+        return xMeta;
+    }
+
+    // create new SwXMeta
+    SwTxtNode * const pTxtNode( rMeta.GetTxtNode() );
+    OSL_ENSURE(pTxtNode, "CreateXMeta: no text node?");
+    if (!pTxtNode) { return 0; }
+    uno::Reference<text::XText> xParentText(i_xParent);
+    if (!xParentText.is())
+    {
+        SwTxtMeta * const pTxtAttr( rMeta.GetTxtAttr() );
+        OSL_ENSURE(pTxtAttr, "CreateXMeta: no text attr?");
+        if (!pTxtAttr) { return 0; }
+        const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
+        xParentText.set(
+            SwXTextRange::CreateParentXText(pTxtNode->GetDoc(), aPos) );
+    }
+    if (!xParentText.is()) { return 0; }
+    SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFmtMeta()->Which())
+        ? new SwXMeta     (pTxtNode->GetDoc(), &rMeta, xParentText,
+                            pPortions.release()) // temporarily un-auto_ptr :-(
+        : new SwXMetaField(pTxtNode->GetDoc(), &rMeta, xParentText,
+                            pPortions.release()));
+    // this is why the constructor is private: need to acquire pXMeta here
+    xMeta.set(pXMeta);
+    // in order to initialize the weak pointer cache in the core object
+    rMeta.SetXMeta(xMeta);
+    return xMeta;
+}
+
+
 bool SwXMeta::SetContentRange(
         SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd ) const
 {
-    ::sw::Meta const * const pMeta( GetMeta() );
+    ::sw::Meta const * const pMeta( m_pImpl->GetMeta() );
     if (pMeta)
     {
         SwTxtMeta const * const pTxtAttr( pMeta->GetTxtAttr() );
@@ -655,23 +756,6 @@ bool SwXMeta::SetContentRange(
         }
     }
     return false;
-}
-
-SwXMeta::SwXMeta(SwDoc *const pDoc,
-        uno::Reference<text::XText> const& xParentText,
-        TextRangeList_t * const pPortions, SwTxtMeta * const pHint)
-    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, xParentText, pPortions, pHint) )
-{
-    if (pHint)
-    {
-        ::sw::Meta * const pMeta(
-            static_cast<SwFmtMeta&>(pHint->GetAttr()).GetMeta() );
-        ASSERT(pMeta, "SwXMeta: no meta?")
-        if (pMeta)
-        {
-            pMeta->Add(this);
-        }
-    }
 }
 
 bool SwXMeta::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
@@ -744,16 +828,6 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
     return bForceExpandHints;
 }
 
-
-SwXMeta::SwXMeta(SwDoc *const pDoc)
-    : m_pImpl( new SwXMeta::Impl(*this, *pDoc, 0, 0, 0) )
-{
-}
-
-SwXMeta::~SwXMeta()
-{
-}
-
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq( ::CreateUnoTunnelId() );
@@ -765,14 +839,7 @@ sal_Int64 SAL_CALL
 SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
 throw (uno::RuntimeException)
 {
-    if ( i_rId.getLength() == 16 &&
-         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                 i_rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >(
-            reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return ::sw::UnoTunnelImpl<SwXMeta>(i_rId, this);
 }
 
 // XServiceInfo
@@ -782,21 +849,26 @@ SwXMeta::getImplementationName() throw (uno::RuntimeException)
     return C2U("SwXMeta");
 }
 
+static char const*const g_ServicesMeta[] =
+{
+    "com.sun.star.text.TextContent",
+    "com.sun.star.text.InContentMetadata",
+};
+static const size_t g_nServicesMeta(
+    sizeof(g_ServicesMeta)/sizeof(g_ServicesMeta[0]));
+
 sal_Bool SAL_CALL
 SwXMeta::supportsService(const ::rtl::OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii("com.sun.star.text.TextContent")
-        || rServiceName.equalsAscii("com.sun.star.text.InContentMetadata");
+    return ::sw::SupportsServiceImpl(
+            g_nServicesMeta, g_ServicesMeta, rServiceName);
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL
 SwXMeta::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = C2U("com.sun.star.text.TextContent");
-    aRet[1] = C2U("com.sun.star.text.InContentMetadata");
-    return aRet;
+    return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
 }
 
 
@@ -886,14 +958,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             C2S("SwXMeta::attach(): argument is no XUnoTunnel"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
-    SwXTextRange * const pRange(
-        reinterpret_cast< SwXTextRange * >(
-            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(
-                SwXTextRange::getUnoTunnelId() ))) );
-    OTextCursorHelper * const pCursor( pRange ? 0 :
-        reinterpret_cast< OTextCursorHelper * >(
-            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(
-                OTextCursorHelper::getUnoTunnelId() ))) );
+    SwXTextRange *const pRange(
+            ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel));
+    OTextCursorHelper *const pCursor( (pRange) ? 0 :
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel));
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
@@ -945,7 +1013,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    pMeta->Add(this);
+    pMeta->Add(m_pImpl.get());
+    pMeta->SetXMeta(uno::Reference<rdf::XMetadatable>(this));
 
     m_pImpl->m_xParentText =
         SwXTextRange::CreateParentXText(pDoc, *aPam.GetPoint());
@@ -1102,7 +1171,7 @@ SwXMeta::hasElements() throw (uno::RuntimeException)
 {
     vos::OGuard g(Application::GetSolarMutex());
 
-    return GetRegisteredIn() ? sal_True : sal_False;
+    return m_pImpl->GetRegisteredIn() ? sal_True : sal_False;
 }
 
 // XEnumerationAccess
@@ -1118,7 +1187,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                C2S("getAnchor(): not inserted"),
+                C2S("createEnumeration(): not inserted"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1147,12 +1216,12 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
 // MetadatableMixin
 ::sfx2::Metadatable* SwXMeta::GetCoreObject()
 {
-    return const_cast< ::sw::Meta * >(GetMeta());
+    return const_cast< ::sw::Meta * >(m_pImpl->GetMeta());
 }
 
 uno::Reference<frame::XModel> SwXMeta::GetModel()
 {
-    ::sw::Meta const * const pMeta( GetMeta() );
+    ::sw::Meta const * const pMeta( m_pImpl->GetMeta() );
     if (pMeta)
     {
         SwTxtNode const * const pTxtNode( pMeta->GetTxtNode() );
@@ -1165,42 +1234,27 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
     return 0;
 }
 
-// SwModify
-void SwXMeta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
-{
-    m_pImpl->m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
-
-    ClientModify(this, pOld, pNew);
-
-    if (!GetRegisteredIn()) // removed => dispose
-    {
-        m_pImpl->m_ListenerContainer.Disposing();
-        m_pImpl->m_bIsDisposed = true;
-        m_pImpl->m_Text.Invalidate();
-    }
-}
-
 
 /******************************************************************
  * SwXMetaField
  ******************************************************************/
 
-inline const ::sw::MetaField * SwXMetaField::GetMetaField() const
+inline const ::sw::MetaField * SwXMeta::Impl::GetMetaField() const
 {
     return static_cast< const ::sw::MetaField * >(GetRegisteredIn());
 }
 
-SwXMetaField::SwXMetaField(SwDoc *const pDoc,
+SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         uno::Reference<text::XText> const& xParentText,
-        TextRangeList_t * const pPortions, SwTxtMeta * const pHint)
-    : SwXMetaFieldBaseClass(pDoc, xParentText, pPortions, pHint)
+        TextRangeList_t const*const pPortions)
+    : SwXMetaField_Base(pDoc, pMeta, xParentText, pPortions)
 {
-    ASSERT(!pHint || RES_TXTATR_METAFIELD == pHint->Which(),
+    ASSERT(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
         "SwXMetaField created for wrong hint!");
 }
 
 SwXMetaField::SwXMetaField(SwDoc *const pDoc)
-    :  SwXMetaFieldBaseClass(pDoc)
+    :  SwXMetaField_Base(pDoc)
 {
 }
 
@@ -1215,23 +1269,28 @@ SwXMetaField::getImplementationName() throw (uno::RuntimeException)
     return C2U("SwXMetaField");
 }
 
+static char const*const g_ServicesMetaField[] =
+{
+    "com.sun.star.text.TextContent",
+    "com.sun.star.text.TextField",
+    "com.sun.star.text.textfield.MetadataField",
+};
+static const size_t g_nServicesMetaField(
+    sizeof(g_ServicesMetaField)/sizeof(g_ServicesMetaField[0]));
+
 sal_Bool SAL_CALL
 SwXMetaField::supportsService(const ::rtl::OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii("com.sun.star.text.TextContent")
-        || rServiceName.equalsAscii("com.sun.star.text.TextField")
-        || rServiceName.equalsAscii("com.sun.star.text.textfield.MetadataField");
+    return ::sw::SupportsServiceImpl(
+            g_nServicesMetaField, g_ServicesMetaField, rServiceName);
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL
 SwXMetaField::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(3);
-    aRet[0] = C2U("com.sun.star.text.TextContent");
-    aRet[1] = C2U("com.sun.star.text.TextField");
-    aRet[2] = C2U("com.sun.star.text.textfield.MetadataField");
-    return aRet;
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesMetaField, g_ServicesMetaField);
 }
 
 // XComponent
@@ -1293,7 +1352,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     vos::OGuard g(Application::GetSolarMutex());
 
     ::sw::MetaField * const pMeta(
-            const_cast< ::sw::MetaField * >(GetMetaField()) );
+            const_cast< ::sw::MetaField * >(m_pImpl->GetMetaField()) );
     if (!pMeta)
         throw lang::DisposedException();
 
@@ -1326,7 +1385,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     vos::OGuard g(Application::GetSolarMutex());
 
-    ::sw::MetaField const * const pMeta( GetMetaField() );
+    ::sw::MetaField const * const pMeta( m_pImpl->GetMetaField() );
     if (!pMeta)
         throw lang::DisposedException();
 

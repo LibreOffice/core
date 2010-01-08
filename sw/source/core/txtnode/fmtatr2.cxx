@@ -57,7 +57,6 @@
 #include <ndtxt.hxx> // for meta
 #include <doc.hxx> // for meta
 #include <unometa.hxx>
-#include <unotextrange.hxx>
 #include <docsh.hxx>
 #include <svtools/zforlist.hxx> // GetNumberFormat
 
@@ -750,6 +749,10 @@ void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     NotifyChangeTxtNode();
     SwModify::Modify(pOld, pNew);
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXMeta(uno::Reference<rdf::XMetadatable>(0));
+    }
 }
 
 // sw::Metadatable
@@ -788,31 +791,7 @@ bool Meta::IsInContent() const
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
 Meta::MakeUnoObject()
 {
-    // re-use existing SwXMeta
-    SwClientIter iter( *this );
-    SwClient * pClient( iter.First( TYPE( SwXMeta ) ) );
-    while (pClient) {
-        SwXMeta *const pMeta( dynamic_cast<SwXMeta*>(pClient) );
-        if (pMeta && pMeta->GetCoreObject() == this) {
-            return pMeta;
-        }
-        pClient = iter.Next();
-    }
-
-    // create new SwXMeta
-    SwTxtMeta * const pTxtAttr( GetTxtAttr() );
-    OSL_ENSURE(pTxtAttr, "MakeUnoObject: no text attr?");
-    if (!pTxtAttr) return 0;
-    SwTxtNode * const pTxtNode( pTxtAttr->GetTxtNode() );
-    OSL_ENSURE(pTxtNode, "MakeUnoObject: no text node?");
-    if (!pTxtNode) return 0;
-    const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
-    const uno::Reference<text::XText> xParentText(
-            SwXTextRange::CreateParentXText(pTxtNode->GetDoc(), aPos) );
-    if (!xParentText.is()) return 0;
-    return (RES_TXTATR_META == m_pFmt->Which())
-        ? new SwXMeta     (pTxtNode->GetDoc(), xParentText, 0, pTxtAttr)
-        : new SwXMetaField(pTxtNode->GetDoc(), xParentText, 0, pTxtAttr);
+    return SwXMeta::CreateXMeta(*this);
 }
 
 /*************************************************************************
