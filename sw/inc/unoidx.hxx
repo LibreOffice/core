@@ -271,46 +271,57 @@ public:
                                                 SwDoc* pDoc);
     void                Invalidate();
 };
+
 /* -----------------05.05.99 12:27-------------------
  *
  * --------------------------------------------------*/
-
-class SwXDocumentIndexes : public SwCollectionBaseClass,
-    public SwUnoCollection
+class SwXDocumentIndexes
+    : public SwCollectionBaseClass
+    , public SwUnoCollection
 {
-protected:
+
+private:
+
     virtual ~SwXDocumentIndexes();
+
 public:
-    SwXDocumentIndexes(SwDoc* pDoc);
 
+    SwXDocumentIndexes(SwDoc *const pDoc);
 
-//  SMART_UNO_DECLARATION( SwXDocumentIndexes, UsrObject );
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(
+            const ::rtl::OUString& rServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
 
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  >     getIdlClasses(void)
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements()
+        throw (::com::sun::star::uno::RuntimeException);
 
-//                                          throw( ::com::sun::star::uno::RuntimeException );
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual sal_Bool            queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 
-
-    //XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getElementNames(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& Name) throw( ::com::sun::star::uno::RuntimeException );
-
-    //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-
-    //XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName(
+            const ::rtl::OUString& rName)
+        throw (::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getElementNames() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName(const ::rtl::OUString& rName)
+        throw (::com::sun::star::uno::RuntimeException);
 
 };
 

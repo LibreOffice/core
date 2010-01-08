@@ -2312,35 +2312,15 @@ void SwXDocumentIndexMark::Invalidate()
         m_pDoc = 0;
     }
 }
-/* -----------------------------06.04.00 15:08--------------------------------
 
- ---------------------------------------------------------------------------*/
-OUString SwXDocumentIndexes::getImplementationName(void) throw( uno::RuntimeException )
-{
-    return C2U("SwXDocumentIndexes");
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL SwXDocumentIndexes::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-{
-    return C2U("com.sun.star.text.DocumentIndexes") == rServiceName;
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXDocumentIndexes::getSupportedServiceNames(void) throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.DocumentIndexes");
-    return aRet;
-}
+/******************************************************************
+ * SwXDocumentIndexes
+ ******************************************************************/
 /*-- 05.05.99 13:14:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXDocumentIndexes::SwXDocumentIndexes(SwDoc* _pDoc) :
-    SwUnoCollection(_pDoc)
+SwXDocumentIndexes::SwXDocumentIndexes(SwDoc *const _pDoc)
+    : SwUnoCollection(_pDoc)
 {
 }
 /*-- 05.05.99 13:15:00---------------------------------------------------
@@ -2349,12 +2329,46 @@ SwXDocumentIndexes::SwXDocumentIndexes(SwDoc* _pDoc) :
 SwXDocumentIndexes::~SwXDocumentIndexes()
 {
 }
+
+/* -----------------------------06.04.00 15:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXDocumentIndexes::getImplementationName() throw (uno::RuntimeException)
+{
+    return C2U("SwXDocumentIndexes");
+}
+
+static char const*const g_ServicesDocumentIndexes[] =
+{
+    "com.sun.star.text.DocumentIndexes",
+};
+static const size_t g_nServicesDocumentIndexes(
+    sizeof(g_ServicesDocumentIndexes)/sizeof(g_ServicesDocumentIndexes[0]));
+
+sal_Bool SAL_CALL
+SwXDocumentIndexes::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+        g_nServicesDocumentIndexes, g_ServicesDocumentIndexes, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL
+SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+        g_nServicesDocumentIndexes, g_ServicesDocumentIndexes);
+}
+
 /*-- 05.05.99 13:15:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 SwXDocumentIndexes::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SAL_CALL
+SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -2365,17 +2379,23 @@ sal_Int32 SwXDocumentIndexes::getCount(void) throw( uno::RuntimeException )
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() )
+        {
             ++nRet;
+        }
     }
     return nRet;
 }
+
 /*-- 05.05.99 13:15:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL
+SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
+throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -2388,14 +2408,14 @@ uno::Any SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() &&
             nIdx++ == nIndex )
-            {
-               const uno::Reference< text::XDocumentIndex > xTmp =
-                   SwXDocumentIndex::CreateXDocumentIndex(
-                       *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
-               uno::Any aRet;
-               aRet <<= xTmp;
-               return aRet;
-            }
+        {
+           const uno::Reference< text::XDocumentIndex > xTmp =
+               SwXDocumentIndex::CreateXDocumentIndex(
+                   *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
+           uno::Any aRet;
+           aRet <<= xTmp;
+           return aRet;
+        }
     }
 
     throw lang::IndexOutOfBoundsException();
@@ -2404,13 +2424,15 @@ uno::Any SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 /*-- 31.01.00 10:12:31---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXDocumentIndexes::getByName(const OUString& rName)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL
+SwXDocumentIndexes::getByName(const OUString& rName)
+throw (container::NoSuchElementException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
         throw uno::RuntimeException();
-
 
     String sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -2419,25 +2441,28 @@ uno::Any SwXDocumentIndexes::getByName(const OUString& rName)
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() &&
-                ((SwTOXBaseSection*)pSect)->GetTOXName() == sToFind)
-            {
-               const uno::Reference< text::XDocumentIndex > xTmp =
-                   SwXDocumentIndex::CreateXDocumentIndex(
-                       *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
-               uno::Any aRet;
-               aRet <<= xTmp;
-               return aRet;
-            }
+            (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
+                == sToFind))
+        {
+           const uno::Reference< text::XDocumentIndex > xTmp =
+               SwXDocumentIndex::CreateXDocumentIndex(
+                   *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
+           uno::Any aRet;
+           aRet <<= xTmp;
+           return aRet;
+        }
     }
     throw container::NoSuchElementException();
 }
+
 /*-- 31.01.00 10:12:31---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXDocumentIndexes::getElementNames(void)
-    throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL
+SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -2446,10 +2471,12 @@ uno::Sequence< OUString > SwXDocumentIndexes::getElementNames(void)
     sal_uInt16 n;
     for( n = 0; n < rFmts.Count(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() )
+        {
             ++nCount;
+        }
     }
 
     uno::Sequence< OUString > aRet(nCount);
@@ -2457,22 +2484,26 @@ uno::Sequence< OUString > SwXDocumentIndexes::getElementNames(void)
     sal_uInt16 nCnt;
     for( n = 0, nCnt = 0; n < rFmts.Count(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode())
         {
-            pArray[nCnt++] = OUString(((SwTOXBaseSection*)pSect)->GetTOXName());
+            pArray[nCnt++] = OUString(
+                static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName());
         }
     }
     return aRet;
 }
+
 /*-- 31.01.00 10:12:31---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXDocumentIndexes::hasByName(const OUString& rName)
-    throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXDocumentIndexes::hasByName(const OUString& rName)
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -2480,31 +2511,34 @@ sal_Bool SwXDocumentIndexes::hasByName(const OUString& rName)
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode())
         {
-            if(((SwTOXBaseSection*)pSect)->GetTOXName() == sToFind)
+            if (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
+                    == sToFind)
+            {
                 return sal_True;
+            }
         }
     }
     return sal_False;
 }
+
 /*-- 05.05.99 13:15:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Type SwXDocumentIndexes::getElementType(void) throw( uno::RuntimeException )
+uno::Type SAL_CALL
+SwXDocumentIndexes::getElementType() throw (uno::RuntimeException)
 {
-    return ::getCppuType((uno::Reference< text::XDocumentIndex> *)0);
+    return text::XDocumentIndex::static_type();
 }
 /*-- 05.05.99 13:15:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXDocumentIndexes::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXDocumentIndexes::hasElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw uno::RuntimeException();
     return 0 != getCount();
 }
 
