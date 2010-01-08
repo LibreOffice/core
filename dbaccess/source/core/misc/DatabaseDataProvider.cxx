@@ -37,6 +37,7 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -633,7 +634,14 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         for (sal_Int32 j = _bHasCategories ? 2 : 1,i = 0; j <= nCount; ++j,++i)
         {
             aValue.fill(j,aColumnTypes[j-1],xRow);
-            aRow.push_back(aValue.getDouble());
+            if ( aValue.isNull() )
+            {
+                double nValue;
+                ::rtl::math::setNan( &nValue );
+                aRow.push_back(nValue);
+            }
+            else
+                aRow.push_back(aValue.getDouble());
         } // for (sal_Int32 j = 2,i = 0; j <= nCount; ++j,++i)
         aDataValues.push_back(aRow);
     } // while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
