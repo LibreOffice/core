@@ -39,6 +39,7 @@ extern void createRegistryInfo_AnyCompareFactory();
 extern void createRegistryInfo_OfficeInstallationDirectories();
 extern void createRegistryInfo_OInstanceLocker();
 extern void createRegistryInfo_Map();
+extern void createRegistryInfo_OSimpleLogRing();
 
 //........................................................................
 namespace comphelper { namespace module
@@ -63,6 +64,7 @@ namespace comphelper { namespace module
                 createRegistryInfo_OfficeInstallationDirectories();
                 createRegistryInfo_OInstanceLocker();
                 createRegistryInfo_Map();
+                createRegistryInfo_OSimpleLogRing();
             }
         }
     }

@@ -38,6 +38,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/frame/XSessionManagerClient.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XSessionManagerListener2.hpp>
 
 #include <list>
 
@@ -81,6 +82,7 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
     void callSaveRequested( bool bShutdown, bool bCancelable );
     void callShutdownCancelled();
     void callInteractionGranted( bool bGranted );
+    void callQuit();
 public:
     VCLSession();
     virtual ~VCLSession();
@@ -199,6 +201,27 @@ void VCLSession::callShutdownCancelled()
     Application::AcquireSolarMutex( nAcquireCount );
 }
 
+void VCLSession::callQuit()
+{
+    std::list< Listener > aListeners;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        // copy listener list since calling a listener may remove it.
+        aListeners = m_aListeners;
+        // set back interaction state
+        m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
+    }
+
+    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    {
+        Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
+        if( xListener2.is() )
+            xListener2->doQuit();
+    }
+    Application::AcquireSolarMutex( nAcquireCount );
+}
+
 void VCLSession::SalSessionEventProc( SalSessionEvent* pEvent )
 {
     switch( pEvent->m_eType )
@@ -217,6 +240,9 @@ void VCLSession::SalSessionEventProc( SalSessionEvent* pEvent )
         break;
         case ShutdownCancel:
             pOneInstance->callShutdownCancelled();
+            break;
+        case Quit:
+            pOneInstance->callQuit();
             break;
     }
 }

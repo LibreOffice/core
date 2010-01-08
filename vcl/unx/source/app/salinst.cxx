@@ -50,7 +50,7 @@
 #include "vcl/salwtype.hxx"
 #include "vcl/salatype.hxx"
 #include "vcl/helper.hxx"
-
+#include <tools/solarmutex.hxx>
 #include "vos/mutex.hxx"
 
 // -------------------------------------------------------------------------
@@ -63,6 +63,7 @@ SalYieldMutex::SalYieldMutex()
 {
     mnCount     = 0;
     mnThreadId  = 0;
+    ::tools::SolarMutex::SetSolarMutex( this );
 }
 
 void SalYieldMutex::acquire()
@@ -141,6 +142,7 @@ X11SalInstance::~X11SalInstance()
     delete pSalData;
     SetSalData( NULL );
 
+    ::tools::SolarMutex::SetSolarMutex( 0 );
       delete mpSalYieldMutex;
 }
 

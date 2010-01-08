@@ -46,7 +46,7 @@
 #ifndef _SVLBITM_HXX
 #include <svtools/svlbitm.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 
