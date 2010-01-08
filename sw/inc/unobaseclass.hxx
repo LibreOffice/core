@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOBASECLASS_HXX
-#define _UNOBASECLASS_HXX
+#ifndef SW_UNOBASECLASS_HXX
+#define SW_UNOBASECLASS_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -102,5 +102,42 @@ class UnoActionRemoveContext
 /// helper function for implementing SwClient::Modify
 void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-#endif
+
+#include <boost/utility.hpp>
+#include <osl/diagnose.h>
+#include <vos/mutex.hxx>
+#include <vcl/svapp.hxx>
+
+namespace sw {
+
+    template<typename T> class UnoImplPtr
+        : private ::boost::noncopyable
+    {
+        private:
+            T * m_p;
+
+        public:
+            UnoImplPtr(T *const i_p)
+                : m_p(i_p)
+            {
+                OSL_ENSURE(i_p, "UnoImplPtr: null");
+            }
+
+            ~UnoImplPtr()
+            {
+                ::vos::OGuard g(Application::GetSolarMutex());
+                delete m_p; // #i105557#: call dtor with locked solar mutex
+                m_p = 0;
+            }
+
+            T & operator * () const { return *m_p; }
+
+            T * operator ->() const { return  m_p; }
+
+            T * get        () const { return  m_p; }
+    };
+
+} // namespace sw
+
+#endif // SW_UNOBASECLASS_HXX
 
