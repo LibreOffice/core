@@ -36,7 +36,7 @@
 
 #include "vos/mutex.hxx"
 #include "tools/datetime.hxx"
-#include "svtools/zforlist.hxx"
+#include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"
 
 #include "ids.hrc"

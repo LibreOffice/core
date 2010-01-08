@@ -40,7 +40,7 @@
 #include "com/sun/star/task/XInteractionRetry.hpp"
 
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
-#include "svtools/svtools.hrc" // RID_ERRHDL
+#include "svl/svtools.hrc" // RID_ERRHDL
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

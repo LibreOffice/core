@@ -34,7 +34,7 @@
 
 #include "vos/mutex.hxx"
 #include "tools/list.hxx"
-#include "svtools/httpcook.hxx"
+#include "svl/httpcook.hxx"
 #include "vcl/svapp.hxx"
 
 #include "cookiedg.hxx"
