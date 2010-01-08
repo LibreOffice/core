@@ -114,6 +114,11 @@ struct TxtAttrDeleter
     TxtAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
     void operator() (SwTxtAttr * const pAttr)
     {
+        if (RES_TXTATR_META == pAttr->Which() ||
+            RES_TXTATR_METAFIELD == pAttr->Which())
+        {
+            static_cast<SwTxtMeta *>(pAttr)->ChgTxtNode(0); // prevents ASSERT
+        }
         SwTxtAttr::Destroy( pAttr, m_rPool );
     }
 };
@@ -1178,7 +1183,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            static_cast<SwFmtMeta&>(pAttr->GetAttr()).NotifyRemoval();
+            static_cast<SwTxtMeta*>(pAttr)->ChgTxtNode(0);
             break;
 
         default:

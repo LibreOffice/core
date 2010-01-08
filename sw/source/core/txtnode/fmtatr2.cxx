@@ -650,19 +650,28 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
     }
 }
 
-void SwFmtMeta::NotifyRemoval()
+void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
     // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
     ASSERT(m_pMeta, "NotifyRemoval: no meta ?");
     if (m_pMeta)
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*m_pMeta) ); // cast to proper base class!
-        m_pMeta->Modify(&aMsgHint, &aMsgHint);
+        if (!pTxtNode)
+        {
+            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
+                &static_cast<SwModify&>(*m_pMeta) ); // cast to base class!
+            m_pMeta->Modify(&aMsgHint, &aMsgHint);
+        }
+        else
+        {   // do not call Modify, that would call SwXMeta::Modify!
+            m_pMeta->NotifyChangeTxtNode();
+        }
     }
 }
 
+// UGLY: this really awful method fixes up an inconsistent state,
+// and if it is not called when copying, total chaos will undoubtedly ensue
 void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
 {
     ASSERT(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
@@ -673,6 +682,8 @@ void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
         // inserted via MakeTxtAttr! so fix it up to point at the original item
         // (maybe would be better to tell MakeTxtAttr that it creates a copy?)
         pOriginal->SetFmtMeta(&rOriginalMeta);
+        // force pOriginal to register in original text node!
+        pOriginal->NotifyChangeTxtNode();
         if (RES_TXTATR_META == Which())
         {
             m_pMeta.reset( new ::sw::Meta(this) );
@@ -685,7 +696,10 @@ void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
             m_pMeta = pTargetDoc->GetMetaFieldManager().makeMetaField( this,
                 pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
         }
+        // this cannot be done in Clone: a Clone is not necessarily a copy!
         m_pMeta->RegisterAsCopyOf(*pOriginal);
+        // force copy Meta to register in target text node!
+        m_pMeta->NotifyChangeTxtNode();
     }
 }
 
@@ -718,14 +732,23 @@ SwTxtNode * Meta::GetTxtNode() const
     return (pTxtAttr) ? pTxtAttr->GetTxtNode() : 0;
 }
 
-// SwClient
-void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void Meta::NotifyChangeTxtNode()
 {
     SwTxtNode * const pTxtNode( GetTxtNode() );
     if (pTxtNode && (GetRegisteredIn() != pTxtNode))
     {
         pTxtNode->Add(this);
     }
+    else if (!pTxtNode && GetRegisteredIn())
+    {
+        const_cast<SwModify *>(GetRegisteredIn())->Remove(this);
+    }
+}
+
+// SwClient
+void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    NotifyChangeTxtNode();
     SwModify::Modify(pOld, pNew);
 }
 

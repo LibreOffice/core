@@ -47,7 +47,7 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <frame.hxx>
-#include <fmtmeta.hxx>
+#include <txtatr.hxx>
 
 #include <docsh.hxx>
 #include <svtools/smplhint.hxx>
@@ -350,8 +350,13 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
                             case RES_TXTATR_META:
                             case RES_TXTATR_METAFIELD:
-                                static_cast<SwFmtMeta&>(pAttr->GetAttr())
-                                    .NotifyRemoval();
+                                {
+                                    SwTxtMeta *const pTxtMeta(
+                                        static_cast<SwTxtMeta*>(pAttr));
+                                    // force removal of UNO object
+                                    pTxtMeta->ChgTxtNode(0);
+                                    pTxtMeta->ChgTxtNode(pTxtNd);
+                                }
                                 break;
 
                             default:

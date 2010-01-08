@@ -122,8 +122,8 @@ public:
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const;
 //    TYPEINFO();
 
-    // notify clients registered at m_pMeta that this meta is being removed
-    void NotifyRemoval();
+    /// notify clients registered at m_pMeta that this meta is being (re-)moved
+    void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
     static SwFmtMeta * CreatePoolDefault( const USHORT i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
     /// this method <em>must</em> be called when the hint is actually copied
@@ -140,7 +140,7 @@ class Meta
     , public SwModify
 {
 protected:
-    friend class ::SwFmtMeta; // SetFmtMeta
+    friend class ::SwFmtMeta; // SetFmtMeta, NotifyChangeTxtNode
     friend class ::SwXMeta; // GetTxtNode, GetTxtAttr
 
     SwFmtMeta * m_pFmt;
@@ -150,6 +150,8 @@ protected:
 
     SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
+
+    void NotifyChangeTxtNode();
 
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);
