@@ -1317,17 +1317,10 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                             pHeadFootFmt);
                 }
 
-                if(pHeadFootFmt)
+                if (pHeadFootFmt)
                 {
-                    SwXHeadFootText* pxHdFt = (SwXHeadFootText*)SwClientIter( *pHeadFootFmt ).
-                                    First( TYPE( SwXHeadFootText ));
-                    xParentText = pxHdFt;
-                    if(!pxHdFt)
-                    {
-                        xParentText =
-                            new SwXHeadFootText(*pHeadFootFmt, bHeader);
-                    }
-                    break;
+                    xParentText = SwXHeadFootText::CreateXHeadFootText(
+                            *pHeadFootFmt, bHeader);
                 }
             }
         }

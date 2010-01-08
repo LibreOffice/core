@@ -38,8 +38,6 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
 #include <unotext.hxx>
 
 
@@ -136,13 +134,12 @@ typedef ::cppu::WeakImplHelper2
 class SwXHeadFootText
     : public SwXHeadFootText_Base
     , public SwXText
-    , public SwClient
 {
 
 private:
 
-    SwFrmFmt*           GetFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    BOOL                bIsHeader;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
 protected:
 
@@ -154,14 +151,13 @@ protected:
 
     virtual ~SwXHeadFootText();
 
+    SwXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader);
+
 public:
 
-    SwXHeadFootText(SwFrmFmt& rHeadFootFmt, BOOL bHeader);
-
-    TYPEINFO();
-
-    // SwClient
-    virtual void        Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+        CreateXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader);
+    static bool IsXHeadFootText(SwClient *const pClient);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

@@ -2613,60 +2613,136 @@ SwXBodyText::hasElements() throw (uno::RuntimeException)
 /******************************************************************
  *  SwXHeadFootText
  ******************************************************************/
-TYPEINIT1(SwXHeadFootText, SwClient);
-/* -----------------------------06.04.00 16:40--------------------------------
 
- ---------------------------------------------------------------------------*/
-OUString SwXHeadFootText::getImplementationName(void) throw( uno::RuntimeException )
+class SwXHeadFootText::Impl
+    : public SwClient
 {
-    return C2U("SwXHeadFootText");
-}
-/* -----------------------------06.04.00 16:40--------------------------------
 
- ---------------------------------------------------------------------------*/
-BOOL SwXHeadFootText::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-{
-    return C2U("com.sun.star.text.Text") == rServiceName;
-}
-/* -----------------------------06.04.00 16:40--------------------------------
+public:
 
- ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXHeadFootText::getSupportedServiceNames(void) throw( uno::RuntimeException )
+    bool                        m_bIsHeader;
+
+    Impl(   SwXHeadFootText & /*rThis*/,
+            SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
+        : SwClient(& rHeadFootFmt)
+        , m_bIsHeader(bIsHeader)
+    {
+    }
+
+    SwFrmFmt * GetHeadFootFmt() const {
+        return static_cast<SwFrmFmt*>(
+                const_cast<SwModify*>(GetRegisteredIn()));
+    }
+
+    SwFrmFmt & GetHeadFootFmtOrThrow() {
+        SwFrmFmt *const pFmt( GetHeadFootFmt() );
+        if (!pFmt) {
+            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "SwXHeadFootText: disposed or invalid")), 0);
+        }
+        return *pFmt;
+    }
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+/*-- 11.12.98 10:14:51---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXHeadFootText::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Text");
-    return aRet;
+    ClientModify(this, pOld, pNew);
 }
+
+bool SwXHeadFootText::IsXHeadFootText(SwClient *const pClient)
+{
+    return 0 != dynamic_cast<SwXHeadFootText::Impl*>(pClient);
+}
+
+uno::Reference< text::XText >
+SwXHeadFootText::CreateXHeadFootText(
+        SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
+{
+    // re-use existing SwXHeadFootText
+    // #i105557#: do not iterate over the registered clients: race condition
+    uno::Reference< text::XText > xText(rHeadFootFmt.GetXObject(),
+            uno::UNO_QUERY);
+    if (!xText.is())
+    {
+        SwXHeadFootText *const pXHFT(
+                new SwXHeadFootText(rHeadFootFmt, bIsHeader));
+        xText.set(pXHFT);
+        rHeadFootFmt.SetXObject(xText);
+    }
+    return xText;
+}
+
 /*-- 11.12.98 10:14:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXHeadFootText::SwXHeadFootText(SwFrmFmt& rHeadFootFmt, BOOL bHeader) :
-    SwXText(rHeadFootFmt.GetDoc(), bHeader ? CURSOR_HEADER : CURSOR_FOOTER),
-    SwClient(&rHeadFootFmt),
-    bIsHeader(bHeader)
+SwXHeadFootText::SwXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
+    : SwXText(rHeadFootFmt.GetDoc(),
+            (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER)
+    , m_pImpl( new SwXHeadFootText::Impl(*this, rHeadFootFmt, bIsHeader) )
 {
-
 }
+
 /*-- 11.12.98 10:14:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXHeadFootText::~SwXHeadFootText()
 {
-
 }
+
+/* -----------------------------06.04.00 16:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXHeadFootText::getImplementationName() throw (uno::RuntimeException)
+{
+    return C2U("SwXHeadFootText");
+}
+
+/* -----------------------------06.04.00 16:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+static char const*const g_ServicesHeadFootText[] =
+{
+    "com.sun.star.text.Text",
+};
+static const size_t g_nServicesHeadFootText(
+    sizeof(g_ServicesHeadFootText)/sizeof(g_ServicesHeadFootText[0]));
+
+sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+            g_nServicesHeadFootText, g_ServicesHeadFootText, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL
+SwXHeadFootText::getSupportedServiceNames() throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesHeadFootText, g_ServicesHeadFootText);
+}
+
 /*-- 11.12.98 10:14:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 const SwStartNode *SwXHeadFootText::GetStartNode() const
 {
     const SwStartNode *pSttNd = 0;
-    SwFrmFmt* pHeadFootFmt = GetFmt();
+    SwFrmFmt *const pHeadFootFmt = m_pImpl->GetHeadFootFmt();
     if(pHeadFootFmt)
     {
         const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
         if( rFlyCntnt.GetCntntIdx() )
+        {
             pSttNd = rFlyCntnt.GetCntntIdx()->GetNode().GetStartNode();
+        }
     }
     return pSttNd;
 }
@@ -2679,28 +2755,19 @@ SwXHeadFootText::CreateCursor() throw (uno::RuntimeException)
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< uno::Type > SwXHeadFootText::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL
+SwXHeadFootText::getTypes() throw (uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aHFTypes = SwXHeadFootText_Base::getTypes();
-    uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
-
-    long nIndex = aHFTypes.getLength();
-    aHFTypes.realloc(
-        aHFTypes.getLength() +
-        aTextTypes.getLength());
-
-    uno::Type* pHFTypes = aHFTypes.getArray();
-    const uno::Type* pTextTypes = aTextTypes.getConstArray();
-    for(long nPos = 0; nPos < aTextTypes.getLength(); nPos++)
-        pHFTypes[nIndex++] = pTextTypes[nPos];
-
-    return aHFTypes;
+    const uno::Sequence< uno::Type > aTypes = SwXHeadFootText_Base::getTypes();
+    const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< sal_Int8 > SwXHeadFootText::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL
+SwXHeadFootText::getImplementationId() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     static uno::Sequence< sal_Int8 > aId( 16 );
@@ -2715,7 +2782,8 @@ uno::Sequence< sal_Int8 > SwXHeadFootText::getImplementationId(  ) throw(uno::Ru
 /* -----------------------------21.03.00 15:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Any SwXHeadFootText::queryInterface(const uno::Type& rType)
+uno::Any SAL_CALL
+SwXHeadFootText::queryInterface(const uno::Type& rType)
 throw (uno::RuntimeException)
 {
     const uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
@@ -2727,135 +2795,128 @@ throw (uno::RuntimeException)
 /*-- 11.12.98 10:14:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor > SAL_CALL
+SwXHeadFootText::createTextCursor() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >     xRet;
-    SwFrmFmt* pHeadFootFmt = GetFmt();
-    if(pHeadFootFmt)
-    {
-        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
-        const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
-        SwPosition aPos(rNode);
-        SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
-                (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
-        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
-        //save current start node to be able to check if there is content after the table -
-        //otherwise the cursor would be in the body text!
+    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
 
-        const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(
-                        bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
-        //steht hier eine Tabelle?
-        SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-        SwCntntNode* pCont = 0;
-        while( pTblNode )
-        {
-            pUnoCrsr->GetPoint()->nNode = *pTblNode->EndOfSectionNode();
-            pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
-            pTblNode = pCont->FindTableNode();
-        }
-        if(pCont)
-            pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
-        const SwStartNode* pNewStartNode = pUnoCrsr->GetNode()->FindSttNodeByType(
-                        bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
-        if(!pNewStartNode || pNewStartNode != pOwnStartNode)
-        {
-            uno::RuntimeException aExcept;
-            aExcept.Message = S2U("no text available");
-            throw aExcept;
-        }
-        xRet = static_cast<text::XWordCursor*>(pXCursor);
-    }
-    else
+    uno::Reference< text::XTextCursor > xRet;
+    const SwFmtCntnt& rFlyCntnt = rHeadFootFmt.GetCntnt();
+    const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+    SwPosition aPos(rNode);
+    SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
+            (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
+    SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+
+    // save current start node to be able to check if there is content
+    // after the table - otherwise the cursor would be in the body text!
+    SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
+            (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
+    // is there a table here?
+    SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+    SwCntntNode* pCont = 0;
+    while (pTblNode)
     {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U(cInvalidObject);
-        throw aRuntime;
+        pUnoCrsr->GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+        pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
+        pTblNode = pCont->FindTableNode();
     }
+    if (pCont)
+    {
+        pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
+    }
+    SwStartNode const*const pNewStartNode =
+        pUnoCrsr->GetNode()->FindSttNodeByType(
+            (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
+    if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
+    {
+        uno::RuntimeException aExcept;
+        aExcept.Message = S2U("no text available");
+        throw aExcept;
+    }
+    xRet = static_cast<text::XWordCursor*>(pXCursor);
     return xRet;
 }
+
 /*-- 11.12.98 10:14:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursorByRange(
-                const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor > SAL_CALL
+SwXHeadFootText::createTextCursorByRange(
+    const uno::Reference< text::XTextRange > & xTextPosition)
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  xRet;
-    SwFrmFmt* pHeadFootFmt = GetFmt();
+
+    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
+
     SwUnoInternalPaM aPam(*GetDoc());
-    if (pHeadFootFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
-    {
-        SwNode& rNode = pHeadFootFmt->GetCntnt().GetCntntIdx()->GetNode();
-        SwPosition aPos(rNode);
-        SwPaM aHFPam(aPos);
-        aHFPam.Move(fnMoveForward, fnGoNode);
-        SwStartNode* pOwnStartNode = aHFPam.GetNode()->FindSttNodeByType(
-                        bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
-        SwStartNode* p1 = aPam.GetNode()->FindSttNodeByType(
-            bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
-        if(p1 == pOwnStartNode)
-        {
-            xRet = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*GetDoc(), this,
-                        (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER,
-                        *aPam.GetPoint(), aPam.GetMark()));
-        }
-    }
-    return xRet;
-}
-/* -----------------19.03.99 15:44-------------------
- *
- * --------------------------------------------------*/
-uno::Reference< container::XEnumeration >  SwXHeadFootText::createEnumeration(void)
-    throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< container::XEnumeration >  aRef;
-    //wenn this ungueltig ist, dann kommt die uno::Exception aus createTextCursor()
-    SwFrmFmt* pHeadFootFmt = GetFmt();
-    if(pHeadFootFmt)
-    {
-        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
-        const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
-        SwPosition aPos(rNode);
-        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(aPos, sal_False));
-        pUnoCursor->Move(fnMoveForward, fnGoNode);
-        aRef = new SwXParagraphEnumeration(this, pUnoCursor,
-                    (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
-    }
-    else
+    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
 
+    uno::Reference< text::XTextCursor >  xRet;
+    SwNode& rNode = rHeadFootFmt.GetCntnt().GetCntntIdx()->GetNode();
+    SwPosition aPos(rNode);
+    SwPaM aHFPam(aPos);
+    aHFPam.Move(fnMoveForward, fnGoNode);
+    SwStartNode *const pOwnStartNode = aHFPam.GetNode()->FindSttNodeByType(
+            (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
+    SwStartNode *const p1 = aPam.GetNode()->FindSttNodeByType(
+            (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
+    if (p1 == pOwnStartNode)
+    {
+        xRet = static_cast<text::XWordCursor*>(
+                new SwXTextCursor(*GetDoc(), this,
+                    (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER,
+                    *aPam.GetPoint(), aPam.GetMark()));
+    }
+    return xRet;
+}
+
+/* -----------------19.03.99 15:44-------------------
+ *
+ * --------------------------------------------------*/
+uno::Reference< container::XEnumeration > SAL_CALL
+SwXHeadFootText::createEnumeration()
+throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
+
+    uno::Reference< container::XEnumeration >  aRef;
+    const SwFmtCntnt& rFlyCntnt = rHeadFootFmt.GetCntnt();
+    const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+    SwPosition aPos(rNode);
+    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+        GetDoc()->CreateUnoCrsr(aPos, sal_False));
+    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    aRef = new SwXParagraphEnumeration(this, pUnoCursor,
+                (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
+
     return aRef;
 }
+
 /* -----------------19.03.99 15:50-------------------
  *
  * --------------------------------------------------*/
-uno::Type SwXHeadFootText::getElementType(void) throw( uno::RuntimeException )
+uno::Type SAL_CALL
+SwXHeadFootText::getElementType() throw (uno::RuntimeException)
 {
-    return ::getCppuType((uno::Reference<text::XTextRange>*)0);
+    return text::XTextRange::static_type();
 }
 /* -----------------19.03.99 15:50-------------------
  *
  * --------------------------------------------------*/
-sal_Bool SwXHeadFootText::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SAL_CALL SwXHeadFootText::hasElements() throw (uno::RuntimeException)
 {
     return sal_True;
-}
-
-/*-- 11.12.98 10:14:51---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void    SwXHeadFootText::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
-{
-    ClientModify( this, pOld, pNew);
 }
 
