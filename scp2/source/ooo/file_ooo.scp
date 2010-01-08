@@ -163,7 +163,7 @@ End
 File gid_File_Profile_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Name = PROFILENAME(gengal);
 End
 
@@ -173,7 +173,7 @@ File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -348,7 +348,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
+STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -515,7 +515,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,PATCH);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -1171,7 +1171,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "offapi.rdb";
 End
 
@@ -1671,7 +1671,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY, PATCH);
+    Styles = (PACKED, STARREGISTRY);
 #if defined WNT
     NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
 #else
@@ -1818,7 +1818,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_ImagesCrystal_Zip
