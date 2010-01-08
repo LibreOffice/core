@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "clockwipe.hxx"
 
 
@@ -66,9 +67,7 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon ClockWipe::operator () ( double t )
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( 0.5, 0.5 );
-    aTransform.translate( 0.5, 0.5 );
+    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
     ::basegfx::B2DPolygon poly( calcCenteredClock(t) );
     poly.transform( aTransform );
     return ::basegfx::B2DPolyPolygon(poly);
