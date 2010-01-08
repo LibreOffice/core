@@ -682,7 +682,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 
     const SdrGrafObj& rGraf = (SdrGrafObj&) rObj;
 
-    pGraphic->SetGraphic( rGraf.GetGraphic() );
+    pGraphic->SetGraphic( rGraf.GetGraphic(), &rGraf.GetGraphicObject() );
     aCropRect = rGraf.aCropRect;
     aFileName = rGraf.aFileName;
     aFilterName = rGraf.aFilterName;
