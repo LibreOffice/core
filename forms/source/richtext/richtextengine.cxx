@@ -32,14 +32,14 @@
 #include "precompiled_forms.hxx"
 #include "richtextengine.hxx"
 #include <svl/itempool.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editobj.hxx>
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #define ITEMID_FONT         EE_CHAR_FONTHEIGHT
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #define ITEMID_LANGUAGE     EE_CHAR_LANGUAGE
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>

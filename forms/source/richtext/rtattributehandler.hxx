@@ -33,8 +33,8 @@
 
 #include "rtattributes.hxx"
 #include <rtl/ref.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/frmdir.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/frmdir.hxx>
 
 class SfxItemSet;
 class SfxPoolItem;

@@ -91,7 +91,7 @@ private:
     DECL_LINK(  PathHdl_Impl, PushButton * );
     DECL_LINK(  StandardHdl_Impl, PushButton * );
 
-    DECL_LINK(  PathSelect_Impl, OptHeaderTabListBox * );
+    DECL_LINK(  PathSelect_Impl, svx::OptHeaderTabListBox * );
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
     DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
 

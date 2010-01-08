@@ -35,14 +35,14 @@
 
 #include "align.hxx"
 
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
 #include "align.hrc"
 #include <svx/rotmodit.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <tools/shl.hxx>

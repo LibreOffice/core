@@ -32,8 +32,8 @@
 #include "precompiled_cui.hxx"
 
 #include <optasian.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>

@@ -34,7 +34,7 @@
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 //........................................................................
 namespace frm

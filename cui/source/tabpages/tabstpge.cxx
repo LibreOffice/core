@@ -43,7 +43,7 @@
 
 #include <cuires.hrc>
 #include "tabstpge.hrc"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"

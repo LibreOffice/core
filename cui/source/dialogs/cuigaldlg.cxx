@@ -39,7 +39,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/opengrf.hxx>
-#include <svx/impgrf.hxx>
+#include <svtools/filter.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include "cuigaldlg.hxx"
@@ -856,7 +856,7 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 void TPGalleryThemeProperties::FillFilterList()
 {
-    GraphicFilter*      pFilter = GetGrfFilter();
+    GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
     String              aExt;
     String              aName;
     FilterEntry*        pFilterEntry;

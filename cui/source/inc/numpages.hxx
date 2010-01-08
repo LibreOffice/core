@@ -40,7 +40,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #ifndef _SVX_NUMDEF_HXX
-#include <svx/numdef.hxx>
+#include <editeng/numdef.hxx>
 #endif
 #include <svtools/ctrlbox.hxx>
 #include <svl/svarray.hxx>

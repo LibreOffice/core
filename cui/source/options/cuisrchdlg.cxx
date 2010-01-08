@@ -59,7 +59,7 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <optjsearch.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "backgrnd.hxx"
 
 

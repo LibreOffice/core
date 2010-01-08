@@ -274,12 +274,12 @@ void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( sal_Bool _bByChar
     pDlg->SetByCharacter(_bByCharacter);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
 {
     pDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType )
 {
      pDlg->SetConversionFormat(_eType);
 }
@@ -328,7 +328,7 @@ sal_Bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
     return pDlg->GetUseBothDirections();
 }
 
-HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
+editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
 {
     return pDlg->GetDirection( _eDefaultDirection );
 }
@@ -345,7 +345,7 @@ String   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
 {
     return pDlg->GetCurrentString();
 }
-HangulHanjaConversion::ConversionFormat  AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
+editeng::HangulHanjaConversion::ConversionFormat     AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
 {
     return pDlg->GetConversionFormat();
 }
@@ -1135,7 +1135,7 @@ AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeD
 }
 
 AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(Window* pParent,
-                                                                       HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
+                                                                       editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection )
 {
     HangulHanjaConversionDialog* pDlg = new HangulHanjaConversionDialog( pParent, _ePrimaryDirection);
     return new AbstractHangulHanjaConversionDialog_Impl( pDlg );

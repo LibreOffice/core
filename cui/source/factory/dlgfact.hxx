@@ -163,8 +163,8 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    EndDialog(long nResult = 0);
     virtual void    EnableRubySupport( sal_Bool _bVal );
     virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
-    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
-    virtual void    SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType );
+    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+    virtual void    SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
     virtual void    SetOptionsChangedHdl( const Link& _rHdl );
     virtual void    SetIgnoreHdl( const Link& _rHdl );
     virtual void    SetIgnoreAllHdl( const Link& _rHdl ) ;
@@ -174,14 +174,14 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    SetConversionFormatChangedHdl( const Link& _rHdl ) ;
     virtual void    SetFindHdl( const Link& _rHdl );
     virtual sal_Bool        GetUseBothDirections( ) const;
-    virtual HangulHanjaConversion::ConversionDirection    GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
+    virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
     virtual void    SetCurrentString(
                     const String& _rNewString,
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
     virtual String  GetCurrentString( ) const ;
-    virtual HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const ;
+    virtual editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const ;
     virtual void    FocusSuggestion( );
     virtual String  GetCurrentSuggestion( ) const;
 };
@@ -649,7 +649,7 @@ public:
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
-                                            HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+                                            editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
     virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                                 const String &rWord, sal_Int16 nLanguage );
 

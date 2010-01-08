@@ -47,8 +47,8 @@
 
 #include <svx/xtable.hxx>               // XColorTable
 #include <svx/drawitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include "border.hxx"
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>

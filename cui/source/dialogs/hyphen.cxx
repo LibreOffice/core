@@ -38,12 +38,12 @@
 #include <vcl/msgbox.hxx>
 #include "cuires.hrc"
 #include "hyphen.hrc"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "hyphen.hxx"
-#include <svx/splwrap.hxx>
+#include <editeng/splwrap.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svtools/langtab.hxx>
 #include "dialmgr.hxx"
 

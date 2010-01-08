@@ -44,11 +44,12 @@
 #include <svx/svxerr.hxx>
 #include "cuires.hrc"
 #include "thesdlg.hrc"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/langbox.hxx>
 #include <svtools/langtab.hxx>
 #include "dialmgr.hxx"
 #include <svx/dialogs.hrc>
+#include <editeng/editerr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

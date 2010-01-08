@@ -43,12 +43,12 @@
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
 #include "transfrm.hrc"
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 
 #include "transfrm.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "svx/anchorid.hxx"
 #include <sfx2/module.hxx>
 #include <svl/rectitem.hxx>

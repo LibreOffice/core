@@ -32,7 +32,7 @@
 #include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
@@ -45,6 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svtools/unitconv.hxx>
 
 #define _SVX_CHARDLG_CXX
 #include <svl/languageoptions.hxx>
@@ -54,38 +55,38 @@
 
 #include <svx/xtable.hxx>       // XColorTable
 #include "chardlg.hxx"
-#include "svx/fontitem.hxx"
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/blnkitem.hxx>
-#include "svx/flstitem.hxx"
-#include <svx/akrnitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
+#include "editeng/fontitem.hxx"
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include "editeng/flstitem.hxx"
+#include <editeng/akrnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
 #include "svx/drawitem.hxx"
 #include "svx/dlgutil.hxx"
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include "cuicharmap.hxx"
 #include "chardlg.h"
-#include <svx/emphitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 #include <cuires.hrc> //CHINA001
 #include <svl/intitem.hxx> //CHINA001

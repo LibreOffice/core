@@ -53,7 +53,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include "charmap.hrc"
 #include "macroass.hxx"
 

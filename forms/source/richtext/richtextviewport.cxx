@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "richtextviewport.hxx"
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 //........................................................................
 namespace frm

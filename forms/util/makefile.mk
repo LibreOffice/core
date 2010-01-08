@@ -58,6 +58,7 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(EDITENGLIB) \
         $(SALLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \

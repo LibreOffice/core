@@ -256,7 +256,7 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     Size aHeadSize = pHeaderBar->GetSizePixel();
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new OptHeaderTabListBox( &aPathCtrl, nBits );
+    pPathBox = new svx::OptHeaderTabListBox( &aPathCtrl, nBits );
     aPathCtrl.SetFocusControl( pPathBox );
     pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( aLink );
@@ -409,7 +409,7 @@ void SvxPathTabPage::FillUserData()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPathTabPage, PathSelect_Impl, OptHeaderTabListBox *, EMPTYARG )
+IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
 
 /*  [Beschreibung]
 

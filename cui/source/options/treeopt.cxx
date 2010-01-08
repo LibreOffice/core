@@ -113,7 +113,7 @@
 #include "treeopt.hxx"
 #include "treeopt.hrc"
 #include "fontsubs.hxx"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/xtable.hxx>
 #include "connpoolconfig.hxx"
 #include "dbregister.hxx"
@@ -123,7 +123,7 @@
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #endif
 
 

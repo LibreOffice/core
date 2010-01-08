@@ -43,7 +43,7 @@
 #include "srchxtra.hrc"
 #include <svx/svxitems.hrc> // RID_ATTR_BEGIN
 #include <svx/dialmgr.hxx>  // item resources
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
 #include <dialmgr.hxx>

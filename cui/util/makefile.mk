@@ -60,6 +60,7 @@ SHL1LIBS=	\
 
 
 SHL1STDLIBS= \
+            $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(AVMEDIALIB) \

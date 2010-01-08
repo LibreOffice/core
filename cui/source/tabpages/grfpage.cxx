@@ -38,8 +38,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>

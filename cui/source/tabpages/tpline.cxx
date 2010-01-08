@@ -35,7 +35,7 @@
 
 #ifndef _SVX_SIZEITEM_HXX //autogen
 
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
@@ -64,10 +64,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/numvset.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/numitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/gallery.hxx>
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>

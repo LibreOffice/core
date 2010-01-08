@@ -40,7 +40,7 @@
 #include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>

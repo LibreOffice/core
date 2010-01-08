@@ -64,7 +64,7 @@
 #include <helpid.hrc>
 #include <bastype2.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>

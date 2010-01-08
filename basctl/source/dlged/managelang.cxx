@@ -56,7 +56,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 #include <svtools/langtab.hxx>
 
