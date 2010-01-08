@@ -167,9 +167,14 @@ HasHorizontalScrollBar
 HasLayoutInfo
 HasMainTitle
 HasReference
+HasSecondaryXAxisTitle
+HasSecondaryYAxisTitle
 HasSheetTabs
 HasSortInfo
 HasVerticalScrollBar
+HasXAxisTitle
+HasYAxisTitle
+HasZAxisTitle
 HeaderBodyDistance
 HeaderHeight
 HeaderIsDynamicHeight

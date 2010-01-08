@@ -39,6 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
     namespace chart2 { class XChartDocument; }
+    namespace chart2 { class XTitled; }
     namespace drawing { class XShape; }
 } } }
 
@@ -50,12 +51,21 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
-
 class ChartConverter;
 class ObjectFormatter;
 struct ChartSpaceModel;
 struct ConverterData;
+
+// ============================================================================
+
+const sal_Int32 API_PRIM_AXESSET = 0;
+const sal_Int32 API_SECN_AXESSET = 1;
+
+const sal_Int32 API_X_AXIS = 0;
+const sal_Int32 API_Y_AXIS = 1;
+const sal_Int32 API_Z_AXIS = 2;
+
+// ============================================================================
 
 class ConverterRoot
 {
@@ -85,12 +95,29 @@ protected:
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
+    /** Registers the main title object and its layout data, needed for
+        conversion of the title position using the old Chart1 API. */
+    void                registerMainTitle(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
+                            const ModelRef< LayoutModel >& rxLayout );
+    /** Registers an axis title object and its layout data, needed for
+        conversion of the title position using the old Chart1 API. */
+    void                registerAxisTitle(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
+                            const ModelRef< LayoutModel >& rxLayout,
+                            sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx );
+    /** Converts the positions of the main title and all axis titles. */
+    void                convertTitlePositions();
+
 private:
     ::boost::shared_ptr< ConverterData > mxData;
 };
 
 // ============================================================================
 
+/** Base class of all converter classes. Holds a reference to a model structure
+    of the specified type.
+ */
 template< typename ModelType >
 class ConverterBase : public ConverterRoot
 {

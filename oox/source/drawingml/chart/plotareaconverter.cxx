@@ -32,6 +32,8 @@
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -45,6 +47,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::chart2::XCoordinateSystem;
 using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDiagram;
@@ -57,14 +60,15 @@ namespace chart {
 
 namespace {
 
-/** Axes set model. This is a helper class for the plot area converter. */
+/** Axes set model. This is a helper for the plot area converter collecting all
+    type groups and axes of the primary or secondary axes set. */
 struct AxesSetModel
 {
     typedef ModelVector< TypeGroupModel >       TypeGroupVector;
     typedef ModelMap< sal_Int32, AxisModel >    AxisMap;
 
-    TypeGroupVector     maTypeGroups;
-    AxisMap             maAxes;
+    TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
+    AxisMap             maAxes;             /// All axes mapped by API axis type.
 
     inline explicit     AxesSetModel() {}
     inline              ~AxesSetModel() {}
@@ -407,6 +411,33 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     {
         PropertySet aPropSet( xDiagram->getWall() );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_PLOTAREA2D );
+    }
+}
+
+void PlotAreaConverter::convertPositionFromModel()
+{
+    LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
+    LayoutConverter aLayoutConv( *this, rLayout );
+    Rectangle aDiagramRect;
+    if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
+    {
+        namespace cssc = ::com::sun::star::chart;
+        Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );
+        Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
+        switch( rLayout.mnTarget )
+        {
+            case XML_inner:
+                xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+            break;
+            case XML_outer:
+                xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+            break;
+            default:
+                OSL_ENSURE( false, "PlotAreaConverter::convertPositionFromModel - unknown positioning target" );
+        }
+    }
+    catch( Exception& )
+    {
     }
 }
 

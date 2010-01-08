@@ -32,7 +32,6 @@
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -48,9 +47,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::chart::XDiagramPositioning;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataReceiver;
@@ -60,23 +57,6 @@ namespace drawingml {
 namespace chart {
 
 // ============================================================================
-
-namespace {
-
-double lclGetTitleRotation( const Reference< XTitled >& rxTitled )
-{
-    double fAngle = 0.0;
-    if( rxTitled.is() )
-    {
-        PropertySet aTitleProp( rxTitled->getTitleObject() );
-        aTitleProp.getProperty( fAngle, PROP_TextRotation );
-    }
-    return fAngle;
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
 
 ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel ) :
     ConverterBase< ChartSpaceModel >( rParent, rModel )
@@ -135,9 +115,12 @@ void ChartSpaceConverter::convertFromModel()
         {
             if( aAutoTitle.getLength() == 0 )
                 aAutoTitle = CREATE_OUSTRING( "Chart Title" );
+            TitleModel& rTitle = mrModel.mxTitle.getOrCreate();
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
-            TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
+            TitleConverter aTitleConv( *this, rTitle );
             aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
+            // register the title and layout data for conversion of position
+            registerMainTitle( xTitled, rTitle.mxLayout );
         }
     }
     catch( Exception& )
@@ -168,7 +151,8 @@ void ChartSpaceConverter::convertFromModel()
 
     /*  Following all conversions needing the old Chart1 API that involves full
         initialization of the chart view. */
-    Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY );
+    namespace cssc = ::com::sun::star::chart;
+    Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY );
     if( xChart1Doc.is() )
     {
         /*  Set the IncludeHiddenCells property via the old API as only this
@@ -177,39 +161,11 @@ void ChartSpaceConverter::convertFromModel()
         PropertySet aDiaProp( xChart1Doc->getDiagram() );
         aDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
 
-        // title position
-        PropertySet aDocProp( xChart1Doc );
-        if( aDocProp.getBoolProperty( PROP_HasMainTitle ) )
-        {
-            Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY );
-            double fAngle = lclGetTitleRotation( xTitled );
-            LayoutModel& rLayout = mrModel.mxTitle.getOrCreate().mxLayout.getOrCreate();
-            LayoutConverter aLayoutConv( *this, rLayout );
-            aLayoutConv.convertFromModel( xChart1Doc->getTitle(), fAngle );
-        }
-
         // plot area position and size
-        LayoutModel& rLayout = mrModel.mxPlotArea.getOrCreate().mxLayout.getOrCreate();
-        LayoutConverter aLayoutConv( *this, rLayout );
-        Rectangle aDiagramRect;
-        if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
-        {
-            Reference< XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
-            switch( rLayout.mnTarget )
-            {
-                case XML_inner:
-                    xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
-                break;
-                case XML_outer:
-                    xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
-                break;
-                default:
-                    OSL_ENSURE( false, "ChartSpaceConverter::convertFromModel - unknown positioning target" );
-            }
-        }
-        catch( Exception& )
-        {
-        }
+        aPlotAreaConv.convertPositionFromModel();
+
+        // positions of main title and all axis titles
+        convertTitlePositions();
     }
 }
 
