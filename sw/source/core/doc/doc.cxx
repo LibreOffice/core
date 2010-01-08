@@ -35,7 +35,7 @@
 
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
-
+#include <svx/svxids.hrc>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,11 +49,11 @@
 #include <vcl/virdev.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/charclass.hxx>
 #include <swmodule.hxx>

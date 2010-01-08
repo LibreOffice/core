@@ -39,10 +39,10 @@
 #endif
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <node.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>

@@ -37,10 +37,10 @@
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
 #include <sfx2/printer.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <swtypes.hxx>

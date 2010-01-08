@@ -69,7 +69,7 @@
 #ifndef _UNDO_HRC
 #include <undo.hrc>
 #endif
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)

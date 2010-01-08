@@ -45,7 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft2.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>

@@ -40,7 +40,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <cntfrm.hxx>

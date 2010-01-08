@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <swmodule.hxx>

@@ -100,7 +100,7 @@
 #include <mmconfigitem.hxx>
 #include <mailmergechildwindow.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

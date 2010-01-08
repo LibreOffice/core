@@ -40,19 +40,19 @@
 #include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>

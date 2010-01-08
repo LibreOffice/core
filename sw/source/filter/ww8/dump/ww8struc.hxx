@@ -200,7 +200,7 @@ struct WW8_BordersSO            // fuer StarOffice-Border Code
 
 /*
 // Linien-Defaults in Twips: fruehere Writer-Defaults,
-//                           siehe auch <svx/boxitem.hxx>
+//                           siehe auch <editeng/boxitem.hxx>
 #define DEF_LINE_WIDTH_0        1
 #define DEF_LINE_WIDTH_1        20
 #define DEF_LINE_WIDTH_2        50

@@ -45,8 +45,8 @@
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif

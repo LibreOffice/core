@@ -33,10 +33,10 @@
 #include <hintids.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/paperinf.hxx>
-#include "svx/frmdiritem.hxx"
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include "editeng/frmdiritem.hxx"
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/localedatawrapper.hxx>

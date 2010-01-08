@@ -44,9 +44,9 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/svxacorr.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>
 

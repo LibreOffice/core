@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #ifndef _ZFORMAT_HXX //autogen

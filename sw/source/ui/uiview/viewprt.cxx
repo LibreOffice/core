@@ -53,7 +53,7 @@
 #include <svtools/printdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/misccfg.hxx>
 #include <svx/prtqry.hxx>

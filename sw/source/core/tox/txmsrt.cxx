@@ -35,7 +35,7 @@
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

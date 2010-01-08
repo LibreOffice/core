@@ -36,12 +36,12 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #include <viewsh.hxx>
 #include <viewopt.hxx>      // SwViewOptions

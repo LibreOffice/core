@@ -48,7 +48,7 @@
 
 
 #include <svx/svdpage.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>

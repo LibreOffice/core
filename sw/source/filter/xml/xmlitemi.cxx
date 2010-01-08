@@ -45,12 +45,12 @@
 #include <xmloff/families.hxx>
 #endif
 #include <svx/unomid.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/langitem.hxx>
 
 #ifndef _XMLOFF_XMLTABI_HXX
 //#include <xmloff/xmltabi.hxx>

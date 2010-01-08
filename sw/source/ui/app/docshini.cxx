@@ -47,12 +47,12 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/asiancfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #ifndef _SVX_AKRNTEM_HXX
-#include <svx/akrnitem.hxx>
+#include <editeng/akrnitem.hxx>
 #endif
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -64,16 +64,16 @@
 
 #include <svx/drawitem.hxx>
 #endif
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/langitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/svxacorr.hxx>
 
 #include <vcl/svapp.hxx>
 #include <view.hxx>

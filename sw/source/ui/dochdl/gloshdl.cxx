@@ -33,8 +33,8 @@
 
 
 #include <hintids.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/adjitem.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
@@ -82,7 +82,7 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
 

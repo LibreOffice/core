@@ -61,7 +61,7 @@
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/zoomitem.hxx>
 #include <vcl/decoview.hxx>

@@ -41,12 +41,12 @@
 #include <sfx2/objitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <tox.hxx>

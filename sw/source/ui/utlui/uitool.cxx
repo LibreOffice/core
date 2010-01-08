@@ -43,14 +43,14 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svx/pmdlitem.hxx>
+#include <editeng/pmdlitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
 #ifndef _VCL_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>

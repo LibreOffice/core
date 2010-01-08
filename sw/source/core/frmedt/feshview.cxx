@@ -47,9 +47,9 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 

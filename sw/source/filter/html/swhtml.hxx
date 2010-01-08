@@ -49,7 +49,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>

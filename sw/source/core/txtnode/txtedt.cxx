@@ -42,11 +42,11 @@
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/hangulhanja.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/hangulhanja.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1024,8 +1024,8 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         do {
             nLangFound = aIter.GetLanguage();
             sal_Bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
-                                (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
-                                 svx::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
+                                (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
+                                 editeng::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
 
             xub_StrLen nChPos = aIter.GetChgPos();
             // the position at the end of the paragraph returns -1

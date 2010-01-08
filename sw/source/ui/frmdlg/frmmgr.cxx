@@ -38,12 +38,12 @@
 
 
 #include <svl/stritem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <fmtclds.hxx>
 #include "wrtsh.hxx"

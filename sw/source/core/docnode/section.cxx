@@ -38,7 +38,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 

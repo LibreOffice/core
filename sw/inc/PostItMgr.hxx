@@ -33,7 +33,7 @@
 
 #include <list>
 #include <vector>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/debug.hxx>

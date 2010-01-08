@@ -31,7 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svx/svxids.hrc>
+#include <editeng/memberids.hrc>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -51,7 +52,7 @@
 #include <docary.hxx>
 #include <docstyle.hxx>
 #include <fmtclds.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -67,7 +68,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <unoobj.hxx>
 #include <vcl/font.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vos/mutex.hxx>
@@ -75,7 +76,7 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-#include <svx/unofdesc.hxx>
+#include <editeng/unofdesc.hxx>
 #include <fmtornt.hxx>
 #include <SwStyleNameMapper.hxx>
 // --> OD 2008-01-15 #newlistlevelattrs#

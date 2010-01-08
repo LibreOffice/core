@@ -51,7 +51,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdogrp.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>

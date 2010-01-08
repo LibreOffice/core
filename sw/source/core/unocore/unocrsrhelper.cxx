@@ -32,7 +32,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svx/svxids.hrc>
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
 #include <unoobj.hxx>
@@ -65,7 +65,7 @@
 #include <swtable.hxx>
 #include <tox.hxx>
 #include <fchrfmt.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #define _SVSTDARR_USHORTS

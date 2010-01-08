@@ -153,7 +153,7 @@
 // OD 14.02.2003 #107424#
 #include <svtools/colorcfg.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX

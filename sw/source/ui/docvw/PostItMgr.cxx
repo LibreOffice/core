@@ -75,9 +75,9 @@
 #include <svl/smplhint.hxx>
 
 #include <svx/svdview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/outliner.hxx>
 
 #include <i18npool/mslangid.hxx>
 #include <i18npool/lang.h>

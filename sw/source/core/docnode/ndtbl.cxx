@@ -39,12 +39,12 @@
 #include <hintids.hxx>
 
 
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 // OD 06.08.2003 #i17174#
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtfordr.hxx>

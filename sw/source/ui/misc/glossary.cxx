@@ -60,7 +60,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unocrsr.hxx>
 #include <unotools.hxx>

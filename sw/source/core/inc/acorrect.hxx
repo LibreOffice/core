@@ -30,7 +30,7 @@
 #ifndef _ACORRECT_HXX
 #define _ACORRECT_HXX
 
-#include <svx/svxacorr.hxx>
+#include <editeng/svxacorr.hxx>
 
 #include <swundo.hxx>
 

@@ -57,9 +57,9 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <hintids.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtanchr.hxx>
 #include <pam.hxx>              // fuer SwPam

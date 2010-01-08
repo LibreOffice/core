@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer SwTxtFmtColls
 #include <edimp.hxx>    // fuer MACROS

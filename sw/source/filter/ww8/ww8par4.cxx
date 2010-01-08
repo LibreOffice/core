@@ -47,7 +47,6 @@
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/unoapi.hxx>
 #include <filter/msfilter/msocximex.hxx>
 
@@ -59,9 +58,7 @@
 #include <frmfmt.hxx>
 #include <pam.hxx>
 #include <ndgrf.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>            // fuer Ole-Node
-#endif
 #include <mdiexp.hxx>           // Progress
 #include <redline.hxx>
 #include <fltshell.hxx>
@@ -69,6 +66,7 @@
 #include <shellio.hxx>
 #include <ndole.hxx>
 
+#include <svtools/filter.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"

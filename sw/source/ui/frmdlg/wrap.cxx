@@ -42,9 +42,9 @@
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // OD 18.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>

@@ -119,7 +119,7 @@
 #include <svx/htmlcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 
 #include <unomailmerge.hxx>

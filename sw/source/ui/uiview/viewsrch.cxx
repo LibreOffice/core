@@ -51,7 +51,7 @@
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>

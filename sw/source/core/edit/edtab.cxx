@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #include <vcl/window.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>

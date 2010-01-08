@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <doc.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>

@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/BibliographyDataField.hpp>

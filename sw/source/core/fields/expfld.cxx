@@ -35,10 +35,10 @@
 #include <hintids.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <unofield.hxx>
 #include <fmtfld.hxx>

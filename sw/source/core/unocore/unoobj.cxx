@@ -93,7 +93,7 @@
 #include <unofield.hxx>
 #include <unometa.hxx>
 #include <fmtanchr.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <flypos.hxx>
 #include <txtftn.hxx>
@@ -113,7 +113,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>

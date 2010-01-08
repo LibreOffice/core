@@ -42,8 +42,8 @@
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>

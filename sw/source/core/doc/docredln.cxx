@@ -38,9 +38,9 @@
 #include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

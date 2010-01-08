@@ -34,7 +34,7 @@
 #include "frmatr.hxx"
 #include "swcache.hxx"
 // --> OD 2008-12-04 #i96772#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 
 class SwPageFrm;

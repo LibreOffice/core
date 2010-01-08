@@ -39,7 +39,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "docstat.hxx"

@@ -49,7 +49,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/htmlcfg.hxx>
 
 #include <comphelper/storagehelper.hxx>

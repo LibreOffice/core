@@ -39,7 +39,7 @@
 #include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unoprnms.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
 #include <fmtflcnt.hxx>
@@ -61,8 +61,8 @@
 // OD 2004-04-21 #i26791#
 #include <fmtfollowtextflow.hxx>
 #include <rootfrm.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <vos/mutex.hxx>

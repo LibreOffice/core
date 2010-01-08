@@ -34,29 +34,29 @@
 
 #include <tools/shl.hxx>
 #include <svx/svdview.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
 #ifndef _SVX_PARAITEM_HXX //autogen
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #endif
-#include <svx/adjitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/wghtitem.hxx>
 #ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 #endif
-#include <svx/postitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
@@ -66,14 +66,14 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <doc.hxx>
 #include <wview.hxx>
 #include <viewopt.hxx>
@@ -100,17 +100,17 @@
 
 //modified on Jul. 30th
 #include <svl/languageoptions.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
 #include <string.h>
 
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editdata.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/outliner.hxx>
 #include <vcl/window.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
 
 #include <langhelper.hxx>

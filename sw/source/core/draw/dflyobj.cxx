@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
 #include <svx/svdtrans.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
 
 

@@ -40,13 +40,13 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editdata.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editview.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>

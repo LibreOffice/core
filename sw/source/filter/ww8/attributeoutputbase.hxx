@@ -35,7 +35,7 @@
 #include "WW8TableInfo.hxx"
 
 #include <rtl/textenc.h>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/solar.h>
 
 #include <swtypes.hxx>

@@ -58,7 +58,7 @@
 #include "xmlimp.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>

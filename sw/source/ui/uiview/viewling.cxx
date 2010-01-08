@@ -52,11 +52,11 @@
 #include <sfx2/request.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/SpellPortions.hxx>
+#include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <initui.hxx>               // fuer SpellPointer
@@ -102,6 +102,7 @@
 #include <unomid.h>
 
 #include <memory>
+#include <editeng/editerr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

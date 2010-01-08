@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <doc.hxx>

@@ -41,7 +41,7 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
@@ -65,7 +65,7 @@
 #include <porrst.hxx>
 #include <porftn.hxx>   // SwFtnPortion
 #include <accessibilityoptions.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include <unicode/ubidi.h>
 

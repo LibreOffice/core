@@ -37,10 +37,10 @@
 #endif
 
 #include "hintids.hxx"
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtlsplt.hxx>
@@ -51,7 +51,7 @@
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
-
+#include <svx/svxids.hrc>
 #include "doc.hxx"
 #include "pam.hxx"
 #include "swcrsr.hxx"

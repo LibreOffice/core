@@ -51,8 +51,8 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <hintids.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>

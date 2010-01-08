@@ -817,7 +817,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <edit.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <toolbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/dockwin.hxx>

@@ -36,9 +36,9 @@
 #define private public
 #endif
 #include <hintids.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svtools/rtftoken.h>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>

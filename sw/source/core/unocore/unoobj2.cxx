@@ -89,8 +89,8 @@
 #include <unostyle.hxx>
 #include <unofield.hxx>
 #include <fmtanchr.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svtools/ctrltool.hxx>
 #include <flypos.hxx>
 #include <txtftn.hxx>
@@ -113,7 +113,7 @@
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>

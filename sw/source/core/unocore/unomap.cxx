@@ -32,15 +32,9 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 // --> OD 2004-08-06 #i28749#
@@ -50,12 +44,9 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
+#include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

@@ -41,19 +41,18 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltabe.hxx>
 #include "xmlbrshe.hxx"
-#include <svx/tstpitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include "fmtornt.hxx"
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include "frmfmt.hxx"
 #include "fmtfsize.hxx"
 #include "swrect.hxx"
 #include "xmlexp.hxx"
+#include <editeng/memberids.hrc>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

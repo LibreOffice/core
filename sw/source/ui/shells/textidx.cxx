@@ -39,7 +39,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
 #include <uiitems.hxx>

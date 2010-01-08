@@ -34,7 +34,7 @@
 #include <sal/types.h>
 #include <xmloff/xmlement.hxx>
 #include "hintids.hxx"  // for following include
-#include <svx/brshitem.hxx> // for SvxGraphicsPosition
+#include <editeng/brshitem.hxx> // for SvxGraphicsPosition
 
 class SvxBorderLine;
 struct SvXMLEnumMapEntry;

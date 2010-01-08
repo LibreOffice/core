@@ -33,22 +33,22 @@
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
+#include <svx/svxids.hrc>
+#include <sfx2/sfx.hrc>
 #include <i18npool/mslangid.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>

@@ -35,7 +35,7 @@
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/font.hxx>
-#include <svx/swafopt.hxx>
+#include <editeng/swafopt.hxx>
 #include "swdllapi.h"
 #include <crsrsh.hxx>   // fuer Basisklasse
 #include <itabenum.hxx>

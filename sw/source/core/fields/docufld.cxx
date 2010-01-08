@@ -55,7 +55,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/string.hxx>
@@ -104,8 +104,8 @@
 #include <swunohelper.hxx>
 #include <comcore.hrc>
 
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 

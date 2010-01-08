@@ -50,11 +50,11 @@
 #ifndef SV_FONTCVT_HXX
 #   include <unotools/fontcvt.hxx>   //GetSubsFontName
 #endif
-#   include <svx/paperinf.hxx>      //lA0Width...
-#   include <svx/lrspitem.hxx>      //SvxLRSpaceItem
-#   include <svx/ulspitem.hxx>      //SvxULSpaceItem
-#   include <svx/boxitem.hxx>       //SvxBoxItem
-#   include <svx/fontitem.hxx>      //SvxFontItem
+#   include <editeng/paperinf.hxx>      //lA0Width...
+#   include <editeng/lrspitem.hxx>      //SvxLRSpaceItem
+#   include <editeng/ulspitem.hxx>      //SvxULSpaceItem
+#   include <editeng/boxitem.hxx>       //SvxBoxItem
+#   include <editeng/fontitem.hxx>      //SvxFontItem
 #   include <frmfmt.hxx>            //SwFrmFmt
 #   include <fmtclds.hxx>           //SwFmtCol
 #   include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem

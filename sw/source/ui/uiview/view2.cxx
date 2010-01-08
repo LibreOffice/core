@@ -33,13 +33,7 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-
-// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-// #include <com/sun/star/lang/Locale.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-// #endif
+#include <svtools/filter.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -65,7 +59,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/htmlmode.hxx>
@@ -78,17 +72,16 @@
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/lrspitem.hxx>
-#include  <svx/impgrf.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svtools/txtcmp.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <vcl/msgbox.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/topfrm.hxx>
 #include <svl/whiter.hxx>
@@ -245,8 +238,8 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     else
     {
         if( !pFlt )
-            pFlt = ::GetGrfFilter();
-        nRes = ::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
+            pFlt = GraphicFilter::GetGraphicFilter();
+        nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
     }
 
     if( GRFILTER_OK == nRes )
@@ -437,11 +430,11 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
-        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
+        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, GraphicFilter::GetGraphicFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, ::GetGrfFilter() );
+            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, GraphicFilter::GetGraphicFilter() );
         if ( rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );

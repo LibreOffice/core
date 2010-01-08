@@ -37,24 +37,24 @@
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/pgrditem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
 #ifndef _SVX_TSTPITEM_HXX
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 // <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <breakit.hxx>
-#include <svx/forbiddenruleitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>

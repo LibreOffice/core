@@ -40,9 +40,9 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/protitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>

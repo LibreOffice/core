@@ -34,8 +34,8 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/xmlcnitm.hxx>
-#include <svx/twolinesitem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <editeng/twolinesitem.hxx>
 #include <txtinet.hxx>
 #include <txtatr.hxx>
 #include <fchrfmt.hxx>

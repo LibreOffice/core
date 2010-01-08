@@ -34,27 +34,22 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-
-
+#include <svx/svxids.hrc>
 #include "hintids.hxx"
 #include <tools/string.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svx/htmlcfg.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <fmtanchr.hxx>

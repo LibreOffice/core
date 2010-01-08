@@ -35,8 +35,8 @@
 #include <hintids.hxx>
 #include <vcl/sound.hxx>
 #include <tools/shl.hxx> // SW_MOD
-#include <svx/pgrditem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
 #include <paratr.hxx>

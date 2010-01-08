@@ -34,7 +34,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
 
 /////////////////////////////////////////////////////////////////

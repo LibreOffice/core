@@ -39,9 +39,8 @@
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

@@ -40,12 +40,12 @@
 
 
 #include <svl/eitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <tgrditem.hxx>

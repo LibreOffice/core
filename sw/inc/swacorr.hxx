@@ -30,7 +30,7 @@
 #ifndef _SWACORR_HXX
 #define _SWACORR_HXX
 
-#include <svx/svxacorr.hxx>
+#include <editeng/svxacorr.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>

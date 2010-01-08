@@ -49,8 +49,8 @@
 // --> OD 2006-03-15 #i62875#
 #include <fmtfollowtextflow.hxx>
 // <--
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentSettingAccess.hxx>
 

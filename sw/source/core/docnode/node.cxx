@@ -35,9 +35,9 @@
 #include <hintids.hxx>
 
 // --> OD 2005-02-21 #i42921#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // <--
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #endif

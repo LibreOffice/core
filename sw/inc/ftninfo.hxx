@@ -36,7 +36,7 @@
 //#include <numrule.hxx>
 //#endif
 #include <calbck.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 
 class SwTxtFmtColl;
 class SwPageDesc;

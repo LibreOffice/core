@@ -51,7 +51,7 @@
 #include <sfx2/linkmgr.hxx>
 #ifndef _SVX_SIZEITEM_HXX //autogen
 
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 
 #include <svx/htmlcfg.hxx>

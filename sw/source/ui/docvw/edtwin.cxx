@@ -65,8 +65,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
 //#ifndef _SVDVMARK_HXX //autogen
@@ -74,19 +74,19 @@
 //#endif
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/editeng.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>

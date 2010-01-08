@@ -38,7 +38,7 @@
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif

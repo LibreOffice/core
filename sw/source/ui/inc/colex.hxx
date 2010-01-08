@@ -31,7 +31,7 @@
 #define _COLEX_HXX
 
 #include <svx/pagectrl.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 #include "frmatr.hxx"

@@ -36,9 +36,9 @@
 
 #include <string.h>
 #include <vcl/font.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <pam.hxx>

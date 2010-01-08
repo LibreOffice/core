@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <unosett.hxx>
 
 #include "swtypes.hxx"

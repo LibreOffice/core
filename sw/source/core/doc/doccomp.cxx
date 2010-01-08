@@ -35,10 +35,10 @@
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <vcl/vclenum.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>

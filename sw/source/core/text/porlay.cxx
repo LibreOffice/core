@@ -47,11 +47,11 @@
 #include <com/sun/star/i18n/CTLScriptType.hdl>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <paratr.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <vcl/outdev.hxx>
-#include <svx/blnkitem.hxx>
+#include <editeng/blnkitem.hxx>
 #include <tools/multisel.hxx>
 #include <unotools/charclass.hxx>
 #include <i18npool/mslangid.hxx>

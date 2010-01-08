@@ -32,11 +32,11 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <viewsh.hxx>   // ViewShell

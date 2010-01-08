@@ -50,9 +50,9 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <com/sun/star/i18n/WordType.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <charatr.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;

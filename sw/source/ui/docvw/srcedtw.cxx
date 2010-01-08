@@ -51,7 +51,7 @@
 #include <svtools/txtattr.hxx>
 #include <unotools/sourceviewconfig.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <tools/time.hxx>

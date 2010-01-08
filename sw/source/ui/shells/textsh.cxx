@@ -56,13 +56,13 @@
 #include <basic/sbxvar.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
@@ -70,7 +70,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 
 #include <sot/clsids.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>

@@ -48,7 +48,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include "poolfmt.hxx"
 #include "fmtfsize.hxx"
 #include "fmtornt.hxx"

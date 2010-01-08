@@ -35,7 +35,7 @@
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <svx/frmdir.hxx>
+#include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
 #ifndef __SGI_STL_VECTOR

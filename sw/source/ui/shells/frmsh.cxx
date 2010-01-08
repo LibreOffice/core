@@ -42,10 +42,10 @@
 #include <svl/rectitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>

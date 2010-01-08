@@ -41,10 +41,10 @@
 #include "colfrm.hxx"
 #include "txttypes.hxx"
 #include <sfx2/printer.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <pormulti.hxx>     // SwMultiPortion
 #include <doc.hxx>
 #include <sortedobjs.hxx>

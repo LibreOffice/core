@@ -43,7 +43,7 @@
 #include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>

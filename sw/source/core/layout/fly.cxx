@@ -38,12 +38,12 @@
 #endif
 #include <tools/poly.hxx>
 #include <svx/contdlg.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>

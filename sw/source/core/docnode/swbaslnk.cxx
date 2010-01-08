@@ -45,7 +45,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
 #endif

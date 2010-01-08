@@ -49,7 +49,7 @@
 #include "docsh.hxx"
 #include "pagedesc.hxx"     // Aktuelles Seitenformat
 #include <frmatr.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 
 /*--------------------------------------------------------------------

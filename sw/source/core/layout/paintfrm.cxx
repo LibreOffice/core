@@ -44,11 +44,11 @@
 #include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 // --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
 // <--

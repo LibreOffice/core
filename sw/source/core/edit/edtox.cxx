@@ -41,7 +41,7 @@
 #include <svl/fstathelper.hxx>
 #endif
 #include <sfx2/docfile.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>

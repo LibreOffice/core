@@ -44,8 +44,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/window.hxx>
 #include <fmturl.hxx>

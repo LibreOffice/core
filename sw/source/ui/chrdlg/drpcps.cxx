@@ -52,16 +52,16 @@
 #include <vcl/metric.hxx>
 #endif
 #include <svl/stritem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/printer.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 

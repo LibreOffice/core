@@ -41,11 +41,11 @@
 #include <xmloff/numehelp.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <fmtrowsplt.hxx>
 #ifndef _SVX_FRAMEDIRITEM_HXX
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #endif
 
 #include <list>

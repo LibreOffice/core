@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-
+#include <editeng/memberids.hrc>
 #include <hintids.hxx>
 #include <svx/unomid.hxx>
 #include <xmloff/xmlnmspe.hxx>

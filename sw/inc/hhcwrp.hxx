@@ -30,7 +30,7 @@
 #ifndef _HHCWRP_HXX
 #define _HHCWRP_HXX
 
-#include <svx/hangulhanja.hxx>
+#include <editeng/hangulhanja.hxx>
 #include <pam.hxx>
 
 class SwView;
@@ -40,7 +40,7 @@ struct SwConversionArgs;
 
 //////////////////////////////////////////////////////////////////////
 
-class SwHHCWrapper : public svx::HangulHanjaConversion
+class SwHHCWrapper : public editeng::HangulHanjaConversion
 {
     SwView *    pView;
     Window*     pWin;

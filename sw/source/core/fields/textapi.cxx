@@ -34,8 +34,8 @@
 #include <textapi.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

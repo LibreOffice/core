@@ -36,7 +36,7 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #endif
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>

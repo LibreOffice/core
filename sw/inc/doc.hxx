@@ -78,7 +78,7 @@ class SwList;
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svl/style.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>

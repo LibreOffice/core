@@ -57,11 +57,10 @@
 #include <svtools/soerr.hxx>
 #include <tools/cachestr.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/svxacorr.hxx>
 #include <vcl/graph.hxx>
-#include <svx/impgrf.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 
@@ -111,7 +110,7 @@
 #include <sfx2/request.hxx>
 #include <paratr.hxx>
 #include <ndtxt.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -122,7 +121,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 #include "PostItMgr.hxx"
 

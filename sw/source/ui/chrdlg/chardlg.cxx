@@ -43,7 +43,7 @@
 #endif
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svl/cjkoptions.hxx>
 

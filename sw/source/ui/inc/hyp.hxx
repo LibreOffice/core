@@ -32,7 +32,7 @@
 #define _HYP_HXX
 
 #include <tools/link.hxx>
-#include <svx/splwrap.hxx>
+#include <editeng/splwrap.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 
 class SwView;

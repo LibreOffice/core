@@ -43,8 +43,8 @@
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 
 using namespace objectpositioning;
 using namespace ::com::sun::star;

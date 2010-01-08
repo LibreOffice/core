@@ -42,7 +42,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/misccfg.hxx>
@@ -55,7 +55,7 @@
 #include <sfx2/printer.hxx>
 #include <svx/linkmgr.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/soerr.hxx>
 #include <sot/clsids.hxx>

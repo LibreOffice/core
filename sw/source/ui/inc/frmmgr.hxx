@@ -32,7 +32,7 @@
 
 #include "swtypes.hxx"
 #include "frmatr.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>

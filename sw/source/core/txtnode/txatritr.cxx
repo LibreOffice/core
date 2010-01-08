@@ -38,7 +38,7 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <tools/string.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <txatritr.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>

@@ -37,17 +37,17 @@
 #include <hintids.hxx>
 
 #include <tools/solar.h>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 
 

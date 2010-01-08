@@ -40,7 +40,7 @@
 #include "vbaaddins.hxx"
 #include "vbadialogs.hxx"
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
 

@@ -40,7 +40,7 @@
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/globname.hxx>

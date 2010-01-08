@@ -32,9 +32,9 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>

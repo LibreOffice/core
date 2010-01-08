@@ -33,10 +33,10 @@
 
 
 #include <hintids.hxx>
-#include <svx/charscaleitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>

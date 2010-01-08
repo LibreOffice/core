@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <pagefrm.hxx>
 #include <swatrset.hxx>
 #include <frmfmt.hxx>

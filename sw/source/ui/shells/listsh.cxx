@@ -34,8 +34,8 @@
 
 #include "cmdid.h"
 #include "hintids.hxx"
-#include <svx/sizeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>

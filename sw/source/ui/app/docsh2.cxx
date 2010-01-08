@@ -75,8 +75,8 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
 #include <svx/htmlcfg.hxx>
@@ -152,7 +152,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>

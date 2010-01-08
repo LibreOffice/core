@@ -64,8 +64,8 @@
 #include <ftnidx.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
 #define _SVSTDARR_BOOLS

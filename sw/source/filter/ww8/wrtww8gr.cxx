@@ -46,13 +46,13 @@
 #include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>

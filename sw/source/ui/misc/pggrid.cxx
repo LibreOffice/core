@@ -49,11 +49,11 @@
 #endif
 #include <svx/xtable.hxx>
 #include <uitool.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <pggrid.hxx>
 #include <tgrditem.hxx>
 #include <pggrid.hrc>

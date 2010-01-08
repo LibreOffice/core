@@ -37,7 +37,7 @@
 #include "paratr.hxx"
 #include "errhdl.hxx"
 #include <vcl/outdev.hxx>
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 
 #include "pormulti.hxx"
 #include <pagefrm.hxx>

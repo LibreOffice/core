@@ -34,15 +34,15 @@
 #include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <sfx2/printer.hxx>
 // OD 08.01.2004 #i11859#
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 
 
 #include <fmtornt.hxx>

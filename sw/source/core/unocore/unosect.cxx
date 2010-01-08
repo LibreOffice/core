@@ -37,9 +37,9 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _SVX_XMLCNITEM_HXX
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #endif
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
@@ -68,9 +68,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 /* #109700# */
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

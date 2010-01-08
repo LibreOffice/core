@@ -34,17 +34,17 @@
 
 #include <hintids.hxx>
 #include <sot/factory.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stylepool.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
 // --> OD 2008-01-16 #newlistlevelattrs#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>

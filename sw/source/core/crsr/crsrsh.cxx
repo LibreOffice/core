@@ -34,7 +34,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>

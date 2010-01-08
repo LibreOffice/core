@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/cmapitem.hxx>
+#include <editeng/cmapitem.hxx>
 
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>

@@ -35,7 +35,7 @@
 #include <wrtsh.hxx>
 #include <crsskip.hxx>
 #include <swcrsr.hxx>
-#include <svx/lrspitem.hxx> // #i23725#
+#include <editeng/lrspitem.hxx> // #i23725#
 // --> OD 2006-07-10 #134369#
 #ifndef _VIEW_HXX
 #include <view.hxx>

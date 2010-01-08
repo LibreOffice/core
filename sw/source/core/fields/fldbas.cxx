@@ -37,7 +37,7 @@
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif

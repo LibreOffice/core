@@ -67,12 +67,12 @@
 #include <svx/obj3d.hxx>
 
 #ifndef _TXTRANGE_HXX //autogen
-#include <svx/txtrange.hxx>
+#include <editeng/txtrange.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 // --> OD 2004-06-16 #i28701#
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 // <--
 #include <txtflcnt.hxx>
 #include <fmtsrnd.hxx>
@@ -90,11 +90,11 @@
 #include <IDocumentSettingAccess.hxx>
 #include <svx/obj3d.hxx>
 #ifndef _TXTRANGE_HXX //autogen
-#include <svx/txtrange.hxx>
+#include <editeng/txtrange.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <svx/svdoedge.hxx>
 
 

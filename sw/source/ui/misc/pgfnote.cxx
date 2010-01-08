@@ -49,10 +49,10 @@
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <uitool.hxx>
 #include <pagedesc.hxx>
 #include <pgfnote.hxx>

@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>

@@ -34,7 +34,7 @@
 
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svtools/grfmgr.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>

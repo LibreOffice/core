@@ -35,9 +35,9 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>

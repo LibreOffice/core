@@ -42,10 +42,10 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <fmtornt.hxx>

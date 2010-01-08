@@ -53,12 +53,12 @@
 #include <vos/mutex.hxx>
 #include <svl/itemset.hxx>
 
-#include <svx/editobj.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoedhlp.hxx>
 
 
 #include "accessibility.hxx"

@@ -47,9 +47,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/gallery.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <swunodef.hxx>
@@ -442,7 +441,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     aURL.SetSmartURL( aName );
     aDlgHelper.SetFileName( aURL.GetName() );
 
-    GraphicFilter& rGF = *GetGrfFilter();
+    GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
     const USHORT nCount = rGF.GetExportFormatCount();
 
     String aExt( aURL.GetExtension() );

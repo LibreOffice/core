@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
@@ -58,7 +58,7 @@
 #include "shellres.hxx"
 
 // #i7672#
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 

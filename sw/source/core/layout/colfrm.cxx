@@ -36,8 +36,8 @@
 #include "doc.hxx"
 
 #include "hintids.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
 #include <frmfmt.hxx>

@@ -38,8 +38,8 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <numrule.hxx>

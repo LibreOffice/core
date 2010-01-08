@@ -45,14 +45,14 @@
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

@@ -41,8 +41,7 @@
 #include <svtools/filter.hxx>
 #include <sot/storage.hxx>
 #include <svx/linkmgr.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/impgrf.hxx>
+#include <editeng/boxitem.hxx>
 #include <sot/formats.hxx>
 #include <fmtfsize.hxx>
 #include <fmturl.hxx>
@@ -402,7 +401,7 @@ Size SwGrfNode::GetTwipSize() const
 BOOL SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
+    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
     {
         const String aUserData( aGrfObj.GetUserData() );
 
@@ -921,7 +920,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                GetGrfFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
+                GraphicFilter::GetGraphicFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
                 delete pStrm;
             }
             // <--

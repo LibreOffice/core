@@ -43,10 +43,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
 #include <svl/macitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>

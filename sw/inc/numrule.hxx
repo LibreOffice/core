@@ -33,8 +33,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/numitem.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>

@@ -47,8 +47,8 @@
 #endif
 #include <sot/storage.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <SwAppletImpl.hxx>

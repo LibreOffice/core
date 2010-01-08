@@ -46,12 +46,12 @@
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #endif
 #include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>

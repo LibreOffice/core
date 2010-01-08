@@ -50,9 +50,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <hhcwrp.hxx>
@@ -106,12 +106,12 @@ public:
         //!! hack to transport the current conversion direction state settings
         //!! into the next incarnation that iterates over the drawing objets
         //!! ( see SwHHCWrapper::~SwHHCWrapper() )
-        svx::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_True );
+        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_True );
     }
 
     ~SwKeepConversionDirectionStateContext()
     {
-        svx::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_False );
+        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_False );
     }
 };
 
@@ -126,7 +126,7 @@ SwHHCWrapper::SwHHCWrapper(
         sal_Int32 nConvOptions,
         sal_Bool bIsInteractive,
         sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection ) :
-    svx::HangulHanjaConversion( &pSwView->GetEditWin(), rxMSF,
+    editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxMSF,
                                 SvxCreateLocale( nSourceLanguage ),
                                 SvxCreateLocale( nTargetLanguage ),
                                 pTargetFont,
@@ -651,7 +651,7 @@ void SwHHCWrapper::Convert()
             // at the begin of the paragraph to solve the problem, i.e. have the
             // TextConversion service get those charcters together in the same call.
             xub_StrLen nStartIdx = STRING_MAXLEN;
-            if (svx::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
+            if (editeng::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
                 nStartIdx = 0;
             else
             {

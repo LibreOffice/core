@@ -90,7 +90,7 @@
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <svx/linkmgr.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
@@ -102,7 +102,7 @@
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -116,7 +116,7 @@
 ///////////////////////////Modified on Jun. 14th//////////////////////////
 ///////////////////////for getDocumentLanguages///////////////////////////
 //-->
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
@@ -135,8 +135,8 @@
 #include <map>
 #include <set>
 
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>

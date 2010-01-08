@@ -43,7 +43,7 @@
 
 #include <vcl/lineinfo.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 
 class SwPostItMgr;
 class SwPostItField;

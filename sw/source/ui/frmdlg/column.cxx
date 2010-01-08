@@ -39,11 +39,11 @@
 
 #include "hintids.hxx"
 #include <svx/htmlmode.hxx>
-#include <svx/borderline.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/sizeitem.hxx>
-#include "svx/frmdiritem.hxx"
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include "editeng/frmdiritem.hxx"
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>

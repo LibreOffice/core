@@ -41,7 +41,7 @@
 #include <svtools/svtreebx.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 #include <condedit.hxx>
 #include <section.hxx>
@@ -49,10 +49,10 @@
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
 #include <numberingtypelistbox.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <vcl/image.hxx>
 #include <svx/paraprev.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 
 class SwWrtShell;

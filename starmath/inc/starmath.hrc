@@ -30,13 +30,9 @@
 #ifndef _STARMATH_HRC
 #define _STARMATH_HRC
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svl/solar.hrc>
-#endif
-#ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/sfxsids.hrc>
-#endif
-
+#include <editeng/memberids.hrc>
 
 #define SID_NEXTERR                 (SID_SMA_START + 1)
 #define SID_PREVERR                 (SID_SMA_START + 2)

@@ -40,7 +40,7 @@
 #include <vcl/keycod.hxx>
 #endif
 #include <tools/datetime.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>

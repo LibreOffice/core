@@ -70,7 +70,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>

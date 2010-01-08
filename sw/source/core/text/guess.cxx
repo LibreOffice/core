@@ -33,7 +33,7 @@
 
 
 #include <ctype.h>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
 #include <errhdl.hxx>   // ASSERTs
 #include <dlelstnr.hxx>
