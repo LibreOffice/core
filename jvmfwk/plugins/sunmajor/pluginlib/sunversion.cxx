@@ -54,13 +54,6 @@ public:
 } test;
 #endif
 
-SunVersion::SunVersion():  m_nUpdateSpecial(0),
-                           m_preRelease(Rel_NONE),
-                           m_bValid(false)
-{
-    memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
-}
-
 SunVersion::SunVersion(const rtl::OUString &usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE),
     usVersion(usVer)
