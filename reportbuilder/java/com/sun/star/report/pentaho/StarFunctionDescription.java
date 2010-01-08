@@ -63,7 +63,8 @@ public final class StarFunctionDescription extends WeakBase
         {
             functionDescription.getDisplayName(defaultContext.getLocalizationContext().getLocale());
             locale = defaultContext.getLocalizationContext().getLocale();
-        } catch ( MissingResourceException e )
+        }
+        catch (MissingResourceException e)
         {
             locale = Locale.ENGLISH;
         }
@@ -75,9 +76,8 @@ public final class StarFunctionDescription extends WeakBase
         // of the PropertySetMixin helper for further information.
         // Ensure that your attributes are initialized correctly!
         m_prophlp = new PropertySetMixin(m_xContext, this,
-                                         new Type(com.sun.star.report.meta.XFunctionDescription.class), null);
+                new Type(com.sun.star.report.meta.XFunctionDescription.class), null);
     }
-    ;
 
     // com.sun.star.beans.XPropertySet:
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
@@ -139,8 +139,10 @@ public final class StarFunctionDescription extends WeakBase
         for (int i = 0; i < count; i++)
         {
             signature.append(functionDescription.getParameterDisplayName(i, defaultLocale));
-            if ( i != (count - 1) )
+            if (i != (count - 1))
+            {
                 signature.append(';');
+            }
         }
         signature.append(')');
         return signature.toString();
@@ -150,7 +152,7 @@ public final class StarFunctionDescription extends WeakBase
     {
         int count = functionDescription.getParameterCount();
         final boolean infinite = functionDescription.isInfiniteParameterCount();
-        if ( infinite )
+        if (infinite)
         {
             count = 30;
         }
@@ -170,18 +172,24 @@ public final class StarFunctionDescription extends WeakBase
     {
         final boolean infinite = functionDescription.isInfiniteParameterCount();
         final int count = functionDescription.getParameterCount();
-        if ( !infinite && arguments.length > count )
+        if (!infinite && arguments.length > count)
+        {
             throw new com.sun.star.lang.IllegalArgumentException();
+        }
 
         final StringBuffer formula = new StringBuffer(getName());
         formula.append('(');
         for (int i = 0; i < arguments.length; ++i)
         {
-            if ( arguments[i].length() == 0 )
+            if (arguments[i].length() == 0)
+            {
                 break;
+            }
             formula.append(arguments[i]);
-            if ( i < (arguments.length - 1) && arguments[i+1].length() != 0 )
+            if (i < (arguments.length - 1) && arguments[i + 1].length() != 0)
+            {
                 formula.append(';');
+            }
         }
         formula.append(')');
         return formula.toString();

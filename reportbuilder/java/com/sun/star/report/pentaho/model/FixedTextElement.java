@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -41,16 +39,17 @@ import org.jfree.report.structure.Section;
  */
 public class FixedTextElement extends ReportElement
 {
-  private final Section content;
 
-  public FixedTextElement()
-  {
-    content = new Section();
-    content.setVirtual(true);
-  }
+    private final Section content;
 
-  public Section getContent()
-  {
-    return content;
-  }
+    public FixedTextElement()
+    {
+        content = new Section();
+        content.setVirtual(true);
+    }
+
+    public Section getContent()
+    {
+        return content;
+    }
 }

@@ -43,7 +43,7 @@ public class TitleFunctionDescription extends AbstractFunctionDescription
 
     public TitleFunctionDescription()
     {
-        super("TITLE","com.sun.star.report.function.metadata.Title-Function");
+        super("TITLE", "com.sun.star.report.function.metadata.Title-Function");
     }
 
     public FunctionCategory getCategory()

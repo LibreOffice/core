@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 /**
@@ -39,32 +37,31 @@ package com.sun.star.report.pentaho.styles;
  */
 public class StyleMappingRule
 {
-  private final StyleMapperKey key;
-  private final String family;
-  private final boolean listOfValues;
 
+    private final StyleMapperKey key;
+    private final String family;
+    private final boolean listOfValues;
 
-  public StyleMappingRule(final StyleMapperKey key, final String family,
-                          final boolean listOfValues)
-  {
-    this.key = key;
-    this.family = family;
-    this.listOfValues = listOfValues;
-  }
+    public StyleMappingRule(final StyleMapperKey key, final String family,
+            final boolean listOfValues)
+    {
+        this.key = key;
+        this.family = family;
+        this.listOfValues = listOfValues;
+    }
 
+    public StyleMapperKey getKey()
+    {
+        return key;
+    }
 
-  public StyleMapperKey getKey()
-  {
-    return key;
-  }
+    public String getFamily()
+    {
+        return family;
+    }
 
-  public String getFamily()
-  {
-    return family;
-  }
-
-  public boolean isListOfValues()
-  {
-    return listOfValues;
-  }
+    public boolean isListOfValues()
+    {
+        return listOfValues;
+    }
 }

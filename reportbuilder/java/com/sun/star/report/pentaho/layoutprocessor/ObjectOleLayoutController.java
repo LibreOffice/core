@@ -75,7 +75,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
             }
             catch (DataSourceException e)
             {
-            // ignore .. assume that the reference has not changed.
+                // ignore .. assume that the reference has not changed.
             }
         }
         return false;
@@ -108,7 +108,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
                 }
                 catch (DataSourceException e)
                 {
-                // ignore .. assume that the reference has not changed.
+                    // ignore .. assume that the reference has not changed.
                 }
             }
             ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.MASTER_COLUMNS, masterfields);

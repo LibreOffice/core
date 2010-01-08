@@ -27,16 +27,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 
 public interface StyleMapper
 {
-    void updateStyle (final String uri,
-                           final String attrName,
-                           final String attrValue,
-                           final CSSDeclarationRule targetRule);
+
+    void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule);
 }

@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.JFreeReportInfo;
@@ -49,9 +47,9 @@ import org.jfree.report.structure.Section;
 public class VariablesDeclarationSection extends Section
 {
 
-  public VariablesDeclarationSection()
-  {
-    setNamespace(JFreeReportInfo.REPORT_NAMESPACE);
-    setType("variables-section");
-  }
+    public VariablesDeclarationSection()
+    {
+        setNamespace(JFreeReportInfo.REPORT_NAMESPACE);
+        setType("variables-section");
+    }
 }

@@ -56,6 +56,7 @@ import org.xml.sax.SAXException;
  */
 public class DocumentContentReadHandler extends AbstractXmlReadHandler
 {
+
     private static final Log LOGGER = LogFactory.getLog(DocumentContentReadHandler.class);
     private OfficeDocument report;
     private FontFaceDeclsReadHandler fontFaceReadHandler;
