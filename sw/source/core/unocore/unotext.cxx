@@ -1594,15 +1594,11 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
         //bookmarks have to be removed before the referenced text node is deleted in DelFullPara
         if(pStartRange)
         {
-            ::sw::mark::IMark const * const pStartBookmark = pStartRange->GetBookmark();
-            if(pStartBookmark)
-                pDoc->getIDocumentMarkAccess()->deleteMark(pStartBookmark);
+            pStartRange->Invalidate();
         }
         if(pEndRange)
         {
-            ::sw::mark::IMark const * const pEndBookmark = pEndRange->GetBookmark();
-            if(pEndBookmark)
-                pDoc->getIDocumentMarkAccess()->deleteMark(pEndBookmark);
+            pEndRange->Invalidate();
         }
 
         pDoc->StartUndo( UNDO_START, NULL );

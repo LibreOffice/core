@@ -45,26 +45,15 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase8.hxx>
 
-#include <calbck.hxx>
 #include <pam.hxx>
 #include <unobaseclass.hxx>
 
 
-class String;
-class SfxItemPropertySet;
 class SwDoc;
-class SwStartNode;
 struct SwPosition;
 class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
-class SwTableBox;
-
-namespace sw {
-    namespace mark {
-        class IMark;
-    }
-}
 
 /* -----------------29.04.98 07:35-------------------
  *
@@ -104,12 +93,14 @@ typedef ::cppu::WeakImplHelper8
 
 class SW_DLLPUBLIC SwXTextRange
     : public SwXTextRange_Base
-    , private SwClient
 {
 
 private:
 
     friend class SwXText;
+
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     enum RangePosition
     {
@@ -118,26 +109,14 @@ private:
         RANGE_IN_CELL,  // position created with a cell that has no uno object
         RANGE_IS_TABLE, // anchor of a table
         RANGE_INVALID   // created by NewInstance
-    } eRangePosition;
+    };
 
-    SwDoc*              pDoc;
-    SwTableBox*         pBox;
-    const SwStartNode*  pBoxStartNode;
-    SwDepend            aObjectDepend; // register at format of table or frame
-    const SfxItemPropertySet*   m_pPropSet;
-    //SwDepend  aFrameDepend;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        xParentText;
-    ::sw::mark::IMark* pMark;
-
-    const ::sw::mark::IMark * GetBookmark() const
-        { return pMark; }
     void    SetPositions(SwPaM const& rPam);
     //TODO: new exception type for protected content
-    void    DeleteAndInsert(const String& rText, const bool bForceExpandHints)
+    void    DeleteAndInsert(
+                const ::rtl::OUString& rText, const bool bForceExpandHints)
         throw (::com::sun::star::uno::RuntimeException);
-
-protected:
+    void    Invalidate();
 
     virtual ~SwXTextRange();
 
@@ -146,30 +125,25 @@ public:
     SwXTextRange(SwPaM& rPam,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XText > & xParent,
-            enum RangePosition eRange = RANGE_IN_TEXT);
+            const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE
     SwXTextRange(SwFrmFmt& rTblFmt);
 
-    BOOL GetPositions(SwPaM& rToFill) const;
-    const SwDoc* GetDoc() const
-        { return pDoc; }
-    SwDoc* GetDoc()
-        { return pDoc; }
+    const SwDoc* GetDoc() const;
+          SwDoc* GetDoc();
+    bool GetPositions(SwPaM & rToFill) const;
 
     static BOOL XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xTextRange);
+
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextRange > CreateTextRangeFromPosition(
             SwDoc* pDoc,
             const SwPosition& rPos, const SwPosition* pMark);
+
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         CreateParentXText(SwDoc* pDoc, const SwPosition& rPos);
-
-    TYPEINFO();
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
