@@ -35,8 +35,8 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
 #include <sfx2/app.hxx>

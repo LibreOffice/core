@@ -35,10 +35,10 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>

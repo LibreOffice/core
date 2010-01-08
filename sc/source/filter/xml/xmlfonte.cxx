@@ -37,13 +37,13 @@
 
 #include "scitems.hxx"
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "xmlexprt.hxx"

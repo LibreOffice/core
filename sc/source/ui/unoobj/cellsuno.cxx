@@ -33,21 +33,21 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/fmdpage.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unotext.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>

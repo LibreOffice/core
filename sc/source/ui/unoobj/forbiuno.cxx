@@ -33,7 +33,7 @@
 
 
 
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #include "forbiuno.hxx"
 #include "docsh.hxx"

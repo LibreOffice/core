@@ -31,4 +31,6 @@
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
+#include <editeng/editids.hrc>
+#include <editeng/memberids.hrc>
 #include <sc.hrc>

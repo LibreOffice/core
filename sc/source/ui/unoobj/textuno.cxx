@@ -34,21 +34,21 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unofored.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unofored.hxx>
 #include <rtl/uuid.h>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 #include "textuno.hxx"
 #include "fielduno.hxx"
 #include "servuno.hxx"

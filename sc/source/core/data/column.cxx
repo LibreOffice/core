@@ -39,7 +39,7 @@
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <string.h>
 
 #include "scitems.hxx"

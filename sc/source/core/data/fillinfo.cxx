@@ -36,10 +36,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
+#include <editeng/shaditem.hxx>
 
 #include "fillinfo.hxx"
 #include "document.hxx"

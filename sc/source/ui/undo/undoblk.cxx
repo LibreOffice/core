@@ -40,7 +40,7 @@
 #include "scitems.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 
 #include "undoblk.hxx"

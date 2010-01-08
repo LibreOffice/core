@@ -37,15 +37,15 @@
 
 #define _TPHFEDIT_CXX
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 //CHINA001 #include <svx/chardlg.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/flditem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/adjitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>

@@ -239,7 +239,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <conditio.hxx>
@@ -248,7 +248,7 @@
 #include <uiitems.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/gdiobj.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <anyrefdg.hxx>
 #include <basic/sbxcore.hxx>
@@ -306,7 +306,7 @@
 #include <svx/def3d.hxx>
 #include <vcl/floatwin.hxx>
 #include <basic/sbxobj.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtrans.hxx>
 #include <svl/style.hxx>
@@ -327,7 +327,7 @@
 #include <svx/svdorect.hxx>
 #include <svl/whiter.hxx>
 #include <stlpool.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <inputhdl.hxx>
 #include <svx/svdpage.hxx>
 

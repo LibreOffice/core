@@ -35,8 +35,8 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
 
 

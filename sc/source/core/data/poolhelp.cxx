@@ -36,7 +36,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svl/zforlist.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 
 #include "poolhelp.hxx"
 #include "document.hxx"

@@ -54,9 +54,9 @@
 #include "recursionhelper.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svl/intitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/broadcast.hxx>
 
 using namespace formula;

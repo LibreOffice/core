@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 #include "selectionstate.hxx"
 
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include "viewdata.hxx"
 
 // ============================================================================

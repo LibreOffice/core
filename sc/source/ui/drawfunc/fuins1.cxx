@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/impgrf.hxx>
 #include <svx/opengrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
@@ -273,7 +272,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
         Graphic aGraphic;
-        int nError = ::LoadGraphic( aFileName, aFilterName, aGraphic, ::GetGrfFilter() );
+        int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, GraphicFilter::GetGraphicFilter() );
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, TRUE, pViewSh, pWindow, pView );

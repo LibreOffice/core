@@ -34,7 +34,7 @@
 // INCLUDE -------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>

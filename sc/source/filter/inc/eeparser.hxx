@@ -36,7 +36,7 @@
 #include <vcl/graph.hxx>
 #include <tools/table.hxx>
 #include <svl/itemset.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <address.hxx>
 
 const sal_Char nHorizontal = 1;

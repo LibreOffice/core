@@ -34,7 +34,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>

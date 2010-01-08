@@ -34,14 +34,14 @@
 #include "scitems.hxx"
 
 #include <memory> //auto_ptr
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dbexch.hrc>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -58,7 +58,7 @@
 #include <sot/clsids.hxx>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
-#include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
+#include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>

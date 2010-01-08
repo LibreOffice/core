@@ -77,6 +77,7 @@ SHL1LIBS= 		$(LIB1TARGET)
 
 SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CPPULIB)			\
+                $(EDITENGLIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(SALLIB)			\

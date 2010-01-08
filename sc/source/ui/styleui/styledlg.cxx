@@ -61,7 +61,7 @@
 #include <svx/svxids.hrc> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include <svl/intitem.hxx> //CHINA001
-#include <svx/flstitem.hxx> //CHINA001
+#include <editeng/flstitem.hxx> //CHINA001
 #include <svl/aeitem.hxx> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
 //==================================================================

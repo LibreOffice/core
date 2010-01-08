@@ -54,7 +54,7 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
-#include <svx/flstitem.hxx> //CHINA001
+#include <editeng/flstitem.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
 
 #if !LAYOUT_SFX_TABDIALOG_BROKEN

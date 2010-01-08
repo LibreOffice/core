@@ -31,7 +31,7 @@
 #ifndef SC_XIHELPER_HXX
 #define SC_XIHELPER_HXX
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include "scmatrix.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"

@@ -38,15 +38,15 @@
 #include <svl/itemset.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include "scitems.hxx"
-#include <svx/fhgtitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/svxfont.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>

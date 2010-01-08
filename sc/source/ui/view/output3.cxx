@@ -35,7 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdoutl.hxx>

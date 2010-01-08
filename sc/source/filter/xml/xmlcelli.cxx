@@ -67,8 +67,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 

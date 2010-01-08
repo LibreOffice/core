@@ -32,9 +32,9 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 

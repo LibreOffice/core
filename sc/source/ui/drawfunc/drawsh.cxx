@@ -36,7 +36,7 @@
 
 #include "scitems.hxx"
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 //#include <svx/labdlg.hxx> CHINA001
 #include <svl/srchitem.hxx>

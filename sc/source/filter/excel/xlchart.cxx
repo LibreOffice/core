@@ -56,7 +56,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
 #include <filter/msfilter/escherex.hxx>
-
+#include <editeng/memberids.hrc>
 #include "global.hxx"
 #include "xlconst.hxx"
 #include "xlstyle.hxx"

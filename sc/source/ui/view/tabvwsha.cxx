@@ -41,7 +41,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zformat.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/numinf.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>

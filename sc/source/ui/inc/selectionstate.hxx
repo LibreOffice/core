@@ -31,7 +31,7 @@
 #ifndef SC_SELECTIONSTATE_HXX
 #define SC_SELECTIONSTATE_HXX
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include "rangelst.hxx"
 
 // ============================================================================

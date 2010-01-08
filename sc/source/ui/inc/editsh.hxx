@@ -36,7 +36,7 @@
 #include <tools/link.hxx>
 
 #include "shellids.hxx"
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 class EditView;
 class ScViewData;

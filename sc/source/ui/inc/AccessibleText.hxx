@@ -34,7 +34,7 @@
 #include "textuno.hxx"
 #include "global.hxx"
 #include "viewdata.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #include <memory>
 

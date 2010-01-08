@@ -35,8 +35,8 @@
 
 #include "scitems.hxx"
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -58,11 +58,11 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svl/whiter.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

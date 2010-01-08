@@ -32,20 +32,20 @@
 #include "precompiled_sc.hxx"
 
 #include "fuconcustomshape.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
 #include <svx/fmmodel.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 
 #include <math.h>
 

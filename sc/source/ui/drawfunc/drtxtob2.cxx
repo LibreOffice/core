@@ -32,14 +32,14 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xtextit.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

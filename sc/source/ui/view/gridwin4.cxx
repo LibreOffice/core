@@ -36,14 +36,14 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editview.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 

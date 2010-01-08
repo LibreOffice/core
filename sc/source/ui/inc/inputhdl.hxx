@@ -35,7 +35,7 @@
 #include "address.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 class ScDocument;
 class ScTabView;

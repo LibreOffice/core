@@ -35,7 +35,7 @@
 #include <svx/svxids.hrc>
 #include "sc.hrc"
 #include "scitems.hxx"
-
+#include <editeng/memberids.hrc>
 
 
 #define ITEMID_DBTYPE           0
@@ -67,24 +67,24 @@
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/objitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/postattr.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/postitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xfillit0.hxx>
@@ -107,14 +107,14 @@
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
 #include <svx/xftsfit.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/grafctrl.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/ilstitem.hxx>

@@ -37,8 +37,8 @@
 #include <unotools/useroptions.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include "scitems.hxx"

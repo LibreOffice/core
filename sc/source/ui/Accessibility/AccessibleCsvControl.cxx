@@ -53,9 +53,9 @@
 #endif
 #include <comphelper/sequence.hxx>
 #include "scitems.hxx"
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"
 #include "csvgrid.hxx"

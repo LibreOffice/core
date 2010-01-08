@@ -38,13 +38,13 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sot/exchange.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>

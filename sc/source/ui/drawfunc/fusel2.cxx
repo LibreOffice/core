@@ -39,7 +39,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include "fusel.hxx"
 #include "tabvwsh.hxx"

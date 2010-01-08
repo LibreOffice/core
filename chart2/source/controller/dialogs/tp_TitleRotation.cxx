@@ -36,8 +36,8 @@
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "HelpIds.hrc"
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 // header for class SfxInt32Item
 #include <svl/intitem.hxx>

@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 #include "AccessibleEditObject.hxx"
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "unoguard.hxx"
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
@@ -51,8 +51,8 @@
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
 
 using namespace ::com::sun::star;

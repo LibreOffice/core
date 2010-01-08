@@ -32,7 +32,7 @@
 #define SC_SHEETDATA_HXX
 
 #include <xmloff/maptype.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <vector>
 #include <hash_set>
 

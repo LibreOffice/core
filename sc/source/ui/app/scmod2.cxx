@@ -35,7 +35,7 @@
 
 //------------------------------------------------------------------
 
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

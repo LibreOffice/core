@@ -37,7 +37,7 @@
 
 #include <unotools/textsearch.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"

@@ -80,6 +80,7 @@ SHL1LIBS= 		$(LIB1TARGET)
 
 SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CHARTVIEW)		\
+                $(EDITENGLIB)			\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\

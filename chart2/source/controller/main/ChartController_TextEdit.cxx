@@ -55,7 +55,7 @@
 #include <vos/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 
 //.............................................................................
 namespace chart

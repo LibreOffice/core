@@ -34,7 +34,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>

@@ -32,12 +32,12 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/ptitem.hxx>
 

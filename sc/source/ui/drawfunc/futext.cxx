@@ -33,17 +33,17 @@
 
 #include <svx/svddef.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 
 #include "futext.hxx"

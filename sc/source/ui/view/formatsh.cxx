@@ -54,7 +54,7 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -67,24 +67,24 @@
 #include <svl/stritem.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/numinf.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"

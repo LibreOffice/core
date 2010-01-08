@@ -81,7 +81,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 // for OutlinerView
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 using namespace ::com::sun::star;
 

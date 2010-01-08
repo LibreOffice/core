@@ -56,7 +56,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include <algorithm>

@@ -36,10 +36,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/bindings.hxx>

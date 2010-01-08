@@ -38,11 +38,11 @@
 // INCLUDE ---------------------------------------------------------------
 #include <rangelst.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/brshitem.hxx>
-#include <svx/editview.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editview.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/bindings.hxx>

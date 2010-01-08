@@ -36,7 +36,7 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 // #98185# Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>

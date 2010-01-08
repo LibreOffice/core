@@ -33,8 +33,8 @@
 
 //------------------------------------------------------------------------
 
-#include <svx/editeng.hxx>  // EditEngine::IsSimpleCharInput
-#include <svx/outlobj.hxx>
+#include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>

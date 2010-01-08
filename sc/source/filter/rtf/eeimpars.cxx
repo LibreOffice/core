@@ -36,17 +36,17 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/adjitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svx/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svtools/parhtml.hxx>

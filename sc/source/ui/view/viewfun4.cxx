@@ -36,17 +36,16 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -676,7 +675,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
     USHORT nFilterFormat;
     Graphic aGraphic;
-    GraphicFilter* pGraphicFilter = ::GetGrfFilter();
+    GraphicFilter* pGraphicFilter = GraphicFilter::GetGraphicFilter();
 
 //      GraphicProgress aGraphicProgress(&aGraphicFilter);
 

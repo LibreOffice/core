@@ -35,7 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>

@@ -36,23 +36,23 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <rtl/tencinfo.h>
 
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
@@ -86,8 +86,8 @@
 #include "ftools.hxx"
 
 
-#include <svx/flditem.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/borderline.hxx>
 #include <unotools/syslocale.hxx>
 
 

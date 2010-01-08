@@ -31,7 +31,7 @@
 #define _IDLITEMS_HXX
 
 #include <svl/eitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 
 class SvxDrawToolItem : public SfxEnumItem

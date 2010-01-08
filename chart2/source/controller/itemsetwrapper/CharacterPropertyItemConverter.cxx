@@ -35,13 +35,14 @@
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
 #include "RelativeSizeHelper.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/memberids.hrc>
+#include <editeng/eeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svl/stritem.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>

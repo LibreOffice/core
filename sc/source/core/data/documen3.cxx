@@ -34,7 +34,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>

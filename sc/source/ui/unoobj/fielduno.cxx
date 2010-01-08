@@ -33,11 +33,11 @@
 #include <svl/smplhint.hxx>
 
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

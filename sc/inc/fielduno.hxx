@@ -36,7 +36,7 @@
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>

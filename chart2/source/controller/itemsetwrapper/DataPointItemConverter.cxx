@@ -50,10 +50,10 @@
 // header for class XFillColorItem
 #include <svx/xflclit.hxx>
 #include <svl/intitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 // header for class SfxStringItem
 #include <svl/stritem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS

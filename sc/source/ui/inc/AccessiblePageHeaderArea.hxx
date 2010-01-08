@@ -35,7 +35,7 @@
 #ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
 #endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 class EditTextObject;
 namespace accessibility

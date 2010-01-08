@@ -34,11 +34,11 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "scitems.hxx"
-#include <svx/editview.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>

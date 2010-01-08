@@ -34,14 +34,14 @@
 #include "lotfntbf.hxx"
 
 #include "scitems.hxx"
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/printer.hxx>
 
 #include "attrib.hxx"

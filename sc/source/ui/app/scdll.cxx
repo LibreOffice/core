@@ -33,7 +33,7 @@
 
 
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #ifndef _FM_FMOBJFAC_HXX
@@ -96,7 +96,7 @@
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/fntctl.hxx>

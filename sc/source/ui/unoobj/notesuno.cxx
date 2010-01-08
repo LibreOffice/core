@@ -34,7 +34,7 @@
 
 
 #include "rangelst.hxx"
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include "notesuno.hxx"
@@ -53,7 +53,7 @@
 #include "undocell.hxx"
 #include "unoguard.hxx"
 #include "userdat.hxx"
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svditer.hxx>

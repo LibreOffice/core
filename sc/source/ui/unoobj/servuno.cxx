@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include "servuno.hxx"
