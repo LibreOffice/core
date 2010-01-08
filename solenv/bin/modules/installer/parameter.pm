@@ -280,7 +280,6 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /wnt(msc|gcc)i/ )
     {
         $installer::globals::iswindowsbuild = 1;
-        if ( $installer::globals::installertypedir eq "" ) { $installer::globals::installertypedir = "msi"; }
     }
 
     if ( $installer::globals::compiler =~ /unxso[lg][siux]/ )

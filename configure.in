@@ -3259,7 +3259,7 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
-if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \) ; then
+if test "$enable_epm" = "yes"; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
    dnl Check for epm - not needed for windows
@@ -3310,18 +3310,6 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 
    # test which package format to use
    AC_MSG_CHECKING([which package format to use])
-   # epm supports the following formats:
-   # aix - AIX software distribution
-   # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-   # depot or swinstall - HP-UX software distribution
-   # deb - Debian software distribution
-   # inst or tardist - IRIX software distribution
-   # osx - MacOS X software distribution
-   # pkg - Solaris software distribution
-   # rpm - RedHat software distribution
-   # setld - Tru64 (setld) software distribution
-   # native - "Native" software distribution for the platform
-   # portable - Portable software distribution
 
    # defaults
    case "$_os" in
@@ -3354,6 +3342,9 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 	IRIX)
 		PKGFORMAT=tardist
 		;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
 	*)
@@ -3362,7 +3353,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do 
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable) 
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed)
 			;;
 		*)
 			AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -3377,6 +3368,10 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - "Native" software distribution for the platform
 portable - Portable software distribution
+OOo additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
 			]) 
 			;;
 		esac

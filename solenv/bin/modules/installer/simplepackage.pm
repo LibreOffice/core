@@ -364,7 +364,7 @@ sub replace_variables_in_scriptfile
 
 sub create_package
 {
-    my ( $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $format ) = @_;
+    my ( $installdir, $archivedir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $format ) = @_;
 
     installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
     installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
@@ -379,9 +379,9 @@ sub create_package
     installer::systemactions::rename_directory($installdir, $tempdir);
 
     # creating new directory with original name
-    installer::systemactions::create_directory($installdir);
+    installer::systemactions::create_directory($archivedir);
 
-    my $archive =  $installdir . $installer::globals::separator . $packagename . $format;
+    my $archive = $archivedir . $installer::globals::separator . $packagename . $format;
 
     if ( $archive =~ /zip$/ )
     {
@@ -612,10 +612,22 @@ sub create_simple_package
         }
     }
 
+    # Work around Windows problems with long pathnames (see issue 50885) by
+    # putting the to-be-archived installation tree into the temp directory
+    # instead of the module output tree (unless LOCALINSTALLDIR dictates
+    # otherwise, anyway); can be removed once issue 50885 is fixed:
+    my $tempinstalldir = $installdir;
+    if ( $installer::globals::iswindowsbuild &&
+         $installer::globals::packageformat eq "archive" &&
+         !$installer::globals::localinstalldirset )
+    {
+        $tempinstalldir = File::Temp::tempdir;
+    }
+
     # Creating subfolder in installdir, which shall become the root of package or zip file
     my $subfolderdir = "";
-    if ( $packagename ne "" ) { $subfolderdir = $installdir . $installer::globals::separator . $packagename; }
-    else { $subfolderdir = $installdir; }
+    if ( $packagename ne "" ) { $subfolderdir = $tempinstalldir . $installer::globals::separator . $packagename; }
+    else { $subfolderdir = $tempinstalldir; }
 
     if ( ! -d $subfolderdir ) { installer::systemactions::create_directory($subfolderdir); }
 
@@ -770,11 +782,11 @@ sub create_simple_package
     # Creating archive file
     if ( $installer::globals::packageformat eq "archive" )
     {
-        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $installer::globals::archiveformat);
+        create_package($tempinstalldir, $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $installer::globals::archiveformat);
     }
     elsif ( $installer::globals::packageformat eq "dmg" )
     {
-        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, ".dmg");
+        create_package($installdir, $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, ".dmg");
     }
 
     # Analyzing the log file
