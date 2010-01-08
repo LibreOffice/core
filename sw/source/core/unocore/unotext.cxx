@@ -116,7 +116,7 @@ uno::Reference< text::XTextCursor >   SwXText::createCursor() throw (uno::Runtim
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
         SwPosition aPos(rNode);
         xRet = static_cast<text::XWordCursor*>(
-                new SwXTextCursor(this, aPos, GetTextType(), GetDoc()));
+                new SwXTextCursor(*GetDoc(), this, GetTextType(), aPos));
         xRet->gotoStart(sal_False);
     }
     return xRet;
@@ -1437,7 +1437,7 @@ uno::Reference< text::XTextRange > SwXText::appendTextPortion(
 
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
         //aPam.Move( fnMoveBackward, fnGoNode );
-        SwUnoCrsr* pCursor = pTextCursor->GetCrsr();
+        SwUnoCrsr * pCursor = pTextCursor->GetCursor();
         pCursor->MovePara( fnParaCurr, fnParaEnd );
         pDoc->DontExpandFmt( *pCursor->Start() );
 
@@ -2326,7 +2326,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
             aPam.GetPoint()->nContent.Assign(pCont, 0);
         }
     }
-    return new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_BODY, GetDoc());
+    return new SwXTextCursor(*GetDoc(), this, CURSOR_BODY, *aPam.GetPoint());
 }
 
 /*-- 10.12.98 11:17:29---------------------------------------------------
@@ -2374,7 +2374,11 @@ uno::Reference< text::XTextCursor >  SwXBodyText::createTextCursorByRange(
         SwStartNode* p2 = rNode.StartOfSectionNode();
 
         if(p1 == p2)
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_BODY, GetDoc(), aPam.GetMark());
+        {
+            aRef = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*GetDoc(), this, CURSOR_BODY,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     if(!aRef.is())
         throw uno::RuntimeException();
@@ -2554,8 +2558,9 @@ uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursor(void) thr
         const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
         const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
         SwPosition aPos(rNode);
-        SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, bIsHeader ? CURSOR_HEADER : CURSOR_FOOTER, GetDoc());
-        SwUnoCrsr* pUnoCrsr = pCrsr->GetCrsr();
+        SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
+                (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         //save current start node to be able to check if there is content after the table -
@@ -2578,12 +2583,11 @@ uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursor(void) thr
                         bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
         if(!pNewStartNode || pNewStartNode != pOwnStartNode)
         {
-            pCrsr = NULL;
             uno::RuntimeException aExcept;
             aExcept.Message = S2U("no text available");
             throw aExcept;
         }
-        xRet =  (text::XWordCursor*)pCrsr;
+        xRet = static_cast<text::XWordCursor*>(pXCursor);
     }
     else
     {
@@ -2614,8 +2618,12 @@ uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursorByRange(
         SwStartNode* p1 = aPam.GetNode()->FindSttNodeByType(
             bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
         if(p1 == pOwnStartNode)
-            xRet =  (text::XWordCursor*)new SwXTextCursor(this, *aPam.GetPoint(),
-                            bIsHeader ? CURSOR_HEADER : CURSOR_FOOTER, GetDoc(), aPam.GetMark());
+        {
+            xRet = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*GetDoc(), this,
+                        (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     return xRet;
 }

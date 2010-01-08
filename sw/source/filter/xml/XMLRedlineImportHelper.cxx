@@ -500,11 +500,11 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
         // create (UNO-) cursor
         SwPosition aPos(*pRedlineNode);
-        SwXTextCursor* pCursor =
-            new SwXTextCursor(pXText, aPos, CURSOR_REDLINE, pDoc);
-        pCursor->GetCrsr()->Move(fnMoveForward, fnGoNode);
-
-        xReturn = (XWordCursor*)pCursor;    // cast to avoid ambigiouty
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*pDoc, pXText, CURSOR_REDLINE, aPos);
+        pXCursor->GetCursor()->Move(fnMoveForward, fnGoNode);
+        // cast to avoid ambiguity
+        xReturn = static_cast<text::XWordCursor*>(pXCursor);
     }
     // else: unknown redline -> Ignore
 

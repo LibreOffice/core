@@ -1035,10 +1035,11 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursor(void) throw( uno:
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
         SwPosition aPos(*pSttNd);
-        SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_TBLTEXT, GetDoc());
-        SwUnoCrsr* pUnoCrsr = pCrsr->GetCrsr();
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
-        aRef =  (text::XWordCursor*)pCrsr;
+        aRef =  static_cast<text::XWordCursor*>(pXCursor);
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
@@ -1068,7 +1069,11 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno:
             p1 = p1->StartOfSectionNode();
 
         if( p1 == pSttNd )
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_TBLTEXT, GetDoc(), aPam.GetMark());
+        {
+            aRef = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     else
         throw uno::RuntimeException();

@@ -733,7 +733,7 @@ SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xC
     SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
     xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCrsr();
+    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCursor();
     pUnoCrsr->SetRemainInSection(sal_False);
     return pUnoCrsr;
 }
@@ -987,7 +987,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
         const uno::Reference< text::XText >  xParent =
             ::sw::CreateParentXText(*pDocShell->GetDoc(),
                     *pResultCrsr->GetPoint());
-        xRet = *new SwXTextCursor(xParent, pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;
@@ -1015,7 +1015,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
             ::sw::CreateParentXText(*pDocShell->GetDoc(),
                     *pResultCrsr->GetPoint());
 
-        xRet = *new SwXTextCursor(xParent, pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;

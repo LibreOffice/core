@@ -40,6 +40,7 @@
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
+#include <unoevtlstnr.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <fmtrfmrk.hxx>
@@ -638,8 +639,8 @@ void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
 {
     // create a new cursor to prevent modifying SwXTextRange
     xRange = static_cast<text::XWordCursor*>(
-        new SwXTextCursor(&m_rMeta, *rPam.GetPoint(), CURSOR_META,
-                GetDoc(), (rPam.HasMark()) ? rPam.GetMark() : 0));
+        new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, *rPam.GetPoint(),
+                (rPam.HasMark()) ? rPam.GetMark() : 0));
 }
 
 bool SwXMetaText::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
@@ -663,7 +664,7 @@ throw (uno::RuntimeException)
         {
             SwPosition aPos(*pTxtNode, nMetaStart);
             xRet = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(&m_rMeta, aPos, CURSOR_META, GetDoc()));
+                    new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, aPos));
         }
     }
     return xRet;

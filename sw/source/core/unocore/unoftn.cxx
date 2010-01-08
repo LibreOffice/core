@@ -391,9 +391,10 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursor(void) throw( 
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         SwPosition aPos( *pTxtFtn->GetStartNode() );
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, aPos, CURSOR_FOOTNOTE, GetDoc());
-        aRef =  (text::XWordCursor*)pXCrsr;
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
+        aRef = static_cast<text::XWordCursor*>(pXCursor);
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
     }
     else
@@ -422,7 +423,9 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
         if( pStart != pFtnStartNode )
             throw uno::RuntimeException();
 
-        aRef = (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
+        aRef = static_cast<text::XWordCursor*>(
+                new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE,
+                    *aPam.GetPoint(), aPam.GetMark()));
     }
     else
         throw uno::RuntimeException();

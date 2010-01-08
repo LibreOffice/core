@@ -49,20 +49,14 @@
 #include <cppuhelper/implbase12.hxx>
 
 #include <comphelper/uno3.hxx>
-#include <tools/link.hxx>
-#include <tools/string.hxx>
 
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
 #include <unobaseclass.hxx>
 #include <TextCursorHelper.hxx>
 
 
-class SfxItemPropertySet;
 class SwDoc;
 struct SwPosition;
 class SwUnoCrsr;
-struct SwSortOptions;
 
 
 typedef ::cppu::WeakImplHelper12
@@ -82,64 +76,44 @@ typedef ::cppu::WeakImplHelper12
 
 class SwXTextCursor
     : public SwXTextCursor_Base
-    , public SwClient
     , public OTextCursorHelper
 {
 
 private:
 
-    SwEventListenerContainer    aLstnrCntnr;
-    const SfxItemPropertySet*   m_pPropSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
-    SwSortOptions*              pLastSortOptions;
-
-    CursorType                  eType;
-
-    // --> FME 2006-03-07 #126177# We need to track if the RemoveCursor_Impl
-    // user event has been posted. In this case we have to remove the user
-    // event in ~SwXTextCursor().
-    ULONG mnUserEventId;
-    bool mbRemoveUserEvent;
-    // <--
-
-    DECL_STATIC_LINK(SwXTextCursor, RemoveCursor_Impl,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*);
-
-protected:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXTextCursor();
 
 public:
 
     SwXTextCursor(
+            SwDoc & rDoc,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XText > xParent,
-            const SwPosition& rPos,
-            CursorType eSet, SwDoc* pDoc, const SwPosition* pMark = 0);
+                ::com::sun::star::text::XText > const& xParent,
+            const enum CursorType eType,
+            SwPosition const& rPos,
+            SwPosition const*const pMark = 0);
     SwXTextCursor(
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XText > xParent,
-            SwUnoCrsr* pSourceCrsr, CursorType eSet = CURSOR_ALL);
+                ::com::sun::star::text::XText > const& xParent,
+            SwPaM const& rSourceCursor,
+            const enum CursorType eType = CURSOR_ALL);
 
-    SwUnoCrsr*          GetCrsr() {return (SwUnoCrsr*)GetRegisteredIn();}
-    const SwUnoCrsr*    GetCrsr() const {return (SwUnoCrsr*)GetRegisteredIn();}
-
-    // --> FME 2006-03-07 #126177#
-    void DoNotRemoveUserEvent() { mbRemoveUserEvent = false; }
-    // <--
+          SwUnoCrsr *   GetCursor();
+    const SwUnoCrsr *   GetCursor() const;
 
     bool IsAtEndOfMeta() const;
 
-    void    DeleteAndInsert(const String& rText,
+    void DeleteAndInsert(::rtl::OUString const& rText,
                 const bool bForceExpandHints);
 
+    // OTextCursorHelper
     virtual const SwPaM*        GetPaM() const;
     virtual SwPaM*              GetPaM();
     virtual const SwDoc*        GetDoc() const;
     virtual SwDoc*              GetDoc();
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     DECLARE_XINTERFACE()
 

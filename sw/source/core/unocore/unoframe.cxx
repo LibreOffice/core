@@ -2652,10 +2652,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
             throw aExcept;
         }
 
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc());
-        aRef =  (text::XWordCursor*)pXCrsr;
+        SwXTextCursor *const pXCursor = new SwXTextCursor(
+                 *pFmt->GetDoc(), this, CURSOR_FRAME, *aPam.GetPoint());
+        aRef =  static_cast<text::XWordCursor*>(pXCursor);
 #if OSL_DEBUG_LEVEL > 1
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         (void) pUnoCrsr;
 #endif
     }
@@ -2682,8 +2683,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         (void)p2;
 #endif
         if(aPam.GetNode()->FindFlyStartNode() == rNode.FindFlyStartNode())
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this ,
-                *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc(), aPam.GetMark());
+        {
+            aRef = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*pFmt->GetDoc(), this, CURSOR_FRAME,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     else
         throw uno::RuntimeException();

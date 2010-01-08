@@ -141,9 +141,9 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     SwPosition aPos(aNodeIndex);
-    SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_REDLINE,
-                                             GetDoc());
-    SwUnoCrsr* pUnoCursor = pCrsr->GetCrsr();
+    SwXTextCursor *const pXCursor =
+        new SwXTextCursor(*GetDoc(), this, CURSOR_REDLINE, aPos);
+    SwUnoCrsr *const pUnoCursor = pXCursor->GetCursor();
     pUnoCursor->Move(fnMoveForward, fnGoNode);
 
     // #101929# prevent a newly created text cursor from running inside a table
@@ -175,7 +175,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
         throw aExcept;
     }
 
-    return (text::XWordCursor*)pCrsr;
+    return static_cast<text::XWordCursor*>(pXCursor);
 }
 /* ---------------------------------------------------------------------------
 
@@ -716,8 +716,9 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
     if(pNodeIndex)
     {
         SwPosition aPos(*pNodeIndex);
-        SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_REDLINE, pDoc);
-        SwUnoCrsr* pUnoCrsr = pCrsr->GetCrsr();
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*pDoc, this, CURSOR_REDLINE, aPos);
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         //steht hier eine Tabelle?
@@ -731,7 +732,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
         }
         if(pCont)
             pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
-        xRet =  (text::XWordCursor*)pCrsr;
+        xRet = static_cast<text::XWordCursor*>(pXCursor);
     }
     else
     {
