@@ -2158,7 +2158,9 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             pDoc = pPortion->GetCursor()->GetDoc();
         }
         else if ( !pDoc && pParagraph && pParagraph->GetTxtNode( ) )
-            pDoc = pParagraph->GetTxtNode( )->GetDoc( );
+        {
+            pDoc = const_cast<SwDoc*>(pParagraph->GetTxtNode()->GetDoc());
+        }
 
     }
 

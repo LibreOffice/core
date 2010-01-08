@@ -48,12 +48,11 @@
 #include <sfx2/Metadatable.hxx>
 
 #include <calbck.hxx>
-#include <unoevtlstnr.hxx>
 #include <unobaseclass.hxx>
 
 
-class SfxItemPropertySet;
 struct SwPosition;
+class SwPaM;
 class SwUnoCrsr;
 class SwStartNode;
 class SwTxtNode;
@@ -80,73 +79,41 @@ typedef ::cppu::ImplInheritanceHelper10
 
 class SwXParagraph
     : public SwXParagraph_Base
-    , public SwClient
 {
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
-    SwEventListenerContainer    aLstnrCntnr;
-    const SfxItemPropertySet*   m_pPropSet;
-    ::rtl::OUString             m_sText;
-    sal_Int32                   nSelectionStartPos;
-    sal_Int32                   nSelectionEndPos;
-    BOOL                        m_bIsDescriptor;
-
-protected:
-
-    void SAL_CALL SetPropertyValues_Impl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Any >& rValues)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
-        GetPropertyValues_Impl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL
-        GetPropertyValuesTolerant_Impl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames,
-            sal_Bool bDirectValuesOnly)
-        throw (::com::sun::star::uno::RuntimeException);
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXParagraph();
 
+    SwXParagraph(::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XText > const & xParent,
+            SwTxtNode & rTxtNode,
+            const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
+
 public:
 
+    /// descriptor
     SwXParagraph();
-    SwXParagraph(::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XText > const & i_xParent,
-            SwTxtNode * i_pTxtNode,
-            sal_Int32 nSelStart = -1, sal_Int32 nSelEnd = - 1);
 
-    BOOL            IsDescriptor() const {return m_bIsDescriptor;}
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextContent>
+        CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
+                const& xParentText = 0,
+            const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
     const SwTxtNode * GetTxtNode() const;
-          SwTxtNode * GetTxtNode();
-
-    static BOOL getDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
-        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
-    static SwXParagraph* GetImplementation(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface> xRef);
+    bool            IsDescriptor() const;
+    /// make rPaM select the paragraph
+    bool SelectPaM(SwPaM & rPaM);
+    /// for SwXText
     void attachToText(SwXText & rParent, SwTxtNode & rTxtNode);
 
-    TYPEINFO();
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    static bool getDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
+        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject();

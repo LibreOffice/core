@@ -1169,9 +1169,9 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             }
             else
             {
-                aRef = new SwXParagraph(static_cast<SwXText*>(pText),
-                    pStart->nNode.GetNode().GetTxtNode(),
-                    nFirstContent, nLastContent);
+                aRef = SwXParagraph::CreateXParagraph(*pUnoCrsr->GetDoc(),
+                    *pStart->nNode.GetNode().GetTxtNode(),
+                    static_cast<SwXText*>(pText), nFirstContent, nLastContent);
             }
         }
     }
@@ -1528,15 +1528,7 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     {
         if (pPara)
         {
-            const SwTxtNode * pTxtNode( pPara->GetTxtNode() );
-
-            if (pTxtNode) {
-                bRet = sal_True;
-                *rToFill.GetPoint() = SwPosition( *pTxtNode );
-                // set selection to the whole paragraph
-                rToFill.SetMark();
-                rToFill.GetMark()->nContent = pTxtNode->GetTxt().Len();
-            }
+            bRet = pPara->SelectPaM(rToFill);
         }
         else
         {

@@ -666,7 +666,10 @@ void SwXText::insertTextContentBefore(
         throw aRuntime;
     }
 
-    SwXParagraph* pPara = SwXParagraph::GetImplementation(xNewContent);
+    const uno::Reference<lang::XUnoTunnel> xParaTunnel(xNewContent,
+            uno::UNO_QUERY);
+    SwXParagraph *const pPara =
+            ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
     if(!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
         throw lang::IllegalArgumentException();
 
@@ -718,7 +721,10 @@ void SwXText::insertTextContentAfter(
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetDoc())
         throw uno::RuntimeException();
-    SwXParagraph* pPara = SwXParagraph::GetImplementation(xNewContent);
+    const uno::Reference<lang::XUnoTunnel> xParaTunnel(xNewContent,
+            uno::UNO_QUERY);
+    SwXParagraph *const pPara =
+            ::sw::UnoTunnelGetImplementation<SwXParagraph>(xParaTunnel);
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
         throw lang::IllegalArgumentException();
 
@@ -1414,7 +1420,10 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
         }
         SwTxtNode * pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
         OSL_ENSURE(pTxtNode, "no SwTxtNode?");
-        xRet = new SwXParagraph(this, pTxtNode);
+        if (pTxtNode)
+        {
+            xRet.set(SwXParagraph::CreateXParagraph(*pDoc, *pTxtNode, this), uno::UNO_QUERY);
+        }
     }
 
     return xRet;
