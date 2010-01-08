@@ -79,7 +79,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unobookmark.hxx>
 #include <unoparagraph.hxx>
-#include <unotextcursor.hxx>
+#include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
 
 #include <svx/editview.hxx>
@@ -317,8 +317,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     : 0;
 
             if(pCursor && pCursor->GetDoc() == GetView()->GetDocShell()->GetDoc())
-                pPam = lcl_createPamCopy(*((SwXTextCursor*)pCursor)->GetPaM());
-
+            {
+                pPam = lcl_createPamCopy(*pCursor->GetPaM());
+            }
         }
         else if(xPosN.is() &&
             xIfcTunnel.is() &&
@@ -1773,7 +1774,7 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
             {
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwPaM* pShellCrsr = rSh.GetCrsr();
-                SwXTextCursor::getTextFromPam(*pShellCrsr, uRet);
+                SwUnoCursorHelper::GetTextFromPam(*pShellCrsr, uRet);
             }
             default:;//prevent warning
         }
@@ -1805,7 +1806,7 @@ void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeEx
             {
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwCursor* pShellCrsr = rSh.GetSwCrsr();
-                SwXTextCursor::SetString( *pShellCrsr, aString );
+                SwUnoCursorHelper::SetString(*pShellCrsr, aString);
             }
             default:;//prevent warning
         }
@@ -1834,7 +1835,10 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwNode *pNode = pShellCrsr->GetNode();
         if (pNode && pNode->IsTxtNode())
-            SwXTextCursor::SetPropertyValue(*pShellCrsr, *m_pPropSet, rPropertyName, aValue );
+        {
+            SwUnoCursorHelper::SetPropertyValue(
+                *pShellCrsr, *m_pPropSet, rPropertyName, aValue );
+        }
         else
             throw RuntimeException();
     }
@@ -1853,7 +1857,8 @@ Any  SwXTextViewCursor::getPropertyValue( const OUString& rPropertyName )
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        aRet = SwXTextCursor::GetPropertyValue(  *pShellCrsr, *m_pPropSet, rPropertyName);
+        aRet = SwUnoCursorHelper::GetPropertyValue(
+                *pShellCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw RuntimeException();
@@ -1902,7 +1907,8 @@ PropertyState  SwXTextViewCursor::getPropertyState( const OUString& rPropertyNam
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        eState = SwXTextCursor::GetPropertyState( *pShellCrsr, *m_pPropSet, rPropertyName);
+        eState = SwUnoCursorHelper::GetPropertyState(
+                *pShellCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw RuntimeException();
@@ -1920,7 +1926,8 @@ Sequence< PropertyState >  SwXTextViewCursor::getPropertyStates(
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        aRet = SwXTextCursor::GetPropertyStates(*pShellCrsr, *m_pPropSet,  rPropertyNames);
+        aRet = SwUnoCursorHelper::GetPropertyStates(
+                *pShellCrsr, *m_pPropSet,  rPropertyNames);
     }
     return aRet;
 }
@@ -1935,7 +1942,8 @@ void  SwXTextViewCursor::setPropertyToDefault( const OUString& rPropertyName )
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        SwXTextCursor::SetPropertyToDefault( *pShellCrsr, *m_pPropSet, rPropertyName);
+        SwUnoCursorHelper::SetPropertyToDefault(
+                *pShellCrsr, *m_pPropSet, rPropertyName);
     }
 }
 /*-- 29.06.00 17:33:43---------------------------------------------------
@@ -1950,7 +1958,8 @@ Any  SwXTextViewCursor::getPropertyDefault( const OUString& rPropertyName )
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        aRet = SwXTextCursor::GetPropertyDefault( *pShellCrsr, *m_pPropSet, rPropertyName);
+        aRet = SwUnoCursorHelper::GetPropertyDefault(
+                *pShellCrsr, *m_pPropSet, rPropertyName);
     }
     return aRet;
 }

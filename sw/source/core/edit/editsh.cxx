@@ -63,7 +63,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unotextcursor.hxx>
+#include <unocrsrhelper.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
@@ -1111,7 +1111,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     if( pDel )
     {
         rtl::OUString sTmp;
-        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();

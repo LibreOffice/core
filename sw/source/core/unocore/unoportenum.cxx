@@ -48,7 +48,7 @@
 #include <unoclbck.hxx>
 #include <unomid.h>
 #include <unoparaframeenum.hxx>
-#include <unotextcursor.hxx>
+#include <unocrsrhelper.hxx>
 #include <unorefmark.hxx>
 #include <unobookmark.hxx>
 #include <unoredline.hxx>
@@ -1150,7 +1150,7 @@ lcl_CreatePortions(
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration
         uno::Reference< XTextRange > xRef;
 
-        SwXTextCursor::SelectPam(*pUnoCrsr, sal_True); // set mark
+        SwUnoCursorHelper::SelectPam(*pUnoCrsr, true); // set mark
 
         const sal_Int32 nFirstFrameIndex =
             lcl_ExportFrames( *PortionStack.top().first,

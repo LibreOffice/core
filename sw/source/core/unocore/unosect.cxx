@@ -48,7 +48,7 @@
 #include <unotextrange.hxx>
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
-#include <unotextcursor.hxx>
+#include <TextCursorHelper.hxx>
 #include <unoredline.hxx>
 #include <redline.hxx>
 #include <unomap.hxx>

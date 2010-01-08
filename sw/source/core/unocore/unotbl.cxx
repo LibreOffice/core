@@ -109,10 +109,6 @@ using ::rtl::OUString;
 
 
 //-----------------------------------------------------------------------------
-// from unoobj.cxx
-extern void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)    throw (lang::IllegalArgumentException);
-extern void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet) throw (lang::IllegalArgumentException);
-
 // from swtable.cxx
 extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
@@ -1854,12 +1850,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInf
 /*-- 11.12.98 12:16:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-extern sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertySimpleEntry* pEntry,
-            SwPaM& rPam,
-            SfxItemSet& rSet,
-            const uno::Any& aValue ) throw (lang::IllegalArgumentException);
-
-
 void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                                                         const uno::Any& aValue)
             throw( beans::UnknownPropertyException,
@@ -1903,16 +1893,21 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                 }
                 break;
                 case FN_UNO_PARA_STYLE:
-                    lcl_SetTxtFmtColl(aValue, *pUnoCrsr);
+                    SwUnoCursorHelper::SetTxtFmtColl(aValue, *pUnoCrsr);
                 break;
                 default:
                 {
                     SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-                    SwXTextCursor::GetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet );
+                    SwUnoCursorHelper::GetCrsrAttr(pTblCrsr->GetSelRing(),
+                            aItemSet);
 
-                    if(!lcl_setCrsrPropertyValue( pEntry, pTblCrsr->GetSelRing(), aItemSet, aValue ))
-                        m_pPropSet->setPropertyValue( *pEntry, aValue, aItemSet );
-                    SwXTextCursor::SetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
+                    if (!SwUnoCursorHelper::SetCursorPropertyValue(
+                            *pEntry, aValue, pTblCrsr->GetSelRing(), aItemSet))
+                    {
+                        m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
+                    }
+                    SwUnoCursorHelper::SetCrsrAttr(pTblCrsr->GetSelRing(),
+                            aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
                 }
             }
         }
@@ -1956,7 +1951,8 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case FN_UNO_PARA_STYLE:
                 {
-                    SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(*pUnoCrsr, FALSE);
+                    SwFmtColl *const pFmt =
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, FALSE);
                     OUString sRet;
                     if(pFmt)
                         sRet = pFmt->GetName();
@@ -1970,7 +1966,8 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // erstmal die Attribute des Cursors
-                    SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), aSet);
+                    SwUnoCursorHelper::GetCrsrAttr(pTblCrsr->GetSelRing(),
+                            aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
             }
@@ -3162,7 +3159,8 @@ uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor(void)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return SwXTextCursor::createSortDescriptor(sal_True);
+
+    return SwUnoCursorHelper::CreateSortDescriptor(true);
 }
 /*-- 11.12.98 12:42:49---------------------------------------------------
 
@@ -3174,7 +3172,7 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
     SwSortOptions aSortOpt;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt &&
-        SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
+        SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwSelBoxes aBoxes;
@@ -4157,11 +4155,16 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 default:
                 {
                     SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-                    SwXTextCursor::GetCrsrAttr( pCrsr->GetSelRing(), aItemSet );
+                    SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(),
+                            aItemSet);
 
-                    if(!lcl_setCrsrPropertyValue( pEntry, pCrsr->GetSelRing(), aItemSet, aValue ))
-                        m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet );
-                    SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
+                    if (!SwUnoCursorHelper::SetCursorPropertyValue(
+                            *pEntry, aValue, pCrsr->GetSelRing(), aItemSet))
+                    {
+                        m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
+                    }
+                    SwUnoCursorHelper::SetCrsrAttr(pCrsr->GetSelRing(),
+                            aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
                 }
             }
         }
@@ -4214,7 +4217,8 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 break;
                 case FN_UNO_PARA_STYLE:
                 {
-                    SwFmtColl* pTmpFmt = SwXTextCursor::GetCurTxtFmtColl(*pTblCrsr, FALSE);
+                    SwFmtColl *const pTmpFmt =
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pTblCrsr, FALSE);
                     OUString sRet;
                     if(pFmt)
                         sRet = pTmpFmt->GetName();
@@ -4242,7 +4246,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                         0L);
                     // erstmal die Attribute des Cursors
                     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-                    SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
+                    SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
             }
@@ -4875,7 +4879,8 @@ double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException )
 uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return SwXTextCursor::createSortDescriptor(sal_True);
+
+    return SwUnoCursorHelper::CreateSortDescriptor(true);
 }
 /*-- 11.12.98 14:27:39---------------------------------------------------
 
@@ -4887,7 +4892,7 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
     SwSortOptions aSortOpt;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt &&
-        SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
+        SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
         SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
         pTableCrsr->MakeBoxSels();

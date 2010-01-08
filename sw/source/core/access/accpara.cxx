@@ -35,7 +35,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <unotextrange.hxx>
-#include <unotextcursor.hxx>
+#include <unocrsrhelper.hxx>
 #include <crstate.hxx>
 #include <accmap.hxx>
 #include "fesh.hxx"
@@ -1533,7 +1533,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwXTextCursor::GetCrsrAttr( *pPaM, aCharAttrsAtPaM, TRUE, TRUE );
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, TRUE, TRUE);
         aSet.Put( aCharAttrsAtPaM );
     }
     // <--

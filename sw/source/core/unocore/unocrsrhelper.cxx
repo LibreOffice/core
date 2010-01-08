@@ -32,12 +32,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <map>
+
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
 #include <unofootnote.hxx>
-#include <unotextcursor.hxx>
 #include <unorefmark.hxx>
 #include <unostyle.hxx>
 #include <unoidx.hxx>
@@ -45,6 +46,7 @@
 #include <unotbl.hxx>
 #include <unosett.hxx>
 #include <unoframe.hxx>
+#include <unocrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
@@ -103,8 +105,9 @@ using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
+
 /* -----------------16.09.98 12:27-------------------
- *  Lesen spezieller Properties am Cursor
+*   Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -196,7 +199,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
                             ? pNode->GetFmtColl() : &pNode->GetAnyFmtColl();
             else
-                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
+            {
+                pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(rPam,
+                        FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
+            }
             if(pFmt)
             {
                 if( pAny )

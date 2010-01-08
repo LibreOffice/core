@@ -58,31 +58,12 @@
 #include <TextCursorHelper.hxx>
 
 
-class SfxItemSet;
 class SfxItemPropertySet;
 class SwDoc;
 struct SwPosition;
-class SwCursor;
 class SwUnoCrsr;
-class SwFmtColl;
 struct SwSortOptions;
 
-
-/* -----------------03.12.98 12:16-------------------
- *
- * --------------------------------------------------*/
-enum SwGetPropertyStatesCaller
-{
-    SW_PROPERTY_STATE_CALLER_DEFAULT,
-    SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION,
-    SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY,
-    SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT
-};
-
-/// attributes should be applied to a table selection
-#define CRSR_ATTR_MODE_TABLE        1
-/// attributes should be added, not replaced
-#define CRSR_ATTR_MODE_DONTREPLACE  2
 
 typedef ::cppu::WeakImplHelper12
 <   ::com::sun::star::lang::XServiceInfo
@@ -151,71 +132,6 @@ public:
 
     void    DeleteAndInsert(const String& rText,
                 const bool bForceExpandHints);
-
-    static void SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet,
-                            USHORT nAttrMode);
-    static void GetCrsrAttr( SwPaM& rPam, SfxItemSet& rSet,
-                     BOOL bOnlyTxtAttr = FALSE, BOOL bGetFromChrFmt = TRUE );
-    static void getTextFromPam(SwPaM& aCrsr, ::rtl::OUString& rBuffer);
-    static SwFmtColl* GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional);
-
-    static void SelectPam(SwPaM& rCrsr, sal_Bool bExpand);
-    static void SetString(SwCursor& rCrsr, const ::rtl::OUString& rString);
-
-    static ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >
-           createSortDescriptor(sal_Bool bFromTable);
-    static sal_Bool convertSortProperties(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >& rDescriptor,
-            SwSortOptions& rSortOpt);
-
-    static void SetPropertyValue(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::rtl::OUString& rPropertyName,
-            const ::com::sun::star::uno::Any& aValue,
-            USHORT nAttrMode = 0)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Any  GetPropertyValue(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::rtl::OUString& rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyState > GetPropertyStates(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames,
-            SwGetPropertyStatesCaller eCaller=SW_PROPERTY_STATE_CALLER_DEFAULT)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::beans::PropertyState GetPropertyState(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::rtl::OUString& rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
-    static void SetPropertyToDefault(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::rtl::OUString& rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Any  GetPropertyDefault(
-            SwPaM& rPaM,
-            const SfxItemPropertySet& rPropSet,
-            const ::rtl::OUString& rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
 
     virtual const SwPaM*        GetPaM() const;
     virtual SwPaM*              GetPaM();

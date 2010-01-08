@@ -459,7 +459,7 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
                 }
 
                 SwCursor aCrsr(*aTmp.GetPoint(),0,false);
-                SwXTextCursor::SelectPam(aCrsr, sal_True);
+                SwUnoCursorHelper::SelectPam(aCrsr, true);
                 aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 //hier muss der uebergebene PaM umgesetzt werden:
                 if(pRange)
@@ -1359,11 +1359,9 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
                 {
                     try
                     {
-                        SwXTextCursor::SetPropertyValue(
-                        aPam,
-                        *pParaPropSet,
-                        pValues[nProp].Name,
-                        pValues[nProp].Value);
+                        SwUnoCursorHelper::SetPropertyValue(
+                            aPam, *pParaPropSet,
+                            pValues[nProp].Name, pValues[nProp].Value);
                     }
                     catch( lang::IllegalArgumentException& rIllegal )
                     {
@@ -1448,7 +1446,7 @@ uno::Reference< text::XTextRange > SwXText::appendTextPortion(
             xub_StrLen nContentPos = pCursor->GetPoint()->nContent.GetIndex();
             SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *pCursor, rText,
                 false );
-            SwXTextCursor::SelectPam(*pCursor, sal_True);
+            SwUnoCursorHelper::SelectPam(*pCursor, true);
             pCursor->GetPoint()->nContent = nContentPos;
         }
 
@@ -1463,12 +1461,10 @@ uno::Reference< text::XTextRange > SwXText::appendTextPortion(
                 {
                     try
                     {
-                        SwXTextCursor::SetPropertyValue(
-                        *pCursor,
-                        *pCursorPropSet,
-                        pValues[nProp].Name,
-                        pValues[nProp].Value,
-                        nsSetAttrMode::SETATTR_NOFORMATATTR);
+                        SwUnoCursorHelper::SetPropertyValue(
+                            *pCursor, *pCursorPropSet,
+                            pValues[nProp].Name, pValues[nProp].Value,
+                            nsSetAttrMode::SETATTR_NOFORMATATTR);
                     }
                     catch( lang::IllegalArgumentException& rIllegal )
                     {

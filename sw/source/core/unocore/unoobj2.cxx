@@ -80,7 +80,6 @@
 #include <unofootnote.hxx>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
-#include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoport.hxx>
@@ -132,14 +131,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::drawing;
-
 using ::rtl::OUString;
 
 
@@ -359,28 +350,29 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew)
 /*-- 09.12.98 14:19:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode)
+void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
+        const SfxItemSet& rSet,
+        const SetAttrMode nAttrMode, const bool bTableMode)
 {
-    sal_uInt16 nFlags = nsSetAttrMode::SETATTR_APICALL | (nAttrMode & nsSetAttrMode::SETATTR_NOFORMATATTR);
-    if(nAttrMode & CRSR_ATTR_MODE_DONTREPLACE)
-        nFlags |= nsSetAttrMode::SETATTR_DONTREPLACE;
+    const SetAttrMode nFlags = nAttrMode | nsSetAttrMode::SETATTR_APICALL;
     SwDoc* pDoc = rPam.GetDoc();
     //StartEndAction
     UnoActionContext aAction(pDoc);
-    SwPaM* pCrsr = &rPam;
-    if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
+    if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
         pDoc->StartUndo(UNDO_INSATTR, NULL);
 
-        SwPaM *_pStartCrsr = &rPam;
+        SwPaM *pCurrent = &rPam;
         do
         {
-            if( _pStartCrsr->HasMark() && ( (CRSR_ATTR_MODE_TABLE & nAttrMode) ||
-                *_pStartCrsr->GetPoint() != *_pStartCrsr->GetMark() ))
+            if (pCurrent->HasMark() &&
+                ( (bTableMode) ||
+                  (*pCurrent->GetPoint() != *pCurrent->GetMark()) ))
             {
-                pDoc->InsertItemSet(*_pStartCrsr, rSet, nFlags);
+                pDoc->InsertItemSet(*pCurrent, rSet, nFlags);
             }
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != &rPam );
+            pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
+        } while (pCurrent != &rPam);
 
         pDoc->EndUndo(UNDO_INSATTR, NULL);
     }
@@ -388,7 +380,7 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
     {
 //          if( !HasSelection() )
 //              UpdateAttr();
-        pDoc->InsertItemSet( *pCrsr, rSet, nFlags );
+        pDoc->InsertItemSet( rPam, rSet, nFlags );
     }
     //#outline level,add by zhaojianwei
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
@@ -398,7 +390,6 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
         {
             rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
         }
-
     }
     //<-end,zhaojianwei
 }
@@ -408,72 +399,72 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
 // --> OD 2006-07-12 #i63870#
 // split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
 // and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
-void SwXTextCursor::GetCrsrAttr( SwPaM& rPam,
-                                 SfxItemSet& rSet,
-                                 BOOL bOnlyTxtAttr,
-                                 BOOL bGetFromChrFmt )
+void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
+        SfxItemSet & rSet, const bool bOnlyTxtAttr, const bool bGetFromChrFmt)
 {
     static const sal_uInt16 nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
-    SwPaM *_pStartCrsr = &rPam;
+    SwPaM *pCurrent = & rPam;
     do
     {
-        ULONG nSttNd = _pStartCrsr->GetMark()->nNode.GetIndex(),
-                    nEndNd = _pStartCrsr->GetPoint()->nNode.GetIndex();
-            xub_StrLen nSttCnt = _pStartCrsr->GetMark()->nContent.GetIndex(),
-                    nEndCnt = _pStartCrsr->GetPoint()->nContent.GetIndex();
+        SwPosition const & rStart( *pCurrent->Start() );
+        SwPosition const & rEnd( *pCurrent->End() );
+        const ULONG nSttNd = rStart.nNode.GetIndex();
+        const ULONG nEndNd = rEnd  .nNode.GetIndex();
 
-            if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
-            {
-                sal_uInt32 nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-                nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (sal_uInt16)nTmp;
-            }
+        if (nEndNd - nSttNd >= nMaxLookup)
+        {
+            rSet.ClearItem();
+            rSet.InvalidateAllItems();
+            return;// uno::Any();
+        }
 
-            if( nEndNd - nSttNd >= nMaxLookup )
+        // the first node inserts the values into the get set
+        // all other nodes merge their values into the get set
+        for (ULONG n = nSttNd; n <= nEndNd; ++n)
+        {
+            SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
+            switch (pNd->GetNodeType())
             {
-                rSet.ClearItem();
-                rSet.InvalidateAllItems();
-                return;// uno::Any();
-            }
-
-            // beim 1.Node traegt der Node die Werte in den GetSet ein (Initial)
-            // alle weiteren Nodes werden zum GetSet zu gemergt
-            for( ULONG n = nSttNd; n <= nEndNd; ++n )
-            {
-                SwNode* pNd = rPam.GetDoc()->GetNodes()[ n ];
-                switch( pNd->GetNodeType() )
-                {
                 case ND_TEXTNODE:
-                    {
-                        xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
-                                nEnd = n == nEndNd ? nEndCnt
-                                            : ((SwTxtNode*)pNd)->GetTxt().Len();
-                        ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd, bOnlyTxtAttr, bGetFromChrFmt );
-                    }
-                    break;
+                {
+                    const xub_StrLen nStart = (n == nSttNd)
+                        ? rStart.nContent.GetIndex() : 0;
+                    const xub_StrLen nEnd   = (n == nEndNd)
+                        ? rEnd.nContent.GetIndex()
+                        : static_cast<SwTxtNode*>(pNd)->GetTxt().Len();
+                    static_cast<SwTxtNode*>(pNd)->GetAttr(
+                        *pSet, nStart, nEnd, bOnlyTxtAttr, bGetFromChrFmt);
+                }
+                break;
                 case ND_GRFNODE:
                 case ND_OLENODE:
-                    ((SwCntntNode*)pNd)->GetAttr( *pSet );
-                    break;
+                    static_cast<SwCntntNode*>(pNd)->GetAttr( *pSet );
+                break;
 
                 default:
-                    pNd = 0;
-                }
+                    continue; // skip this node
+            }
 
-                if( pNd )
-                {
-                    if( pSet != &rSet )
-                        rSet.MergeValues( aSet );
-
-                    if( aSet.Count() )
-                        aSet.ClearItem();
-
-                }
+            if (pSet != &rSet)
+            {
+                rSet.MergeValues( aSet );
+            }
+            else
+            {
                 pSet = &aSet;
             }
-    } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != &rPam );
+
+            if (aSet.Count())
+            {
+                aSet.ClearItem();
+            }
+        }
+        pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
+    } while ( pCurrent != &rPam );
 }
+
 /******************************************************************
  * SwXParagraphEnumeration
  ******************************************************************/
@@ -967,7 +958,7 @@ throw (uno::RuntimeException)
             SwUnoCursorHelper::DocInsertStringSplitCR(
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
 
-            SwXTextCursor::SelectPam(aCursor, sal_True);
+            SwUnoCursorHelper::SelectPam(aCursor, true);
             aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
         }
         SetPositions(aCursor);
@@ -1111,7 +1102,7 @@ OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
     SwPaM aPaM(GetDoc()->GetNodes());
     if (GetPositions(aPaM) && aPaM.HasMark())
     {
-        SwXTextCursor::getTextFromPam(aPaM, sRet);
+        SwUnoCursorHelper::GetTextFromPam(aPaM, sRet);
     }
     return sRet;
 }
@@ -1488,7 +1479,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    SwXTextCursor::SetPropertyValue(aPaM, m_pImpl->m_rPropSet,
+    SwUnoCursorHelper::SetPropertyValue(aPaM, m_pImpl->m_rPropSet,
             rPropertyName, rValue);
 }
 
@@ -1505,7 +1496,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyValue(aPaM, m_pImpl->m_rPropSet,
+    return SwUnoCursorHelper::GetPropertyValue(aPaM, m_pImpl->m_rPropSet,
             rPropertyName);
 }
 
@@ -1565,7 +1556,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyState(aPaM, m_pImpl->m_rPropSet,
+    return SwUnoCursorHelper::GetPropertyState(aPaM, m_pImpl->m_rPropSet,
             rPropertyName);
 }
 
@@ -1581,7 +1572,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyStates(aPaM, m_pImpl->m_rPropSet,
+    return SwUnoCursorHelper::GetPropertyStates(aPaM, m_pImpl->m_rPropSet,
             rPropertyName);
 }
 
@@ -1596,7 +1587,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    SwXTextCursor::SetPropertyToDefault(aPaM, m_pImpl->m_rPropSet,
+    SwUnoCursorHelper::SetPropertyToDefault(aPaM, m_pImpl->m_rPropSet,
             rPropertyName);
 }
 
@@ -1613,7 +1604,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     SwPaM aPaM(GetDoc()->GetNodes());
     GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyDefault(aPaM, m_pImpl->m_rPropSet,
+    return SwUnoCursorHelper::GetPropertyDefault(aPaM, m_pImpl->m_rPropSet,
             rPropertyName);
 }
 
@@ -1834,24 +1825,25 @@ sal_Bool SAL_CALL SwXTextRanges::hasElements() throw (uno::RuntimeException)
 /* -----------------11.12.98 10:07-------------------
  *
  * --------------------------------------------------*/
-void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
+void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 {
     // Start/EndAction
-    SwDoc* pDoc = rCrsr.GetDoc();
+    SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    String aText(rString);
-    xub_StrLen nTxtLen = aText.Len();
     pDoc->StartUndo(UNDO_INSERT, NULL);
-    if(rCrsr.HasMark())
-        pDoc->DeleteAndJoin(rCrsr);
-    if(nTxtLen)
+    if (rCursor.HasMark())
     {
+        pDoc->DeleteAndJoin(rCursor);
+    }
+    if (rString.getLength())
+    {
+        String aText(rString);
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
-                    *pDoc, rCrsr, aText, false ) );
+                    *pDoc, rCursor, aText, false ) );
         DBG_ASSERT( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
-        SwXTextCursor::SelectPam(rCrsr, sal_True);
-        rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS, FALSE, FALSE);
+        SwUnoCursorHelper::SelectPam(rCursor, true);
+        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     pDoc->EndUndo(UNDO_INSERT, NULL);
 }

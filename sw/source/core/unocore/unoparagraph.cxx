@@ -37,7 +37,6 @@
 #include <unoparaframeenum.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
-#include <unotextcursor.hxx>
 #include <unoport.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
@@ -457,7 +456,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
-        SwXTextCursor::SetPropertyValue(aCursor, m_rPropSet,
+        SwUnoCursorHelper::SetPropertyValue(aCursor, m_rPropSet,
                 pPropertyNames[nProp], pValues[nProp]);
     }
 }
@@ -659,7 +658,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 }
                 else
                 {
-                    SwXTextCursor::SetPropertyValue(
+                    SwUnoCursorHelper::SetPropertyValue(
                         aCursor, m_pImpl->m_rPropSet, pProp[i], pValue[i]);
                 }
             }
@@ -973,7 +972,7 @@ throw (beans::UnknownPropertyException)
     case FN_UNO_PARA_STYLE:
     case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         {
-            SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
+            SwFmtColl* pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(
                 aPam, rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
             eRet = pFmt ? beans::PropertyState_DIRECT_VALUE
                         : beans::PropertyState_AMBIGUOUS_VALUE;
@@ -1132,7 +1131,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             pTemp->SetMark();
             *pTemp->GetPoint() = aEnd;
             //pTemp->Exchange();
-            SwXTextCursor::SelectPam(*pTemp, sal_True);
+            SwUnoCursorHelper::SelectPam(*pTemp, true);
             if (!SwUnoCursorHelper::IsEndOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaEnd);
@@ -1365,7 +1364,7 @@ OUString SAL_CALL SwXParagraph::getString() throw (uno::RuntimeException)
         SwPosition aPos( *pTxtNode );
         SwCursor aCursor( aPos, 0, false );
         SwParaSelection aParaSel( aCursor );
-        SwXTextCursor::getTextFromPam(aCursor, aRet);
+        SwUnoCursorHelper::GetTextFromPam(aCursor, aRet);
     }
     else if (m_pImpl->IsDescriptor())
     {
@@ -1393,12 +1392,12 @@ throw (uno::RuntimeException)
         if (!SwUnoCursorHelper::IsStartOfPara(aCursor)) {
             aCursor.MovePara(fnParaCurr, fnParaStart);
         }
-        SwXTextCursor::SelectPam(aCursor, sal_True);
+        SwUnoCursorHelper::SelectPam(aCursor, true);
         if (pTxtNode->GetTxt().Len()) {
             aCursor.MovePara(fnParaCurr, fnParaEnd);
         }
-        SwXTextCursor::SetString(aCursor, aString);
-        SwXTextCursor::SelectPam(aCursor, sal_False);
+        SwUnoCursorHelper::SetString(aCursor, aString);
+        SwUnoCursorHelper::SelectPam(aCursor, false);
     }
     else if (m_pImpl->IsDescriptor())
     {
