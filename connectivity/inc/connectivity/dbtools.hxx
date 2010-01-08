@@ -37,6 +37,7 @@
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include "connectivity/dbtoolsdllapi.hxx"
+#include "connectivity/FValue.hxx"
 
 namespace com { namespace sun { namespace star {
 
@@ -352,6 +353,33 @@ namespace dbtools
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False);
 
+    /** retrieves a particular indirect data source setting
+
+        @param _rxDataSource
+            a data source component
+        @param _pAsciiSettingsName
+            the ASCII name of the setting to obtain
+        @param _rSettingsValue
+            the value of the setting, upon successfull return
+
+        @return
+            <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>
+            member of the data source
+            <TRUE/> otherwise
+    */
+    OOO_DLLPUBLIC_DBTOOLS
+    bool    getDataSourceSetting(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
+        const sal_Char* _pAsciiSettingsName,
+        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
+    );
+    OOO_DLLPUBLIC_DBTOOLS
+    bool    getDataSourceSetting(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
+        const ::rtl::OUString& _sSettingsName,
+        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
+    );
+
     OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** quote the given name with the given quote string.
@@ -590,6 +618,20 @@ namespace dbtools
     void setObjectWithInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
                             const ::com::sun::star::uno::Any& x,
+                            sal_Int32 sqlType,
+                            sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+        @param  _xParams        the parameters where to set the value
+        @param  parameterIndex  the index of the parameter, 1 based
+        @param  x               the value to set
+        @param  sqlType         the corresponding sql type @see com::sun::star::sdbc::DataType
+        @param  scale           the scale of the sql type can be 0
+    */
+    OOO_DLLPUBLIC_DBTOOLS
+    void setObjectWithInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
+                            sal_Int32 parameterIndex,
+                            const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
                             sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 

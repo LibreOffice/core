@@ -223,9 +223,11 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
                     delete static_cast< double* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::DATE:
@@ -284,9 +286,11 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new double(0.0)),_nType);
             break;
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
             break;
         case DataType::LONGVARBINARY:
+        case DataType::BLOB:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
             break;
         case DataType::DATE:
@@ -465,11 +469,9 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
-    if ( aFind == m_aODBCColumnTypes.end() )
-        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+    const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
 
-    switch(aFind->second)
+    switch(nColumnType)
     {
         case SQL_WVARCHAR:
         case SQL_WCHAR:
@@ -478,7 +480,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         case SQL_CHAR:
         case SQL_LONGVARCHAR:
         {
-            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
             return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
         }
         default:
@@ -623,10 +625,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     else
     {
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
-        if ( aFind == m_aODBCColumnTypes.end() )
-            aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
-        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+        const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
+        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
     }
     return nRet;
 }
@@ -1499,11 +1499,10 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
+            case DataType::CLOB:
                 {
-                    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(nColumn);
-                    if ( aFind == m_aODBCColumnTypes.end() )
-                        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(nColumn,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,nColumn))).first;
-                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+                    const SWORD nColumnType = impl_getColumnType_nothrow(nColumn);
+                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,nColumnType,m_bWasNull,**this,m_nTextEncoding);
                 }
                 break;
             case DataType::BIGINT:
@@ -1514,6 +1513,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 *pColumn = getDouble(nColumn);
                 break;
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
                 *pColumn = getBytes(nColumn);
                 break;
             case DataType::DATE:
@@ -1719,6 +1719,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     aSeq = m_aRow[nColumnIndex];
                     N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
                     break;
@@ -1730,6 +1731,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 }
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                 {
                     ::rtl::OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
@@ -1744,5 +1746,13 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
         }
         while (nRet == SQL_NEED_DATA);
     }
+}
+// -----------------------------------------------------------------------------
+SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
+{
+    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    if ( aFind == m_aODBCColumnTypes.end() )
+        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+    return aFind->second;
 }
 
