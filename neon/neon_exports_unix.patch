@@ -1,6 +1,6 @@
 --- misc/neon-0.28.2/src/exports.map	2009-09-29 10:28:13.531250000 +0200
 +++ misc/build/neon-0.28.2/src/exports.map	2009-09-21 12:16:53.453125000 +0200
-@@ -0,0 +1,286 @@
+@@ -0,0 +1,287 @@
 +NEON_0_28_2 {
 +	global:
 +		ne__negotiate_ssl;
@@ -284,6 +284,7 @@
 +		ne_207_set_response_handlers;
 +		ne_accept_207;
 +		ne_simple_request;
++		GetVersionInfo;
 +	local:
 +		*;
 +};
