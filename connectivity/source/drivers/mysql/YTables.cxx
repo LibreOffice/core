@@ -187,12 +187,27 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     }
 }
 // -------------------------------------------------------------------------
+::rtl::OUString OTables::adjustSQL(const ::rtl::OUString& _sSql)
+{
+    ::rtl::OUString sSQL = _sSql;
+    static const ::rtl::OUString s_sUNSIGNED(RTL_CONSTASCII_USTRINGPARAM("UNSIGNED"));
+    sal_Int32 nIndex = sSQL.indexOf(s_sUNSIGNED);
+    while(nIndex != -1 )
+    {
+        sal_Int32 nParen = sSQL.indexOf(')',nIndex);
+        sal_Int32 nPos = nIndex + s_sUNSIGNED.getLength();
+        ::rtl::OUString sNewUnsigned( sSQL.copy(nPos,nParen - nPos + 1));
+        sSQL = sSQL.replaceAt(nIndex,s_sUNSIGNED.getLength()+sNewUnsigned.getLength(),sNewUnsigned + s_sUNSIGNED);
+        nIndex = sSQL.indexOf(s_sUNSIGNED,nIndex + s_sUNSIGNED.getLength()+sNewUnsigned.getLength());
+    }
+    return sSQL;
+}
+// -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
     static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
-    const ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,xConnection,s_sCreatePattern);
-
+    const ::rtl::OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,s_sCreatePattern));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
     {
