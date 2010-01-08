@@ -61,12 +61,13 @@ SVT_DLLPUBLIC long      ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
 SVT_DLLPUBLIC void      SetMetricValue( MetricField& rField, long lCoreValue, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
 
+SVT_DLLPUBLIC long  PointToTwips( long nIn );
+
 #if 0
 // to Twips
 SVT_DLLPUBLIC long  CMToTwips( long nIn );
 SVT_DLLPUBLIC long  MMToTwips( long nIn );
 SVT_DLLPUBLIC long  InchToTwips( long nIn );
-SVT_DLLPUBLIC long  PointToTwips( long nIn );
 SVT_DLLPUBLIC long  PicaToTwips( long nIn );
 
 // to CM
