@@ -91,16 +91,13 @@ const sal_Char cInvalidObject[] = "this object is invalid";
 
   -----------------------------------------------------------------------*/
 
-void SwXText::PrepareForAttach( ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange > &,
-        const SwXTextRange* const, const SwPaM * const)
+void
+SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
 {
 }
 
-bool SwXText::CheckForOwnMemberMeta(const SwXTextRange* const,
-                const SwPaM* const, bool)
-    throw (::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::uno::RuntimeException)
+bool SwXText::CheckForOwnMemberMeta(const SwPaM &, const bool)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ASSERT(CURSOR_META != eCrsrType, "should not be called!");
     return false;
@@ -285,35 +282,43 @@ void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
         if(pRange && pRange->GetDoc()  == GetDoc() ||
             pCursor && pCursor->GetDoc()  == GetDoc())
         {
-            const SwStartNode* pOwnStartNode = GetStartNode();
-            if(pCursor)
+            const SwStartNode *const pOwnStartNode = GetStartNode();
+            SwPaM aPam(GetDoc()->GetNodes());
+            const SwPaM * pPam(0);
+            if (pCursor)
             {
-                const SwStartNode* pTmp = pCursor->GetPaM()->GetNode()->StartOfSectionNode();
-                while(pTmp && pTmp->IsSectionNode())
+                pPam = pCursor->GetPaM();
+            }
+            else // pRange
+            {
+                if (pRange->GetPositions(aPam))
+                {
+                    pPam = &aPam;
+                }
+            }
+            if (!pPam)
+            {
+                throw uno::RuntimeException();
+            }
+            else
+            {
+                const SwStartNode* pTmp(pPam->GetNode()->StartOfSectionNode());
+                while (pTmp && pTmp->IsSectionNode())
                 {
                     pTmp = pTmp->StartOfSectionNode();
                 }
-                if( !pOwnStartNode || pOwnStartNode != pTmp)
+                if (!pOwnStartNode || (pOwnStartNode != pTmp))
                 {
                     throw uno::RuntimeException();
                 }
             }
-            else //dann pRange
-            {
-                ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-                const SwStartNode* pTmp = pBkmk->GetMarkPos().nNode.GetNode().StartOfSectionNode();
-                while(pTmp && pTmp->IsSectionNode())
-                    pTmp = pTmp->StartOfSectionNode();
-                if(!pOwnStartNode || pOwnStartNode != pTmp)
-                    throw uno::RuntimeException();
-            }
+
             bool bForceExpandHints( false );
             if (CURSOR_META == eCrsrType)
             {
                 try
                 {
-                    bForceExpandHints = CheckForOwnMemberMeta(
-                        pRange, (pCursor) ? pCursor->GetPaM() : 0, bAbsorb);
+                    bForceExpandHints = CheckForOwnMemberMeta(*pPam, bAbsorb);
                 }
                 catch (lang::IllegalArgumentException & iae)
                 {
@@ -348,10 +353,7 @@ void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
                 //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
                 //Text davor eingefuegt wird
                 UnoActionContext aContext(GetDoc());
-                const SwPosition* pPos = pCursor
-                    ? pCursor->GetPaM()->Start()
-                    : &pRange->GetBookmark()->GetMarkStart();
-                SwPaM aInsertPam(*pPos);
+                SwPaM aInsertPam(*pPam->Start());
                 const sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
 
@@ -382,8 +384,7 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
         SwUnoInternalPaM aPam(*GetDoc());
         if(SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange))
         {
-            const bool bForceExpandHints(
-                    CheckForOwnMemberMeta( 0, &aPam, bAbsorb) );
+            const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
             const enum IDocumentContentOperations::InsertFlags nInsertFlags =
                 (bForceExpandHints)
@@ -424,7 +425,7 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
                     }
                     if(pRange)
                     {
-                        pRange->_CreateNewBookmark(aTmp);
+                        pRange->SetPositions(aTmp);
                     }
                     else if(pCursor)
                     {
@@ -462,7 +463,9 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
                 aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 //hier muss der uebergebene PaM umgesetzt werden:
                 if(pRange)
-                    pRange->_CreateNewBookmark(aCrsr);
+                {
+                    pRange->SetPositions(aCrsr);
+                }
                 else
                 {
                     SwPaM* pUnoCrsr = pCursor->GetPaM();
@@ -541,33 +544,8 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
                     ;
             }
 
-            const SwNode* pSrcNode = 0;
-            if(pCursor && pCursor->GetPaM())
-            {
-                pSrcNode = pCursor->GetPaM()->GetNode();
-            }
-            else if (pRange && pRange->GetBookmark())
-            {
-                ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-                pSrcNode = &pBkmk->GetMarkPos().nNode.GetNode();
-            }
-            else if (pPortion && pPortion->GetCursor())
-            {
-                pSrcNode = pPortion->GetCursor()->GetNode();
-            }
-            else if (pText)
-            {
-                uno::Reference<text::XTextCursor> xTextCursor = pText->createCursor();
-                xTextCursor->gotoEnd(sal_True);
-                uno::Reference<lang::XUnoTunnel> xCrsrTunnel( xTextCursor, uno::UNO_QUERY );
-                pCursor = reinterpret_cast< OTextCursorHelper * >(
-                        sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-                pSrcNode = pCursor->GetPaM()->GetNode();
-            }
-            else
-                throw lang::IllegalArgumentException();
-
-            const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
+            const SwStartNode* pTmp =
+                aPam.GetNode()->FindSttNodeByType(eSearchNodeType);
 
             //SectionNodes ueberspringen
             while(pTmp && pTmp->IsSectionNode())
@@ -587,8 +565,7 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
                 throw aRunException;
             }
 
-            const bool bForceExpandHints( CheckForOwnMemberMeta(
-                    pRange, (pCursor) ? pCursor->GetPaM() : 0, bAbsorb) );
+            const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
             // Sonderbehandlung fuer Contents, die den Range nicht ersetzen, sonder darueber gelegt werden
             // Bookmarks, IndexEntry
@@ -627,8 +604,7 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
             if (bForceExpandHints)
             {
                 // if necessary, replace xTempRange with a new SwXTextCursor
-                PrepareForAttach(xTempRange, pRange,
-                        (pCursor) ? pCursor->GetPaM() : 0);
+                PrepareForAttach(xTempRange, aPam);
             }
             xContent->attach(xTempRange);
         }
@@ -1047,13 +1023,19 @@ sal_Bool SwXText::CheckForOwnMember(
     }
 
     const SwNode* pSrcNode;
-    if(pCursor)
-        pSrcNode = pCursor->GetPaM()->GetNode();
-    else //dann pRange
+    if (pCursor)
     {
-        ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-        pSrcNode = &pBkmk->GetMarkPos().nNode.GetNode();
+        pSrcNode = pCursor->GetPaM()->GetNode();
     }
+    else // pRange
+    {
+        SwPaM aPam(pRange->GetDoc()->GetNodes().GetEndOfContent());
+        if (pRange->GetPositions(aPam))
+        {
+            pSrcNode = aPam.GetNode();
+        }
+    }
+    if (!pSrcNode) { return sal_False; }
     const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
     //SectionNodes ueberspringen
@@ -1107,18 +1089,8 @@ sal_Int16 SwXText::ComparePositions(
             if(CheckForOwnMember(pRange1, pCursor1)
                 && CheckForOwnMember( pRange2, pCursor2))
             {
-                const SwPosition *pStart1 = 0;
-                const SwPosition *pStart2 = 0;
-
-                if(pRange1)
-                    pStart1 = pRange1->GetBookmark() ? &(pRange1->GetBookmark()->GetMarkStart()) : 0;
-                else
-                    pStart1 = pCursor1->GetPaM() ? pCursor1->GetPaM()->Start() : 0;
-
-                if(pRange2)
-                    pStart2 = pRange2->GetBookmark() ? &(pRange2->GetBookmark()->GetMarkStart()) : 0;
-                else
-                    pStart2 = pCursor2->GetPaM() ? pCursor2->GetPaM()->Start() : 0;
+                SwPosition const*const pStart1 = aPam1.Start();
+                SwPosition const*const pStart2 = aPam2.Start();
 
                 if(pStart1 && pStart2)
                 {

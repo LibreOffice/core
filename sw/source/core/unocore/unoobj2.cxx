@@ -1377,7 +1377,7 @@ SwXTextRange::SwXTextRange(SwPaM& rPam,
     xParentText(rxParent),
     pMark(NULL)
 {
-    _CreateNewBookmark(rPam);
+    SetPositions(rPam);
 }
 
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
@@ -1394,7 +1394,7 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
     SwPosition aPosition( *pTblNode );
     SwPaM aPam( aPosition );
 
-    _CreateNewBookmark( aPam );
+    SetPositions( aPam );
 }
 
 SwXTextRange::~SwXTextRange()
@@ -1405,7 +1405,7 @@ SwXTextRange::~SwXTextRange()
         pDoc->getIDocumentMarkAccess()->deleteMark(pBkmk);
 }
 
-void SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
+void SwXTextRange::SetPositions(const SwPaM& rPam)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
@@ -1452,7 +1452,7 @@ void SwXTextRange::DeleteAndInsert(
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
             aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
         }
-        _CreateNewBookmark(aNewCrsr);
+        SetPositions(aNewCrsr);
         pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 }

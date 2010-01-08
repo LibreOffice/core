@@ -52,7 +52,6 @@ typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
     TextRangeList_t;
 
-class SwXTextRange;
 class SwPaM;
 class SwTxtNode;
 
@@ -117,8 +116,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         GetParentText() const;
 
-    bool CheckForOwnMemberMeta(const SwXTextRange* const pRange,
-            const SwPaM* const pPam, bool bAbsorb)
+    bool CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 

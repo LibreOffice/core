@@ -411,25 +411,25 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
     SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
     SwPosition aPos( aIdx, SwIndex( pNd, pNd->Len() ));
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     pInsDoc->LockExpFlds();
     {
+        SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : pxRange->GetDoc());
+        SwPaM aPam(pDoc->GetNodes());
+        SwPaM * pPam(0);
         if(pxCursor)
         {
-            SwPaM* pUnoCrsr = pxCursor->GetPaM();
-            bRet = pxCursor->GetDoc()->CopyRange( *pUnoCrsr, aPos, false )
-                || bRet;
+            pPam = pxCursor->GetPaM();
         }
         else
         {
-            const ::sw::mark::IMark* const pBkmk = pxRange->GetBookmark();
-            if(pBkmk && pBkmk->IsExpanded())
+            if (pxRange->GetPositions(aPam))
             {
-                SwPaM aTmp(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
-                bRet = pxRange->GetDoc()->CopyRange(aTmp, aPos, false)
-                    || bRet;
+                pPam = & aPam;
             }
         }
+        if (!pPam) { return false; }
+        bRet = pDoc->CopyRange( *pPam, aPos, false ) || bRet;
     }
 
     pInsDoc->UnlockExpFlds();
@@ -1113,7 +1113,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     }
 
     SwDoc* pDoc = 0;
-    if ( pRange && pRange->GetBookmark())
+    if (pRange)
         pDoc = pRange->GetDoc();
     else if ( pCursor )
         pDoc = pCursor->GetDoc();
@@ -1131,29 +1131,23 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
     if(!pDoc)
         throw uno::RuntimeException();
-    SwPaM* pInsertPaM = 0;
-    if(pRange)
+
+    SwPaM InsertPaM(pDoc->GetNodes());
+    if (pRange)
     {
-        const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
-        if(pBkmk->IsExpanded())
-            pInsertPaM = new SwPaM(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
-        else
-            pInsertPaM = new SwPaM(pBkmk->GetMarkPos());
+        if (!pRange->GetPositions(InsertPaM))
+        {
+            throw uno::RuntimeException();
+        }
     }
     else
     {
-        SwPaM* pCrsr = pCursor->GetPaM();
-        if(pCrsr->HasMark())
-            pInsertPaM = new SwPaM(*pCrsr->GetPoint(), *pCrsr->GetMark());
-        else
-            pInsertPaM = new SwPaM(*pCrsr->GetPoint());
+        InsertPaM = *pCursor->GetPaM();
     }
 
-    SwTextBlocks* pBlock = pGlossaries->GetGroupDoc(sGroupName);
-    sal_Bool bResult = pBlock && !pBlock->GetError() &&
-                pDoc->InsertGlossary( *pBlock, sEntryName, *pInsertPaM);
-    delete pBlock;
-    delete pInsertPaM;
+    ::std::auto_ptr<SwTextBlocks> pBlock(pGlossaries->GetGroupDoc(sGroupName));
+    const bool bResult = pBlock.get() && !pBlock->GetError()
+                    && pDoc->InsertGlossary( *pBlock, sEntryName, InsertPaM);
 
     if(!bResult)
         throw uno::RuntimeException();

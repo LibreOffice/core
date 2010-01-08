@@ -1181,17 +1181,26 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     const SwStartNode* pOwnStartNode = pOwnCursor->GetNode()->
                                             FindSttNodeByType(eSearchNodeType);
 
-    const SwNode* pSrcNode = 0;
-    if(pCursor && pCursor->GetPaM())
+    SwPaM aPam(GetDoc()->GetNodes());
+    const SwPaM * pPam(0);
+    if (pCursor)
     {
-        pSrcNode = pCursor->GetPaM()->GetNode();
+        pPam = pCursor->GetPaM();
     }
-    else if(pRange && pRange->GetBookmark())
+    else if (pRange)
     {
-        ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-        pSrcNode = &pBkmk->GetMarkPos().nNode.GetNode();
+        if (pRange->GetPositions(aPam))
+        {
+            pPam = & aPam;
+        }
     }
-    const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
+
+    if (!pPam)
+    {
+        throw uno::RuntimeException();
+    }
+    const SwStartNode* pTmp =
+        pPam->GetNode()->FindSttNodeByType(eSearchNodeType);
 
     //SectionNodes ueberspringen
     while(pTmp && pTmp->IsSectionNode())
@@ -1209,16 +1218,9 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
 
     if (CURSOR_META == eType)
     {
-        const SwPosition & rPoint( (pRange)
-            ? pRange->GetBookmark()->GetMarkPos()
-            : *pCursor->GetPaM()->GetPoint() );
-        const SwPosition & rMark ( (pRange)
-            ? ((pRange->GetBookmark()->IsExpanded())
-                    ? pRange->GetBookmark()->GetOtherMarkPos() : rPoint)
-            : *pCursor->GetPaM()->GetMark() );
-        SwPaM aPam(rPoint, rMark);
+        SwPaM CopyPam(*pPam->GetMark(), *pPam->GetPoint());
         const bool bNotForced(
-                lcl_ForceIntoMeta(aPam, xParentText, META_CHECK_BOTH) );
+                lcl_ForceIntoMeta(CopyPam, xParentText, META_CHECK_BOTH) );
         if (!bNotForced)
         {
             throw uno::RuntimeException(
@@ -1241,26 +1243,9 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
             aOwnLeft = aOwnRight;
             aOwnRight = aTmp;
         }
-        SwPosition* pParamLeft;
-        SwPosition* pParamRight;
-        if(pCursor)
-        {
-            const SwPaM* pTmp2 = pCursor->GetPaM();
-            pParamLeft = new SwPosition(*pTmp2->GetPoint());
-            pParamRight = new SwPosition(pTmp2->HasMark() ? *pTmp2->GetMark() : *pParamLeft);
-        }
-        else
-        {
-            ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-            pParamLeft = new SwPosition(pBkmk->GetMarkPos());
-            pParamRight = new SwPosition(pBkmk->IsExpanded() ? pBkmk->GetOtherMarkPos() : *pParamLeft);
-        }
-        if(*pParamRight < *pParamLeft)
-        {
-            SwPosition* pTmp2 = pParamLeft;
-            pParamLeft = pParamRight;
-            pParamRight = pTmp2;
-        }
+        SwPosition const* pParamLeft  = pPam->Start();
+        SwPosition const* pParamRight = pPam->End();
+
         // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
         if(aOwnRight > *pParamRight)
             *pOwnCursor->GetPoint() = aOwnRight;
@@ -1271,35 +1256,19 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
             *pOwnCursor->GetMark() = aOwnLeft;
         else
             *pOwnCursor->GetMark() = *pParamLeft;
-        delete pParamLeft;
-        delete pParamRight;
     }
     else
     {
-        //der Cursor soll dem uebergebenen Range entsprechen
-        if(pCursor)
+        // cursor should be the given range
+        *pOwnCursor->GetPoint() = *pPam->GetPoint();
+        if (pPam->HasMark())
         {
-            const SwPaM* pTmp2 = pCursor->GetPaM();
-            *pOwnCursor->GetPoint() = *pTmp2->GetPoint();
-            if(pTmp2->HasMark())
-            {
-                pOwnCursor->SetMark();
-                *pOwnCursor->GetMark() = *pTmp2->GetMark();
-            }
-            else
-                pOwnCursor->DeleteMark();
+            pOwnCursor->SetMark();
+            *pOwnCursor->GetMark() = *pPam->GetMark();
         }
         else
         {
-            ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
-            *pOwnCursor->GetPoint() = pBkmk->GetMarkPos();
-            if(pBkmk->IsExpanded())
-            {
-                pOwnCursor->SetMark();
-                *pOwnCursor->GetMark() = pBkmk->GetOtherMarkPos();
-            }
-            else
-                pOwnCursor->DeleteMark();
+            pOwnCursor->DeleteMark();
         }
     }
 }
@@ -1923,7 +1892,7 @@ void SwXTextCursor::setString(const OUString& aString) throw( uno::RuntimeExcept
     const bool bForceExpandHints( (CURSOR_META != eType)
         ? false
         : dynamic_cast<SwXMeta*>(xParentText.get())->CheckForOwnMemberMeta(
-            0, GetPaM(), true) );
+            *GetPaM(), true) );
     DeleteAndInsert(aString, bForceExpandHints);
 }
 /* -----------------------------03.05.00 12:56--------------------------------

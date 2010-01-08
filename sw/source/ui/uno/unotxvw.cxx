@@ -1418,10 +1418,13 @@ void SwXTextViewCursor::gotoRange(
         {
             pSrcNode = pCursor->GetPaM()->GetNode();
         }
-        else if(pRange && pRange->GetBookmark())
+        else if (pRange)
         {
-            const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
-            pSrcNode = &(pBkmk->GetMarkPos().nNode.GetNode());
+            SwPaM aPam(pRange->GetDoc()->GetNodes());
+            if (pRange->GetPositions(aPam))
+            {
+                pSrcNode = aPam.GetNode();
+            }
         }
         else if (pPara && pPara->GetTxtNode())
         {

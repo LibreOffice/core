@@ -130,7 +130,9 @@ private:
         xParentText;
     ::sw::mark::IMark* pMark;
 
-    void    _CreateNewBookmark(SwPaM& rPam);
+    const ::sw::mark::IMark * GetBookmark() const
+        { return pMark; }
+    void    SetPositions(SwPaM const& rPam);
     //TODO: new exception type for protected content
     void    DeleteAndInsert(const String& rText, const bool bForceExpandHints)
         throw (::com::sun::star::uno::RuntimeException);
@@ -153,8 +155,6 @@ public:
         { return pDoc; }
     SwDoc* GetDoc()
         { return pDoc; }
-    const ::sw::mark::IMark * GetBookmark() const
-        { return pMark; }
 
     static BOOL XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
             const ::com::sun::star::uno::Reference<

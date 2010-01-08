@@ -586,12 +586,10 @@ private:
     SwXMeta & m_rMeta;
 
     virtual void PrepareForAttach(uno::Reference< text::XTextRange > & xRange,
-            const SwXTextRange* const pRange, const SwPaM * const pPam);
+            const SwPaM & rPam);
 
-    virtual bool CheckForOwnMemberMeta(const SwXTextRange* const pRange,
-            const SwPaM* const pPam, bool bAbsorb)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
+    virtual bool CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
+        throw (lang::IllegalArgumentException, uno::RuntimeException);
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
@@ -637,41 +635,18 @@ const SwStartNode *SwXMetaText::GetStartNode() const
 }
 
 void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
-        const SwXTextRange* const pRange, const SwPaM * const pPam)
+        const SwPaM & rPam)
 {
-    SwPosition const* pPoint(0);
-    SwPosition const* pMark (0);
-    if (pRange)
-    {
-        ::sw::mark::IMark const& rIMark(*pRange->GetBookmark());
-        pMark = &rIMark.GetMarkPos();
-        if (rIMark.IsExpanded())
-        {
-            pMark = &rIMark.GetOtherMarkPos();
-        }
-    }
-    else if (pPam)
-    {
-        pPoint = pPam->GetPoint();
-        if (pPam->HasMark())
-        {
-            pMark = pPam->GetMark();
-        }
-    }
     // create a new cursor to prevent modifying SwXTextRange
-    if (pPoint)
-    {
-        xRange = static_cast<text::XWordCursor*>(
-            new SwXTextCursor(&m_rMeta, *pPoint, CURSOR_META, GetDoc(), pMark));
-    }
+    xRange = static_cast<text::XWordCursor*>(
+        new SwXTextCursor(&m_rMeta, *rPam.GetPoint(), CURSOR_META,
+                GetDoc(), (rPam.HasMark()) ? rPam.GetMark() : 0));
 }
 
-bool SwXMetaText::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
-                const SwPaM* const pPam, bool bAbsorb)
-    throw (::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::uno::RuntimeException)
+bool SwXMetaText::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    return m_rMeta.CheckForOwnMemberMeta(pRange, pPam, bAbsorb);
+    return m_rMeta.CheckForOwnMemberMeta(rPam, bAbsorb);
 }
 
 uno::Reference< text::XTextCursor > SwXMetaText::createCursor()
@@ -884,11 +859,9 @@ bool SwXMeta::SetContentRange(
     return false;
 }
 
-bool SwXMeta::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
-                const SwPaM* const pPam, bool bAbsorb)
+bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ASSERT((pPam && !pRange) || (!pPam && pRange), "ERROR: pam xor range");
     SwTxtNode * pTxtNode;
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
@@ -896,9 +869,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
     ASSERT(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
-    SwPosition const * const pStartPos( (pPam)
-        ? pPam->Start()
-        : &pRange->GetBookmark()->GetMarkStart() );
+
+    SwPosition const * const pStartPos( rPam.Start() );
     if (&pStartPos->nNode.GetNode() != pTxtNode)
     {
         throw lang::IllegalArgumentException(
@@ -921,14 +893,9 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwXTextRange* const pRange,
     {
         bForceExpandHints = true;
     }
-    const bool bHasEnd( (pPam)
-        ? pPam->HasMark()
-        : pRange->GetBookmark()->IsExpanded());
-    if (bHasEnd && bAbsorb)
+    if (rPam.HasMark() && bAbsorb)
     {
-        SwPosition const * const pEndPos( (pPam)
-            ? pPam->End()
-            : &pRange->GetBookmark()->GetMarkEnd() );
+        SwPosition const * const pEndPos( rPam.End() );
         if (&pEndPos->nNode.GetNode() != pTxtNode)
         {
             throw lang::IllegalArgumentException(

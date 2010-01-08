@@ -93,7 +93,7 @@ private:
     virtual void PrepareForAttach(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xRange,
-            SwXTextRange const * const pRange, SwPaM const * const pPam);
+            SwPaM const & rPam);
 
 protected:
 
@@ -136,8 +136,7 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
     virtual bool CheckForOwnMemberMeta(
-            const SwXTextRange* const pRange,
-            const SwPaM* const pPam, bool bAbsorb)
+            const SwPaM & rPam, const bool bAbsorb)
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
