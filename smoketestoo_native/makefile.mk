@@ -41,29 +41,46 @@ SHL1TARGET = smoketest
 SHL1OBJS = $(SLO)/smoketest.obj
 SHL1RPATH = NONE
 SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
 
-.IF "$(OS)" == "MACOSX"
-my_path = OpenOffice.org.app/Contents/MacOS/soffice
+.IF "$(OS)" == "WNT"
+my_file = file:///
 .ELSE
-my_path = openoffice.org3/program/soffice
+my_file = file://
+.END
+
+.IF "$(OS)" == "MACOSX"
+my_path = $(MISC)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice
+.ELIF "$(OS)" == "WNT"
+my_path = \
+    `cat $(MISC)/installation.flag`'/opt/OpenOffice.org 3/program/soffice.exe'
+.ELSE
+my_path = $(MISC)/installation/opt/openoffice.org3/program/soffice
 .END
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 .IF "$(USE_SHELL)" == "bash"
 my_arg_env = \
-    -env:arg-env=$(OOO_LIBRARY_PATH_VAR)$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}
+    -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}"
 .ELSE
 # The tcsh case is somewhat imprecise in that it treats a null environment
 # variable the same as an unset one:
 .IF "$($(OOO_LIBRARY_PATH_VAR))" == ""
 my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)
 .ELSE
-my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)=$($(OOO_LIBRARY_PATH_VAR))
+my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)='$($(OOO_LIBRARY_PATH_VAR))'
 .END
 .END
+.END
+
+.IF "$(USE_SHELL)" == "bash"
+my_set_tmp = my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX))
+.ELSE
+my_set_tmp = export my_tmp `mktemp -dt ooosmoke.XXXXXX` && \
+    export my_tmp `cygpath -m $my_tmp`
 .END
 
 ALLTAR: smoketest
@@ -73,19 +90,30 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
     $(RM) -r $(MISC)/user
     $(MKDIR) $(MISC)/user
     $(CPPUNITTESTER) $(SHL1TARGETN) \
-        -env:UNO_SERVICES=file://$(PWD)/$(MISC)/services.rdb \
-        -env:UNO_TYPES=file://$(SOLARBINDIR)/types.rdb \
-        -env:arg-path=$(MISC)/installation/opt/$(my_path) \
-        -env:arg-user=$(MISC)/user -env:arg-doc=$(BIN)/smoketestdoc.sxw \
-        $(my_arg_env)
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/services.rdb \
+        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
+        -env:arg-path=$(my_path) -env:arg-user=$(MISC)/user \
+        -env:arg-doc=$(BIN)/smoketestdoc.sxw $(my_arg_env)
+.IF "$(OS)" == "WNT"
+    $(RM) -r $(MISC)/installation.flag `cat $(MISC)/installation.flag`
+.ENDIF
 
 $(MISC)/installation.flag:
+.IF "$(OS)" == "WNT"
+    $(my_set_tmp) && \
+    unzip \
+        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
+        -d "$$my_tmp" && \
+    mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
+    echo "$$my_tmp" > $@
+.ELSE
     $(RM) -r $(MISC)/installation
     $(MKDIR) $(MISC)/installation
     cd $(MISC)/installation && $(GNUTAR) xfz \
         $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
     $(MV) $(MISC)/installation/OOo_*_install $(MISC)/installation/opt
     $(TOUCH) $@
+.END
 
 $(MISC)/services.rdb:
     $(RM) $@
