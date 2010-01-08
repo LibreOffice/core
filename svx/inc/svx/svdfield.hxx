@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svdomeas.cxx,v $
- * $Revision: 1.35.18.1 $
+ * $RCSfile: measfld.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,38 +28,12 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_editeng.hxx"
+#ifndef _SVDFIELD_HXX
+#define _SVDFIELD_HXX
 
-#include <editeng/measfld.hxx>
+#include "svx/svxdllapi.h"
 
-SV_IMPL_PERSIST1(SdrMeasureField,SvxFieldData);
+void SVX_DLLPUBLIC SdrRegisterFieldClasses();
 
-__EXPORT SdrMeasureField::~SdrMeasureField()
-{
-}
+#endif //_SVDFIELD_HXX
 
-SvxFieldData* __EXPORT SdrMeasureField::Clone() const
-{
-    return new SdrMeasureField(*this);
-}
-
-int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
-{
-    return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
-}
-
-void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
-{
-    UINT16 nFieldKind;
-    rIn>>nFieldKind;
-    eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
-}
-
-void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
-{
-    rOut<<(UINT16)eMeasureFieldKind;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// eof

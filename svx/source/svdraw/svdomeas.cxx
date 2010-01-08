@@ -58,7 +58,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/svdfield.hxx>
+#include <editeng/measfld.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>

@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVDFIELD_HXX
-#define _SVDFIELD_HXX
+#ifndef _EDIT_MEASFIELD_HXX
+#define _EDIT_MEASFIELD_HXX
 
 #include <editeng/eeitem.hxx>
 
@@ -43,11 +43,6 @@
 #include <editeng/flditem.hxx>
 #endif
 #include "editeng/editengdllapi.h"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Do not remove this, it is still used in src536a!
-void EDITENG_DLLPUBLIC SdrRegisterFieldClasses();
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SDR_MEASUREFIELD 50
 

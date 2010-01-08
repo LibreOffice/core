@@ -32,8 +32,9 @@
 #include "precompiled_svx.hxx"
 #include <editeng/eeitem.hxx>
 
-#include <editeng/svdfield.hxx>
+#include <editeng/measfld.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdfield.hxx>
 
 static BOOL bInit = FALSE;
 

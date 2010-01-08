@@ -39,7 +39,7 @@
 
 #include <editeng/flditem.hxx>
 
-#include <editeng/svdfield.hxx>
+#include <editeng/measfld.hxx>
 
 // #90477#
 #include <tools/tenccvt.hxx>

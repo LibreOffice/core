@@ -42,7 +42,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/svdfield.hxx>
+#include <editeng/measfld.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
 #include <comphelper/serviceinfohelper.hxx>
