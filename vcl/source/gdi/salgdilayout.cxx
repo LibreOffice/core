@@ -693,6 +693,12 @@ void SalGraphics::mirror( ControlType nType, const ImplControlValue& rVal, const
     {
         switch( nType )
         {
+            case CTRL_SLIDER:
+            {
+                SliderValue* pSlVal = reinterpret_cast<SliderValue*>(rVal.getOptionalVal());
+                mirror(pSlVal->maThumbRect,pOutDev,bBack);
+            }
+            break;
             case CTRL_SCROLLBAR:
             {
                 ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(rVal.getOptionalVal());

@@ -171,6 +171,7 @@ void Slider::ImplInitSettings()
 void Slider::ImplUpdateRects( BOOL bUpdate )
 {
     Rectangle aOldThumbRect = maThumbRect;
+    bool bInvalidateAll = false;
 
     if ( mnThumbPixRange )
     {
@@ -196,6 +197,18 @@ void Slider::ImplUpdateRects( BOOL bUpdate )
             }
             else
                 maChannel2Rect.SetEmpty();
+
+            const Region aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
+            Region aThumbBounds, aThumbContent;
+            if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_HORZ,
+                                         aControlRegion, 0, ImplControlValue(), rtl::OUString(),
+                                         aThumbBounds, aThumbContent ) )
+            {
+                Rectangle aRect( aThumbBounds.GetBoundRect() );
+                maThumbRect.Left() = mnThumbPixPos - aRect.GetWidth()/2;
+                maThumbRect.Right() = maThumbRect.Left() + aRect.GetWidth() - 1;
+                bInvalidateAll = true;
+            }
         }
         else
         {
@@ -219,6 +232,18 @@ void Slider::ImplUpdateRects( BOOL bUpdate )
             }
             else
                 maChannel2Rect.SetEmpty();
+
+            const Region aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
+            Region aThumbBounds, aThumbContent;
+            if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_VERT,
+                                         aControlRegion, 0, ImplControlValue(), rtl::OUString(),
+                                         aThumbBounds, aThumbContent ) )
+            {
+                Rectangle aRect( aThumbBounds.GetBoundRect() );
+                maThumbRect.Top() = mnThumbPixPos - aRect.GetHeight()/2;
+                maThumbRect.Bottom() = maThumbRect.Top() + aRect.GetHeight() - 1;
+                bInvalidateAll = true;
+            }
         }
     }
     else
@@ -232,17 +257,22 @@ void Slider::ImplUpdateRects( BOOL bUpdate )
     {
         if ( aOldThumbRect != maThumbRect )
         {
-            Region aInvalidRegion( aOldThumbRect );
-            aInvalidRegion.Union( maThumbRect );
-
-            if( !IsBackground() && GetParent() )
-            {
-                const Point aPos( GetPosPixel() );
-                aInvalidRegion.Move( aPos.X(), aPos.Y() );
-                GetParent()->Invalidate( aInvalidRegion, INVALIDATE_TRANSPARENT | INVALIDATE_UPDATE );
-            }
+            if( bInvalidateAll )
+                Invalidate();
             else
-                Invalidate( aInvalidRegion );
+            {
+                Region aInvalidRegion( aOldThumbRect );
+                aInvalidRegion.Union( maThumbRect );
+
+                if( !IsBackground() && GetParent() )
+                {
+                    const Point aPos( GetPosPixel() );
+                    aInvalidRegion.Move( aPos.X(), aPos.Y() );
+                    GetParent()->Invalidate( aInvalidRegion, INVALIDATE_TRANSPARENT | INVALIDATE_UPDATE );
+                }
+                else
+                    Invalidate( aInvalidRegion );
+            }
         }
     }
 }
@@ -359,6 +389,29 @@ void Slider::ImplDraw( USHORT nDrawFlags )
     // Evt. noch offene Berechnungen nachholen
     if ( mbCalcSize )
         ImplCalc( FALSE );
+
+    ControlPart nPart = (GetStyle() & WB_HORZ) ? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA;
+    ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+    ControlState   nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
+    SliderValue    sldValue;
+
+    sldValue.mnMin       = mnMinRange;
+    sldValue.mnMax       = mnMaxRange;
+    sldValue.mnCur       = mnThumbPos;
+    sldValue.maThumbRect = maThumbRect;
+
+    if( IsMouseOver() )
+    {
+        if( maThumbRect.IsInside( GetPointerPosPixel() ) )
+            sldValue.mnThumbState |= CTRL_STATE_ROLLOVER;
+    }
+    aControlValue.setOptionalVal( (void *)(&sldValue) );
+
+    const Region aCtrlRegion( Rectangle( Point(0,0), GetOutputSizePixel() ) );
+    bool bNativeOK = DrawNativeControl( CTRL_SLIDER, nPart,
+                                        aCtrlRegion, nState, aControlValue, rtl::OUString() );
+    if( bNativeOK )
+        return;
 
     if ( (nDrawFlags & SLIDER_DRAW_CHANNEL1) && !maChannel1Rect.IsEmpty() )
     {

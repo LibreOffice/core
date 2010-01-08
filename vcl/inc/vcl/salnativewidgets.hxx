@@ -98,6 +98,8 @@ typedef sal_uInt32      ControlType;
 // all parts like slider, buttons
 #define CTRL_SCROLLBAR          60
 
+#define CTRL_SLIDER             65
+
 // Border around a group of related
 // items, perhaps also displaying
 // a label of identification
@@ -290,6 +292,20 @@ class VCL_DLLPUBLIC ScrollbarValue
                     mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
                 };
         inline ~ScrollbarValue() {};
+};
+
+class VCL_DLLPUBLIC SliderValue
+{
+    public:
+        long            mnMin;
+        long            mnMax;
+        long            mnCur;
+        Rectangle       maThumbRect;
+        ControlState    mnThumbState;
+
+        SliderValue() : mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
+        {}
+        ~SliderValue() {}
 };
 
 /* TabitemValue:
