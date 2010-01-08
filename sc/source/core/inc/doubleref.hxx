@@ -36,8 +36,8 @@
 
 class ScDocument;
 class ScBaseCell;
-class ScDBQueryParamBase;
-class ScQueryParamBase;
+struct ScDBQueryParamBase;
+struct ScQueryParamBase;
 
 // ============================================================================
 

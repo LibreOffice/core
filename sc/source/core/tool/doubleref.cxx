@@ -51,7 +51,7 @@ namespace {
 
 void lcl_toUpper(OUString& rStr)
 {
-    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, rStr.getLength());
+    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, static_cast<xub_StrLen>(rStr.getLength()));
 }
 
 bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
@@ -477,8 +477,8 @@ ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) 
 {
     SCSIZE nC, nR;
     mpMatrix->GetDimensions(nC, nR);
-    mnCols = nC;
-    mnRows = nR;
+    mnCols = static_cast<SCCOL>(nC);
+    mnRows = static_cast<SCROW>(nR);
 }
 
 ScDBExternalRange::~ScDBExternalRange()
