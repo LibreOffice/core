@@ -251,7 +251,7 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
     {
         SwUnoInternalPaM aPam(*pNewDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
         UnoActionContext aCont(pNewDoc);
         SwTxtAttr* pTxtAttr = 0;
@@ -315,7 +315,8 @@ uno::Reference< text::XTextRange >  SwXFootnote::getAnchor(void) throw( uno::Run
         SwPosition aMark( *aPam.Start() );
         aPam.SetMark();
         aPam.GetMark()->nContent++;
-        aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), *aPam.Start(), aPam.End());
+        aRef = SwXTextRange::CreateXTextRange(
+                *GetDoc(), *aPam.Start(), aPam.End());
     }
     else
         throw uno::RuntimeException();
@@ -412,7 +413,7 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
         throw uno::RuntimeException();
     uno::Reference< text::XTextCursor >  aRef;
     SwUnoInternalPaM aPam(*GetDoc());
-    if(SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         const SwNode* pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();

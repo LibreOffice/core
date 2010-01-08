@@ -328,7 +328,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwUnoInternalPaM aPam(*pDoc);
     //das muss jetzt sal_True liefern
-    SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
     pDoc->StartUndo( UNDO_INSSECTION, NULL );
 
@@ -488,7 +488,7 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException)
             const SwEndNode* pEndNode = pIdx->GetNode().EndOfSectionNode();
             SwPaM aEnd(*pEndNode);
             aEnd.Move( fnMoveBackward, fnGoCntnt );
-            xRet = SwXTextRange::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
+            xRet = SwXTextRange::CreateXTextRange(*pSectFmt->GetDoc(),
                 *aPaM.Start(), aEnd.Start());
         }
     }

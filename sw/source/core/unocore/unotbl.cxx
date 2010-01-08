@@ -1062,7 +1062,8 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno:
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< text::XTextCursor >  aRef;
     SwUnoInternalPaM aPam(*GetDoc());
-    if((pStartNode || IsValid()) && SwXTextRange::XTextRangeToSwPaM(aPam, xTextPosition))
+    if ((pStartNode || IsValid())
+        && ::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
         //skip sections
@@ -2468,7 +2469,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
         {
             UnoActionContext aCont( pDoc );

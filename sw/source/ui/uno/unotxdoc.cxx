@@ -991,11 +991,10 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
+        xRet = *new SwXTextCursor(xParent, pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;
@@ -1019,12 +1018,11 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
 
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;

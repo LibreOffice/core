@@ -382,7 +382,7 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
     if (GetDoc())
     {
         SwUnoInternalPaM aPam(*GetDoc());
-        if(SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange))
+        if (::sw::XTextRangeToSwPaM(aPam, xTextRange))
         {
             const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
@@ -504,7 +504,7 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
     if(xRange.is() && xContent.is())
     {
         SwUnoInternalPaM aPam(*GetDoc());
-        if(SwXTextRange::XTextRangeToSwPaM(aPam, xRange))
+        if (::sw::XTextRangeToSwPaM(aPam, xRange))
         {
             uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
             SwXTextRange* pRange = 0;
@@ -1060,8 +1060,8 @@ sal_Int16 SwXText::ComparePositions(
     SwUnoInternalPaM aPam2(*GetDoc());
 
     BOOL bExcept = FALSE;
-    if(SwXTextRange::XTextRangeToSwPaM(aPam1, xPos1) &&
-            SwXTextRange::XTextRangeToSwPaM(aPam2, xPos2))
+    if (::sw::XTextRangeToSwPaM(aPam1, xPos1) &&
+        ::sw::XTextRangeToSwPaM(aPam2, xPos2))
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel1( xPos1, uno::UNO_QUERY);
         SwXTextRange* pRange1 = 0;
@@ -1582,8 +1582,8 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
     uno::Reference< text::XTextContent > xRet;
     SwUnoInternalPaM aStartPam(*GetDoc());
     std::auto_ptr < SwUnoInternalPaM > pEndPam( new SwUnoInternalPaM(*GetDoc()));
-    if(SwXTextRange::XTextRangeToSwPaM(aStartPam, xStart) &&
-        SwXTextRange::XTextRangeToSwPaM(*pEndPam, xEnd) )
+    if (::sw::XTextRangeToSwPaM(aStartPam, xStart) &&
+        ::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
         uno::Reference<lang::XUnoTunnel> xStartRangeTunnel( xStart, uno::UNO_QUERY);
         SwXTextRange* pStartRange  = reinterpret_cast< SwXTextRange * >(
@@ -1826,8 +1826,8 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
 
             // !!! TODO - PaMs in tables and sections do not work here - the same applies to PaMs in frames !!!
 
-            if(!SwXTextRange::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
-                !SwXTextRange::XTextRangeToSwPaM(aEndCellPam, xEndRange) )
+            if (!::sw::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
+                !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
                 throw lang::IllegalArgumentException();
             /** check the nodes between start and end
                 it is allowed to have pairs of StartNode/EndNodes
@@ -2361,7 +2361,7 @@ uno::Reference< text::XTextCursor >  SwXBodyText::createTextCursorByRange(
         throw aRuntime;
     }
     SwUnoInternalPaM aPam(*GetDoc());
-    if(SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
@@ -2603,7 +2603,7 @@ uno::Reference< text::XTextCursor >  SwXHeadFootText::createTextCursorByRange(
     uno::Reference< text::XTextCursor >  xRet;
     SwFrmFmt* pHeadFootFmt = GetFmt();
     SwUnoInternalPaM aPam(*GetDoc());
-    if(pHeadFootFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (pHeadFootFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = pHeadFootFmt->GetCntnt().GetCntntIdx()->GetNode();
         SwPosition aPos(rNode);

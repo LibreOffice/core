@@ -237,7 +237,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     m_pImpl->m_pDoc = pDoc;
     SwUnoInternalPaM aPam(*m_pImpl->m_pDoc);
-    SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (!m_pImpl->m_sMarkName.getLength())
     {
@@ -294,8 +294,8 @@ SwXBookmark::getAnchor() throw (uno::RuntimeException)
     {
         throw uno::RuntimeException();
     }
-    return SwXTextRange::CreateTextRangeFromPosition(
-            m_pImpl->m_pDoc,
+    return SwXTextRange::CreateXTextRange(
+            *m_pImpl->m_pDoc,
             m_pImpl->m_pRegisteredBookmark->GetMarkPos(),
             (m_pImpl->m_pRegisteredBookmark->IsExpanded())
                 ? &m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : NULL);

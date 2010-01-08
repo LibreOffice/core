@@ -591,11 +591,8 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                     pPoint = pRedline->GetPoint();
                 else
                     pPoint = pRedline->GetMark();
-                SwPaM aTmp(*pPoint);
-                uno::Reference<text::XText> xTmpParent;
-//              uno::Reference< text::XTextRange > xRange = SwXTextRange::createTextRangeFromPaM(aTmp);
-                uno::Reference<text::XTextRange>xRange =
-                    SwXTextRange::CreateTextRangeFromPosition( pDoc, *pPoint, 0 );
+                const uno::Reference<text::XTextRange> xRange =
+                    SwXTextRange::CreateXTextRange(*pDoc, *pPoint, 0);
                 xRet = xRange.get();
             }
             break;

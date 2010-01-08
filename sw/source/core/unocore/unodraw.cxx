@@ -784,7 +784,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if( pDesc && (xRg = pDesc->GetTextRange()).is() )
     {
         pInternalPam = new SwUnoInternalPaM(*pDoc);
-        if(SwXTextRange::XTextRangeToSwPaM(*pInternalPam, xRg))
+        if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
         {
             if(FLY_AT_FLY == aAnchor.GetAnchorId() &&
                                 !pInternalPam->GetNode()->FindFlyStartNode())
@@ -1302,7 +1302,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                         new SwUnoInternalPaM( *(pFmt->GetDoc()) );
                         uno::Reference< text::XTextRange > xRg;
                         aValue >>= xRg;
-                        if ( SwXTextRange::XTextRangeToSwPaM(*pInternalPam, xRg) )
+                        if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
                         {
                             if (aAnchor.GetAnchorId() == FLY_AS_CHAR)
                             {
@@ -1634,9 +1634,9 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         if ( aAnchor.GetCntntAnchor() )
                         {
-                            uno::Reference< text::XTextRange > xTextRange =
-                                SwXTextRange::CreateTextRangeFromPosition(
-                                                    pFmt->GetDoc(),
+                            const uno::Reference< text::XTextRange > xTextRange
+                                = SwXTextRange::CreateXTextRange(
+                                                    *pFmt->GetDoc(),
                                                     *aAnchor.GetCntntAnchor(),
                                                     0L );
                             aRet.setValue(&xTextRange, ::getCppuType((uno::Reference<text::XTextRange>*)0));
@@ -2203,7 +2203,7 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor(void) throw( uno::Runtim
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateXTextRange(*pFmt->GetDoc(), rPos, 0);
         }
     }
     else

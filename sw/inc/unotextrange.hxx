@@ -77,6 +77,13 @@ namespace sw {
 
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
 
+    bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > & xTextRange);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+        CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
+
 } // namespace sw
 
 
@@ -105,10 +112,8 @@ private:
     enum RangePosition
     {
         RANGE_IN_TEXT,  // "ordinary" ::com::sun::star::text::TextRange
-        RANGE_IN_FRAME, // position created with a frame that has no uno object
         RANGE_IN_CELL,  // position created with a cell that has no uno object
         RANGE_IS_TABLE, // anchor of a table
-        RANGE_INVALID   // created by NewInstance
     };
 
     void    SetPositions(SwPaM const& rPam);
@@ -133,17 +138,10 @@ public:
           SwDoc* GetDoc();
     bool GetPositions(SwPaM & rToFill) const;
 
-    static BOOL XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextRange);
-
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange > CreateTextRangeFromPosition(
-            SwDoc* pDoc,
-            const SwPosition& rPos, const SwPosition* pMark);
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        CreateParentXText(SwDoc* pDoc, const SwPosition& rPos);
+                ::com::sun::star::text::XTextRange > CreateXTextRange(
+            SwDoc & rDoc,
+            const SwPosition& rPos, const SwPosition *const pMark);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

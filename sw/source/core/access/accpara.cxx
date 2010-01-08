@@ -2105,8 +2105,10 @@ sal_Bool SwAccessibleParagraph::replaceText(
             aEndPos.nContent = nEnd;
 
             // now create XTextRange as helper and set string
-            SwXTextRange::CreateTextRangeFromPosition(
-                pNode->GetDoc(), aStartPos, &aEndPos)->setString(sReplacement);
+            const uno::Reference<text::XTextRange> xRange(
+                SwXTextRange::CreateXTextRange(
+                    *pNode->GetDoc(), aStartPos, &aEndPos));
+            xRange->setString(sReplacement);
 
             // delete portion data
             ClearPortionData();

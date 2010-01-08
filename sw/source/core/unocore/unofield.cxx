@@ -1305,7 +1305,7 @@ void SwXTextField::attachToRange(
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwField* pFld = 0;
         switch(m_nServiceId)
         {
@@ -1880,8 +1880,8 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
 
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
 
-        aRef = SwXTextRange::CreateTextRangeFromPosition(m_pDoc,
-                                *aPam.GetPoint(), aPam.GetMark());
+        aRef = SwXTextRange::CreateXTextRange(
+                *m_pDoc, *aPam.GetPoint(), aPam.GetMark());
     }
     return aRef;
 

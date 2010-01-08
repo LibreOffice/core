@@ -334,7 +334,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         else if(!pFrame && !pCell && xPos.is())
         {
             SwUnoInternalPaM aPam(*pDoc);
-            if(SwXTextRange::XTextRangeToSwPaM(aPam, xPos))
+            if (::sw::XTextRangeToSwPaM(aPam, xPos))
             {
                 pPam = lcl_createPamCopy(aPam);
             }
@@ -1362,7 +1362,7 @@ void SwXTextViewCursor::gotoRange(
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         SwUnoInternalPaM rDestPam(*m_pView->GetDocShell()->GetDoc());
-        if(!SwXTextRange::XTextRangeToSwPaM( rDestPam, xRange))
+        if (!::sw::XTextRangeToSwPaM(rDestPam, xRange))
             throw IllegalArgumentException();
 
         ShellModes  eSelMode = m_pView->GetShellMode();
@@ -1699,9 +1699,7 @@ uno::Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::Runt
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-        uno::Reference< text::XTextRange >  xRg = SwXTextRange::CreateTextRangeFromPosition(pDoc,
-                                    *pShellCrsr->Start(), 0);
-        xRet = xRg->getText();
+        xRet = ::sw::CreateParentXText(*pDoc, *pShellCrsr->Start());
     }
     else
         throw uno::RuntimeException();
@@ -1722,8 +1720,7 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getStart(void) throw( uno
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-        xRet = SwXTextRange::CreateTextRangeFromPosition(pDoc,
-                                    *pShellCrsr->Start(), 0);
+        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->Start(), 0);
     }
     else
         throw uno::RuntimeException();
@@ -1744,8 +1741,7 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getEnd(void) throw( uno::
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-        xRet = SwXTextRange::CreateTextRangeFromPosition(pDoc,
-                                        *pShellCrsr->End(), 0);
+        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->End(), 0);
     }
     else
         throw uno::RuntimeException();

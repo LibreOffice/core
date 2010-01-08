@@ -2926,8 +2926,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             SwPosition aPos( *pCNd );
             aPos.nContent.Assign( pCNd, 0U );
 
-            Reference < XTextRange > xTextRange =
-                SwXTextRange::CreateTextRangeFromPosition( pDoc, aPos, 0 );
+            const uno::Reference< text::XTextRange > xTextRange =
+                SwXTextRange::CreateXTextRange( *pDoc, aPos, 0 );
             Reference < XText > xText = xTextRange->getText();
             Reference < XTextCursor > xTextCursor =
                 xText->createTextCursorByRange( xTextRange );

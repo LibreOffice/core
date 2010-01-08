@@ -162,7 +162,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 #ifdef DBG_UTIL
     sal_Bool bSuccess =
 #endif
-        SwXTextRange::XTextRangeToSwPaM( aPaM, rRange);
+        ::sw::XTextRangeToSwPaM(aPaM, rRange);
     DBG_ASSERT(bSuccess, "illegal range");
 
     // PaM -> Index
@@ -180,7 +180,7 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 #ifdef DBG_UTIL
         sal_Bool bSuccess =
 #endif
-            SwXTextRange::XTextRangeToSwPaM(aUnoPaM, xRange);
+            ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
         DBG_ASSERT(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();

@@ -1536,10 +1536,8 @@ SwXTextRange::getText() throw (uno::RuntimeException)
             SwTable const*const pTable = SwTable::FindTable( pTblFmt );
             SwTableNode const*const pTblNode = pTable->GetTableNode();
             const SwPosition aPosition( *pTblNode );
-            const uno::Reference< text::XTextRange >  xRange =
-                SwXTextRange::CreateTextRangeFromPosition(
-                        &m_pImpl->m_rDoc, aPosition, 0);
-            m_pImpl->m_xParentText = xRange->getText();
+            m_pImpl->m_xParentText =
+                ::sw::CreateParentXText(m_pImpl->m_rDoc, aPosition);
         }
     }
     OSL_ENSURE(m_pImpl->m_xParentText.is(), "SwXTextRange::getText: no text");
@@ -1645,10 +1643,12 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill) const
     return false;
 }
 
-sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
-                            const uno::Reference< XTextRange > & xTextRange)
+namespace sw {
+
+bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
+        const uno::Reference< text::XTextRange > & xTextRange)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
@@ -1658,27 +1658,26 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     SwXParagraph* pPara = 0;
     if(xRangeTunnel.is())
     {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        pPortion = reinterpret_cast< SwXTextPortion * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
-        pText   = reinterpret_cast< SwXText * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-        pPara   = reinterpret_cast< SwXParagraph * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId()) ));
+        pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        pCursor =
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+        pPortion=
+            ::sw::UnoTunnelGetImplementation<SwXTextPortion>(xRangeTunnel);
+        pText   = ::sw::UnoTunnelGetImplementation<SwXText>(xRangeTunnel);
+        pPara   = ::sw::UnoTunnelGetImplementation<SwXParagraph>(xRangeTunnel);
     }
 
-    //if it's a text cursor then create a temporary cursor there and re-use the pCursor variable
-    uno::Reference< XTextCursor > xTextCursor;
+    // if it's a text then create a temporary cursor there and re-use
+    // the pCursor variable
     if(pText)
     {
-        xTextCursor = pText->createCursor();
+        const uno::Reference< text::XTextCursor > xTextCursor =
+            pText->createCursor();
         xTextCursor->gotoEnd(sal_True);
-        uno::Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
-        pCursor = reinterpret_cast<  OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+        const uno::Reference<lang::XUnoTunnel> xCrsrTunnel(
+                xTextCursor, uno::UNO_QUERY);
+        pCursor =
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xCrsrTunnel);
     }
     if(pRange && pRange->GetDoc() == rToFill.GetDoc())
     {
@@ -1698,8 +1697,9 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
                 : ((pPortion) ? pPortion->GetCursor() : 0);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" );
-                bRet = sal_True;
+                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
+                        "what to do about rings?");
+                bRet = true;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
                 if (pUnoCrsr->HasMark())
                 {
@@ -1714,53 +1714,65 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     return bRet;
 }
 
-sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
-    const SwFrmFmt* pFrmFmt, SwFrmFmt*& rpFormat)
+static bool
+lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
+    SwFrmFmt const*const pFrmFmt, SwFrmFmt*& rpFormat)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
-    SwFrmFmt* pHeadFootFmt;
-    if(SFX_ITEM_SET == rSet.GetItemState( static_cast< USHORT >(bHeader ? RES_HEADER : RES_FOOTER), sal_True, &pItem) &&
-            0 != (pHeadFootFmt = bHeader ?
-                    ((SwFmtHeader*)pItem)->GetHeaderFmt() :
-                                ((SwFmtFooter*)pItem)->GetFooterFmt()))
+    if (SFX_ITEM_SET == rSet.GetItemState(
+            static_cast<USHORT>(bHeader ? RES_HEADER : RES_FOOTER),
+            sal_True, &pItem))
     {
-        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
-        const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
-        const SwStartNode* pCurSttNode = rNode.FindSttNodeByType(
-            bHeader ? SwHeaderStartNode : SwFooterStartNode);
-        if(pCurSttNode && pCurSttNode == pSttNode)
+        SfxPoolItem *const pItemNonConst(const_cast<SfxPoolItem *>(pItem));
+        SwFrmFmt *const pHeadFootFmt = (bHeader) ?
+            static_cast<SwFmtHeader*>(pItemNonConst)->GetHeaderFmt() :
+            static_cast<SwFmtFooter*>(pItemNonConst)->GetFooterFmt();
+        if (pHeadFootFmt)
         {
-            bRet = sal_True;
-            rpFormat = pHeadFootFmt;
+            const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
+            const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+            SwStartNode const*const pCurSttNode = rNode.FindSttNodeByType(
+                (bHeader) ? SwHeaderStartNode : SwFooterStartNode);
+            if (pCurSttNode && (pCurSttNode == pSttNode))
+            {
+                rpFormat = pHeadFootFmt;
+                bRet = true;
+            }
         }
     }
     return bRet;
 }
 
-uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(
-    SwDoc* pDoc, const SwPosition& rPos, const SwPosition* pMark)
+} // namespace sw
+
+uno::Reference< text::XTextRange >
+SwXTextRange::CreateXTextRange(
+    SwDoc & rDoc, const SwPosition& rPos, const SwPosition *const pMark)
 {
-    uno::Reference< XText > xParentText( CreateParentXText(pDoc, rPos) );
-    std::auto_ptr<SwUnoCrsr> pNewCrsr( pDoc->CreateUnoCrsr(rPos, sal_False) );
+    const uno::Reference<text::XText> xParentText(
+            ::sw::CreateParentXText(rDoc, rPos));
+    const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+            rDoc.CreateUnoCrsr(rPos, sal_False));
     if(pMark)
     {
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *pMark;
     }
-    bool isCell( dynamic_cast<SwXCell*>(xParentText.get()) );
-    uno::Reference< XTextRange > xRet(
+    const bool isCell( dynamic_cast<SwXCell*>(xParentText.get()) );
+    const uno::Reference< text::XTextRange > xRet(
         new SwXTextRange(*pNewCrsr, xParentText,
             isCell ? RANGE_IN_CELL : RANGE_IN_TEXT) );
     return xRet;
-
 }
 
-uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
-        const SwPosition& rPos)
+namespace sw {
+
+uno::Reference< text::XText >
+CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
 {
-    uno::Reference< XText > xParentText;
+    uno::Reference< text::XText > xParentText;
     SwStartNode* pSttNode = rPos.nNode.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {
@@ -1771,18 +1783,19 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
     {
         case SwTableBoxStartNode:
         {
-            const SwTableNode* pTblNode = pSttNode->FindTableNode();
-            SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-            SwTableBox* pBox = pSttNode->GetTblBox();
+            SwTableNode const*const pTblNode = pSttNode->FindTableNode();
+            SwFrmFmt *const pTableFmt =
+                static_cast<SwFrmFmt*>(pTblNode->GetTable().GetFrmFmt());
+            SwTableBox *const  pBox = pSttNode->GetTblBox();
 
-            xParentText = pBox
+            xParentText = (pBox)
                 ? SwXCell::CreateXCell( pTableFmt, pBox )
                 : new SwXCell( pTableFmt, *pSttNode );
         }
         break;
         case SwFlyStartNode:
         {
-            SwFrmFmt* pFmt = pSttNode->GetFlyFmt();
+            SwFrmFmt *const pFmt = pSttNode->GetFlyFmt();
             if (0 != pFmt)
             {
                 SwXTextFrame* pFrame( static_cast<SwXTextFrame*>(
@@ -1794,18 +1807,23 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
         case SwHeaderStartNode:
         case SwFooterStartNode:
         {
-            sal_Bool bHeader = SwHeaderStartNode == eType;
-            sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
+            const bool bHeader = (SwHeaderStartNode == eType);
+            const sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
             for(sal_uInt16 i = 0; i < nPDescCount; i++)
             {
-                const SwPageDesc& rDesc = const_cast<const SwDoc*>(pDoc)
-                    ->GetPageDesc( i );
+                const SwPageDesc& rDesc =
+                    // C++ is retarded
+                    const_cast<SwDoc const&>(rDoc).GetPageDesc( i );
                 const SwFrmFmt* pFrmFmtMaster = &rDesc.GetMaster();
                 const SwFrmFmt* pFrmFmtLeft = &rDesc.GetLeft();
 
                 SwFrmFmt* pHeadFootFmt = 0;
-                if(!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtMaster, pHeadFootFmt))
-                    lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtLeft, pHeadFootFmt);
+                if (!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtMaster,
+                            pHeadFootFmt))
+                {
+                    lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrmFmtLeft,
+                            pHeadFootFmt);
+                }
 
                 if(pHeadFootFmt)
                 {
@@ -1813,7 +1831,10 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
                                     First( TYPE( SwXHeadFootText ));
                     xParentText = pxHdFt;
                     if(!pxHdFt)
-                        xParentText = new SwXHeadFootText(*pHeadFootFmt, bHeader);
+                    {
+                        xParentText =
+                            new SwXHeadFootText(*pHeadFootFmt, bHeader);
+                    }
                     break;
                 }
             }
@@ -1821,15 +1842,16 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
         break;
         case SwFootnoteStartNode:
         {
-            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
-            uno::Reference< XFootnote >  xRef;
-            for( n = 0; n < nFtnCnt; ++n )
+            const sal_uInt16 nFtnCnt = rDoc.GetFtnIdxs().Count();
+            uno::Reference< text::XFootnote >  xRef;
+            for (sal_uInt16 n = 0; n < nFtnCnt; ++n )
             {
-                const SwTxtFtn* pTxtFtn = pDoc->GetFtnIdxs()[ n ];
+                const SwTxtFtn* pTxtFtn = rDoc.GetFtnIdxs()[ n ];
                 const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
                 pTxtFtn = rFtn.GetTxtFtn();
 #if OSL_DEBUG_LEVEL > 1
-                const SwStartNode* pTmpSttNode = pTxtFtn->GetStartNode()->GetNode().
+                const SwStartNode* pTmpSttNode =
+                        pTxtFtn->GetStartNode()->GetNode().
                                 FindSttNodeByType(SwFootnoteStartNode);
                 (void)pTmpSttNode;
 #endif
@@ -1837,11 +1859,12 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
                 if (pSttNode == pTxtFtn->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
-                    xParentText = ((SwUnoCallBack*)pDoc->GetUnoCallBack())->
+                    xParentText =
+                        static_cast<SwUnoCallBack*>(rDoc.GetUnoCallBack())->
                                                             GetFootnote(rFtn);
                     if (!xParentText.is())
                     {
-                        xParentText = new SwXFootnote(pDoc, rFtn);
+                        xParentText = new SwXFootnote(&rDoc, rFtn);
                     }
                     break;
                 }
@@ -1851,9 +1874,9 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
         default:
         {
             // then it is the body text
-            uno::Reference<frame::XModel> xModel =
-                pDoc->GetDocShell()->GetBaseModel();
-            uno::Reference< XTextDocument > xDoc(
+            const uno::Reference<frame::XModel> xModel =
+                rDoc.GetDocShell()->GetBaseModel();
+            const uno::Reference< text::XTextDocument > xDoc(
                 xModel, uno::UNO_QUERY);
             xParentText = xDoc->getText();
         }
@@ -1861,6 +1884,8 @@ uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
     OSL_ENSURE(xParentText.is(), "no parent text?");
     return xParentText;
 }
+
+} // namespace sw
 
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createContentEnumeration(const OUString& rServiceName)
@@ -2168,8 +2193,8 @@ void SwXTextRanges::Impl::MakeRanges()
         SwPaM *pTmpCursor = pCursor;
         do {
             const uno::Reference< text::XTextRange > xRange(
-                    SwXTextRange::CreateTextRangeFromPosition(
-                        pTmpCursor->GetDoc(),
+                    SwXTextRange::CreateXTextRange(
+                        *pTmpCursor->GetDoc(),
                         *pTmpCursor->GetPoint(), pTmpCursor->GetMark()));
             if (xRange.is())
             {

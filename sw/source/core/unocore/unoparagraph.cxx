@@ -263,7 +263,7 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
     if (!xParentText.is())
     {
         SwPosition Pos( rTxtNode );
-        xParentText.set(SwXTextRange::CreateParentXText( &rDoc, Pos ));
+        xParentText.set(::sw::CreateParentXText( rDoc, Pos ));
     }
     SwXParagraph *const pXPara(
             new SwXParagraph(xParentText, rTxtNode, nSelStart, nSelEnd) );

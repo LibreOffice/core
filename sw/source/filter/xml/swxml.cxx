@@ -788,9 +788,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        uno::Reference<XTextRange> xInsertTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                           0 );
+        const uno::Reference<text::XTextRange> xInsertTextRange =
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
         OUString sTextInsertModeRange(
                 RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
         xInfoSet->setPropertyValue( sTextInsertModeRange,

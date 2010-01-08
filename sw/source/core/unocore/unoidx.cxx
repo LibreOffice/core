@@ -1030,7 +1030,7 @@ void SwXDocumentIndex::attachToRange(const uno::Reference< text::XTextRange > & 
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
             const SwTOXBase* pOld = pDoc->GetCurTOX( *aPam.Start() );
             if(!pOld)
@@ -1092,7 +1092,7 @@ uno::Reference< text::XTextRange >  SwXDocumentIndex::getAnchor(void) throw( uno
             aPaM.SetMark();
             aPaM.GetPoint()->nNode = *pIdx->GetNode().EndOfSectionNode();
             aPaM.Move( fnMoveBackward, fnGoCntnt );
-            xRet = SwXTextRange::CreateTextRangeFromPosition(pSectFmt->GetDoc(),
+            xRet = SwXTextRange::CreateXTextRange(*pSectFmt->GetDoc(),
                 *aPaM.GetMark(), aPaM.GetPoint());
         }
     }
@@ -1469,7 +1469,7 @@ void SwXDocumentIndexMark::attachToRange(const uno::Reference< text::XTextRange 
 
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwTOXMark aMark (pTOXType);
         if(sAltText.Len())
             aMark.SetAlternativeText(sAltText);

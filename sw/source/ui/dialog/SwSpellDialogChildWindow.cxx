@@ -258,8 +258,10 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     //mark the start position only if not at start of doc
                     if(!pWrtShell->IsStartOfDoc())
                     {
-                        m_pSpellState->m_xStartRange = SwXTextRange::CreateTextRangeFromPosition(
-                                pWrtShell->GetDoc(), *pCrsr->Start(), pCrsr->End());
+                        m_pSpellState->m_xStartRange =
+                            SwXTextRange::CreateXTextRange(
+                                *pWrtShell->GetDoc(),
+                                *pCrsr->Start(), pCrsr->End());
                     }
                     pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR, FALSE );
                 }
@@ -390,7 +392,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
-                    if(SwXTextRange::XTextRangeToSwPaM(aPam, m_pSpellState->m_xStartRange))
+                    if (::sw::XTextRangeToSwPaM(aPam,
+                                m_pSpellState->m_xStartRange))
                     {
                         pWrtShell->SetSelection(aPam);
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_CURR, DOCPOS_START);

@@ -309,7 +309,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwUnoInternalPaM aPam(*pDocument);
     //das muss jetzt sal_True liefern
-    SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     m_pImpl->InsertRefMark(aPam, dynamic_cast<SwXTextCursor*>(pCursor));
     m_pImpl->m_bIsDescriptor = sal_False;
     m_pImpl->m_pDoc = pDocument;
@@ -342,8 +342,8 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
                                    rTxtNode, *pTxtMark->GetStart())
                     :   new SwPaM( rTxtNode, *pTxtMark->GetStart()) );
 
-                return SwXTextRange::CreateTextRangeFromPosition(
-                            m_pImpl->m_pDoc, *pPam->Start(), pPam->End());
+                return SwXTextRange::CreateXTextRange(
+                            *m_pImpl->m_pDoc, *pPam->Start(), pPam->End());
             }
         }
     }
@@ -820,8 +820,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         OSL_ENSURE(pTxtAttr, "CreateXMeta: no text attr?");
         if (!pTxtAttr) { return 0; }
         const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
-        xParentText.set(
-            SwXTextRange::CreateParentXText(pTxtNode->GetDoc(), aPos) );
+        xParentText.set( ::sw::CreateParentXText(*pTxtNode->GetDoc(), aPos) );
     }
     if (!xParentText.is()) { return 0; }
     SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFmtMeta()->Which())
@@ -1072,7 +1071,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    SwXTextRange::XTextRangeToSwPaM(aPam, i_xTextRange);
+    ::sw::XTextRangeToSwPaM(aPam, i_xTextRange);
 
     UnoActionContext aContext(pDoc);
 
@@ -1109,8 +1108,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pMeta->Add(m_pImpl.get());
     pMeta->SetXMeta(uno::Reference<rdf::XMetadatable>(this));
 
-    m_pImpl->m_xParentText =
-        SwXTextRange::CreateParentXText(pDoc, *aPam.GetPoint());
+    m_pImpl->m_xParentText = ::sw::CreateParentXText(*pDoc, *aPam.GetPoint());
 
     m_pImpl->m_bIsDescriptor = false;
 }
@@ -1153,8 +1151,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
 
     const SwPosition start(*pTxtNode, nMetaStart - 1); // -1 due to CH_TXTATR
     const SwPosition end(*pTxtNode, nMetaEnd);
-    return SwXTextRange::CreateTextRangeFromPosition(
-                pTxtNode->GetDoc(), start, &end);
+    return SwXTextRange::CreateXTextRange(*pTxtNode->GetDoc(), start, &end);
 }
 
 // XTextRange

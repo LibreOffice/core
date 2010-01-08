@@ -713,9 +713,9 @@ void SwXMLImport::startDocument( void )
         }
         if( pCrsrSh )
         {
-            Reference<XTextRange> xInsertTextRange(
-                SwXTextRange::CreateTextRangeFromPosition(
-                                pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
+            const uno::Reference<text::XTextRange> xInsertTextRange(
+                SwXTextRange::CreateXTextRange(
+                    *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
             setTextInsertMode( xInsertTextRange );
             xTextCursor = GetTextImport()->GetCursor();
             pTxtCrsr = 0;

@@ -2056,7 +2056,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetCntntAnchor());
-            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateXTextRange(*pFmt->GetDoc(), rPos, 0);
         }
     }
     else
@@ -2098,7 +2098,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     {
         SwUnoInternalPaM aIntPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
         SwPaM aPam(rNode);
@@ -2430,7 +2430,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
-        if(SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange))
+        if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
         {
             SfxItemSet aSet( pDoc->GetAttrPool(),
                         RES_ANCHOR, RES_ANCHOR );
@@ -2672,7 +2672,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     SwUnoInternalPaM aPam(*GetDoc());
-    if(pFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (pFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = pFmt->GetCntnt().GetCntntIdx()->GetNode();
 #if OSL_DEBUG_LEVEL > 1
