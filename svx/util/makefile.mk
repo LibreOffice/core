@@ -36,8 +36,6 @@ TARGET=svx
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
-USE_DEFFILE=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -48,43 +46,14 @@ LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
-# --- Svx - DLL ----------
+HELPIDFILES=    ..$/inc$/helpid.hrc
 
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=\
-    $(SLB)$/svdraw.lib \
-    $(SLB)$/form.lib
+# svxcore
+SHL1TARGET= svxcore$(DLLPOSTFIX)
+SHL1IMPLIB= isvxcore
+SHL1USE_EXPORTS=name
 
-.IF "(GUIBASE)" == "WIN"
-LIB1FILES+=$(SLB)$/ibrwimp.lib
-.ENDIF # (WIN)
-
-LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
-LIB2FILES=\
-    $(SLB)$/items.lib     \
-    $(SLB)$/dialogs.lib	\
-    $(SLB)$/mnuctrls.lib  \
-    $(SLB)$/options.lib   \
-    $(SLB)$/stbctrls.lib  \
-    $(SLB)$/tbxctrls.lib  \
-    $(SLB)$/smarttags.lib
-
-LIB3TARGET= $(SLB)$/$(TARGET)_3.lib
-LIB3FILES=\
-    $(SLB)$/unodraw.lib	\
-    $(SLB)$/unogallery.lib\
-    $(SLB)$/accessibility.lib	\
-    $(SLB)$/customshapes.lib
-
-LIB4TARGET= $(SLB)$/$(TARGET)_4.lib
-LIB4FILES=\
-    $(SLB)$/fmcomp.lib \
-    $(SLB)$/engine3d.lib \
-    $(SLB)$/table.lib
-
-# Objects needed for the svxcore library.
-LIB5TARGET= $(SLB)$/$(TARGET)_5.lib
-LIB5FILES=\
+SHL1LIBS= \
     $(SLB)$/animation.lib \
     $(SLB)$/attribute.lib \
     $(SLB)$/contact.lib \
@@ -96,10 +65,7 @@ LIB5FILES=\
     $(SLB)$/form-core.lib \
     $(SLB)$/gal.lib \
     $(SLB)$/items-core.lib \
-    $(SLB)$/options-core.lib
-
-LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
-LIB6FILES=\
+    $(SLB)$/options-core.lib \
     $(SLB)$/overlay.lib \
     $(SLB)$/primitive2d.lib \
     $(SLB)$/primitive3d.lib \
@@ -107,19 +73,12 @@ LIB6FILES=\
     $(SLB)$/svdraw-core.lib \
     $(SLB)$/svxlink.lib \
     $(SLB)$/table-core.lib \
-    $(SLB)$/tbxctrls-core.lib  \
+    $(SLB)$/tbxctrls-core.lib \
     $(SLB)$/toolbars.lib \
     $(SLB)$/unodraw-core.lib \
     $(SLB)$/xml.lib \
     $(SLB)$/xout.lib
 
-HELPIDFILES=    ..$/inc$/helpid.hrc
-
-# svxcore
-SHL1TARGET= svxcore$(DLLPOSTFIX)
-SHL1IMPLIB= isvxcore
-SHL1USE_EXPORTS=name
-SHL1LIBS= $(LIB5TARGET) $(LIB6TARGET)
 
 SHL1STDLIBS= \
              $(EDITENGLIB) \
@@ -149,7 +108,7 @@ SHL1STDLIBS= \
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=$(TARGET)_5 $(TARGET)_6
+DEFLIB1NAME=$(SHL1LIBS:b)
 
 # svx
 SHL2TARGET= svx$(DLLPOSTFIX)
@@ -157,7 +116,28 @@ SHL2IMPLIB= i$(TARGET)
 SHL2USE_EXPORTS=name
 SHL2DEPN=$(SHL1TARGETN)
 
-SHL2LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET) $(LIB4TARGET)
+SHL2LIBS= \
+    $(SLB)$/svdraw.lib \
+    $(SLB)$/form.lib \
+    $(SLB)$/items.lib     \
+    $(SLB)$/dialogs.lib	\
+    $(SLB)$/mnuctrls.lib  \
+    $(SLB)$/options.lib   \
+    $(SLB)$/stbctrls.lib  \
+    $(SLB)$/tbxctrls.lib  \
+    $(SLB)$/smarttags.lib \
+    $(SLB)$/unodraw.lib	\
+    $(SLB)$/unogallery.lib\
+    $(SLB)$/accessibility.lib	\
+    $(SLB)$/customshapes.lib \
+    $(SLB)$/fmcomp.lib \
+    $(SLB)$/engine3d.lib \
+    $(SLB)$/table.lib
+
+.IF "(GUIBASE)" == "WIN"
+SHL2LIBS+=$(SLB)$/ibrwimp.lib
+.ENDIF # (WIN)
+
 SHL2STDLIBS= \
             $(EDITENGLIB) \
             $(SVXCORELIB) \
@@ -189,7 +169,7 @@ SHL2STDLIBS+=$(SHELLLIB)
 
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-DEFLIB2NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
+DEFLIB2NAME=$(SHL2LIBS:b)
 
 .IF "$(debug)$(dbgutil)"!=""
 SHL2STDLIBS += $(CPPUHELPERLIB)
