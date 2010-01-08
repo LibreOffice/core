@@ -370,16 +370,12 @@ void ScTabView::SelectionChanged()
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
+        if (xController.is())
         {
-            uno::Reference<frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->SelectionChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->SelectionChanged();
         }
     }
 

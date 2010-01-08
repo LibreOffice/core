@@ -155,6 +155,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xltools.obj					\
         $(SLO)$/xlview.obj
 
 # --- Targets -------------------------------------------------------

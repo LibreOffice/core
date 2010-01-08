@@ -174,7 +174,6 @@
 #include <svl/inethist.hxx>
 #include <svl/inetdef.hxx>
 #include <sfx2/sfxdefs.hxx>
-#include <svl/cancel.hxx>
 #include <svtools/compat.hxx>
 #include <svl/inetmsg.hxx>
 #include <sfx2/app.hxx>

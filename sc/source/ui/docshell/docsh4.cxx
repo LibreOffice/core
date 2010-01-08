@@ -56,7 +56,6 @@ using namespace ::com::sun::star;
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
@@ -2559,7 +2558,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
