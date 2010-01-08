@@ -1598,7 +1598,7 @@ public:
             SwDoc *const pDoc,
             const enum TOXTypes eType,
             SwTOXType *const pType, SwTOXMark const*const pMark)
-        : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
+        : SwClient(const_cast<SwTOXMark*>(pMark))
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
@@ -1654,19 +1654,6 @@ void SwXDocumentIndexMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
     {
         Invalidate();
     }
-    else if (pOld)
-    {
-        switch (pOld->Which())
-        {
-            case RES_TOXMARK_DELETED:
-                if (static_cast<const void*>(m_pTOXMark) ==
-                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
-                {
-                    Invalidate();
-                }
-                break;
-        }
-    }
 }
 
 /*-- 14.12.98 10:25:43---------------------------------------------------
@@ -1680,7 +1667,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
 
   -----------------------------------------------------------------------*/
 SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, const SwTOXMark & rMark)
+                SwTOXType & rType, SwTOXMark & rMark)
     : m_pImpl( new SwXDocumentIndexMark::Impl(*this, &rDoc, rType.GetType(),
                     &rType, &rMark) )
 {
@@ -1694,23 +1681,20 @@ SwXDocumentIndexMark::~SwXDocumentIndexMark()
 
 uno::Reference<text::XDocumentIndexMark>
 SwXDocumentIndexMark::CreateXDocumentIndexMark(
-        SwDoc & rDoc, SwTOXType & rType, const SwTOXMark & rMark)
+        SwDoc & rDoc, SwTOXType & rType, SwTOXMark & rMark)
 {
+    // re-use existing SwXDocumentIndexMark
+    // NB: xmloff depends on this caching to generate ID from the address!
     // #i105557#: do not iterate over the registered clients: race condition
-    // to do this properly requires the SwXDocumentIndexMark to register at the
-    // format directly, not at the unocallback
-#if 0
-    SwClientIter aIter(*pType);
-    SwXDocumentIndexMark::Impl* pxMark = (SwXDocumentIndexMark::Impl*)
-                            aIter.First(TYPE(SwXDocumentIndexMark::Impl));
-    while( pxMark )
+    uno::Reference< text::XDocumentIndexMark > xTOXMark(rMark.GetXTOXMark());
+    if (!xTOXMark.is())
     {
-        if(pxMark->m_pTOXMark == pMark)
-            return pxMark->m_rThis;
-        pxMark = (SwXDocumentIndexMark::Impl*)aIter.Next();
+        SwXDocumentIndexMark *const pNew =
+            new SwXDocumentIndexMark(rDoc, rType, rMark);
+        xTOXMark.set(pNew);
+        rMark.SetXTOXMark(xTOXMark);
     }
-#endif
-    return new SwXDocumentIndexMark(rDoc, rType, rMark);
+    return xTOXMark;
 }
 
 /* -----------------------------10.03.00 18:02--------------------------------
@@ -1955,8 +1939,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         throw lang::IllegalArgumentException();
     }
-    pDoc->GetUnoCallBack()->Add(m_pImpl.get());
-    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
 
     SwUnoInternalPaM aPam(*pDoc);
     //das muss jetzt sal_True liefern
@@ -2046,6 +2028,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
     m_pImpl->m_pDoc = pDoc;
     m_pImpl->m_bIsDescriptor = sal_False;
+
+    const_cast<SwTOXMark*>(m_pImpl->m_pTOXMark)->Add(m_pImpl.get());
+    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
 }
 
 /*-- 14.12.98 10:25:45---------------------------------------------------
@@ -2268,7 +2253,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if(pTxtAttr)
         {
             m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
-            m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
+            const_cast<SwTOXMark*>(m_pImpl->m_pTOXMark)->Add(m_pImpl.get());
             pType->Add(&m_pImpl->m_TypeDepend);
         }
     }

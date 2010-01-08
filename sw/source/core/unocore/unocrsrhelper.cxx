@@ -313,7 +313,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    const SwTOXMark& rMark = pTxtAttr->GetTOXMark();
+                    SwTOXMark & rMark =
+                        static_cast<SwTOXMark&>(pTxtAttr->GetAttr());
                     const uno::Reference< text::XDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             *rPam.GetDoc(),

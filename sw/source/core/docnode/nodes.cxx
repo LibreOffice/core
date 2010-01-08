@@ -48,6 +48,7 @@
 #include <swddetbl.hxx>
 #include <frame.hxx>
 #include <txtatr.hxx>
+#include <tox.hxx> // InvalidateTOXMark
 
 #include <docsh.hxx>
 #include <svtools/smplhint.hxx>
@@ -341,7 +342,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                                 break;
 
                             case RES_TXTATR_TOXMARK:
-                                nDelMsg = RES_TOXMARK_DELETED;
+                                static_cast<SwTOXMark&>(pAttr->GetAttr())
+                                    .InvalidateTOXMark();
                                 break;
 
                             case RES_TXTATR_REFMARK:

@@ -468,12 +468,12 @@ static Reference<XTextRange>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    const SwTxtAttr & rAttr, const bool bEnd)
+    SwTxtAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    const SwTOXMark& rTOXMark = static_cast<const SwTOXMark&>(rAttr.GetAttr());
+    SwTOXMark & rTOXMark = static_cast<SwTOXMark&>(rAttr.GetAttr());
 
-    Reference<XTextContent> xContent(
+    const Reference<XTextContent> xContent(
         SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
                     *const_cast<SwTOXType*>(rTOXMark.GetTOXType()), rTOXMark),
         uno::UNO_QUERY);
@@ -742,7 +742,7 @@ lcl_ExportHints(
     while(nStartIndex < pHints->GetStartCount() &&
         nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
     {
-        const SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
+        SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
         USHORT nAttrWhich = pAttr->Which();
         if (nNextStart == nCurrentIndex)
         {

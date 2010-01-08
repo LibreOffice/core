@@ -207,7 +207,7 @@ private:
     virtual ~SwXDocumentIndexMark();
 
     SwXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, const SwTOXMark & rMark);
+                SwTOXType & rType, SwTOXMark & rMark);
 
 public:
 
@@ -217,7 +217,7 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndexMark>
         CreateXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, const SwTOXMark & rMark);
+                SwTOXType & rType, SwTOXMark & rMark);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

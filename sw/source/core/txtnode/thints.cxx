@@ -1174,7 +1174,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             break;
 
         case RES_TXTATR_TOXMARK:
-            nDelMsg = RES_TOXMARK_DELETED;
+            static_cast<SwTOXMark&>(pAttr->GetAttr()).InvalidateTOXMark();
             break;
 
         case RES_TXTATR_REFMARK:
