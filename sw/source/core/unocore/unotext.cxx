@@ -674,7 +674,10 @@ void SwXText::insertTextContentBefore(
         throw lang::IllegalArgumentException();
 
     sal_Bool bRet = sal_False;
-    SwXTextSection* pXSection = SwXTextSection::GetImplementation( xSuccessor );
+    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
+            uno::UNO_QUERY);
+    SwXTextSection *const pXSection =
+            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable* pXTable = SwXTextTable::GetImplementation(xSuccessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
     SwTxtNode * pTxtNode = 0;
@@ -728,7 +731,10 @@ void SwXText::insertTextContentAfter(
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
         throw lang::IllegalArgumentException();
 
-    SwXTextSection* pXSection = SwXTextSection::GetImplementation( xPredecessor );
+    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
+            uno::UNO_QUERY);
+    SwXTextSection *const pXSection =
+            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable* pXTable = SwXTextTable::GetImplementation(xPredecessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
     sal_Bool bRet = sal_False;
@@ -779,7 +785,10 @@ void SwXText::removeTextContentBefore(
     }
 
     sal_Bool bRet = sal_False;
-    SwXTextSection* pXSection = SwXTextSection::GetImplementation( xSuccessor );
+    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
+            uno::UNO_QUERY);
+    SwXTextSection *const pXSection =
+            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable* pXTable = SwXTextTable::GetImplementation( xSuccessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())
@@ -826,7 +835,10 @@ void SwXText::removeTextContentAfter(const uno::Reference< text::XTextContent>& 
     }
 
     sal_Bool bRet = sal_False;
-    SwXTextSection* pXSection = SwXTextSection::GetImplementation( xPredecessor );
+    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
+            uno::UNO_QUERY);
+    SwXTextSection *const pXSection =
+            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable* pXTable = SwXTextTable::GetImplementation(xPredecessor );
     SwFrmFmt* pTableFmt = pXTable ? pXTable->GetFrmFmt() : 0;
     if(pTableFmt && pTableFmt->GetDoc() == GetDoc())

@@ -43,65 +43,15 @@
 
 #include <cppuhelper/implbase7.hxx>
 
-#include <tools/link.hxx>
-#include <tools/string.hxx>
-
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
+#include <unobaseclass.hxx>
 
 
-class SfxItemPropertySet;
 class SwSectionFmt;
 
 
 /*-----------------09.03.98 13:57-------------------
 
 --------------------------------------------------*/
-
-class SwXTextSection;
-
-class SwXTextSectionClient
-    : public SwClient
-{
-
-private:
-
-    friend class SwXTextSection;
-
-    SwXTextSection * m_pSection;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextSection > m_xReference;
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
-
-    SwXTextSectionClient(
-        SwSectionFmt& rFmt,
-        SwXTextSection& rTextSection,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextSection > xSection);
-
-    virtual ~SwXTextSectionClient();
-
-    DECL_STATIC_LINK( SwXTextSectionClient, RemoveSectionClient_Impl,
-                      SwXTextSectionClient* );
-
-public:
-
-    TYPEINFO();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection >
-        GetXTextSection();
-
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextSection >
-        CreateXTextSection(SwSectionFmt* pFmt = 0, BOOL bIndexHeader = FALSE);
-    static SwXTextSectionClient* Create(
-            SwXTextSection& rSection,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextSection > xSection,
-            SwSectionFmt& rFmt);
-};
 
 
 struct SwTextSectionProperties_Impl;
@@ -122,57 +72,21 @@ class SwXTextSection
 
 private:
 
-    friend class SwXTextSectionClient;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwEventListenerContainer        aLstnrCntnr;
-    const SfxItemPropertySet*       m_pPropSet;
-
-    BOOL                            m_bIsDescriptor;
-    BOOL                            m_bIndexHeader;
-    String                          m_sName;
-    SwTextSectionProperties_Impl*   pProps;
-    SwXTextSectionClient*           m_pClient;
-
-protected:
-
-    void SAL_CALL SetPropertyValues_Impl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Any >& aValues)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
-        GetPropertyValues_Impl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
-                rPropertyNames)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-
-    SwXTextSection(sal_Bool bWithFormat, sal_Bool bIndexHeader = FALSE);
+    SwXTextSection(SwSectionFmt *const pFmt, const bool bIndexHeader = false);
 
     virtual ~SwXTextSection();
 
-    void ResetClient() { m_pClient = 0; }
-    void SetClient(SwXTextSectionClient* pClient) { m_pClient = pClient; }
-
 public:
-
-    void attachToRange(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextRange)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
 
     SwSectionFmt*   GetFmt() const;
 
-    static SwXTextSection* GetImplementation(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface> xRef);
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextSection >
+        CreateXTextSection(SwSectionFmt *const pFmt = 0,
+                const bool bIndexHeader = false);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

@@ -447,7 +447,8 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :
         case SW_SERVICE_TEXT_SECTION :
-            xRet = SwXTextSectionClient::CreateXTextSection( 0, SW_SERVICE_INDEX_HEADER_SECTION == nObjectType);
+            xRet = SwXTextSection::CreateXTextSection(0,
+                    (SW_SERVICE_INDEX_HEADER_SECTION == nObjectType));
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
@@ -1473,15 +1474,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
   -----------------------------------------------------------------------*/
 uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 {
-    SwXTextSectionClient* pClient = (SwXTextSectionClient*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXTextSectionClient ));
-    uno::Reference< XTextSection > xRet;
-    if( pClient  )
-        xRet = pClient->GetXTextSection();
-    // it is possible that the client is still registered but the reference is already invalid
-    if( !xRet.is() )
-        xRet = SwXTextSectionClient::CreateXTextSection(&rFmt);
-    return xRet;
+    return SwXTextSection::CreateXTextSection(&rFmt);
 }
 
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )

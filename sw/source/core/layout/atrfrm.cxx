@@ -2480,6 +2480,11 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     // wegen RESET_FMTWRITTEN.
 //  if ( GetDepends() )
         SwFmt::Modify( pOld, pNew );
+
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXObject(uno::Reference<uno::XInterface>(0));
+    }
 }
 
 //Vernichtet alle Frms, die in aDepend angemeldet sind.
