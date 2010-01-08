@@ -1122,7 +1122,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                         while ( nIndex > -1 )
                         {
                             sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
-                            nIndex = sExpression.indexOf('"',nIndex+2);SELECT "D4 Product"."P10  Color" || ',' || "D2 Market"."M04  Region" , "F1 Revenue"."1-01  Revenue  (Sum All)" FROM "Sample Sales"
+                            nIndex = sExpression.indexOf('"',nIndex+2);
                         }
                         ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
 
