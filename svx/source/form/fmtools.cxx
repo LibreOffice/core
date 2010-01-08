@@ -91,8 +91,8 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
