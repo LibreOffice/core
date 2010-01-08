@@ -64,7 +64,7 @@ protected:
 
 public:
 
-    SwXBodyText(SwDoc* pDoc);
+    SwXBodyText(SwDoc *const pDoc);
 
     SwXTextCursor * CreateTextCursor(const bool bIgnoreTables = false);
 
