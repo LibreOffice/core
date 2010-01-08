@@ -62,6 +62,7 @@ SHL1IMPLIB=	i$(TARGET)
 SHL1OBJS=	$(SLOFILES)
 SHL1USE_EXPORTS=name
 SHL1STDLIBS= \
+             $(EDITENGLIB) \
              $(VBAHELPERLIB) \
              $(SVXCORELIB) \
              $(SFX2LIB) \

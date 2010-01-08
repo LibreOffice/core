@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ=..$/..$/..
-PRJNAME=goodies
+PRJNAME=filter
 TARGET=icgm
 ENABLE_EXCEPTIONS=TRUE
 

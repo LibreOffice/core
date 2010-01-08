@@ -39,14 +39,14 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editdata.hxx>
 #include <filter/msfilter/msdffimp.hxx>         //  Escher-Grafikimport
 #include <filter/msfilter/msocximex.hxx>
 #include <filter/msfilter/msfiltertracer.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #undef ITEMID_FIELD
 #include "filter/msfilter/msfilterdllapi.h"
 #include <vcl/font.hxx>

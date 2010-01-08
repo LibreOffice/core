@@ -31,7 +31,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=goodies
+PRJNAME=filter
 TARGET=epbm
 TARGET2=epb
 DEPTARGET=vepbm

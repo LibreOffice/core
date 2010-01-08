@@ -31,7 +31,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=goodies
+PRJNAME=filter
 TARGET=eos2met
 TARGET2=eme
 DEPTARGET=veos2met

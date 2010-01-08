@@ -31,7 +31,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=goodies
+PRJNAME=filter
 TARGET=ipcd
 DEPTARGET=vipcd
 

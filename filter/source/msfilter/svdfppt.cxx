@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <math.h>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/stg.hxx>
@@ -59,17 +59,18 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdotable.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdattr.hxx>
 #include "svx/xattr.hxx"
 #include "svx/svditext.hxx"
 #include <svx/svdetc.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/editids.hrc>
 
 #if defined(JOEENV) && defined(JOEDEBUG)
 #include "impinccv.h" // etwas Testkram
@@ -81,34 +82,34 @@
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-#include <svx/adjitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/editeng.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/sxekitm.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svtools/sychconv.hxx>
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/unoapi.hxx>
 #include <toolkit/unohlp.hxx>
@@ -124,13 +125,13 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <vcl/print.hxx>
-#include <svx/svxfont.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "com/sun/star/awt/Gradient.hpp"
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine.hpp>

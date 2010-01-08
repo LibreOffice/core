@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-#include "svx/impgrf.hxx"
 #include "eschesdo.hxx"
 #include <filter/msfilter/escherex.hxx>
 #include <svx/unoapi.hxx>
@@ -3791,7 +3790,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
-                    GraphicFilter*  pFilter = GetGrfFilter();
+                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
                     ByteString      aVersion( "MSOFFICE9.0" );
                     aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );
