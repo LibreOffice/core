@@ -97,11 +97,14 @@ public:
     inline bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
     inline bool         isWall3dChart() const { return mbWall3dChart; }
+    /** Returns true, if chart is a pie chart or doughnut chart. */
+    inline bool         isPieChart() const { return mbPieChart; }
 
 private:
     ::rtl::OUString     maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
+    bool                mbPieChart;
 };
 
 // ----------------------------------------------------------------------------
@@ -109,7 +112,8 @@ private:
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),
     mb3dChart( false ),
-    mbWall3dChart( false )
+    mbWall3dChart( false ),
+    mbPieChart( false )
 {
 }
 
@@ -166,6 +170,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
         // 3D view settings
         mb3dChart = rFirstTypeGroup.is3dChart();
         mbWall3dChart = rFirstTypeGroup.isWall3dChart();
+        mbPieChart = rFirstTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE;
         if( mb3dChart )
         {
             View3DConverter aView3DConv( *this, rView3DModel );
@@ -312,7 +317,8 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
     ConverterBase< PlotAreaModel >( rParent, rModel ),
     mb3dChart( false ),
-    mbWall3dChart( false )
+    mbWall3dChart( false ),
+    mbPieChart( false )
 {
 }
 
@@ -399,6 +405,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
             maAutoTitle = aAxesSetConv.getAutomaticTitle();
             mb3dChart = aAxesSetConv.is3dChart();
             mbWall3dChart = aAxesSetConv.isWall3dChart();
+            mbPieChart = aAxesSetConv.isPieChart();
         }
         else
         {
@@ -424,7 +431,9 @@ void PlotAreaConverter::convertPositionFromModel()
         namespace cssc = ::com::sun::star::chart;
         Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );
         Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
-        switch( rLayout.mnTarget )
+        // for pie charts, always set inner plot area size to exclude the data labels as Excel does
+        sal_Int32 nTarget = (mbPieChart && (rLayout.mnTarget == XML_outer)) ? XML_inner : rLayout.mnTarget;
+        switch( nTarget )
         {
             case XML_inner:
                 xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );

@@ -101,6 +101,7 @@ private:
     ::rtl::OUString     maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
+    bool                mbPieChart;
 };
 
 // ============================================================================
