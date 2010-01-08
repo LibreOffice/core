@@ -123,6 +123,15 @@ public:
 
     bool CheckForOwnMember(const SwPaM & rPaM)
         throw (lang::IllegalArgumentException, uno::RuntimeException);
+
+    void ConvertCell(
+            const bool bFirstCell,
+            const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
+            ::std::vector<SwNodeRange> & rRowNodes,
+            ::std::auto_ptr< SwPaM > & rpFirstPaM,
+            SwPaM & rLastPaM,
+            bool & rbExcept);
+
 };
 
 /* -----------------------------15.03.2002 12:39------------------------------
@@ -1838,158 +1847,407 @@ struct VerticallyMergedCell
     sal_Int32                                           nLeftPosition;
     bool                                                bOpen;
 
-    VerticallyMergedCell( uno::Reference< beans::XPropertySet >&   rxCell, sal_Int32 nLeft ) :
-        nLeftPosition( nLeft ),
-        bOpen( true )
-        {
-            aCells.push_back( rxCell );
-        }
+    VerticallyMergedCell(uno::Reference< beans::XPropertySet > const& rxCell,
+            const sal_Int32 nLeft)
+        : nLeftPosition( nLeft )
+        , bOpen( true )
+    {
+        aCells.push_back( rxCell );
+    }
 };
 #define COL_POS_FUZZY 2
-bool lcl_SimilarPosition( sal_Int32 nPos1, sal_Int32 nPos2 )
+static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 {
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
+}
+
+void SwXText::Impl::ConvertCell(
+    const bool bFirstCell,
+    const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
+    ::std::vector<SwNodeRange> & rRowNodes,
+    ::std::auto_ptr< SwPaM > & rpFirstPaM,
+    SwPaM & rLastPaM,
+    bool & rbExcept)
+{
+    if (rCell.getLength() != 2)
+    {
+        throw lang::IllegalArgumentException();
+    }
+    const uno::Reference<text::XTextRange> xStartRange = rCell[0];
+    const uno::Reference<text::XTextRange> xEndRange = rCell[1];
+    SwUnoInternalPaM aStartCellPam(*m_pDoc);
+    SwUnoInternalPaM aEndCellPam(*m_pDoc);
+
+    // !!! TODO - PaMs in tables and sections do not work here -
+    //     the same applies to PaMs in frames !!!
+
+    if (!::sw::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
+        !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
+    {
+        throw lang::IllegalArgumentException();
+    }
+    /** check the nodes between start and end
+        it is allowed to have pairs of StartNode/EndNodes
+     */
+    if (aStartCellPam.Start()->nNode < aEndCellPam.End()->nNode)
+    {
+        // increment on each StartNode and decrement on each EndNode
+        // we must reach zero at the end and must not go below zero
+        long nOpenNodeBlock = 0;
+        SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
+        while (aCellIndex < aEndCellPam.End()->nNode.GetIndex())
+        {
+            if (aCellIndex.GetNode().IsStartNode())
+            {
+                ++nOpenNodeBlock;
+            }
+            else if (aCellIndex.GetNode().IsEndNode())
+            {
+                --nOpenNodeBlock;
+            }
+            if (nOpenNodeBlock < 0)
+            {
+                rbExcept = true;
+                break;
+            }
+            ++aCellIndex;
+        }
+        if (nOpenNodeBlock != 0)
+        {
+            rbExcept = true;
+            return;
+        }
+    }
+
+    /** The vector<vector> NodeRanges has to contain consecutive nodes.
+        In rTableRanges the ranges don't need to be full paragraphs but
+        they have to follow each other. To process the ranges they
+        have to be aligned on paragraph borders by inserting paragraph
+        breaks. Non-consecutive ranges must initiate an exception.
+     */
+    if (bFirstCell)
+    {
+        // align the beginning - if necessary
+        if (aStartCellPam.Start()->nContent.GetIndex())
+        {
+            m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+        }
+    }
+    else
+    {
+        // check the predecessor
+        const ULONG nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
+        const ULONG nStartCellNodeIndex =
+            aStartCellPam.Start()->nNode.GetIndex();
+        const ULONG nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
+        if (nLastNodeIndex == nStartCellNodeIndex)
+        {
+            // same node as predecessor then equal nContent?
+            if (rLastPaM.End()->nContent != aStartCellPam.Start()->nContent)
+            {
+                rbExcept = true;
+            }
+            else
+            {
+                m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+            }
+        }
+        else if (nStartCellNodeIndex == (nLastNodeEndIndex + 1))
+        {
+            // next paragraph - now the content index of the new should be 0
+            // and of the old one should be equal to the text length
+            // but if it isn't we don't care - the cell is being inserted on
+            // the node border anyway
+        }
+        else
+        {
+            rbExcept = true;
+        }
+    }
+    // now check if there's a need to insert another paragraph break
+    if (aEndCellPam.End()->nContent.GetIndex() <
+            aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
+    {
+        m_pDoc->SplitNode(*aEndCellPam.End(), sal_False);
+        // take care that the new start/endcell is moved to the right position
+        // aStartCellPam has to point to the start of the new (previous) node
+        // aEndCellPam has to point to the end of the new (previous) node
+        aStartCellPam.DeleteMark();
+        aStartCellPam.Move(fnMoveBackward, fnGoNode);
+        aStartCellPam.GetPoint()->nContent = 0;
+        aEndCellPam.DeleteMark();
+        aEndCellPam.Move(fnMoveBackward, fnGoNode);
+        aEndCellPam.GetPoint()->nContent =
+            aEndCellPam.GetNode()->GetTxtNode()->Len();
+    }
+
+    *rLastPaM.GetPoint() = *aEndCellPam.Start();
+    if (aStartCellPam.HasMark())
+    {
+        rLastPaM.SetMark();
+        *rLastPaM.GetMark() = *aEndCellPam.End();
+    }
+    else
+    {
+        rLastPaM.DeleteMark();
+    }
+
+    SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
+            aEndCellPam.End()->nNode);
+    rRowNodes.push_back(aCellRange);
+    if (bFirstCell)
+    {
+        rpFirstPaM.reset(new SwPaM(*aStartCellPam.Start()));
+    }
+}
+
+typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
+
+static void
+lcl_ApplyRowProperties(
+    uno::Sequence<beans::PropertyValue> const& rRowProperties,
+    uno::Any const& rRow,
+    TableColumnSeparators & rRowSeparators)
+{
+    uno::Reference< beans::XPropertySet > xRow;
+    rRow >>= xRow;
+    const beans::PropertyValue* pProperties = rRowProperties.getConstArray();
+    for (sal_Int32 nProperty = 0; nProperty < rRowProperties.getLength();
+         ++nProperty)
+    {
+        if (pProperties[ nProperty ].Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("TableColumnSeparators")))
+        {
+            // add the separators to access the cell's positions
+            // for vertical merging later
+            TableColumnSeparators aSeparators;
+            pProperties[ nProperty ].Value >>= aSeparators;
+            rRowSeparators = aSeparators;
+        }
+        xRow->setPropertyValue(
+            pProperties[ nProperty ].Name, pProperties[ nProperty ].Value);
+    }
+}
+
+#ifdef DEBUG
+//-->debug cell properties of all rows
+static void
+lcl_DebugCellProperties(
+    const uno::Sequence< uno::Sequence< uno::Sequence<
+        beans::PropertyValue > > >& rCellProperties)
+{
+    ::rtl::OUString sNames;
+    for (sal_Int32  nDebugRow = 0; nDebugRow < rCellProperties.getLength();
+         ++nDebugRow)
+    {
+        const uno::Sequence< beans::PropertyValues > aDebugCurrentRow =
+            rCellProperties[nDebugRow];
+        sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
+        (void) nDebugCells;
+        for (sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells;
+             ++nDebugCell)
+        {
+            const uno::Sequence< beans::PropertyValue >&
+                rDebugCellProperties = aDebugCurrentRow[nDebugCell];
+            const sal_Int32 nDebugCellProperties =
+                rDebugCellProperties.getLength();
+            for (sal_Int32  nDebugProperty = 0;
+                 nDebugProperty < nDebugCellProperties; ++nDebugProperty)
+            {
+                const ::rtl::OUString sName =
+                    rDebugCellProperties[nDebugProperty].Name;
+                sNames += sName;
+                sNames += ::rtl::OUString('-');
+            }
+            sNames += ::rtl::OUString('+');
+        }
+        sNames += ::rtl::OUString('|');
+    }
+    (void)sNames;
+}
+//--<
+#endif
+
+
+static void
+lcl_ApplyCellProperties(
+    const sal_Int32 nCell,
+    TableColumnSeparators const& rRowSeparators,
+    const uno::Sequence< beans::PropertyValue >& rCellProperties,
+    uno::Reference< uno::XInterface > xCell,
+    ::std::vector<VerticallyMergedCell> & rMergedCells)
+{
+    const sal_Int32 nCellProperties = rCellProperties.getLength();
+    const uno::Reference< beans::XPropertySet > xCellPS(xCell, uno::UNO_QUERY);
+    for (sal_Int32 nProperty = 0; nProperty < nCellProperties; ++nProperty)
+    {
+        const OUString & rName  = rCellProperties[nProperty].Name;
+        const uno::Any & rValue = rCellProperties[nProperty].Value;
+        if (rName.equalsAscii("VerticalMerge"))
+        {
+            // determine left border position
+            // add the cell to a queue of merged cells
+            sal_Bool bMerge = sal_False;
+            rValue >>= bMerge;
+            sal_Int32 nLeftPos = -1;
+            if (!nCell)
+            {
+                nLeftPos = 0;
+            }
+            else if (rRowSeparators.getLength() >= nCell)
+            {
+                const text::TableColumnSeparator* pSeparators =
+                    rRowSeparators.getConstArray();
+                nLeftPos = pSeparators[nCell - 1].Position;
+            }
+            if (bMerge)
+            {
+                // 'close' all the cell with the same left position
+                // if separate vertical merges in the same column exist
+                if (rMergedCells.size())
+                {
+                    std::vector<VerticallyMergedCell>::iterator aMergedIter =
+                        rMergedCells.begin();
+                    while (aMergedIter != rMergedCells.end())
+                    {
+                        if (lcl_SimilarPosition(aMergedIter->nLeftPosition,
+                                    nLeftPos))
+                        {
+                            aMergedIter->bOpen = false;
+                        }
+                        ++aMergedIter;
+                    }
+                }
+                // add the new group of merged cells
+                rMergedCells.push_back(VerticallyMergedCell(xCellPS, nLeftPos));
+            }
+            else
+            {
+                // find the cell that
+                DBG_ASSERT(rMergedCells.size(),
+                        "the first merged cell is missing");
+                if (rMergedCells.size())
+                {
+                    std::vector<VerticallyMergedCell>::iterator aMergedIter =
+                        rMergedCells.begin();
+#if OSL_DEBUG_LEVEL > 1
+                    bool bDbgFound = false;
+#endif
+                    while (aMergedIter != rMergedCells.end())
+                    {
+                        if (aMergedIter->bOpen &&
+                            lcl_SimilarPosition(aMergedIter->nLeftPosition,
+                                nLeftPos))
+                        {
+                            aMergedIter->aCells.push_back( xCellPS );
+#if OSL_DEBUG_LEVEL > 1
+                            bDbgFound = true;
+#endif
+                        }
+                        ++aMergedIter;
+                    }
+#if OSL_DEBUG_LEVEL > 1
+                    DBG_ASSERT( bDbgFound,
+                            "couldn't find first vertically merged cell" );
+#endif
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                xCellPS->setPropertyValue(rName, rValue);
+            }
+            catch (uno::Exception const& e)
+            {
+                // Apply the paragraph and char properties to the cell's content
+                const uno::Reference< text::XText > xCellText(xCell,
+                        uno::UNO_QUERY);
+                const uno::Reference< text::XTextCursor > xCellCurs =
+                    xCellText->createTextCursor();
+                xCellCurs->gotoStart( sal_False );
+                xCellCurs->gotoEnd( sal_True );
+                const uno::Reference< beans::XPropertySet > xCellTextProps(
+                        xCellCurs, uno::UNO_QUERY);
+                xCellTextProps->setPropertyValue(rName, rValue);
+            }
+        }
+    }
+}
+
+static void
+lcl_MergeCells(::std::vector<VerticallyMergedCell> & rMergedCells)
+{
+    if (rMergedCells.size())
+    {
+        std::vector<VerticallyMergedCell>::iterator aMergedIter =
+            rMergedCells.begin();
+        while (aMergedIter != rMergedCells.end())
+        {
+            sal_Int32 nCellCount =
+                static_cast<sal_Int32>(aMergedIter->aCells.size());
+            std::vector<uno::Reference< beans::XPropertySet > >::iterator
+                aCellIter = aMergedIter->aCells.begin();
+            bool bFirstCell = true;
+            // the first of the cells gets the number of cells set as RowSpan
+            // the others get the inverted number of remaining merged cells
+            // (3,-2,-1)
+            while (aCellIter != aMergedIter->aCells.end())
+            {
+                (*aCellIter)->setPropertyValue(
+                    C2U(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)),
+                    uno::makeAny(nCellCount));
+                if (bFirstCell)
+                {
+                    nCellCount *= -1;
+                    bFirstCell = false;
+                }
+                ++nCellCount;
+                ++aCellIter;
+            }
+            ++aMergedIter;
+        }
+    }
 }
 
 uno::Reference< text::XTextTable > SAL_CALL
 SwXText::convertToTable(
     const uno::Sequence< uno::Sequence< uno::Sequence<
         uno::Reference< text::XTextRange > > > >& rTableRanges,
-   const uno::Sequence< uno::Sequence< uno::Sequence<
+    const uno::Sequence< uno::Sequence< uno::Sequence<
         beans::PropertyValue > > >& rCellProperties,
-   const uno::Sequence< uno::Sequence< beans::PropertyValue > >& rRowProperties,
-   const uno::Sequence< beans::PropertyValue >& rTableProperties)
+    const uno::Sequence< uno::Sequence< beans::PropertyValue > >&
+        rRowProperties,
+    const uno::Sequence< beans::PropertyValue >& rTableProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     if(!IsValid())
+    {
         throw  uno::RuntimeException();
+    }
 
     //at first collect the text ranges as SwPaMs
-    const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >* pTableRanges = rTableRanges.getConstArray();
+    const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
+        pTableRanges = rTableRanges.getConstArray();
     std::auto_ptr < SwPaM > pFirstPaM;
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     bool bExcept = false;
     SwPaM aLastPaM(m_pImpl->m_pDoc->GetNodes());
-    for( sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength()); ++nRow)
+    for (sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength());
+            ++nRow)
     {
         std::vector<SwNodeRange> aRowNodes;
-        const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >& rRow = pTableRanges[nRow];
-       const uno::Sequence< uno::Reference< text::XTextRange > >* pRow = pTableRanges[nRow].getConstArray();
+        const uno::Sequence< uno::Reference< text::XTextRange > >* pRow =
+            pTableRanges[nRow].getConstArray();
+        const sal_Int32 nCells(pTableRanges[nRow].getLength());
 
-        for( sal_Int32 nCell = 0; nCell < rRow.getLength(); ++nCell)
+        for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
         {
-            if( pRow[nCell].getLength() != 2 )
-                throw lang::IllegalArgumentException();
-            const uno::Reference< text::XTextRange > xStartRange = pRow[nCell][0];
-            const uno::Reference< text::XTextRange > xEndRange = pRow[nCell][1];
-            SwUnoInternalPaM aStartCellPam(*m_pImpl->m_pDoc);
-            SwUnoInternalPaM aEndCellPam(*m_pImpl->m_pDoc);
-
-            // !!! TODO - PaMs in tables and sections do not work here - the same applies to PaMs in frames !!!
-
-            if (!::sw::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
-                !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
-                throw lang::IllegalArgumentException();
-            /** check the nodes between start and end
-                it is allowed to have pairs of StartNode/EndNodes
-             */
-            if(aStartCellPam.Start()->nNode < aEndCellPam.End()->nNode)
-            {
-                // increment on each StartNode and decrement on each EndNode
-                // we must reach zero at the end and must not go below zero
-                long nOpenNodeBlock = 0;
-                SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
-                while( aCellIndex < aEndCellPam.End()->nNode.GetIndex())
-                {
-                    if( aCellIndex.GetNode().IsStartNode() )
-                        ++nOpenNodeBlock;
-                    else if(aCellIndex.GetNode().IsEndNode() )
-                        --nOpenNodeBlock;
-                    if( nOpenNodeBlock < 0 )
-                    {
-                        bExcept = true;
-                        break;
-                    }
-                    ++aCellIndex;
-                }
-                if( nOpenNodeBlock != 0)
-                {
-                    bExcept = true;
-                    break;
-                }
-            }
-
-            /** The vector<vector> NodeRanges has to contain consecutive nodes.
-                In rTableRanges the ranges don't need to be full paragraphs but they have to follow
-                each other. To process the ranges they have to be aligned on paragraph borders
-                by inserting paragraph breaks. Non-consecutive ranges must initiate an
-                exception.
-
-             */
-            if(!nRow && !nCell)
-            {
-                //align the beginning - if necessary
-                if(aStartCellPam.Start()->nContent.GetIndex())
-                    m_pImpl->m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
-            }
-            else
-            {
-                //check the predecessor
-                ULONG nLastNodeIndex = aLastPaM.End()->nNode.GetIndex();
-                ULONG nStartCellNodeIndex = aStartCellPam.Start()->nNode.GetIndex();
-                ULONG nLastNodeEndIndex = aLastPaM.End()->nNode.GetIndex();
-                if( nLastNodeIndex == nStartCellNodeIndex)
-                {
-                    //- same node as predecessor then equal nContent?
-                    if(aLastPaM.End()->nContent != aStartCellPam.Start()->nContent)
-                        bExcept = true;
-                    else
-                    {
-                        m_pImpl->m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
-                    }
-                }
-                else if(nStartCellNodeIndex == ( nLastNodeEndIndex + 1))
-                {
-                    //next paragraph - now the content index of the new should be 0
-                    //and of the old one should be equal to the text length
-                    //but if it isn't we don't care - the cell is being inserted on the
-                    //node border anyway
-                }
-                else
-                {
-                    bExcept = true;
-                }
-            }
-           //now check if there's a need to insert another paragraph break
-            if( aEndCellPam.End()->nContent.GetIndex() < aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
-           {
-               m_pImpl->m_pDoc->SplitNode(*aEndCellPam.End(), sal_False);
-                //take care that the new start/endcell is moved to the right position
-               //aStartCellPam has to point to the start of the new (previous) node
-               //aEndCellPam has to point the the end of the new (previous) node
-                aStartCellPam.DeleteMark();
-                aStartCellPam.Move(fnMoveBackward, fnGoNode);
-               aStartCellPam.GetPoint()->nContent = 0;
-                aEndCellPam.DeleteMark();
-                aEndCellPam.Move(fnMoveBackward, fnGoNode);
-                aEndCellPam.GetPoint()->nContent = aEndCellPam.GetNode()->GetTxtNode()->Len();
-
-           }
-
-            *aLastPaM.GetPoint() = *aEndCellPam.Start();
-            if( aStartCellPam.HasMark() )
-            {
-                aLastPaM.SetMark();
-                *aLastPaM.GetMark() = *aEndCellPam.End();
-            }
-            else
-                aLastPaM.DeleteMark();
-
-            SwNodeRange aCellRange( aStartCellPam.Start()->nNode, aEndCellPam.End()->nNode);
-            aRowNodes.push_back(aCellRange);
-            if( !nRow && !nCell )
-                pFirstPaM.reset( new SwPaM(*aStartCellPam.Start()));
+            m_pImpl->ConvertCell((nCell == 0) && (nRow == 0), pRow[nCell],
+                aRowNodes, pFirstPaM, aLastPaM, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
     }
@@ -2001,216 +2259,80 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         throw lang::IllegalArgumentException();
     }
 
-    typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
-    std::vector< TableColumnSeparators > aRowSeparators(rRowProperties.getLength());
-    std::vector<VerticallyMergedCell>       aMergedCells;
+    std::vector< TableColumnSeparators >
+        aRowSeparators(rRowProperties.getLength());
+    std::vector<VerticallyMergedCell> aMergedCells;
 
-    const SwTable* pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
-    SwXTextTable* pTextTable = 0;
-    uno::Reference< text::XTextTable > xRet = pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
-    uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
-    // set properties to the table - catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
+    SwTable const*const pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
+    SwXTextTable *const pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
+    const uno::Reference< text::XTextTable > xRet = pTextTable;
+    const uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
+    // set properties to the table
+    // catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
     try
     {
         //apply table properties
-        const beans::PropertyValue* pTableProperties = rTableProperties.getConstArray();
-        sal_Int32 nProperty = 0;
-        for( ; nProperty < rTableProperties.getLength(); ++nProperty)
+        const beans::PropertyValue* pTableProperties =
+            rTableProperties.getConstArray();
+        for (sal_Int32 nProperty = 0; nProperty < rTableProperties.getLength();
+             ++nProperty)
         {
             try
             {
-                xPrSet->setPropertyValue( pTableProperties[nProperty].Name, pTableProperties[nProperty].Value );
+                xPrSet->setPropertyValue( pTableProperties[nProperty].Name,
+                        pTableProperties[nProperty].Value );
             }
-            catch ( const uno::Exception e )
+            catch ( uno::Exception const& e )
             {
 #if DEBUG
                 std::clog << "Exception when setting property: ";
-                std::clog << rtl::OUStringToOString( pTableProperties[nProperty].Name, RTL_TEXTENCODING_UTF8 ).getStr( );
+                std::clog << rtl::OUStringToOString(
+                    pTableProperties[nProperty].Name, RTL_TEXTENCODING_UTF8)
+                    .getStr();
                 std::clog << ". Message: ";
-                std::clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( );
+                std::clog << rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_UTF8 ).getStr();
                 std::clog << std::endl;
 #endif
             }
         }
 
         //apply row properties
-        uno::Reference< table::XTableRows >  xRows = xRet->getRows();
-        const beans::PropertyValues* pRowProperties = rRowProperties.getConstArray();
-        sal_Int32 nRow = 0;
-        for( ; nRow < xRows->getCount(); ++nRow)
+        const uno::Reference< table::XTableRows >  xRows = xRet->getRows();
+
+        const beans::PropertyValues* pRowProperties =
+            rRowProperties.getConstArray();
+        for (sal_Int32 nRow = 0; nRow < xRows->getCount(); ++nRow)
         {
             if( nRow >= rRowProperties.getLength())
             {
                 break;
             }
-            uno::Reference< beans::XPropertySet > xRow;
-            xRows->getByIndex( nRow ) >>= xRow;
-            const beans::PropertyValue* pProperties = pRowProperties[nRow].getConstArray();
-            for( nProperty = 0; nProperty < pRowProperties[nRow].getLength(); ++nProperty)
-            {
-                if( pProperties[ nProperty ].Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM ( "TableColumnSeparators" )))
-                {
-                    //add the separators to access the cell's positions for vertical merging later
-                    TableColumnSeparators aSeparators;
-                    pProperties[ nProperty ].Value >>= aSeparators;
-                    aRowSeparators[nRow] = aSeparators;
-                }
-                xRow->setPropertyValue( pProperties[ nProperty ].Name, pProperties[ nProperty ].Value );
-            }
+            lcl_ApplyRowProperties(pRowProperties[nRow],
+                xRows->getByIndex(nRow), aRowSeparators[nRow]);
         }
 
 #ifdef DEBUG
-//-->debug cell properties of all rows
-    {
-        ::rtl::OUString sNames;
-        for( sal_Int32  nDebugRow = 0; nDebugRow < rCellProperties.getLength(); ++nDebugRow)
-        {
-            const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = rCellProperties[nDebugRow];
-            sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
-            (void) nDebugCells;
-            for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
-            {
-                const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
-                sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
-                for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
-                {
-                    const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
-                    sNames += sName;
-                    sNames += ::rtl::OUString('-');
-                }
-                sNames += ::rtl::OUString('+');
-            }
-            sNames += ::rtl::OUString('|');
-        }
-        (void)sNames;
-    }
-//--<
+        lcl_DebugCellProperties(rCellProperties);
 #endif
-
 
         //apply cell properties
-        for( nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
+        for (sal_Int32 nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
         {
-            const uno::Sequence< beans::PropertyValues > aCurrentRow = rCellProperties[nRow];
+            const uno::Sequence< beans::PropertyValues > aCurrentRow =
+                rCellProperties[nRow];
             sal_Int32 nCells = aCurrentRow.getLength();
-            for( sal_Int32  nCell = 0; nCell < nCells; ++nCell)
+            for (sal_Int32  nCell = 0; nCell < nCells; ++nCell)
             {
-                const uno::Sequence< beans::PropertyValue >& aCellProperties = aCurrentRow[nCell];
-                sal_Int32 nCellProperties = aCellProperties.getLength();
-                uno::Reference< beans::XPropertySet > xCell( pTextTable->getCellByPosition(nCell, nRow), uno::UNO_QUERY );
-                for( nProperty = 0; nProperty < nCellProperties; ++nProperty)
-                {
-                    const OUString& rName = aCellProperties[nProperty].Name;
-                    if( rName.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM ( "VerticalMerge")))
-                    {
-                        //determine left border position
-                        //add the cell to a queue of merged cells
-                        //
-                        sal_Bool bMerge = sal_False;
-                        aCellProperties[nProperty].Value >>= bMerge;
-                        sal_Int32 nLeftPos = -1;
-                        if( !nCell )
-                            nLeftPos = 0;
-                        else if( aRowSeparators[nRow].getLength() >= nCell )
-                        {
-                            const text::TableColumnSeparator* pSeparators = aRowSeparators[nRow].getConstArray();
-                            nLeftPos = pSeparators[nCell - 1].Position;
-                        }
-                        if( bMerge )
-                        {
-                            // 'close' all the cell with the same left position
-                            // if separate vertical merges in the same column exist
-                            if( aMergedCells.size() )
-                            {
-                                std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
-                                while( aMergedIter != aMergedCells.end())
-                                {
-                                    if( lcl_SimilarPosition( aMergedIter->nLeftPosition, nLeftPos) )
-                                    {
-                                        aMergedIter->bOpen = false;
-                                    }
-                                    ++aMergedIter;
-                                }
-                            }
-                            //add the new group of merged cells
-                            aMergedCells.push_back(VerticallyMergedCell(xCell, nLeftPos ));
-                        }
-                        else
-                        {
-                            //find the cell that
-                            DBG_ASSERT(aMergedCells.size(), "the first merged cell is missing");
-                            if( aMergedCells.size() )
-                            {
-                                std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
-#if OSL_DEBUG_LEVEL > 1
-                                bool bDbgFound = false;
-#endif
-                                while( aMergedIter != aMergedCells.end())
-                                {
-                                    if( aMergedIter->bOpen &&
-                                        lcl_SimilarPosition( aMergedIter->nLeftPosition, nLeftPos) )
-                                    {
-                                        aMergedIter->aCells.push_back( xCell );
-#if OSL_DEBUG_LEVEL > 1
-                                        bDbgFound = true;
-#endif
-                                    }
-                                    ++aMergedIter;
-                                }
-#if OSL_DEBUG_LEVEL > 1
-                                DBG_ASSERT( bDbgFound, "couldn't find first vertically merged cell" );
-#endif
-                            }
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            xCell->setPropertyValue(rName, aCellProperties[nProperty].Value);
-                        }
-                        catch ( const uno::Exception e )
-                        {
-                            // Apply the paragraph and char properties to the cell's content
-                            uno::Reference< text::XText > xCellText( xCell, uno::UNO_QUERY );
-                            uno::Reference< text::XTextCursor > xCellCurs = xCellText->createTextCursor( );
-                            xCellCurs->gotoStart( false );
-                            xCellCurs->gotoEnd( true );
-
-                            uno::Reference< beans::XPropertySet > xCellTextProps( xCellCurs, uno::UNO_QUERY );
-                            xCellTextProps->setPropertyValue( rName, aCellProperties[nProperty].Value );
-                        }
-                    }
-                }
+                lcl_ApplyCellProperties(nCell,
+                    aRowSeparators[nRow], aCurrentRow[nCell],
+                    pTextTable->getCellByPosition(nCell, nRow),
+                    aMergedCells);
             }
         }
-        //now that the cell properties are set the vertical merge values have to be applied
-        if( aMergedCells.size() )
-        {
-            std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
-            while( aMergedIter != aMergedCells.end())
-            {
-                sal_Int32 nCellCount = (sal_Int32)aMergedIter->aCells.size();
-                std::vector<uno::Reference< beans::XPropertySet > >::iterator aCellIter = aMergedIter->aCells.begin();
-                bool bFirstCell = true;
-                //the first of the cells get's the number of cells set as RowSpan
-                //the others get the inverted number of remaining merged cells (3,-2,-1)
-                while( aCellIter != aMergedIter->aCells.end() )
-                {
-                    (*aCellIter)->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)), uno::makeAny( nCellCount ));
-                    if( bFirstCell )
-                    {
-                        nCellCount *= -1;
-                        bFirstCell = false;
-                    }
-                    ++nCellCount;
-                    ++aCellIter;
-                }
-                ++aMergedIter;
-            }
-        }
+        // now that the cell properties are set the vertical merge values
+        // have to be applied
+        lcl_MergeCells(aMergedCells);
     }
     catch( const lang::WrappedTargetException& rWrapped )
     {
@@ -2221,29 +2343,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         (void)rBounds;
     }
 
-
-        bool bIllegalException = false;
-        bool bRuntimeException = false;
-        ::rtl::OUString sMessage;
-        m_pImpl->m_pDoc->StartUndo(UNDO_START, NULL);
-        m_pImpl->m_pDoc->EndUndo(UNDO_START, NULL);
-        if( bIllegalException || bRuntimeException )
-        {
-            SwUndoIter aUndoIter( pFirstPaM.get(), UNDO_EMPTY );
-            m_pImpl->m_pDoc->Undo(aUndoIter);
-            if(bIllegalException)
-            {
-                lang::IllegalArgumentException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-            else //if(bRuntimeException)
-            {
-                uno::RuntimeException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-        }
     return xRet;
 }
 
