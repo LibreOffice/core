@@ -37,7 +37,7 @@
 #include <svtools/parhtml.hxx>
 #endif
 #ifndef _SVX_SVXENUM_HXX
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>

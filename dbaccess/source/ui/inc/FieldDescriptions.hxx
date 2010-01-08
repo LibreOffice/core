@@ -34,7 +34,7 @@
 #include "QEnumTypes.hxx"
 #endif
 #ifndef _SVX_SVXENUM_HXX
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"

@@ -476,7 +476,7 @@
 #include "svx/dbexch.hrc"
 #include "svx/dialogs.hrc"
 #include "svx/globlmn.hrc"
-#include "svx/svxenum.hxx"
+#include "editeng/svxenum.hxx"
 #include "svx/svxids.hrc"
 
 

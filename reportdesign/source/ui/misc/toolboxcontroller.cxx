@@ -51,10 +51,10 @@
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
 #define ITEMID_FONTHEIGHT   4
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/tbxcustomshapes.hxx>
 
 #include <comphelper/sequence.hxx>

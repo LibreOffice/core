@@ -41,8 +41,8 @@
 #include "ViewsWindow.hxx"
 
 #include <svx/svdpagv.hxx>
-#include <svx/eeitemid.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/eeitemid.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/gallery.hxx>

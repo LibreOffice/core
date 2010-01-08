@@ -37,10 +37,10 @@
 
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoashp.hxx>
