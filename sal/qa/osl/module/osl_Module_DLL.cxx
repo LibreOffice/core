@@ -33,7 +33,7 @@
 
 #include <stdio.h>
 #include <sal/types.h>
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {

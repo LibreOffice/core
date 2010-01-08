@@ -49,12 +49,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 #include <string.h>
 
 
@@ -632,7 +626,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
                 sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
                 nRead = m_input->readBytes( aData , nToRead );
 
-                assert( aData.getLength() == nRead );
+                OSL_ASSERT( aData.getLength() == nRead );
 
                 try
                 {
@@ -650,7 +644,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
                 }
             }
 
-            assert( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
+            OSL_ASSERT( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
 
             m_pBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
 
