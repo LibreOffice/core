@@ -32,10 +32,8 @@
 #include "precompiled_sfx2.hxx"
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "viewfac.hxx"
 
 // STATIC DATA -----------------------------------------------------------
@@ -52,6 +50,14 @@ void SfxViewFactory::InitFactory()
 {
     DBG_CHKTHIS(SfxViewFactory, 0);
     (*fnInit)();
+}
+
+String SfxViewFactory::GetViewName() const
+{
+    ::rtl::OUStringBuffer aViewName;
+    aViewName.appendAscii( "view" );
+    aViewName.append( sal_Int32( GetOrdinal() ) );
+    return aViewName.makeStringAndClear();
 }
 
 // CTOR / DTOR -----------------------------------------------------------

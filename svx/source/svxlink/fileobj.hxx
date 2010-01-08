@@ -91,7 +91,6 @@ public:
     virtual BOOL IsDataComplete() const;
 
     void CancelTransfers();
-    void SetTransferPriority( USHORT nPrio );
 };
 
 

@@ -400,17 +400,7 @@ interface TopWindow : BrowseWindow
     [
         StateMethod = StateView_Impl ;
     ]
-    SID_WIN_POSSIZE // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
     SID_CLOSEWIN // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
-    SID_BACKTOWEBTOP // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;
         StateMethod = GetState_Impl ;
@@ -435,23 +425,29 @@ interface TopWindow : BrowseWindow
         ExecMethod = INetExecute_Impl ;
         StateMethod = INetState_Impl ;
     ]
-    SID_BROWSE_STOP // ole(no) api()
-    [
-        ExecMethod = INetExecute_Impl ;
-        StateMethod = INetState_Impl ;
-    ]
-
 }
 
  //=========================================================================
 
 shell SfxViewFrame
 {
-    import BrowseWindow [Automation];
+    import TopWindow [Automation];
 
     SID_FORMATMENUSTATE
     [
         StateMethod = MiscState_Impl ;
+    ]
+
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    SID_SHOWPOPUPS
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
     ]
 }
 

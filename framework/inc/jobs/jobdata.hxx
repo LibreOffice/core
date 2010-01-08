@@ -233,7 +233,7 @@ class JobData : private ThreadHelpBase
             after a job was sucessfully executed (by any outside code using our
             informations) it can return a result. This member make it part of this
             container too. So it can be used for further things.
-            We use it also to actualize our internal state and the configuration
+            We use it also to update our internal state and the configuration
             of the job. But note: only the last result will be saved here!
          */
         JobResult m_aLastExecutionResult;

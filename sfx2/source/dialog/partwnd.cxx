@@ -181,7 +181,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     if ( pBind->GetDispatcher() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
         if ( xSupp.is() )
             xSupp->getFrames()->append( xFrame );
     }

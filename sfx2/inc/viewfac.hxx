@@ -59,6 +59,9 @@ public:
                   { return String( aDescription ); }
     USHORT        GetOrdinal() const { return nOrd; }
 
+    /// returns an API-compatible view name. For the moment, this is "view" with an appended ordinal/ID
+    String        GetViewName() const;
+
 private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;

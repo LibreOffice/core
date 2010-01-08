@@ -80,7 +80,7 @@ void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
     }
 }
 
-struct SfxProgress_Impl : public SfxCancellable
+struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
     String                  aText, aStateText;
@@ -144,11 +144,9 @@ void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
 
 // -----------------------------------------------------------------------
 
-SfxProgress_Impl::SfxProgress_Impl( const String &rTitle )
-    :   SfxCancellable( SFX_APP()->GetCancelManager(), rTitle ),
-        pActiveProgress( 0 )
+SfxProgress_Impl::SfxProgress_Impl( const String &/*rTitle*/ )
+    :   pActiveProgress( 0 )
 {
-    SFX_APP()->GetCancelManager()->RemoveCancellable(this);
 }
 
 // -----------------------------------------------------------------------
@@ -185,21 +183,6 @@ SfxProgress::SfxProgress
 {
     pImp->bRunning = TRUE;
     pImp->bAllowRescheduling = Application::IsInExecute();;
-
-    if ( pObjSh )
-    {
-        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjSh ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pObjSh ) )
-        {
-            pFrame->GetCancelManager()->InsertCancellable( pImp );
-/*
-            SfxBindings& rBindings = pFrame->GetBindings();
-            rBindings.Invalidate( SID_BROWSE_STOP );
-            if ( !rBindings.IsInRegistrations() )
-                rBindings.Update( SID_BROWSE_STOP );
-            rBindings.Invalidate( SID_BROWSE_STOP );
- */
-        }
-    }
 
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;
@@ -241,14 +224,6 @@ SfxProgress::~SfxProgress()
 
     if( pImp->bIsStatusText == TRUE )
         GetpApp()->HideStatusText( );
-    SfxObjectShell* pDoc = pImp->xObjSh;
-    if ( pDoc )
-    {
-        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDoc ) )
-            pFrame->GetCancelManager()->RemoveCancellable( pImp );//Invalidate( SID_BROWSE_STOP );
-    }
-    else
-        SFX_APP()->Invalidate( SID_BROWSE_STOP );
     delete pImp;
 }
 
@@ -390,8 +365,8 @@ BOOL SfxProgress::SetState
 
 {
     // wurde via Stop-Button angehalten?
-    if ( pImp->IsCancelled() )
-        return FALSE;
+//  if ( pImp->IsCancelled() )
+//      return FALSE;
 
     if( pImp->pActiveProgress ) return TRUE;
 

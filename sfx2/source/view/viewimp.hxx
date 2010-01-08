@@ -85,12 +85,10 @@ struct SfxViewShell_Impl
     Size                        aOptimalSize;
     Size                        aMargin;
     USHORT                      nPrinterLocks;
-    BOOL                        bUseObjectSize;
     BOOL                        bCanPrint;
     BOOL                        bHasPrintOptions;
     BOOL                        bPlugInsActive;
     BOOL                        bIsShowView;
-    BOOL                        bFrameSetImpl;
     BOOL                        bOwnsMenu;
     BOOL                        bGotOwnerShip;
     BOOL                        bGotFrameOwnerShip;

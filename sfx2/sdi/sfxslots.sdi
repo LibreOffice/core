@@ -43,7 +43,6 @@ SlotIdFile( "sfx2/sfx.hrc" )
     include "docslots.sdi"
     include "viwslots.sdi"
     include "frmslots.sdi"
-    include "mdislots.sdi"
     include "appslots.sdi"
 
 }

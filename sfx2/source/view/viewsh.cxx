@@ -84,7 +84,7 @@
 #include "view.hrc"
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "mailmodelapi.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -392,7 +392,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_ACTIVATE_STYLE_APPLY:
         {
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    GetViewFrame()->GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
 
             Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
@@ -488,7 +488,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( pMailDocType )
                     aDocType = pMailDocType->GetValue();
 
-                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
                 SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
 
                 if ( nId == SID_MAIL_SENDDOC )
@@ -532,7 +532,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame()->GetFrameInterface() );
+            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
             const rtl::OUString aModuleManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ));
@@ -689,8 +689,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             // ausfuehren
             if ( !pShowItem || bActive != pImp->bPlugInsActive )
             {
-                SfxFrame* pTopFrame = GetFrame()->GetTopFrame();
-                if ( pTopFrame != GetFrame()->GetFrame() )
+                SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
+                if ( pTopFrame != &GetFrame()->GetFrame() )
                 {
                     // FramesetDocument
                     SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
@@ -776,7 +776,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             aPrinterName = Printer::GetDefaultPrinterName();
                         if ( aPrinterName.getLength() > 0 )
                         {
-                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
                             ::rtl::OUStringBuffer aBuffer( 60 );
                             aBuffer.append( RetrieveLabelFromCommand(
@@ -874,7 +874,7 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
     if ( !bActive )
-        GetFrame()->GetFrame()->Appear();
+        GetFrame()->GetFrame().Appear();
 }
 
 //--------------------------------------------------------------------
@@ -896,7 +896,7 @@ void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
-    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
     uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
@@ -909,12 +909,12 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
-    if ( !pFrame->GetFrame()->IsClosing_Impl() ||
+    if ( !pFrame->GetFrame().IsClosing_Impl() ||
         SfxViewFrame::Current() != pFrame )
             pFrame->GetDispatcher()->Update_Impl( TRUE );
     pFrame->GetBindings().HidePopups(FALSE);
 
-    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
     // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
     // if ( xParentFrame.is() )
     //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
@@ -995,7 +995,7 @@ void SfxViewShell::Activate( BOOL bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
         if ( pSh->GetModel().is() )
-            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame()->GetController() );
+            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame().GetController() );
 
         SetCurrentDocument();
     }
@@ -1255,8 +1255,6 @@ SfxViewShell::SfxViewShell
     ,pFrame(pViewFrame)
     ,pSubShell(0)
     ,pWindow(0)
-    ,bMaximizeFirst( 0 != (nFlags & SFX_VIEW_MAXIMIZE_FIRST) )
-    ,bOptimizeEach(0 != (nFlags & SFX_VIEW_OPTIMIZE_EACH))
     ,bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
 {
     DBG_CTOR(SfxViewShell, 0);
@@ -1266,11 +1264,7 @@ SfxViewShell::SfxViewShell
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
 
-    pImp->bUseObjectSize = FALSE;
-//        SFX_CREATE_MODE_EMBEDDED==pFrame->GetObjectShell()->GetCreateMode() &&
-//        SFX_VIEW_OBJECTSIZE_EMBEDDED == (nFlags & SFX_VIEW_OBJECTSIZE_EMBEDDED);
     pImp->bCanPrint = SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT);
-    pImp->bFrameSetImpl = (nFlags & SFX_VIEW_IMPLEMENTED_AS_FRAMESET) != 0;
     pImp->bHasPrintOptions =
         SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
     pImp->bPlugInsActive = TRUE;
@@ -1362,6 +1356,24 @@ SfxViewShell* SfxViewShell::Current()
 {
     SfxViewFrame *pCurrent = SfxViewFrame::Current();
     return pCurrent ? pCurrent->GetViewShell() : NULL;
+}
+
+//--------------------------------------------------------------------
+
+SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
+{
+    if ( !i_rController.is() )
+        return NULL;
+
+    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, FALSE );
+            pViewShell;
+            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, FALSE )
+        )
+    {
+        if ( pViewShell->GetController() == i_rController )
+            return pViewShell;
+    }
+    return NULL;
 }
 
 //--------------------------------------------------------------------
@@ -1517,16 +1529,12 @@ void SfxViewShell::PushSubShells_Impl( BOOL bPush )
     {
         for ( USHORT n=0; n<nCount; n++ )
             pDisp->Push( *pImp->aArr[n] );
-
-//      HACK(evtl. PushSubShells fuer SW virtuell machen oder im SW umbauen)
-//      Notify( *this, SfxSimpleHint( SFX_HINT_RESERVED4 ) );
     }
     else if ( nCount )
     {
-        pDisp->Pop( *pImp->aArr[0], SFX_SHELL_POP_UNTIL );
-
-//      HACK(evtl. PushSubShells fuer SW virtuell machen oder im SW umbauen)
-//      Notify( *this, SfxSimpleHint( SFX_HINT_RESERVED3 ) );
+        SfxShell& rPopUntil = *pImp->aArr[0];
+        if ( pDisp->GetShellLevel( rPopUntil ) != USHRT_MAX )
+            pDisp->Pop( rPopUntil, SFX_SHELL_POP_UNTIL );
     }
 
     pDisp->Flush();
@@ -1677,7 +1685,7 @@ BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     if (!pImp->pAccExec)
     {
         pImp->pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame()->GetFrameInterface());
+        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame().GetFrameInterface());
     }
 
     return pImp->pAccExec->execute(aKey.GetKeyCode());
@@ -1782,13 +1790,6 @@ void SfxViewShell::DisconnectAllClients()
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::UseObjectSize() const
-{
-    return pImp->bUseObjectSize;
-}
-
-//--------------------------------------------------------------------
-
 void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 {
 }
@@ -1798,14 +1799,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 {
     DBG_ASSERT (pFrame, "Kein Frame?");
-    if ( UseObjectSize() )
-    {
-        Point aPos = rRect.TopLeft();
-        Size aSize = GetObjectShell()->GetVisArea().GetSize();
-        GetObjectShell()->SetVisArea( Rectangle(aPos, aSize) );
-    }
-    else
-        GetObjectShell()->SetVisArea( rRect );
+    GetObjectShell()->SetVisArea( rRect );
 }
 
 //--------------------------------------------------------------------
@@ -1977,13 +1971,6 @@ SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
     return pSelf;
 }
 
-//--------------------------------------------------------------------
-
-BOOL SfxViewShell::IsImplementedAsFrameset_Impl( ) const
-{
-    return pImp->bFrameSetImpl;
-}
-
 //------------------------------------------------------------------------
 
 void SfxViewShell::JumpToMark( const String& rMark )
@@ -2019,6 +2006,11 @@ void SfxViewShell::SetController( SfxBaseController* pController )
 }
 
 Reference < XController > SfxViewShell::GetController()
+{
+    return pImp->pController;
+}
+
+SfxBaseController* SfxViewShell::GetBaseController_Impl() const
 {
     return pImp->pController;
 }
@@ -2177,7 +2169,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
     {
         // document couldn't be closed or it shouldn't, now try at least to close the frame
         com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
-                GetViewFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                GetViewFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
         if ( xFrame.is() )
         {
             try
@@ -2243,3 +2235,4 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
     {
     }
 }
+

@@ -986,7 +986,7 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
-                Reference< XDispatchProvider > xDispProv( pFrame->GetTopFrame()->GetFrameInterface(), UNO_QUERY );
+                Reference< XDispatchProvider > xDispProv( pFrame->GetTopFrame().GetFrameInterface(), UNO_QUERY );
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(

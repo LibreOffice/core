@@ -348,7 +348,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     // Merge Addon popup menus into the SV Menu
-    Reference< com::sun::star::frame::XFrame > xFrame( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface() );
+    Reference< com::sun::star::frame::XFrame > xFrame( pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface() );
 
     if ( pSVMenu->IsMenuBar() )
     {
@@ -613,7 +613,7 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     BOOL bIsHiContrastMode = IsHiContrastMode();
-    Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
+    Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( !bIsAddonPopupMenu )
     {
@@ -685,7 +685,7 @@ void SfxVirtualMenu::UpdateImages()
         BOOL            bIsHiContrastMode   = IsHiContrastMode();
         USHORT          nItemCount          = pSVMenu->GetItemCount();
         SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
-        Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
+        Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
         for ( USHORT nSVPos=0; nSVPos < nItemCount; ++nSVPos )
         {
@@ -734,7 +734,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     {
         BOOL            bIsHiContrastMode   = IsHiContrastMode();
         USHORT          nItemCount          = pMenu->GetItemCount();
-        Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+        Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
         for ( USHORT nPos=0; nPos < nItemCount; ++nPos )
         {
@@ -903,7 +903,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     // Create special popup menu that is filled with the 3rd party components popup menu items
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
-    Reference<com::sun::star::frame::XFrame> xFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+    Reference<com::sun::star::frame::XFrame> xFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
     PopupMenu* pAddonMenu = NULL;
     try

@@ -13193,31 +13193,6 @@ SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EXPLORER;
-]
-
-//--------------------------------------------------------------------------
 SfxUInt16Item Year2000 SID_ATTR_YEAR2000
 ()
 [

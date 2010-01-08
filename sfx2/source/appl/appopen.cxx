@@ -104,7 +104,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/viewsh.hxx>
 #include "app.hrc"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -196,7 +196,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
                     // Vergleiche anhand der URLs
                     INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
-                         (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, 0, TRUE )) &&
+                         (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, TRUE )) &&
                          !xDoc->IsLoading())
                     {
                             break;
@@ -213,12 +213,10 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
         DBG_ASSERT(
             !bForbidVisible, "Unsichtbares kann nicht aktiviert werden" );
 
-        SfxTopViewFrame *pFrame;
-        for( pFrame = (SfxTopViewFrame*)
-                 SfxViewFrame::GetFirst( xDoc, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame;
+        for( pFrame = SfxViewFrame::GetFirst( xDoc );
              pFrame && !pFrame->IsVisible_Impl();
-             pFrame = (SfxTopViewFrame*)
-                 SfxViewFrame::GetNext( *pFrame, xDoc, TYPE(SfxTopViewFrame) ) ) ;
+             pFrame = SfxViewFrame::GetNext( *pFrame, xDoc ) ) ;
         if ( pFrame )
         {
             SfxViewFrame *pCur = SfxViewFrame::Current();
@@ -514,65 +512,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
 //--------------------------------------------------------------------
 
-SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxItemSet *pSet )
-{
-    SfxObjectShellLock xDoc;
-    String aFact( rFact );
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
-    if ( aPrefix.Len() == aFact.Match( aPrefix ) )
-        aFact.Erase( 0, aPrefix.Len() );
-    USHORT nPos = aFact.Search( '?' );
-    String aParam;
-    if ( nPos != STRING_NOTFOUND )
-    {
-        aParam = aFact.Copy( nPos, aFact.Len() );
-        aFact.Erase( nPos, aFact.Len() );
-        aParam.Erase(0,1);
-    }
-
-    xDoc = SfxObjectShell::CreateObjectByFactoryName( aFact );
-    aParam = INetURLObject::decode( aParam, '%', INetURLObject::DECODE_WITH_CHARSET );
-    if( xDoc.Is() )
-        xDoc->DoInitNew_Impl( aParam );
-
-    if ( xDoc.Is() )
-    {
-        if ( pSet )
-        {
-            // TODO/LATER: Should the other arguments be transfered as well?
-            SFX_ITEMSET_ARG( pSet, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH, FALSE);
-            if ( pDefaultPathItem )
-                xDoc->GetMedium()->GetItemSet()->Put( *pDefaultPathItem );
-            SFX_ITEMSET_ARG( pSet, pDefaultNameItem, SfxStringItem, SID_DEFAULTFILENAME, FALSE);
-            if ( pDefaultNameItem )
-                xDoc->GetMedium()->GetItemSet()->Put( *pDefaultNameItem );
-            SFX_ITEMSET_ARG( pSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, FALSE );
-            if ( pTitleItem )
-                xDoc->GetMedium()->GetItemSet()->Put( *pTitleItem );
-        }
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
-            pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *pNew, aArgs );
-
-            sal_Int32 nLength = aArgs.getLength();
-            aArgs.realloc( nLength + 1 );
-
-            aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
-            aArgs[nLength].Value <<= ::rtl::OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
-
-            xModel->attachResource( ::rtl::OUString(), aArgs );
-            delete pNew;
-        }
-    }
-
-    return xDoc;
-}
-
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -604,131 +543,6 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
     if ( pItem )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
-}
-
-const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
-{
-    DBG_MEMTEST();
-/*
-    SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
-//(mba)/task
-
-    if ( !pHidden || !pHidden->GetValue() )
-        Application::GetAppWindow()->EnterWait();
-*/
-    SfxObjectShellLock xDoc;
-
-    // Factory-RegNo kann per Parameter angegeben sein
-    SfxErrorContext aEc(ERRCTX_SFX_NEWDOCDIRECT);
-    rReq.GetArgs(); // -Wall required??
-    String aFactory;
-    rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, TRUE ) );
-    SFX_REQUEST_ARG( rReq, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
-    if( pFactoryName )
-        aFactory = pFactoryName->GetValue();
-    else
-        aFactory = SvtModuleOptions().GetDefaultModuleName();
-
-    SFX_REQUEST_ARG( rReq, pFileFlagsItem, SfxStringItem, SID_OPTIONS, FALSE);
-    if ( pFileFlagsItem )
-    {
-        // Werte auf einzelne Items verteilen
-        String aFileFlags = pFileFlagsItem->GetValue();
-        aFileFlags.ToUpperAscii();
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0054 ) )               // T = 54h
-            rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, TRUE ) );
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0048 ) )               // H = 48h
-            rReq.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0052 ) )               // R = 52h
-            rReq.AppendItem( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0042 ) )               // B = 42h
-            rReq.AppendItem( SfxBoolItem( SID_PREVIEW, TRUE ) );
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0053 ) )               // S = 53h
-            rReq.AppendItem( SfxBoolItem( SID_SILENT, TRUE ) );
-    }
-
-    xDoc = NewDoc_Impl( aFactory, rReq.GetArgs() );
-    if ( xDoc.Is() )
-    {
-        SFX_REQUEST_ARG(rReq, pReadonly, SfxBoolItem, SID_DOC_READONLY, FALSE);
-        if ( pReadonly )
-            xDoc->GetMedium()->GetItemSet()->Put( *pReadonly );
-
-        SFX_REQUEST_ARG(rReq, pPreview, SfxBoolItem, SID_PREVIEW, FALSE);
-        if ( pPreview )
-            xDoc->GetMedium()->GetItemSet()->Put( *pPreview );
-
-        SFX_REQUEST_ARG(rReq, pSilent, SfxBoolItem, SID_SILENT, FALSE);
-        if ( pSilent )
-            xDoc->GetMedium()->GetItemSet()->Put( *pSilent );
-
-        SFX_REQUEST_ARG(rReq, pFlags, SfxStringItem, SID_OPTIONS, FALSE);
-        if ( pFlags )
-            xDoc->GetMedium()->GetItemSet()->Put( *pFlags );
-    }
-
-    // View erzeugen
-    if ( xDoc.Is() )
-    {
-        SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
-        BOOL bHidden = FALSE;
-        if ( pHidden )
-        {
-            xDoc->GetMedium()->GetItemSet()->Put( *pHidden, SID_HIDDEN );
-            bHidden = pHidden->GetValue();
-        }
-
-        SFX_REQUEST_ARG(rReq, pViewId, SfxUInt16Item, SID_VIEW_ID, FALSE);
-        USHORT nViewId = 0;
-        if ( pViewId )
-        {
-            xDoc->GetMedium()->GetItemSet()->Put( *pViewId, SID_VIEW_ID );
-            nViewId = pViewId->GetValue();
-        }
-
-        xDoc->SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-//      xDoc->Get_Impl()->nLoadedFlags = SFX_LOADED_ALL;
-        const SfxItemSet* pInternalArgs = rReq.GetInternalArgs_Impl();
-        if( pInternalArgs )
-            xDoc->GetMedium()->GetItemSet()->Put( *pInternalArgs );
-        SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-
-        SfxFrame* pFrame = NULL;
-        if (pFrameItem)
-            pFrame = pFrameItem->GetFrame();
-        else
-            pFrame = (SfxFrame*)SfxTopFrame::Create(xDoc, nViewId, bHidden, pInternalArgs);
-        if ( pFrame )
-        {
-            if ( pFrame->GetCurrentDocument() == xDoc || pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
-            {
-                if ( bHidden )
-                {
-                    xDoc->RestoreNoDelete();
-                    xDoc->OwnerLock( TRUE );
-                    xDoc->Get_Impl()->bHiddenLockedByAPI = TRUE;
-                }
-
-                if ( pFrame->GetCurrentDocument() != xDoc )
-                {
-                    if ( pFrame->InsertDocument( xDoc ) )
-                        rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
-                    else
-                        xDoc->DoClose();
-                }
-            }
-            else
-                xDoc.Clear();
-        }
-    }
-
-    return rReq.GetReturnValue();
-
-//(mba)/task
-/*
-    if ( !pHidden || !pHidden->GetValue() )
-        Application::GetAppWindow()->LeaveWait();
- */
 }
 
 //--------------------------------------------------------------------
@@ -1306,12 +1120,22 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         return;
     }
 
-    SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-    SfxFrame *pFrame = NULL;
-    if ( pFrmItem )
-        pFrame = pFrmItem->GetFrame();
-    else if ( SfxViewFrame::Current() )
-        pFrame = SfxViewFrame::Current()->GetFrame();
+    SfxFrame* pTargetFrame = NULL;
+    Reference< XFrame > xTargetFrame;
+
+    SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+    if ( pFrameItem )
+        pTargetFrame = pFrameItem->GetFrame();
+
+    if ( !pTargetFrame )
+    {
+        SFX_REQUEST_ARG(rReq, pUnoFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE);
+        if ( pUnoFrameItem )
+            xTargetFrame = pUnoFrameItem->GetFrame();
+    }
+
+    if ( !pTargetFrame && !xTargetFrame.is() && SfxViewFrame::Current() )
+        pTargetFrame = &SfxViewFrame::Current()->GetFrame();
 
     // check if caller has set a callback
     SFX_REQUEST_ARG(rReq, pLinkItem, SfxLinkItem, SID_DONELINK, FALSE );
@@ -1388,18 +1212,24 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 //    {
         // if a frame is given, it must be used for the starting point of the targetting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
-        Reference < XFrame > xFrame;
-        if ( pFrame )
-            xFrame = pFrame->GetFrameInterface();
-        else
-            xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+        if ( !xTargetFrame.is() )
+        {
+            if ( pTargetFrame )
+            {
+                xTargetFrame = pTargetFrame->GetFrameInterface();
+            }
+            else
+            {
+                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+            }
+        }
 
         // make URL ready
         SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_FILE_NAME, FALSE );
         aFileName = pURLItem->GetValue();
         if( aFileName.Len() && aFileName.GetChar(0) == '#' ) // Mark without URL
         {
-            SfxViewFrame *pView = pFrame ? pFrame->GetCurrentViewFrame() : 0;
+            SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : 0;
             if ( !pView )
                 pView = SfxViewFrame::Current();
             pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
@@ -1417,13 +1247,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // if loading must be done synchron, we must wait for completion to get a return value
             // find frame by myself; I must konw the exact frame to get the controller for the return value from it
             //if( aTarget.getLength() )
-            //    xFrame = xFrame->findFrame( aTarget, FrameSearchFlag::ALL );
+            //    xTargetFrame = xTargetFrame->findFrame( aTarget, FrameSearchFlag::ALL );
             Reference < XComponent > xComp;
 
             try
             {
-                xComp = ::comphelper::SynchronousDispatch::dispatch( xFrame, aFileName, aTarget, 0, aArgs );
-//                Reference < XComponentLoader > xLoader( xFrame, UNO_QUERY );
+                xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
+//                Reference < XComponentLoader > xLoader( xTargetFrame, UNO_QUERY );
 //                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
             }
             catch(const RuntimeException&)
@@ -1448,7 +1278,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
             RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
             if ( xDisp.is() )
@@ -1494,7 +1324,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             if ( pShell->GetController() == xController )
             {
-                pCntrFrame = pShell->GetViewFrame()->GetFrame();
+                pCntrFrame = &pShell->GetViewFrame()->GetFrame();
                 break;
             }
         }

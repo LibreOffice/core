@@ -129,6 +129,7 @@ protected:
     ::rtl::OUString m_aDefaultParentBaseURL;
     ::rtl::OUString m_aModuleName;
     sal_Bool        m_bEmbeddedScriptSupport;
+    sal_Bool        m_bDocumentRecoverySupport;
 
     Interceptor* m_pInterceptor;
 
