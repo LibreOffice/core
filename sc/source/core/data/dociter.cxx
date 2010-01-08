@@ -509,20 +509,33 @@ ScDBQueryDataIterator::DataAccess::~DataAccess()
 
 SCROW ScDBQueryDataIterator::GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
 {
-    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
     return pCol->pItems[nColRow].nRow;
 }
 
 ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
 {
-    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
     return pCol->pItems[nColRow].pCell;
 }
 
 ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
-    ScColumn* pCol = &(rDoc.pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
     return pCol->pAttrArray;
+}
+
+bool ScDBQueryDataIterator::IsQueryValid(ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScBaseCell* pCell)
+{
+    return rDoc.pTab[nTab]->ValidQuery(nRow, rParam, NULL, pCell);
+}
+
+SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCROW nRow, SCCOL nCol)
+{
+    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
+    SCSIZE nColRow;
+    pCol->Search(nRow, nColRow);
+    return nColRow;
 }
 
 // ----------------------------------------------------------------------------
@@ -575,9 +588,11 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         if ( nColRow < nCellCount && nThisRow <= mpParam->nRow2 )
         {
             nRow = nThisRow;
-            ScBaseCell* pCell = ScDBQueryDataIterator::GetCellByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
-            if ( (mpDoc->pTab[nTab])->ValidQuery( nRow, *mpParam, NULL,
-                    (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL) ) )
+            ScBaseCell* pCell = NULL;
+            if (nCol == static_cast<SCCOL>(nFirstQueryField))
+                pCell = ScDBQueryDataIterator::GetCellByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
+
+            if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, pCell))
             {
                 switch (pCell->GetCellType())
                 {
@@ -647,8 +662,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
     if (mpParam->bHasHeader)
         nRow++;
 //  nColRow = 0;
-    ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
-    pCol->Search( nRow, nColRow );
+    nColRow = ScDBQueryDataIterator::SearchColEntryIndex(*mpDoc, nTab, nRow, nCol);
     return getCurrent(rValue);
 }
 
