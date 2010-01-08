@@ -85,7 +85,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 
@@ -652,7 +651,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
-        if (pSlideViewFrame && pSlideViewFrame->ISA(SfxTopViewFrame))
+        if (pSlideViewFrame)
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }

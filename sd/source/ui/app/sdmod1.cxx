@@ -87,6 +87,8 @@
 
 
 using ::sd::framework::FrameworkHelper;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XFrame;
 
 namespace {
 
@@ -305,13 +307,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                 }
 
                 SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                if ( pFrmItem )
-                {
-                    SfxFrame* pFrame = pFrmItem->GetFrame();
-                    pFrame->InsertDocument( pDocSh );
-                }
-                else
-                    SfxViewFrame::CreateViewFrame(*pDocSh, ::sd::OUTLINE_FACTORY_ID);
+                SfxViewFrame::LoadDocumentIntoFrame( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
 
                 ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
 
@@ -536,7 +532,7 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
     }
 }
 
-SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, SfxFrame* pTargetFrame )
+SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, const Reference< XFrame >& i_rFrame )
 {
     SfxFrame* pFrame = 0;
 
@@ -555,17 +551,9 @@ SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, SfxFrame* p
     }
     else if( pDocShell )
     {
-        if ( pTargetFrame )
-        {
-            pFrame = pTargetFrame;
-            pFrame->InsertDocument( pDocShell );
-        }
-        else
-        {
-            SfxViewFrame* pViewFrame = SfxViewFrame::CreateViewFrame( *pDocShell );
-            if( pViewFrame )
-                pFrame = pViewFrame->GetFrame();
-        }
+        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pDocShell, i_rFrame );
+        OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
+        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;
@@ -577,10 +565,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
     SfxFrame* pFrame = 0;
     if ( SvtModuleOptions().IsImpress() )
     {
-        SfxFrame* pTargetFrame = 0;
-        SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+        Reference< XFrame > xTargetFrame;
+        SFX_REQUEST_ARG( rReq, pFrmItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE);
         if ( pFrmItem )
-            pTargetFrame = pFrmItem->GetFrame();
+            xTargetFrame = pFrmItem->GetFrame();
 
         bool bMakeLayoutVisible = false;
         SfxViewFrame* pViewFrame = NULL;
@@ -600,12 +588,12 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             if( aStandardTemplate.Len() > 0 )
             {
                 //load a template document
-                pFrame = CreateFromTemplate( aStandardTemplate, pTargetFrame );
+                pFrame = CreateFromTemplate( aStandardTemplate, xTargetFrame );
             }
             else
             {
                 //create an empty document
-                pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, pTargetFrame );
+                pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, xTargetFrame );
                 bMakeLayoutVisible = true;
             }
         }
@@ -638,7 +626,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         SfxStringItem aReferer( SID_REFERER, UniString() );
                         SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
 
-                        if ( pTargetFrame )
+                        if ( xTargetFrame.is() )
                         {
                             SfxAllItemSet aSet( *rReq.GetArgs()->GetPool() );
                             aSet.Put( aFile );
@@ -648,10 +636,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             if (aPasswrd.Len() > 0)
                                 aSet.Put( aPassword );
 
-                            const SfxPoolItem* pRet = pTargetFrame->LoadDocumentSynchron( aSet );
+                            const SfxPoolItem* pRet = SfxFrame::OpenDocumentSynchron( aSet, xTargetFrame );
                             const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
                             if ( pFrameItem && pFrameItem->GetFrame() )
-                                pFrame = pFrameItem->GetFrame()->GetFrame();
+                                pFrame = &pFrameItem->GetFrame()->GetFrame();
                         }
                         else
                         {
@@ -670,7 +658,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);
                                 const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
                                 if ( pFrameItem )
-                                    pFrame = pFrameItem->GetFrame()->GetFrame();
+                                    pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
                             catch (::com::sun::star::uno::Exception e)
                             {
@@ -694,20 +682,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     SfxObjectShell* pShell = xShell;
                     if( pShell )
                     {
-                        if ( pTargetFrame )
-                        {
-                            pFrame = pTargetFrame;
-                            pFrame->InsertDocument( pShell );
-                            pViewFrame = pFrame->GetCurrentViewFrame();
-                        }
-                        else
-                        {
-                            pViewFrame = SfxViewFrame::CreateViewFrame( *pShell );
-                            if( pViewFrame )
-                                pFrame = pViewFrame->GetFrame();
-                        }
-
+                        pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
                         DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
+                        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
 
                         if(bNewDocDirect && !bStartWithTemplate)
                         {
@@ -793,7 +770,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
     return pFrame;
 }
 
-SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTargetFrame )
+SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference< XFrame >& i_rFrame )
 {
     SfxFrame* pFrame = 0;
 
@@ -810,17 +787,9 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTarge
             pDoc->StopWorkStartupDelay();
         }
 
-        if ( pTargetFrame )
-        {
-            pFrame = pTargetFrame;
-            pFrame->InsertDocument( pNewDocSh );
-        }
-        else
-        {
-            SfxViewFrame* pViewFrame = SfxViewFrame::CreateViewFrame( *pNewDocSh );
-            if( pViewFrame )
-                pFrame = pViewFrame->GetFrame();
-        }
+        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
+        OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
+        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;

@@ -284,11 +284,7 @@ ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
     : SfxViewShell (_pFrame,
-        SFX_VIEW_MAXIMIZE_FIRST
-        | SFX_VIEW_OPTIMIZE_EACH
-        | SFX_VIEW_DISABLE_ACCELS
-        | SFX_VIEW_OBJECTSIZE_EMBEDDED
-        | SFX_VIEW_CAN_PRINT
+          SFX_VIEW_CAN_PRINT
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
@@ -1015,7 +1011,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
     // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxTopViewFrame accesses the window without checking it.
+    // too.  The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {

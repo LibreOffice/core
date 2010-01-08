@@ -62,7 +62,6 @@
 #include <svx/svdouno.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/fmshell.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svl/cjkoptions.hxx>
 
 #ifndef SD_FRAME_VIEW
