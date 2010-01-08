@@ -72,20 +72,7 @@ SwXReferenceMark* SwUnoCallBack::GetRefMark(const SwFmtRefMark& rMark)
  ---------------------------------------------------------------------------*/
 SwXFootnote* SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
 {
-    SwClientIter aIter( *this );
-    SwXFootnote* pxFootnote = (SwXFootnote*)aIter.First( TYPE( SwXFootnote ));
-    while(pxFootnote)
-    {
-        SwDoc* pDoc = pxFootnote->GetDoc();
-        if(pDoc)
-        {
-            const SwFmtFtn* pFtn = pxFootnote->FindFmt();
-            if(pFtn == &rMark)
-                return pxFootnote;
-        }
-        pxFootnote = (SwXFootnote*)aIter.Next( );
-    }
-    return 0;
+    return SwXFootnote::GetXFootnote(*this, rMark);
 }
 
 /* -----------------------------27.11.00 17:15--------------------------------

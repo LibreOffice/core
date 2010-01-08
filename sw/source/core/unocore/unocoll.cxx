@@ -1727,8 +1727,8 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 
             if(nCount == nIndex)
             {
-                xRef = new SwXFootnote(GetDoc(), rFtn);
-                aRet.setValue(&xRef, ::getCppuType((uno::Reference<XFootnote>*)0));
+                xRef = SwXFootnote::CreateXFootnote(*GetDoc(), rFtn);
+                aRet <<= xRef;
                 break;
             }
             nCount++;
@@ -1762,12 +1762,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
  ---------------------------------------------------------------------------*/
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
-    Reference<XTextContent> xContent = ((SwUnoCallBack*)rDoc.GetUnoCallBack())->
-                                                            GetFootnote(rFmt);
-    if(!xContent.is())
-        xContent = new SwXFootnote(&rDoc, rFmt);
-    Reference<XFootnote> xRet(xContent, UNO_QUERY);
-    return xRet;
+    return SwXFootnote::CreateXFootnote(rDoc, rFmt);
 }
 
 /******************************************************************

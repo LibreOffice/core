@@ -41,14 +41,11 @@
 
 #include <cppuhelper/implbase5.hxx>
 
-#include <tools/string.hxx>
-
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
 #include <unotext.hxx>
 
 
 class SwDoc;
+class SwModify;
 class SwFmtFtn;
 
 
@@ -66,18 +63,15 @@ typedef ::cppu::WeakImplHelper5
 class SwXFootnote
     : public SwXFootnote_Base
     , public SwXText
-    , public SwClient
 {
 
 private:
 
     friend class SwXFootnotes;
 
-    SwEventListenerContainer    aLstnrCntnr;
-    const SwFmtFtn*             pFmtFtn;
-    BOOL                        m_bIsDescriptor;
-    String                      m_sLabel;
-    BOOL                        m_bIsEndnote;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
 
 protected:
 
@@ -90,24 +84,17 @@ protected:
 
     virtual ~SwXFootnote();
 
+    SwXFootnote(SwDoc & rDoc, const SwFmtFtn & rFmt);
+
 public:
 
-    SwXFootnote(BOOL bEndnote);
-    SwXFootnote(SwDoc* pDoc, const SwFmtFtn& rFmt);
+    SwXFootnote(const bool bEndnote);
 
-    void attachToRange(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextRange)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
-
-    const SwFmtFtn* FindFmt() const { return GetDoc() ? pFmtFtn : 0; }
-    void            Invalidate();
-
-    TYPEINFO();
-
-    // SwClient
-    virtual void        Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    static SwXFootnote *
+        CreateXFootnote(SwDoc & rDoc, SwFmtFtn const& rFootnoteFmt);
+    /// may return 0
+    static SwXFootnote *
+        GetXFootnote(SwModify const& rUnoCB, SwFmtFtn const& rFootnoteFmt);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

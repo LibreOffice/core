@@ -445,8 +445,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     if( pAny )
                     {
-                        uno::Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
-                        pAny->setValue(&xFoot, ::getCppuType((uno::Reference<XFootnote>*)0));
+                        const uno::Reference< text::XFootnote > xFootnote =
+                            SwXFootnote::CreateXFootnote(*rPam.GetDoc(), rFtn);
+                        *pAny <<= xFootnote;
                     }
                 }
                 else

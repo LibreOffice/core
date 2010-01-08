@@ -1344,13 +1344,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 if (pSttNode == pTxtFtn->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
-                    xParentText =
-                        static_cast<SwUnoCallBack*>(rDoc.GetUnoCallBack())->
-                                                            GetFootnote(rFtn);
-                    if (!xParentText.is())
-                    {
-                        xParentText = new SwXFootnote(&rDoc, rFtn);
-                    }
+                    xParentText = SwXFootnote::CreateXFootnote(rDoc, rFtn);
                     break;
                 }
             }
