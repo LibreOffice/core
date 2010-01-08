@@ -191,9 +191,10 @@ void OQuery::rebuildColumns()
         m_pColumnMediator = NULL;
 
         Reference<XColumnsSupplier> xColSup(m_xCommandDefinition,UNO_QUERY);
+        Reference< XNameAccess > xColumnDefinitions;
         if ( xColSup.is() )
         {
-            Reference< XNameAccess > xColumnDefinitions = xColSup->getColumns();
+            xColumnDefinitions = xColSup->getColumns();
             if ( xColumnDefinitions.is() )
                 m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         }
@@ -236,20 +237,29 @@ void OQuery::rebuildColumns()
         }
 
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-        for ( ;pBegin != pEnd; ++pBegin)
-        {
-            Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
-            OTableColumn* pColumn = new OTableColumn( xSource );
-            Reference<XChild> xChild(*pColumn,UNO_QUERY);
-            if ( xChild.is() )
-                xChild->setParent(*this);
+        Sequence< ::rtl::OUString> aDefintionNames;
+        bool bApplyDefinitionNames = false;
+        //if ( xColumnDefinitions.is() )
+        //{
+        //    aDefintionNames = xColumnDefinitions->getElementNames();
+        //    bApplyDefinitionNames = aDefintionNames.getLength() == aNames.getLength();
+        //}
 
-            implAppendColumn( *pBegin, pColumn );
-            Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
+        ::rtl::OUString sEmpty;
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        for ( sal_Int32 i = 0;pIter != pEnd; ++pIter,++i)
+        {
+            Reference<XPropertySet> xSource(xColumns->getByName( *pIter ),UNO_QUERY);
+            OQueryColumn* pColumn = new OQueryColumn( xSource, m_xConnection, bApplyDefinitionNames ? aDefintionNames[i] : sEmpty);
+            Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
+            xChild->setParent( *this );
+
+            ::rtl::OUString sNewName = bApplyDefinitionNames ? aDefintionNames[i] : *pIter;
+            implAppendColumn( sNewName, pColumn );
+            Reference< XPropertySet > xDest( *pColumn, UNO_QUERY_THROW );
             if ( m_pColumnMediator.is() )
-                m_pColumnMediator->notifyElementCreated( *pBegin, xDest );
+                m_pColumnMediator->notifyElementCreated( sNewName, xDest );
         }
     }
     catch( const SQLContext& e )

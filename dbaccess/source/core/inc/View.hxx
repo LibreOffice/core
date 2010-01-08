@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: datasourceui.hxx,v $
- * $Revision: 1.3.68.1 $
+ * $RCSfile: View.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,53 +28,64 @@
  *
  ************************************************************************/
 
-#ifndef DBACCESS_DATASOURCEUI_HXX
-#define DBACCESS_DATASOURCEUI_HXX
+#ifndef DBACCESS_VIEW_HXX
+#define DBACCESS_VIEW_HXX
 
-#include "dsntypes.hxx"
-#include "dsmeta.hxx"
+#include "connectivity/sdbcx/VView.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/sdbcx/XAlterView.hpp>
+#include <com/sun/star/sdb/tools/XViewSupport.hpp>
 /** === end UNO includes === **/
 
-#include <boost/shared_ptr.hpp>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 //........................................................................
-namespace dbaui
+namespace dbaccess
 {
 //........................................................................
 
     //====================================================================
-    //= DataSourceUI
+    //= View
     //====================================================================
-    /** encapsulates information about available UI features of a data source type
-    */
-    class DataSourceUI
+    typedef ::connectivity::sdbcx::OView                                View_Base;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XAlterView >  View_IBASE;
+    class View :public View_Base
+                ,public View_IBASE
     {
     public:
-        DataSourceUI( const DataSourceMetaData& _rDSMeta );
-        ~DataSourceUI();
+        View(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            sal_Bool _bCaseSensitive,
+            const ::rtl::OUString& _rCatalogName,
+            const ::rtl::OUString& _rSchemaName,
+            const ::rtl::OUString& _rName
+        );
 
-        /** returns whether the data source's UI contains the specified setting
+        // UNO
+        DECLARE_XINTERFACE()
+        DECLARE_XTYPEPROVIDER()
 
-            Note that at the moment, not all items are supported by this method. In particular, use
-            it for the following only
-            <ul><li>All items which refer to advanced settings (see AdvancedSettingsSupport)</li>
-            </ul>
+        // XAlterView
+        virtual void SAL_CALL alterCommand( const ::rtl::OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            A complete support of *all* items is a medium-term goal.
+    protected:
+        virtual ~View();
 
-            @param _nItemId
-                the UI's item ID for the setting in question. See dsitems.hxx.
-        */
-        bool    hasSetting( const USHORT _nItemId ) const;
+    protected:
+        // OPropertyContainer
+        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const;
 
     private:
-        DataSourceMetaData  m_aDSMeta;
+         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XViewSupport>     m_xViewSupport;
+        sal_Int32       m_nCommandHandle;
+    private:
+        using View_Base::getFastPropertyValue;
     };
 
 //........................................................................
-} // namespace dbaui
+} // namespace dbaccess
 //........................................................................
 
-#endif // DBACCESS_DATASOURCEUI_HXX
+#endif // DBACCESS_VIEW_HXX

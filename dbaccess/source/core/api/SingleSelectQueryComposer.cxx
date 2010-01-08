@@ -37,6 +37,7 @@
 #include "dbastrings.hrc"
 #include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -228,24 +229,11 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
     try
     {
-        Reference< XChild> xChild(_xConnection, UNO_QUERY);
-        if(xChild.is())
+        Any aValue;
+        Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
+        if ( dbtools::getDataSourceSetting(xDs,static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
         {
-            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-            if ( xProp.is() )
-            {
-                Sequence< PropertyValue > aInfo;
-                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-                const PropertyValue* pBegin = aInfo.getConstArray();
-                const PropertyValue* pEnd = pBegin + aInfo.getLength();
-                for (; pBegin != pEnd; ++pBegin)
-                {
-                    if ( pBegin->Name == static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE) )
-                    {
-                        OSL_VERIFY( pBegin->Value >>= m_nBoolCompareMode );
-                    }
-                }
-            }
+            OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }
     }
     catch(Exception&)
@@ -750,9 +738,10 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         OSL_ENSURE( (size_t) nCount == aSelectColumns->get().size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
         for(sal_Int32 i=1;i<=nCount;++i)
         {
-            ::rtl::OUString sName = xResultSetMeta->getColumnName(i);
+            ::rtl::OUString sColumnName = xResultSetMeta->getColumnName(i);
+            ::rtl::OUString sColumnLabel = xResultSetMeta->getColumnLabel(i);
             sal_Bool bFound = sal_False;
-            OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),sName,aCaseCompare);
+            OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),sColumnLabel,aCaseCompare);
             size_t nFoundSelectColumnPos = aFind - aSelectColumns->get().begin();
             if ( aFind != aSelectColumns->get().end() )
             {
@@ -761,7 +750,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                     // so we start after the first found
                     do
                     {
-                        aFind = ::connectivity::findRealName(++aFind,aSelectColumns->get().end(),sName,aCaseCompare);
+                        aFind = ::connectivity::findRealName(++aFind,aSelectColumns->get().end(),sColumnName,aCaseCompare);
                         nFoundSelectColumnPos = aFind - aSelectColumns->get().begin();
                     }
                     while   (   ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
@@ -770,9 +759,9 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 }
                 if ( aFind != aSelectColumns->get().end() )
                 {
-                    (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
                     aUsedSelectColumns.insert( nFoundSelectColumnPos );
-                    aNames.push_back(sName);
+                    aNames.push_back(sColumnName);
                     bFound = sal_True;
                 }
             }
@@ -781,7 +770,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 continue;
 
             OSQLColumns::Vector::const_iterator aRealFind = ::connectivity::findRealName(
-                aSelectColumns->get().begin(), aSelectColumns->get().end(), sName, aCaseCompare );
+                aSelectColumns->get().begin(), aSelectColumns->get().end(), sColumnName, aCaseCompare );
 
             if ( i > static_cast< sal_Int32>( aSelectColumns->get().size() ) )
             {
@@ -806,19 +795,19 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 ::rtl::OUString sRealName;
                 xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
                 ::std::vector< ::rtl::OUString>::iterator aFindName;
-                if ( !sName.getLength() )
-                    xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+                if ( !sColumnName.getLength() )
+                    xProp->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
 
 
-                aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sName));
+                aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
                 sal_Int32 j = 0;
                 while ( aFindName != aNames.end() )
                 {
-                    sName += ::rtl::OUString::valueOf(++j);
-                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sName));
+                    sColumnName += ::rtl::OUString::valueOf(++j);
+                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
                 }
 
-                pColumn->setName(sName);
+                pColumn->setName(sColumnName);
                 pColumn->setRealName(sRealName);
                 pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
 
@@ -828,7 +817,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 continue;
 
             aUsedSelectColumns.insert( (size_t)(i - 1) );
-            aNames.push_back( sName );
+            aNames.push_back( sColumnName );
         }
     }
     catch(const Exception&)
@@ -1529,6 +1518,27 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::LONGVARCHAR:
                 aSQL.append( STR_LIKE );
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                break;
+            case DataType::CLOB:
+                {
+                    Reference< XClob > xClob(aValue,UNO_QUERY);
+                    if ( xClob.is() )
+                    {
+                        const ::sal_Int64 nLength = xClob->length();
+                        if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
+                        {
+                            aSQL.append( STR_LIKE );
+                            aSQL.appendAscii("'");
+                            aSQL.append( xClob->getSubString(1,(sal_Int32)nLength) );
+                            aSQL.appendAscii("'");
+                        }
+                    }
+                    else
+                    {
+                        aSQL.append( STR_LIKE );
+                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                    }
+                }
                 break;
             case DataType::VARBINARY:
             case DataType::BINARY:

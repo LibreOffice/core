@@ -546,7 +546,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
                 Property aProperty(
                     ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
                     -1,
-                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ),
+                    pSettings->ValueType,
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID
                 );
                 xSettingsSet->insert( makeAny( aProperty ) );
@@ -1164,8 +1164,9 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "ImplicitCatalogRestriction", Any( ) ),
-        AsciiPropertyValue( "ImplicitSchemaRestriction",  Any( ) ),
+        AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< ::rtl::OUString >::get() ),
+        AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< ::rtl::OUString >::get() ),
+        AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
         // known SDB level settings
         AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),
@@ -1182,7 +1183,18 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
 
-        AsciiPropertyValue( NULL, Any() )
+        // known services to handle database tasks
+        AsciiPropertyValue( "TableAlterationServiceName", makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "TableRenameServiceName",     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ViewAlterationServiceName",  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ViewSupportServiceName",     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "CommandDefinitionSupplier",  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "FormSupplier",               makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ReportSupplier",             makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "IndexAlterationServiceName", makeAny( ::rtl::OUString() ) ),
+
+        AsciiPropertyValue()
     };
     return aKnownSettings;
 }

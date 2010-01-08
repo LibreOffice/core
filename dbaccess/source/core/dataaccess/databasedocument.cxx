@@ -53,10 +53,13 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -71,6 +74,13 @@
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/property.hxx>
+
+#include <connectivity/dbtools.hxx>
+
+#include <svtools/saveopt.hxx>
+
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
@@ -838,8 +848,16 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 // -----------------------------------------------------------------------------
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
+    Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess;
+    m_pImpl->m_aContext.createComponent( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ,xTempAccess);
+    Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
+    Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
+    if ( xTruncate.is() )
+    {
+        xTruncate->truncate();
+    }
     Sequence<Any> aParam(2);
-    aParam[0] <<= _rURL;
+    aParam[0] <<= xStream;
     aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
@@ -1137,8 +1155,25 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     Reference< XNameAccess > xContainer = rContainerRef;
     if ( !xContainer.is() )
     {
-        TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
-        rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, bFormsContainer );
+        Any aValue;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "FormSupplier" : "ReportSupplier",aValue) )
+        {
+            ::rtl::OUString sSupportService;
+            aValue >>= sSupportService;
+            if ( sSupportService.getLength() )
+            {
+                Sequence<Any> aArgs(1);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+                rContainerRef = xContainer;
+            }
+        }
+        if ( !xContainer.is() )
+        {
+            TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
+            rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, bFormsContainer );
+        }
         impl_reparent_nothrow( xContainer );
     }
     return xContainer;
@@ -1602,8 +1637,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage( const Reference< XStorage >& /
     DocumentGuard aGuard( *this );
 
     throw Exception(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Embedding of database documents is not supported." ) ),
-            // TODO: resource
+        DBACORE_RESSTRING( RID_STR_NO_EMBEDDING ),
         *this
     );
 }

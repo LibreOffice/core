@@ -171,6 +171,10 @@ namespace dbaui
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
+
+        void fillFunctionInfo(   const ::connectivity::OSQLParseNode* pNode
+                                ,const ::rtl::OUString& sFunctionTerm
+                                ,OTableFieldDescRef& aInfo);
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);

@@ -104,13 +104,32 @@ struct AsciiPropertyValue
     // note: the canonic member order would be AsciiName / DefaultValue, but
     // this crashes on unxlngi6.pro, since there's a bug which somehow results in
     // getDefaultDataSourceSettings returning corrupted Any instances then.
-    ::com::sun::star::uno::Any  DefaultValue;
-    const sal_Char*             AsciiName;
+    ::com::sun::star::uno::Any          DefaultValue;
+    const sal_Char*                     AsciiName;
+    const ::com::sun::star::uno::Type&  ValueType;
+
+    AsciiPropertyValue()
+        :DefaultValue( )
+        ,AsciiName( NULL )
+        ,ValueType( ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
+    {
+    }
 
     AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rDefaultValue )
         :DefaultValue( _rDefaultValue )
         ,AsciiName( _pAsciiName )
+        ,ValueType( _rDefaultValue.getValueType() )
     {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
+    }
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Type& _rValeType )
+        :DefaultValue()
+        ,AsciiName( _pAsciiName )
+        ,ValueType( _rValeType )
+    {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: VOID property values not supported!" );
     }
 };
 

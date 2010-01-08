@@ -30,36 +30,26 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #define _DBACORE_DEFINITIONCOLUMN_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
-#endif
-#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include "columnsettings.hxx"
+
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/container/XChild.hpp>
+
 #include <comphelper/IdPropArrayHelper.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 
 namespace dbaccess
 {
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
+    // =========================================================================
+    //= OTableColumnDescriptor
+    // =========================================================================
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
@@ -68,7 +58,9 @@ namespace dbaccess
                                   ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumnDescriptor >
                                   ,public TXChild
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xParent;
+        const bool                                                              m_bActAsDescriptor;
+
     protected:
     //  <properties>
         rtl::OUString           m_aTypeName;
@@ -79,24 +71,32 @@ namespace dbaccess
         sal_Int32               m_nPrecision;
         sal_Int32               m_nScale;
         sal_Int32               m_nIsNullable;
-        sal_Bool                m_bAutoIncrement : 1;
-        sal_Bool                m_bRowVersion : 1;
-        sal_Bool                m_bCurrency : 1;
+        sal_Bool                m_bAutoIncrement;
+        sal_Bool                m_bRowVersion;
+        sal_Bool                m_bCurrency;
     //  </properties>
+
     public:
-        OTableColumnDescriptor():m_nType(::com::sun::star::sdbc::DataType::SQLNULL)
-                           ,m_nPrecision(0)
-                           ,m_nScale(0)
-                           ,m_nIsNullable(::com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN)
-                           ,m_bAutoIncrement(sal_False)
-                           ,m_bRowVersion(sal_False)
-                           ,m_bCurrency(sal_False){}
+        OTableColumnDescriptor( const bool _bActAsDescriptor )
+            :OColumn( !_bActAsDescriptor )
+            ,m_bActAsDescriptor( _bActAsDescriptor )
+            ,m_nType( ::com::sun::star::sdbc::DataType::SQLNULL )
+            ,m_nPrecision( 0 )
+            ,m_nScale( 0 )
+            ,m_nIsNullable( ::com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN )
+            ,m_bAutoIncrement( sal_False )
+            ,m_bRowVersion( sal_False )
+            ,m_bCurrency( sal_False )
+        {
+            impl_registerProperties();
+        }
 
         DECLARE_XINTERFACE( )
-    // com::sun::star::lang::XTypeProvider
+
+        // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XServiceInfo
+        // ::com::sun::star::lang::XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -104,67 +104,101 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-    // ::comphelper::OPropertyArrayUsageHelper
+        // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
-    // ::cppu::OPropertySetHelper
+        // ::cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                                     )
-                                                     throw (::com::sun::star::uno::Exception);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
-    protected:
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    protected:
-        using OColumn::getFastPropertyValue;
+    private:
+        void    impl_registerProperties();
     };
 
-    /**
-     *  describes a column of an existing table. The informations for the column are
-     *  retrieved in a generic way using the meta data of a connection.
+    // =========================================================================
+    // = OTableColumn
+    // =========================================================================
+    class OTableColumn;
+    typedef ::comphelper::OPropertyArrayUsageHelper < OTableColumn >    OTableColumn_PBase;
+    /** describes a column of a table
      */
-    class OTableColumn : public OTableColumnDescriptor,
-                         public ::comphelper::OPropertyArrayUsageHelper < OTableColumn >
+    class OTableColumn  :public OTableColumnDescriptor
+                        ,public OTableColumn_PBase
     {
-        friend class ODBTable;
-
     protected:
         virtual ~OTableColumn();
+
     public:
         OTableColumn(const ::rtl::OUString& _rName);
-        OTableColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
-    // com::sun::star::lang::XTypeProvider
+        // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XServiceInfo
+        // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::comphelper::OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
     };
 
+    // =========================================================================
+    // = OQueryColumn
+    // =========================================================================
+    class OQueryColumn;
+    typedef ::comphelper::OPropertyArrayUsageHelper< OQueryColumn > OQueryColumn_PBase;
+    /** a column of a Query, with additional information obtained from parsing the query statement
+    */
+    class OQueryColumn  :public OTableColumnDescriptor
+                        ,public OQueryColumn_PBase
+    {
+        // <properties>
+        ::rtl::OUString m_sCatalogName;
+        ::rtl::OUString m_sSchemaName;
+        ::rtl::OUString m_sTableName;
+        ::rtl::OUString m_sRealName;
+        // </properties>
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xOriginalTableColumn;
+
+    protected:
+        ~OQueryColumn();
+
+    public:
+        OQueryColumn(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::rtl::OUString& _sNewName
+        );
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+
+        // *Property*
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                impl_determineOriginalTableColumn(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                );
+
+        using ::cppu::OPropertySetHelper::getFastPropertyValue;
+    };
+
+    // =========================================================================
+    // = OColumnWrapper
+    // =========================================================================
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation
      */
-    class OColumnWrapper : public OColumn
+    class OColumnWrapper    :public OColumn
     {
     protected:
         // definition which is provided by a driver!
@@ -174,7 +208,7 @@ namespace dbaccess
         sal_Int32               m_nColTypeID;
 
     protected:
-        OColumnWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol);
+        OColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
         virtual ~OColumnWrapper();
 
     public:
@@ -195,24 +229,30 @@ namespace dbaccess
                                                      throw (::com::sun::star::uno::Exception);
 
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-    //  Helper
-//      sal_Int32   getColumnTypeID() const {return m_nColTypeID;}
+
+    protected:
+        ::rtl::OUString impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const;
 
     protected:
         using OColumn::getFastPropertyValue;
     };
 
+    // =========================================================================
+    // = OTableColumnDescriptorWrapper
+    // =========================================================================
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
-    class OTableColumnDescriptorWrapper :   public OColumnWrapper,
-                                            public OColumnSettings,
-                                            public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnDescriptorWrapper >
+    class OTableColumnDescriptorWrapper :public OColumnWrapper
+                                        ,public OColumnSettings
+                                        ,public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnDescriptorWrapper >
     {
-        sal_Bool m_bPureWrap;
+        const bool  m_bPureWrap;
+        const bool  m_bIsDescriptor;
+
     public:
-        OTableColumnDescriptorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,sal_Bool _bPureWrap = sal_False)
-                            :OColumnWrapper(rCol),m_bPureWrap(_bPureWrap){}
+        OTableColumnDescriptorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,
+            const bool _bPureWrap, const bool _bIsDescriptor );
 
     // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
@@ -243,26 +283,26 @@ namespace dbaccess
                                                      throw (::com::sun::star::uno::Exception);
 
     protected:
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    protected:
         using OColumnWrapper::getFastPropertyValue;
     };
 
+    // =========================================================================
+    // = OTableColumnWrapper
+    // =========================================================================
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation
      */
-    class OTableColumnWrapper : public OTableColumnDescriptorWrapper,
-                                public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnWrapper >
+    class OTableColumnWrapper   :public OTableColumnDescriptorWrapper
+                                ,public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnWrapper >
     {
     protected:
         ~OTableColumnWrapper();
+
     public:
-        OTableColumnWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rColDefintion
-                            ,sal_Bool _bPureWrap = sal_False);
+        OTableColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rColDefintion,
+                             const bool _bPureWrap );
 
     // ::com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
@@ -274,76 +314,6 @@ namespace dbaccess
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
-    };
-
-    /**
-     *  describes all properties for a columns of an index.
-     */
-    class OIndexColumnWrapper : public OColumnWrapper,
-                                public ::comphelper::OPropertyArrayUsageHelper < OIndexColumnWrapper >
-    {
-    protected:
-    //  <properties>
-        sal_Bool                m_bAscending;
-    //  </properties>
-
-    public:
-        OIndexColumnWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol )
-                            :OColumnWrapper(rCol) {}
-
-    // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
-
-        virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
-
-    protected:
-        using OColumnWrapper::getFastPropertyValue;
-    };
-
-    /**
-     *  describes all properties for a columns of an key column.
-     */
-    class OKeyColumnWrapper : public OColumnWrapper,
-                              public ::comphelper::OPropertyArrayUsageHelper < OKeyColumnWrapper >
-    {
-    protected:
-    //  <properties>
-        rtl::OUString           m_aRelatedColumn;
-    //  </properties>
-
-    public:
-        OKeyColumnWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol)
-                        :OColumnWrapper(rCol) {}
-
-    // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
-
-        virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
-
-    protected:
-        using OColumnWrapper::getFastPropertyValue;
     };
 }
 #endif // _DBACORE_DEFINITIONCOLUMN_HXX_
