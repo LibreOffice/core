@@ -1,5 +1,5 @@
---- misc/neon-0.28.2/src/config.h	2009-12-10 13:29:15.000000000 +0100
-+++ misc/build/neon-0.28.2/src/config.h	2009-12-10 13:21:58.000000000 +0100
+--- misc/neon-0.28.2/src/config.h	2010-01-08 11:51:21.000000000 +0100
++++ misc/build/neon-0.28.2/src/config.h	2010-01-08 11:53:42.000000000 +0100
 @@ -1 +1,488 @@
 -dummy
 +
@@ -490,8 +490,8 @@
 +#else
 +#define HAVE_NTLM 1
 +#endif
---- misc/neon-0.28.2/src/makefile.mk	2009-12-10 13:29:15.000000000 +0100
-+++ misc/build/neon-0.28.2/src/makefile.mk	2009-12-10 13:21:58.000000000 +0100
+--- misc/neon-0.28.2/src/makefile.mk	2010-01-08 11:51:21.000000000 +0100
++++ misc/build/neon-0.28.2/src/makefile.mk	2010-01-08 11:53:27.000000000 +0100
 @@ -1 +1,100 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
@@ -595,7 +595,7 @@
 +DEF1NAME=$(SHL1TARGET)
 +.INCLUDE :  target.mk
 --- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.c	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_auth.c	2010-01-08 11:30:06.000000000 +0100
 @@ -77,6 +77,10 @@
  #include "ne_sspi.h"
  #endif
@@ -634,8 +634,8 @@
  static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
                             struct auth_challenge *chall, char *pwbuf) 
  {
--    if (chall->handler->creds(chall->handler->userdata, sess->realm,
-+    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm,
+-    if (chall->handler->creds(chall->handler->userdata, sess->realm, 
++    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm, 
                                chall->handler->attempt++, sess->username, pwbuf) == 0) {
          return 0;
      } else {
@@ -643,9 +643,9 @@
      int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
      int status;
      char *response = NULL;
--
-+    char password[NE_ABUFSIZ];
-+
+-    
++    char password[NE_ABUFSIZ];   
++ 
      NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
      
      if (!sess->sspi_context) {
@@ -756,7 +756,7 @@
      return ret;
  }
 --- misc/neon-0.28.2/src/ne_auth.h	2007-12-05 17:39:58.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.h	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_auth.h	2010-01-08 11:30:07.000000000 +0100
 @@ -47,8 +47,8 @@
   * Hint: if you just wish to attempt authentication just once (even if
   * the user gets the username/password wrong), have the callback
@@ -769,7 +769,7 @@
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
 --- misc/neon-0.28.2/src/ne_defs.h	2006-10-24 21:40:09.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_defs.h	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_defs.h	2010-01-08 11:30:07.000000000 +0100
 @@ -41,7 +41,7 @@
  #endif
  
@@ -780,7 +780,7 @@
  #endif
  
 --- misc/neon-0.28.2/src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_locks.c	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_locks.c	2010-01-08 11:30:06.000000000 +0100
 @@ -579,6 +579,23 @@
          const char *token = ne_get_response_header(ctx->req, "Lock-Token");
          /* at the root element; retrieve the Lock-Token header,
@@ -848,7 +848,7 @@
  	}
      }
 --- misc/neon-0.28.2/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_locks.h	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_locks.h	2010-01-08 11:30:07.000000000 +0100
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -860,8 +860,8 @@
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
  
---- misc/neon-0.28.2/src/ne_ntlm.c	2009-12-10 13:29:15.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-12-10 13:21:58.000000000 +0100
+--- misc/neon-0.28.2/src/ne_ntlm.c	2010-01-08 11:51:21.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_ntlm.c	2010-01-08 11:53:52.000000000 +0100
 @@ -1 +1,703 @@
 -dummy
 +/*
@@ -1567,8 +1567,8 @@
 +
 +#endif /* HAVE_OPENSSL */
 +#endif /* HAVE_NTLM */
---- misc/neon-0.28.2/src/ne_ntlm.h	2009-12-10 13:29:15.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-12-10 13:21:58.000000000 +0100
+--- misc/neon-0.28.2/src/ne_ntlm.h	2010-01-08 11:51:21.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_ntlm.h	2010-01-08 11:53:52.000000000 +0100
 @@ -1 +1,44 @@
 -dummy
 +/*
@@ -1616,7 +1616,7 @@
 +
 +#endif /* NE_NTLM_H */
 --- misc/neon-0.28.2/src/ne_socket.c	2008-02-28 14:19:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_socket.c	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_socket.c	2010-01-08 11:30:06.000000000 +0100
 @@ -60,6 +60,7 @@
  #include <stddef.h>
  #ifdef USE_GETADDRINFO
@@ -1626,15 +1626,11 @@
  #endif
  
 --- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-12-10 13:28:42.000000000 +0100
-@@ -202,9 +202,48 @@
-         return -1;
-     }
++++ misc/build/neon-0.28.2/src/ne_sspi.c	2010-01-08 11:30:07.000000000 +0100
+@@ -206,6 +206,45 @@
+ }
  
-+    return 0;
-+}
-+
-+/*
+ /*
 + * Simplification wrapper arround AcquireCredentialsHandle as most of
 + * the parameters do not change.
 + */
@@ -1669,13 +1665,14 @@
 +        return -1;
 +    }
 +
-     return 0;
- }
- 
++    return 0;
++}
 +
- /*
++
++/*
   * Wrapper arround initializeSecurityContext.  Supplies several
   * default parameters as well as logging in case of errors.
+  */
 @@ -483,7 +522,7 @@
   * Processes received authentication tokens as well as supplies the
   * response token.
@@ -1685,11 +1682,17 @@
  {
      SecBufferDesc outBufferDesc;
      SecBuffer outBuffer;
-@@ -560,14 +599,23 @@
- 
+@@ -561,13 +600,22 @@
          /* Reset any existing context since we are starting over */
          resetContext(sspiContext);
-+
+ 
+-        if (acquireCredentialsHandle
+-            (&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
+-                freeBuffer(&outBufferDesc);
+-                NE_DEBUG(NE_DBG_HTTPAUTH,
+-                    "sspi: acquireCredentialsHandle failed.\n");
+-                return -1;
+-        }
 +	if (strlen(username) != 0) {
 +	  if (acquireCredentialsHandleForUsername
 +	        (&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
@@ -1705,19 +1708,12 @@
 +	    return -1;
 +	  }
 +	}
- 
--        if (acquireCredentialsHandle
--            (&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
--                freeBuffer(&outBufferDesc);
--                NE_DEBUG(NE_DBG_HTTPAUTH,
--                    "sspi: acquireCredentialsHandle failed.\n");
--                return -1;
--        }
++
  
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
 --- misc/neon-0.28.2/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_sspi.h	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_sspi.h	2010-01-08 11:30:06.000000000 +0100
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -1728,7 +1724,7 @@
  #endif /* HAVE_SSPI */
  
 --- misc/neon-0.28.2/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_uri.c	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_uri.c	2010-01-08 11:30:06.000000000 +0100
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -1775,7 +1771,7 @@
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
 --- misc/neon-0.28.2/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_utils.c	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_utils.c	2010-01-08 11:30:06.000000000 +0100
 @@ -118,6 +118,9 @@
  #ifdef HAVE_GNUTLS
      ", GNU TLS " LIBGNUTLS_VERSION
@@ -1806,7 +1802,7 @@
  #endif /* NE_HAVE_* */
      default:
 --- misc/neon-0.28.2/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_utils.h	2009-12-10 13:21:58.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_utils.h	2010-01-08 11:30:07.000000000 +0100
 @@ -54,6 +54,7 @@
  #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
  #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
