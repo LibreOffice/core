@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined HPUX || defined LINUX || defined IRIX
+#if defined HPUX || defined LINUX
 #include <mntent.h>
 #define mnttab mntent
 #elif defined SCO
