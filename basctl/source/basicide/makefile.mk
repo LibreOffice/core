@@ -69,6 +69,7 @@ EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
                 $(SLO)$/moduldl2.obj	\
                 $(SLO)$/unomodel.obj	\
                 $(SLO)$/register.obj	\
+                $(SLO)$/basdoc.obj	    \
                 $(SLO)$/tbxctl.obj		\
                 $(SLO)$/basidectrlr.obj	\
                 $(SLO)$/localizationmgr.obj \
@@ -77,7 +78,6 @@ EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
                 $(SLO)$/documentenumeration.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
-            $(SLO)$/basdoc.obj	\
             $(SLO)$/basicbox.obj	\
             $(SLO)$/baside2b.obj	\
             $(SLO)$/brkdlg.obj	\
