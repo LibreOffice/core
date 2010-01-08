@@ -64,21 +64,9 @@ SwUnoCallBack::~SwUnoCallBack()
  ---------------------------------------------------------------------------*/
 SwXReferenceMark* SwUnoCallBack::GetRefMark(const SwFmtRefMark& rMark)
 {
-    SwClientIter aIter( *this );
-    SwXReferenceMark* pxRefMark = (SwXReferenceMark*)aIter.First( TYPE( SwXReferenceMark ));
-    while(pxRefMark)
-    {
-        SwDoc* pDoc = pxRefMark->GetDoc();
-        if(pDoc)
-        {
-            const SwFmtRefMark* pFmt = pDoc->GetRefMark(pxRefMark->GetMarkName());
-            if(pFmt == &rMark)
-                return pxRefMark;
-        }
-        pxRefMark = (SwXReferenceMark*)aIter.Next( );
-    }
-    return 0;
+    return SwXReferenceMark::GetReferenceMark(*this, rMark);
 }
+
 /* -----------------------------05.09.00 12:38--------------------------------
 
  ---------------------------------------------------------------------------*/

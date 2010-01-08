@@ -1946,18 +1946,10 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwClientIter aIter( *pDoc->GetUnoCallBack() );
-    SwXReferenceMark* pxMark = (SwXReferenceMark*)aIter.First( TYPE( SwXReferenceMark ));
-    while(pxMark)
-    {
-        if(pxMark->GetMark() == pMark)
-            break;
-        pxMark = (SwXReferenceMark*)aIter.Next();
-    }
-    if( !pxMark )
-        pxMark = new SwXReferenceMark(pDoc, pMark);
-    return pxMark;
+
+    return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
+
 /******************************************************************
  *
  ******************************************************************/

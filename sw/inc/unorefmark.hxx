@@ -40,16 +40,12 @@
 
 #include <cppuhelper/implbase5.hxx>
 
-#include <tools/string.hxx>
-
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
+#include <unobaseclass.hxx>
 
 
 class SwDoc;
-class SwPaM;
+class SwModify;
 class SwFmtRefMark;
-class SwXTextCursor;
 
 
 /* -----------------27.08.98 15:11-------------------
@@ -65,41 +61,24 @@ typedef ::cppu::WeakImplHelper5
 
 class SwXReferenceMark
     : public SwXReferenceMark_Base
-    , public SwClient
 {
 
 private:
 
-    SwEventListenerContainer    aLstnrCntnr;
-    SwDoc*                      pDoc;
-    const SwFmtRefMark*         pMark;
-    String                      sMarkName;
-    BOOL                        m_bIsDescriptor;
-
-    BOOL    IsValid() const {return 0 != GetRegisteredIn();}
-    void    InsertRefMark( SwPaM& rPam, SwXTextCursor * pCursor );
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXReferenceMark();
 
 public:
 
-    SwXReferenceMark(SwDoc * pDoc, const SwFmtRefMark * pMark);
+    SwXReferenceMark(SwDoc *const pDoc, const SwFmtRefMark *const pMark);
 
-    void attachToRange(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange >& xTextRange)
-        throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
-
-    const SwFmtRefMark* GetMark() const {return pMark;}
-    const String&       GetMarkName() const {return sMarkName;}
-    SwDoc*              GetDoc() const {return pDoc;}
-    void                Invalidate();
-
-    TYPEINFO();
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    static SwXReferenceMark *
+        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark const& rMarkFmt);
+    /// may return 0
+    static SwXReferenceMark *
+        GetReferenceMark(SwModify const& rUnoCB, SwFmtRefMark const& rMarkFmt);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
