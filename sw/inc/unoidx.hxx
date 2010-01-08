@@ -32,9 +32,7 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
@@ -53,8 +51,6 @@ class SwTOXType;
 /* -----------------07.12.98 10:08-------------------
  *
  * --------------------------------------------------*/
-class SwXIndexStyleAccess_Impl;
-class SwXIndexTokenAccess_Impl;
 
 typedef ::cppu::WeakImplHelper5
 <   ::com::sun::star::lang::XUnoTunnel
@@ -70,8 +66,8 @@ class SwXDocumentIndex
 
 private:
 
-    friend class SwXIndexStyleAccess_Impl;
-    friend class SwXIndexTokenAccess_Impl;
+    class StyleAccess_Impl;
+    class TokenAccess_Impl;
 
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
@@ -317,78 +313,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
 };
-/* -----------------13.09.99 16:39-------------------
-
- --------------------------------------------------*/
-class SwXIndexStyleAccess_Impl : public cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XIndexReplace,
-    ::com::sun::star::lang::XServiceInfo
->
-{
-    SwXDocumentIndex&   rParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XDocumentIndex >  xParent;
-protected:
-    virtual ~SwXIndexStyleAccess_Impl();
-public:
-    SwXIndexStyleAccess_Impl(SwXDocumentIndex& rParentIdx);
-
-
-    //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-
-    //XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-};
-
-/* -----------------13.09.99 16:39-------------------
-
- --------------------------------------------------*/
-class SwXIndexTokenAccess_Impl : public cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XIndexReplace,
-    ::com::sun::star::lang::XServiceInfo
->
-{
-    SwXDocumentIndex&   rParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XDocumentIndex >  xParent;
-    sal_Int32               nCount;
-protected:
-    virtual ~SwXIndexTokenAccess_Impl();
-public:
-    SwXIndexTokenAccess_Impl(SwXDocumentIndex& rParentIdx);
-
-
-
-    //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-
-    //XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-};
 
 #endif
-
 

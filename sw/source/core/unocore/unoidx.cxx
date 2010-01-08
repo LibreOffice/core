@@ -31,12 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/BibliographyDataField.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
@@ -75,7 +76,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
-static String
+static OUString
 lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
     OUString sRet;
@@ -189,6 +190,104 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
         }
     }
 }
+
+/* -----------------13.09.99 16:39-------------------
+
+ --------------------------------------------------*/
+typedef ::cppu::WeakImplHelper2
+<   lang::XServiceInfo
+,   container::XIndexReplace
+> SwXDocumentIndexStyleAccess_Base;
+
+class SwXDocumentIndex::StyleAccess_Impl
+    : public SwXDocumentIndexStyleAccess_Base
+{
+
+private:
+    /// can be destroyed threadsafely, so no UnoImplPtr here
+    ::rtl::Reference<SwXDocumentIndex> m_xParent;
+
+    virtual ~StyleAccess_Impl();
+
+public:
+    StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        supportsService(const ::rtl::OUString& rServiceName)
+        throw (uno::RuntimeException);
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames() throw (uno::RuntimeException);
+
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
+    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
+        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+                uno::RuntimeException);
+
+    // XIndexReplace
+    virtual void SAL_CALL
+        replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
+        throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
+                lang::WrappedTargetException, uno::RuntimeException);
+
+};
+
+/* -----------------13.09.99 16:39-------------------
+
+ --------------------------------------------------*/
+typedef ::cppu::WeakImplHelper2
+<   lang::XServiceInfo
+,   container::XIndexReplace
+> SwXDocumentIndexTokenAccess_Base;
+
+class SwXDocumentIndex::TokenAccess_Impl
+    : public SwXDocumentIndexTokenAccess_Base
+{
+
+private:
+    /// can be destroyed threadsafely, so no UnoImplPtr here
+    ::rtl::Reference<SwXDocumentIndex> m_xParent;
+
+    virtual ~TokenAccess_Impl();
+
+public:
+
+    TokenAccess_Impl(SwXDocumentIndex& rParentIdx);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        supportsService(const ::rtl::OUString& rServiceName)
+        throw (uno::RuntimeException);
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames() throw (uno::RuntimeException);
+
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
+    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
+        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+                uno::RuntimeException);
+
+    // XIndexReplace
+    virtual void SAL_CALL
+        replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
+        throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
+                lang::WrappedTargetException, uno::RuntimeException);
+
+};
+
 
 /******************************************************************
  * SwXDocumentIndex
@@ -1035,7 +1134,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     m_pImpl->m_wTokenAccess);
                 if (!xTokenAccess.is())
                 {
-                    xTokenAccess = new SwXIndexTokenAccess_Impl(*this);
+                    xTokenAccess = new TokenAccess_Impl(*this);
                     m_pImpl->m_wTokenAccess = xTokenAccess;
                 }
                 aRet <<= xTokenAccess;
@@ -1047,7 +1146,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     m_pImpl->m_wStyleAccess);
                 if (!xStyleAccess.is())
                 {
-                    xStyleAccess = new SwXIndexStyleAccess_Impl(*this);
+                    xStyleAccess = new StyleAccess_Impl(*this);
                     m_pImpl->m_wStyleAccess = xStyleAccess;
                 }
                 aRet <<= xStyleAccess;
@@ -2409,49 +2508,66 @@ sal_Bool SwXDocumentIndexes::hasElements(void) throw( uno::RuntimeException )
     return 0 != getCount();
 }
 
-/* -----------------------------06.04.00 15:08--------------------------------
+/******************************************************************
+ * SwXDocumentIndex::StyleAccess_Impl
+ ******************************************************************/
 
- ---------------------------------------------------------------------------*/
-OUString SwXIndexStyleAccess_Impl::getImplementationName(void) throw( uno::RuntimeException )
-{
-    return C2U("SwXIndexStyleAccess_Impl");
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL SwXIndexStyleAccess_Impl::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-{
-    return C2U("com.sun.star.text.DocumentIndexParagraphStyles") == rServiceName;
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXIndexStyleAccess_Impl::getSupportedServiceNames(void) throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.DocumentIndexParagraphStyles");
-    return aRet;
-}
 /*-- 13.09.99 16:52:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXIndexStyleAccess_Impl::SwXIndexStyleAccess_Impl(SwXDocumentIndex& rParentIdx) :
-    rParent(rParentIdx),
-    xParent(&rParentIdx)
+SwXDocumentIndex::StyleAccess_Impl::StyleAccess_Impl(
+        SwXDocumentIndex& rParentIdx)
+    : m_xParent(&rParentIdx)
 {
 }
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXIndexStyleAccess_Impl::~SwXIndexStyleAccess_Impl()
+SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
 {
 }
+
+/* -----------------------------06.04.00 15:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
+throw (uno::RuntimeException)
+{
+    return C2U("SwXDocumentIndex::StyleAccess_Impl");
+}
+
+static char const*const g_ServicesIndexStyleAccess[] =
+{
+    "com.sun.star.text.DocumentIndexParagraphStyles",
+};
+static const size_t g_nServicesIndexStyleAccess(
+    sizeof(g_ServicesIndexStyleAccess)/sizeof(g_ServicesIndexStyleAccess[0]));
+
+sal_Bool SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::supportsService(
+        const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+        g_nServicesIndexStyleAccess, g_ServicesIndexStyleAccess, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
+throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesIndexStyleAccess, g_ServicesIndexStyleAccess);
+}
+
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXIndexStyleAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElement)
-    throw( lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
+void SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
+        sal_Int32 nIndex, const uno::Any& rElement)
+throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2461,38 +2577,45 @@ void SwXIndexStyleAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
         throw lang::IndexOutOfBoundsException();
     }
 
-    SwTOXBase * pTOXBase( &rParent.m_pImpl->GetTOXSectionOrThrow() );
+    SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
     uno::Sequence<OUString> aSeq;
     if(!(rElement >>= aSeq))
+    {
         throw lang::IllegalArgumentException();
+    }
 
-    sal_Int32 nStyles = aSeq.getLength();
+    const sal_Int32 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
     String sSetStyles;
     String aString;
     for(sal_Int32 i = 0; i < nStyles; i++)
     {
         if(i)
+        {
             sSetStyles += TOX_STYLE_DELIMITER;
-        SwStyleNameMapper::FillUIName(pStyles[i], aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
+        }
+        SwStyleNameMapper::FillUIName(pStyles[i], aString,
+                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
         sSetStyles +=  aString;
     }
-    pTOXBase->SetStyleNames(sSetStyles, (sal_uInt16) nIndex);
+    rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
 }
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 SwXIndexStyleAccess_Impl::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::getCount() throw (uno::RuntimeException)
 {
     return MAXLEVEL;
 }
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXIndexStyleAccess_Impl::getByIndex(sal_Int32 nIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                 uno::RuntimeException)
+uno::Any SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
+throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -2501,10 +2624,11 @@ uno::Any SwXIndexStyleAccess_Impl::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
     }
 
-    SwTOXBase * pTOXBase( &rParent.m_pImpl->GetTOXSectionOrThrow() );
+    SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    const String& rStyles = pTOXBase->GetStyleNames((sal_uInt16) nIndex);
-    sal_uInt16 nStyles = rStyles.GetTokenCount(TOX_STYLE_DELIMITER);
+    const String& rStyles =
+        rTOXBase.GetStyleNames(static_cast<sal_uInt16>(nIndex));
+    const sal_uInt16 nStyles = rStyles.GetTokenCount(TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     String aString;
@@ -2523,116 +2647,143 @@ uno::Any SwXIndexStyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Type SwXIndexStyleAccess_Impl::getElementType(void)
-    throw( uno::RuntimeException )
+uno::Type SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::getElementType()
+throw (uno::RuntimeException)
 {
     return ::getCppuType((uno::Sequence<OUString>*)0);
 }
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXIndexStyleAccess_Impl::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException)
 {
     return sal_True;
 }
 
-/* -----------------13.09.99 16:51-------------------
-
- --------------------------------------------------*/
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString SwXIndexTokenAccess_Impl::getImplementationName(void) throw( uno::RuntimeException )
-{
-    return C2U("SwXIndexTokenAccess_Impl");
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL SwXIndexTokenAccess_Impl::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-{
-    return C2U("com.sun.star.text.DocumentIndexLevelFormat") == rServiceName;
-}
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXIndexTokenAccess_Impl::getSupportedServiceNames(void) throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.DocumentIndexLevelFormat");
-    return aRet;
-}
+/******************************************************************
+ * SwXDocumentIndex::TokenAccess_Impl
+ ******************************************************************/
 /*-- 13.09.99 16:52:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXIndexTokenAccess_Impl::SwXIndexTokenAccess_Impl(SwXDocumentIndex& rParentIdx) :
-    rParent(rParentIdx),
-    xParent(&rParentIdx),
-    nCount(0)
+SwXDocumentIndex::TokenAccess_Impl::TokenAccess_Impl(
+        SwXDocumentIndex& rParentIdx)
+    : m_xParent(&rParentIdx)
 {
 }
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXIndexTokenAccess_Impl::~SwXIndexTokenAccess_Impl()
+SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
 {
 }
+
+/* -----------------------------06.04.00 15:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
+throw (uno::RuntimeException)
+{
+    return C2U("SwXDocumentIndex::TokenAccess_Impl");
+}
+
+static char const*const g_ServicesIndexTokenAccess[] =
+{
+    "com.sun.star.text.DocumentIndexLevelFormat",
+};
+static const size_t g_nServicesIndexTokenAccess(
+    sizeof(g_ServicesIndexTokenAccess)/sizeof(g_ServicesIndexTokenAccess[0]));
+
+sal_Bool SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::supportsService(
+        const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    return ::sw::SupportsServiceImpl(
+        g_nServicesIndexTokenAccess, g_ServicesIndexTokenAccess, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
+throw (uno::RuntimeException)
+{
+    return ::sw::GetSupportedServiceNamesImpl(
+            g_nServicesIndexTokenAccess, g_ServicesIndexTokenAccess);
+}
+
+struct TokenType {
+    const char *pName;
+    const enum FormTokenType eTokenType;
+};
+
+static const struct TokenType g_TokenTypes[] =
+{
+    { "TokenEntryNumber",           TOKEN_ENTRY_NO  },
+    { "TokenEntryText",             TOKEN_ENTRY_TEXT },
+    { "TokenTabStop",               TOKEN_TAB_STOP },
+    { "TokenText",                  TOKEN_TEXT },
+    { "TokenPageNumber",            TOKEN_PAGE_NUMS },
+    { "TokenChapterInfo",           TOKEN_CHAPTER_INFO },
+    { "TokenHyperlinkStart",        TOKEN_LINK_START },
+    { "TokenHyperlinkEnd",          TOKEN_LINK_END },
+    { "TokenBibliographyDataField", TOKEN_AUTHORITY },
+    { 0, static_cast<enum FormTokenType>(0) }
+};
+
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElement)
-    throw( lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-            lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
+        sal_Int32 nIndex, const uno::Any& rElement)
+throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
+        lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwTOXBase * pTOXBase( &rParent.m_pImpl->GetTOXSectionOrThrow() );
+    SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    if(nIndex < 0 ||
-        (nIndex > pTOXBase->GetTOXForm().GetFormMax()))
-            throw lang::IndexOutOfBoundsException();
+    if ((nIndex < 0) || (nIndex > rTOXBase.GetTOXForm().GetFormMax()))
+    {
+        throw lang::IndexOutOfBoundsException();
+    }
 
     uno::Sequence<beans::PropertyValues> aSeq;
     if(!(rElement >>= aSeq))
+    {
         throw lang::IllegalArgumentException();
-
+    }
 
     String sPattern;
-    sal_Int32 nTokens = aSeq.getLength();
+    const sal_Int32 nTokens = aSeq.getLength();
     const beans::PropertyValues* pTokens = aSeq.getConstArray();
     for(sal_Int32 i = 0; i < nTokens; i++)
     {
         const beans::PropertyValue* pProperties = pTokens[i].getConstArray();
-        sal_Int32 nProperties = pTokens[i].getLength();
+        const sal_Int32 nProperties = pTokens[i].getLength();
         //create an invalid token
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
-            if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("TokenType"))
+            if (pProperties[j].Name.equalsAscii("TokenType"))
             {
-                const String sTokenType =
+                const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
-                if(sTokenType.EqualsAscii("TokenEntryNumber"))
-                    aToken.eTokenType = TOKEN_ENTRY_NO;
-                else if(sTokenType.EqualsAscii("TokenEntryText" ))
-                    aToken.eTokenType = TOKEN_ENTRY_TEXT;
-                else if(sTokenType.EqualsAscii("TokenTabStop"   ))
-                    aToken.eTokenType = TOKEN_TAB_STOP;
-                else if(sTokenType.EqualsAscii("TokenText"      ))
-                    aToken.eTokenType = TOKEN_TEXT;
-                else if(sTokenType.EqualsAscii("TokenPageNumber"))
-                    aToken.eTokenType = TOKEN_PAGE_NUMS;
-                else if(sTokenType.EqualsAscii("TokenChapterInfo"      ))
-                    aToken.eTokenType = TOKEN_CHAPTER_INFO;
-                else if(sTokenType.EqualsAscii("TokenHyperlinkStart" ))
-                    aToken.eTokenType = TOKEN_LINK_START;
-                else if(sTokenType.EqualsAscii("TokenHyperlinkEnd"))
-                    aToken.eTokenType = TOKEN_LINK_END;
-                else if(sTokenType.EqualsAscii("TokenBibliographyDataField" ))
-                    aToken.eTokenType = TOKEN_AUTHORITY;
+                for (TokenType const* pTokenType = g_TokenTypes;
+                        pTokenType->pName; ++pTokenType)
+                {
+                    if (sTokenType.equalsAscii(pTokenType->pName))
+                    {
+                        aToken.eTokenType = pTokenType->eTokenType;
+                        break;
+                    }
+                }
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharacterStyleName"  )  ))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("CharacterStyleName")))
             {
                 String sCharStyleName;
                 SwStyleNameMapper::FillUIName(
@@ -2642,54 +2793,68 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                         sal_True);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
-                            sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopRightAligned") ))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TabStopRightAligned")))
             {
-                sal_Bool bRight = lcl_AnyToBool(pProperties[j].Value);
+                const sal_Bool bRight = lcl_AnyToBool(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
                                     SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT;
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopPosition"  )))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TabStopPosition")))
             {
                 sal_Int32 nPosition = 0;
-                if(pProperties[j].Value.getValueType() != ::getCppuType((sal_Int32*)0))
+                if (!(pProperties[j].Value >>= nPosition))
+                {
                     throw lang::IllegalArgumentException();
-                pProperties[j].Value >>= nPosition;
+                }
                 nPosition = MM100_TO_TWIP(nPosition);
                 if(nPosition < 0)
+                {
                     throw lang::IllegalArgumentException();
+                }
                 aToken.nTabStopPosition = nPosition;
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopFillCharacter" )))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TabStopFillCharacter")))
             {
-                const String sFillChar =
+                const OUString sFillChar =
                     lcl_AnyToString(pProperties[j].Value);
-                if(sFillChar.Len() > 1)
+                if (sFillChar.getLength() > 1)
+                {
                     throw lang::IllegalArgumentException();
-                aToken.cTabFillChar = sFillChar.Len() ?
-                                sFillChar.GetChar(0) : ' ';
+                }
+                aToken.cTabFillChar =
+                    (sFillChar.getLength()) ? sFillChar[0] : ' ';
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text" )))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("Text")))
                {
-                const String sText =
-                    lcl_AnyToString(pProperties[j].Value);
+                const OUString sText = lcl_AnyToString(pProperties[j].Value);
                 aToken.sText = sText;
             }
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChapterFormat"    )))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("ChapterFormat")))
             {
                 sal_Int16 nFormat = lcl_AnyToInt16(pProperties[j].Value);
                 switch(nFormat)
                 {
-                    case text::ChapterFormat::NUMBER:           nFormat = CF_NUMBER;
+                    case text::ChapterFormat::NUMBER:
+                        nFormat = CF_NUMBER;
                     break;
-                    case text::ChapterFormat::NAME:             nFormat = CF_TITLE;
+                    case text::ChapterFormat::NAME:
+                        nFormat = CF_TITLE;
                     break;
-                    case text::ChapterFormat::NAME_NUMBER:      nFormat = CF_NUM_TITLE;
+                    case text::ChapterFormat::NAME_NUMBER:
+                        nFormat = CF_NUM_TITLE;
                     break;
-                    case text::ChapterFormat::NO_PREFIX_SUFFIX:nFormat = CF_NUMBER_NOPREPST;
+                    case text::ChapterFormat::NO_PREFIX_SUFFIX:
+                        nFormat = CF_NUMBER_NOPREPST;
                     break;
-                    case text::ChapterFormat::DIGIT:           nFormat = CF_NUM_NOPREPST_TITLE;
+                    case text::ChapterFormat::DIGIT:
+                        nFormat = CF_NUM_NOPREPST_TITLE;
                     break;
                     default:
                         throw lang::IllegalArgumentException();
@@ -2697,15 +2862,19 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 aToken.nChapterFormat = nFormat;
             }
 //--->i53420
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChapterLevel")) )
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("ChapterLevel")))
             {
                 const sal_Int16 nLevel = lcl_AnyToInt16(pProperties[j].Value);
                 if( nLevel < 1 || nLevel > MAXLEVEL )
+                {
                     throw lang::IllegalArgumentException();
+                }
                 aToken.nOutlineLevel = nLevel;
             }
 //<---
-            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
                 sal_Int16 nType = 0;
                 pProperties[j].Value >>= nType;
@@ -2719,7 +2888,8 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 aToken.nAuthorityField = nType;
             }
             // #i21237#
-            else if ( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WithTab")))
+            else if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("WithTab")))
             {
                 aToken.bWithTab = lcl_AnyToBool(pProperties[j].Value);
             }
@@ -2727,17 +2897,22 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
         }
         //exception if wrong TokenType
         if(TOKEN_END <= aToken.eTokenType )
+        {
             throw lang::IllegalArgumentException();
+        }
         // set TokenType from TOKEN_ENTRY_TEXT to TOKEN_ENTRY if it is
         // not a content index
         if(TOKEN_ENTRY_TEXT == aToken.eTokenType &&
-                                TOX_CONTENT != pTOXBase->GetType())
+                                (TOX_CONTENT != rTOXBase.GetType()))
+        {
             aToken.eTokenType = TOKEN_ENTRY;
+        }
 //---> i53420
 // check for chapter format allowed values if it was TOKEN_ENTRY_NO type
 // only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
 // reading from file
         if( TOKEN_ENTRY_NO == aToken.eTokenType )
+        {
             switch(aToken.nChapterFormat)
             {
             case CF_NUMBER:
@@ -2746,41 +2921,47 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             default:
                 throw lang::IllegalArgumentException();
             }
+        }
 //<---
         sPattern += aToken.GetString();
     }
-    SwForm aForm(pTOXBase->GetTOXForm());
-    aForm.SetPattern((sal_uInt16) nIndex, sPattern);
-    pTOXBase->SetTOXForm(aForm);
+    SwForm aForm(rTOXBase.GetTOXForm());
+    aForm.SetPattern(static_cast<sal_uInt16>(nIndex), sPattern);
+    rTOXBase.SetTOXForm(aForm);
 }
+
 /*-- 13.09.99 16:52:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 SwXIndexTokenAccess_Impl::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    const sal_Int32 nRet = rParent.m_pImpl->GetFormMax();
+    const sal_Int32 nRet = m_xParent->m_pImpl->GetFormMax();
     return nRet;
 }
+
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-         uno::RuntimeException)
+uno::Any SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
+throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwTOXBase * pTOXBase( &rParent.m_pImpl->GetTOXSectionOrThrow() );
+    SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    if(nIndex < 0 ||
-    (nIndex > pTOXBase->GetTOXForm().GetFormMax()))
+    if ((nIndex < 0) || (nIndex > rTOXBase.GetTOXForm().GetFormMax()))
+    {
         throw lang::IndexOutOfBoundsException();
+    }
 
     // #i21237#
-    SwFormTokens aPattern = pTOXBase->GetTOXForm().
-        GetPattern((sal_uInt16) nIndex);
+    SwFormTokens aPattern = rTOXBase.GetTOXForm().
+        GetPattern(static_cast<sal_uInt16>(nIndex));
     SwFormTokens::iterator aIt = aPattern.begin();
 
     sal_uInt16 nTokenCount = 0;
@@ -2793,7 +2974,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         beans::PropertyValues* pTokenProps = aRetSeq.getArray();
         SwFormToken  aToken = *aIt; // #i21237#
 
-        uno::Sequence< beans::PropertyValue >& rCurTokenSeq = pTokenProps[nTokenCount-1];
+        uno::Sequence< beans::PropertyValue >& rCurTokenSeq =
+            pTokenProps[nTokenCount-1];
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
                         aString,
@@ -2802,25 +2984,30 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         const OUString aProgCharStyle( aString );
         switch(aToken.eTokenType)
         {
-            case TOKEN_ENTRY_NO     :
+            case TOKEN_ENTRY_NO:
             {
 //--->i53420
 // writing to file (from doc to properties)
                 sal_Int32 nElements = 2;
                 sal_Int32 nCurrentElement = 0;
 
-                if( aToken.nChapterFormat != CF_NUMBER )//check for default value
+                // check for default value
+                if (aToken.nChapterFormat != CF_NUMBER)
+                {
                     nElements++;//we need the element
+                }
                 if( aToken.nOutlineLevel != MAXLEVEL )
+                {
                     nElements++;
+                }
 
                 rCurTokenSeq.realloc( nElements );
 
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[nCurrentElement].Name = C2U("TokenType");
-                pArr[nCurrentElement++].Value <<= OUString::createFromAscii("TokenEntryNumber");
-//              pArr[0].Value <<= C2U("TokenEntryNumber");
+                pArr[nCurrentElement++].Value <<=
+                    OUString::createFromAscii("TokenEntryNumber");
 
                 pArr[nCurrentElement].Name = C2U("CharacterStyleName");
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
@@ -2828,18 +3015,24 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 {
                     pArr[nCurrentElement].Name = C2U("ChapterFormat");
                     sal_Int16 nVal;
-//! the allowed values for chapter format, when used as entry number, are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
+// the allowed values for chapter format, when used as entry number,
+// are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
 //CF_NUMBER
                     switch(aToken.nChapterFormat)
                     {
                     default:
-                    case CF_NUMBER:             nVal = text::ChapterFormat::NUMBER; break;
-                    case CF_NUM_NOPREPST_TITLE: nVal = text::ChapterFormat::DIGIT; break;
+                    case CF_NUMBER:
+                        nVal = text::ChapterFormat::NUMBER;
+                    break;
+                    case CF_NUM_NOPREPST_TITLE:
+                        nVal = text::ChapterFormat::DIGIT;
+                    break;
                     }
-                    pArr[nCurrentElement++].Value <<= (sal_Int16)nVal;
+                    pArr[nCurrentElement++].Value <<= nVal;
                 }
 
-                if( aToken.nOutlineLevel != MAXLEVEL ) //only  a ChapterLevel != MAXLEVEL is registered
+                // only  a ChapterLevel != MAXLEVEL is registered
+                if (aToken.nOutlineLevel != MAXLEVEL)
                 {
                     pArr[nCurrentElement].Name = C2U("ChapterLevel");
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
@@ -2847,8 +3040,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 //<---
             }
             break;
-            case TOKEN_ENTRY        :   // no difference between Entry and Entry Text
-            case TOKEN_ENTRY_TEXT   :
+            case TOKEN_ENTRY:   // no difference between Entry and Entry Text
+            case TOKEN_ENTRY_TEXT:
             {
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
@@ -2860,14 +3053,13 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
-            case TOKEN_TAB_STOP     :
+            case TOKEN_TAB_STOP:
             {
                 rCurTokenSeq.realloc(5); // #i21237#
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenTabStop");
-
 
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
@@ -2889,10 +3081,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[3].Value <<= aProgCharStyle;
                 // #i21237#
                 pArr[4].Name = C2U("WithTab");
-                pArr[4].Value.setValue(&aToken.bWithTab, ::getCppuBooleanType());
+                pArr[4].Value <<= static_cast<sal_Bool>(aToken.bWithTab);
             }
             break;
-            case TOKEN_TEXT         :
+            case TOKEN_TEXT:
             {
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
@@ -2907,7 +3099,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[2].Value <<= OUString(aToken.sText);
             }
             break;
-            case TOKEN_PAGE_NUMS    :
+            case TOKEN_PAGE_NUMS:
             {
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
@@ -2919,7 +3111,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
-            case TOKEN_CHAPTER_INFO :
+            case TOKEN_CHAPTER_INFO:
             {
                 rCurTokenSeq.realloc( 4 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
@@ -2934,13 +3126,23 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
                 switch(aToken.nChapterFormat)
                 {
-                    case CF_NUMBER:             nVal = text::ChapterFormat::NUMBER; break;
-                    case CF_TITLE:              nVal = text::ChapterFormat::NAME; break;
-                    case CF_NUM_TITLE:          nVal = text::ChapterFormat::NAME_NUMBER; break;
-                    case CF_NUMBER_NOPREPST:    nVal = text::ChapterFormat::NO_PREFIX_SUFFIX; break;
-                    case CF_NUM_NOPREPST_TITLE: nVal = text::ChapterFormat::DIGIT; break;
+                    case CF_NUMBER:
+                        nVal = text::ChapterFormat::NUMBER;
+                    break;
+                    case CF_TITLE:
+                        nVal = text::ChapterFormat::NAME;
+                    break;
+                    case CF_NUM_TITLE:
+                        nVal = text::ChapterFormat::NAME_NUMBER;
+                    break;
+                    case CF_NUMBER_NOPREPST:
+                        nVal = text::ChapterFormat::NO_PREFIX_SUFFIX;
+                    break;
+                    case CF_NUM_NOPREPST_TITLE:
+                        nVal = text::ChapterFormat::DIGIT;
+                    break;
                 }
-                pArr[2].Value <<= (sal_Int16)nVal;
+                pArr[2].Value <<= nVal;
 //--->i53420
                 pArr[3].Name = C2U("ChapterLevel");
                 //
@@ -2948,33 +3150,36 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 //<---
             }
             break;
-            case TOKEN_LINK_START   :
+            case TOKEN_LINK_START:
             {
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenHyperlinkStart");
+                pArr[0].Value <<=
+                    OUString::createFromAscii("TokenHyperlinkStart");
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
             }
             break;
-            case TOKEN_LINK_END     :
+            case TOKEN_LINK_END:
             {
                 rCurTokenSeq.realloc( 1 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenHyperlinkEnd");
+                pArr[0].Value <<=
+                    OUString::createFromAscii("TokenHyperlinkEnd");
             }
             break;
-            case TOKEN_AUTHORITY :
+            case TOKEN_AUTHORITY:
             {
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenBibliographyDataField");
+                pArr[0].Value <<=
+                    OUString::createFromAscii("TokenBibliographyDataField");
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -2991,22 +3196,26 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         aIt++; // #i21237#
     }
 
-    uno::Any aRet(&aRetSeq, ::getCppuType((uno::Sequence< beans::PropertyValues >*)0));
-
+    uno::Any aRet;
+    aRet <<= aRetSeq;
     return aRet;
 }
+
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Type  SwXIndexTokenAccess_Impl::getElementType(void)
-    throw( uno::RuntimeException )
+uno::Type SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::getElementType()
+throw (uno::RuntimeException)
 {
     return ::getCppuType((uno::Sequence< beans::PropertyValues >*)0);
 }
 /*-- 13.09.99 16:52:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXDocumentIndex::TokenAccess_Impl::hasElements()
+throw (uno::RuntimeException)
 {
     return sal_True;
 }
