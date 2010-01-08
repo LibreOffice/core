@@ -433,19 +433,14 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 
         if(xBkm.is() && xIfcTunnel.is())
         {
-            SwXBookmark* pBkm = reinterpret_cast<SwXBookmark*>(
-                    xIfcTunnel->getSomething(SwXBookmark::getUnoTunnelId()));
-            if(pBkm && pBkm->GetDoc() == pDoc)
+            ::sw::mark::IMark const*const pMark(
+                    SwXBookmark::GetBookmarkInDoc(pDoc, xIfcTunnel) );
+            if (pMark)
             {
-                IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-                IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(pBkm->getName());
-                if( ppMark != pMarkAccess->getMarksEnd() )
-                {
-                    rSh.EnterStdMode();
-                    rSh.GotoMark( ppMark->get() );
-                }
-                return sal_True;
+                rSh.EnterStdMode();
+                rSh.GotoMark(pMark);
             }
+            return sal_True;
         }
         // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
         //

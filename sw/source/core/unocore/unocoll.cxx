@@ -1529,8 +1529,9 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 
     uno::Any aRet;
     ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
-    uno::Reference< XTextContent > xRef = GetObject(*pBkmk, GetDoc());
-    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+    const uno::Reference< text::XTextContent > xRef =
+        SwXBookmark::CreateXBookmark(*GetDoc(), *pBkmk);
+    aRet <<= xRef;
     return aRet;
 }
 
@@ -1547,8 +1548,9 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
         throw NoSuchElementException();
 
     uno::Any aRet;
-    uno::Reference< XTextContent > xRef = SwXBookmarks::GetObject(*(ppBkmk->get()), GetDoc());
-    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+    const uno::Reference< text::XTextContent > xRef =
+        SwXBookmark::CreateXBookmark(*GetDoc(), *(ppBkmk->get()));
+    aRet <<= xRef;
     return aRet;
 }
 
@@ -1592,27 +1594,6 @@ sal_Bool SwXBookmarks::hasElements(void)
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
-}
-
-SwXBookmark* SwXBookmarks::GetObject( ::sw::mark::IMark& rBkmk, SwDoc* pDoc)
-{
-    SwModify* const pModify = static_cast<SwModify*>(&rBkmk);
-    SwXBookmark* pXBkmk = (SwXBookmark*)SwClientIter(*pModify).First(TYPE(SwXBookmark));
-    if(!pXBkmk)
-    {
-        // FIXME: These belong in XTextFieldsSupplier
-        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
-        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
-        //else
-        OSL_ENSURE(
-            dynamic_cast< ::sw::mark::IBookmark* >(&rBkmk),
-            "<SwXBookmark::GetObject(..)>"
-            "SwXBookmark requested for non-bookmark mark.");
-        pXBkmk = new SwXBookmark(&rBkmk, pDoc);
-    }
-    return pXBkmk;
 }
 
 /******************************************************************

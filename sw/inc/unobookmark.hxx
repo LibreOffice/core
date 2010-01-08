@@ -41,12 +41,10 @@
 
 #include <cppuhelper/implbase5.hxx>
 
-#include <tools/string.hxx>
 #include <sfx2/Metadatable.hxx>
 
+#include <unobaseclass.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <calbck.hxx>
-#include <unoevtlstnr.hxx>
 
 
 class SwDoc;
@@ -63,32 +61,14 @@ typedef ::cppu::ImplInheritanceHelper5
 
 class SwXBookmark
     : public SwXBookmark_Base
-    , private SwClient
 {
 
 private:
 
-    SwEventListenerContainer m_aLstnrCntnr;
-    SwDoc* m_pDoc;
-    String m_aName;
-    ::sw::mark::IMark* m_pRegisteredBookmark;
-
-    void registerInMark(::sw::mark::IMark* const pBkmk);
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
 protected:
-
-    virtual ~SwXBookmark();
-
-public:
-
-    SwXBookmark(::sw::mark::IMark* pMark = 0, SwDoc* pDoc = 0);
-
-    const ::sw::mark::IMark* GetBookmark() const
-        { return m_pRegisteredBookmark; }
-          ::sw::mark::IMark* GetBookmark()
-        { return m_pRegisteredBookmark; }
-    SwDoc* GetDoc()
-        { return m_pDoc; }
 
     void attachToRangeEx(
             const ::com::sun::star::uno::Reference<
@@ -102,10 +82,26 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 
-    TYPEINFO();
+    const ::sw::mark::IMark* GetBookmark() const;
 
-    // SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual ~SwXBookmark();
+
+    /// @param pDoc and pMark != 0, but not & because of ImplInheritanceHelper
+    SwXBookmark(::sw::mark::IMark *const pMark, SwDoc *const pDoc);
+
+public:
+
+    /// descriptor
+    SwXBookmark();
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextContent>
+        CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark);
+
+    /// @return IMark for this, but only if it lives in pDoc
+    static ::sw::mark::IMark const* GetBookmarkInDoc(SwDoc const*const pDoc,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XUnoTunnel> & xUT);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject();

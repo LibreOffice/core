@@ -100,8 +100,9 @@ namespace
         BYTE                        nBkmType;
         const SwPosition            aPosition;
 
-        SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, const SwPosition &rPosition )
-        : xBookmark ( pXMark )
+        SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
+                const BYTE nType, SwPosition const& rPosition)
+        : xBookmark ( xMark )
         , nBkmType  ( nType )
         , aPosition ( rPosition )
         {
@@ -165,7 +166,9 @@ namespace
             {
                 const BYTE nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                    new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), nType, rStartPos)));
+                    new SwXBookmarkPortion_Impl(
+                            SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                            nType, rStartPos)));
             }
 
             const SwPosition& rEndPos = pBkmk->GetMarkEnd();
@@ -183,8 +186,12 @@ namespace
                     pEndPos = pCrossRefEndPos.get();
                 }
                 if(pEndPos)
+                {
                     rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                        new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), BKM_TYPE_END, *pEndPos)));
+                        new SwXBookmarkPortion_Impl(
+                                SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                                BKM_TYPE_END, *pEndPos)));
+                }
             }
         }
     }
