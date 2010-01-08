@@ -30,6 +30,7 @@
 #ifndef SW_UNOBASECLASS_HXX
 #define SW_UNOBASECLASS_HXX
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 
@@ -136,6 +137,32 @@ namespace sw {
 
             T * get        () const { return  m_p; }
     };
+
+    template< class C > C *
+    UnoTunnelGetImplementation(
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XUnoTunnel > const & xUnoTunnel)
+    {
+        if (!xUnoTunnel.is()) { return 0; }
+        C *const pC( reinterpret_cast< C* >(
+                        ::sal::static_int_cast< sal_IntPtr >(
+                            xUnoTunnel->getSomething(C::getUnoTunnelId()))));
+        return pC;
+    }
+
+    template< class C > sal_Int64
+    UnoTunnelImpl(const ::com::sun::star::uno::Sequence< sal_Int8 > & rId,
+                  C *const pThis)
+    {
+        if ((rId.getLength() == 16) &&
+            (0 == rtl_compareMemory(C::getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16)))
+        {
+            return ::sal::static_int_cast< sal_Int64 >(
+                    reinterpret_cast< sal_IntPtr >(pThis) );
+        }
+        return 0;
+    }
 
 } // namespace sw
 
