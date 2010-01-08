@@ -481,11 +481,20 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SA
 
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
 {
+    if (this == &rWeakRef)
+    {
+        return *this;
+    }
+    Reference< XInterface > xInt( rWeakRef.get() );
+    return operator = ( xInt );
+}
+
+WeakReferenceHelper & SAL_CALL
+WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
+SAL_THROW( () )
+{
     try
     {
-    if (this != &rWeakRef)
-    {
-        Reference< XInterface > xInt( rWeakRef.get() );
         if (m_pImpl)
         {
             if (m_pImpl->m_XWeakConnectionPoint.is())
@@ -501,7 +510,6 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
             m_pImpl = new OWeakRefListener(xInt);
             m_pImpl->acquire();
         }
-    }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
     return *this;

@@ -79,13 +79,15 @@ public:
     */
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
 
-    /** Releases this reference and takes over hard reference xInt. If the implementation behind
-        xInt does not support XWeak or XInt is null, than this reference is null.
+    /** Releases this reference and takes over hard reference xInt.
+        If the implementation behind xInt does not support XWeak
+        or XInt is null, then this reference is null.
 
         @param xInt another hard reference
     */
-    inline WeakReferenceHelper & SAL_CALL operator = ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt ) SAL_THROW( () )
-        { return operator = ( WeakReferenceHelper( xInt ) ); }
+    WeakReferenceHelper & SAL_CALL operator = (
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > & xInt ) SAL_THROW( () );
 
     /** Returns true if both weak refs reference to the same object.
 
@@ -134,6 +136,17 @@ public:
     inline WeakReference( const Reference< interface_type > & rRef ) SAL_THROW( () )
         : WeakReferenceHelper( rRef )
         {}
+
+    /** Releases this reference and takes over hard reference xInt.
+        If the implementation behind xInt does not support XWeak
+        or XInt is null, then this reference is null.
+
+        @param xInt another hard reference
+    */
+    WeakReference & SAL_CALL operator = (
+            const ::com::sun::star::uno::Reference< interface_type > & xInt )
+        SAL_THROW( () )
+        { WeakReferenceHelper::operator=(xInt); return *this; }
 
     /**  Gets a hard reference to the object.
 

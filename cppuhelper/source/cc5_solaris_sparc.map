@@ -383,4 +383,5 @@ UDK_3.6 { # OOo 3.0
 UDK_3.7 { # OOo 3.3
     global:
         __1cEcppuLOWeakObjectbAdisposeWeakConnectionPoint6M_v_;
+        __1cDcomDsunEstarDunoTWeakReferenceHelper2G6Mrkn0DJReference4n0DKXInterface____r4_;
 } UDK_3.6;
