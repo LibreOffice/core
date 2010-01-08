@@ -108,24 +108,8 @@ SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
  * --------------------------------------------------*/
 SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 {
-    SwPaM* pRet = new SwPaM(*rPam.GetPoint());
-    if(rPam.HasMark())
-    {
-        pRet->SetMark();
-        *pRet->GetMark() = *rPam.GetMark();
-    }
-    if(rPam.GetNext() != (const Ring*)&rPam)
-    {
-        SwPaM *_pStartCrsr = (SwPaM *)rPam.GetNext();
-        do
-        {
-            //neuen PaM erzeugen
-            SwPaM* pPaM = new SwPaM(*_pStartCrsr);
-            //und in den Ring einfuegen
-            pPaM->MoveTo(pRet);
-
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != rPam.GetNext() );
-    }
+    SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
+    ::sw::DeepCopyPaM(rPam, *pRet);
     return pRet;
 }
 /******************************************************************

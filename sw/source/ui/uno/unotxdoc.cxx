@@ -971,10 +971,7 @@ Reference< XIndexAccess >
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    if(nResult)
-        xRet = new SwXTextRanges(pResultCrsr);
-    else
-        xRet = new SwXTextRanges();
+    xRet = new SwXTextRanges( (nResult) ? pResultCrsr : 0 );
     delete pResultCrsr;
     return xRet;
 }

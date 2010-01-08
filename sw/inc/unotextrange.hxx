@@ -45,10 +45,9 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase8.hxx>
 
-#include <svtools/svarray.hxx>
-
 #include <calbck.hxx>
 #include <pam.hxx>
+#include <unobaseclass.hxx>
 
 
 class String;
@@ -83,6 +82,13 @@ public:
     virtual ~SwUnoInternalPaM();
 
 };
+
+
+namespace sw {
+
+    void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
+
+} // namespace sw
 
 
 typedef ::cppu::WeakImplHelper8
@@ -300,9 +306,6 @@ public:
 /* -----------------15.05.98 08:29-------------------
  *
  * --------------------------------------------------*/
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > *
-    XTextRangeRefPtr;
-SV_DECL_PTRARR(XTextRangeArr, XTextRangeRefPtr, 4, 4)
 
 typedef ::cppu::WeakImplHelper3
 <   ::com::sun::star::lang::XUnoTunnel
@@ -312,32 +315,20 @@ typedef ::cppu::WeakImplHelper3
 
 class SwXTextRanges
     : public SwXTextRanges_Base
-    , public SwClient
 {
 
 private:
 
-    XTextRangeArr*  pRangeArr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        xParentText;
-    XTextRangeArr*  GetRangesArray();
-    SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
-
-protected:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual ~SwXTextRanges();
 
 public:
 
-    SwXTextRanges();
-    SwXTextRanges(SwPaM* pCrsr);
+    SwXTextRanges(SwPaM *const pCrsr);
 
-    const SwUnoCrsr* GetCursor() const {
-        return (const SwUnoCrsr*)(GetRegisteredIn());
-    }
-
-    // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    const SwUnoCrsr* GetCursor() const;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
