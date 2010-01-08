@@ -2301,46 +2301,50 @@ throw (uno::RuntimeException)
 /* -----------------------------05.01.00 11:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Reference< text::XTextCursor >  SwXBodyText::CreateTextCursor(sal_Bool bIgnoreTables)
+SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
 {
-    uno::Reference< text::XTextCursor >  xRet;
-    if(IsValid())
+    if(!IsValid())
     {
-        SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
-       //the cursor has to skip tables contained in this text
-        SwPaM aPam(rNode);
-        aPam.Move( fnMoveBackward, fnGoDoc );
-        if(!bIgnoreTables)
-        {
-            SwTableNode* pTblNode = aPam.GetNode()->FindTableNode();
-            SwCntntNode* pCont = 0;
-            while( pTblNode )
-            {
-                aPam.GetPoint()->nNode = *pTblNode->EndOfSectionNode();
-                pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
-                pTblNode = pCont->FindTableNode();
-            }
-            if(pCont)
-                aPam.GetPoint()->nContent.Assign(pCont, 0);
-        }
-        xRet =  (text::XWordCursor*)new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_BODY, GetDoc());
+        return 0;
     }
-    return xRet;
+
+    // the cursor has to skip tables contained in this text
+    SwPaM aPam(GetDoc()->GetNodes().GetEndOfContent());
+    aPam.Move( fnMoveBackward, fnGoDoc );
+    if (!bIgnoreTables)
+    {
+        SwTableNode * pTblNode = aPam.GetNode()->FindTableNode();
+        SwCntntNode * pCont = 0;
+        while (pTblNode)
+        {
+            aPam.GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+            pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
+            pTblNode = pCont->FindTableNode();
+        }
+        if (pCont)
+        {
+            aPam.GetPoint()->nContent.Assign(pCont, 0);
+        }
+    }
+    return new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_BODY, GetDoc());
 }
+
 /*-- 10.12.98 11:17:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 uno::Reference< text::XTextCursor >  SwXBodyText::createTextCursor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  aRef = CreateTextCursor(sal_False);
-    if(!aRef.is())
+
+    const uno::Reference< text::XTextCursor > xRef(
+            static_cast<text::XWordCursor*>(CreateTextCursor(false)) );
+    if (!xRef.is())
     {
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
-    return aRef;
+    return xRef;
 }
 /*-- 10.12.98 11:17:29---------------------------------------------------
 

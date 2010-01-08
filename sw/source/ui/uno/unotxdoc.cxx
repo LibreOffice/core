@@ -728,19 +728,12 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
 SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
-     XText* pText = xBodyText.get();
+    XText *const pText = xBodyText.get();
     SwXBodyText* pBText = (SwXBodyText*)pText;
-    xCrsr = pBText->CreateTextCursor(sal_True);
+    SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
+    xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    Reference<XUnoTunnel> xRangeTunnel( xCrsr, UNO_QUERY);
-    SwXTextCursor* pxUnoCrsr = 0;
-    if(xRangeTunnel.is())
-    {
-        pxUnoCrsr = reinterpret_cast<SwXTextCursor*>(xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId()));
-    }
-
-    SwUnoCrsr*  pUnoCrsr = pxUnoCrsr->GetCrsr();
+    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCrsr();
     pUnoCrsr->SetRemainInSection(sal_False);
     return pUnoCrsr;
 }

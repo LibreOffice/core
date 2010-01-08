@@ -45,6 +45,7 @@
 
 class SwDoc;
 class SwFrmFmt;
+class SwXTextCursor;
 
 
 typedef ::cppu::WeakAggImplHelper2
@@ -65,8 +66,7 @@ public:
 
     SwXBodyText(SwDoc* pDoc);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >
-        CreateTextCursor(sal_Bool bIgnoreTables = sal_False);
+    SwXTextCursor * CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
