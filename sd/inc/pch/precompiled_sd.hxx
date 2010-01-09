@@ -629,7 +629,6 @@
 #include "svx/hyperdlg.hxx"
 #include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
-#include "svx/impgrf.hxx"
 #include "svx/itemwin.hxx"
 #include "svx/langbox.hxx"
 #include "editeng/langitem.hxx"
