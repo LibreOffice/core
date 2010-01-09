@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -888,9 +888,6 @@ Optional Features:
   --disable-qadevooo      OO.o includes some qa testsuites which some
                           packagers may wish to build without
 
-  --disable-fontooo       disable FontOOo
-                          (useful for distributions using fontconfig for OOo)
-
   --disable-mathmldtd     disable mathmldtd
                           (useful for distributions that want to avoid packaging
                           it)
@@ -1046,11 +1043,6 @@ Optional Features:
                           explicitly enable if your version of ccache doesn't
                           identify as version 2.4_OOo
 
-  --enable-sgistl         for IRIX users, use this option option to build
-                          OpenOffice.org using SGI's STL.
-
-                          Usage: --enable-sgistl=yes
-
   --enable-verbose        Increase build verbosity.
   --disable-verbose       Decrease build verbosity.
 
@@ -1111,8 +1103,6 @@ Optional Packages:
                           Usage: --with-package-format="foo bar"
 
   --with-system-stdlibs   use libstdc++/libgcc_s already on system
-
-  --with-system-mspack    use libmspack already installed on system
 
   --with-system-cairo      Use Cairo libraries already on system
 
@@ -2015,13 +2005,6 @@ if test "${enable_qadevooo+set}" = set; then
 else
   enable_qadevooo="yes"
 fi;
-# Check whether --enable-fontooo or --disable-fontooo was given.
-if test "${enable_fontooo+set}" = set; then
-  enableval="$enable_fontooo"
-
-else
-  enable_fontooo="yes"
-fi;
 # Check whether --enable-mathmldtd or --disable-mathmldtd was given.
 if test "${enable_mathmldtd+set}" = set; then
   enableval="$enable_mathmldtd"
@@ -2041,12 +2024,6 @@ if test "${with_system_stdlibs+set}" = set; then
 
 else
   checkforstdlibproblems=yes
-fi;
-
-# Check whether --with-system-mspack or --without-system-mspack was given.
-if test "${with_system_mspack+set}" = set; then
-  withval="$with_system_mspack"
-
 fi;
 # Check whether --enable-cups or --disable-cups was given.
 if test "${enable_cups+set}" = set; then
@@ -2903,11 +2880,6 @@ if test "${with_build_version+set}" = set; then
   withval="$with_build_version"
   with_build_version=$withval
 fi;
-# Check whether --enable-sgistl or --disable-sgistl was given.
-if test "${enable_sgistl+set}" = set; then
-  enableval="$enable_sgistl"
-
-fi;
 
 # Check whether --with-alloc or --without-alloc was given.
 if test "${with_alloc+set}" = set; then
@@ -3343,9 +3315,6 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		if getconf GNU_LIBPTHREAD_VERSION |grep -q NPTL; then
-			PTHREAD_CFLAGS="-DNPTL"
-		fi
 		_os=Linux
 		;;
 	gnu)
@@ -3429,12 +3398,6 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
-		;;
-	irix*)
-		test_cups=no
-        test_randr=no
-		test_freetype=yes
-		_os=IRIX
 		;;
 	aix*)
 		test_cups=no
@@ -5253,75 +5216,6 @@ echo "${ECHO_T}not found " >&6
    LDFLAGS=$hash_style_ldflags_save
 fi
 
-
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-   if test "$CC" = "cc"; then
-      for ac_prog in cc
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path__cc+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $_cc in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path__cc="$_cc" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path__cc="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-_cc=$ac_cv_path__cc
-
-if test -n "$_cc"; then
-  echo "$as_me:$LINENO: result: $_cc" >&5
-echo "${ECHO_T}$_cc" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-  test -n "$_cc" && break
-done
-
-      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-      echo "$as_me:$LINENO: checking the SGI MIPSpro C compiler version" >&5
-echo $ECHO_N "checking the SGI MIPSpro C compiler version... $ECHO_C" >&6
-            _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
-      _mipspro_major=`echo $_mipspro_version | $AWK -F. '{ print $1 }'`
-      if test "$_mipspro_major" != "7"; then
-         { { echo "$as_me:$LINENO: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&5
-echo "$as_me: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&2;}
-   { (exit 1); exit 1; }; }
-      else
-         _mipspro_minor=`echo $_mipspro_version | $AWK -F. '{ if ($2 <= 1) print "false"; else print "true" }'`
-         if test "$_mipspro_minor" = "false"; then
-            { { echo "$as_me:$LINENO: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&5
-echo "$as_me: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&2;}
-   { (exit 1); exit 1; }; }
-         else
-                        echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-         fi
-      fi
-   fi
-fi
 
 if test "$_os" = "OSF1"; then
    if test "$CC" = "cc"; then
@@ -9564,20 +9458,6 @@ echo "${ECHO_T}checked" >&6
       fi
    fi
 fi
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-      if test "$CC" = "cc"; then
-      echo "$as_me:$LINENO: checking SGI MIPSpro C++ Compiler" >&5
-echo $ECHO_N "checking SGI MIPSpro C++ Compiler... $ECHO_C" >&6
-      if test "$CXX" != "CC"; then
-         { echo "$as_me:$LINENO: WARNING: SGI MIPSpro C++ was not found" >&5
-echo "$as_me: WARNING: SGI MIPSpro C++ was not found" >&2;}
-         echo "SGI MIPSpro C++ was not found" >> warn
-      else
-         echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-      fi
-   fi
-fi
 if test "$_os" = "OSF1"; then
    echo "$as_me:$LINENO: checking Compaq C++ compiler version" >&5
 echo $ECHO_N "checking Compaq C++ compiler version... $ECHO_C" >&6
@@ -9763,25 +9643,6 @@ echo "$as_me: WARNING: patch 107733-06 not found, please install linker patch 10
    fi
 fi
 
-if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
-	if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		echo "$as_me:$LINENO: checking for SGI STL" >&5
-echo $ECHO_N "checking for SGI STL... $ECHO_C" >&6
-		if test -d /usr/include/CC ; then
-			echo "$as_me:$LINENO: result: yes." >&5
-echo "${ECHO_T}yes." >&6
-
-		else
-			echo "$as_me:$LINENO: result: not found." >&5
-echo "${ECHO_T}not found." >&6
-		fi
-	else
-		{ { echo "$as_me:$LINENO: error: Option --enable-sgistl is only valid for IRIX" >&5
-echo "$as_me: error: Option --enable-sgistl is only valid for IRIX" >&2;}
-   { (exit 1); exit 1; }; }
-	fi
-else
-
    echo "$as_me:$LINENO: checking what the default STL should be" >&5
 echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6
    DEFAULT_TO_STLPORT="no"
@@ -9914,24 +9775,6 @@ echo "${ECHO_T}checked" >&6
 echo "$as_me: error: STLport libraries not found" >&2;}
    { (exit 1); exit 1; }; }
 		      fi
-	      elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		      if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
-			      echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-			   else
-				   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-					   echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-				   elif test -f "$STLPORT4/lib/libstlport.so"; then
-					   echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-					   STLPORT_VER=500
-				   else
-					   { { echo "$as_me:$LINENO: error: STLport libraries not found" >&5
-echo "$as_me: error: STLport libraries not found" >&2;}
-   { (exit 1); exit 1; }; }
-				   fi
-			   fi
 		   else
 			   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
 				   echo "$as_me:$LINENO: result: checked" >&5
@@ -9953,7 +9796,6 @@ echo "$as_me: WARNING: using stlport. Warning, breaks your ABI compatability!" >
          echo "using stlport. Warning, breaks your ABI compatability!" >>warn
       fi
    fi
-fi
 
 if test -z "$STLPORT4"; then
   STLPORT4="NO_STLPORT4"
@@ -10356,11 +10198,18 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
-             gccvisbroken=no;
-         else
-             gccvisbroken=yes;
-         fi
+         case "$build_cpu" in
+            i?86|x86_64)
+               if $EGREP -q '@PLT' visibility.s; then
+                  gccvisbroken=no
+               else
+                  gccvisbroken=yes
+               fi
+               ;;
+            *)
+               gccvisbroken=no
+               ;;
+         esac
       fi
       rm -f visibility.s
 
@@ -11951,9 +11800,6 @@ echo $ECHO_N "checking which package format to use... $ECHO_C" >&6
 		;;
 	OSF1)
 		PKGFORMAT=setld
-		;;
-	IRIX)
-		PKGFORMAT=tardist
 		;;
     WINNT)
         PKGFORMAT=msi
@@ -27655,266 +27501,6 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether to include FontOOo" >&5
-echo $ECHO_N "checking whether to include FontOOo... $ECHO_C" >&6
-if test -n "$enable_fontooo"; then
-  if test "$enable_fontooo" = "no"; then
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    WITH_FONTOOO=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
-  else
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    WITH_FONTOOO=YES
-    BUILD_TYPE="$BUILD_TYPE MSFONTEXTRACT"
-  fi
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-  WITH_FONTOOO=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
-fi
-
-
-if test "$WITH_FONTOOO" = "YES"; then
-        echo "$as_me:$LINENO: checking whether to use system libmspack" >&5
-echo $ECHO_N "checking whether to use system libmspack... $ECHO_C" >&6
-  if test -n "$with_system_mspack" -o -n "$with_system_libs" && \
-	  test "$with_system_mspack" != "no"; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    SYSTEM_MSPACK=YES
-    if test "${ac_cv_header_mspack_h+set}" = set; then
-  echo "$as_me:$LINENO: checking for mspack.h" >&5
-echo $ECHO_N "checking for mspack.h... $ECHO_C" >&6
-if test "${ac_cv_header_mspack_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
-echo "${ECHO_T}$ac_cv_header_mspack_h" >&6
-else
-  # Is the header compilable?
-echo "$as_me:$LINENO: checking mspack.h usability" >&5
-echo $ECHO_N "checking mspack.h usability... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <mspack.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_header_compiler=no
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6
-
-# Is the header present?
-echo "$as_me:$LINENO: checking mspack.h presence" >&5
-echo $ECHO_N "checking mspack.h presence... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <mspack.h>
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_c_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-rm -f conftest.err conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: mspack.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: mspack.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: mspack.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: mspack.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: mspack.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: mspack.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: mspack.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: mspack.h: in the future, the compiler will take precedence" >&2;}
-    (
-      cat <<\_ASBOX
-## ------------------------------------------ ##
-## Report this to the AC_PACKAGE_NAME lists.  ##
-## ------------------------------------------ ##
-_ASBOX
-    ) |
-      sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-echo "$as_me:$LINENO: checking for mspack.h" >&5
-echo $ECHO_N "checking for mspack.h... $ECHO_C" >&6
-if test "${ac_cv_header_mspack_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_mspack_h=$ac_header_preproc
-fi
-echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
-echo "${ECHO_T}$ac_cv_header_mspack_h" >&6
-
-fi
-if test $ac_cv_header_mspack_h = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: mspack.h not found, install libmspack" >&5
-echo "$as_me: error: mspack.h not found, install libmspack" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-
-
-echo "$as_me:$LINENO: checking for mspack_create_cab_decompressor in -lmspack" >&5
-echo $ECHO_N "checking for mspack_create_cab_decompressor in -lmspack... $ECHO_C" >&6
-if test "${ac_cv_lib_mspack_mspack_create_cab_decompressor+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmspack  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char mspack_create_cab_decompressor ();
-int
-main ()
-{
-mspack_create_cab_decompressor ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mspack_mspack_create_cab_decompressor=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mspack_mspack_create_cab_decompressor=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mspack_mspack_create_cab_decompressor" >&5
-echo "${ECHO_T}$ac_cv_lib_mspack_mspack_create_cab_decompressor" >&6
-if test $ac_cv_lib_mspack_mspack_create_cab_decompressor = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMSPACK 1
-_ACEOF
-
-  LIBS="-lmspack $LIBS"
-
-else
-  { { echo "$as_me:$LINENO: error: libmspack not installed or functional" >&5
-echo "$as_me: error: libmspack not installed or functional" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-  else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    SYSTEM_MSPACK=NO
-  fi
-fi
-
-
 echo "$as_me:$LINENO: checking whether to include MathMLDTD" >&5
 echo $ECHO_N "checking whether to include MathMLDTD... $ECHO_C" >&6
 if test -n "$enable_mathmldtd"; then
@@ -29702,8 +29288,6 @@ s,@GOBJECT_CFLAGS@,$GOBJECT_CFLAGS,;t t
 s,@GOBJECT_LIBS@,$GOBJECT_LIBS,;t t
 s,@ENABLE_EVOAB2@,$ENABLE_EVOAB2,;t t
 s,@ENABLE_KAB@,$ENABLE_KAB,;t t
-s,@WITH_FONTOOO@,$WITH_FONTOOO,;t t
-s,@SYSTEM_MSPACK@,$SYSTEM_MSPACK,;t t
 s,@WITH_FONTS@,$WITH_FONTS,;t t
 s,@WITHOUT_PPDS@,$WITHOUT_PPDS,;t t
 s,@WITHOUT_AFMS@,$WITHOUT_AFMS,;t t
