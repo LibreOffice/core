@@ -65,7 +65,7 @@ class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
 class SvxFieldData;
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField(
     const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 class EDITENG_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
