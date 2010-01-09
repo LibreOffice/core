@@ -43,27 +43,28 @@
 #define HID_EDITENG_SPELLER_START                                   (HID_EDIT_START +  5)
 #define HID_AUTOCORR_HELP_END                                       (HID_EDIT_START +  6)
 #define HID_AUTOCORR_HELP_START                                     (HID_EDIT_START +  7)
-#define HID_EDIT_WORD                                               HID_AUTOCORR_HELP_START
-#define HID_EDIT_SENT                                               (HID_AUTOCORR_HELP+1)
-#define HID_EDIT_SENTWORD                                           (HID_AUTOCORR_HELP+2)
-#define HID_EDIT_ACORWORD                                           (HID_AUTOCORR_HELP+3)
+#define HID_AUTOCORR_HELP_WORD                                               HID_AUTOCORR_HELP_START
 
-#define HID_EDIT_ACORSENTWORD                                       (HID_AUTOCORR_HELP+5)
+#define HID_AUTOCORR_HELP_SENT                                               (HID_AUTOCORR_HELP_START+1)
+#define HID_AUTOCORR_HELP_SENTWORD                                           (HID_AUTOCORR_HELP_START+2)
+#define HID_AUTOCORR_HELP_ACORWORD                                           (HID_AUTOCORR_HELP_START+3)
 
-#define HID_EDIT_CHGTOENEMDASH                                      (HID_AUTOCORR_HELP+7)
-#define HID_EDIT_WORDENEMDASH                                       (HID_AUTOCORR_HELP+8)
-#define HID_EDIT_SENTENEMDASH                                       (HID_AUTOCORR_HELP+9)
-#define HID_EDIT_SENTWORDENEMDASH                                   (HID_AUTOCORR_HELP+10)
-#define HID_EDIT_ACORWORDENEMDASH                                   (HID_AUTOCORR_HELP+11)
+#define HID_AUTOCORR_HELP_ACORSENTWORD                                       (HID_AUTOCORR_HELP_START+5)
 
-#define HID_EDIT_ACORSENTWORDENEMDASH                               (HID_AUTOCORR_HELP+13)
-#define HID_EDIT_CHGQUOTES                                          (HID_AUTOCORR_HELP+15)
-#define HID_EDIT_CHGSGLQUOTES                                       (HID_AUTOCORR_HELP+16)
-#define HID_EDIT_SETINETATTR                                        (HID_AUTOCORR_HELP+17)
-#define HID_EDIT_INGNOREDOUBLESPACE                                 (HID_AUTOCORR_HELP+18)
-#define HID_EDIT_CHGWEIGHTUNDERL                                    (HID_AUTOCORR_HELP+19)
-#define HID_EDIT_CHGFRACTIONSYMBOL                                  (HID_AUTOCORR_HELP+20)
-#define HID_EDIT_CHGORDINALNUMBER                                   (HID_AUTOCORR_HELP+21) // HID_EDIT_START +  28
+#define HID_AUTOCORR_HELP_CHGTOENEMDASH                                      (HID_AUTOCORR_HELP_START+7)
+#define HID_AUTOCORR_HELP_WORDENEMDASH                                       (HID_AUTOCORR_HELP_START+8)
+#define HID_AUTOCORR_HELP_SENTENEMDASH                                       (HID_AUTOCORR_HELP_START+9)
+#define HID_AUTOCORR_HELP_SENTWORDENEMDASH                                   (HID_AUTOCORR_HELP_START+10)
+#define HID_AUTOCORR_HELP_ACORWORDENEMDASH                                   (HID_AUTOCORR_HELP_START+11)
+
+#define HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH                               (HID_AUTOCORR_HELP_START+13)
+#define HID_AUTOCORR_HELP_CHGQUOTES                                          (HID_AUTOCORR_HELP_START+15)
+#define HID_AUTOCORR_HELP_CHGSGLQUOTES                                       (HID_AUTOCORR_HELP_START+16)
+#define HID_AUTOCORR_HELP_SETINETATTR                                        (HID_AUTOCORR_HELP_START+17)
+#define HID_AUTOCORR_HELP_INGNOREDOUBLESPACE                                 (HID_AUTOCORR_HELP_START+18)
+#define HID_AUTOCORR_HELP_CHGWEIGHTUNDERL                                    (HID_AUTOCORR_HELP_START+19)
+#define HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL                                  (HID_AUTOCORR_HELP_START+20)
+#define HID_AUTOCORR_HELP_CHGORDINALNUMBER                                   (HID_AUTOCORR_HELP_START+21) // HID_EDIT_START +  28
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
