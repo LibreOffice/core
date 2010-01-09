@@ -46,6 +46,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -88,12 +89,9 @@ namespace sdr
                 const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
                 const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
                 const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
-                basegfx::B2DHomMatrix aObjectMatrix;
-
-                aObjectMatrix.scale(aObjectRange.getWidth(), aObjectRange.getHeight());
-                aObjectMatrix.shearX(fShearX);
-                aObjectMatrix.rotate(fRotate);
-                aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
+                    aObjectRange.getMinX(), aObjectRange.getMinY()));
 
                 // Prepare attribute settings, will be used soon anyways
                 const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
