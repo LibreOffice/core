@@ -55,8 +55,6 @@ JAVA_INCLUDES+= -I$(JAVA_HOME)/include/bsd
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "NETBSD"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/netbsd
-.ELIF "$(OS)" == "IRIX"
-JAVA_INCLUDES+= -I$(JAVA_HOME)/include/solaris
 .ENDIF
 .ENDIF
 
