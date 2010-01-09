@@ -251,7 +251,7 @@
 #include "svx/xgrscit.hxx"
 #include "svx/xlnclit.hxx"
 #include "svx/xlndsit.hxx"
-#include "svx/xmlcnitm.hxx"
+#include "editeng/xmlcnitm.hxx"
 #include "svx/xpoly.hxx"
 
 
