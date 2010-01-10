@@ -33,286 +33,283 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-Bitmap BMP_FOIL_00
+// preview bitmaps for layouts
+Bitmap BMP_ADDEMPTY_57X71
 {
-    File = "foil00.bmp" ;
+    File = "layout_addempty_57x71.png";
 };
-Bitmap BMP_FOIL_00_H
+Bitmap BMP_LAYOUT_ADDEMPTY_57X71_H
 {
-    File = "foil00_h.bmp" ;
+    File = "layout_addempty_57x71_h.png";
 };
-Bitmap BMP_FOIL_01
+Bitmap BMP_LAYOUT_ADDHEAD01_57X71
 {
-    File = "foil01.bmp" ;
+    File = "layout_addhead01_57x71.png";
 };
-Bitmap BMP_FOIL_01_H
+Bitmap BMP_LAYOUT_ADDHEAD01_57X71_H
 {
-    File = "foil01_h.bmp" ;
+    File = "layout_addhead01_57x71_h.png";
 };
-Bitmap BMP_FOIL_02
+Bitmap BMP_LAYOUT_ADDHEAD02_57X71
 {
-    File = "foil02.bmp" ;
+    File = "layout_addhead02_57x71.png";
 };
-Bitmap BMP_FOIL_02_H
+Bitmap BMP_LAYOUT_ADDHEAD02_57X71_H
 {
-    File = "foil02_h.bmp" ;
+    File = "layout_addhead02_57x71_h.png";
 };
-Bitmap BMP_FOIL_03
+Bitmap BMP_LAYOUT_ADDHEAD02A_57X71
 {
-    File = "foil03.bmp" ;
+    File = "layout_addhead02a_57x71.png";
 };
-Bitmap BMP_FOIL_03_H
+Bitmap BMP_LAYOUT_ADDHEAD02A_57X71_H
 {
-    File = "foil03_h.bmp" ;
+    File = "layout_addhead02a_57x71_h.png";
 };
-Bitmap BMP_FOIL_04
+Bitmap BMP_LAYOUT_ADDHEAD02B_57X71
 {
-    File = "foil04.bmp" ;
+    File = "layout_addhead02b_57x71.png";
 };
-Bitmap BMP_FOIL_04_H
+Bitmap BMP_LAYOUT_ADDHEAD02B_57X71_H
 {
-    File = "foil04_h.bmp" ;
+    File = "layout_addhead02b_57x71_h.png";
 };
-Bitmap BMP_FOIL_05
+Bitmap BMP_LAYOUT_ADDHEAD03_57X71
 {
-    File = "foil05.bmp" ;
+    File = "layout_addhead03_57x71.png";
 };
-Bitmap BMP_FOIL_06
+Bitmap BMP_LAYOUT_ADDHEAD03_57X71_H
 {
-    File = "foil06.bmp" ;
+    File = "layout_addhead03_57x71_h.png";
 };
-Bitmap BMP_FOIL_06_H
+Bitmap BMP_LAYOUT_ADDHEAD03A_57X71
 {
-    File = "foil06_h.bmp" ;
+    File = "layout_addhead03a_57x71.png";
 };
-Bitmap BMP_FOIL_07
+Bitmap BMP_LAYOUT_ADDHEAD03A_57X71_H
 {
-    File = "foil07.bmp" ;
+    File = "layout_addhead03a_57x71_h.png";
 };
-Bitmap BMP_FOIL_07_H
+Bitmap BMP_LAYOUT_ADDHEAD04_57X71
 {
-    File = "foil07_h.bmp" ;
+    File = "layout_addhead04_57x71.png";
 };
-Bitmap BMP_FOIL_08
+Bitmap BMP_LAYOUT_ADDHEAD04_57X71_H
 {
-    File = "foil08.bmp" ;
+    File = "layout_addhead04_57x71_h.png";
 };
-Bitmap BMP_FOIL_08_H
+Bitmap BMP_LAYOUT_ADDHEAD06_57X71
 {
-    File = "foil08_h.bmp" ;
+    File = "layout_addhead06_57x71.png";
 };
-Bitmap BMP_FOIL_09
+Bitmap BMP_LAYOUT_ADDHEAD06_57X71_H
 {
-    File = "foil09.bmp" ;
+    File = "layout_addhead06_57x71_h.png";
 };
-Bitmap BMP_FOIL_09_H
+Bitmap BMP_LAYOUT_ADDTEXTONLY_57X71
 {
-    File = "foil09_h.bmp" ;
+    File = "layout_addtextonly_57x71.png";
 };
-Bitmap BMP_FOIL_10
+Bitmap BMP_LAYOUT_ADDTEXTONLY_57X71_H
 {
-    File = "foil10.bmp" ;
+    File = "layout_addtextonly_57x71_h.png";
 };
-Bitmap BMP_FOIL_10_H
+Bitmap BMP_LAYOUT_ADDVERTICAL01_57X71
 {
-    File = "foil10_h.bmp" ;
+    File = "layout_addvertical01_57x71.png";
 };
-Bitmap BMP_FOIL_11
+Bitmap BMP_LAYOUT_ADDVERTICAL01_57X71_H
 {
-    File = "foil11.bmp" ;
+    File = "layout_addvertical01_57x71_h.png";
 };
-Bitmap BMP_FOIL_11_H
+Bitmap BMP_LAYOUT_ADDVERTICAL02_57X71
 {
-    File = "foil11_h.bmp" ;
+    File = "layout_addvertical02_57x71.png";
 };
-Bitmap BMP_FOIL_12
+Bitmap BMP_LAYOUT_ADDVERTICAL02_57X71_H
 {
-    File = "foil12.bmp" ;
+    File = "layout_addvertical02_57x71_h.png";
 };
-Bitmap BMP_FOIL_12_H
+Bitmap BMP_LAYOUT_EMPTY_57X71
 {
-    File = "foil12_h.bmp" ;
+    File = "layout_empty_57x71.png";
 };
-Bitmap BMP_FOIL_13
+Bitmap BMP_LAYOUT_EMPTY_57X71_H
 {
-    File = "foil13.bmp" ;
+    File = "layout_empty_57x71_h.png";
 };
-Bitmap BMP_FOIL_13_H
+Bitmap BMP_LAYOUT_HEAD01_57X71
 {
-    File = "foil13_h.bmp" ;
+    File = "layout_head01_57x71.png";
 };
-Bitmap BMP_FOIL_14
+Bitmap BMP_LAYOUT_HEAD01_57X71_H
 {
-    File = "foil14.bmp" ;
+    File = "layout_head01_57x71_h.png";
 };
-Bitmap BMP_FOIL_14_H
+Bitmap BMP_LAYOUT_HEAD02_57X71
 {
-    File = "foil14_h.bmp" ;
+    File = "layout_head02_57x71.png";
 };
-Bitmap BMP_FOIL_15
+Bitmap BMP_LAYOUT_HEAD02_57X71_H
 {
-    File = "foil15.bmp" ;
+    File = "layout_head02_57x71_h.png";
 };
-Bitmap BMP_FOIL_15_H
+Bitmap BMP_LAYOUT_HEAD02A_57X71
 {
-    File = "foil15_h.bmp" ;
+    File = "layout_head02a_57x71.png";
 };
-Bitmap BMP_FOIL_16
+Bitmap BMP_LAYOUT_HEAD02A_57X71_H
 {
-    File = "foil16.bmp" ;
+    File = "layout_head02a_57x71_h.png";
 };
-Bitmap BMP_FOIL_16_H
+Bitmap BMP_LAYOUT_HEAD02B_57X71
 {
-    File = "foil16_h.bmp" ;
+    File = "layout_head02b_57x71.png";
 };
-Bitmap BMP_FOIL_17
+Bitmap BMP_LAYOUT_HEAD02B_57X71_H
 {
-    File = "foil17.bmp" ;
+    File = "layout_head02b_57x71_h.png";
 };
-Bitmap BMP_FOIL_17_H
+Bitmap BMP_LAYOUT_HEAD03_57X71
 {
-    File = "foil17_h.bmp" ;
+    File = "layout_head03_57x71.png";
 };
-Bitmap BMP_FOIL_18
+Bitmap BMP_LAYOUT_HEAD03_57X71_H
 {
-    File = "foil18.bmp" ;
+    File = "layout_head03_57x71_h.png";
 };
-Bitmap BMP_FOIL_18_H
+Bitmap BMP_LAYOUT_HEAD03A_57X71
 {
-    File = "foil18_h.bmp" ;
+    File = "layout_head03a_57x71.png";
 };
-Bitmap BMP_FOIL_19
+Bitmap BMP_LAYOUT_HEAD03A_57X71_H
 {
-    File = "foil19.bmp" ;
+    File = "layout_head03a_57x71_h.png";
 };
-Bitmap BMP_FOIL_19_H
+Bitmap BMP_LAYOUT_HEAD04_57X71
 {
-    File = "foil19_h.bmp" ;
+    File = "layout_head04_57x71.png";
 };
-Bitmap BMP_FOIL_20
+Bitmap BMP_LAYOUT_HEAD04_57X71_H
 {
-    File = "foil20.bmp" ;
+    File = "layout_head04_57x71_h.png";
 };
-Bitmap BMP_FOIL_20_H
+Bitmap BMP_LAYOUT_HEAD06_57X71
 {
-    File = "foil20_h.bmp" ;
+    File = "layout_head06_57x71.png";
 };
-Bitmap BMP_FOIL_21
+Bitmap BMP_LAYOUT_HEAD06_57X71_H
 {
-    File = "foil21.bmp" ;
+    File = "layout_head06_57x71_h.png";
 };
-Bitmap BMP_FOIL_21_H
+Bitmap BMP_LAYOUT_TEXTONLY_57X71
 {
-    File = "foil21_h.bmp" ;
+    File = "layout_textonly_57x71.png";
 };
-Bitmap BMP_FOIL_22
+Bitmap BMP_LAYOUT_TEXTONLY_57X71_H
 {
-    File = "foil22.bmp" ;
+    File = "layout_textonly_57x71_h.png";
 };
-Bitmap BMP_FOIL_22_H
+Bitmap BMP_LAYOUT_VERTICAL01_57X71
 {
-    File = "foil22_h.bmp" ;
+    File = "layout_vertical01_57x71.png";
 };
-Bitmap BMP_FOIL_23
+Bitmap BMP_LAYOUT_VERTICAL01_57X71_H
 {
-    File = "foil23.bmp" ;
+    File = "layout_vertical01_57x71_h.png";
 };
-Bitmap BMP_FOIL_23_H
+Bitmap BMP_LAYOUT_VERTICAL02_57X71
 {
-    File = "foil23_h.bmp" ;
+    File = "layout_vertical02_57x71.png";
 };
-Bitmap BMP_FOIL_24
+Bitmap BMP_LAYOUT_VERTICAL02_57X71_H
 {
-    File = "foil24.bmp" ;
+    File = "layout_vertical02_57x71_h.png";
 };
-Bitmap BMP_FOIL_24_H
-{
-    File = "foil24_h.bmp" ;
-};
-Bitmap BMP_FOIL_25
-{
-    File = "foil25.bmp" ;
-};
-Bitmap BMP_FOIL_25_H
-{
-    File = "foil25_h.bmp" ;
-};
-Bitmap BMP_FOIL_26
-{
-    File = "foil26.bmp" ;
-};
-Bitmap BMP_FOIL_26_H
-{
-    File = "foil26_h.bmp" ;
-};
-Bitmap BMP_FOIL_27
-{
-    File = "foil27.bmp" ;
-};
-Bitmap BMP_FOIL_27_H
-{
-    File = "foil27_h.bmp" ;
-};
+
 Bitmap BMP_FOILH_01
 {
-    File = "foilh01.bmp" ;
+    File = "foilh01.png";
 };
 Bitmap BMP_FOILH_01_H
 {
-    File = "foilh01_h.bmp" ;
+    File = "foilh01_h.png";
 };
 Bitmap BMP_FOILH_02
 {
-    File = "foilh02.bmp" ;
+    File = "foilh02.png";
 };
 Bitmap BMP_FOILH_02_H
 {
-    File = "foilh02_h.bmp" ;
+    File = "foilh02_h.png";
 };
 Bitmap BMP_FOILH_03
 {
-    File = "foilh03.bmp" ;
+    File = "foilh03.png";
 };
 Bitmap BMP_FOILH_03_H
 {
-    File = "foilh03_h.bmp" ;
+    File = "foilh03_h.png";
 };
 Bitmap BMP_FOILH_04
 {
-    File = "foilh04.bmp" ;
+    File = "foilh04.png";
 };
 Bitmap BMP_FOILH_04_H
 {
-    File = "foilh04_h.bmp" ;
+    File = "foilh04_h.png";
 };
 Bitmap BMP_FOILH_06
 {
-    File = "foilh06.bmp" ;
+    File = "foilh06.png";
 };
 Bitmap BMP_FOILH_06_H
 {
-    File = "foilh06_h.bmp" ;
+    File = "foilh06_h.png";
 };
 Bitmap BMP_FOILH_09
 {
-    File = "foilh09.bmp" ;
+    File = "foilh09.png";
 };
 Bitmap BMP_FOILH_09_H
 {
-    File = "foilh09_h.bmp" ;
+    File = "foilh09_h.png";
 };
-Bitmap BMP_FOILN_01
+
+
+Bitmap BMP_PLACEHOLDER_CHART_57X71
 {
-    File = "foiln01.bmp" ;
+    File = "placeholder_chart_57x71.png";
 };
-Bitmap BMP_FOILN_01_H
+Bitmap BMP_PLACEHOLDER_CHART_57X71_H
 {
-    File = "foiln01_h.bmp" ;
+    File = "placeholder_chart_57x71_h.png";
 };
-Bitmap BMP_FOIL_NONE
+Bitmap BMP_PLACEHOLDER_IMAGE_57X71
 {
-    File = "foilnone.bmp" ;
+    File = "placeholder_image_57x71.png";
 };
+Bitmap BMP_PLACEHOLDER_IMAGE_57X71_H
+{
+    File = "placeholder_image_57x71_h.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_57X71
+{
+    File = "placeholder_movie_57x71.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_57X71_H
+{
+    File = "placeholder_movie_57x71_h.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_57X71
+{
+    File = "placeholder_table_57x71.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_57X71_H
+{
+    File = "placeholder_table_57x71_h.png";
+};
+
 Bitmap BMP_PAGE
 {
     File = "page.bmp" ;
@@ -495,26 +492,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     #undef STYLE_IMAGE_LISTEF
 };
 
-Bitmap BMP_PRESOBJ_GRAPHIC
-{
-    File = "image.bmp" ;
-};
-Bitmap BMP_PRESOBJ_OBJECT
-{
-    File = "object.bmp" ;
-};
-Bitmap BMP_PRESOBJ_CHART
-{
-    File = "chart.bmp" ;
-};
-Bitmap BMP_PRESOBJ_ORGCHART
-{
-    File = "orgchart.bmp" ;
-};
-Bitmap BMP_PRESOBJ_TABLE
-{
-    File = "table.bmp" ;
-};
 Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";

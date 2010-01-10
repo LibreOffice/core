@@ -41,7 +41,10 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <tools/rcid.h>
+
 #include <vcl/help.hxx>
+#include <vcl/imagerepository.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -52,6 +55,7 @@
 
 #include "view/viewoverlaymanager.hxx"
 
+#include "res_bmp.hrc"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
@@ -71,6 +75,36 @@ using namespace ::com::sun::star::frame;
 namespace sd {
 
 class ImageButtonHdl;
+
+// --------------------------------------------------------------------
+
+Image ViewOverlayManager::maSmallButtonImages[ViewOverlayManager::ButtonCount];
+Image ViewOverlayManager::maLargeButtonImages[ViewOverlayManager::ButtonCount];
+
+static USHORT gButtonSlots[ViewOverlayManager::ButtonCount] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
+static USHORT gButtonResId[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71, BMP_PLACEHOLDER_CHART_57X71, BMP_PLACEHOLDER_IMAGE_57X71, BMP_PLACEHOLDER_MOVIE_57X71 };
+static USHORT gButtonResIdHc[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71_H, BMP_PLACEHOLDER_CHART_57X71_H, BMP_PLACEHOLDER_IMAGE_57X71_H, BMP_PLACEHOLDER_MOVIE_57X71_H };
+
+// --------------------------------------------------------------------
+
+static Image loadImageResource( USHORT nId )
+{
+    /*
+    OUString sURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/sd/bitmap/" ) ) );
+    sURL += OUString::valueOf( (sal_Int32)nId );
+
+    BitmapEx aBmpEx;
+    vcl::ImageRepository::loadImage( sURL, aBmpEx, false );
+    return Image( aBmpEx );
+    */
+
+    SdResId aResId( nId );
+    aResId.SetRT( RSC_BITMAP );
+
+    return Image( BitmapEx( aResId ) );
+}
+
+// --------------------------------------------------------------------
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 
@@ -306,7 +340,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
 
-        Image* pImages = (nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        Image* pImages = &ViewOverlayManager::maLargeButtonImages[0]; //(nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
 
         Size aButtonSize( pDev->PixelToLogic(pImages[0].GetSizePixel()) );
         if( 200 > nShapeSizePix )
@@ -340,7 +374,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
                 aImg = Image(b);
             }
 
-            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, ViewOverlayManager::mnButtonSlots[i], aImg, aPoint );
+            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, gButtonSlots[i], aImg, aPoint );
             pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
             pHdl->SetPageView( mrView.GetSdrPageView() );
 
@@ -382,12 +416,6 @@ void ChangePlaceholderTag::deselect()
 {
     SmartTag::deselect();
 }
-
-// --------------------------------------------------------------------
-
-Image ViewOverlayManager::maSmallButtonImages[ViewOverlayManager::ButtonCount];
-Image ViewOverlayManager::maLargeButtonImages[ViewOverlayManager::ButtonCount];
-USHORT ViewOverlayManager::mnButtonSlots[ViewOverlayManager::ButtonCount] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 
 // --------------------------------------------------------------------
 
@@ -433,8 +461,8 @@ void ViewOverlayManager::UpdateImages()
         Reference<XFrame> xFrame(mrBase.GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW);
         for( int i = 0; i < ButtonCount; i++ )
         {
-            maSmallButtonImages[i] = lcl_getslotimage( xFrame, mnButtonSlots[i], FALSE, FALSE );
-            maLargeButtonImages[i] = lcl_getslotimage( xFrame, mnButtonSlots[i], TRUE, FALSE );
+            maSmallButtonImages[i] = loadImageResource( gButtonResId[i] );
+//          maLargeButtonImages[i] = lcl_getslotimage( xFrame, mnButtonSlots[i], TRUE, FALSE );
         }
     }
     catch( Exception& )

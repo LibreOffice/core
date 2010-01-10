@@ -32,7 +32,7 @@
 #include "layoutdialog.hrc"
 #include "helpids.h"
 
-DockingWindow FLT_WIN_LAYOUT_DIALOG
+FloatingWindow FLT_WIN_LAYOUT_DIALOG
 {
     HelpId = HID_SD_SLIDE_LAYOUTS;
     Border = TRUE ;
@@ -42,12 +42,14 @@ DockingWindow FLT_WIN_LAYOUT_DIALOG
     Moveable = TRUE ;
     Closeable = TRUE ;
     Zoomable = TRUE ;
-    Dockable = TRUE ;
+    ClipChildren = TRUE ;
     EnableResizing = TRUE ;
 
     String STR_RESET_LAYOUT
     {
         Text[ en-US ] = "Reset Slide Layout";
     };
+
+    Text [en-US] = "Slide Layout";
 };
 

@@ -70,36 +70,6 @@
 #define RID_GRAFFILTERS         RID_APP_START+29
 #define RID_GRAFFILTERS_TBX     RID_APP_START+30
 
-#define BMP_FOIL_00             RID_APP_START+10
-#define BMP_FOIL_01             RID_APP_START+11
-#define BMP_FOIL_02             RID_APP_START+12
-#define BMP_FOIL_03             RID_APP_START+13
-#define BMP_FOIL_04             RID_APP_START+14
-#define BMP_FOIL_05             RID_APP_START+15
-#define BMP_FOIL_06             RID_APP_START+16
-#define BMP_FOIL_07             RID_APP_START+17
-#define BMP_FOIL_08             RID_APP_START+18
-#define BMP_FOIL_09             RID_APP_START+19
-#define BMP_FOIL_10             RID_APP_START+20
-#define BMP_FOIL_11             RID_APP_START+21
-#define BMP_FOIL_12             RID_APP_START+22
-#define BMP_FOIL_13             RID_APP_START+23
-#define BMP_FOIL_14             RID_APP_START+24
-#define BMP_FOIL_15             RID_APP_START+25
-#define BMP_FOIL_16             RID_APP_START+26
-#define BMP_FOIL_17             RID_APP_START+27
-#define BMP_FOIL_18             RID_APP_START+28
-#define BMP_FOIL_19             RID_APP_START+29
-#define BMP_FOIL_20             RID_APP_START+30
-#define BMP_FOILH_01            RID_APP_START+31
-#define BMP_FOILH_02            RID_APP_START+32
-#define BMP_FOILH_03            RID_APP_START+33
-#define BMP_FOILH_04            RID_APP_START+34
-#define BMP_FOILH_06            RID_APP_START+35
-#define BMP_FOILH_09            RID_APP_START+36
-#define BMP_FOILN_01            RID_APP_START+40
-#define BMP_FOIL_25             RID_APP_START+41
-
 // Bitmaps fuer Tree-ListBox im Effekte-TabDialog
 #define BMP_PAGE                RID_APP_START+42
 #define BMP_PAGEOBJS            RID_APP_START+43
@@ -173,38 +143,6 @@
 #define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
 #define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
 
-#define BMP_FOIL_00_H                       RID_SD_START+182
-#define BMP_FOIL_01_H                       RID_SD_START+183
-#define BMP_FOIL_02_H                       RID_SD_START+184
-#define BMP_FOIL_03_H                       RID_SD_START+185
-#define BMP_FOIL_04_H                       RID_SD_START+186
-#define BMP_FOIL_05_H                       RID_SD_START+187
-#define BMP_FOIL_06_H                       RID_SD_START+188
-#define BMP_FOIL_07_H                       RID_SD_START+189
-#define BMP_FOIL_08_H                       RID_SD_START+190
-#define BMP_FOIL_09_H                       RID_SD_START+191
-#define BMP_FOIL_10_H                       RID_SD_START+192
-#define BMP_FOIL_11_H                       RID_SD_START+193
-#define BMP_FOIL_12_H                       RID_SD_START+194
-#define BMP_FOIL_13_H                       RID_SD_START+195
-#define BMP_FOIL_14_H                       RID_SD_START+196
-#define BMP_FOIL_15_H                       RID_SD_START+197
-#define BMP_FOIL_16_H                       RID_SD_START+198
-#define BMP_FOIL_17_H                       RID_SD_START+199
-#define BMP_FOIL_18_H                       RID_SD_START+200
-#define BMP_FOIL_19_H                       RID_SD_START+201
-#define BMP_FOIL_20_H                       RID_SD_START+202
-#define BMP_FOIL_21_H                       RID_SD_START+203
-#define BMP_FOIL_22_H                       RID_SD_START+204
-#define BMP_FOIL_23_H                       RID_SD_START+205
-#define BMP_FOIL_24_H                       RID_SD_START+206
-#define BMP_FOILH_01_H                      RID_SD_START+207
-#define BMP_FOILH_02_H                      RID_SD_START+208
-#define BMP_FOILH_03_H                      RID_SD_START+209
-#define BMP_FOILH_04_H                      RID_SD_START+210
-#define BMP_FOILH_06_H                      RID_SD_START+211
-#define BMP_FOILN_01_H                      RID_SD_START+212
-
 #define BMP_PAGE_H                          RID_SD_START+213
 #define BMP_PAGEOBJS_H                      RID_SD_START+214
 #define BMP_OBJECTS_H                       RID_SD_START+215
@@ -231,14 +169,79 @@
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
 #define BMP_FADE_EFFECT_INDICATOR_H         RID_SD_START+332
 
-#define BMP_FOILH_09_H                      RID_SD_START+333
-#define BMP_FOIL_25_H                       RID_SD_START+334
-#define BMP_FOIL_26_H                       RID_SD_START+335
-#define BMP_FOIL_27                         RID_SD_START+336
-#define BMP_FOIL_27_H                       RID_SD_START+337
-
 #define BMP_COMMENTS_INDICATOR              RID_SD_START+338
 #define BMP_COMMENTS_INDICATOR_H            RID_SD_START+339
+
+#define BMP_ADDEMPTY_57X71                  RID_SD_START+340
+#define BMP_LAYOUT_ADDEMPTY_57X71_H         RID_SD_START+341
+#define BMP_LAYOUT_ADDHEAD01_57X71          RID_SD_START+342
+#define BMP_LAYOUT_ADDHEAD01_57X71_H        RID_SD_START+343
+#define BMP_LAYOUT_ADDHEAD02_57X71          RID_SD_START+344
+#define BMP_LAYOUT_ADDHEAD02_57X71_H        RID_SD_START+345
+#define BMP_LAYOUT_ADDHEAD02A_57X71         RID_SD_START+346
+#define BMP_LAYOUT_ADDHEAD02A_57X71_H       RID_SD_START+347
+#define BMP_LAYOUT_ADDHEAD02B_57X71         RID_SD_START+348
+#define BMP_LAYOUT_ADDHEAD02B_57X71_H       RID_SD_START+349
+#define BMP_LAYOUT_ADDHEAD03_57X71          RID_SD_START+350
+#define BMP_LAYOUT_ADDHEAD03_57X71_H        RID_SD_START+351
+#define BMP_LAYOUT_ADDHEAD03A_57X71         RID_SD_START+352
+#define BMP_LAYOUT_ADDHEAD03A_57X71_H       RID_SD_START+353
+#define BMP_LAYOUT_ADDHEAD04_57X71          RID_SD_START+354
+#define BMP_LAYOUT_ADDHEAD04_57X71_H        RID_SD_START+355
+#define BMP_LAYOUT_ADDHEAD06_57X71          RID_SD_START+356
+#define BMP_LAYOUT_ADDHEAD06_57X71_H        RID_SD_START+357
+#define BMP_LAYOUT_ADDTEXTONLY_57X71        RID_SD_START+358
+#define BMP_LAYOUT_ADDTEXTONLY_57X71_H      RID_SD_START+359
+#define BMP_LAYOUT_ADDVERTICAL01_57X71      RID_SD_START+360
+#define BMP_LAYOUT_ADDVERTICAL01_57X71_H    RID_SD_START+361
+#define BMP_LAYOUT_ADDVERTICAL02_57X71      RID_SD_START+362
+#define BMP_LAYOUT_ADDVERTICAL02_57X71_H    RID_SD_START+363
+#define BMP_LAYOUT_EMPTY_57X71              RID_SD_START+364
+#define BMP_LAYOUT_EMPTY_57X71_H            RID_SD_START+365
+#define BMP_LAYOUT_HEAD01_57X71             RID_SD_START+366
+#define BMP_LAYOUT_HEAD01_57X71_H           RID_SD_START+367
+#define BMP_LAYOUT_HEAD02_57X71             RID_SD_START+368
+#define BMP_LAYOUT_HEAD02_57X71_H           RID_SD_START+369
+#define BMP_LAYOUT_HEAD02A_57X71            RID_SD_START+370
+#define BMP_LAYOUT_HEAD02A_57X71_H          RID_SD_START+371
+#define BMP_LAYOUT_HEAD02B_57X71            RID_SD_START+372
+#define BMP_LAYOUT_HEAD02B_57X71_H          RID_SD_START+373
+#define BMP_LAYOUT_HEAD03_57X71             RID_SD_START+374
+#define BMP_LAYOUT_HEAD03_57X71_H           RID_SD_START+375
+#define BMP_LAYOUT_HEAD03A_57X71            RID_SD_START+376
+#define BMP_LAYOUT_HEAD03A_57X71_H          RID_SD_START+377
+#define BMP_LAYOUT_HEAD04_57X71             RID_SD_START+378
+#define BMP_LAYOUT_HEAD04_57X71_H           RID_SD_START+379
+#define BMP_LAYOUT_HEAD06_57X71             RID_SD_START+380
+#define BMP_LAYOUT_HEAD06_57X71_H           RID_SD_START+381
+#define BMP_LAYOUT_TEXTONLY_57X71           RID_SD_START+382
+#define BMP_LAYOUT_TEXTONLY_57X71_H         RID_SD_START+383
+#define BMP_LAYOUT_VERTICAL01_57X71         RID_SD_START+384
+#define BMP_LAYOUT_VERTICAL01_57X71_H       RID_SD_START+385
+#define BMP_LAYOUT_VERTICAL02_57X71         RID_SD_START+386
+#define BMP_LAYOUT_VERTICAL02_57X71_H       RID_SD_START+387
+
+#define BMP_FOILH_01                        RID_SD_START+388
+#define BMP_FOILH_01_H                      RID_SD_START+389
+#define BMP_FOILH_02                        RID_SD_START+390
+#define BMP_FOILH_02_H                      RID_SD_START+391
+#define BMP_FOILH_03                        RID_SD_START+392
+#define BMP_FOILH_03_H                      RID_SD_START+393
+#define BMP_FOILH_04                        RID_SD_START+394
+#define BMP_FOILH_04_H                      RID_SD_START+395
+#define BMP_FOILH_06                        RID_SD_START+396
+#define BMP_FOILH_06_H                      RID_SD_START+397
+#define BMP_FOILH_09                        RID_SD_START+398
+#define BMP_FOILH_09_H                      RID_SD_START+399
+
+#define BMP_PLACEHOLDER_CHART_57X71         RID_SD_START+400
+#define BMP_PLACEHOLDER_CHART_57X71_H       RID_SD_START+401
+#define BMP_PLACEHOLDER_IMAGE_57X71         RID_SD_START+402
+#define BMP_PLACEHOLDER_IMAGE_57X71_H       RID_SD_START+403
+#define BMP_PLACEHOLDER_MOVIE_57X71         RID_SD_START+404
+#define BMP_PLACEHOLDER_MOVIE_57X71_H       RID_SD_START+405
+#define BMP_PLACEHOLDER_TABLE_57X71         RID_SD_START+406
+#define BMP_PLACEHOLDER_TABLE_57X71_H       RID_SD_START+407
 
 // -----------------------------------------------------------------------------
 

@@ -41,9 +41,9 @@
 #include <vcl/status.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <svtools/languageoptions.hxx>
-#include <svtools/style.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/style.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/valueset.hxx>
 
@@ -150,10 +150,12 @@ SfxPopupWindowType SdLayoutControl::GetPopupWindowType() const
 
 SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
 {
+    /*
     OUString sResourceName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ) );
     sResourceName += OUString::valueOf( static_cast<sal_Int32>(GetId()) );
     createAndPositionSubToolBar( sResourceName );
-/*
+    */
+
     SfxPopupWindow* pWin = 0;
 
     ToolBox& rTbx = GetToolBox();
@@ -168,7 +170,6 @@ SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
         }
      }
     SetPopupWindow( pWin );
-    */
     return 0;
 }
 

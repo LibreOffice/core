@@ -31,10 +31,8 @@
 #ifndef _SD_VIEWOVERLAYMANAGER_HXX
 #define _SD_VIEWOVERLAYMANAGER_HXX
 
-//#include <com/sun/star/drawing/XDrawView.hpp>
-
 #include <vcl/image.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 
@@ -63,7 +61,6 @@ public:
     static const int ButtonCount = 4;
     static Image maLargeButtonImages[ButtonCount];
     static Image maSmallButtonImages[ButtonCount];
-    static USHORT mnButtonSlots[ButtonCount];
 
 private:
     void UpdateImages();
@@ -72,9 +69,6 @@ private:
     ULONG mnUpdateTagsEvent;
 
     ViewTagVector   maTagVector;
-
-//  ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
-//  ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxCurrentPage;
 };
 
 }

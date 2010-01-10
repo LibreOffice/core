@@ -108,7 +108,7 @@ sal_uInt32 ToolPanel::AddControl (
     }
 
     // Replace the old links for cycling between first and last child by
-    // current ones.
+    // current onems.
     if (nControlCount > 0)
     {
         ::Window* pFirst = mpControlContainer->GetControl(0)->GetWindow();
