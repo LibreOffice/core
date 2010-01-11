@@ -1,0 +1,12 @@
+--- misc/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:25.084658287 +0100
++++ misc/build/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:18.660706180 +0100
+@@ -149,6 +149,9 @@
+ #define NOMINMAX
+ #define BLENDFUNCTION void    // for mingw & gcc
+ #include <windows.h>
++#if defined(OPTIONAL) // set within windows.h
++#undef OPTIONAL
++#endif
+ #endif
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
+   BOOL APIENTRY DllMain( HANDLE, DWORD, LPVOID )      \

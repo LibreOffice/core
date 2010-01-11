@@ -37,7 +37,7 @@ TARFILE_NAME = cppunit-1.12.1
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
-PATCH_FILES = solarisfinite.patch warnings.patch
+PATCH_FILES = solarisfinite.patch warnings.patch windows.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912590&group_id=11795&atid=311795>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
