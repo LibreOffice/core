@@ -122,12 +122,13 @@ namespace dbaui
     //==================================================================
 DBG_NAME(IndexFieldsControl)
 //------------------------------------------------------------------
-    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex)
+    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix)
         :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
         ,m_pFieldNameCell(NULL)
         ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
+        ,m_bAddIndexAppendix(_bAddIndexAppendix)
     {
         DBG_CTOR(IndexFieldsControl,NULL);
 
@@ -208,7 +209,7 @@ DBG_NAME(IndexFieldsControl)
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
 //      if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
-            RowInserted(GetRowCount(), 1, sal_False);
+        RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 
         GoToRowColumnId(0, COLUMN_ID_FIELDNAME);
@@ -250,51 +251,52 @@ DBG_NAME(IndexFieldsControl)
     {
         RemoveColumns();
 
-        m_sAscendingText = String(ModuleRes(STR_ORDER_ASCENDING));
-        m_sDescendingText = String(ModuleRes(STR_ORDER_DESCENDING));
-
-        // the "sort order" column
-        String sColumnName = String(ModuleRes(STR_TAB_INDEX_SORTORDER));
-        // the width of the order column is the maximum widths of the texts used
-        // (the title of the column)
-        sal_Int32 nSortOrderColumnWidth = GetTextWidth(sColumnName);
-        // ("ascending" + scrollbar width)
-        sal_Int32 nOther = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
-        nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
-        // ("descending" + scrollbar width)
-        nOther = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
-        nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
-        // (plus some additional space)
-        nSortOrderColumnWidth += GetTextWidth('0') * 2;
-        InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HIB_STDSTYLE, 1);
-
         // for the width: both columns together should be somewhat smaller than the whole window (without the scrollbar)
         sal_Int32 nFieldNameWidth = GetSizePixel().Width();
-        nFieldNameWidth -= nSortOrderColumnWidth;
 
+        if ( m_bAddIndexAppendix )
+        {
+            m_sAscendingText = String(ModuleRes(STR_ORDER_ASCENDING));
+            m_sDescendingText = String(ModuleRes(STR_ORDER_DESCENDING));
+
+            // the "sort order" column
+            String sColumnName = String(ModuleRes(STR_TAB_INDEX_SORTORDER));
+            // the width of the order column is the maximum widths of the texts used
+            // (the title of the column)
+            sal_Int32 nSortOrderColumnWidth = GetTextWidth(sColumnName);
+            // ("ascending" + scrollbar width)
+            sal_Int32 nOther = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
+            nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
+            // ("descending" + scrollbar width)
+            nOther = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
+            nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
+            // (plus some additional space)
+            nSortOrderColumnWidth += GetTextWidth('0') * 2;
+            InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HIB_STDSTYLE, 1);
+
+            m_pSortingCell = new ListBoxControl(&GetDataWindow());
+            m_pSortingCell->InsertEntry(m_sAscendingText);
+            m_pSortingCell->InsertEntry(m_sDescendingText);
+            m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
+
+            nFieldNameWidth -= nSortOrderColumnWidth;
+        }
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         nFieldNameWidth -= aSystemStyle.GetScrollBarSize();
         nFieldNameWidth -= 8;
-
         // the "field name" column
-        sColumnName = String(ModuleRes(STR_TAB_INDEX_FIELD));
+        String sColumnName = String(ModuleRes(STR_TAB_INDEX_FIELD));
         InsertDataColumn(COLUMN_ID_FIELDNAME, sColumnName, nFieldNameWidth, HIB_STDSTYLE, 0);
 
         // create the cell controllers
         // for the field name cell
         m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
         m_pFieldNameCell->InsertEntry(String());
+        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
         const ::rtl::OUString* pFields = _rAvailableFields.getConstArray();
         const ::rtl::OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
             m_pFieldNameCell->InsertEntry(*pFields);
-        // for the sort cell
-        m_pSortingCell = new ListBoxControl(&GetDataWindow());
-        m_pSortingCell->InsertEntry(m_sAscendingText);
-        m_pSortingCell->InsertEntry(m_sDescendingText);
-
-        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
-        m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
     }
 
     //------------------------------------------------------------------

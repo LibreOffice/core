@@ -79,7 +79,7 @@
 
 #include <connectivity/dbtools.hxx>
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>

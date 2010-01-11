@@ -84,15 +84,15 @@
 #include <tools/string.hxx>
 
 #include <svl/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/filenotation.hxx>
+#include <unotools/historyoptions.hxx>
+#include <svl/filenotation.hxx>
 #include <svtools/insdlg.hxx>
 
 #include <unotools/tempfile.hxx>

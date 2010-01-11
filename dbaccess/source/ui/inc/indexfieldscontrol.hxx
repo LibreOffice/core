@@ -70,9 +70,10 @@ namespace dbaui
         String                      m_sDescendingText;
 
         sal_Int32                   m_nMaxColumnsInIndex;
+        sal_Bool                    m_bAddIndexAppendix;
 
     public:
-        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex);
+        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix);
         ~IndexFieldsControl();
 
         void Init(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rAvailableFields);

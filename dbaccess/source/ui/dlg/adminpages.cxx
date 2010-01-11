@@ -47,9 +47,9 @@
 #include "sqlmessage.hxx"
 
 #include <osl/file.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
