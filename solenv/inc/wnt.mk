@@ -74,7 +74,3 @@ JAVA_RUNTIME=javai_g.lib
 .ENDIF
 
 OOO_LIBRARY_PATH_VAR = PATH
-AUGMENT_LIBRARY_PATH = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(SOLARBINDIR:s/://:^"/cygdrive/")
-AUGMENT_LIBRARY_PATH_LOCAL = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(PWD:s/://:^"/cygdrive/")/$(LB):$(SOLARBINDIR:s/://:^"/cygdrive/")

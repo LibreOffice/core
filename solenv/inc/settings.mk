@@ -1037,21 +1037,22 @@ LNTFLAGSOUTOBJ=-os
 # the middle of an existing && chain; the tcsh case is somewhat imprecise in
 # that it potentially affects multiple commands following on the recipe line:
 .IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH *= : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(SOLARLIBDIR)
-AUGMENT_LIBRARY_PATH_LOCAL *= : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(PWD)/$(LB):$(SOLARLIBDIR)
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
+AUGMENT_LIBRARY_PATH_LOCAL = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
 .ELSE
-AUGMENT_LIBRARY_PATH *= if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
+AUGMENT_LIBRARY_PATH = if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
     eval 'setenv $(OOO_LIBRARY_PATH_VAR) \
-    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(SOLARLIBDIR)"' \
+    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(normpath, $(SOLARSHAREDBIN))"' \
     && if ($$?$(OOO_LIBRARY_PATH_VAR) == 0) \
-    setenv $(OOO_LIBRARY_PATH_VAR) "$(SOLARLIBDIR)" &&
-AUGMENT_LIBRARY_PATH_LOCAL *= if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
+    setenv $(OOO_LIBRARY_PATH_VAR) "$(normpath, $(SOLARSHAREDBIN))" &&
+AUGMENT_LIBRARY_PATH_LOCAL = if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
     eval 'setenv $(OOO_LIBRARY_PATH_VAR) \
-    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(PWD)/$(LB):$(SOLARLIBDIR)"' \
+    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))"' \
     && if ($$?$(OOO_LIBRARY_PATH_VAR) == 0) \
-    setenv $(OOO_LIBRARY_PATH_VAR) "$(PWD)/$(LB):$(SOLARLIBDIR)" &&
+    setenv $(OOO_LIBRARY_PATH_VAR) \
+    "$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))" &&
 .END
 .END
 
