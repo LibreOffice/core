@@ -629,9 +629,22 @@ string </xsl:text>
     </xsl:if>
     <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
         <xsl:variable name="refname" select="@name"/>
-        <xsl:for-each select="ancestor::rng:grammar/rng:define[@name=$refname]">
-            <xsl:call-template name="factorytokentoidmapinner"/>
-        </xsl:for-each>
+	<xsl:variable name="refblock1">
+	    <xsl:for-each 
+		select="ancestor::rng:grammar/rng:define[@name=$refname]">
+	      <xsl:call-template name="factorytokentoidmapinner"/>
+	    </xsl:for-each>
+	</xsl:variable>
+	<xsl:choose>
+	  <xsl:when test="string-length($refblock1) = 0">
+	    <xsl:for-each select="ancestor::model/namespace/rng:grammar/rng:define[@name=$refname]">
+		<xsl:call-template name="factorytokentoidmapinner"/>
+	      </xsl:for-each>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <xsl:value-of select="$refblock1"/>
+	  </xsl:otherwise>
+	</xsl:choose>
     </xsl:for-each>
 </xsl:template>
 
@@ -659,7 +672,7 @@ TokenToIdMapPointer </xsl:text>
         </xsl:if>
     </xsl:for-each>
     <xsl:text>
-      case 0:</xsl:text>
+    default:</xsl:text>
     <xsl:for-each select="start">
       <xsl:variable name="name" select="@name"/>
       <xsl:text>
@@ -670,8 +683,6 @@ TokenToIdMapPointer </xsl:text>
       </xsl:for-each>
     </xsl:for-each>
     <xsl:text>
-        break;
-    default:
         break;
     }
     
