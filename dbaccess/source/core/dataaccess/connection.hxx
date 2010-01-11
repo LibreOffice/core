@@ -276,6 +276,10 @@ private:
             m_xConnectionTools is nol <NULL/>
     */
     void    impl_loadConnectionTools_throw();
+
+    /** reads the table filter and table type filter from the datasourfce
+    */
+    void    impl_fillTableFilter();
 };
 
 //........................................................................
