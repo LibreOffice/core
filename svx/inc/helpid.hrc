@@ -283,6 +283,7 @@
 #define HID_SVX_SENDMENU_SIGNANDENCRYPT                             (HID_SVX_START + 245)
 #define HID_SVX_TP_APPEARANCE                                       (HID_SVX_START + 246)
 #define HID_SVX_TP_DESKTOP                                          (HID_SVX_START + 247)
+#define HID_CT_THES_ALTERNATIVES                                    (HID_SVX_START + 248)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -290,7 +291,7 @@
 // Overrun check ---------------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     (HID_SVX_START+247)
+#define ACT_SVX_HID_END     (HID_SVX_START+248)
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
 #endif

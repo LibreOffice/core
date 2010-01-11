@@ -33,8 +33,8 @@
 
 #include <tools/shl.hxx>
 #include <svl/lngmisc.hxx>
-#include <svl/svlbitm.hxx>
-#include <svl/svtreebx.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/svtreebx.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -198,6 +198,7 @@ ThesaurusAlternativesCtrl_Impl::~ThesaurusAlternativesCtrl_Impl()
 
 SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( const String &rText, bool bIsHeader )
 {
+    (void) bIsHeader;
     SvLBoxEntry* pEntry = new SvLBoxEntry;
     String sEmpty;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
@@ -314,9 +315,9 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
     aMeanLB     ( this, SVX_RES( LB_MEAN ) ),
     aSynonymText( this, SVX_RES( FT_SYNON ) ),
     aSynonymLB  ( this, SVX_RES( LB_SYNON ) ),
-    aVarFL      ( this, SVX_RES( FL_VAR ) ),
     m_aAlternativesText  ( this, SVX_RES( FT_THES_ALTERNATIVES ) ),
     m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( this ) ),
+    aVarFL      ( this, SVX_RES( FL_VAR ) ),
     aOkBtn      ( this, SVX_RES( BTN_THES_OK ) ),
     aCancelBtn  ( this, SVX_RES( BTN_THES_CANCEL ) ),
     aLookUpBtn  ( this, SVX_RES( BTN_LOOKUP ) ),
