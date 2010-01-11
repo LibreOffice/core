@@ -278,9 +278,9 @@ throw (::com::sun::star::uno::RuntimeException)
     com::sun::star::awt::Rectangle aRectangle;
     Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     const Point mMousePos = pWindow->GetPointerPosPixel();
-    mRectangle.X = mMousePos.X();
-    mRectangle.Y = mMousePos.Y();
-    sal_Int16 nId = xPopupMenu->execute( xParent, mRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    aRectangle.X = mMousePos.X();
+    aRectangle.Y = mMousePos.Y();
+    sal_Int16 nId = xPopupMenu->execute( xParent, aRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
     if ( nId && m_xFrame.is() )
     {

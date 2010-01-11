@@ -34,8 +34,6 @@
 #include <cppuhelper/factory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <osl/file.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

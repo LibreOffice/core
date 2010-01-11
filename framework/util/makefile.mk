@@ -120,6 +120,7 @@ SHL1STDLIBS=    \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
                 $(SVTOOLLIB)        \
+                $(SVLLIB)        	\
                 $(I18NISOLANGLIB)   \
                 $(VOSLIB)           \
                 $(VCLLIB)           \
