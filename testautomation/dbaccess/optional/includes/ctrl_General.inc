@@ -884,6 +884,8 @@ testcase tActivationOrder
         endif      
         DocumentWriter.TypeKeys "<TAB>" , true
         sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
+        sleep(1)
         DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
@@ -895,6 +897,8 @@ testcase tActivationOrder
         endif
         
         DocumentWriter.TypeKeys "<TAB>" , true
+        sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
