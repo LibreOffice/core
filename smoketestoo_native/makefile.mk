@@ -98,6 +98,10 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
     $(RM) -r $(MISC)/installation.flag `cat $(MISC)/installation.flag`
 .ENDIF
 
+# Work around Windows problems with long pathnames (see issue 50885) by
+# installing into the temp directory instead of the module output tree (in which
+# case installation.flag contains the path to the temp installation, which is
+# removed after smoketest); can be removed once issue 50885 is fixed:
 $(MISC)/installation.flag:
 .IF "$(OS)" == "WNT"
     $(my_set_tmp) && \
