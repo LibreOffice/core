@@ -55,6 +55,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class StyleUtilities
 {
+
     private static final Log LOGGER = LogFactory.getLog(StyleUtilities.class);
     private static final String STYLE = "style";
 
@@ -117,8 +118,7 @@ public class StyleUtilities
         }
         inheritanceTracker.add(styleName);
 
-        if (stylesCollection.containsStyle(styleFamily, styleName) ||
-                commonCollection.getCommonStyles().containsStyle(styleFamily, styleName))
+        if (stylesCollection.containsStyle(styleFamily, styleName) || commonCollection.getCommonStyles().containsStyle(styleFamily, styleName))
         {
             // fine, there's already a copy of the stylesheet.
             return;
@@ -193,7 +193,8 @@ public class StyleUtilities
                 LOGGER.warn("Inconsistent styles: " + styleFamily + ":" + styleParent + " does not exist.");
             }
             return preStyle;
-        } catch (CloneNotSupportedException e)
+        }
+        catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException("Failed to derive a stylesheet", e);
         }
@@ -248,7 +249,8 @@ public class StyleUtilities
                     currentFonts.addFontFace((FontFaceElement) element.clone());
                 }
             }
-        } catch (CloneNotSupportedException e)
+        }
+        catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException("Failed to clone font-face element");
         }
@@ -264,12 +266,13 @@ public class StyleUtilities
         {
             try
             {
-                final Section styleMap = (Section) derivedStyle.findFirstChild(OfficeNamespaces.STYLE_NS,"map");
+                final Section styleMap = (Section) derivedStyle.findFirstChild(OfficeNamespaces.STYLE_NS, "map");
                 if (styleMap != null)
                 {
                     performDataStyleProcessing(styleMap, stylesCollection, predefCollection, "apply-style-name");
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
             }
         }
@@ -286,8 +289,7 @@ public class StyleUtilities
         if (attribute != null)
         {
             final String styleName = String.valueOf(attribute);
-            if (!stylesCollection.getAutomaticStyles().containsDataStyle(styleName) &&
-                    !stylesCollection.getCommonStyles().containsDataStyle(styleName))
+            if (!stylesCollection.getAutomaticStyles().containsDataStyle(styleName) && !stylesCollection.getCommonStyles().containsDataStyle(styleName))
             {
                 try
                 {
@@ -313,7 +315,8 @@ public class StyleUtilities
                             derivedStyle = null;
                         }
                     }
-                } catch (CloneNotSupportedException e)
+                }
+                catch (CloneNotSupportedException e)
                 {
                     throw new ReportProcessingException("Failed to copy style. This should not have happened.");
                 }
@@ -508,7 +511,8 @@ public class StyleUtilities
                         predefCollection);
             }
             return autostyle;
-        } catch (CloneNotSupportedException e)
+        }
+        catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException(
                     "Deriving the style failed. Clone error: ", e);

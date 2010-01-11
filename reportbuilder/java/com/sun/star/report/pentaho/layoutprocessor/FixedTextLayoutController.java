@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import org.jfree.report.flow.layoutprocessor.LayoutController;
@@ -55,37 +53,35 @@ import com.sun.star.report.pentaho.model.FixedTextElement;
  * @since 05.03.2007
  */
 public class FixedTextLayoutController
-    extends AbstractReportElementLayoutController
+        extends AbstractReportElementLayoutController
 {
 
-  public FixedTextLayoutController()
-  {
-  }
+    public FixedTextLayoutController()
+    {
+    }
 
+    protected boolean isValueChanged()
+    {
+        final FlowController controller = getFlowController();
+        final GlobalMasterRow masterRow = controller.getMasterRow();
+        final ReportDataRow reportDataRow = masterRow.getReportDataRow();
+        return reportDataRow.getCursor() == 0;
+    }
 
-  protected boolean isValueChanged()
-  {
-    final FlowController controller = getFlowController();
-    final GlobalMasterRow masterRow = controller.getMasterRow();
-    final ReportDataRow reportDataRow = masterRow.getReportDataRow();
-    return reportDataRow.getCursor() == 0;
-  }
+    protected LayoutController delegateContentGeneration(final ReportTarget target)
+            throws ReportProcessingException, ReportDataFactoryException,
+            DataSourceException
+    {
+        final FixedTextElement fte = (FixedTextElement) getNode();
+        final Section content = fte.getContent();
 
-  protected LayoutController delegateContentGeneration
-      (final ReportTarget target)
-      throws ReportProcessingException, ReportDataFactoryException,
-      DataSourceException
-  {
-    final FixedTextElement fte = (FixedTextElement) getNode();
-    final Section content = fte.getContent();
+        final FlowController flowController = getFlowController();
+        final ReportContext reportContext = flowController.getReportContext();
+        final LayoutControllerFactory layoutControllerFactory =
+                reportContext.getLayoutControllerFactory();
 
-    final FlowController flowController = getFlowController();
-    final ReportContext reportContext = flowController.getReportContext();
-    final LayoutControllerFactory layoutControllerFactory =
-        reportContext.getLayoutControllerFactory();
-
-    final FixedTextLayoutController flc = (FixedTextLayoutController) clone();
-    flc.setState(AbstractReportElementLayoutController.FINISHED);
-    return layoutControllerFactory.create(flowController, content, flc);
-  }
+        final FixedTextLayoutController flc = (FixedTextLayoutController) clone();
+        flc.setState(AbstractReportElementLayoutController.FINISHED);
+        return layoutControllerFactory.create(flowController, content, flc);
+    }
 }

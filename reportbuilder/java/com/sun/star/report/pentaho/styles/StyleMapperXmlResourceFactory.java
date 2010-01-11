@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
@@ -43,17 +41,18 @@ import org.pentaho.reporting.libraries.base.config.Configuration;
  */
 public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory
 {
-  public StyleMapperXmlResourceFactory()
-  {
-  }
 
-  protected Configuration getConfiguration()
-  {
-    return JFreeReportBoot.getInstance().getGlobalConfig();
-  }
+    public StyleMapperXmlResourceFactory()
+    {
+    }
 
-  public Class getFactoryType()
-  {
-    return StyleMapper.class;
-  }
+    protected Configuration getConfiguration()
+    {
+        return JFreeReportBoot.getInstance().getGlobalConfig();
+    }
+
+    public Class getFactoryType()
+    {
+        return StyleMapper.class;
+    }
 }

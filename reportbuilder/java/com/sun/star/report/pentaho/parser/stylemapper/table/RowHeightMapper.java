@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.stylemapper.table;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
@@ -41,15 +40,16 @@ import org.jfree.layouting.input.style.keys.box.BoxStyleKeys;
  */
 public class RowHeightMapper implements StyleMapper
 {
-  public RowHeightMapper()
-  {
-  }
 
-  public void updateStyle(final String uri,
-                          final String attrName,
-                          final String attrValue,
-                          final CSSDeclarationRule targetRule)
-  {
-    targetRule.setPropertyValueAsString(BoxStyleKeys.HEIGHT, attrValue);
-  }
+    public RowHeightMapper()
+    {
+    }
+
+    public void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        targetRule.setPropertyValueAsString(BoxStyleKeys.HEIGHT, attrValue);
+    }
 }
