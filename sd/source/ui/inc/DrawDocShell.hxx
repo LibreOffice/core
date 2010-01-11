@@ -52,7 +52,6 @@ class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
-class SdFormatClipboard;
 
 namespace sd {
 
@@ -208,9 +207,6 @@ public:
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
 
     void                    ClearUndoBuffer();
-
-public:
-    SdFormatClipboard*      mpFormatClipboard;
 
 protected:
 

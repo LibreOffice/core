@@ -40,7 +40,7 @@
 #include "sddllapi.h"
 #include <tools/string.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
 

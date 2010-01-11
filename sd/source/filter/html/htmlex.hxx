@@ -34,7 +34,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <vcl/gdimtf.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "resltn.hxx"       // enum PublishingResolution
 #include <svtools/colrdlg.hxx>
 #include <svtools/ehdl.hxx>

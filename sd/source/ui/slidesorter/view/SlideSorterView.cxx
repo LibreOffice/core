@@ -60,7 +60,7 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xlndsit.hxx>
@@ -72,10 +72,10 @@
 #include <algorithm>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 
 using namespace std;

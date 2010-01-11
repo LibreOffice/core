@@ -35,7 +35,7 @@
 
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>

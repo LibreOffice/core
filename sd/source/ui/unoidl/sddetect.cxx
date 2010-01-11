@@ -63,10 +63,10 @@
 
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -83,7 +83,7 @@
 #include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
 

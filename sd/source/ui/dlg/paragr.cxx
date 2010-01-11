@@ -37,9 +37,9 @@
 
 #include <vcl/field.hxx>
 
-#include <svtools/cjkoptions.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/editdata.hxx>
 #include <svx/dialogs.hrc>

@@ -28,8 +28,6 @@
  *
  ************************************************************************/
 
-import "svxslots.ilb"
-
 module
 "2DADF501-1F00-101C-A2E4-00001B4C5CE7"
 "33A1C840-1F00-101C-A2E4-00001B4C5CE7"
@@ -37,10 +35,15 @@ StarDraw
 [
 HelpText( "StarDraw Application" )
 SlotIdFile( "sdslots.hrc" )
-TypeLibFile( "sdslots.tlb" )
 ModulePrefix( "Sd" )
 ]
 {
+        include "sfx2/sfxitems.sdi"
+        include "sfx2/sfx.sdi"
+        include "svx/svxitems.sdi"
+        include "svx/xoitems.sdi"
+        include "svx/svx.sdi"
+
         item UINT16 TbxImageItem;
 
         enum FadeEffect
