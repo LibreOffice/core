@@ -74,6 +74,11 @@ namespace connectivity
                 can contain () which have to filled with values
             */
             static ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+
+            /** convert the sql statement to fit MySQL notation
+                @param  _sSql in/out
+            */
+            static ::rtl::OUString adjustSQL(const ::rtl::OUString& _sSql);
         };
     }
 }
