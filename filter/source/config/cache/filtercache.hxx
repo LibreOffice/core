@@ -1022,9 +1022,11 @@ class FilterCache : public BaseLock
 
         //---------------------------------------
 
+#if OSL_DEBUG_LEVEL > 0
         /** TODO */
         ::rtl::OUString impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const;
         ::rtl::OUString impl_searchContentHandlerForType(const ::rtl::OUString& sType) const;
+#endif
 
         //---------------------------------------
         /** @short check if the specified OOo module is installed.

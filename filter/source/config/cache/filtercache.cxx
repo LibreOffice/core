@@ -2456,6 +2456,7 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
     return lData;
 }
 
+#if OSL_DEBUG_LEVEL > 0
 /*-----------------------------------------------*/
 ::rtl::OUString FilterCache::impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const
 {
@@ -2493,6 +2494,7 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
 
     return ::rtl::OUString();
 }
+#endif
 
 /*-----------------------------------------------*/
 sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)

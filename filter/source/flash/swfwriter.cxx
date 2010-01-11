@@ -261,6 +261,7 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
     endTag();
 }
 
+#ifdef THEFUTURE
 // -----------------------------------------------------------------------------
 
 void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
@@ -286,6 +287,7 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 
     endTag();
 }
+#endif
 
 // -----------------------------------------------------------------------------
 
