@@ -40,7 +40,6 @@
 
 class ImageList;
 
-class SfxAcceleratorManager;
 class SfxBindings;
 class SfxObjectFactory;
 class ModalDialog;

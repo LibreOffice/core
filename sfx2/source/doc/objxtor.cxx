@@ -190,7 +190,6 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 //--------------------------------------------------------------------
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 :mpObjectContainer(0)
-    ,pAccMgr(0)
     ,pCfgMgr( 0)
     ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )

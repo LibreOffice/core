@@ -96,7 +96,6 @@ class Bitmap;
 class INetURLObject;
 class IndexBitSet;
 class SfxTopFrame;
-class SfxAcceleratorManager;
 class JobSetup;
 class Size;
 class Point;
@@ -798,7 +797,6 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
-    SAL_DLLPRIVATE SfxAcceleratorManager* GetAccMgr_Impl();
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
