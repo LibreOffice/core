@@ -34,6 +34,7 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/Protocol.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
 
 //#define DEBUG_RESOLVE
@@ -129,6 +130,17 @@ string OOXMLPropertyImpl::getName() const
 
     if (sResult.length() == 0)
         sResult = (*SprmIdToString::Instance())(mId);
+
+    if (sResult.length() == 0)
+        sResult = fastTokenToId(mId);
+
+    if (sResult.length() == 0)
+    {
+        static char sBuffer[256];
+
+        snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32, mId);
+        sResult = sBuffer;
+    }
 
     return sResult;
 }
@@ -467,7 +479,15 @@ string OOXMLPropertySetImpl::getType() const
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
+    {
         mProperties.push_back(pProperty);
+    }
+#ifdef DEBUG_PROPERTIES
+    else
+    {
+        debug_logger->element("warning.property_not_added");
+    }
+#endif
 }
 
 void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
