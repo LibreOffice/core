@@ -29,33 +29,30 @@
 #
 #*************************************************************************
 
-PRJ := ..$/..
+PRJ := ../..
 PRJNAME := cppuhelper
 
 TARGET := qa_propertysetmixin
-PACKAGE = test$/cppuhelper$/propertysetmixin$/comp
+PACKAGE = test/cppuhelper/propertysetmixin/comp
 
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(GUI)" == "WNT"
-FILEURLPREFIX = file:///
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
+.IF "$(OS)" == "WNT"
+my_file = file:///
 .ELSE
-FILEURLPREFIX = file://
-MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
-.ENDIF
-
-
+my_file = file://
+.END
 
 DLLPRE = # no leading "lib" on .so files
-INCPRE += -I$(MISC)$/$(TARGET)$/inc
+INCPRE += -I$(MISC)/$(TARGET)/inc
 
 SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_propertysetmixin.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
+SHL1OBJS = $(SLO)/test_propertysetmixin.obj
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1IMPLIB = i$(SHL1TARGET)
+SHL1RPATH = NONE
 DEF1NAME = $(SHL1TARGET)
 
 .IF "$(COMNAME)" == "gcc3"
@@ -65,10 +62,11 @@ SHL1VERSIONMAP = test.map
 .ENDIF
 
 SHL2TARGET = $(TARGET).uno
-SHL2OBJS = $(SLO)$/comp_propertysetmixin.obj
+SHL2OBJS = $(SLO)/comp_propertysetmixin.obj
 SHL2VERSIONMAP = comp.map
 SHL2STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL2IMPLIB = i$(SHL2TARGET)
+SH21RPATH = NONE
 DEF2NAME = $(SHL2TARGET)
 
 SLOFILES = $(SHL1OBJS) $(SHL2OBJS)
@@ -80,63 +78,52 @@ JARFILES = java_uno.jar juh.jar jurt.jar ridl.jar
 
 ALLTAR: test
 
-$(MISC)$/$(TARGET)$/types.urd: types.idl
+$(MISC)/$(TARGET)/types.urd: types.idl
     - $(MKDIR) $(@:d)
     $(IDLC) -O$(@:d) -I$(SOLARIDLDIR) -cid -we $<
 
-$(MISC)$/$(TARGET)$/types.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.urd
+$(MISC)/$(TARGET)/types.rdb: $(MISC)/$(TARGET)/types.urd
     - $(RM) $@
     $(REGMERGE) $@ /UCR $<
 
-$(MISC)$/$(TARGET)$/uno.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
-        $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST) \
-        $(MISC)$/$(TARGET)$/$(TARGET).uno.jar $(MISC)$/$(TARGET)$/bootstrap.rdb
+$(MISC)/$(TARGET)/uno.rdb: $(MISC)/$(TARGET)/types.rdb $(SHL2TARGETN) \
+        $(MISC)/$(TARGET)/$(TARGET).uno.jar $(MISC)/$(TARGET)/bootstrap.rdb
     - $(MKDIR) $(@:d)
-    $(COPY) $(SOLARBINDIR)$/types.rdb $@
-    $(REGMERGE) $@ / $(MISC)$/$(TARGET)$/types.rdb
-    $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST) -c reflection.uno$(DLLPOST) \
-        -c stocservices.uno$(DLLPOST)
-    $(REGCOMP) -register -r $@ \
-        -c $(subst,$/,/ $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST))
-    $(REGCOMP) -register -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ \
-        -c \
-   $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(MISC)$/$(TARGET)$/$(TARGET).uno.jar) \
-        -classpath $(CLASSPATH) \
-    -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR)
+    $(COPY) $(SOLARBINDIR)/types.rdb $@
+    $(REGMERGE) $@ / $(MISC)/$(TARGET)/types.rdb
+    $(REGCOMP) -register -r $@ -wop -c javaloader.uno -c javavm.uno \
+        -c reflection.uno -c stocservices.uno -c $(SHL2TARGETN)
+    $(REGCOMP) -register -br $(MISC)/$(TARGET)/bootstrap.rdb -r $@ \
+        -c $(my_file)$(PWD)/$(MISC)/$(TARGET)/$(TARGET).uno.jar \
+        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR)
 
-$(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
+$(MISC)/$(TARGET)/bootstrap.rdb:
     - $(MKDIR) $(@:d)
-    $(COPY) $(SOLARBINDIR)$/types.rdb $@
-    $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
+    $(COPY) $(SOLARBINDIR)/types.rdb $@
+    $(REGCOMP) -register -r $@ -wop -c javaloader.uno -c javavm.uno \
+        -c stocservices.uno
 
-$(MISC)$/$(TARGET)$/cppumaker.flag: $(MISC)$/$(TARGET)$/types.rdb
-    $(CPPUMAKER) -O$(MISC)$/$(TARGET)$/inc -BUCR -Gc \
-        -X$(SOLARBINDIR)$/types.rdb $<
+$(MISC)/$(TARGET)/cppumaker.flag: $(MISC)/$(TARGET)/types.rdb
+    $(CPPUMAKER) -O$(MISC)/$(TARGET)/inc -BUCR -Gc \
+        -X$(SOLARBINDIR)/types.rdb $<
     $(TOUCH) $@
 
-$(SLOFILES): $(MISC)$/$(TARGET)$/cppumaker.flag
+$(SLOFILES): $(MISC)/$(TARGET)/cppumaker.flag
 
-$(MISC)$/$(TARGET)$/javamaker.flag: $(MISC)$/$(TARGET)$/types.rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)$/types.rdb $<
+$(MISC)/$(TARGET)/javamaker.flag: $(MISC)/$(TARGET)/types.rdb
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/types.rdb $<
     $(TOUCH) $@
 
 # The following dependency (to execute javac whenever javamaker has run) does
 # not work reliably, see #i28827#:
-$(JAVAFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET)$/javamaker.flag
+$(JAVAFILES) $(JAVACLASSFILES): $(MISC)/$(TARGET)/javamaker.flag
 
-$(MISC)$/$(TARGET)$/$(TARGET).uno.jar: $(JAVACLASSFILES) \
-        $(MISC)$/$(TARGET)$/javamaker.flag manifest
+$(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVACLASSFILES) \
+        $(MISC)/$(TARGET)/javamaker.flag manifest
     jar cfm $@ manifest -C $(CLASSDIR) test/cppuhelper/propertysetmixin
 
-test .PHONY: $(SHL1TARGETN) $(MISC)$/$(TARGET)$/uno.rdb
-.IF "$(GUI)" == "WNT"
-    set CLASSPATH=$(CLASSPATH) && \
-    set URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) && \
-    testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET)$/uno.rdb#$(SOLARBINDIR)"
-.ELSE
-    setenv CLASSPATH $(CLASSPATH) && \
-    setenv URE_INTERNAL_JAVA_DIR $(MY_URE_INTERNAL_JAVA_DIR) && \
-    testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET)$/uno.rdb#$(SOLARLIBDIR)"
-.ENDIF
+test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/uno.rdb
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
+        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
+        -env:URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
+        -env:arg-reg=$(MISC)/$(TARGET)/uno.rdb -env:arg-path=$(SOLARSHAREDBIN)

@@ -35,7 +35,7 @@
 
 UDK_3_0_0 {
     global:
-        registerAllTestFunction;
+        cppunitTestPlugIn;
 
         _ZN4_STL7num_put*; # STLport
 

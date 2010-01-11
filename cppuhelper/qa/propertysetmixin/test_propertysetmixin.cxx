@@ -64,9 +64,12 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/servicefactory.hxx"
-#include "testshl/simpleheader.hxx"
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "osl/mutex.hxx"
-#include "osl/thread.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
@@ -96,6 +99,14 @@ std::ostream & operator <<(std::ostream & out, css::uno::Type const & value) {
 std::ostream & operator <<(std::ostream & out, css::uno::Any const & value) {
     return
         out << "com::sun::star::uno::Any[" << value.getValueType() << ", ...]";
+}
+
+rtl::OUString getArgument(rtl::OUString const & name) {
+    rtl::OUString val;
+    CPPUNIT_ASSERT(
+        rtl::Bootstrap::get(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, val));
+    return val;
 }
 
 class BoundListener:
@@ -222,17 +233,12 @@ void Test::setUp() {
     // single component context is used for all tests and destroyed in the last
     // pseudo-test "finish":
     if (!m_context.is()) {
-        char const * fw = getForwardString();
-        rtl::OUString forward(fw, rtl_str_getLength(fw),
-                         osl_getThreadTextEncoding());
-            //TODO: check for string conversion failure
-        sal_Int32 index = forward.indexOf('#');
-        rtl::OUString registry = forward.copy(0, index);
-        rtl::OUString bootstrappath = forward.copy(index+1);
-
         css::uno::Reference< css::lang::XMultiComponentFactory > factory(
             cppu::createRegistryServiceFactory(
-                registry, sal_False, bootstrappath),
+                getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reg"))),
+                sal_False,
+                getArgument(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("path")))),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::beans::XPropertySet >(
             factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
@@ -670,8 +676,8 @@ void Test::testFull(
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
