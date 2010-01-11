@@ -78,16 +78,10 @@ SHL1OBJS=  \
     $(SLO)$/linetest.obj		\
     $(SLO)$/masktest.obj		\
     $(SLO)$/polytest.obj		\
-    $(SLO)$/tools.obj		    \
-    $(SLO)$/bitmapdevice.obj    \
-    $(SLO)$/debug.obj			\
-    $(SLO)$/polypolygonrenderer.obj
-# last three objs are a bit of a hack: cannot link against LIBBASEBMP
-# here, because not yet delivered. Need the functionality to test, so
-# we're linking it in statically. Need to keep this in sync with
-# source/makefile.mk
+    $(SLO)$/tools.obj
 SHL1TARGET= tests
-SHL1STDLIBS= 	$(SALLIB)		 \
+SHL1STDLIBS=    $(BASEBMPLIB) \
+                $(SALLIB)		 \
                 $(CPPUNITLIB)	 \
                 $(BASEGFXLIB)
 

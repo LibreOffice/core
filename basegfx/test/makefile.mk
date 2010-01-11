@@ -48,21 +48,9 @@ SHL1OBJS=  \
     $(SLO)$/basegfx3d.obj \
     $(SLO)$/testtools.obj
 
-# linking statically against basegfx parts
-SHL1LIBS=\
-    $(SLB)$/curve.lib	\
-    $(SLB)$/matrix.lib	\
-    $(SLB)$/numeric.lib	\
-    $(SLB)$/point.lib	\
-    $(SLB)$/polygon.lib	\
-    $(SLB)$/range.lib	\
-    $(SLB)$/tuple.lib	\
-    $(SLB)$/tools.lib	\
-    $(SLB)$/color.lib	\
-    $(SLB)$/vector.lib
-
 SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
+                $(BASEGFXLIB) \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
                         $(CPPULIB)       \
