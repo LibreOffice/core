@@ -6184,16 +6184,6 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     return sal_False;
 }
 
-void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    m_bMenuBarCloser = bCloserState;
-    aWriteLock.unlock();
-
-    implts_updateMenuBarClose();
-}
-
 sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
 {
     sal_Int16 eOptSymbolsSize( 0 );

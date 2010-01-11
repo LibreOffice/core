@@ -331,7 +331,6 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
-            void implts_setMenuBarCloser(sal_Bool bCloserState);
             void implts_updateMenuBarClose();
             sal_Bool implts_resetMenuBar();
 
