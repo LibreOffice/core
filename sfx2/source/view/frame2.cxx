@@ -57,7 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

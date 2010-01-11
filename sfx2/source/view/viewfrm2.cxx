@@ -56,7 +56,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/stritem.hxx>

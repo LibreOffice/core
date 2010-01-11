@@ -1611,7 +1611,7 @@ namespace svxform
         DBG_ASSERT( pBindings != NULL,
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
         m_xFrame = Reference<XFrame>(
-            pBindings->GetDispatcher().GetFrame()->GetFrame()->GetFrameInterface(),
+            pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
             UNO_QUERY );
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
