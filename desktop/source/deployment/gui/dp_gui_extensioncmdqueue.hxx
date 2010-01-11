@@ -96,14 +96,6 @@ public:
     */
     void stop();
 
-    /** Determines if thread of this class has terminated.
-    */
-    bool hasTerminated();
-
-    /** Blocks until the thread has terminated. All URLs in the queue will be processed.
-    */
-    void stopAndWait();
-
     bool isBusy();
 private:
     ExtensionCmdQueue(ExtensionCmdQueue &); // not defined

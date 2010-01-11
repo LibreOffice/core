@@ -101,8 +101,6 @@ namespace migration
             ::com::sun::star::deployment::XPackage > & xPkg);
         void registerBasicPackage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > & xPkg);
-        void registerConfigurationPackage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > & xPkg);
 
     public:
         ExtensionMigration(::com::sun::star::uno::Reference<

@@ -97,27 +97,20 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
     _setBold(m_ftHead);
 
     checkEval();
-    // we need to choose the welcome text that is diplayed
-    // choices are the default text, default text+migradtion,
-    // OEM and extended OEM
-    // No OEM is built, remove the check
-//     switch (checkOEM())
-//     {
-//     case OEM_NONE:
-        // check for migration
-        if (Migration::checkMigration())
-        {
-            String aText(WizardResId(STR_WELCOME_MIGRATION));
-            // replace %OLDPRODUCT with found version name
-            aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
-            m_ftBody.SetText( aText );
-        }
-        else
-        if ( ! m_bLicenseNeedsAcceptance )
-        {
-            String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
-            m_ftBody.SetText( aText );
-        }
+
+    // check for migration
+    if (Migration::checkMigration())
+    {
+        String aText(WizardResId(STR_WELCOME_MIGRATION));
+        // replace %OLDPRODUCT with found version name
+        aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
+        m_ftBody.SetText( aText );
+    }
+    else if ( ! m_bLicenseNeedsAcceptance )
+    {
+        String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
+        m_ftBody.SetText( aText );
+    }
 }
 
 
@@ -625,84 +618,4 @@ void RegistrationPage::executeSingleMode()
         ::utl::RegOptions().removeReminder();
 }
 
-// -----------------------------------------------------------------------
-
-static char const OEM_PRELOAD_SECTION[] = "Bootstrap";
-static char const OEM_PRELOAD[]     = "Preload";
-static char const STR_TRUE[]        = "1";
-static char const STR_FALSE[]       = "0";
-
-static sal_Bool existsURL( OUString const& _sURL )
-{
-    using namespace osl;
-    DirectoryItem aDirItem;
-
-    if (_sURL.getLength() != 0)
-        return ( DirectoryItem::get( _sURL, aDirItem ) == DirectoryItem::E_None );
-
-    return sal_False;
-}
-
-
-// locate soffice.ini/.rc file
-static OUString locateIniFile()
-{
-    OUString aUserDataPath;
-    OUString aSofficeIniFileURL;
-
-    // Retrieve the default file URL for the soffice.ini/rc
-    rtl::Bootstrap().getIniName( aSofficeIniFileURL );
-
-    if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
-    {
-        const char CONFIG_DIR[] = "/config";
-
-        sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
-        if ( nIndex > 0 )
-        {
-            OUString        aUserSofficeIniFileURL;
-            OUStringBuffer  aBuffer( aUserDataPath );
-            aBuffer.appendAscii( CONFIG_DIR );
-            aBuffer.append( aSofficeIniFileURL.copy( nIndex ));
-            aUserSofficeIniFileURL = aBuffer.makeStringAndClear();
-
-            if ( existsURL( aUserSofficeIniFileURL ))
-                return aUserSofficeIniFileURL;
-        }
-    }
-    // Fallback try to use the soffice.ini/rc from program folder
-    return aSofficeIniFileURL;
-}
-
-// check whether the OEMPreload flag was set in soffice.ini/.rc
-static sal_Int32 checkOEMPreloadFlag()
-{
-    OUString aSofficeIniFileURL;
-    aSofficeIniFileURL = locateIniFile();
-    Config aConfig(aSofficeIniFileURL);
-    aConfig.SetGroup( OEM_PRELOAD_SECTION );
-    ByteString sResult = aConfig.ReadKey( OEM_PRELOAD );
-    return sResult.ToInt32();
-    /*
-    if ( sResult == STR_TRUE )
-        return sal_True;
-    else
-        return sal_False;
-    */
-}
-
-WelcomePage::OEMType WelcomePage::checkOEM()
-{
-  sal_Int32 oemResult = checkOEMPreloadFlag();
-  switch (oemResult) {
-  case 1:
-    return OEM_NORMAL;
-  case 2:
-    return OEM_EXTENDED;
-  default:
-    return OEM_NONE;
-  }
-}
-
 } // namespace desktop
-

@@ -769,12 +769,6 @@ ExtMgrDialog::~ExtMgrDialog()
 }
 
 //------------------------------------------------------------------------------
-void ExtMgrDialog::selectEntry( long nPos )
-{
-    m_pExtensionBox->selectEntry( nPos );
-}
-
-//------------------------------------------------------------------------------
 void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 {
     m_aGetExtensions.SetURL( rURL );

@@ -163,7 +163,6 @@ public:
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     void            setGetExtensionsURL( const ::rtl::OUString &rURL );
-    void            selectEntry( long nPos );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & );
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,

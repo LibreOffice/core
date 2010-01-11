@@ -56,8 +56,6 @@ public:
     /** in mem db */
     PersistentMap();
 
-    void flush() const;
-
     bool has( ::rtl::OString const & key ) const;
     bool get( ::rtl::OString * value, ::rtl::OString const & key ) const;
     t_string2string_map getEntries() const;

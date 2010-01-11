@@ -56,7 +56,6 @@ SLOFILES = \
         $(SLO)$/license_dialog.obj \
         $(SLO)$/dp_gui_dependencydialog.obj \
         $(SLO)$/dp_gui_thread.obj \
-        $(SLO)$/dp_gui_updatability.obj \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \

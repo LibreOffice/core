@@ -127,18 +127,6 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     return unsatisfied;
 }
 
-::rtl::OUString
-name(css::uno::Reference< css::xml::dom::XElement > const & dependency) {
-    ::rtl::OUString n(
-        dependency->getAttributeNS(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))));
-    return n.getLength() == 0
-        ? ::rtl::OUString(
-            ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN)))
-        : n;
-}
-
 ::rtl::OUString getErrorText( css::uno::Reference< css::xml::dom::XElement > const & dependency )
 {
     ::rtl::OUString sReason;

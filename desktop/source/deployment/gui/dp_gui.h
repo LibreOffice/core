@@ -33,7 +33,6 @@
 
 #include "dp_gui_updatedata.hxx"
 #include "dp_misc.h"
-#include "dp_gui_updatability.hxx"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
 #include "rtl/instance.hxx"
