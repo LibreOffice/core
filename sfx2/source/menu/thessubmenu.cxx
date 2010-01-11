@@ -36,7 +36,7 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/debug.hxx>
 
 #include <vector>
@@ -84,7 +84,7 @@ String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText )
     // remove any possible remaining ' ' that may confuse the thesaurus
     // when it gets called with the text
     aText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
-    
+
     return aText;
 }
 
@@ -137,8 +137,8 @@ void SfxThesSubMenuControl::FillMenu()
     Ist die Funktionalit"at disabled, wird der entsprechende
     Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
-void SfxThesSubMenuControl::StateChanged( 
-    USHORT /*nSID*/, 
+void SfxThesSubMenuControl::StateChanged(
+    USHORT /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -170,17 +170,17 @@ PopupMenu* SfxThesSubMenuControl::GetPopup() const
 
 ////////////////////////////////////////////////////////////
 
-OUString SfxThesSubMenuHelper::GetText( 
-    const String &rLookUpString, 
+OUString SfxThesSubMenuHelper::GetText(
+    const String &rLookUpString,
     xub_StrLen nDelimPos )
 {
     return OUString( rLookUpString.Copy( 0, nDelimPos ) );
 }
 
-    
-void SfxThesSubMenuHelper::GetLocale( 
-    lang::Locale /*out */ &rLocale, 
-    const String &rLookUpString, 
+
+void SfxThesSubMenuHelper::GetLocale(
+    lang::Locale /*out */ &rLocale,
+    const String &rLookUpString,
     xub_StrLen nDelimPos  )
 {
     String aIsoLang( rLookUpString.Copy( nDelimPos + 1) );
@@ -193,7 +193,7 @@ void SfxThesSubMenuHelper::GetLocale(
     }
 }
 
-    
+
 SfxThesSubMenuHelper::SfxThesSubMenuHelper()
 {
     try
@@ -203,29 +203,29 @@ SfxThesSubMenuHelper::SfxThesSubMenuHelper()
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.linguistic2.Thesaurus" ) ) ), uno::UNO_QUERY_THROW ) ;
     }
-    catch (uno::Exception &e)    
+    catch (uno::Exception &e)
     {
         (void) e;
         DBG_ASSERT( 0, "failed to get thesaurus" );
-    }    
+    }
 }
 
-    
+
 SfxThesSubMenuHelper::~SfxThesSubMenuHelper()
 {
-}    
+}
 
 
 bool SfxThesSubMenuHelper::IsSupportedLocale( const lang::Locale & rLocale ) const
 {
     return m_xThesarus.is() && m_xThesarus->hasLocale( rLocale );
 }
-    
 
-bool SfxThesSubMenuHelper::GetMeanings( 
-    std::vector< OUString > & rSynonyms, 
+
+bool SfxThesSubMenuHelper::GetMeanings(
+    std::vector< OUString > & rSynonyms,
     const OUString & rWord,
-    const lang::Locale & rLocale, 
+    const lang::Locale & rLocale,
     sal_Int16 nMaxSynonms )
 {
     bool bHasMoreSynonyms = false;
@@ -235,11 +235,11 @@ bool SfxThesSubMenuHelper::GetMeanings(
         try
         {
             // get all meannings
-            const uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeaningSeq( 
+            const uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeaningSeq(
                     m_xThesarus->queryMeanings( rWord, rLocale, uno::Sequence< beans::PropertyValue >() ));
             const uno::Reference< linguistic2::XMeaning > *pxMeaning = aMeaningSeq.getConstArray();
             const sal_Int32 nMeanings = aMeaningSeq.getLength();
-        
+
             // iterate over all meanings until nMaxSynonms are found or all meanings are processed
             sal_Int32 nCount = 0;
             sal_Int32 i = 0;
@@ -256,18 +256,18 @@ bool SfxThesSubMenuHelper::GetMeanings(
                 }
                 bHasMoreSynonyms = k < nSynonyms;    // any synonym from this meaning skipped?
             }
-            
+
             bHasMoreSynonyms |= i < nMeanings;   // any meaning skipped?
         }
         catch (uno::Exception &e)
         {
             (void) e;
             DBG_ASSERT( 0, "failed to get synonyms" );
-        }    
+        }
     }
     return bHasMoreSynonyms;
 }
-    
+
 
 ////////////////////////////////////////////////////////////
 
