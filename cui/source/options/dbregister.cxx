@@ -416,7 +416,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
     if ( _bReadOnly )
     {
         sal_Bool bHighContrast = pPathBox->GetDisplayBackground().GetColor().IsDark();
-        Image aLocked( SVX_RES( bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK ) );
+        Image aLocked( CUI_RES( bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK ) );
         pEntry = pPathBox->InsertEntry( aStr, aLocked, aLocked );
     }
     else
