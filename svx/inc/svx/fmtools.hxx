@@ -27,7 +27,6 @@
 #ifndef _SVX_FMTOOLS_HXX
 #define _SVX_FMTOOLS_HXX
 
-#include "fmprop.hrc"
 #include "svx/svxdllapi.h"
 
 #include <com/sun/star/sdb/SQLContext.hpp>
