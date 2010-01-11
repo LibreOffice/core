@@ -257,6 +257,11 @@ public class PentahoReportJob implements ReportJob
                     if (parameters.length > 0)
                     {
                         String name = parameters[0].toString();
+                        if (parameters[0] instanceof ContextLookup)
+                        {
+                            final ContextLookup context = (ContextLookup) parameters[0];
+                            name = context.getName();
+                        }
                         for (int j = 0; j < reportFunctions.length; j++)
                         {
                             if (reportFunctions[j] instanceof FormulaExpression)
@@ -370,7 +375,7 @@ public class PentahoReportJob implements ReportJob
         catch (final Exception e)
         {
             String message = e.getMessage();
-            if (message.length() == 0)
+            if (message == null || message.length() == 0)
             {
                 message = "Failed to process the report";
             }

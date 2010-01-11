@@ -80,6 +80,10 @@ public class TableCellLayoutController extends SectionLayoutController
             {
                 FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
             }
+            else if ( "float".equals(valueType))
+            {
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE, "1.#NAN");
+            }
         }
         catch (Exception e)
         {
