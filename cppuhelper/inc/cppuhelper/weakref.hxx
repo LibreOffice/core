@@ -142,6 +142,8 @@ public:
         or XInt is null, then this reference is null.
 
         @param xInt another hard reference
+
+        @since UDK 3.2.12
     */
     WeakReference & SAL_CALL operator = (
             const ::com::sun::star::uno::Reference< interface_type > & xInt )
