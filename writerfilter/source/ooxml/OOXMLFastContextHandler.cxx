@@ -1236,13 +1236,61 @@ void OOXMLFastContextHandler::sendPropertyToParent()
             pProps->add(pProp);
 
 #ifdef DEBUG_ELEMENT
-            debug_logger->chars(pProp->toString());
+            debug_logger->addTag(toPropertiesTag(pProps));
 #endif
         }
     }
 
 #ifdef DEBUG_ELEMENT
     debug_logger->endElement("sendPropertyToParent");
+#endif
+}
+
+void OOXMLFastContextHandler::sendPropertiesToParent()
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("sendPropertiesToParent");
+#endif
+    if (mpParent != NULL)
+    {
+        OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
+
+        if (pParentProps.get() != NULL)
+        {
+            OOXMLPropertySet::Pointer_t pProps(getPropertySet());
+
+#ifdef DEBUG_ELEMENT
+            debug_logger->startElement("me");
+            debug_logger->addTag(toPropertiesTag(pProps));
+            debug_logger->endElement("me");
+#endif
+
+            if (pProps.get() != NULL)
+            {
+                OOXMLValue::Pointer_t pValue
+                (new OOXMLPropertySetValue(getPropertySet()));
+
+                OOXMLProperty::Pointer_t pProp
+                (new OOXMLPropertyImpl(getId(), pValue, OOXMLPropertyImpl::SPRM));
+
+#ifdef DEBUG_ELEMENT
+                debug_logger->startElement("propertyForSet");
+                debug_logger->chars(pProp->toString());
+                debug_logger->endElement("propertyForSet");
+#endif
+
+                pParentProps->add(pProp);
+
+#ifdef DEBUG_ELEMENT
+                debug_logger->startElement("parent");
+                debug_logger->addTag(toPropertiesTag(pParentProps));
+                debug_logger->endElement("parent");
+#endif
+            }
+        }
+    }
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("sendPropertiesToParent");
 #endif
 }
 
@@ -1387,31 +1435,7 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
     }
     else
     {
-        OOXMLValue::Pointer_t pVal
-            (new OOXMLPropertySetValue(mpPropertySet));
-
-        OOXMLPropertyImpl::Pointer_t pProperty
-            (new OOXMLPropertyImpl(mId, pVal, OOXMLPropertyImpl::SPRM));
-
-        OOXMLPropertySet::Pointer_t pProperties = (*mpParent).getPropertySet();
-
-        if (pProperties.get() != NULL)
-        {
-#ifdef DEBUG_PROPERTIES
-            debug_logger->startElement("property");
-            debug_logger->chars(xmlify(pProperty->toString()));
-            debug_logger->endElement("property");
-#endif
-            pProperties->add(pProperty);
-        }
-#ifdef DEBUG_PROPERTIES
-        else if (! propagatesProperties())
-        {
-            debug_logger->startElement("warning");
-            debug_logger->chars("properties lost");
-            debug_logger->endElement("warning");
-        }
-#endif
+        sendPropertiesToParent();
     }
 }
 

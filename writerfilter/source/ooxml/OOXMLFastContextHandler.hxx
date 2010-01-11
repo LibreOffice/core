@@ -226,6 +226,7 @@ public:
     virtual void propagateCellProperties();
     virtual bool propagatesProperties() const;
     void sendPropertiesWithId(const Id & rId);
+    void sendPropertiesToParent();
     void sendCellProperties();
     void sendRowProperties();
     void sendTableProperties();
