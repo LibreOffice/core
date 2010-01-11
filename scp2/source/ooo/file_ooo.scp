@@ -163,7 +163,7 @@ End
 File gid_File_Profile_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Name = PROFILENAME(gengal);
 End
 
@@ -173,7 +173,7 @@ File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -348,7 +348,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
+STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -503,17 +503,6 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
-File gid_File_Jar_Sandbox
-    TXT_FILE_BODY;
-    Name = JARFILENAME(sandbox);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
@@ -526,7 +515,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,PATCH);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -1667,7 +1656,7 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
@@ -1730,7 +1719,7 @@ End
 
 File gid_File_Oo_Office_Linguistic_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
 End
@@ -2126,7 +2115,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "offapi.rdb";
 End
 
@@ -2724,7 +2713,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY, PATCH);
+    Styles = (PACKED, STARREGISTRY);
 #if defined WNT
     NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
 #else
@@ -2893,13 +2882,20 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_ImagesCrystal_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_crystal.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesOxygen_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_oxygen.zip";
     Styles = (PACKED);
 End
 
