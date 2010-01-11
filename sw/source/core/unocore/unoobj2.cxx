@@ -112,7 +112,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
@@ -1192,6 +1192,12 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
 {
+    SwTable* pTable = SwTable::FindTable( &rTblFmt );
+    SwTableNode* pTblNode = pTable->GetTableNode( );
+    SwPosition aPosition( *pTblNode );
+    SwPaM aPam( aPosition );
+
+    _CreateNewBookmark( aPam );
 }
 
 SwXTextRange::~SwXTextRange()

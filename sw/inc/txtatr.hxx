@@ -60,15 +60,6 @@ public:
 };
 
 
-// ATT_XMLCONTAINERITEM ******************************
-
-class SwTxtXMLAttrContainer : public SwTxtAttrEnd
-{
-public:
-    SwTxtXMLAttrContainer( SvXMLAttrContainerItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-};
-
 // ******************************
 
 class SwTxtAttrNesting : public SwTxtAttrEnd

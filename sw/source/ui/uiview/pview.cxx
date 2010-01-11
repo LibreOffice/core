@@ -41,9 +41,9 @@
 #include <vcl/cmdevt.hxx>
 #include <vcl/button.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/topfrm.hxx>
@@ -1376,7 +1376,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 }
 
@@ -2531,7 +2531,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0
         };
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         const USHORT* pPtr = aInval + 1;
         do {

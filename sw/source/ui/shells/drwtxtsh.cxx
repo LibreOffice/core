@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <i18npool/lang.h>
-#include <svtools/slstitm.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/svdview.hxx>
@@ -49,7 +49,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/outliner.hxx>
 #include <svx/editstat.hxx>
 #include <svx/svdoutl.hxx>
@@ -577,7 +577,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 {
                     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, RID_SVXDLG_TEXT, pSdrView );
+                                &aNewAttr, pSdrView );
                     USHORT nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)

@@ -31,8 +31,6 @@
 #ifndef _POSTITMGR_HXX
 #define _POSTITMGR_HXX
 
-#include <svtools/lstner.hxx>
-
 #include <list>
 #include <vector>
 #include <svx/outlobj.hxx>
@@ -41,8 +39,10 @@
 #include <tools/debug.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/options.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <svl/lstner.hxx>
 
 class SwWrtShell;
 class SwDoc;
@@ -139,6 +139,9 @@ class SwNoteProps: public utl::ConfigItem
                  }
                  return aNames;
             }
+
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 
 class SwPostItMgr: public SfxListener

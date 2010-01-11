@@ -60,8 +60,8 @@
 #include <SwAppletImpl.hxx>
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/svstdarr.hxx>
+#include "svl/urihelper.hxx"
 #include <sfx2/frmdescr.hxx>
 #include <SwStyleNameMapper.hxx>
 

@@ -48,11 +48,11 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/langitem.hxx>
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/svstdarr.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/stritem.hxx>
 
 #include <ndtxt.hxx>
 #include <pam.hxx>

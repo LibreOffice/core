@@ -35,7 +35,7 @@
 #include <tools/list.hxx>
 #include <tools/cachestr.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/prntitem.hxx>
 #include <svx/opaqitem.hxx>
 #include <svx/protitem.hxx>

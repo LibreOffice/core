@@ -59,7 +59,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwNodeNum.hxx>
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -1329,7 +1329,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 
     aRedlRest.Restore();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
         //              the same (or no) section. Becaus not full selected

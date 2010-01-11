@@ -61,7 +61,7 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/adjitem.hxx>

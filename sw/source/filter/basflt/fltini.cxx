@@ -39,7 +39,7 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/app.hxx>
@@ -417,6 +417,9 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = 0;
 }
+
+void SwFilterOptions::Commit() {}
+void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /*  */
 
@@ -1008,3 +1011,24 @@ void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xR
     else
         xRet = WriterRef(0);
 }
+
+typedef ULONG ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, BOOL, const String& );
+typedef ULONG ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
+
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
+    if( pFunction )
+        return pFunction( rDoc, rStor, bSaveInto, rStorageName );
+    return ERRCODE_NONE;
+}
+
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
+{
+    GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
+    if( pFunction )
+            return pFunction( rDocS );
+    return ERRCODE_NONE;
+}
+
+

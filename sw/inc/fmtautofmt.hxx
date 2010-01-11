@@ -31,7 +31,7 @@
 #define _FMTAUTOFMT_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <format.hxx>
 #include <boost/shared_ptr.hpp>
 

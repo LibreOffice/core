@@ -37,10 +37,10 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/list.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sfx2/event.hxx>
@@ -1034,8 +1034,8 @@ void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState /*eState*/,
             aContentTree.SetActiveShell(pWrtShell);
             BOOL bGlobal = IsGlobalDoc();
             aContentToolBox.EnableItem(FN_GLOBAL_SWITCH, bGlobal);
-            if(!bGlobal && IsGlobalMode() ||
-                    !IsGlobalMode() && pConfig->IsGlobalActive())
+            if( (!bGlobal && IsGlobalMode()) ||
+                    (!IsGlobalMode() && pConfig->IsGlobalActive()) )
             {
                 ToggleTree();
             }
