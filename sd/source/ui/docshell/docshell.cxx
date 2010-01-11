@@ -189,7 +189,6 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 
 DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
-    mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(NULL),
     mpUndoManager(NULL),
     mpPrinter(NULL),

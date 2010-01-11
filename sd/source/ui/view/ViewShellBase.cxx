@@ -1227,7 +1227,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
         Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
