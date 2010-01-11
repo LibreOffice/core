@@ -63,12 +63,7 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/stritem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/acorrcfg.hxx>
 #include <svx/dlgutil.hxx>
@@ -80,6 +75,7 @@
 #include <svx/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -295,7 +291,7 @@ void SwSpellPopup::fillLangPopupMenu(
         {
             for (USHORT i = 0; i < rLocales.getLength(); ++i)
             {
-                if (aLangItems.size() == nMaxCount)
+                if (aLangItems.size() == (size_t)nMaxCount)
                     break;
                 const lang::Locale& rLocale = rLocales[i];
                 if (lcl_checkScriptType( nScriptType, aLanguageTable.GetType( rLocale.Language )))
@@ -575,7 +571,7 @@ bGrammarResults(false)
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-    SetItemImage( MN_SPELLING, rImg );
+    SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -708,7 +704,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     Image rImg = ::GetImage( xFrame,
             OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-    SetItemImage( MN_SPELLING, rImg );
+    SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -740,7 +736,7 @@ void SwSpellPopup::Execute( USHORT nId )
     if ((MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ||
         (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END))
     {
-        USHORT nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
+        sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
                 nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
         DBG_ASSERT( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
         if (0 <= nAltIdx && nAltIdx < aSuggestions.getLength() && (bGrammarResults || xSpellAlt.is()))
