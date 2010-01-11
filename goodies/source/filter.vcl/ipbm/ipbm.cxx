@@ -172,6 +172,7 @@ BOOL PBMReader::ImplReadHeader()
     *mpPBM >> nID[ 0 ] >> nID[ 1 ];
     if ( nID[ 0 ] != 'P' )
         return FALSE;
+    mnMaxVal = mnWidth = mnHeight = 0;
     switch ( nID[ 1 ] )
     {
         case '1' :
@@ -179,6 +180,7 @@ BOOL PBMReader::ImplReadHeader()
         case '4' :
             mnMode = 0;
             nMax = 2;               // number of parameters in Header
+            mnMaxVal = 1;
             break;
         case '2' :
             mbRaw = FALSE;
@@ -195,9 +197,6 @@ BOOL PBMReader::ImplReadHeader()
         default:
             return FALSE;
     }
-
-    mnMaxVal = mnWidth = mnHeight = 0;
-
     while ( bFinished == FALSE )
     {
         if ( mpPBM->GetError() )
