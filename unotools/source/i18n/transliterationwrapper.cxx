@@ -152,9 +152,9 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
     return TransliterationModules_UPPERCASE_LOWERCASE == nType ||
            TransliterationModules_LOWERCASE_UPPERCASE == nType ||
            TransliterationModules_IGNORE_CASE == nType ||
-           TransliterationModulesExtra::SENTENCE_CASE == nType ||
-           TransliterationModulesExtra::TITLE_CASE == nType ||
-           TransliterationModulesExtra::TOGGLE_CASE == nType;
+           (sal_uInt32) TransliterationModulesExtra::SENTENCE_CASE == (sal_uInt32) nType ||
+           (sal_uInt32) TransliterationModulesExtra::TITLE_CASE    == (sal_uInt32) nType ||
+           (sal_uInt32) TransliterationModulesExtra::TOGGLE_CASE   == (sal_uInt32) nType;
 }
 
 
