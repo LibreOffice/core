@@ -104,6 +104,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
                                              :m_xFormatter(_rxNumberF)
+    ,m_bBookmarkSelection( NULL )
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(sal_False)
@@ -133,7 +134,8 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
-    :m_xConnection(_rxConnection)
+    :m_bBookmarkSelection( NULL )
+    ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
@@ -187,6 +189,7 @@ void ODatabaseImportExport::dispose()
     m_xResultSetMetaData.clear();
     m_xResultSet.clear();
     m_xRow.clear();
+    m_xRowLocate.clear();
     m_xFormatter.clear();
 }
 // -----------------------------------------------------------------------------
@@ -231,20 +234,37 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
             if (xComponent.is() && xEvt.is())
                 xComponent->addEventListener(xEvt);
         }
-        if(_aDataDescriptor.has(daSelection))
-            _aDataDescriptor[daSelection]   >>= m_aSelection;
 
-        sal_Bool bBookmarkSelection = sal_True; // the default if not present
+        if ( _aDataDescriptor.has( daSelection ) )
+            _aDataDescriptor[ daSelection ] >>= m_aSelection;
+
         if ( _aDataDescriptor.has( daBookmarkSelection ) )
+            _aDataDescriptor[ daBookmarkSelection ] >>= m_bBookmarkSelection;
+
+        if ( _aDataDescriptor.has( daCursor ) )
         {
-            _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
-            DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
+            _aDataDescriptor[ daCursor ] >>= m_xResultSet;
+            m_xRowLocate.set( m_xResultSet, UNO_QUERY );
         }
 
+        if ( m_aSelection.getLength() != 0 )
+        {
+            if ( !m_xResultSet.is() )
+            {
+                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
+                m_aSelection.realloc( 0 );
+            }
+        }
 
-        if(_aDataDescriptor.has(daCursor))
-            _aDataDescriptor[daCursor]  >>= m_xResultSet;
-    } // if ( !_bPlusDefaultInit )
+        if ( m_aSelection.getLength() != 0 )
+        {
+            if ( m_bBookmarkSelection && !m_xRowLocate.is() )
+            {
+                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
+                m_aSelection.realloc( 0 );
+            }
+        }
+    }
     else
         initialize();
 
@@ -314,19 +334,14 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-                Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
-                if(xProp.is())
-                {
-                    xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
-                    xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(m_nCommandType));
-                    xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
-                    Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-                    xRowSet->execute();
-                }
-                else
-                    OSL_ENSURE(sal_False, "ODatabaseImportExport::initialize: could not instantiate a rowset!");
-            } // if ( !m_xResultSet.is() )
+                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.RowSet" ) ), UNO_QUERY );
+                Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
+                xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
+                xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
+                xProp->setPropertyValue( PROPERTY_COMMAND, makeAny( m_sName ) );
+                Reference< XRowSet > xRowSet( xProp, UNO_QUERY );
+                xRowSet->execute();
+            }
             impl_initializeRowMember_throw();
         }
         catch(Exception& )
@@ -375,7 +390,8 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::impl_initializeRowMember_throw" );
     if ( !m_xRow.is() && m_xResultSet.is() )
     {
-        m_xRow.set(m_xResultSet,UNO_QUERY);
+        m_xRow.set( m_xResultSet, UNO_QUERY );
+        m_xRowLocate.set( m_xResultSet, UNO_QUERY );
         m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
         Reference<XColumnsSupplier> xSup(m_xResultSet,UNO_QUERY_THROW);
         m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
@@ -570,22 +586,29 @@ BOOL ORTFImportExport::Write()
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
         sal_Int32 kk=0;
-        if(m_aSelection.getLength())
+        if ( m_aSelection.getLength() )
         {
             const Any* pSelIter = m_aSelection.getConstArray();
             const Any* pEnd   = pSelIter + m_aSelection.getLength();
-            sal_Bool bContinue = sal_True;
-            for(;pSelIter != pEnd && bContinue;++pSelIter)
-            {
-                sal_Int32 nPos = -1;
-                *pSelIter >>= nPos;
-                OSL_ENSURE(nPos != -1,"Invalid posiotion!");
-                bContinue = (m_xResultSet->absolute(nPos));
-                if ( bContinue )
-                    appendRow(pHorzChar,nCount,k,kk);
 
+            sal_Bool bContinue = sal_True;
+            for( ; pSelIter != pEnd && bContinue; ++pSelIter )
+            {
+                if ( m_bBookmarkSelection )
+                {
+                    bContinue = m_xRowLocate->moveToBookmark( *pSelIter );
+                }
+                else
+                {
+                    sal_Int32 nPos = -1;
+                    OSL_VERIFY( *pSelIter >>= nPos );
+                    bContinue = ( m_xResultSet->absolute( nPos ) );
+                }
+
+                if ( bContinue )
+                    appendRow( pHorzChar, nCount, k, kk );
             }
-        } // if(m_aSelection.getLength())
+        }
         else
         {
             m_xResultSet->beforeFirst(); // set back before the first row

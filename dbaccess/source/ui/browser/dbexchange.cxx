@@ -31,36 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef DBAUI_TOKENWRITER_HXX
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include "TokenWriter.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-//#ifndef _COMPHELPER_EXTRACT_HXX_
-//#include <comphelper/extract.hxx>
-//#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
 #include "UITools.hxx"
 
 
@@ -78,23 +58,17 @@ namespace dbaui
 
     namespace
     {
-        template<class T > void lcl_addListener(const Reference<T>& _xComponent,ODataClipboard* _pListener)
+        template<class T > void lcl_setListener(const Reference<T>& _xComponent, const Reference< XEventListener >& i_rListener, const bool i_bAdd )
         {
-            if ( _xComponent.is() )
-            {
-                Reference< XComponent> xCom(_xComponent,UNO_QUERY);
-                if ( xCom.is() )
-                    xCom->addEventListener(Reference< XEventListener>((::cppu::OWeakObject*)_pListener,UNO_QUERY));
-            }
-        }
-        template<class T > void lcl_removeListener(const Reference<T>& _xComponent,ODataClipboard* _pListener)
-        {
-            if ( _xComponent.is() )
-            {
-                Reference< XComponent> xCom(_xComponent,UNO_QUERY);
-                if ( xCom.is() )
-                    xCom->removeEventListener(Reference< XEventListener>((::cppu::OWeakObject*)_pListener,UNO_QUERY));
-            }
+            if ( !_xComponent.is() )
+                return;
+
+            Reference< XComponent> xCom( _xComponent, UNO_QUERY );
+            OSL_ENSURE( xCom.is(), "lcl_setListener: no component!" );
+            if ( !xCom.is() )
+                return;
+
+            i_bAdd ? xCom->addEventListener( i_rListener ) : xCom->removeEventListener( i_rListener );
         }
     }
 
@@ -111,13 +85,11 @@ namespace dbaui
         ,m_pRtf(NULL)
     {
         osl_incrementInterlockedCount( &m_refCount );
-        lcl_addListener(_rxConnection,this);
+        lcl_setListener( _rxConnection, this, true );
 
-        m_pHtml = new OHTMLImportExport(getDescriptor(), _rxORB, _rxFormatter);
-        m_aEventListeners.push_back(m_pHtml);
+        m_pHtml.set( new OHTMLImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
+        m_pRtf.set( new ORTFImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
 
-        m_pRtf = new ORTFImportExport(getDescriptor(), _rxORB, _rxFormatter);
-        m_aEventListeners.push_back(m_pRtf);
         osl_decrementInterlockedCount( &m_refCount );
     }
 
@@ -132,47 +104,50 @@ namespace dbaui
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
-        m_pHtml = new OHTMLImportExport(getDescriptor(),_rxORB, _rxFormatter);
-        m_aEventListeners.push_back(m_pHtml);
-
-        m_pRtf = new ORTFImportExport(getDescriptor(),_rxORB, _rxFormatter);
-        m_aEventListeners.push_back(m_pRtf);
+        m_pHtml.set( new OHTMLImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
+        m_pRtf.set( new ORTFImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
     }
 
     // -----------------------------------------------------------------------------
-    ODataClipboard::ODataClipboard( const Reference< XPropertySet >& _rxLivingForm,
-                                    const Sequence< Any >& _rSelectedRows,
-                                    const Reference< XResultSet>& _rxResultSet,
-                                    const Reference< XMultiServiceFactory >& _rxORB)
-        :ODataAccessObjectTransferable( _rxLivingForm )
+    ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
+                                    const Sequence< Any >& i_rSelectedRows,
+                                    const sal_Bool i_bBookmarkSelection,
+                                    const Reference< XMultiServiceFactory >& i_rORB )
+        :ODataAccessObjectTransferable( i_rAliveForm )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
+        OSL_PRECOND( i_rORB.is(), "ODataClipboard::ODataClipboard: having no factory is not good ..." );
+
         osl_incrementInterlockedCount( &m_refCount );
 
         Reference<XConnection> xConnection;
-        getDescriptor()[daConnection] >>= xConnection;
-        lcl_addListener(xConnection,this);
-        lcl_addListener(_rxResultSet,this);
+        getDescriptor()[ daConnection ] >>= xConnection;
+        lcl_setListener( xConnection, this, true );
 
-        getDescriptor()[daSelection]        <<= _rSelectedRows;
-        getDescriptor()[daBookmarkSelection]<<= sal_False;  // by definition, it's the indicies
-        getDescriptor()[daCursor]           <<= _rxResultSet;
-        addCompatibleSelectionDescription( _rSelectedRows );
+        // do not pass the form itself as source result set, since the client might operate on the form, which
+        // might lead to undesired effects. Instead, use a clone.
+        Reference< XResultSet > xResultSetClone;
+        Reference< XResultSetAccess > xResultSetAccess( i_rAliveForm, UNO_QUERY );
+        if ( xResultSetAccess.is() )
+            xResultSetClone = xResultSetAccess->createResultSet();
+        OSL_ENSURE( xResultSetClone.is(), "ODataClipboard::ODataClipboard: could not clone the form's result set" );
+        lcl_setListener( xResultSetClone, this, true );
 
-        if ( xConnection.is() && _rxORB.is() )
+        getDescriptor()[daCursor]           <<= xResultSetClone;
+        getDescriptor()[daSelection]        <<= i_rSelectedRows;
+        getDescriptor()[daBookmarkSelection]<<= i_bBookmarkSelection;
+        addCompatibleSelectionDescription( i_rSelectedRows );
+
+        if ( xConnection.is() && i_rORB.is() )
         {
-            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, _rxORB ) );
+            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, i_rORB ) );
             if ( xFormatter.is() )
             {
-                m_pHtml = new OHTMLImportExport( getDescriptor(),_rxORB, xFormatter );
-                m_aEventListeners.push_back( m_pHtml );
-
-                m_pRtf = new ORTFImportExport( getDescriptor(),_rxORB, xFormatter );
-                m_aEventListeners.push_back( m_pRtf );
+                m_pHtml.set( new OHTMLImportExport( getDescriptor(), i_rORB, xFormatter ) );
+                m_pRtf.set( new ORTFImportExport( getDescriptor(), i_rORB, xFormatter ) );
             }
         }
-
 
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -195,13 +170,11 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::AddSupportedFormats()
     {
-        // RTF?
-        if (m_pRtf)
-            AddFormat(SOT_FORMAT_RTF);
+        if ( m_pRtf.is() )
+            AddFormat( SOT_FORMAT_RTF );
 
-        // HTML?
-        if (m_pHtml)
-            AddFormat(SOT_FORMATSTR_ID_HTML);
+        if ( m_pHtml.is() )
+            AddFormat( SOT_FORMATSTR_ID_HTML );
 
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
@@ -213,13 +186,14 @@ namespace dbaui
         switch (nFormat)
         {
             case SOT_FORMAT_RTF:
-                if ( m_pRtf )
+                if ( m_pRtf.is() )
                     m_pRtf->initialize(getDescriptor());
-                return m_pRtf && SetObject(m_pRtf, SOT_FORMAT_RTF, rFlavor);
+                return m_pRtf.is() && SetObject( m_pRtf.get(), SOT_FORMAT_RTF, rFlavor );
+
             case SOT_FORMATSTR_ID_HTML:
-                if ( m_pHtml )
+                if ( m_pHtml.is() )
                     m_pHtml->initialize(getDescriptor());
-                return m_pHtml && SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML, rFlavor);
+                return m_pHtml.is() && SetObject( m_pHtml.get(), SOT_FORMATSTR_ID_HTML, rFlavor );
         }
 
         return ODataAccessObjectTransferable::GetData( rFlavor );
@@ -228,59 +202,65 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
-        if ( m_pHtml )
+        if ( m_pHtml.is() )
         {
             m_pHtml->dispose();
-            m_pHtml = NULL;
-        } // if ( m_pHtml )
-        if ( m_pRtf )
+            m_pHtml.clear();
+        }
+
+        if ( m_pRtf.is() )
         {
             m_pRtf->dispose();
-            m_pRtf = NULL;
+            m_pRtf.clear();
         }
-        m_aEventListeners.clear();
-        Reference<XConnection> xConnection;
-        Reference<XResultSet> xProp;
-        if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
-            lcl_removeListener(xConnection,this);
-        if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
-            lcl_removeListener(xProp,this);
+
+        if ( getDescriptor().has( daConnection ) )
+        {
+            Reference<XConnection> xConnection( getDescriptor()[daConnection], UNO_QUERY );
+            lcl_setListener( xConnection, this, false );
+        }
+
+        if ( getDescriptor().has( daCursor ) )
+        {
+            Reference< XResultSet > xResultSet( getDescriptor()[ daCursor ], UNO_QUERY );
+            lcl_setListener( xResultSet, this, false );
+        }
 
         ODataAccessObjectTransferable::ObjectReleased( );
     }
+
     // -----------------------------------------------------------------------------
-    void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& i_rSource ) throw (::com::sun::star::uno::RuntimeException)
     {
-        Reference<XConnection> xConnection;
-        Reference<XResultSet> xProp;
-        if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
+        ODataAccessDescriptor& rDescriptor( getDescriptor() );
+
+        if ( rDescriptor.has( daConnection ) )
         {
-            lcl_removeListener(xConnection,this);
-            getDescriptor().erase(daConnection);
-        } // if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
-        if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
+            Reference< XConnection > xConnection( rDescriptor[daConnection], UNO_QUERY );
+            if ( xConnection == i_rSource.Source )
+            {
+                rDescriptor.erase( daConnection );
+            }
+        }
+
+        if ( rDescriptor.has( daCursor ) )
         {
-            lcl_removeListener(xProp,this);
-            getDescriptor().erase(daCursor);
-        } // if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
+            Reference< XResultSet > xResultSet( rDescriptor[ daCursor ], UNO_QUERY );
+            if ( xResultSet == i_rSource.Source )
+            {
+                rDescriptor.erase( daCursor );
+                // Selection and BookmarkSelection are meaningless without a result set
+                if ( rDescriptor.has( daSelection ) )
+                    rDescriptor.erase( daSelection );
+                if ( rDescriptor.has( daBookmarkSelection ) )
+                    rDescriptor.erase( daBookmarkSelection );
+            }
+        }
 
-        if ( getDescriptor().has(daColumnObject) )
-            getDescriptor().erase(daColumnObject);
-
-        if ( getDescriptor().has(daComponent) )
-            getDescriptor().erase(daComponent);
-
-
+        // no matter whether it was the source connection or the source result set which died,
+        // we cannot provide the data anymore.
         ClearFormats();
-        //getDescriptor().clear();
-        AddSupportedFormats();
-
-        /*m_pHtml = NULL;
-        m_pRtf = NULL;
-        m_aEventListeners.clear();*/
     }
-    // -----------------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( ODataClipboard, ODataAccessObjectTransferable, TDataClipboard_BASE )
 }
 
 
