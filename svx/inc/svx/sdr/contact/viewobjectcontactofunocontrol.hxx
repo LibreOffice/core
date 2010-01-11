@@ -66,7 +66,6 @@ namespace sdr { namespace contact {
 
     public:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-
         /// determines whether an XControl already exists, and is currently visible
         bool    isControlVisible() const;
 
