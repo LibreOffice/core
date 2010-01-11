@@ -43,6 +43,7 @@ sub action($$$)
          'app/BRAND/OOO' => '@executable_path/../basis-link/program',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
+         'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/URELIB/URELIB' => '@loader_path',
          'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OOO/OOO' => '@loader_path',
