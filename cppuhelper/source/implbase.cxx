@@ -247,6 +247,8 @@ void WeakComponentImplHelperBase::release()
     throw ()
 {
     if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // ensure no other references are created, via the weak connection point, from now on
+        disposeWeakConnectionPoint();
         // restore reference count:
         osl_incrementInterlockedCount( &m_refCount );
         if (! rBHelper.bDisposed) {
@@ -381,6 +383,8 @@ void WeakAggComponentImplHelperBase::release()
         OWeakAggObject::release();
     }
     else if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // ensure no other references are created, via the weak connection point, from now on
+        disposeWeakConnectionPoint();
         // restore reference count:
         osl_incrementInterlockedCount( &m_refCount );
         if (! rBHelper.bDisposed) {

@@ -78,9 +78,6 @@ module chart {};
  */
 module chart2 {};
 
-/// Non-JDBC conform database interfaces <b>(deprecated)</d>
-module data {};
-
 /// Access to the tree of configuration data.
 module configuration {};
 
