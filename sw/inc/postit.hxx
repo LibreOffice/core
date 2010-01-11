@@ -324,7 +324,9 @@ class SwMarginWin : public Window
         virtual bool    CalcFollow();
 
         SwMarginWin*    GetTopReplyNote();
-        bool            IsAnyStackParentVisible();
+#if 0
+       bool            IsAnyStackParentVisible();
+#endif
 
         sal_Int32       GetMetaHeight();
         sal_Int32       GetMinimumSizeWithMeta();

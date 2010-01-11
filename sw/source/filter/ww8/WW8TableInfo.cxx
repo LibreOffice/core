@@ -139,6 +139,7 @@ const SwTable * WW8TableNodeInfoInner::getTable() const
     return mpTable;
 }
 
+#ifdef DEBUG
 string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
@@ -154,7 +155,7 @@ string WW8TableNodeInfoInner::toString() const
 
     return string(buffer);
 }
-
+#endif
 // WW8TableTextNodeInfo
 
 WW8TableNodeInfo::WW8TableNodeInfo(const SwNode * pNode)
@@ -170,6 +171,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
 }
 
+#ifdef DEBUG
 ::std::string WW8TableNodeInfo::toString() const
 {
     static char buffer[1024];
@@ -190,15 +192,13 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
         aIt++;
     }
 
-#ifdef DEBUG
     sResult += dbg_out(*mpNode);
-#endif
 
     sResult +="</tableNodeInfo>";
 
     return sResult;
 }
-
+#endif
 void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;

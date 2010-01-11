@@ -1517,6 +1517,7 @@ void SwMarginWin::SetViewState(ShadowState bState)
     }
 }
 
+#if 0
 bool SwMarginWin::IsAnyStackParentVisible()
 {
     SwMarginWin* pMarginWin = mpMgr->GetNextPostIt(KEY_PAGEUP, this);
@@ -1533,7 +1534,7 @@ bool SwMarginWin::IsAnyStackParentVisible()
     }
     return false;
 }
-
+#endif
 SwMarginWin* SwMarginWin::GetTopReplyNote()
 {
     SwMarginWin* pTopNote = 0;

@@ -103,11 +103,10 @@ using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 
-WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType)
+WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName)
     : maPtNode(aStartPos.nNode)
     , mnPtCntnt(aStartPos.nContent.GetIndex())
     , msBookmarkName(sBookmarkName)
-    , msMarkType(sMarkType)
     , mpPaM(NULL)
 {
 }
@@ -121,11 +120,6 @@ WW8NewFieldCtx::~WW8NewFieldCtx()
 ::rtl::OUString WW8NewFieldCtx::GetBookmarkName()
 {
     return msBookmarkName;
-}
-
-::rtl::OUString WW8NewFieldCtx::GetMarkType()
-{
-    return msMarkType;
 }
 
 void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
@@ -233,7 +227,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
 
     if (aBookmarkName.Len()>0) {
-        WW8NewFieldCtx *pFieldCtx=new WW8NewFieldCtx(*pPaM->GetPoint(), aBookmarkName, ::rtl::OUString::createFromAscii("ecma.office-open-xml.field.FORMTEXT"));
+        WW8NewFieldCtx *pFieldCtx=new WW8NewFieldCtx(*pPaM->GetPoint(), aBookmarkName/*, ::rtl::OUString::createFromAscii("ecma.office-open-xml.field.FORMTEXT"*/);
         maNewFieldCtxStack.push_back(pFieldCtx);
         pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
         pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);

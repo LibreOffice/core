@@ -106,7 +106,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
-#include "warnpassword.hxx"
 
 #include <cfgid.h>
 #include <unotools/moduleoptions.hxx>

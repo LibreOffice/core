@@ -84,7 +84,9 @@ public:
 
     const SwNode * getNode() const;
 
+#ifdef DEBUG
     string toString() const;
+#endif
 };
 
 class WW8TableNodeInfo
@@ -131,7 +133,9 @@ public:
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
+#ifdef DEBUG
     ::std::string toString() const;
+#endif
 };
 
 struct hashNode

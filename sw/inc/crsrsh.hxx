@@ -877,8 +877,6 @@ public:
        @return the textual description of the current selection
      */
     String GetCrsrDescr() const;
-
-    SwRect GetRectOfCurrentChar();
 };
 
 

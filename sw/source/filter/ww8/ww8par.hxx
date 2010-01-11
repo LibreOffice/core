@@ -383,20 +383,18 @@ private:
     SwNodeIndex maPtNode;
     xub_StrLen mnPtCntnt;
     ::rtl::OUString msBookmarkName;
-    ::rtl::OUString msMarkType;
     typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
     typedef ::std::vector< Param_t > Params_t;
     Params_t maParams;
   SwPaM * mpPaM;
 
 public:
-    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType);
+    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName);
     ~WW8NewFieldCtx();
 
     SwNodeIndex GetPtNode() { return maPtNode; };
     xub_StrLen GetPtCntnt() { return mnPtCntnt; };
     ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetMarkType();
     void AddParam(::rtl::OUString name, ::rtl::OUString value);
     void SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark);
 };

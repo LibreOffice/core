@@ -222,7 +222,9 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
+#if 0
             void Hide( SwPostItField* pPostItField );
+#endif
             void Hide( const String& rAuthor );
             void Hide();
             void Show();
@@ -245,7 +247,6 @@ class SwPostItMgr: public SfxListener
             SwMarginWin* GetPostIt(const SfxBroadcaster* pBroadcaster) const;
             SwMarginWin* GetPostIt(SfxBroadcaster* pBroadcaster) const;
             SwPostIt* GetPostIt(const SwPostItField* pFld) const;
-            SwPostIt* GetPostIt(SwPostItField* pFld) const;
 
             void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
 
@@ -254,8 +255,6 @@ class SwPostItMgr: public SfxListener
             Color           GetColorDark(sal_uInt16 aAuthorIndex);
             Color           GetColorLight(sal_uInt16 aAuthorIndex);
             Color           GetColorAnkor(sal_uInt16 aAuthorIndex);
-
-            bool                ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}

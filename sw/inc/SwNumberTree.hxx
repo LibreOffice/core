@@ -168,13 +168,6 @@ public:
     }
 
     /**
-       Returns the first child of this node.
-
-       @return the child
-    */
-    SwNumberTreeNode* GetFirstChild() const;
-
-    /**
        Returns number of this node.
 
        @param bValidate     validate the number?

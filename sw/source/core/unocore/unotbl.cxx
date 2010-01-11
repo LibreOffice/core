@@ -4429,41 +4429,6 @@ void SwXCellRange::GetDataSequence(
         pDblSeq->realloc( nDtaCnt );
 }
 
-/*-- 04.06.04 11:42:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-
-SwUnoCrsr * lcl_CreateCursor( SwFrmFmt &rTblFmt,
-        SwTableBox *pStartBox,      // should be top-left cell of cell range
-        SwTableBox *pEndBox )       // should be bottom right-cell cell range
-{
-    // create a *new* UNO cursor spanning the cell range defined by
-    // the start and end box. Both boxes must be belong to the same table!
-
-    SwUnoCrsr *pUnoCrsr = 0;
-    if (pStartBox && pEndBox)
-    {
-        // hier muessen die Actions aufgehoben werden um
-        // (zB dem Layout zu ermöglichen die Tabelle zu formatieren, da
-        // sonst kein Tabellen Cursor aufgespannt werden kann.)
-        UnoActionRemoveContext aRemoveContext(rTblFmt.GetDoc());
-
-        // set point of cursor to top left box of range
-        const SwStartNode* pSttNd = pStartBox->GetSttNd();
-        SwPosition aPos(*pSttNd);
-        pUnoCrsr = rTblFmt.GetDoc()->CreateUnoCrsr(aPos, sal_True);
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        pUnoCrsr->SetRemainInSection( sal_False );
-        pUnoCrsr->SetMark();
-        pUnoCrsr->GetPoint()->nNode = *pEndBox->GetSttNd();
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        SwUnoTableCrsr *pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        pCrsr->MakeBoxSels();
-    }
-    return pUnoCrsr;
-}
-
-
 /*-- 29.04.02 11:42:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
