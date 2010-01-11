@@ -39,7 +39,7 @@
 #include <tools/debug.hxx>
 
 
-#include "CharacterClassificationImpl.hxx"
+#include "characterclassificationImpl.hxx"
 #include "breakiteratorImpl.hxx"
 
 #define TRANSLITERATION_ALL
@@ -333,7 +333,7 @@ Transliteration_titlecase::Transliteration_titlecase()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
 
-rtl::OUString SAL_CALL Transliteration_titlecase::transliterate( 
+rtl::OUString SAL_CALL Transliteration_titlecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& /*offset*/ )
     throw(RuntimeException)
@@ -459,7 +459,7 @@ rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
 // beginOfSentence does not work as expected with '.'. See comment below.
 // For the time being I will leave this code here as a from-scratch sample if the
 // breakiterator works better at some point...
-rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate( 
+rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
     const OUString& inStr, sal_Int32 nStartPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& /*offset*/ )
     throw(RuntimeException)
