@@ -178,6 +178,10 @@ OOXMLFactory_ns::Pointer_t OOXMLFactory::getFactoryForNamespace(Id nId)
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromStart
 (OOXMLFastContextHandler * pHandler, Token_t Element)
 {
+#ifdef DEBUG_CREATE
+    debug_logger->startElement("createFastChildContextFromStart");
+#endif
+
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; aResult;
     OOXMLFactory_ns::Pointer_t pFactory;    
     
@@ -194,6 +198,9 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
     </xsl:for-each>
     <xsl:text>
     
+#ifdef DEBUG_CREATE
+    debug_logger->endElement("createFastChildContextFromStart");
+#endif
     return aResult;
 }
 </xsl:text>
