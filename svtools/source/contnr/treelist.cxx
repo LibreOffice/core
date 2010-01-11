@@ -38,7 +38,7 @@
 
 #include <svtools/treelist.hxx>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // Prueft Integritaet der Liste nach jeder Operation
 //#define CHECK_INTEGRITY
 #endif

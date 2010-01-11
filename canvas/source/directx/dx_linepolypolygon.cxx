@@ -46,14 +46,14 @@ namespace dxcanvas
     {
     }
 
-    GraphicsPathSharedPtr LinePolyPolygon::getGraphicsPath() const
+    GraphicsPathSharedPtr LinePolyPolygon::getGraphicsPath( bool bNoLineJoin ) const
     {
         // generate GraphicsPath only on demand (gets deleted as soon
         // as any of the modifying methods above touches the
         // B2DPolyPolygon).
         if( !mpPath )
         {
-            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe() );
+            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe(), bNoLineJoin );
             mpPath->SetFillMode( const_cast<LinePolyPolygon*>(this)->getFillRule() == rendering::FillRule_EVEN_ODD ?
                                  Gdiplus::FillModeAlternate : Gdiplus::FillModeWinding );
         }

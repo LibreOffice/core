@@ -385,14 +385,14 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "la.so"
 #elif defined LINUX && defined M68K
   #define __DLLEXTENSION "lm.so"
+#elif defined LINUX && defined HPPA
+  #define __DLLEXTENSION "lh.so"
 #elif defined LINUX
   #error unknown plattform
 #elif defined FREEBSD && defined X86
   #define __DLLEXTENSION "fi.so"
 #elif defined FREEBSD && defined X86_64
   #define __DLLEXTENSION "fx.so"
-#elif defined IRIX
-  #define __DLLEXTENSION "im.so"
 #elif defined MACOSX && defined POWERPC
   #define __DLLEXTENSION "mxp.dylib"
 #elif defined MACOSX && defined X86
