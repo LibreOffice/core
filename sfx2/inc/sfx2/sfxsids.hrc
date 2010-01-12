@@ -267,7 +267,6 @@
 #define SID_EXPLORER_PROPS_END              (SID_SFX_START + 1499)
 
 #define SID_AUTOLOAD                        (SID_SFX_START + 1509)
-#define SID_VIEW                            (SID_SFX_START + 1512)
 #define SID_FILLFRAME                       (SID_SFX_START + 1516)
 #define SID_BASEURL                         (SID_SFX_START + 1518)
 #define SID_TEMPLATE                        (SID_SFX_START + 1519)

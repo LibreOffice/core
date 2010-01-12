@@ -1146,21 +1146,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     rReq.RemoveItem( SID_DONELINK );
 
-    // check if caller wants to create a view
-    BOOL bCreateView = TRUE;
-    SFX_REQUEST_ARG( rReq, pCreateViewItem, SfxBoolItem, SID_VIEW, FALSE );
-    if ( pCreateViewItem )
-    {
-        if ( !pCreateViewItem->GetValue() )
-            bCreateView = FALSE;
-        // this is an "SFX only" parameter
-        rReq.RemoveItem( SID_VIEW );
-    }
-
-    // we can't load without a view - switch to hidden view
-    if ( !bCreateView )
-        rReq.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
-
     // check if the view must be hidden
     BOOL bHidden = FALSE;
     SFX_REQUEST_ARG(rReq, pHidItem, SfxBoolItem, SID_HIDDEN, FALSE);
@@ -1334,12 +1319,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             SfxObjectShell* pSh = pCntrFrame->GetCurrentDocument();
             DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
 
-            if ( bCreateView )
-                rReq.SetReturnValue( SfxViewFrameItem( 0, pCntrFrame->GetCurrentViewFrame() ) );
-            else
-                rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
+            rReq.SetReturnValue( SfxViewFrameItem( 0, pCntrFrame->GetCurrentViewFrame() ) );
 
-            if( ( bHidden || !bCreateView ) )
+            if ( bHidden )
                 pSh->RestoreNoDelete();
         }
     }

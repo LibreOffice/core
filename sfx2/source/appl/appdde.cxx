@@ -596,14 +596,12 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
             // dann versuche die Datei zu laden:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
-//          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
 
             SfxBoolItem aSilent(SID_SILENT, TRUE);
             SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
                     &aName, &aNewView,
-                    /*aHidden,*/
                     &aSilent, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
