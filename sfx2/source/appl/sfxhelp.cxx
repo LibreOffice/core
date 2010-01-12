@@ -56,12 +56,12 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -74,7 +74,7 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
@@ -238,6 +238,8 @@ public:
                     ~SfxHelpOptions_Impl();
 
     BOOL            HasId( ULONG nId ) { USHORT nDummy; return m_pIds ? m_pIds->Seek_Entry( nId, &nDummy ) : FALSE; }
+    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void            Commit();
 };
 
 static Sequence< ::rtl::OUString > GetPropertyNames()
@@ -308,6 +310,15 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
 SfxHelpOptions_Impl::~SfxHelpOptions_Impl()
 {
     delete m_pIds;
+}
+
+
+void SfxHelpOptions_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
+void SfxHelpOptions_Impl::Commit()
+{
 }
 
 // class SfxHelp_Impl ----------------------------------------------------

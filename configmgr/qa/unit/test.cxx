@@ -52,7 +52,6 @@
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/servicefactory.hxx"
-#include "cppunit/simpleheader.hxx"
 #include "osl/conditn.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
@@ -64,6 +63,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "testshl/simpleheader.hxx"
 
 namespace {
 

@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "XMLTextFrameContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>

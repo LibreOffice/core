@@ -30,7 +30,7 @@
 #ifndef _SVX_GRFCROP_HXX
 #define _SVX_GRFCROP_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 

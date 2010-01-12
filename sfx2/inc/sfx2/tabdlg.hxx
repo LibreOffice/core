@@ -37,8 +37,8 @@
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #if ENABLE_LAYOUT

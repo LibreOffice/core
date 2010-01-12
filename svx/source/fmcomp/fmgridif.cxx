@@ -34,7 +34,7 @@
 #include "fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmurl.hxx"
 #include "formcontrolfactory.hxx"
 #include "gridcell.hxx"

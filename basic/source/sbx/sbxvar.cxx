@@ -33,7 +33,7 @@
 
 
 #include <tools/stream.hxx>
-#include "svtools/brdcst.hxx"
+#include "svl/brdcst.hxx"
 
 #include <basic/sbx.hxx>
 #include <basic/sbxbase.hxx>

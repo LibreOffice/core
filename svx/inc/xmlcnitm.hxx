@@ -31,7 +31,7 @@
 #ifndef _SVX_XMLCNITM_HXX
 #define _SVX_XMLCNITM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 class SvXMLNamespaceMap;

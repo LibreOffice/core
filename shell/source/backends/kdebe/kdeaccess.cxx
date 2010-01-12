@@ -36,7 +36,8 @@
 #include "osl/file.h"
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
-#include "vcl/kde_headers.h"
+
+#include "kde_headers.h"
 
 #include "kdeaccess.hxx"
 
