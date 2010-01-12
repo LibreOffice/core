@@ -60,6 +60,8 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
@@ -110,6 +112,8 @@ using namespace ::cppu;
 using namespace ::osl;
 
 using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::ucb::XContent;
+using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 
 //........................................................................
 namespace dbaccess
@@ -537,23 +541,139 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::doEmergencySave( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+namespace
 {
-    // for the moment, just delegate this to our "storeToURL" method
-    storeToURL( i_TargetLocation, i_MediaDescriptor );
+    // .........................................................................
+    const ::rtl::OUString& lcl_getRecoveryDataSubStorageName()
+    {
+        static const ::rtl::OUString s_sRecDataStorName( RTL_CONSTASCII_USTRINGPARAM( "recovery" ) );
+        return s_sRecDataStorName;
+    }
+
+    // .........................................................................
+    bool lcl_hasAnyModifiedSubComponent_throw( const Reference< XController >& i_rController )
+    {
+        Reference< XDatabaseDocumentUI > xDatabaseUI( i_rController, UNO_QUERY_THROW );
+        Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
+
+        typedef ::std::vector< Reference< XComponent > > Components;
+        Components aSubComponents( aComponents.getLength() );
+        ::std::copy( aComponents.getConstArray(), aComponents.getConstArray() + aComponents.getLength(), aSubComponents.begin() );
+
+        bool isAnyModified = false;
+        for (   Components::const_iterator comp = aSubComponents.begin();
+                !isAnyModified && ( comp != aSubComponents.end() );
+                ++comp
+            )
+        {
+            Reference< XModifiable > xModify( *comp, UNO_QUERY );
+            if ( xModify.is() )
+            {
+                isAnyModified = xModify->isModified();
+                continue;
+            }
+
+            // TODO: clarify: anything else to care for? Both the sub componbents with and without model
+            // should support the XModifiable interface, so I think nothing more is needed here.
+            OSL_ENSURE( false, "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
+        }
+
+        return isAnyModified;
+    }
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::recoverDocument( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+::sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeException )
 {
-    // for the moment, just delegate this to our "load" method
-    ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
+    DocumentGuard aGuard( *this );
+
+    // The implementation here is somewhat sloppy, in that it returns whether *any* part of the whole
+    // database document, including opened sub components, is modified. This is more that what is requested:
+    // We need to return <TRUE/> if the doc itself, or any of the opened sub components, has been modified
+    // since the last call to any of the save* methods, or since the document has been loaded/created.
+    // However, the API definition explicitly allows to be that sloppy ...
+
+    if ( isModified() )
+        return sal_True;
+
+    // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
+    // we ask our connected controllers, not simply our existing form/report definitions.
+    // (There is some information which even cannot be obtained without asking the controller.
+    // For instance, newly created, but not yet saved, forms/reports are acessible via the
+    // controller only, but not via the model.)
+
+    try
+    {
+        for (   Controllers::const_iterator ctrl = m_aControllers.begin();
+                ctrl != m_aControllers.end();
+                ++ctrl
+            )
+        {
+            if ( lcl_hasAnyModifiedSubComponent_throw( *ctrl ) )
+                return sal_True;
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::saveToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    DocumentGuard aGuard( *this );
+    ModifyLock aLock( *this );
+
+    try
+    {
+        // create a storage for the target location
+        Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( i_TargetLocation ) );
+
+        // first store the document as a whole into this storage
+        impl_storeToStorage_throw( xTargetStorage, i_MediaDescriptor, aGuard );
+
+        // create a sub storage for recovery data
+        if ( xTargetStorage->hasByName( lcl_getRecoveryDataSubStorageName() ) )
+            xTargetStorage->removeElement( lcl_getRecoveryDataSubStorageName() );
+        Reference< XStorage > xRecoveryStorage = xTargetStorage->openStorageElement( lcl_getRecoveryDataSubStorageName(), ElementModes::READWRITE );
+
+        // store recovery data for open sub components of our controller(s)
+        // TODO
+
+        // commit the root storage
+        ODatabaseModelImpl::commitStorageIfWriteable( xTargetStorage );
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    // delegate this to our "load" method, to load the database document itself
 
     // our load implementation expects the SalvagedFile and URL to be in the media descriptor
+    ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
     aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
     aMediaDescriptor.put( "URL", i_SourceLocation );
 
     load( aMediaDescriptor.getPropertyValues() );
+
+    // TODO: recover any things in the "recovery" sub folder of the storage
 }
 
 // -----------------------------------------------------------------------------
