@@ -39,11 +39,14 @@
 
 testcase tBasicDialogI18nImport
 
-    printlog( "Dialogs that show up when importing Multi locale dialogs into BASIC IDE" )
+    printlog( "Dialogs that show up when importing multi locale dialogs into BASIC IDE" )
     
     dim cDialogPath as string
         cDialogPath = gTesttoolPath & "framework\required\input\basic_ide\Dialog5.xdl"
         cDialogPath = convertpath( cDialogPath )
+        
+    dim iNumberOfLanguages as integer
+    dim iTry as integer
         
     const LANGUAGE_COUNT = 5
         
@@ -82,15 +85,23 @@ testcase tBasicDialogI18nImport
                 
                 printlog( "Accept with yes" )
                 Active.Yes()
-                
+                sleep(1)
                 Kontext "TranslationBar"
                 if ( TranslationBar.exists() ) then
+
+                    for iTry = 1 to 5
+                        iNumberOfLanguages = CurrentLanguage.getItemCount()
+                        if ( iNumberOfLanguages = LANGUAGE_COUNT ) then
+                            exit for
+                        endif
+                        wait( 100 )
+                    next iTry
                 
                     printlog( "Check number of imported languages" )
-                    if ( CurrentLanguage.getItemCount() <> LANGUAGE_COUNT ) then
+                    if ( iNumberOfLanguages <> LANGUAGE_COUNT ) then
                         warnlog( "Incorrect language count in listbox <CurrentLanguage>" )
                         printlog( "Expected: " & LANGUAGE_COUNT )
-                        printlog( "Found...: " & CurrentLanguage.getItemCount() )
+                        printlog( "Found...: " & iNumberOfLanguages )
                     endif
                     
                     Kontext "DialogBar"
