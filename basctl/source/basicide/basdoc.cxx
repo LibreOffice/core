@@ -66,7 +66,7 @@ BasicDocShell::BasicDocShell()
 {
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
-    SetModel( new SIDEModel(this) );
+    SetBaseModel( new SIDEModel(this) );
 }
 
 __EXPORT BasicDocShell::~BasicDocShell()
