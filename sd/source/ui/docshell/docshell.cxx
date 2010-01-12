@@ -148,7 +148,7 @@ void DrawDocShell::Construct( bool bClipboard )
     // the document's ref device.
     UpdateRefDevice();
 
-    SetModel( new SdXImpressDocument( this, bClipboard ) );
+    SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
     mpUndoManager = new sd::UndoManager;
     mpDoc->SetSdrUndoManager( mpUndoManager );
