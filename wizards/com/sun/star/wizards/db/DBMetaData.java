@@ -599,8 +599,8 @@ public class DBMetaData
 
     public void getDataSourceInterfaces() throws Exception
     {
-        xCompleted = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, xDataSource);
-        xDataSourcePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
+        xCompleted = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, getDataSource());
+        xDataSourcePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getDataSource());
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
     }
 
@@ -684,7 +684,7 @@ public class DBMetaData
     private boolean getConnection(String _DataSourceName)
     {
         setDataSourceByName(_DataSourceName, true);
-        return getConnection(xDataSource);
+        return getConnection( getDataSource() );
     }
 
     private boolean getConnection(com.sun.star.sdbc.XConnection _DBConnection)

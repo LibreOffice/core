@@ -145,6 +145,8 @@ protected:
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
 
+    virtual void            resetNoBroadcast();
+
     // OEntryListHelper overriables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock );
     virtual void    connectedExternalListSource( );

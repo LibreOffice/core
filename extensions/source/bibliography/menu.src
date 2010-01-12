@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <svx/svxids.hrc>
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
@@ -36,7 +36,7 @@
 #ifndef _GLOBALACC_SRC
 #include <svx/globlac.hrc>
 #endif
-#include <extensio.hrc>
+#include "bibliography.hrc"
 
 #include "bib.hrc"
 

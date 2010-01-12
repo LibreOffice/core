@@ -287,9 +287,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     /** used in developement to start the wizard */
     public static void main(String args[])
     {
-        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost
-                                                                                                                               // ;Lo-1.Germany.sun.com;
-                                                                                                                               // 10.16.65.155
+        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         try {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             AgendaWizardDialogImpl wizard = new AgendaWizardDialogImpl(xLocMSF);

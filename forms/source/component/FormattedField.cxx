@@ -42,8 +42,8 @@
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/wintypes.hxx>
@@ -1246,6 +1246,13 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 Any OFormattedModel::getDefaultForReset() const
 {
     return m_xAggregateSet->getPropertyValue( PROPERTY_EFFECTIVE_DEFAULT );
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aSaveValue.clear();
 }
 
 //.........................................................................
