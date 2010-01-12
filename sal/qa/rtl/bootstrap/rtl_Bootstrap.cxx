@@ -39,9 +39,9 @@
 #include <stdlib.h>
 #include <algorithm> // STL
 
-#include "cppunit/stringhelper.hxx"
+#include "testshl/stringhelper.hxx"
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 //#include "stringhelper.hxx"
 //#include "valueequal.hxx"
 #include <rtl/bootstrap.hxx>

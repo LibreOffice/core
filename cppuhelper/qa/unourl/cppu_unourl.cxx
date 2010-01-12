@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
