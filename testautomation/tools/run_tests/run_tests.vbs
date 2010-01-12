@@ -1,35 +1,32 @@
-'*************************************************************************
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '*
-'*  OpenOffice.org - a multi-platform office productivity suite
+'* Copyright 2008 by Sun Microsystems, Inc.
 '*
-'*  $RCSfile: run_tests.vbs,v $
+'* OpenOffice.org - a multi-platform office productivity suite
 '*
-'*  $Revision: 1.1 $
+'* $RCSfile: master.inc,v $
 '*
-'*  last change: $Author: andreschnabel $ $Date: 2008/04/05 09:02:23 $
+'* $Revision: 1.5 $
 '*
-'*  The Contents of this file are made available subject to
-'*  the terms of GNU Lesser General Public License Version 2.1.
+'* last change: $Author: vg $ $Date: 2008-08-19 12:49:51 $
 '*
+'* This file is part of OpenOffice.org.
 '*
-'*    GNU Lesser General Public License Version 2.1
-'*    =============================================
-'*    Copyright 2005 by Sun Microsystems, Inc.
-'*    901 San Antonio Road, Palo Alto, CA 94303, USA
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
 '*
-'*    This library is free software; you can redistribute it and/or
-'*    modify it under the terms of the GNU Lesser General Public
-'*    License version 2.1, as published by the Free Software Foundation.
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
 '*
-'*    This library is distributed in the hope that it will be useful,
-'*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-'*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-'*    Lesser General Public License for more details.
-'*
-'*    You should have received a copy of the GNU Lesser General Public
-'*    License along with this library; if not, write to the Free Software
-'*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-'*    MA  02111-1307  USA
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
 '*
 '########################################################################
 '
@@ -63,6 +60,7 @@ Dim oFSO	' AS FileSystemObject
 Dim oStdIn	' As TextStream
 Dim WshShell	' as WScript.Shell
 Dim oExec	' as WshExec
+Dim sKill	' as Killcommand for soffic.* process '06.11.2009 Florian Bircher (fbircher@openoffice.org)
 
 ' get Objects for Scripting
 Set oFSO = CreateObject ("Scripting.FileSystemObject")
@@ -74,6 +72,26 @@ Set WshShell = CreateObject("WScript.Shell")
 ' Read Environment and do Windows Version specific stuff
 ' nothing done yet 
 
+' Begin 06.11.2009 Florian Bircher (fbircher@openoffice.org): 
+' Change due Windows 7 does not have tskill 
+' Selecting Terminatig Process
+sTaskKill = oFSO.GetSpecialFolder(SystemFolder) & "\system32\taskkill.exe"
+sTsKill = oFSO.GetSpecialFolder(SystemFolder) & "\system32\tskill.exe"
+
+If oFSO.FileExists(sTaskKill) Then
+	sKill = sTaskKill & " /IM soffice* /T /F"
+	WScript.Echo "Using taskkill to kill soffice"
+Else
+	If oFSO.FileExists(sTsKill) Then
+		sKill = sTsKill & " soffice*"
+		WScript.Echo "Using tskill to kill soffice"
+	Else
+	WScript.Echo "taskkill.exe or tskill.exe not found."
+	WScript.Echo "Check if they exist in %Windows%\system32\"
+	WScript.Quit 1
+	End If
+End If
+' End 06.11.2009 Florian Bircher (fbircher@openoffice.org)
 
 '--- if sLocation is not set manuall try to get the location form testtoolrc
 If not oFSO.FolderExists(sLocation) Then
@@ -128,7 +146,7 @@ While Not oStdIn.AtEndOfStream
     ' *************-> killed in resetoffice.bas) 
     ' *************-> 2009/07/06
     ' *************-> wolfgang pechlaner (wope@openoffice.org)       
-    WshShell.Run "tskill soffice", 1, true
+    WshShell.Run sKill, 1, true  '06.11.2009 Florian Bircher (fbircher@openoffice.org)
     WScript.Sleep 1000 
 
     sTestCase = oStdIn.ReadLine
@@ -144,7 +162,7 @@ While Not oStdIn.AtEndOfStream
         WScript.Echo " File not found"
     Else
         ' first run is the real test ...
-        Set oExec = WshShell.Exec("""" & sTestTool & """ & -run & """ & sTest & """" )
+        Set oExec = WshShell.Exec("""" & sTestTool & """ -run """ & sTest & """" )
         WScript.Sleep 1000
         
         If oExec.Status = 0 Then
