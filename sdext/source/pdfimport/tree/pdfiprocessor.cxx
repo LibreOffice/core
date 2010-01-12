@@ -51,6 +51,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/rendering/XVolatileBitmap.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -502,8 +503,7 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
     FontAttributes aFontAttrs = m_aIdToFont[ rGlyph.getGC().FontId ];
 
     // add transformation to GC
-    basegfx::B2DHomMatrix aFontTransform;
-    aFontTransform.translate( -rRect.X1, -rRect.Y1 );
+    basegfx::B2DHomMatrix aFontTransform(basegfx::tools::createTranslateB2DHomMatrix(-rRect.X1, -rRect.Y1));
     aFontTransform *= aFontMatrix;
     aFontTransform.translate( rRect.X1, rRect.Y1 );
 
