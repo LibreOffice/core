@@ -3067,24 +3067,26 @@ BOOL GtkSalGraphics::NWPaintGTKSlider(
     const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
     GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
     GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE;
-    gtk_paint_box( pWidget->style,
-                   pixDrawable,
-                   eState,
-                   GTK_SHADOW_IN,
-                   NULL,
-                   pWidget,
-                   "trough",
-                   0, 0, w, h);
-
-    eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
     gint slider_width = 10;
     gint slider_length = 10;
+    gint trough_border = 0;
     gtk_widget_style_get( pWidget,
                           "slider-width", &slider_width,
                           "slider-length", &slider_length,
+                          "trough-border", &trough_border,
                           NULL);
+
+    eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
     if( nPart == PART_TRACK_HORZ_AREA )
     {
+        gtk_paint_box( pWidget->style,
+                       pixDrawable,
+                       eState,
+                       GTK_SHADOW_IN,
+                       NULL,
+                       pWidget,
+                       "trough",
+                       0, (h-slider_width-2*trough_border)/2, w, slider_width + 2*trough_border);
         gint x = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
         gtk_paint_slider( pWidget->style,
                           pixDrawable,
@@ -3099,6 +3101,14 @@ BOOL GtkSalGraphics::NWPaintGTKSlider(
     }
     else
     {
+        gtk_paint_box( pWidget->style,
+                       pixDrawable,
+                       eState,
+                       GTK_SHADOW_IN,
+                       NULL,
+                       pWidget,
+                       "trough",
+                       (w-slider_width-2*trough_border)/2, 0, slider_width + 2*trough_border, h);
         gint y = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
         gtk_paint_slider( pWidget->style,
                           pixDrawable,
