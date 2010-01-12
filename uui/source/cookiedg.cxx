@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/httpcook.hxx>
+#include <svl/httpcook.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 

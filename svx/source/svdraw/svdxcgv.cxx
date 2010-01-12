@@ -52,8 +52,8 @@
 #include "svdglob.hxx"  // StringCache
 #include "xoutbmp.hxx"
 #include <vcl/metaact.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
 #include <tools/bigint.hxx>
 #include <sot/formats.hxx>
 
@@ -62,7 +62,7 @@
 #include <vcl/virdev.hxx>
 
 // b4967543
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 // #i72535#
 #include "fmobj.hxx"

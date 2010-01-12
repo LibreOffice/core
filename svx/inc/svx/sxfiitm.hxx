@@ -30,7 +30,7 @@
 #ifndef _SFXIITM_HXX
 #define _SFXIITM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/fract.hxx>
 
 /*************************************************************************/

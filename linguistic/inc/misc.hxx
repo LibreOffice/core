@@ -44,13 +44,12 @@
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;

@@ -145,6 +145,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 }
             }
 
+            ::connectivity::ODatabaseMetaDataResultSet::ORows aTypeInfoRows;
             while( xRet->next() )
             {
                 ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
@@ -169,8 +170,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                     else
                         ++aIter;
                 }
-                m_aTypeInfoRows.push_back(aRow);
+                aTypeInfoRows.push_back(aRow);
             }
+            m_aTypeInfoRows = aTypeInfoRows;
         }
     }
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);

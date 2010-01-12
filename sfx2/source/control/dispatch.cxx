@@ -33,14 +33,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SFXEITEM_HXX //autogen
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
@@ -50,7 +50,7 @@
 #include <stdlib.h>             // wg. bsearch
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

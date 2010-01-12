@@ -34,7 +34,7 @@
 #include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -284,7 +284,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
-    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
     {
@@ -396,7 +396,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SvtMenuOptions aOptions;
-    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
@@ -417,8 +417,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
             DELETEZ( pPopup );
         }
 
+        const String sItemText = pSVMenu->GetItemText(nSlotId);
+        const String sHelpText = pSVMenu->GetHelpText(nSlotId);
+
         if ( pPopup )
         {
+
             SfxMenuControl *pMnuCtrl =
                 SfxMenuControl::CreateControl(nSlotId, *pPopup, *pBindings);
 
@@ -434,10 +438,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
-                (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                    pSVMenu->GetHelpText(nSlotId), *pBindings);
-                pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                pSVMenu->GetHelpText(nSlotId), *pBindings);
+                (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
+                pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
@@ -473,7 +475,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     pMnuCtrl->Bind( this, nSlotId,
                         *new SfxVirtualMenu(nSlotId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
-                        pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId),
+                        sItemText, sHelpText,
                         *pBindings );
                 }
             }
@@ -510,12 +512,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, *pBindings, this );
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, sHelpText, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                     }
 
@@ -527,13 +529,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                         else
                             // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                        pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
                     }
 
                     if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
