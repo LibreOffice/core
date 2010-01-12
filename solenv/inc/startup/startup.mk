@@ -50,27 +50,27 @@ OS_variable_needed
 
 # ----------------- Default Control Macro definitions -----------------------
 # Select appropriate defaults for basic macros
-   MAKE          *=  $(MAKECMD) $(MFLAGS)
-   TMPDIR        *:= $/tmp
-   DIVFILE       *=  $(TMPFILE)
+MAKE          *=  $(MAKECMD) $(MFLAGS)
+TMPDIR        *:= $/tmp
+DIVFILE       *=  $(TMPFILE)
 
 MAXLINELENGTH	= 65530
 
 # Recipe execution configuration
-   SHELL := $(OOO_SHELL)
-   SHELLFLAGS := -c
-   SHELLMETAS := !"\#$$%&'()*;<=>?[\]`{{|}}~
+SHELL := $(OOO_SHELL)
+SHELLFLAGS := -c
+SHELLMETAS := !"\#$$%&'()*;<=>?[\]`{{|}}~
     # the colon (":") utility is typically only available as a shell built-in,
     # so it should be included in SHELLMETAS; however, this would result in very
     # many false positives on Windows where ":" is used in drive letter notation
-   GROUPSHELL := $(SHELL)
-   GROUPFLAGS :=
-   GROUPSUFFIX :=
+GROUPSHELL := $(SHELL)
+GROUPFLAGS :=
+GROUPSUFFIX :=
 
 # Intermediate target removal configuration
-   RM            *:= rm
-   RMFLAGS       *=  -f
-   RMTARGET      *=  $<
+RM            *:= rm
+RMFLAGS       *=  -f
+RMTARGET      *=  $<
 
 # Default recipe that is used to remove intermediate targets.
 .REMOVE :; #echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
