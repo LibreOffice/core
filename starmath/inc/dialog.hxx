@@ -498,22 +498,22 @@ public:
     // Dialog
     virtual short   Execute();
 
-    BOOL SmSymDefineDialog::SelectOldSymbolSet(const XubString &rSymbolSetName)
+    BOOL SelectOldSymbolSet(const XubString &rSymbolSetName)
     {
         return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, FALSE);
     }
 
-    BOOL SmSymDefineDialog::SelectOldSymbol(const XubString &rSymbolName)
+    BOOL SelectOldSymbol(const XubString &rSymbolName)
     {
         return SelectSymbol(aOldSymbols, rSymbolName, FALSE);
     }
 
-    BOOL    SmSymDefineDialog::SelectSymbolSet(const XubString &rSymbolSetName)
+    BOOL SelectSymbolSet(const XubString &rSymbolSetName)
     {
         return SelectSymbolSet(aSymbolSets, rSymbolSetName, FALSE);
     }
 
-    BOOL    SmSymDefineDialog::SelectSymbol(const XubString &rSymbolName)
+    BOOL SelectSymbol(const XubString &rSymbolName)
     {
         return SelectSymbol(aSymbols, rSymbolName, FALSE);
     }

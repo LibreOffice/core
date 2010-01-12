@@ -414,10 +414,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aReplaceText = pItem2->GetValue();
             if (aReplaceText.Len() > 0)
             {
-                SwView &rView = rWrtSh.GetView();
+                SwView &rView2 = rWrtSh.GetView();
                 const bool bSelection = rWrtSh.HasSelection();
-                const String aLookUpText = rView.GetThesaurusLookUpText( bSelection );
-                rView.InsertThesaurusSynonym( aReplaceText, aLookUpText, bSelection );
+                const String aLookUpText = rView2.GetThesaurusLookUpText( bSelection );
+                rView2.InsertThesaurusSynonym( aReplaceText, aLookUpText, bSelection );
             }
         }
         break;

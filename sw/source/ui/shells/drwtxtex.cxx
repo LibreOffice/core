@@ -42,12 +42,15 @@
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <svl/langtab.hxx>
+#include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/escpitem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/frmdiritem.hxx>
