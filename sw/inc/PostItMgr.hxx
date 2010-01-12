@@ -43,6 +43,7 @@
 #include <unotools/configitem.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <SidebarWindowsTypes.hxx>
 
 class SwWrtShell;
 class SwDoc;
@@ -56,9 +57,13 @@ class SwEditWin;
 class Color;
 class SvxSearchItem;
 class SvxLanguageItem;
-class SwPostIt;
-class SwMarginWin;
-class SwMarginItem;
+namespace sw { namespace annotation {
+    class SwAnnotationWin;
+}}
+namespace sw { namespace sidebarwindows {
+    class SwSidebarWin;
+}}
+class SwSidebarItem;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -67,23 +72,20 @@ class SwMarginItem;
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
-typedef std::list<SwMarginItem*> SwMarginItem_list;
-typedef std::list<SwMarginItem*>::iterator SwMarginItem_iterator;
+typedef std::list<SwSidebarItem*> SwSidebarItem_list;
+typedef std::list<SwSidebarItem*>::iterator SwSidebarItem_iterator;
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 struct SwPostItPageItem
 {
     bool bScrollbar;
-    bool bMarginSide;
+    sw::sidebarwindows::SidebarPosition eSidebarPosition;
     long lOffset;
     SwRect mPageRect;
-    SwMarginItem_list* mList;
+    SwSidebarItem_list* mList;
     SwPostItPageItem(): bScrollbar(false),lOffset(0)
     {
-        mList = new SwMarginItem_list;
+        mList = new SwSidebarItem_list;
     }
     ~SwPostItPageItem()
     {
@@ -108,11 +110,13 @@ class SwNoteProps: public utl::ConfigItem
     private:
         bool bIsShowAnkor;
     public:
-            SwNoteProps() : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes")), bIsShowAnkor(false)
+        SwNoteProps()
+            : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes"))
+            , bIsShowAnkor(false)
         {
-            const Sequence<OUString>& rNames = GetPropertyNames();
-                   Sequence<Any> aValues = GetProperties(rNames);
-                   const Any* pValues = aValues.getConstArray();
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
+                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
+                const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
                DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
                 if (aValues.getLength())
                 pValues[0]>>=bIsShowAnkor;
@@ -122,9 +126,9 @@ class SwNoteProps: public utl::ConfigItem
         {
             return bIsShowAnkor;
         }
-            Sequence<OUString>& GetPropertyNames()
+            ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetPropertyNames()
             {
-            static Sequence<OUString> aNames;
+            static ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames;
                  if(!aNames.getLength())
                  {
                          static const char* aPropNames[] =
@@ -133,9 +137,9 @@ class SwNoteProps: public utl::ConfigItem
                            };
                          const int nCount = sizeof(aPropNames)/sizeof(const char*);
                          aNames.realloc(nCount);
-                         OUString* pNames = aNames.getArray();
+                        ::rtl::OUString* pNames = aNames.getArray();
                      for(int i = 0; i < nCount; i++)
-                             pNames[i] = OUString::createFromAscii(aPropNames[i]);
+                            pNames[i] = ::rtl::OUString::createFromAscii(aPropNames[i]);
                  }
                  return aNames;
             }
@@ -147,11 +151,11 @@ class SwPostItMgr: public SfxListener
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         SwEditWin*                      mpEditWin;
-        std::list< SwMarginItem*>       mvPostItFlds;
+        std::list< SwSidebarItem*>      mvPostItFlds;
         std::vector<SwPostItPageItem*>  mPages;
         ULONG                           mnEventId;
         bool                            mbWaitingForCalcRects;
-        SwMarginWin*                    mpActivePostIt;
+        sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
         bool                            mbLayout;
         long                            mbLayoutHeight;
         long                            mbLayouting;
@@ -161,16 +165,18 @@ class SwPostItMgr: public SfxListener
         OutlinerParaObject*             mpAnswer;
         bool                        mpIsShowAnkor;
 
-        typedef std::list<SwMarginWin*>::iterator   SwMarginWin_iterator;
+        typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
         //void          AddRedlineComments(bool bCheckExistance, bool bFocus);
-        void            RemoveMarginWin();
+        void            RemoveSidebarWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );
-        void            AutoScroll(const SwMarginWin* pPostIt,const unsigned long aPage );
+        void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
-        bool            LayoutByPage(std::list<SwMarginWin*> &aVisiblePostItList,const Rectangle aBorder,long lNeededHeight);
+        bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
+                                      const Rectangle aBorder,
+                                      long lNeededHeight);
         void            CheckForRemovedPostIts();
             bool                ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
             bool                BorderOverPageBorder(unsigned long aPage) const;
@@ -188,7 +194,7 @@ class SwPostItMgr: public SfxListener
             SwPostItMgr(SwView* aDoc);
             ~SwPostItMgr();
 
-            typedef std::list< SwMarginItem* >::const_iterator const_iterator;
+            typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
             const_iterator begin()  const { return mvPostItFlds.begin(); }
             const_iterator end()    const { return mvPostItFlds.end();  }
 
@@ -199,7 +205,8 @@ class SwPostItMgr: public SfxListener
             void LayoutPostIts();
             bool CalcRects();
 
-            void MakeVisible(const SwMarginWin* pPostIt,long aPage = -1);
+            void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt,
+                              long aPage = -1);
 
             bool ShowScrollbar(const unsigned long aPage) const;
             bool HasNotes() const ;
@@ -232,17 +239,27 @@ class SwPostItMgr: public SfxListener
             bool IsHit(const Point &aPointPixel);
             Color GetArrowColor(USHORT aDirection,unsigned long aPage) const;
 
-            SwMarginWin* GetNextPostIt(USHORT aDirection, SwMarginWin* aPostIt);
+            sw::sidebarwindows::SwSidebarWin* GetNextPostIt( USHORT aDirection,
+                                                             sw::sidebarwindows::SwSidebarWin* aPostIt);
             long GetNextBorder();
-            SwMarginWin* GetActivePostIt() { return mpActivePostIt; }
-            void      SetActivePostIt( SwMarginWin* p);
+
+            sw::sidebarwindows::SwSidebarWin* GetActiveSidebarWin() { return mpActivePostIt; }
+            void SetActiveSidebarWin( sw::sidebarwindows::SwSidebarWin* p);
+            bool HasActiveSidebarWin() const;
+            bool HasActiveAnnotationWin() const;
+            void GrabFocusOnActiveSidebarWin();
+            void UpdateDataOnActiveSidebarWin();
+            void DeleteActiveSidebarWin();
+            void HideActiveSidebarWin();
+            void ToggleInsModeOnActiveSidebarWin();
+
             sal_Int32 GetMinimumSizeWithMeta() const;
             sal_Int32 GetSidebarScrollerHeight() const;
 
-            SwMarginWin* GetPostIt(const SfxBroadcaster* pBroadcaster) const;
-            SwMarginWin* GetPostIt(SfxBroadcaster* pBroadcaster) const;
-            SwPostIt* GetPostIt(const SwPostItField* pFld) const;
-            SwPostIt* GetPostIt(SwPostItField* pFld) const;
+            sw::sidebarwindows::SwSidebarWin* GetPostIt(const SfxBroadcaster* pBroadcaster) const;
+            sw::sidebarwindows::SwSidebarWin* GetPostIt(SfxBroadcaster* pBroadcaster) const;
+            sw::annotation::SwAnnotationWin* GetPostIt(const SwPostItField* pFld) const;
+            sw::annotation::SwAnnotationWin* GetPostIt(SwPostItField* pFld) const;
 
             void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
 

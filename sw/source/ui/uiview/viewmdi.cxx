@@ -85,7 +85,6 @@
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 
 USHORT  SwView::nMoveType = NID_PGE;
 sal_Int32 SwView::nActMark = 0;
@@ -492,15 +491,15 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
-            SwMarginWin* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
+            sw::sidebarwindows::SwSidebarWin* pPostIt = pThis->GetPostItMgr()->GetActiveSidebarWin();
             if (pPostIt)
-                pThis->GetPostItMgr()->SetActivePostIt(0);
+                pThis->GetPostItMgr()->SetActiveSidebarWin(0);
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
             if (rSh.MoveFldType(pFldType, bNext))
                 pThis->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
             else
                 //first/last item
-                pThis->GetPostItMgr()->SetActivePostIt(pPostIt);
+                pThis->GetPostItMgr()->SetActiveSidebarWin(pPostIt);
         }
         break;
         case NID_SRCH_REP:

@@ -34,12 +34,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-// #include <com/sun/star/lang/Locale.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-// #endif
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -49,9 +43,6 @@
 #include <svtools/svstdarr.hxx>
 #include <svtools/aeitem.hxx>
 
-// #ifndef _FILTER_HXX
-// #include <svtools/filter.hxx>
-// #endif
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
 #include <hintids.hxx>
@@ -146,11 +137,6 @@
 #include <dbmgr.hxx>
 
 #include <PostItMgr.hxx>
-#include <postit.hxx>
-
-// #ifndef _FRMMGR_HXX
-// #include <frmmgr.hxx>
-// #endif
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -1785,8 +1771,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
-            if (pMgr && pMgr->GetActivePostIt())
-                pMgr->GetActivePostIt()->ToggleInsMode();
+            if ( pMgr && pMgr->HasActiveSidebarWin() )
+            {
+                pMgr->ToggleInsModeOnActiveSidebarWin();
+            }
             else
                 rSh.ToggleInsMode();
             bUp = TRUE;
@@ -1800,9 +1788,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         rBnd.Update(nWhich);
     }
 }
-
-
-
 
 void SwView::InsFrmMode(USHORT nCols)
 {

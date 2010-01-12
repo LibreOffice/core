@@ -1474,7 +1474,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 //      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
-    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->GetActivePostIt() )
+    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
         return nsSelectionType::SEL_POSTIT;
      int nCnt;
 
@@ -1800,7 +1800,7 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
  --------------------------------------------------------------------*/
 BOOL SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActivePostIt()!= NULL)));
+    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
 // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden

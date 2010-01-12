@@ -221,7 +221,7 @@ void SwView::GotFocus() const
         SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
         if ( pAsAnnotationShell )
         {
-            mpPostItMgr->SetActivePostIt(0);
+            mpPostItMgr->SetActiveSidebarWin(0);
             const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
         }
     }

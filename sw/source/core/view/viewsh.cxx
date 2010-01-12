@@ -1226,16 +1226,23 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
-                    if (pPage->MarginSide())
+                    switch ( pPage->SidebarPosition() )
                     {
-                        nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
-                    }
-                    else
-                    {
-                        // OD 03.03.2003 #107927# - use correct datatype
-                        nPageLeft =  aPageRect.Left() - nBorderWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        case sw::sidebarwindows::SIDEBAR_LEFT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_RIGHT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_NONE:
+                            // nothing to do
+                        break;
                     }
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
@@ -1705,7 +1712,8 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
                 aPageRect.SSize() = rFormatPage.Frm().SSize();
             }
 
-            const bool bSidebarRight = !static_cast<const SwPageFrm*>(pPage)->MarginSide();
+            const bool bSidebarRight =
+                static_cast<const SwPageFrm*>(pPage)->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
             aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
             aPageRect.SSize().Width() += nSidebarWidth;
 

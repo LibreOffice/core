@@ -51,7 +51,6 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
-/*testarea*/
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
@@ -337,7 +336,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
 
             xub_StrLen aStart = 0;
             // do we need to finish a note?
-            if (POSTITMGR->GetActivePostIt())
+            if (POSTITMGR->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
                 {
@@ -357,7 +356,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                 }
                 else
                 {
-                    POSTITMGR->SetActivePostIt(0);
+                    POSTITMGR->SetActiveSidebarWin(0);
                 }
             }
 

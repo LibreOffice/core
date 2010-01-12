@@ -52,7 +52,7 @@ sw_res_files= \
     $(SRS)$/dialog.srs       \
     $(SRS)$/chrdlg.srs       \
     $(SRS)$/config.srs       \
-    $(SRS)$/dbui.srs	    \
+    $(SRS)$/dbui.srs         \
     $(SRS)$/dochdl.srs       \
     $(SRS)$/docvw.srs        \
     $(SRS)$/envelp.srs       \
@@ -68,7 +68,7 @@ sw_res_files= \
     $(SRS)$/smartmenu.srs    \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
-    $(SRS)$/undo.srs        \
+    $(SRS)$/undo.srs         \
     $(SRS)$/unocore.srs      \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \

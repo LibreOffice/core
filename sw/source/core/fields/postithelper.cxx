@@ -35,7 +35,8 @@
 
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
+#include <AnnotationWin.hxx>
+
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
@@ -74,7 +75,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
                 aInfo.mPagePrtArea = pPage->Prt();
                 aInfo.mPagePrtArea.Pos() += aInfo.mPageFrame.Pos();
                 aInfo.mnPageNumber = pPage->GetPhyPageNum();
-                aInfo.mbMarginSide = pPage->MarginSide();
+                aInfo.meSidebarPosition = pPage->SidebarPosition();
                 aInfo.mRedlineAuthor = 0;
 
                 if( aRet == INVISIBLE )
@@ -145,7 +146,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
     return aRet;
 }
 
-SwPosition SwPostItItem::GetPosition()
+SwPosition SwAnnotationItem::GetPosition()
 {
     SwTxtFld* pFld = pFmtFld->GetTxtFld();
     //if( pFld )
@@ -160,14 +161,18 @@ SwPosition SwPostItItem::GetPosition()
     //}
 }
 
-bool SwPostItItem::UseElement()
+bool SwAnnotationItem::UseElement()
 {
     return pFmtFld->IsFldInDoc();
 }
 
-SwMarginWin* SwPostItItem::GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
+                                                            SwEditWin& rEditWin,
+                                                            WinBits nBits,
+                                                            SwPostItMgr& aMgr,
+                                                            SwPostItBits aBits)
 {
-    return new SwPostIt(pParent,nBits,pFmtFld,aMgr,aBits);
+    return new sw::annotation::SwAnnotationWin( rEditWin, nBits, pFmtFld, aMgr, aBits );
 }
 
 /*
@@ -176,7 +181,7 @@ SwPosition SwRedCommentItem::GetPosition()
     return *pRedline->Start();
 }
 
-SwMarginWin* SwRedCommentItem::GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+SwSidebarWin* SwRedCommentItem::GetSidebarWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
 {
     return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
 }

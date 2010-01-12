@@ -6,9 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sd_primitivetypes2d.hxx,v $
+ * $RCSfile:  $
  *
- * $Revision: 1.2 $
+ * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,22 +29,34 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SW_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SW_PRIMITIVETYPES2D_HXX
+#ifndef _ANNOTATIONMENUBUTTON_HXX
+#define _ANNOTATIONMENUBUTTON_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <vcl/menubtn.hxx>
+
+namespace sw { namespace sidebarwindows {
+    class SwSidebarWin;
+} }
+
+namespace sw { namespace annotation {
+
+class AnnotationMenuButton : public MenuButton
+{
+    public:
+        AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+        ~AnnotationMenuButton();
+
+        // overloaded <MenuButton> methods
+        virtual void Select();
+
+        // overloaded <Window> methods
+        virtual void MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void Paint( const Rectangle& rRect );
+
+    private:
+        sw::sidebarwindows::SwSidebarWin& mrSidebarWin;
+};
+
+} } // end of namespace sw::annotation
+
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-
-#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D  (PRIMITIVE2D_ID_RANGE_SW| 0)
-#define PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 1)
-#define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
-
-//////////////////////////////////////////////////////////////////////////////
-
-#endif // INCLUDED_SW_PRIMITIVETYPES2D_HXX
-
-//////////////////////////////////////////////////////////////////////////////
-// eof

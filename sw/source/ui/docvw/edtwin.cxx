@@ -69,9 +69,6 @@
 #include <svx/langitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/editeng.hxx>
@@ -152,8 +149,7 @@
 #include <IMark.hxx>
 #include <doc.hxx>
 
-#include "PostItMgr.hxx"
-#include "postit.hxx"
+#include <PostItMgr.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
@@ -2607,7 +2603,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if (rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
         return;
 
-    rView.GetPostItMgr()->SetActivePostIt(0);
+    rView.GetPostItMgr()->SetActiveSidebarWin(0);
 
     GrabFocus();
 
@@ -4675,8 +4671,10 @@ BOOL SwEditWin::IsDrawSelMode()
 
 void SwEditWin::GetFocus()
 {
-    if (rView.GetPostItMgr()->GetActivePostIt())
-        rView.GetPostItMgr()->GetActivePostIt()->GrabFocus();
+    if ( rView.GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        rView.GetPostItMgr()->GrabFocusOnActiveSidebarWin();
+    }
     else
     {
         rView.GotFocus();

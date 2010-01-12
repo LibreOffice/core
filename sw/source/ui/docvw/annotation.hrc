@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sd_primitivetypes2d.hxx,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile:  $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,22 +28,27 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SW_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SW_PRIMITIVETYPES2D_HXX
+#ifndef _ANNOTATION_HRC
+#define _ANNOTATION_HRC
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include "rcid.hrc"
+
+#define STR_POSTIT_TODAY                (RC_ANNOTATION_BEGIN +  1)
+#define STR_POSTIT_YESTERDAY            (RC_ANNOTATION_BEGIN +  2)
+
+#define STR_DELETE_ALL_NOTES            (RC_ANNOTATION_BEGIN +  3)
+#define STR_DELETE_AUTHOR_NOTES         (RC_ANNOTATION_BEGIN +  4)
+
+#define STR_NODATE                      (RC_ANNOTATION_BEGIN +  5)
+#define STR_NOAUTHOR                    (RC_ANNOTATION_BEGIN +  6)
+
+#define STR_REPLY                       (RC_ANNOTATION_BEGIN +  7)
+
+
+#define ANNOTATION_ACT_END   STR_REPLY
+#if ANNOTATION_ACT_END > RC_ANNOTATION_END
+#error Resource-Id Ueberlauf in #file, #line
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
 
-#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D  (PRIMITIVE2D_ID_RANGE_SW| 0)
-#define PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 1)
-#define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
-
-//////////////////////////////////////////////////////////////////////////////
-
-#endif // INCLUDED_SW_PRIMITIVETYPES2D_HXX
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
+#endif

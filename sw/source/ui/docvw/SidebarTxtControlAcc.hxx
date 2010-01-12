@@ -6,9 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sd_primitivetypes2d.hxx,v $
+ * $RCSfile:  $
  *
- * $Revision: 1.2 $
+ * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,22 +29,28 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SW_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SW_PRIMITIVETYPES2D_HXX
+#ifndef _SIDEBARTXTCONTROLACC_HXX
+#define _SIDEBARTXTCONTROLACC_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+
+namespace sw { namespace sidebarwindows {
+
+class SidebarTxtControl;
+
+class SidebarTxtControlAccessible : public VCLXWindow
+{
+    public:
+        explicit SidebarTxtControlAccessible( SidebarTxtControl& rSidebarTxtControl );
+        virtual ~SidebarTxtControlAccessible();
+
+        virtual com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext >
+                CreateAccessibleContext();
+
+    private:
+        SidebarTxtControl& mrSidebarTxtControl;
+};
+
+} } // end of namespace sw::sidebarwindows
+
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-
-#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D  (PRIMITIVE2D_ID_RANGE_SW| 0)
-#define PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 1)
-#define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
-
-//////////////////////////////////////////////////////////////////////////////
-
-#endif // INCLUDED_SW_PRIMITIVETYPES2D_HXX
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
