@@ -133,6 +133,9 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 
     if (type == CTRL_RADIOBUTTON) return true;
 
+    if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
+        return true;
+
     return false;
 
     if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
@@ -536,6 +539,20 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         kapp->style()->drawControl( QStyle::CE_MenuItem, &styleOption, &painter);
     }
+    else if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA))
+    {
+        SliderValue* slVal = static_cast<SliderValue *> ( value.getOptionalVal() );
+        QStyleOptionSlider styleOption;
+
+        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
+        styleOption.state = vclStateValue2StateFlag( nControlState, value );
+        styleOption.maximum     = slVal->mnMax;
+        styleOption.minimum     = slVal->mnMin;
+        styleOption.sliderPosition = styleOption.sliderValue = slVal->mnCur;
+        styleOption.orientation = (part == PART_TRACK_HORZ_AREA) ? Qt::Horizontal : Qt::Vertical;
+
+        kapp->style()->drawComplexControl(QStyle::CC_Slider, &styleOption, &painter);
+    }
     else
     {
         returnVal = false;
@@ -759,6 +776,24 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             boundingRect = contentRect;
 
             retVal = true;
+            break;
+        }
+        case CTRL_SLIDER:
+        {
+            const int w = kapp->style()->pixelMetric(QStyle::PM_SliderLength);
+            if( part == PART_THUMB_HORZ )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), w, boundingRect.height());
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            else if( part == PART_THUMB_VERT )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), boundingRect.width(), w);
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            break;
         }
         default:
             break;
