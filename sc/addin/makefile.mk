@@ -45,10 +45,5 @@ TARGET=addin
 ALLTAR:	$(MISC)$/cl2c.pl
     
 $(MISC)$/cl2c.pl: util/cl2c.pl
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     tr -d "\015" < util$/cl2c.pl > $@
     chmod +rw $@
-.ELSE
-    @$(COPY) util$/cl2c.pl $@
-.ENDIF
-

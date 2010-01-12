@@ -41,13 +41,9 @@ TARGET=autil
 $(BIN)$/addin.zip : \
     $(MISC)$/rot.lst \
     $(MISC)$/dfa.lst
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     $(TYPE) $(MISC)$/rot.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip $(CHECKZIPRESULT)
     $(TYPE) $(MISC)$/dfa.lst | tr -s " " "\n" | zip -@ -u -j -ll $(BIN)$/addin.zip $(CHECKZIPRESULT)
     chmod +rw $(BIN)$/addin.zip
-.ELSE
-    $(TYPE) $< | zip -@ -u -j $(BIN)$/addin.zip $(CHECKZIPRESULT)
-.ENDIF
 
 .INCLUDE: target.mk
 

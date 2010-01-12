@@ -90,11 +90,7 @@ $(MISC)$/$(TARGET).lst : \
     $(INCCOM)$/xlang.h \
     ..$/inc$/$(TARGET).hrc \
     ..$/inc$/addin.h
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     echo $< > $@
-.ELSE
-    echo $(<:+"\n":s/ //) > $@
-.ENDIF
 
 # --- Def-File ---
 

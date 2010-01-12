@@ -89,9 +89,4 @@ $(MISC)$/rot.lst : \
     $(INCCOM)$/xlang.h \
     ..$/inc$/rot13.hrc \
     ..$/inc$/addin.h
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @echo $< > $@
-.ELSE
-    @echo $(<:+"\n":s/ //) > $@
-.ENDIF
-
