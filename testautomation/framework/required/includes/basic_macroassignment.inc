@@ -106,20 +106,28 @@ testcase tUpdtMacroAssignment
         
             Kontext "AssignMacro"
             printlog( "Current Dialog: Assign Macro" )
-            call dialogtest( AssignMacro )
-            printlog( "Click the Assign-Button on the Macro-Assignment-Dialog" )
-            AssignButton.click()
-        
-            Kontext "ScriptSelector"
-            printlog( "Current Dialog: ScriptSelector" )
-            call dialogtest( ScriptSelector )
-            printlog( "Cancel the scriptselector" )
-            ScriptSelector.cancel()
-        
-            Kontext "AssignMacro" 
-            printlog( "Current Dialog: Assign Macro" )
-            printlog( "Cancel the Script-Assignement-Dialog" )
-            AssignMacro.cancel()
+            if ( AssignMacro.exists( 1 ) ) then
+                call dialogtest( AssignMacro )
+                printlog( "Click the Assign-Button on the Macro-Assignment-Dialog" )
+                AssignButton.click()
+            
+                Kontext "ScriptSelector"
+                printlog( "Current Dialog: ScriptSelector" )
+                if ( ScriptSelector.exists( 1 ) ) then
+                    call dialogtest( ScriptSelector )
+                    printlog( "Cancel the scriptselector" )
+                    ScriptSelector.cancel()
+                else
+                    warnlog( "Failed to open/access <ScriptSelector>" )
+                endif
+            
+                Kontext "AssignMacro" 
+                printlog( "Current Dialog: Assign Macro" )
+                printlog( "Cancel the Script-Assignement-Dialog" )
+                AssignMacro.cancel()
+            else
+                warnlog( "Failed to open/access <AssignMacro> dialog" )
+            endif
             
         endif
         

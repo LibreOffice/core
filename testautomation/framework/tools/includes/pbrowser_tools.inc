@@ -67,36 +67,38 @@ function hOpenPropertyBrowser() as boolean
     '///<ul>
     
     const CFN = "hOpenPropertyBrowser::"
+    dim irc as integer
     
     '///+<li>Open the property browser (call slot)</li>
-    try
-        ContextProperties
-        
-        '///+<li>Verify that the property browser is open</li>
-        kontext "ControlPropertiesTabControl"
-        if ( ControlPropertiesTabControl.exists( 2 ) ) then
-            
-            '///+<li>Activate General-tabpage</li>
-            ControlPropertiesTabControl.setPage( TabGeneralControl )
-        
-            '///+<li>Verify that the General-tabpage is visible</li>
-            kontext "TabGeneralControl"
-            if ( TabGeneralControl.isVisible() ) then
-                printlog( CFN & "ok" )
-                hOpenPropertyBrowser() = true
-            else
-                printlog( CFN & "General-tab is not visible." )
-                hOpenPropertyBrowser() = false
-            endif   
-        else
-            printlog( CFN & "Could not open property browser" )
-            hOpenPropertyBrowser() = false    
-        endif
-    catch
-        hOpenPropertyBrowser() = false
-        printlog( CFN & "Slot <ContextProperties> not available" )
-    endcatch
+    irc = hUseAsyncSlot( "ContextProperties" )
     
+    ' Check that the slot did indeed get executed. If not: Warn and exit
+    if ( irc = -1 ) then
+        warnlog( CFN & "hUseAsyncSlot timed out for <ContextProperties>" )
+        hOpenPropertyBrowser() = false
+        exit function
+    endif
+    
+    '///+<li>Verify that the property browser is open</li>
+    kontext "ControlPropertiesTabControl"
+    if ( ControlPropertiesTabControl.exists( 2 ) ) then
+        
+        '///+<li>Activate General-tabpage</li>
+        ControlPropertiesTabControl.setPage( TabGeneralControl )
+    
+        '///+<li>Verify that the General-tabpage is visible</li>
+        kontext "TabGeneralControl"
+        if ( TabGeneralControl.isVisible() ) then
+            printlog( CFN & "ok" )
+            hOpenPropertyBrowser() = true
+        else
+            printlog( CFN & "General-tab is not visible." )
+            hOpenPropertyBrowser() = false
+        endif   
+    else
+        printlog( CFN & "Could not open property browser" )
+        hOpenPropertyBrowser() = false    
+    endif
     '///</ul>
     
 end function

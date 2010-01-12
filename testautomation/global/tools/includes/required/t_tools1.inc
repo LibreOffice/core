@@ -1275,6 +1275,9 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "toolsupdatelinks"               : ToolsUpdateLinks
             case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
             
+            ' This is the property browser in the BASIC IDE
+            case "contextproperties"              : ContextProperties
+            
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
             
