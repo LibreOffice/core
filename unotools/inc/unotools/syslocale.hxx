@@ -36,6 +36,7 @@
 #include <unotools/charclass.hxx>
 #include <sal/types.h>
 #include <i18npool/lang.h>
+#include <rtl/textenc.h>
 
 class SvtSysLocale_Impl;
 class SvtSysLocaleOptions;
@@ -79,6 +80,12 @@ public:
             LanguageType                GetLanguage() const;
             com::sun::star::lang::Locale GetUILocale() const;
             LanguageType                GetUILanguage() const;
+
+    /** Get the best MIME encoding matching the system locale, or if that isn't
+        determinable one that matches the UI locale, or UTF8 if everything else
+        fails.
+     */
+    static  rtl_TextEncoding    GetBestMimeEncoding();
 };
 
 #endif  // INCLUDED_SVTOOLS_SYSLOCALE_HXX

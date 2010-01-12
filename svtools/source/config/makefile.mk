@@ -49,6 +49,7 @@ SLOFILES=  \
         $(SLO)$/extcolorcfg.obj            \
         $(SLO)$/fontsubstconfig.obj				\
         $(SLO)$/helpopt.obj                 \
+    $(SLO)$/htmlcfg.obj \
         $(SLO)$/itemholder2.obj \
         $(SLO)$/menuoptions.obj				\
         $(SLO)$/miscopt.obj             \

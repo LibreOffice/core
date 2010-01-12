@@ -39,6 +39,9 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
+#include <rtl/tencinfo.h>
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -187,4 +190,28 @@ LanguageType SvtSysLocale::GetUILanguage() const
     return pImpl->aSysLocaleOptions.GetRealUILanguage();
 }
 
+//------------------------------------------------------------------------
+
+// static
+rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
+{
+    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
+            gsl_getSystemTextEncoding() );
+    if ( !pCharSet )
+    {
+        // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
+        // language if possible.
+        ::com::sun::star::lang::Locale aLocale( SvtSysLocale().GetUILocale() );
+        rtl_Locale * pLocale = rtl_locale_register( aLocale.Language.getStr(),
+                aLocale.Country.getStr(), aLocale.Variant.getStr() );
+        rtl_TextEncoding nEnc = osl_getTextEncodingFromLocale( pLocale );
+        pCharSet = rtl_getBestMimeCharsetFromTextEncoding( nEnc );
+    }
+    rtl_TextEncoding nRet;
+    if ( pCharSet )
+        nRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    else
+        nRet = RTL_TEXTENCODING_UTF8;
+    return nRet;
+}
 
