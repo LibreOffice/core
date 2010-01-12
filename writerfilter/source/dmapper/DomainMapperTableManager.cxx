@@ -371,6 +371,25 @@ void DomainMapperTableManager::endOfRowAction()
         //fill missing elements with '1'
         pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell - pCurrentSpans->size(), 1 );
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("gridSpans");
+    {
+        ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
+        ::std::vector<sal_Int32>::const_iterator aGridSpanIterEnd = pCurrentSpans->end();
+
+        while (aGridSpanIter != aGridSpanIterEnd)
+        {
+            dmapper_logger->startElement("gridSpan");
+            dmapper_logger->attribute("span", *aGridSpanIter);
+            dmapper_logger->endElement("gridSpan");
+
+            aGridSpanIter++;
+        }
+    }
+    dmapper_logger->endElement("gridSpans");
+#endif
+
     //calculate number of used grids - it has to match the size of m_aTableGrid
     size_t nGrids = 0;
     ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
@@ -408,6 +427,12 @@ void DomainMapperTableManager::endOfRowAction()
         }
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
+
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("rowProperties");
+        dmapper_logger->addTag(pPropMap->toTag());
+        dmapper_logger->endElement("rowProperties");
+#endif
         insertRowProps(pPropMap);
     }
 

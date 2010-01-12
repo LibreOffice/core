@@ -42,6 +42,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include "PropertyMapHelper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -141,6 +142,15 @@ XMLTag::Pointer_t PropertyMap::toTag()
         XMLTag::Pointer_t pTag(new XMLTag("property"));
 
         pTag->addAttr("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
+
+        switch (aMapIter->first.eId)
+        {
+            case PROP_TABLE_COLUMN_SEPARATORS:
+                pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter));
+                break;
+            default:
+                break;
+        }
 
         pResult->addTag(pTag);
 

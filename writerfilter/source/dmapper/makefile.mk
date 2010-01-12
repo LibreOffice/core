@@ -62,6 +62,7 @@ SLOFILES= \
     $(SLO)$/PageBordersHandler.obj \
     $(SLO)$/PropertyIds.obj \
     $(SLO)$/PropertyMap.obj \
+    $(SLO)$/PropertyMapHelper.obj \
     $(SLO)$/SectionColumnHandler.obj \
     $(SLO)$/SettingsTable.obj \
     $(SLO)$/StyleSheetTable.obj \
