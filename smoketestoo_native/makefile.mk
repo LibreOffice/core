@@ -61,28 +61,6 @@ my_path = \
 my_path = $(MISC)/installation/opt/openoffice.org3/program/soffice
 .END
 
-.IF "$(OOO_LIBRARY_PATH_VAR)" != ""
-.IF "$(USE_SHELL)" == "bash"
-my_arg_env = \
-    -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}"
-.ELSE
-# The tcsh case is somewhat imprecise in that it treats a null environment
-# variable the same as an unset one:
-.IF "$($(OOO_LIBRARY_PATH_VAR))" == ""
-my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)
-.ELSE
-my_arg_env = -env:arg-env=$(OOO_LIBRARY_PATH_VAR)='$($(OOO_LIBRARY_PATH_VAR))'
-.END
-.END
-.END
-
-.IF "$(USE_SHELL)" == "bash"
-my_set_tmp = my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX))
-.ELSE
-my_set_tmp = export my_tmp `mktemp -dt ooosmoke.XXXXXX` && \
-    export my_tmp `cygpath -m $my_tmp`
-.END
-
 ALLTAR: smoketest
 
 smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
@@ -93,7 +71,8 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-path=$(my_path) -env:arg-user=$(MISC)/user \
-        -env:arg-doc=$(BIN)/smoketestdoc.sxw $(my_arg_env)
+        -env:arg-doc=$(BIN)/smoketestdoc.sxw \
+        -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}"
 .IF "$(OS)" == "WNT"
     $(RM) -r $(MISC)/installation.flag `cat $(MISC)/installation.flag`
 .ENDIF
@@ -104,7 +83,7 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
 # removed after smoketest); can be removed once issue 50885 is fixed:
 $(MISC)/installation.flag:
 .IF "$(OS)" == "WNT"
-    $(my_set_tmp) && \
+    my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
     unzip \
         $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
         -d "$$my_tmp" && \

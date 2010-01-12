@@ -45,11 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 PYEXC=$(DLLDEST)$/python$(EXECPOST)
 REGEXC=$(DLLDEST)$/regcomp$(EXECPOST)
 
-DOLLAR_SIGN=\$$
-.IF "$(USE_SHELL)" != "tcsh"
-DOLLAR_SIGN=$$
-.ENDIF
-
 .IF "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
@@ -63,25 +58,13 @@ PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$
 .EXPORT: PYTHONPATH
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
-.IF "$(USE_SHELL)"=="bash"
 TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
     UNO_TYPES=pyuno_regcomp.rdb UNO_SERVICES=pyuno_regcomp.rdb
-.ELSE
-TEST_ENV=\
-    setenv FOO file://$(shell @pwd)$/$(DLLDEST) && \
-        setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
-.ENDIF
 .ELSE # "$(GUI)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
 CWD_TMP=$(strip $(shell @echo "import os;print os.getcwd()" | $(PYTHON)))
-.IF "$(USE_SHELL)" == "tcsh"
-TEST_ENV=setenv FOO file:///$(strip $(subst,\,/ $(CWD_TMP)/$(DLLDEST))) && \
-        setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
-.ELSE
 TEST_ENV=export FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
         export UNO_TYPES=pyuno_regcomp.rdb && export UNO_SERVICES=pyuno_regcomp.rdb
-.ENDIF "$(USE_SHELL)" == "tcsh"
-
 .ENDIF  # "$(GUI)"!="WNT"
 PYFILES = \
     $(DLLDEST)$/core.py			\
@@ -124,6 +107,6 @@ runtest : ALL
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
-            -l com.sun.star.loader.Python -c vnd.sun.star.expand:$(DOLLAR_SIGN)FOO/samplecomponent.py
+            -l com.sun.star.loader.Python -c vnd.sun.star.expand:$$FOO/samplecomponent.py
 .ENDIF # L10N_framework
 
