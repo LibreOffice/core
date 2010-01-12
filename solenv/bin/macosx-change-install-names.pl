@@ -49,6 +49,7 @@ sub action($$$)
          'shl/OOO/OOO' => '@loader_path',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
+         'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/NONE' => '@__VIA_LIBRARY_PATH__');
     my ($type, $loc1, $loc2) = @_;
     my $act = $action{"$type/$loc1/$loc2"};
