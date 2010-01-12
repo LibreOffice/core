@@ -120,7 +120,7 @@ void INIreader::toStlString( const UnicodeString& str , string& stl_str)
         char* buffer = new char[ str.length()*3 ];
         str.extract( 0 , str.length() , buffer );
         stl_str = string( buffer );
-        delete buffer;
+        delete [] buffer;
 }
 
 void INIreader::trim( string& str )
