@@ -138,9 +138,9 @@ class SwSidebarWin : public Window
         bool            IsPreview()         { return nFlags & PB_Preview;}
 
         void            SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
-        Color           ColorAnchor() { return mColorAnchor; }
-        Color           ColorDark() { return mColorDark; }
-        Color           ColorLight() { return mColorLight; }
+        const Color& ColorAnchor() { return mColorAnchor; }
+        const Color& ColorDark() { return mColorDark; }
+        const Color& ColorLight() { return mColorLight; }
         void            Rescale();
 
         void            SetViewState(::sw::sidebarwindows::ViewState bViewState);

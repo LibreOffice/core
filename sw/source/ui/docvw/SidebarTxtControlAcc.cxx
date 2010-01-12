@@ -131,6 +131,10 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleChild( sal_Int32 i )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+        using WeakAggComponentImplHelperBase::addEventListener;
+        using WeakAggComponentImplHelperBase::removeEventListener;
+
         virtual void SAL_CALL
                 addEventListener (
                     const ::com::sun::star::uno::Reference<

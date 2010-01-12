@@ -48,7 +48,9 @@
 
 namespace sw { namespace annotation {
 
-Color ColorFromAlphaColor(UINT8 aTransparency, Color &aFront, Color &aBack )
+Color ColorFromAlphaColor( const UINT8 aTransparency,
+                           const Color &aFront,
+                           const Color &aBack )
 {
     return Color((UINT8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
                  (UINT8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
@@ -125,7 +127,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     MenuButton::MouseButtonDown( rMEvt );
 }
 
-void AnnotationMenuButton::Paint( const Rectangle& rRect )
+void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
 {
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         SetFillColor(COL_BLACK);

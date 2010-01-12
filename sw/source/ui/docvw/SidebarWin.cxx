@@ -94,8 +94,8 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
                             SwPostItMgr& aMgr,
                             SwPostItBits aBits)
     : Window(&rEditWin, nBits)
-    , mrView( rEditWin.GetView() )
     , mrMgr(aMgr)
+    , mrView( rEditWin.GetView() )
     , nFlags(aBits)
     , mnEventId(0)
     , mpOutlinerView(0)
