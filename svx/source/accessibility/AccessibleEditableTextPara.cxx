@@ -1120,6 +1120,26 @@ namespace accessibility
 
                 return aPoint;
             }
+            // --> OD 2009-12-16 #i88070#
+            // fallback to parent's <XAccessibleContext> instance
+            else
+            {
+                uno::Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
+                if ( xParentContext.is() )
+                {
+                    uno::Reference< XAccessibleComponent > xParentContextComponent( xParentContext, uno::UNO_QUERY );
+                    if( xParentContextComponent.is() )
+                    {
+                        awt::Point aRefPoint = xParentContextComponent->getLocationOnScreen();
+                        awt::Point aPoint = getLocation();
+                        aPoint.X += aRefPoint.X;
+                        aPoint.Y += aRefPoint.Y;
+
+                        return aPoint;
+                    }
+                }
+            }
+            // <--
         }
 
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
