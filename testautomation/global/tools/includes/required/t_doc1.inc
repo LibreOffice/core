@@ -189,6 +189,7 @@ sub hNewDocument ( optional bANewDoc )
     case else             : WarnLog "hNewDocument: No Applikation named '" + gApplication + "' exists in this routine!"
     end select
     Sleep 2
+
 end sub
 '
 '-------------------------------------------------------------------------------

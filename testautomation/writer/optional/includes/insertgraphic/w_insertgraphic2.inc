@@ -631,116 +631,116 @@ endcase
 
 testcase tInsertGraphic_18
 
-  Dim sGraphicName1 as String
-  Dim sGraphicName2 as String
-  Dim sGraphicName3 as String
-  Dim sWidth as String
-  Dim sHeight as String
+    Dim sGraphicName1 as String
+    Dim sGraphicName2 as String
+    Dim sGraphicName3 as String
+    Dim sWidth as String
+    Dim sHeight as String
 
-  sGraphicName1 = "TEST1"
-  sGraphicName2 = "TEST2"
-  sGraphicName3 = "TEST3"
+    sGraphicName1 = "TEST1"
+    sGraphicName2 = "TEST2"
+    sGraphicName3 = "TEST3"
 
-  sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
-  sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
+    sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
+    sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
 
-  PrintLog "- Test Set different attributes via Contextmenu Arrange (send backward)"
- '/// Test Set different attributes via Contextmenu Arrange (send backward)
+    PrintLog "- Test Set different attributes via Contextmenu Arrange (send backward)"
+    '/// Test Set different attributes via Contextmenu Arrange (send backward)
 
-   Call hNewDocument
+    Call hNewDocument
 
-   Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Return>"
 
-  '/// Insert three Graphics at the same place , and named in series
+    '/// Insert three Graphics at the same place , and named in series
 
-   'the 1st graphic
-   fInsertGraphics("Bughunter.jpg")
+    'the 1st graphic
+    fInsertGraphics("Bughunter.jpg")
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName1
-   TabZusaetze.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName1
+    Kontext
+    Active.Setpage TabType
+    Kontext "TabType"
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Call wTypeKeys "<ESCape>"
 
-   Call wTypeKeys "<ESCape>"
+    'the 2nd graphic
+    fInsertGraphics("flowers.gif")
 
-   'the 2nd graphic
-   fInsertGraphics("flowers.gif")
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName2
+    TabZusaetze.OK
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName2
-   TabZusaetze.OK
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Call wTypeKeys "<ESCape>"
 
-   Call wTypeKeys "<ESCape>"
+    'the 3rd graphic
+    fInsertGraphics("game.bmp")
 
-   'the 3rd graphic
-   fInsertGraphics("game.bmp")
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName3
+    TabZusaetze.OK
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName3
-   TabZusaetze.OK
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
-
-   '/// ContextMenu  Arrange / Send backward
-   Call wOpenContextMenu
+    '/// ContextMenu  Arrange / Send backward
+    Call wOpenContextMenu
     hMenuSelectNr(1)
     Sleep 2
     hMenuSelectNr(3)
     Sleep 1
 
-   Call wTypeKeys "<ESCape>"
-   Sleep 1
+    Call wTypeKeys "<ESCape>"
+    Sleep 1
 
-   '/// Check if the attributes Arrange (send to back) works well
-   Call wNavigatorAuswahl(4,1)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    '/// Check if the attributes Arrange (send to back) works well
+    Call wNavigatorAuswahl(4,1)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,2)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,2)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,3)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,3)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
@@ -748,120 +748,122 @@ endcase
 
 testcase tInsertGraphic_19
 
-  Dim sGraphicName1 as String
-  Dim sGraphicName2 as String
-  Dim sGraphicName3 as String
-  Dim sWidth as String
-  Dim sHeight as String
+    Dim sGraphicName1 as String
+    Dim sGraphicName2 as String
+    Dim sGraphicName3 as String
+    Dim sWidth as String
+    Dim sHeight as String
 
-  sGraphicName1 = "TEST1"
-  sGraphicName2 = "TEST2"
-  sGraphicName3 = "TEST3"
+    sGraphicName1 = "TEST1"
+    sGraphicName2 = "TEST2"
+    sGraphicName3 = "TEST3"
 
-  sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
-  sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
+    sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
+    sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
 
-  PrintLog "- Test Set different attributes via Contextmenu Arrange (bring to front)"
- '/// Test Set different attributes via Contextmenu Arrange (bring to front)
+    PrintLog "- Test Set different attributes via Contextmenu Arrange (bring to front)"
+    '/// Test Set different attributes via Contextmenu Arrange (bring to front)
 
-  Call hNewDocument
+    Call hNewDocument
 
-  Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Return>"
 
-  '/// Insert three Graphics at the same place , and named in series
+    '/// Insert three Graphics at the same place , and named in series
 
-   'the 1st graphic
-   fInsertGraphics("Bughunter.jpg")
+    'the 1st graphic
+    fInsertGraphics("Bughunter.jpg")
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName1
-   TabZusaetze.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName1
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Kontext
+    Active.Setpage TabType
+    Kontext "TabType"
 
-   Call wTypeKeys "<ESCape>"
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   'the 2nd graphic
-   fInsertGraphics("flowers.gif")
+    Call wTypeKeys "<ESCape>"
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName2
-   TabZusaetze.OK
+    'the 2nd graphic
+    fInsertGraphics("flowers.gif")
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName2
+    TabZusaetze.OK
 
-   Call wTypeKeys "<ESCape>"
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   'the 3rd graphic
-   fInsertGraphics("game.bmp")
+    Call wTypeKeys "<ESCape>"
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName3
-   TabZusaetze.OK
+    'the 3rd graphic
+    fInsertGraphics("game.bmp")
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName3
+    TabZusaetze.OK
 
-   '/// Format / Arrange / Send to back
-   FormatArrangeSendToBack
-   Sleep 2
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   '/// ContextMenu Arrange / bring to front
-   Call wOpenContextMenu
+    '/// Format / Arrange / Send to back
+    FormatArrangeSendToBack
+    Sleep 2
+
+    '/// ContextMenu Arrange / bring to front
+    Call wOpenContextMenu
     hMenuSelectNr(1)
     Sleep 2
     hMenuSelectNr(1)
     Sleep 1
 
-   Call wTypeKeys "<ESCape>"
-   Sleep 1
+    Call wTypeKeys "<ESCape>"
+    Sleep 1
 
-   '/// Check if the attributes Arrange (send to back) works well
-   Call wNavigatorAuswahl(4,1)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    '/// Check if the attributes Arrange (send to back) works well
+    Call wNavigatorAuswahl(4,1)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,2)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,2)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,3)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,3)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
