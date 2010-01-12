@@ -99,11 +99,7 @@ $(INCCOM)$/sddll0.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     echo \#define DLL_NAME \"libsd$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE			# "$(GUI)"=="UNX"
-.IF "$(USE_SHELL)"!="4nt"
     echo \#define DLL_NAME \"sd$(DLLPOSTFIX).DLL\" >$@
-.ELSE			# "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "sd$(DLLPOSTFIX).DLL" >$@
-.ENDIF			#  "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(GUI)"=="UNX"
 
 LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
