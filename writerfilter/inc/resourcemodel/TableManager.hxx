@@ -159,6 +159,11 @@ protected:
         mState.mpProps = pProps;
     }
 
+    void resetProps()
+    {
+        mState.mpProps.reset();
+    }
+
     PropertiesPointer getCellProps()
     {
         return mState.mpCellProps;
@@ -167,6 +172,11 @@ protected:
     void setCellProps(PropertiesPointer pProps)
     {
         mState.mpCellProps = pProps;
+    }
+
+    void resetCellProps()
+    {
+        mState.mpCellProps.reset();
     }
 
     PropertiesPointer getRowProps()
@@ -179,6 +189,11 @@ protected:
         mState.mpRowProps = pProps;
     }
 
+    void resetRowProps()
+    {
+        mState.mpRowProps.reset();
+    }
+
     PropertiesPointer getTableProps()
     {
         return mState.mpTableProps;
@@ -187,6 +202,11 @@ protected:
     void setTableProps(PropertiesPointer pProps)
     {
         mState.mpTableProps = pProps;
+    }
+
+    void resetTableProps()
+    {
+        mState.mpTableProps.reset();
     }
 
     T getHandle()
@@ -512,7 +532,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
         {
             endOfRowAction();
             pTableData->endRow(getRowProps());
-            getRowProps().reset();
+            resetRowProps();
         }
 
         else if (mbInCell)
@@ -526,7 +546,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
                 pTableData->endCell(getHandle());
             }
         }
-        getCellProps().reset();
+        resetCellProps();
     }
 }
 
@@ -668,7 +688,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
         mpTableDataHandler->endTable();
     }
-    getTableProps().reset();
+    resetTableProps();
     clearData();
 }
 
