@@ -385,7 +385,7 @@ public:
 //                                                   RTL_TEXTENCODING_ASCII_US),
 //                 int nDepth = -1) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static unsigned long GetInstances();
     unsigned long GetSerial();
 #endif
@@ -494,7 +494,7 @@ protected:
      */
     mutable tSwNumberTreeChildren::iterator mItLastValid;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /**
        Counter for the number of created instances.
      */

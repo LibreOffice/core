@@ -37,7 +37,7 @@
 #include <algorithm>
 #define INCLUDED_ALGORITHM
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>

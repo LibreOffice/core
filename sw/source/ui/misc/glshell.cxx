@@ -34,13 +34,13 @@
 #include <com/sun/star/frame/XTitle.hpp>
 
 #include <tools/list.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/srchitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
 #include <svx/acorrcfg.hxx>

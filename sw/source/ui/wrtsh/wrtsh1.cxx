@@ -44,7 +44,7 @@
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
@@ -56,7 +56,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/soerr.hxx>
 #include <tools/cachestr.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/svxacorr.hxx>

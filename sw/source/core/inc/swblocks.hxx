@@ -35,7 +35,7 @@
 #ifndef _DATE_HXX //autogen
 #include <tools/datetime.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 class SfxMedium;

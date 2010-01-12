@@ -36,7 +36,7 @@
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>

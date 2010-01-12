@@ -75,19 +75,12 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <basegfx/numeric/ftools.hxx>
-// OD 2004-05-05 #i28701#
+#include <algorithm>
 #include <fmtwrapinfluenceonobjpos.hxx>
-// --> OD 2004-11-10 #i35007#
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-// <--
-// --> OD 2005-03-10 #i44334#, #i44681#
-// --> OD 2007-01-03 #i73079# - use correct matrix type
 #include <basegfx/matrix/b2dhommatrix.hxx>
-// <--
-// --> OD 2009-01-16 #i59051
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
-// <--
-
 #include <vcl/svapp.hxx>
 #include <slist>
 #include <iterator>
@@ -2117,6 +2110,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         OTextCursorHelper* pCursor = 0;
         SwXTextPortion* pPortion = 0;
         SwXText* pText = 0;
+        SwXParagraph* pParagraph = 0;
 
         pRange  = reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
@@ -2126,6 +2120,8 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
         pPortion = reinterpret_cast< SwXTextPortion * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
+        pParagraph = reinterpret_cast< SwXParagraph * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId( ) ) ) );
 
         if (pRange)
             pDoc = pRange->GetDoc();
@@ -2137,6 +2133,8 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         {
             pDoc = pPortion->GetCursor()->GetDoc();
         }
+        else if ( !pDoc && pParagraph && pParagraph->GetTxtNode( ) )
+            pDoc = pParagraph->GetTxtNode( )->GetDoc( );
 
     }
 
@@ -2855,8 +2853,8 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             // apply translation difference to PolyPolygonBezier.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                basegfx::B2DHomMatrix aMatrix;
-                aMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y );
+                const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+                    aTranslateDiff.X, aTranslateDiff.Y));
 
                 const sal_Int32 nOuterSequenceCount(aConvertedPath.Coordinates.getLength());
                 drawing::PointSequence* pInnerSequence = aConvertedPath.Coordinates.getArray();

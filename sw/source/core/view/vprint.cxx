@@ -45,7 +45,7 @@
 #include <svx/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -776,16 +776,32 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
         pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
     }
 
-    // Die Y-Position der ersten Selektion
-    const Point aSelPoint = pFESh->IsTableMode() ?
-                            pFESh->GetTableCrsr()->GetSttPos() :
-                            pFirstCrsr->GetSttPos();
+    Point aSelPoint;
+    if( pFESh->IsTableMode() )
+    {
+        SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
+
+        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
+        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
+        if( pCntntFrm )
+        {
+            SwRect aCharRect;
+            SwCrsrMoveState aTmpState( MV_NONE );
+            pCntntFrm->GetCharRect( aCharRect, *pShellTblCrsr->Start(), &aTmpState );
+            aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
+        }
+    }
+    else
+    {
+       aSelPoint = pFirstCrsr->GetSttPos();
+    }
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
+    ASSERT( pPage, "no page found!" );
 
-    // und ihren Seitendescribtor
-    const SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
-                                        pPage->GetPageDesc()->GetName() );
+    // get page descriptor - fall back to the first one if pPage could not be found
+    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
+        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->_GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
     {   // Am letzten Absatz die Absatzattribute richten:
@@ -868,15 +884,32 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
     // Die Y-Position der ersten Selektion
     // Die Y-Position der ersten Selektion
-    const Point aSelPoint = pFESh->IsTableMode() ?
-                            pFESh->GetTableCrsr()->GetSttPos() :
-                            pFirstCrsr->GetSttPos();
+    Point aSelPoint;
+    if( pFESh->IsTableMode() )
+    {
+        SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
+
+        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
+        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
+        if( pCntntFrm )
+        {
+            SwRect aCharRect;
+            SwCrsrMoveState aTmpState( MV_NONE );
+            pCntntFrm->GetCharRect( aCharRect, *pShellTblCrsr->Start(), &aTmpState );
+            aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
+        }
+    }
+    else
+    {
+       aSelPoint = pFirstCrsr->GetSttPos();
+    }
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
+    ASSERT( pPage, "no page found!" );
 
-    // und ihren Seitendescribtor
-    const SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
-                                pPage->GetPageDesc()->GetName() );
+    // get page descriptor - fall back to the first one if pPage could not be found
+    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
+        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->_GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
     {   // Am letzten Absatz die Absatzattribute richten:

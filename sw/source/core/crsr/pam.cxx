@@ -550,7 +550,7 @@ void SwPaM::SetMark()
     (*m_pMark) = (*m_pPoint);
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwPaM::Exchange()
 {

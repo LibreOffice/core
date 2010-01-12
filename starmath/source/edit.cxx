@@ -52,13 +52,13 @@
 #include <svx/editstat.hxx>
 #include <svx/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/lrspitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/fontitem.hxx>
 #include <sfx2/viewfrm.hxx>
 
