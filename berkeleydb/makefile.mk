@@ -164,11 +164,6 @@ OUT2INC= \
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
-.IF "$(USE_SHELL)"!="4nt"
-BUILD_ACTION_SEP=;
-.ELSE # "$(USE_SHELL)"!="4nt"
-BUILD_ACTION_SEP=^
-.ENDIF # "$(USE_SHELL)"!="4nt"
 BUILD_DIR=
 BUILD_ACTION=dmake
 

@@ -390,10 +390,6 @@ $(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
 
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    $(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
-.ELSE
 .IF "$(OS)"!="SOLARIS"
     $(GNUCOPY) -pRL $(INCLUDE_PATH)* $(INCLUDE_DIR)
     $(GNUCOPY) -pRL $(PUBLIC_PATH)* $(INCLUDE_DIR)
@@ -401,7 +397,6 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     $(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
     $(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ENDIF			# "$(OS)"!="SOLARIS"
-.ENDIF
 
 .IF "$(GUI)"=="UNX"
     chmod -R 775 $(INCCOM)
