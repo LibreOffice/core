@@ -67,7 +67,6 @@ my $outputfile = '';
 my $mode = '';
 my $bVerbose="0";
 my $srcpath = '';
-my $WIN;
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
@@ -81,13 +80,6 @@ my $default_date = "2002-02-02 02:02:02";
 
 #### main ####
 parse_options();
-
-if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
-   $WIN = 'TRUE';
-}
- else {
-   $WIN = '';
-}
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
@@ -140,13 +132,11 @@ sub splitfile{
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
             $currentFile  = $srcpath . '\\' . $prj . '\\' . $file;
-            if ( $WIN ) { $currentFile  =~ s/\//\\/g; }
-            else        { $currentFile  =~ s/\\/\//g; }
+            $currentFile  =~ s/\\/\//g;
 
             $cur_sdffile = $currentFile;
             #if( $cur_sdffile =~ /\.$file_types[\s]*$/ ){
-                if( $WIN ) { $cur_sdffile =~ s/\\[^\\]*\.$file_types[\s]*$/\\localize.sdf/; }
-                else       { $cur_sdffile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
+                $cur_sdffile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/;
             #}
 
             # Set default date
@@ -186,41 +176,6 @@ sub splitfile{
 }
 #########################################################
 
-#sub fetch_sourcelanguage_dirlist
-#{
-#
-#    my $working_path = getcwd();
-#    my %sl_dirlist;
-#
-#    chdir $srcpath;
-#    my @all_dirs = csh_glob( "*" );
-#
-#    foreach my $file ( @all_dirs )
-#    {
-#        if( -d $file )
-#        {
-#            my $module = $file;
-#            $file .= "/prj/l10n";
-#            $file =~ s/\//\\/ , if( $WIN ) ;
-#
-#            if( -f $file )                                        # Test file <module>/prj/l10n
-#            {
-#                $sl_dirlist{ $module } = 1;
-#                if( $bVerbose eq "1" ) { print STDOUT "$module: de and en-US source language detected\n"; }
-#            }
-#        }
-#    }
-#
-#    chdir $working_path;
-#
-#    return %sl_dirlist;
-#}
-
-#sub has_two_sourcelanguages
-#{
-#    my $module          = shift;
-#    return defined $sl_modules{ $module } ;
-#}
 sub writesdf{
 
     my $lastFile        = shift;
@@ -229,8 +184,7 @@ sub writesdf{
     my %index=();
 
     if( $localizeFile =~ /\.$file_types[\s]*$/ ){
-        if( $WIN ) { $localizeFile =~ s/\\[^\\]*\.$file_types[\s]*$/\\localize.sdf/; }
-        else       { $localizeFile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
+        $localizeFile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/;
         }else {
             print STDERR "Strange filetype found '$localizeFile'\n";
             return;
@@ -481,10 +435,6 @@ sub collectfiles{
                 } #foreach
               } # if
         } # if
-#        if ( !$bVerbose ){
-#            if ( $WIN eq "TRUE" ) { $args .= " > $my_localize_log";  }
-#            else                  { $args .= " >& $my_localize_log"; }
-#        }
         if ( $bVerbose ) { print STDOUT $command.$args."\n"; }
 
         my $rc = system( $command.$args );
