@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -243,7 +243,7 @@ SFXDEBUGLIB=
 FWELIB=-lfwe$(DLLPOSTFIX)
 FWILIB=-lfwi$(DLLPOSTFIX)
 SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
-SVXMSFILTERLIB=-lsvxmsfilter$(DLLPOSTFIX)
+MSFILTERLIB=-lmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
@@ -271,10 +271,11 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
+TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(ZLIB3RDLIB) $(LIBXML2LIB)
+XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
@@ -430,7 +431,7 @@ VBAHELPERLIB=vbahelper.lib
 TKTLIB=tkt.lib
 SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
-SVXMSFILTERLIB=isvxmsfilter.lib
+MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
@@ -479,7 +480,8 @@ PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+TESTSHL2LIB = testshl2.lib
+XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
 .ELSE
