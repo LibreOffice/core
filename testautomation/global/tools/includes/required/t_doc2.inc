@@ -132,6 +132,15 @@ function sMakeReadOnlyDocumentEditable() as boolean
     
     if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
     
+    ' We still run into synchronization problems with the "Make document editable" feature
+    ' because we do not know when this button becomes available and ready for use: The 
+    ' document has to be loaded, then we have to wait for the toolbar to get populated.
+    ' One thing appears to work though: Try to execute the slot using hUseAsyncSlot.
+    ' This is a little bit tricky because the state of the document is altered but if
+    ' the slot has been executed once we know for sure that the button on the toolbar is
+    ' available and can check its state and - if need be - chenge the document state back.
+    hUseAsyncSlot( "EditDoc" )
+    
     Kontext "Standardbar"
     if ( Bearbeiten.IsEnabled() ) then
         
