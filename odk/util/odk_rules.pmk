@@ -53,58 +53,36 @@ $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
 $(DESTDIR)$/configure : $(PRJ)$/configure
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
 
 $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
 
 $(DESTDIR)$/config.guess : $(SRC_ROOT)$/config.guess
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SRC_ROOT)$/config.guess $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
 
 $(DESTDIR)$/config.sub : $(SRC_ROOT)$/config.sub
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SRC_ROOT)$/config.sub $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
 
 $(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
-
-#.IF "$(USE_SHELL)"=="4nt"
-#	$(TYPE) $< | $(SED) "s/__SDKNAME__/$(SDKDIRNAME)/" > $@
-#.ELSE
-#	$(TYPE) $< | $(SED) 's#__SDKNAME__#$(SDKDIRNAME)#' > $@
-#.ENDIF			
 
 $(DESTDIR)$/setsdkenv_unix.%.in : $(PRJ)$/setsdkenv_unix.%.in
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 644 $@
-.ENDIF
 
 $(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
     @@-rm -f $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(TYPE) $< | $(SED) "s/__SDKNAME__/$(SDKDIRNAME)/" > $@
-.ELSE
     $(TYPE) $< | $(SED) 's#__SDKNAME__#$(SDKDIRNAME)#' > $@
-.ENDIF			
 
 $(DESTDIR)$/%.bat : $(PRJ)$/%.bat
     @@-rm -f $@
@@ -144,9 +122,7 @@ $(DESTDIRBIN)$/%.bin : $(BINOUT)$/%.bin
 $(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
-.ENDIF
 
 $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
     @@-rm -f $@
@@ -200,11 +176,7 @@ $(DESTDIRLIB)$/%.a : $(LIBOUT)$/%.a
     $(GNUCOPY) $(LIBOUT)$/$(@:f) $@
 
 $(DIR_CREATE_FLAG) :
-.IF "$(USE_SHELL)" != "4nt"
     $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
-.ELSE
-    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s#\#/#)) | $(XARGS) mkdir.exe -p && echo "dirs created" > $@ && touch $@
-.ENDIF
     $(DELAY) 2
 
 $(DESTDIRSETTINGS)$/component.uno.def : $(PRJ)$/settings$/component.uno.def

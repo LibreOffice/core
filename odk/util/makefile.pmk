@@ -211,18 +211,8 @@ INCLUDEFILELIST=\
     $(INCOUT)$/com$/sun$/star$/uno$/Type.h \
     $(INCOUT)$/com$/sun$/star$/uno$/Type.hxx
 
-.IF "$(USE_SHELL)"=="4nt"
-# Quoted Open Bracket -QOB
-# Quoted Close Bracket -QCB
-QOB=(
-QCB=)
-.ELSE
-QOB=\(
-QCB=\)
-.ENDIF
-
 INCLUDELIST:=\
-    {$(subst,/,$/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! $(QOB) -name "*~" -o -name "*build.lst" -o -name "*deliver.log" $(QCB) -print))} \
+    {$(subst,/,$/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! \( -name "*~" -o -name "*build.lst" -o -name "*deliver.log" \) -print))} \
     $(INCLUDEFILELIST)
 
 SDK_CONTENT_CHECK_FILES= \
