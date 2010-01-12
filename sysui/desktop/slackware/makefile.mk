@@ -46,10 +46,6 @@ TARGET=slackware
 
 MENUFILES=$(PKGDIR)$/{$(PRODUCTLIST)}3.3-$(TARGET)-menus-$(PKGVERSION)-noarch-$(PKGREV).tgz
 
-.IF "$(USE_SHELL)"=="bash"
-ECHOPARAM=-e
-.ENDIF
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -78,7 +74,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
     @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
     @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))/program/soffice soffice )" >> $@
-    @echo $(ECHOPARAM) $(foreach,i,$(shell @cat $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.3//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))-$i )") >> $@
+    @echo -e $(foreach,i,$(shell @cat $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.3//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.3//))-$i )") >> $@
     @cat $< >> $@
 
 %$/install$/slack-desc : slack-desc

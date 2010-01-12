@@ -70,9 +70,7 @@ $(MISC)$/$(TARGET)_delzip :
 
 $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip : $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)
     cd $(DIR_FILTERCFGOUT)$/$(@:b:s/fcfg_drivers_//) && zip -ru ..$/..$/..$/bin$/fcfg_drivers_$(@:b:s/fcfg_drivers_//).zip org/*
-.IF "$(USE_SHELL)"!="4nt"
     $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
-.ENDIF			# "$(USE_SHELL)"!="4nt"
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \
