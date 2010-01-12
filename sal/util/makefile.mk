@@ -228,8 +228,6 @@ SHL1STDLIBS+=-lgcc
 $(SHL1TARGETN) : $(OUT)$/inc$/udkversion.h
 .ENDIF # "$(SHL1TARGETN)" != ""
 
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-
 $(OUT)$/inc$/udkversion.h: 
     echo '#ifndef _SAL_UDKVERSION_H_'           >  $@
     echo '#define _SAL_UDKVERSION_H_'           >> $@
@@ -239,17 +237,3 @@ $(OUT)$/inc$/udkversion.h:
     echo '#define SAL_UDK_MICRO "$(UDK_MICRO)"' >> $@
     echo ''                                     >> $@
     echo '#endif'                               >> $@
-
-.ELSE
-
-$(OUT)$/inc$/udkversion.h: 
-    echo #ifndef _SAL_UDKVERSION_H_           >  $@
-    echo #define _SAL_UDKVERSION_H_           >> $@
-    echo.                                     >> $@
-    echo #define SAL_UDK_MAJOR "$(UDK_MAJOR)" >> $@
-    echo #define SAL_UDK_MINOR "$(UDK_MINOR)" >> $@
-    echo #define SAL_UDK_MICRO "$(UDK_MICRO)" >> $@
-    echo.                                     >> $@
-    echo #endif                               >> $@
-
-.ENDIF

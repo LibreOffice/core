@@ -56,10 +56,10 @@ JARFILES = OOoRunner.jar juh.jar jurt.jar ridl.jar
 .INCLUDE: target.mk
 
 ALLTAR: \
-    $(BIN)$/testacquire-java-client$(SCRIPTEXT) \
-    $(BIN)$/testacquire-java-server$(SCRIPTEXT) \
-    $(BIN)$/testacquire-native-client$(SCRIPTEXT) \
-    $(BIN)$/testacquire-native-server$(SCRIPTEXT)
+    $(BIN)$/testacquire-java-client \
+    $(BIN)$/testacquire-java-server \
+    $(BIN)$/testacquire-native-client \
+    $(BIN)$/testacquire-native-server
 
 .IF "$(GUI)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
@@ -90,7 +90,7 @@ $(SLOFILES) $(JAVACLASSFILES): $(BIN)$/$(TARGET).rdb
 TEST_JAVAUNO_ACQUIRE_UNO_URL := \
     \"'uno:socket,host=127.0.0.1,port=2002;urp;test'\"
 
-$(BIN)$/testacquire-java-client$(SCRIPTEXT):
+$(BIN)$/testacquire-java-client:
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
 ..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
@@ -98,7 +98,7 @@ $(BIN)$/testacquire-java-client$(SCRIPTEXT):
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(BIN)$/testacquire-java-server$(SCRIPTEXT):
+$(BIN)$/testacquire-java-server:
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
 ..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
@@ -106,14 +106,14 @@ $(BIN)$/testacquire-java-server$(SCRIPTEXT):
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(BIN)$/testacquire-native-client$(SCRIPTEXT):
+$(BIN)$/testacquire-native-client:
     echo '$(AUGMENT_LIBRARY_PATH)' uno \
         -c com.sun.star.test.bridges.testacquire.impl \
         -l ../lib/$(SHL1TARGETN:f) -ro $(TARGET).rdb -- \
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(BIN)$/testacquire-native-server$(SCRIPTEXT):
+$(BIN)$/testacquire-native-server:
     echo '$(AUGMENT_LIBRARY_PATH)' uno \
         -c com.sun.star.test.bridges.testacquire.impl \
         -l ../lib/$(SHL1TARGETN:f) -ro $(TARGET).rdb \

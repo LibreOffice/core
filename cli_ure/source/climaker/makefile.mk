@@ -126,9 +126,7 @@ ALLTAR: \
 #Create the config file that is used with the policy assembly
 $(CLIMAKER_CONFIG): climaker.exe.config
     $(COPY) $< $@
-.IF "$(USE_SHELL)"!="4nt"
     chmod +x $@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
 
 
 .IF "$(BUILD_FOR_CLI)" != ""

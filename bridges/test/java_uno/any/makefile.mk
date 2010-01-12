@@ -104,16 +104,16 @@ $(SLOFILES) : $(MISC)$/gen_files.flag
 $(JAVACLASSFILES) : $(MISC)$/gen_files.flag
 
 ALLTAR : \
-    $(OUT)$/bin$/TestRemote$(SCRIPTEXT) \
-    $(OUT)$/bin$/TestJni$(SCRIPTEXT)
+    $(OUT)$/bin$/TestRemote \
+    $(OUT)$/bin$/TestJni
 
-$(OUT)$/bin$/TestRemote$(SCRIPTEXT) : $(JAVACLASSFILES)
+$(OUT)$/bin$/TestRemote : $(JAVACLASSFILES)
     -rm -f $@
     echo java -classpath ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.anytest.TestRemote > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(OUT)$/bin$/TestJni$(SCRIPTEXT) : $(JAVACLASSFILES)
+$(OUT)$/bin$/TestJni : $(JAVACLASSFILES)
     -rm -f $@
     echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
         .$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \

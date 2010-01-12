@@ -41,15 +41,6 @@ TARGET = cliureversion.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-
-.IF "$(USE_SHELL)"!="4nt"
-ECHOQUOTE='
-.ELSE
-ECHOQUOTE=
-.ENDIF
-
-
-
 ALLTAR : \
     $(BIN)$/cliureversion.mk 
 

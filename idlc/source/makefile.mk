@@ -124,11 +124,7 @@ YACCFLAGS+=-v
 .INCLUDE :  target.mk
 
 $(MISC)$/stripped_scanner.ll : scanner.ll
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
     tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
-.ELSE
-    cat scanner.ll > $(MISC)$/stripped_scanner.ll
-.ENDIF
 
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll

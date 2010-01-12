@@ -48,13 +48,6 @@ CCACHE_DISABLE=TRUE
 
 use_shl_versions=
 
-.IF "$(USE_SHELL)"!="4nt"
-ECHOQUOTE='
-.ELSE
-ECHOQUOTE=
-.ENDIF
-
-
 .IF "$(BUILD_FOR_CLI)" == ""
 #do not even build the cxx files because they contain cli cpp
 all:
@@ -146,11 +139,11 @@ CFLAGSCXX += -clr:oldSyntax
 $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
     @echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
-    echo $(ECHOQUOTE) \
-    [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
+    echo \
+    '[assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )];' \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
-    echo $(ECHOQUOTE) \
-    [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
+    echo \
+    '[assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))];' \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
     
     
