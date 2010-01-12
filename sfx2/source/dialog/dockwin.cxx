@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/decoview.hxx>
 
 #include <vcl/svapp.hxx>

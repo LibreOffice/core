@@ -30,7 +30,7 @@
 #ifndef _SFX_SORGITM_HXX
 #define _SFX_SORGITM_HXX
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 // class SfxScriptOrganizerItem ---------------------------------------------
 

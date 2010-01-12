@@ -35,14 +35,14 @@
 #include <limits.h>             // USHRT_MAX
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <osl/file.hxx>
@@ -55,7 +55,7 @@ using namespace com::sun::star::uno;
 #include "impgrf.hrc"
 
 #define _SVX_IMPGRF_CXX
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 
 #include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
@@ -111,7 +111,7 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
         nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream,
                                        nFilter, pDeterminedFormat );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( nRes )
     {
         if( pMed )

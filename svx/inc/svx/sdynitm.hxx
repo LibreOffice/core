@@ -30,7 +30,7 @@
 #ifndef _SDYNITM_HXX
 #define _SDYNITM_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 

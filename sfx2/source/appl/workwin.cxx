@@ -57,12 +57,12 @@
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SFXEITEM_HXX //autogen
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

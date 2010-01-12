@@ -1,0 +1,45 @@
+***************
+*** 67,73 ****
+  #include <toolkit/awt/vclxwindow.hxx>
+  #include <toolkit/helper/vclunohelper.hxx>
+  #include <com/sun/star/frame/XModel2.hpp>
+- #include <com/sun/star/lang/XUnoTunnel.hpp>
+  #include <vcl/window.hxx>
+  #include <vcl/syswin.hxx>
+  #include <tools/diagnose_ex.h>
+--- 67,72 ----
+  #include <toolkit/awt/vclxwindow.hxx>
+  #include <toolkit/helper/vclunohelper.hxx>
+  #include <com/sun/star/frame/XModel2.hpp>
+  #include <vcl/window.hxx>
+  #include <vcl/syswin.hxx>
+  #include <tools/diagnose_ex.h>
+*************** UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
+*** 1117,1135 ****
+  		double points = double( static_cast<double>(_hmm) / factor);
+  		return points;
+  	}
+-         
+-         SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+-         {
+-             SfxObjectShell* pFoundShell = NULL;
+-             if ( xModel.is() )
+-             {
+-                 uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );
+-                 pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+-             }
+-             if ( !pFoundShell )
+-                 throw uno::RuntimeException();
+-             return pFoundShell;
+-         }
+  
+  } // openoffice
+  } //org
+--- 1116,1122 ----
+  		double points = double( static_cast<double>(_hmm) / factor);
+  		return points;
+  	}
++ 
+  
+  } // openoffice
+  } //org

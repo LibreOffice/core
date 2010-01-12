@@ -51,13 +51,13 @@
 // fuer die Sort-String-Arrays aus dem SVMEM.HXX
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <svtools/helpopt.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL_
 #include <com/sun/star/i18n/UnicodeType.hdl>
@@ -1371,10 +1371,6 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
         }
 
-        DBG_ASSERT( nHelpId && nHelpId < (HID_AUTOCORR_HELP_END -
-                                          HID_AUTOCORR_HELP_START + 1),
-                    "wrong HelpId Range" );
-
         if( nHelpId )
         {
             nHelpId += HID_AUTOCORR_HELP_START - 1;
@@ -1402,7 +1398,7 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
         if( pLists )
             pLists->SaveCplSttExceptList();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         DBG_ERROR("speichern einer leeren Liste?");
@@ -1418,7 +1414,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
         if(pLists)
             pLists->SaveWrdSttExceptList();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         DBG_ERROR("speichern einer leeren Liste?");

@@ -48,10 +48,10 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -229,7 +229,7 @@ public:
 
     sal_Int8            ShowLockedDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
     sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
-    void                UnlockFile();
+    void                UnlockFile( sal_Bool bReleaseLockStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage();
@@ -290,6 +290,7 @@ public:
     SAL_DLLPRIVATE void Init_Impl();
     SAL_DLLPRIVATE void ForceSynchronStream_Impl( sal_Bool bSynchron );
 
+    SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();
     SAL_DLLPRIVATE sal_Bool TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& aTargetSet );
     SAL_DLLPRIVATE void Transfer_Impl();

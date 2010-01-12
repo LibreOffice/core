@@ -31,7 +31,7 @@
 #ifndef _XMLOFF_VISAREAEXPORT_HXX
 #define _XMLOFF_VISAREAEXPORT_HXX
 
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <sal/types.h>
 
 class SvXMLExport;

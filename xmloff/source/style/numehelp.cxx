@@ -40,7 +40,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>

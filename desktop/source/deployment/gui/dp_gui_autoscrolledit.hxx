@@ -31,7 +31,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_AUTOSCROLLEDIT_HXX
 
 #include "svtools/svmedit2.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/lstner.hxx"
 
 namespace dp_gui {
 

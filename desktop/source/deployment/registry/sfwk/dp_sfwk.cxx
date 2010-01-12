@@ -38,7 +38,7 @@
 #include "ucbhelper/content.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <memory>

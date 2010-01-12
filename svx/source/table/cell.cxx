@@ -37,8 +37,8 @@
 #include <com/sun/star/table/TableBorder.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
-#include <svtools/style.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/style.hxx>
+#include <svl/itemset.hxx>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
