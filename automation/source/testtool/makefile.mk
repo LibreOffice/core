@@ -91,13 +91,8 @@ $(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/tools$/
 
 
 $(MISC)$/xfilter.pl : filter.pl
-.IF "$(GUI)" == "UNX" || "$(USE_SHELL)"!="4nt"
        tr  -d "\015" < filter.pl > $(MISC)$/xfilter.pl
        chmod 664 $(MISC)$/xfilter.pl
-.ELSE
-       $(COPY) filter.pl $(MISC)$/xfilter.pl
-       attrib  -r $(MISC)$/xfilter.pl
-.ENDIF
 
 
 

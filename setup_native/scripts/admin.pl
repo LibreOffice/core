@@ -194,13 +194,11 @@ sub convert_stringlist_into_array
     {
         $first = $1;
         $last = $2;
-        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         # Problem with two directly following listseparators. For example a path with two ";;" directly behind each other
         $first =~ s/^$listseparator//;
         push(@newarray, "$first\n");
     }
 
-    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last\n");
 
     return \@newarray;
@@ -386,11 +384,8 @@ sub try_to_create_directory
         {
             $created_directory = 1;
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -841,20 +836,14 @@ sub create_directory_with_privileges
 
         if ($returnvalue)
         {
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
     }
     else
     {
-        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-        {
-            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-            system($localcall);
-        }
+        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+        system($localcall);
     }
 }
 

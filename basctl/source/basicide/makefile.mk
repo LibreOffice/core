@@ -93,11 +93,7 @@ $(INCCOM)$/dllname.hxx: makefile.mk
     $(RM) $@
         echo \#define DLL_NAME \"libbasctl$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-.IF "$(USE_SHELL)"!="4nt"
         echo \#define DLL_NAME \"basctl$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-        echo #define DLL_NAME "basctl$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
 $(SLO)$/basiclib.obj : $(INCCOM)$/dllname.hxx

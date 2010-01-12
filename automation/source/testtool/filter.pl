@@ -75,28 +75,13 @@ sub read_block {
   print "Leaving read_block at the end\n" if $debug;
 }
 
-sub convert_path {
-
-  $_ = $_[0];
-  $GUI = $ENV {"GUI"};
-  $use_shell = $ENV {"USE_SHELL"};
-  if ( $GUI eq "WNT" )
-  {
-    if ( defined( $use_shell ) && "$use_shell" eq "4nt" )
-    {
-      s/\//\\/g;
-    }
-  }
-  $_;
-}
-
 # Read a file.
 # first parameter ist the filename
 sub read_file {
 
   local ($filename,$file) = @_;
   $file++;                           # String increment
-  local $TempFileName = &convert_path( $basename."/".$filename );
+  local $TempFileName = $basename."/".$filename;
   print "reading file $TempFileName as $file\n" if $debug;
   open($file, $TempFileName) || die "error: Could not open file $TempFileName. ";
 
@@ -106,9 +91,6 @@ sub read_file {
 }
 
 # main starts here
-
-print &convert_path ("/\n\n\n") if ( $debug );
-
 
 $basename = ".";
 $basename = $ARGV[0] if defined($ARGV[0]);

@@ -156,8 +156,4 @@ VERSIONOBJ_X64=
 $(MISC)$/envsettings.h : makefile.mk
     -$(RM) $@
 # it looks wrong; but rc likes it that way...
-.IF "$(USE_SHELL)"!="4nt"
     echo "#define MISC .\..\$(INPATH)\misc" > $@
-.ELSE			# "$(USE_SHELL)"!="4nt"
-    echo #define MISC .\..\$(INPATH)\misc > $@
-.ENDIF			# "$(USE_SHELL)"!="4nt"
