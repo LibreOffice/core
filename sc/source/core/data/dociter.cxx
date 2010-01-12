@@ -59,7 +59,7 @@ namespace {
 
 void lcl_toUpper(OUString& rStr)
 {
-    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, rStr.getLength());
+    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, static_cast<USHORT>(rStr.getLength()));
 }
 
 }
