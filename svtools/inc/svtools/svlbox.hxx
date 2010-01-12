@@ -52,7 +52,7 @@
 #include <vcl/mnemonicengine.hxx>
 #include <tools/gen.hxx>
 #include <svtools/treelist.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/transfer.hxx>
 
 class Application;

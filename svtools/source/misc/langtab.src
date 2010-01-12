@@ -29,7 +29,7 @@
  ************************************************************************/
 
  // include ---------------------------------------------------------------
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #define RSC_RESOURCE_USAGE 1
 #include <i18npool/lang.h>

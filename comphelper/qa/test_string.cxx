@@ -32,7 +32,7 @@
 #include "sal/config.h"
 
 #include "comphelper/string.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"

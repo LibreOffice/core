@@ -38,8 +38,8 @@
 #include "tools/debug.hxx"
 #include "vcl/font.hxx"
 #include "vcl/impfont.hxx"
-#include "vcl/fontcfg.hxx"
-#include "vcl/outdev.h" // just for ImplGetEnglishSearchFontName! TODO: move it
+#include "vcl/outfont.hxx"
+#include "unotools/fontcfg.hxx"
 
 #include <algorithm>
 
@@ -169,7 +169,7 @@ void Impl_Font::AskConfig()
     mbConfigLookup = true;
 
     // prepare the FontSubst configuration lookup
-    const vcl::FontSubstConfiguration* pFontSubst = vcl::FontSubstConfiguration::get();
+    const utl::FontSubstConfiguration* pFontSubst = utl::FontSubstConfiguration::get();
 
     String      aShortName;
     String      aFamilyName;
@@ -177,12 +177,12 @@ void Impl_Font::AskConfig()
     FontWeight  eWeight = WEIGHT_DONTKNOW;
     FontWidth   eWidthType = WIDTH_DONTKNOW;
     String      aMapName = maFamilyName;
-    ImplGetEnglishSearchFontName( aMapName );
-    vcl::FontSubstConfiguration::getMapName( aMapName,
+    GetEnglishSearchFontName( aMapName );
+    utl::FontSubstConfiguration::getMapName( aMapName,
         aShortName, aFamilyName, eWeight, eWidthType, nType );
 
     // lookup the font name in the configuration
-    const vcl::FontNameAttr* pFontAttr = pFontSubst->getSubstInfo( aMapName );
+    const utl::FontNameAttr* pFontAttr = pFontSubst->getSubstInfo( aMapName );
 
     // if the direct lookup failed try again with an alias name
     if ( !pFontAttr && (aShortName != aMapName) )
