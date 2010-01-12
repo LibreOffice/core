@@ -102,8 +102,13 @@ NPNetscapeFuncs aNPNFuncs =
     NPN_MemFree,
     NPN_MemFlush,
     NPN_ReloadPlugins,
+#ifdef OJI
     NPN_GetJavaEnv,
     NPN_GetJavaPeer,
+#else
+    0,
+    0,
+#endif
     NPN_GetURLNotify,
     NPN_PostURLNotify,
     NPN_GetValue,
