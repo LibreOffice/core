@@ -113,7 +113,15 @@ $delete_common      = 1;            # for "-delete": if defined delete files fro
 if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
   $maybedot     = '';               # some .exe transformation magic.
 } else {
-  $maybedot     = '.';
+  my $cygvernum = `uname -r`;
+  my @cygvernum = split( /\./, $cygvernum);
+  $cygvernum = shift @cygvernum;
+  $cygvernum .= shift @cygvernum;
+  if ( $cygvernum lt 17 ) {
+      $maybedot     = '.';
+  } else {
+      $maybedot     = '';               # no longer works with cygwin 1.7. other magic below.
+  }
 }
 
 ($gui       = lc($ENV{GUI}))        || die "Can't determine 'GUI'. Please set environment.\n";
@@ -832,6 +840,11 @@ sub copy_if_newer
             sleep $try;
             $try ++;
             $success = rename($temp_file, $to);
+            if ( $^O eq 'cygwin' && $to =~ /\.bin$/) {
+                # hack to survive automatically added .exe for executables renamed to
+                # *.bin - will break if there is intentionally a .bin _and_ .bin.exe file.
+                $success = rename( "$to.exe", $to ) if -f "$to.exe";
+            }
         }
         if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
