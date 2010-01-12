@@ -400,6 +400,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
                 {
@@ -472,6 +473,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
                 {

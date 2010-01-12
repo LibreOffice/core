@@ -49,7 +49,7 @@
 #endif
 
 #include "system.h"
-#if defined(SOLARIS) || defined(IRIX)
+#if defined(SOLARIS)
 # include <sys/procfs.h>
 #endif
 #include <osl/diagnose.h>
@@ -269,7 +269,7 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
     cmptr->cmsg_level = SOL_SOCKET;
     cmptr->cmsg_type = SCM_RIGHTS;
     cmptr->cmsg_len = CONTROLLEN;
-    *(int*)CMSG_DATA(cmptr) = SocketFD;
+    memcpy(CMSG_DATA(cmptr), &SocketFD, sizeof(int));
 
 #endif
 
@@ -360,7 +360,7 @@ static oslSocket receiveFdPipe(int PipeFD)
          ( msghdr.msg_controllen == CONTROLLEN ) )
     {
         OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
-        newfd = *(int*)CMSG_DATA(cmptr);
+        memcpy(&newfd, CMSG_DATA(cmptr), sizeof(int));
     }
 #endif
     else
@@ -431,10 +431,8 @@ oslSocket osl_receiveResourcePipe(oslPipe pPipe)
 
 static void ChildStatusProc(void *pData)
 {
-    int   i;
-/*  int   first = 0;*/
-    pid_t pid;
-/*  int   status;*/
+    pid_t pid = -1;
+    int   status = 0;
     int   channel[2];
     ProcessData  data;
     ProcessData *pdata;
@@ -447,25 +445,31 @@ static void ChildStatusProc(void *pData)
        in our child process */
     memcpy(&data, pData, sizeof(data));
 
-    socketpair(AF_UNIX, SOCK_STREAM, 0, channel);
+    if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
+        status = errno;
 
     fcntl(channel[0], F_SETFD, FD_CLOEXEC);
     fcntl(channel[1], F_SETFD, FD_CLOEXEC);
 
     /* Create redirected IO pipes */
+    if ( status == 0 && data.m_pInputWrite )
+        if (pipe( stdInput ) == -1)
+            status = errno;
 
-    if ( data.m_pInputWrite )
-        pipe( stdInput );
+    if ( status == 0 && data.m_pOutputRead )
+        if (pipe( stdOutput ) == -1)
+            status = errno;
 
-    if ( data.m_pOutputRead )
-        pipe( stdOutput );
+    if ( status == 0 && data.m_pErrorRead )
+        if (pipe( stdError ) == -1)
+            status = errno;
 
-    if ( data.m_pErrorRead )
-        pipe( stdError );
-
-    if ((pid = fork()) == 0)
+    if ( (status == 0) && ((pid = fork()) == 0) )
     {
         /* Child */
+        int chstatus = 0;
+        sal_Int32 nWrote;
+
         if (channel[0] != -1) close(channel[0]);
 
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
@@ -481,20 +485,15 @@ static void ChildStatusProc(void *pData)
 #endif
         }
 
-           if ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid())))
+          if (data.m_pszDir)
+              chstatus = chdir(data.m_pszDir);
 
+           if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
         {
-              if (data.m_pszDir)
-                  chdir(data.m_pszDir);
-
+            int i;
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
                  putenv(data.m_pszEnv[i]);
 
-#if defined(LINUX) && !defined(NPTL)
-            /* mfe: linux likes to have just one thread when the exec family is called */
-            /*      this np function has this purpose ...                              */
-            pthread_kill_other_threads_np();
-#endif
             OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
 
             /* Connect std IO to pipe ends */
@@ -537,7 +536,9 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        write(channel[1], &errno, sizeof(errno));
+        nWrote = write(channel[1], &errno, sizeof(errno));
+        if (nWrote != sizeof(errno))
+            OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
         if (channel[1] != -1) close(channel[1]);
 
@@ -545,8 +546,7 @@ static void ChildStatusProc(void *pData)
     }
     else
     {   /* Parent  */
-        int   status;
-
+        int i = -1;
         if (channel[1] != -1) close(channel[1]);
 
         /* Close unused pipe ends */
@@ -554,14 +554,16 @@ static void ChildStatusProc(void *pData)
         if (stdOutput[1] != -1) close( stdOutput[1] );
         if (stdError[1] != -1) close( stdError[1] );
 
-        while (((i = read(channel[0], &status, sizeof(status))) < 0))
+        if (pid > 0)
         {
-            if (errno != EINTR)
-                break;
+            while (((i = read(channel[0], &status, sizeof(status))) < 0))
+            {
+                if (errno != EINTR)
+                    break;
+            }
         }
 
         if (channel[0] != -1) close(channel[0]);
-
 
         if ((pid > 0) && (i == 0))
         {
@@ -1366,48 +1368,6 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
             }
 
             return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-        }
-
-#elif defined(IRIX)
-
-        int  fd;
-        sal_Char name[PATH_MAX + 1];
-
-        snprintf(name, sizeof(name), "/proc/%u", pid);
-
-        if ((fd = open(name, O_RDONLY)) >= 0)
-        {
-            prstatus_t prstatus;
-            prpsinfo_t prpsinfo;
-
-            if (ioctl(fd, PIOCSTATUS, &prstatus) >= 0 &&
-                ioctl(fd, PIOCPSINFO, &prpsinfo) >= 0)
-            {
-                if (Fields & osl_Process_CPUTIMES)
-                {
-                    pInfo->UserTime.Seconds   = prstatus.pr_utime.tv_sec;
-                    pInfo->UserTime.Nanosec   = prstatus.pr_utime.tv_nsec;
-                    pInfo->SystemTime.Seconds = prstatus.pr_stime.tv_sec;
-                    pInfo->SystemTime.Nanosec = prstatus.pr_stime.tv_nsec;
-
-                    pInfo->Fields |= osl_Process_CPUTIMES;
-                }
-
-                if (Fields & osl_Process_HEAPUSAGE)
-                {
-                    int pagesize = getpagesize();
-
-                    pInfo->HeapUsage = prpsinfo.pr_size*pagesize;
-
-                    pInfo->Fields |= osl_Process_HEAPUSAGE;
-                }
-
-                close(fd);
-
-                return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-            }
-            else
-                close(fd);
         }
 
 #elif defined(LINUX)
