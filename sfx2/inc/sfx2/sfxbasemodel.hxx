@@ -1299,11 +1299,13 @@ public:
         throw (css::uno::RuntimeException);
 
     // css.document.XDocumentRecovery
-    virtual void SAL_CALL doEmergencySave( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
+    virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave()
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL saveToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::lang::WrappedTargetException );
-    virtual void SAL_CALL recoverDocument( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
+    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::lang::WrappedTargetException );
@@ -1545,6 +1547,8 @@ private:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                         ::sfx::intern::ViewCreationGuard& i_rGuard
                     ) const;
+
+    SAL_DLLPRIVATE void NotifyModifyListeners_Impl() const;
 
 //________________________________________________________________________________________________________
 //  private variables and methods

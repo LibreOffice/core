@@ -157,8 +157,6 @@ using ::com::sun::star::document::XDocumentRecovery;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
-    If several changes are done the "bQuiet" member can be used to
-    temporarily suppress notifications.
  */
 class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
     ::com::sun::star::util::XModifyListener >
@@ -166,12 +164,9 @@ class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
 
 public:
     SfxObjectShell& m_rShell;
-    bool bQuiet;
-    bool bGotModified;
 
     SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
         : m_rShell(i_rDoc)
-        , bQuiet(false)
     { };
 
     ~SfxDocInfoListener_Impl();
@@ -188,12 +183,9 @@ void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
         throw ( uno::RuntimeException )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    bGotModified = true;
 
     // notify changes to the SfxObjectShell
-    if ( !bQuiet ) {
-        m_rShell.FlushDocInfo();
-    }
+    m_rShell.FlushDocInfo();
 }
 
 void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
@@ -230,6 +222,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     sal_Bool                                                m_bSaving               ;
     sal_Bool                                                m_bSuicide              ;
     sal_Bool                                                m_bInitialized          ;
+    sal_Bool                                                m_bModifiedSinceLastSave;
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
@@ -249,6 +242,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_bInitialized          ( sal_False     )
+            ,   m_bModifiedSinceLastSave( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
@@ -1657,25 +1651,39 @@ void SAL_CALL SfxBaseModel::storeToURL( const   ::rtl::OUString&                
     }
 }
 
-void SAL_CALL SfxBaseModel::doEmergencySave( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+::sal_Bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave() throw ( RuntimeException )
 {
-    // just delegate this to storeToURL
-    storeToURL( i_TargetLocation, i_MediaDescriptor );
+    SfxModelGuard aGuard( *this );
+    return m_pData->m_bModifiedSinceLastSave;
 }
 
-void SAL_CALL SfxBaseModel::recoverDocument( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+void SAL_CALL SfxBaseModel::saveToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
+    SfxModelGuard aGuard( *this );
+
+    // delegate
+    SfxSaveGuard aSaveGuard( this, m_pData, sal_False );
+    impl_store( i_TargetLocation, i_MediaDescriptor, sal_True );
+
+    // no need for subsequent calls to saveToRecoveryFile, unless we're modified, again
+    m_pData->m_bModifiedSinceLastSave = sal_False;
+}
+
+void SAL_CALL SfxBaseModel::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    SfxModelGuard aGuard( *this );
+
     // delegate to our "load" method
     ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
 
     // our load implementation expects the SalvagedFile to be in the media descriptor
     OSL_ENSURE( !aMediaDescriptor.has( "SalvagedFile" ) || ( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) == i_SalvagedFile ),
-        "SfxBaseModel::recoverDocument: inconsistent information!" );
+        "SfxBaseModel::recoverFromFile: inconsistent information!" );
     aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
 
     // similar for the to-be-loaded file
     OSL_ENSURE( !aMediaDescriptor.has( "URL" ) || ( aMediaDescriptor.getOrDefault( "URL", ::rtl::OUString() ) == i_SourceLocation ),
-        "SfxBaseModel::recoverDocument: inconsistent information!" );
+        "SfxBaseModel::recoverFromFile: inconsistent information!" );
     aMediaDescriptor.put( "URL", i_SourceLocation );
 
     load( aMediaDescriptor.getPropertyValues() );
@@ -2431,7 +2439,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         if ( pNamedHint )
         {
 
-            if ( SFX_EVENT_STORAGECHANGED == pNamedHint->GetEventId() )
+            switch ( pNamedHint->GetEventId() )
+            {
+            case SFX_EVENT_STORAGECHANGED:
             {
                 // for now this event is sent only on creation of a new storage for new document
                 // and in case of reload of medium without document reload
@@ -2462,12 +2472,17 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
-            else if ( SFX_EVENT_LOADFINISHED == pNamedHint->GetEventId() )
+            break;
+
+            case SFX_EVENT_LOADFINISHED:
             {
                 impl_getPrintHelper();
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
+                m_pData->m_bModifiedSinceLastSave = sal_False;
             }
-            else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
+            break;
+
+            case SFX_EVENT_SAVEASDOCDONE:
             {
                 m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
 
@@ -2478,9 +2493,20 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 addTitle_Impl( aArgs, aTitle );
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
             }
-            else if ( SFX_EVENT_DOCCREATED  == pNamedHint->GetEventId() )
+            break;
+
+            case SFX_EVENT_DOCCREATED:
             {
                 impl_getPrintHelper();
+                m_pData->m_bModifiedSinceLastSave = sal_False;
+            }
+            break;
+
+            case SFX_EVENT_MODIFYCHANGED:
+            {
+                m_pData->m_bModifiedSinceLastSave = isModified();
+            }
+            break;
             }
 
             postEvent_Impl( pNamedHint->GetEventName() );
@@ -2514,6 +2540,18 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 //  public impl.
 //________________________________________________________________________________________________________
 
+void SfxBaseModel::NotifyModifyListeners_Impl() const
+{
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
+    if ( pIC )
+    {
+        lang::EventObject aEvent( (frame::XModel *)this );
+        pIC->notifyEach( &util::XModifyListener::modified, aEvent );
+    }
+
+    m_pData->m_bModifiedSinceLastSave = sal_True;
+}
+
 void SfxBaseModel::changing()
 {
     SfxModelGuard aGuard( *this );
@@ -2522,24 +2560,7 @@ void SfxBaseModel::changing()
     if ( !m_pData->m_pObjectShell.Is() || !m_pData->m_pObjectShell->IsEnableSetModified() )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
-    if( pIC )
-
-    {
-        lang::EventObject aEvent( (frame::XModel *)this );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
-            }
-            catch( uno::RuntimeException& )
-            {
-                aIt.remove();
-            }
-        }
-    }
+    NotifyModifyListeners_Impl();
 }
 
 void SfxBaseModel::impl_change()
@@ -2548,24 +2569,7 @@ void SfxBaseModel::impl_change()
     if ( impl_isDisposed() )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
-    if( pIC )
-
-    {
-        lang::EventObject aEvent( (frame::XModel *)this );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
-            }
-            catch( uno::RuntimeException& )
-            {
-                aIt.remove();
-            }
-        }
-    }
+    NotifyModifyListeners_Impl();
 }
 
 //________________________________________________________________________________________________________

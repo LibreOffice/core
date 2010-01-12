@@ -170,12 +170,6 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_UNKNOWN = 0,
             /// modified against the original file
             E_MODIFIED = 1,
-            /** We differ between the states: "modified in general" and "modified after last AutoSave".
-                The first state will be interesting in case the crashed document will be restored. Then we have
-                set the right modify state after loading the document. But the second state let us optimize the
-                AutoSave itself. see member ListenForModify too ...
-            */
-            E_MODIFIED_SINCE_LAST_AUTOSAVE = 1024,
             /// an active document can be postponed to be saved later.
             E_POSTPONED = 2,
             /// was already handled during one AutoSave/Recovery session.

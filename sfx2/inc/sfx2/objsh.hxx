@@ -600,12 +600,11 @@ public:
 
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
-    void                        SetModel( SfxBaseModel* pModel );
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
     void                        SetBaseModel( SfxBaseModel* pModel );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
 
     virtual SEQUENCE< OUSTRING >    GetEventNames();
@@ -761,6 +760,7 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     sal_Bool bTypeMustBeSetAlready );
     SAL_DLLPRIVATE void PrepareSecondTryLoad_Impl();
+    SAL_DLLPRIVATE void SetInitialized_Impl( const bool i_fromInitNew );
 
     // public-internals
     SAL_DLLPRIVATE IndexBitSet& GetNoSet_Impl();

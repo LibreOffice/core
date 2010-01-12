@@ -408,16 +408,10 @@ void SfxObjectShell::ModifyChanged()
         return;
 
     {DBG_CHKTHIS(SfxObjectShell, 0);}
-    SfxObjectShell *pDoc;
-    for ( pDoc = SfxObjectShell::GetFirst(); pDoc;
-          pDoc = SfxObjectShell::GetNext(*pDoc) )
-        if( pDoc->IsModified() )
-            break;
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
         pViewFrame->GetBindings().Invalidate( SID_SAVEDOCS );
-
 
     Invalidate( SID_SIGNATURE );
     Invalidate( SID_MACRO_SIGNATURE );
@@ -1439,8 +1433,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             }
         }
 
-        pImp->bInitialized = sal_True;
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
+        SetInitialized_Impl( false );
 
         // Title is not available until loading has finished
         Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );

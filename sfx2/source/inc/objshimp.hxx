@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <tools/datetime.hxx>
 
@@ -130,7 +131,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_Bool                bReadOnlyUI;
     SvRefBaseRef            xHeaderAttributes;
     sal_Bool                bHiddenLockedByAPI;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
+    ::rtl::Reference< SfxBaseModel >
+                            pBaseModel;
     sal_uInt16              nStyleFilter;
     sal_Bool                bDisposing;
 

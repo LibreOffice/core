@@ -1837,7 +1837,6 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     if (xModifyCheck->isModified())
     {
         aNew.DocumentState |= AutoRecovery::E_MODIFIED;
-        aNew.DocumentState |= AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
     }
 
     aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);
@@ -1845,7 +1844,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    // create a new cache entry ... this document isnt well known.
+    // create a new cache entry ... this document isn't known.
     ++m_nIdPool;
     aNew.ID = m_nIdPool;
     LOG_ASSERT(m_nIdPool>=0, "AutoRecovery::implts_registerDocument()\nOverflow of ID pool detected.")
@@ -1924,7 +1923,6 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
     if (pIt != m_lDocCache.end())
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        rInfo.DocumentState |= AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
 
         /* Now we know, that this document was modified again and must be saved next time.
            But we dont need this information for every e.g. key input of the user.
@@ -1959,12 +1957,10 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
         if (bModified)
         {
             rInfo.DocumentState |= AutoRecovery::E_MODIFIED;
-            rInfo.DocumentState |= AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
         }
         else
         {
             rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED;
-            rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
         }
     }
 
@@ -2280,8 +2276,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
 
         // Not modified documents are not saved.
         // We safe an information about the URL only!
-        sal_Bool bModified = ((aInfo.DocumentState & AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE ) == AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE);
-        if (! bModified)
+        Reference< XDocumentRecovery > xDocRecover( aInfo.Document, UNO_QUERY_THROW );
+        if ( !xDocRecover->wasModifiedSinceLastSave() )
         {
             aInfo.DocumentState |= AutoRecovery::E_HANDLED;
             continue;
@@ -2426,8 +2422,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
-    Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY);
-    ENSURE_OR_THROW( xDocRecover.is(), "invalid document" );
+    Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occures inside next line!
@@ -2440,7 +2435,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     {
         try
         {
-            xDocRecover->doEmergencySave( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
+            xDocRecover->saveToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
             #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();
@@ -2484,7 +2479,6 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
         rInfo.DocumentState |=  AutoRecovery::E_SUCCEDED;
-        rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
     }
     else
     {
@@ -2672,8 +2666,11 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         }
 
         css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
-        sal_Bool bModified = ((rInfo.DocumentState & AutoRecovery::E_MODIFIED) == AutoRecovery::E_MODIFIED);
-        xModify->setModified(bModified);
+        if ( xModify.is() )
+        {
+            sal_Bool bModified = ((rInfo.DocumentState & AutoRecovery::E_MODIFIED) == AutoRecovery::E_MODIFIED);
+            xModify->setModified(bModified);
+        }
 
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
@@ -2686,8 +2683,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 
         /* Normaly we listen as XModifyListener on a document to know if a document was changed
            since our last AutoSave. And we deregister us in case we know this state.
-           But directly after one documentw as recovered ... we must start listening.
-           Otherwhise the first "modify" dont reach us. Because weself called setModified()
+           But directly after one document as recovered ... we must start listening.
+           Otherwhise the first "modify" doesnt reach us. Because we ourself called setModified()
            on the document via API. And currently we dont listen for any events (not at the GlobalEventBroadcaster
            nor at any document!).
         */
@@ -2740,7 +2737,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         {
             // let it recover itself
             Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
-            xDocRecover->recoverDocument(
+            xDocRecover->recoverFromFile(
                 sURL,
                 lDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString() ),
                 lDescriptor.getAsConstPropertyValueList()

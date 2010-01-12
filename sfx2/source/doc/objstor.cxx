@@ -476,9 +476,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             impl_addToModelCollection(xModel);
         }
 
-        pImp->bInitialized = sal_True;
-        SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
+        SetInitialized_Impl( true );
         return sal_True;
     }
 

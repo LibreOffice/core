@@ -340,7 +340,7 @@ SfxObjectShell::~SfxObjectShell()
     // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
     // erlaubt
     SfxObjectShell::Close();
-    pImp->xModel = NULL;
+    pImp->pBaseModel.set( NULL );
 
     DELETEX(pImp->pReloadTimer );
 
@@ -354,8 +354,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
-    if ( pImp->xModel.is() )
-        pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
+    pImp->pBaseModel.set( NULL );
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( sal_False ) == pImp->m_xDocStorage )
@@ -605,7 +604,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
             {
                 SfxHelp::OpenHelpAgent( &pFirst->GetFrame(), HID_CLOSE_WARNING );
             }
-            const Reference< XTitle > xTitle(pImp->xModel, UNO_QUERY_THROW);
+            const Reference< XTitle > xTitle( *pImp->pBaseModel.get(), UNO_QUERY_THROW );
             const ::rtl::OUString     sTitle = xTitle->getTitle ();
             nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);
         }
@@ -865,33 +864,26 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::SetModel( SfxBaseModel* pModel )
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetModel() const
 {
-    OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
-    pImp->xModel = pModel;
-    if ( pModel )
+    return GetBaseModel();
+}
+
+void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
+{
+    OSL_ENSURE( !pImp->pBaseModel.is() || pModel == NULL, "Model already set!" );
+    pImp->pBaseModel.set( pModel );
+    if ( pImp->pBaseModel.is() )
     {
-        pModel->addCloseListener( new SfxModelListener_Impl(this) );
+        pImp->pBaseModel->addCloseListener( new SfxModelListener_Impl(this) );
     }
 }
 
 //--------------------------------------------------------------------
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& SfxObjectShell::GetModel() const
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetBaseModel() const
 {
-    return pImp->xModel;
-}
-
-void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
-{
-    SetModel(pModel);
-}
-
-//--------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetBaseModel()
-{
-    return pImp->xModel;
+    return pImp->pBaseModel.get();
 }
 /* -----------------------------10.09.2001 15:56------------------------------
 
@@ -1072,3 +1064,16 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
     return NULL;
 }
 
+void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
+{
+    pImp->bInitialized = sal_True;
+    if ( i_fromInitNew )
+    {
+        SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
+    }
+    else
+    {
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
+    }
+}
