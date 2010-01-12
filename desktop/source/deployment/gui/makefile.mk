@@ -82,6 +82,7 @@ SHL1STDLIBS = \
         $(SVTOOLLIB)	\
         $(SVLLIB)  \
         $(SVXLIB) \
+        $(SVXCORELIB) \
         $(SFXLIB) \
         $(DEPLOYMENTMISCLIB) \
         $(OLE32LIB)
