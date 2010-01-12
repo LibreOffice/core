@@ -52,7 +52,8 @@ SRC1FILES =  \
         svxitems.src
 
 SLOFILES= \
-        $(SLO)$/svdfield.obj \
+                $(SLO)$/optitems.obj    \
+                $(SLO)$/svdfield.obj \
         $(SLO)$/writingmodeitem.obj \
         $(SLO)$/frmitems.obj \
         $(SLO)$/paraitem.obj \

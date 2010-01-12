@@ -29,15 +29,15 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
+#include "precompiled_editeng.hxx"
 #include <tools/shl.hxx>
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include "optitems.hxx"
-#include <svx/dialmgr.hxx>
-#include <svx/svxitems.hrc>
+#include <editeng/optitems.hxx>
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 

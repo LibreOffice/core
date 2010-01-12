@@ -27,20 +27,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_OPTITEMS_HXX
-#define _SVX_OPTITEMS_HXX
+#ifndef _EDITENG_OPTITEMS_HXX
+#define _EDITENG_OPTITEMS_HXX
 
 // include ---------------------------------------------------------------
 
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include "svx/svxdllapi.h"
+#include <editeng/editengdllapi.h>
 
 // forward ---------------------------------------------------------------
-namespace com{namespace sun{namespace star{
-namespace beans{
-//  class XPropertySet;
-}
+namespace com { namespace sun { namespace star {
 namespace linguistic2{
     class XSpellChecker1;
 }}}}
@@ -48,9 +45,7 @@ namespace linguistic2{
 
 // class SfxSpellCheckItem -----------------------------------------------
 
-
-
-class SVX_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
+class EDITENG_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 {
 public:
     TYPEINFO();
@@ -80,9 +75,7 @@ private:
 
 // class SfxHyphenRegionItem ---------------------------------------------
 
-
-
-class SVX_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
+class EDITENG_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
 {
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
@@ -116,8 +109,6 @@ public:
         return *this;
     }
 };
-
-
 
 #endif
 

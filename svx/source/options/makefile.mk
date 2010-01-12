@@ -36,7 +36,6 @@ PROJECTPCHSOURCE=$(PRJ)$/util\svxpch
 
 PRJNAME=svx
 TARGET=options
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -49,18 +48,8 @@ SRS1NAME=$(TARGET)
 SRC1FILES=\
     optgrid.src     
 
-LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
-LIB1OBJFILES= \
-    $(SLO)$/asiancfg.obj
-
-LIB2TARGET= $(SLB)$/$(TARGET).lib
-LIB2OBJFILES= \
-    $(SLO)$/htmlcfg.obj \
-    $(SLO)$/optitems.obj    \
-    $(SLO)$/optgrid.obj \
-    $(SLO)$/srchcfg.obj
-
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
+SLOFILES= \
+    $(SLO)$/optgrid.obj
 
 # --- Targets -------------------------------------------------------
 
