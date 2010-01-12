@@ -208,8 +208,6 @@ sub rebase_again
     my $fname = $misc_dir . "rebase_again.txt";
     open ( FILES, "> $fname") or die "Error: cannot open file $fname";
     my $filesstring = join " ", @$oldfiles_ref;
-    # For W32-4nt-cygwin-perl: rebase_again.txt needs \.
-    if ( "$ENV{USE_SHELL}" eq "4nt" ) { $filesstring =~ s/\//\\/g; }
     print FILES "$filesstring\n";
     close FILES;
     $command .= "\@$fname";
@@ -273,8 +271,6 @@ sub rebase_initially
     my $fname = $misc_dir . "rebase_new.txt";
     open ( FILES, "> $fname") or die "Error: cannot open file $fname";
     my $filesstring = join " ", @$files_ref;
-    # For W32-4nt-cygwin-perl: rebase_new.txt needs \.
-    if ( "$ENV{USE_SHELL}" eq "4nt" ) { $filesstring =~ s/\//\\/g; }
     print FILES "$filesstring\n";
     close FILES;
     $command .= "\@$fname";
