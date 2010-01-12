@@ -654,7 +654,8 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         else
             nRow = mpParam->nRow2 + 1; // Naechste Spalte
     }
-    return false;
+// statement unreachable
+//    return false;
 }
 
 bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
