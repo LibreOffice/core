@@ -704,9 +704,7 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
-                                    //! im Destruktor nicht explizit geloescht werden.
-                                    //! Dies erledigt das Sfx.
+    SetBaseModel( new SmModel(this) );
 }
 
 
