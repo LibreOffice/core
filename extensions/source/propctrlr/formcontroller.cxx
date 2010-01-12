@@ -35,7 +35,7 @@
 #include "formstrings.hxx"
 #include "defaultforminspection.hxx"
 #ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
+#include "propctrlr.hrc"
 #endif
 
 /** === begin UNO includes === **/

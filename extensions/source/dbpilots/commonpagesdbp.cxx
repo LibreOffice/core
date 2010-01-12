@@ -50,10 +50,10 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 //.........................................................................
 namespace dbp

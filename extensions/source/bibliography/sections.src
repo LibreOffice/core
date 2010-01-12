@@ -30,7 +30,7 @@
 //#pragma CHARSET_ANSI
 
 #include "sections.hrc"
-#include "extensio.hrc"
+#include "bibliography.hrc"
 
 #define FT_POS          12
 #define FTSIZE_LEFT     88

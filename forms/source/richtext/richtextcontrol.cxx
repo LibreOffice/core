@@ -46,13 +46,15 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
 /** === end UNO includes === **/
+
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/editview.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
 
 //--------------------------------------------------------------------------
@@ -397,6 +399,33 @@ namespace frm
         }
 
         VCLXWindow::dispose();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
+        if ( !pControl )
+            return;
+
+        OutputDevice* pTargetDevice = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        OSL_ENSURE( pTargetDevice != NULL, "ORichTextPeer::draw: no graphics -> no drawing!" );
+        if ( !pTargetDevice )
+            return;
+
+        ::Size aSize = pControl->GetSizePixel();
+        const MapUnit eTargetUnit = pTargetDevice->GetMapMode().GetMapUnit();
+        if ( eTargetUnit != MAP_PIXEL )
+            aSize = pControl->PixelToLogic( aSize, eTargetUnit );
+
+        ::Point aPos( _nX, _nY );
+        // the XView::draw API talks about pixels, always ...
+        if ( eTargetUnit != MAP_PIXEL )
+            aPos = pTargetDevice->PixelToLogic( aPos );
+
+        pControl->Draw( pTargetDevice, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
     }
 
     //--------------------------------------------------------------------

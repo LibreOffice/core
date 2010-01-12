@@ -58,7 +58,7 @@ using namespace com::sun::star::devtools;
 #include <vcl/svapp.hxx>
 #endif
 #include <svtools/stringtransfer.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 //#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
 //#endif
@@ -495,8 +495,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
-#elif defined IRIX
-    abGP.Append( "06" );
 #elif defined HPUX
     abGP.Append( "07" );
 #elif defined FREEBSD
