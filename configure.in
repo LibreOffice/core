@@ -753,7 +753,7 @@ AC_ARG_WITH(zip-home,
 ],,)
 AC_ARG_WITH(mingwin,
 [  --with-mingwin          For Windows users, use the mingwin32 compiler within
-                          cygwin environment, this implies --with-use-shell=tcsh
+                          cygwin environment
 
                           Usage: --with-mingwin=yes
 
@@ -763,15 +763,6 @@ AC_ARG_WITH(mingwin,
 
                           Usage: --with-mingwin=i586-mingw32msvc-g++
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
-AC_ARG_WITH(use-shell,
-[  --with-use-shell        Use this option to override the default shell to be
-                          used for the build environment.
-                          Supported options:
-                            tcsh (default)
-                            bash
-
-                          Usage: --with-use-shell=tcsh|bash
-],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
 [  --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -1296,16 +1287,8 @@ AC_SUBST(DICT_SYSTEM_DIR)
 AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
-dnl ===================================================================
-dnl all O/S use tcsh or bash.
-dnl The following sets the with_use_shell variable.
-dnl ===================================================================
-AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_CHECKING([Windows build environment sanity])
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
    dnl ===================================================================
@@ -1333,32 +1316,14 @@ link, and copy the program to the name of the link.])
          fi
       fi
    dnl ===================================================================
-   dnl If using Mingwin32 then don't use 4NT
-   dnl ===================================================================
    if test "$WITH_MINGWIN" = "yes" ; then
-      if test "x$with_use_shell" = "x"; then
-         with_use_shell="tcsh"
-      fi
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
       fi
    fi
-elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh"; then
-      AC_MSG_ERROR([only "tcsh" is supported options])
-   fi
-else 
-   dnl ===================================================================
-   dnl All other operating systems use tcsh or bash.
-   dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
-   fi
+   AC_MSG_RESULT([ok])
 fi
-USE_SHELL="$with_use_shell"
-AC_MSG_RESULT([$USE_SHELL])
-AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
 dnl ===================================================================
@@ -1377,25 +1342,13 @@ fi
 
 
 dnl ===================================================================
-dnl Check whether the chosen shell can be used.
+dnl Check whether the bash shell can be used.
 dnl ===================================================================
-if test "$with_use_shell" = "tcsh"; then
-   AC_PATH_PROG(SHELLPATH, tcsh)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([tcsh not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/tcsh$//p"`
-   fi
-elif test "$with_use_shell" = "bash"; then
-   AC_PATH_PROG(SHELLPATH, bash)
-   if test -z "$SHELLPATH"; then
-      AC_MSG_ERROR([bash not found in \$PATH])
-   else
-      SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
-   fi
+AC_PATH_PROG(SHELLPATH, bash)
+if test -z "$SHELLPATH"; then
+   AC_MSG_ERROR([bash not found in \$PATH])
 else
-   AC_MSG_WARN([Windows/OS/2 4NT builds don't test for the shell])
-   SHELLPATH="NO_SHELLPATH_NEEDED"
+   SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
 fi
 AC_SUBST(SHELLPATH)
 

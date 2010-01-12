@@ -42,21 +42,13 @@ CAPTURE_OUTPUT = > $(MISC)$/testhxx.output && $(TOUCH) $(SLO)$/testhxx.obj
 
 SLOFILES = $(SLO)$/testhxx.obj
 
-.IF "$(USE_SHELL)" == "4nt"
-MY_SCRIPT_EXT := .btm
-MY_EXECUTABLE := @ echo
-.ELSE
-MY_SCRIPT_EXT :=
-MY_EXECUTABLE := chmod +x
-.ENDIF
-
 .INCLUDE: target.mk
 
-ALLTAR: $(BIN)$/$(TARGET)$(MY_SCRIPT_EXT)
+ALLTAR: $(BIN)$/$(TARGET)
 
-$(BIN)$/$(TARGET)$(MY_SCRIPT_EXT) .ERRREMOVE : $(MISC)$/testhxx.output create.pl
+$(BIN)$/$(TARGET) .ERRREMOVE : $(MISC)$/testhxx.output create.pl
     $(PERL) -w create.pl < $(MISC)$/testhxx.output > $@
-    $(MY_EXECUTABLE) $@
+    chmod +x $@
 
 $(MISC)$/testhxx.output: $(SLO)$/testhxx.obj
     $(TOUCH) $<

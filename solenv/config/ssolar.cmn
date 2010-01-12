@@ -157,6 +157,7 @@ common
 		ODBCPATH
 		ODBCVER
 		OLD_CHAOS
+        OOO_SHELL
 		PACKMS
 		PCLEAN_PATH
         PKGCONFIG_ROOT
@@ -237,7 +238,6 @@ common
 		USE_MAPFILES
 		USE_NEW_SDK
         USE_PCH
-		USE_SHELL
         USE_SYSTEM_STL
 		use_cygcp
 		use_shl_versions
@@ -274,7 +274,6 @@ common
         SOLAR_PLUGIN
         URE_BOOTSTRAP
         USE_FT_EMBOLDEN
-        USE_SHELL
         USE_XINERAMA
         VBA_EXTENSION
         XINERAMA_LINK

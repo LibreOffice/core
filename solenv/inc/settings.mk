@@ -42,11 +42,6 @@ force_dmake_to_error
 
 # --- common tool makros --------------------------------------
 
-# moved temporary wrapper here as it is used in unitools.mk
-.IF "$(USE_SHELL)"!=""
-use_shell*=$(USE_SHELL)
-.ENDIF
-
 .IF "$(USE_PCH)"!=""
 ENABLE_PCH=TRUE
 .ENDIF			# "$(USE_PCH)"!=""
@@ -58,13 +53,6 @@ NETWORK_BUILD:=TRUE
 .ENDIF			# "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
 
 .INCLUDE : unitools.mk
-
-#have SCRIPTEXT already defined in product.mk but available for all
-.IF "$(USE_SHELL)"=="4NT"
-SCRIPTEXT=.bat
-.ELSE           # "$(GUI)"=="WNT"
-SCRIPTEXT=
-.ENDIF          # "$(GUI)"=="WNT"
 
 .INCLUDE : minor.mk
 
@@ -1034,26 +1022,11 @@ LNTFLAGSOUTOBJ=-os
 # path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
 # the end over adding at the start); the ": &&" in the bash case enables this to
 # work at the start of a recipe line that is not prefixed by "+" as well as in
-# the middle of an existing && chain; the tcsh case is somewhat imprecise in
-# that it potentially affects multiple commands following on the recipe line:
-.IF "$(USE_SHELL)" == "bash"
+# the middle of an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
-.ELSE
-AUGMENT_LIBRARY_PATH = if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
-    eval 'setenv $(OOO_LIBRARY_PATH_VAR) \
-    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(normpath, $(SOLARSHAREDBIN))"' \
-    && if ($$?$(OOO_LIBRARY_PATH_VAR) == 0) \
-    setenv $(OOO_LIBRARY_PATH_VAR) "$(normpath, $(SOLARSHAREDBIN))" &&
-AUGMENT_LIBRARY_PATH_LOCAL = if ($$?$(OOO_LIBRARY_PATH_VAR) == 1) \
-    eval 'setenv $(OOO_LIBRARY_PATH_VAR) \
-    "$${{$(OOO_LIBRARY_PATH_VAR)}}:$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))"' \
-    && if ($$?$(OOO_LIBRARY_PATH_VAR) == 0) \
-    setenv $(OOO_LIBRARY_PATH_VAR) \
-    "$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))" &&
-.END
 .END
 
 # remove if .Net 2003 support has expired 

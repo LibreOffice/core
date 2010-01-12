@@ -47,11 +47,11 @@ LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
 .ENDIF
 
-.IF "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+.IF "$(GUI)"=="WNT"
 PATH!:=.:$(SOLARBINDIR:^"/cygdrive/":s/://):$(PATH)
-.ELSE           # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+.ELSE           # "$(GUI)"=="WNT"
 PATH!:=.$(PATH_SEPERATOR)$(SOLARBINDIR)$(PATH_SEPERATOR)$(PATH)
-.ENDIF          # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+.ENDIF          # "$(GUI)"=="WNT"
 .EXPORT : PATH
 
 #override
@@ -82,10 +82,6 @@ NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
 NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)-newpatch-rename_me.patch
 PATCH_FILE_DEP:=$(PRJ)/$(PATH_IN_MODULE)/{$(PATCH_FILES)}
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
-
-.IF "$(TAR_EXCLUDES)"!=""
-TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
-.ENDIF          # "$(TAR_EXCLUDES)"!=""
 
 unzip_quiet_switch:=-qq
 .IF "$(VERBOSE)"=="TRUE"
@@ -118,9 +114,9 @@ clean:
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -128,28 +124,28 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_NAME).tar)
+    @noop $(assign UNPACKCMD := $(GNUTAR) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 

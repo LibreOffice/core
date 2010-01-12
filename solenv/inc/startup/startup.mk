@@ -33,7 +33,7 @@ CALLTARGETS=$(MAKETARGETS)
 .INCLUDEDIRS : $(DMAKE_INC) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) $(SOLARENV)$/inc
 
 # Grab key definitions from the environment
-# .IMPORT .IGNORE : OS TMPDIR SHELL UPD INPATH OUTPATH GUI COM EX CLASSPATH PRODUCT GUIBASE SOLARENV SOLARVER GUIENV CPU CPUNAME CVER GVER COMPATH LIB INCLUDE TR SORT UNIQ ROOTDIR SED AWK TOUCH IENV ILIB PRODUCT_ENV COMEX UPD BUILD DEVROOT VCL SO3 ENVCFLAGS
+# .IMPORT .IGNORE : OS TMPDIR UPD INPATH OUTPATH GUI COM EX CLASSPATH PRODUCT GUIBASE SOLARENV SOLARVER GUIENV CPU CPUNAME CVER GVER COMPATH LIB INCLUDE TR SORT UNIQ ROOTDIR SED AWK TOUCH IENV ILIB PRODUCT_ENV COMEX UPD BUILD DEVROOT VCL SO3 ENVCFLAGS
 
 .IF "$(OS)" == "" || "$(OS)" == "Windows_NT"
 .ERROR : ; @echo Forced error: Environment variable OS has to be set for OOo build!
@@ -42,7 +42,11 @@ OS_variable_needed
 
 # Customize macro definitions based on seting of OS.
 # This must come before the default macro definitions which follow.
-.INCLUDE .NOINFER : $(INCFILENAME:d)$(OS)$/macros.mk
+.IF "$(OS)" == "OS2"
+.INCLUDE: $(INCFILENAME:d)OS2/macros.mk
+.ELIF "$(OS)" == "WNT"
+.INCLUDE: $(INCFILENAME:d)wnt/macros.mk
+.END
 
 # ----------------- Default Control Macro definitions -----------------------
 # Select appropriate defaults for basic macros
@@ -53,15 +57,18 @@ OS_variable_needed
 MAXLINELENGTH	= 65530
 
 # Recipe execution configuration
-   SHELL	 *:= $/bin$/sh
-   SHELLFLAGS	 *:= -fc
-   GROUPSHELL	 *:= $(SHELL)
-   GROUPFLAGS	 *:=
-   SHELLMETAS	 *:= |();&<>?*][$$:\\#`'"
-   GROUPSUFFIX	 *:=
+   SHELL := $(OOO_SHELL)
+   SHELLFLAGS := -c
+   SHELLMETAS := !"\#$$%&'()*;<=>?[\]`{{|}}~
+    # the colon (":") utility is typically only available as a shell built-in,
+    # so it should be included in SHELLMETAS; however, this would result in very
+    # many false positives on Windows where ":" is used in drive letter notation
+   GROUPSHELL := $(SHELL)
+   GROUPFLAGS :=
+   GROUPSUFFIX :=
 
 # Intermediate target removal configuration
-   RM            *:= $/bin$/rm
+   RM            *:= rm
    RMFLAGS       *=  -f
    RMTARGET      *=  $<
 
@@ -80,7 +87,7 @@ NULLPRQ *:= __.NULLPRQ
 E *:= # Executables
 
 # Other Compilers, Tools and their flags
-MV *:= $/bin$/mv     # File rename command
+MV *:= mv     # File rename command
 
 
 # Finally, define the default construction strategy

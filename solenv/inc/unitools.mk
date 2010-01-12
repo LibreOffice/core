@@ -66,26 +66,14 @@ NULLDEV:=/dev/null
 
 
 # iz29609 helpmacro to check if file exists
-.IF "$(USE_SHELL)"=="bash"
 IFEXIST:=if [ -f 
 IFNOTEXIST:= if ! test -f
 THEN:= ] ; then
 FI:= ; fi
 PIPEERROR=2>&1 |
-.ELSE
-IFEXIST:=if ( -e
-IFNOTEXIST:=if ( ! -e
-THEN:= )
-FI:=
-PIPEERROR=|&
-.ENDIF
 
 # iz31658
-.IF "$(USE_SHELL)"=="bash"
 CHECKZIPRESULT:=|| ret=$$?; if [[ "$$ret" != "12" && "$$ret" != "1" ]] ; then exit $$ret ; fi && echo "Nothing to update for zip"
-.ELSE
-CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
-.ENDIF
 
 # Platform specific
 .IF "$(GUI)"=="WNT"
@@ -196,10 +184,8 @@ CONVERT*:=$(PERL) $(SOLARENV)/bin/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)/bin/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)/bin/gccinstlib.pl
 
-# The dmake $(PWD) variable and the tcsh pwd command both apparantly produce
-# paths with symlinks resolved, while the bash pwd command by default produces
-# paths with unresolved symlinks, so that computing PATH_IN_MODULE in
-# settings.mk would fail without the -P flag to the bash pwd command:
-.IF "$(USE_SHELL)" == "bash"
+# The dmake $(PWD) apparantly produces paths with symlinks resolved, while the
+# bash pwd command by default produces paths with unresolved symlinks, so that
+# computing PATH_IN_MODULE in settings.mk would fail without the -P flag to the
+# bash pwd command:
 PWDFLAGS = -P
-.ENDIF

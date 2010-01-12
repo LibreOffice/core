@@ -102,10 +102,6 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
         # stl/_epilog.h.)
 .ENDIF
 
-.IF "$(USE_SHELL)"=="4nt"
-TAR_EXCLUDES=*/SC5/*
-.ENDIF          # "$(USE_SHELL)"=="4nt"
-
 ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
     src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
 
@@ -233,21 +229,13 @@ avoid_win32_patches :
     force_dmake_to_error
 
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-.IF "$(USE_SHELL)"=="4nt"
     win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 
 .IF "$(USE_NEW_SDK)"!=""
 $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-.IF "$(USE_SHELL)"=="4nt"
     win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# "$(USE_NEW_SDK)"!=""

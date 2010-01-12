@@ -70,27 +70,7 @@ if ($ENV{OS} eq 'LINUX') {
     print STDOUT 'unlink ${my_tmp} || exit 1', "\n";
     print STDOUT 'unlink ${my_tmp}.out || exit 1', "\n";
     print STDOUT 'exit ${my_ret}', "\n";
-} elsif ($ENV{OS} eq 'WNT' and $ENV{USE_SHELL} eq '4nt') {
-    1 while $in =~ s!\s+-I\s*\.\S*\s*! !g; # discard relative includes
-    $in =~ s!(\s+-I\s*)(?i:$solarversion)(\S*)!$1%SOLARVERSION%$2!og;
-        # macrofy includes to solver
-    $in =~ s!\s+-Fo\s*\S+! -Fo%my_tmp%.obj! || die 'bad input: no -Fo';
-    $in =~ s!\s+-Zi\s! !;
-    $in =~ s!\s+-Fd\s*\S+!!;
-    $in =~ s!\S+\\testhxx.cxx!%my_tmp%!
-        || die 'bad input: no source file';
-    print STDOUT '@ECHO OFF', "\n";
-    print STDOUT 'SET my_tmp=%TMP%\%_PID%_include.cc', "\n";
-    print STDOUT 'ECHO #include "%@REPLACE[\\,/,%@FULL[%1]]" > %my_tmp%', "\n";
-    print STDOUT $in, ' > %my_tmp%.out', "\n";
-    print STDOUT 'SET my_ret=%ERRORLEVEL%', "\n";
-    print STDOUT 'IF %my_ret% != 0',
-        ' sed -e s!%@FILENAME[%my_tmp%]!%@REPLACE[\\,\\\\,%1]! %my_tmp%.out',
-        ' 1>&2', "\n";
-    print STDOUT 'DEL /EQ %my_tmp% %my_tmp%.obj %my_tmp%.pdb %my_tmp%.out',
-        "\n";
-    print STDOUT 'QUIT %my_ret%', "\n";
-} elsif ($ENV{OS} eq 'WNT' and $ENV{USE_SHELL} ne '4nt') {
+} elsif ($ENV{OS} eq 'WNT') {
   if ($ENV{COM} eq 'GCC') {
     1 while $in =~ s!\s+-I\s*\.\S*\s*! !g; # discard relative includes
     $in =~ s!(\s+-I\s*)(?i:$solarversion)(\S*)!$1\${SOLARVERSION}$2!og;

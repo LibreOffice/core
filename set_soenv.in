@@ -72,12 +72,12 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 # Help variables.
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $SHELL_PATH, $XLIB, $XINC,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
@@ -794,21 +794,7 @@ if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. shell path.
-# Check whether autoconf found a valid shell path.
-if ("@USE_SHELL@" eq "tcsh")
-{  # SHELL as argument from autoconf.
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/tcsh";
-}
-elsif ("@USE_SHELL@" eq "bash")
-{
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/bash";
-}
-else {
-   die "Not a recognized shell: @USE_SHELL@ !";
-}
-
+$OOO_SHELL = '@SHELLPATH@'."\/bash";
 
 if ( '@STLPORT4@' eq $no_stl )
 {
@@ -1092,7 +1078,6 @@ if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
    $PATH              = GetCorrectPath ($PATH,
                                         $COMPATH, $CC,
                                         $PERL_PATH, 'perl',
-                                        $SHELL_PATH, '@USE_SHELL@',
                                         @javaBits);
 }
 
@@ -1177,11 +1162,6 @@ elsif ($platform =~ m/cygwin/)
    if ( ! ( $PATH =~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
    {
       $PATH          .= $ps.$tmppath;
-   }
-   # Check if $SHELL_PATH is already set in PATH
-   $tmppath = CygFormat($SHELL_PATH);
-   if ( ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
-   {   $PATH          .= $ps.$tmppath;
    }
    # Check if $CYGWIN_PATH is already set in PATH
    $tmppath = CygFormat($CYGWIN_PATH);
@@ -1498,7 +1478,7 @@ CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
-ToFile( "SHELL",             $SHELL,             "e" );
+ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
@@ -1931,8 +1911,6 @@ if (( $platform =~ m/os2/ )) {
 ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
 ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
-
-ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
 
 #
 # Writing the aliases to file.
