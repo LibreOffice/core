@@ -61,7 +61,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/rtfout.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/componentcontext.hxx>
