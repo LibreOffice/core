@@ -43,7 +43,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/fmdpage.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
@@ -7681,7 +7681,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
             //  Update immer, auch wenn der Link schon da war
             //! Update nur fuer die betroffene Tabelle???
 
-            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
             USHORT nCount = pLinkManager->GetLinks().Count();
             for ( USHORT i=0; i<nCount; i++ )
             {

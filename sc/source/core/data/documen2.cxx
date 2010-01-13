@@ -39,7 +39,7 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
@@ -228,7 +228,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
         if ( pDocShell )
-            pLinkManager = new SvxLinkManager( pDocShell );
+            pLinkManager = new sfx2::LinkManager( pDocShell );
 
         xPoolHelper = new ScPoolHelper( this );
 
@@ -263,11 +263,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     aTrackTimer.SetTimeout( 100 );
 }
 
-SvxLinkManager* ScDocument::GetLinkManager()  const
+sfx2::LinkManager*  ScDocument::GetLinkManager()  const
 {
     if ( bAutoCalc && !pLinkManager && pShell)
     {
-        pLinkManager = new SvxLinkManager( pShell );
+        pLinkManager = new sfx2::LinkManager( pShell );
     }
     return pLinkManager;
 }

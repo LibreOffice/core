@@ -57,7 +57,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/fontworkbar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

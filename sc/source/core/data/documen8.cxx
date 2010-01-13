@@ -41,7 +41,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
@@ -1187,7 +1187,7 @@ namespace {
                      (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
-        const SvxLinkManager* pLinkManager,
+        const sfx2::LinkManager* pLinkManager,
         const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode,
         USHORT* pnDdePos = NULL )
 {
@@ -1216,7 +1216,7 @@ ScDdeLink* lclGetDdeLink(
 /** Returns a pointer to the specified DDE link.
     @param nDdePos  Index of the DDE link (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
-ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
+ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, USHORT nDdePos )
 {
     if( pLinkManager )
     {

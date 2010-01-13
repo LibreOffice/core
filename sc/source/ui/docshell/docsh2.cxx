@@ -48,7 +48,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/asiancfg.hxx>
+#include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/unolingu.hxx>
 #include <rtl/logfile.hxx>

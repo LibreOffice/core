@@ -230,7 +230,7 @@
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <ctype.h>
 #include <vcl/font.hxx>
 #include <editeng/fontitem.hxx>

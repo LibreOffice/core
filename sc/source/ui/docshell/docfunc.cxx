@@ -40,7 +40,7 @@
 
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
@@ -4551,7 +4551,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     //  #i52120# if other area links exist at the same start position,
     //  remove them first (file format specifies only one link definition

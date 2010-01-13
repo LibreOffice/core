@@ -39,7 +39,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/charmap.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>

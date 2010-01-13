@@ -61,7 +61,7 @@
 #include "svl/stritem.hxx"
 #include "svl/urihelper.hxx"
 #include "svl/zformat.hxx"
-#include "svx/linkmgr.hxx"
+#include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
 
@@ -1994,7 +1994,7 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
 
     String aFilter, aOptions;
     ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
-    SvxLinkManager* pLinkMgr = mpDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId, aFilter);
     DBG_ASSERT(pFileName, "ScExternalRefManager::insertExternalFileLink: file name pointer is NULL");
     pLinkMgr->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, *pFileName, &aFilter);

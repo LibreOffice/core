@@ -36,7 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/itemset.hxx>
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>

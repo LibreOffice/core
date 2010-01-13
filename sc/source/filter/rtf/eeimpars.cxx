@@ -47,7 +47,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svtools/parhtml.hxx>
 #include <svl/zforlist.hxx>

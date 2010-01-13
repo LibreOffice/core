@@ -44,7 +44,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -2408,7 +2408,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     if (bLink)
     {
-        SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
         SfxMedium* pMed = pSrcShell->GetMedium();
         String aFileName = pMed->GetName();

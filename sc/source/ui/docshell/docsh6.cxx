@@ -40,7 +40,7 @@
 
 #include <svx/pageitem.hxx>
 #include <vcl/virdev.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 // INCLUDE ---------------------------------------------------------------
@@ -367,7 +367,7 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
 
 void ScDocShell::UpdateLinks()
 {
-    SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
+    sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
     ScStrCollection aNames;
 
     // nicht mehr benutzte Links raus
@@ -438,7 +438,7 @@ void ScDocShell::UpdateLinks()
 
 BOOL ScDocShell::ReloadTabLinks()
 {
-    SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
+    sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
     BOOL bAny = FALSE;
     USHORT nCount = pLinkManager->GetLinks().Count();

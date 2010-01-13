@@ -37,7 +37,7 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>

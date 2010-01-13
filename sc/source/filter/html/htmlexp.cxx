@@ -53,7 +53,7 @@
 #include <editeng/wghtitem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/editeng.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>

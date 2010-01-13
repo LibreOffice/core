@@ -36,7 +36,7 @@
 
 #include <sot/formats.hxx>
 #include <sfx2/app.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include "servobj.hxx"
 #include "docsh.hxx"
 #include "impex.hxx"
