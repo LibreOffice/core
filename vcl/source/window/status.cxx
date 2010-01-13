@@ -64,6 +64,7 @@ public:
     ~ImplData();
 
     VirtualDevice*      mpVirDev;
+    long                mnItemBorderWidth;
     BOOL                mbTopBorder:1;
 };
 
@@ -71,6 +72,7 @@ StatusBar::ImplData::ImplData()
 {
     mpVirDev = NULL;
     mbTopBorder = FALSE;
+    mnItemBorderWidth = 0;
 }
 
 StatusBar::ImplData::~ImplData()
@@ -420,8 +422,9 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
 
     // Ausgabebereich berechnen
     ImplStatusItem*     pItem = mpItemList->GetObject( nPos );
-    Rectangle           aTextRect( aRect.Left()+1, aRect.Top()+1,
-                                   aRect.Right()-1, aRect.Bottom()-1 );
+    long nW = mpImplData->mnItemBorderWidth + 1;
+    Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+                                   aRect.Right()-nW, aRect.Bottom()-nW );
     Size                aTextRectSize( aTextRect.GetSize() );
 
     if ( bOffScreen )
@@ -1229,8 +1232,11 @@ Rectangle StatusBar::GetItemRect( USHORT nItemId ) const
         {
             // Rechteck holen und Rahmen abziehen
             aRect = ImplGetItemRectPos( nPos );
-            aRect.Left()++;
-            aRect.Right()--;
+            long nW = mpImplData->mnItemBorderWidth+1;
+            aRect.Top() += nW-1;
+            aRect.Bottom() -= nW-1;
+            aRect.Left() += nW;
+            aRect.Right() -= nW;
             return aRect;
         }
     }
@@ -1250,8 +1256,9 @@ Point StatusBar::GetItemTextPos( USHORT nItemId ) const
             // Rechteck holen
             ImplStatusItem* pItem = mpItemList->GetObject( nPos );
             Rectangle aRect = ImplGetItemRectPos( nPos );
-            Rectangle aTextRect( aRect.Left()+1, aRect.Top()+1,
-                                 aRect.Right()-1, aRect.Bottom()-1 );
+            long nW = mpImplData->mnItemBorderWidth + 1;
+            Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+                                           aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
                                              Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
                                              pItem->mnBits );
@@ -1692,7 +1699,21 @@ Size StatusBar::CalcWindowSizePixel() const
         }
     }
 
-    nCalcHeight = nMinHeight+nBarTextOffset;
+    if( pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
+    {
+        ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
+        Region aBound, aContent;
+        Region aNatRgn( Rectangle( Point( 0, 0 ), Size( 150, 50 ) ) );
+        if( pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+            aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            mpImplData->mnItemBorderWidth =
+                ( aBound.GetBoundRect().GetHeight() -
+                  aContent.GetBoundRect().GetHeight() ) / 2;
+        }
+    }
+
+    nCalcHeight = nMinHeight+nBarTextOffset + 2*mpImplData->mnItemBorderWidth;
     if( nCalcHeight < nProgressHeight+2 )
         nCalcHeight = nProgressHeight+2;
 

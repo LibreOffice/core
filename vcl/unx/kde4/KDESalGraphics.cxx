@@ -255,6 +255,9 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
+
+    XLIB_Region pTempClipRegion = 0;
+
     if (type == CTRL_PUSHBUTTON)
     {
         QStyleOptionButton option;
@@ -476,6 +479,19 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         lcl_drawFrame( QStyle::PE_Frame, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
+
+        int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+        pTempClipRegion = XCreateRegion();
+        XRectangle xRect = { widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height() };
+        XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
+        XLIB_Region pSubtract = XCreateRegion();
+        xRect.x += size;
+        xRect.y += size;
+        xRect.width -= 2* size;
+        xRect.height -= 2*size;
+        XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
+        XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
+        XDestroyRegion( pSubtract );
     }
     else if (type == CTRL_FIXEDBORDER)
     {
@@ -516,15 +532,35 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     if (returnVal)
     {
-        if( SelectFont() == 0 )
-            return false;
+        GC gc = SelectFont();
 
-        QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
-        X11SalGraphics::CopyScreenArea( GetXDisplay(),
-            pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
-            GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
-            SelectFont(), 0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top());
+        if( gc )
+        {
+            if( pTempClipRegion )
+            {
+                if( pClipRegion_ )
+                    XIntersectRegion( pTempClipRegion, pClipRegion_, pTempClipRegion );
+                XSetRegion( GetXDisplay(), gc, pTempClipRegion );
+            }
+            QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
+            X11SalGraphics::CopyScreenArea( GetXDisplay(),
+                pixmap.handle(), pixmap.x11Info().screen(), pixmap.x11Info().depth(),
+                GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
+                gc, 0, 0, widgetRect.width(), widgetRect.height(), widgetRect.left(), widgetRect.top());
+
+            if( pTempClipRegion )
+            {
+                if( pClipRegion_ )
+                    XSetRegion( GetXDisplay(), gc, pClipRegion_ );
+                else
+                    XSetClipMask( GetXDisplay(), gc, None );
+            }
+        }
+        else
+            returnVal = false;
     }
+    if( pTempClipRegion )
+        XDestroyRegion( pTempClipRegion );
 
     return returnVal;
 }
