@@ -1885,14 +1885,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         const sal_Int32                 nPageNumber = nRenderer + 1;
         PageKind                        ePageKind = PK_STANDARD;
         sal_Bool                        bExportNotesPages = sal_False;
-        sal_Bool                        bExportNotes = sal_False;
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
                 rxOptions[ nProperty ].Value >>= xRenderDevice;
-            else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ) )
-                rxOptions[ nProperty ].Value >>= bExportNotes;
             else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
             {
                 rxOptions[ nProperty].Value >>= bExportNotesPages;
@@ -1988,7 +1985,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
                             if ( xPage.is() )
                             {
-                                if ( bExportNotes )
+                                if ( pPDFExtOutDevData->GetIsExportNotes() )
                                     ImplPDFExportComments( xPage, *pPDFExtOutDevData );
                                 uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
                                 if( xPagePropSet.is() )
