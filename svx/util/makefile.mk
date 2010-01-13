@@ -65,13 +65,11 @@ SHL1LIBS= \
     $(SLB)$/form-core.lib \
     $(SLB)$/gal.lib \
     $(SLB)$/items-core.lib \
-    $(SLB)$/options-core.lib \
     $(SLB)$/overlay.lib \
     $(SLB)$/primitive2d.lib \
     $(SLB)$/primitive3d.lib \
     $(SLB)$/properties.lib \
     $(SLB)$/svdraw-core.lib \
-    $(SLB)$/svxlink.lib \
     $(SLB)$/table-core.lib \
     $(SLB)$/tbxctrls-core.lib \
     $(SLB)$/toolbars.lib \
@@ -122,7 +120,6 @@ SHL2LIBS= \
     $(SLB)$/items.lib     \
     $(SLB)$/dialogs.lib	\
     $(SLB)$/mnuctrls.lib  \
-    $(SLB)$/options.lib   \
     $(SLB)$/stbctrls.lib  \
     $(SLB)$/tbxctrls.lib  \
     $(SLB)$/smarttags.lib \
@@ -185,13 +182,11 @@ SRSFILELIST=\
         $(SRS)$/mnuctrls.srs \
         $(SRS)$/stbctrls.srs \
         $(SRS)$/tbxctrls.srs \
-        $(SRS)$/options.srs \
         $(SRS)$/svxitems.srs \
         $(SRS)$/form.srs \
         $(SRS)$/fmcomp.srs \
         $(SRS)$/engine3d.srs \
         $(SRS)$/unodraw.srs \
-        $(SRS)$/svxlink.srs \
         $(SRS)$/accessibility.srs \
         $(SRS)$/table.srs \
         $(SRS)$/toolbars.srs \

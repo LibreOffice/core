@@ -22,11 +22,9 @@ sx	svx\source\smarttags					nmake	-	all	sx_smarttags sx_inc NULL
 sx	svx\source\stbctrls						nmake	-	all	sx_stbc sx_inc NULL
 sx	svx\source\mnuctrls						nmake	-	all	sx_mnuc sx_inc NULL
 sx	svx\source\engine3d						nmake	-	all	sx_3deng sx_inc NULL
-sx	svx\source\svxlink						nmake	-	all	sx_link sx_inc NULL
 sx	svx\source\form							nmake	-	all	sx_form sx_sdi sx_inc NULL
 sx	svx\source\fmcomp						nmake	-	all	sx_fmcmp sx_sdi sx_inc NULL
 sx	svx\source\tbxctrls						nmake	-	all	sx_tbxc sx_inc NULL
-sx	svx\source\options						nmake	-	all	sx_opt sx_inc NULL
 sx  svx\source\dialog                                               nmake   -       all     sx_dlg sx_inc NULL
 sx	svx\source\unodraw						nmake	-	all	sx_undrw sx_inc NULL
 sx	svx\source\unogallery					nmake	-	all	sx_ungal sx_inc NULL
@@ -35,5 +33,5 @@ sx	svx\source\xml							nmake	-	all	sx_xml sx_inc NULL
 sx	svx\source\accessibility				nmake	-	all	sx_accessibility sx_inc NULL
 sx	svx\source\customshapes					nmake	-	all sx_customshapes sx_inc NULL
 sx	svx\source\toolbars						nmake	-	all sx_toolbars sx_inc NULL
-sx      svx\util                                                                nmake   -       all     sx_util sx_3deng sx_dlg sx_draw sx_attribute sx_properties sx_contact sx_event sx_animation sx_primitive2d sx_primitive3d sx_overlay sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_opt sx_sdi sx_stbc sx_tbxc sx_undrw sx_ungal sx_xml sx_xout sx_accessibility sx_intro sx_customshapes sx_toolbars sx_table sx_smarttags NULL
+sx      svx\util                                                                nmake   -       all     sx_util sx_3deng sx_dlg sx_draw sx_attribute sx_properties sx_contact sx_event sx_animation sx_primitive2d sx_primitive3d sx_overlay sx_fmcmp sx_form sx_gall sx_items sx_mnuc sx_sdi sx_stbc sx_tbxc sx_undrw sx_ungal sx_xml sx_xout sx_accessibility sx_intro sx_customshapes sx_toolbars sx_table sx_smarttags NULL
 sx	svx\source\gengal						nmake	-	all	sx_gengal sx_util NULL

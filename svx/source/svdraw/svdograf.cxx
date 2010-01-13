@@ -47,7 +47,7 @@
 #include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>
 
-#include "linkmgr.hxx"
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
@@ -124,14 +124,14 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue )
 {
     SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
-    SvxLinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
+    sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
 
     if( pLinkManager && rValue.hasValue() )
     {
         pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName, 0, &pGrafObj->aFilterName );
 
         Graphic aGraphic;
-        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
+        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
             GraphicType eOldGraphicType = pGrafObj->GetGraphicType();  // kein Hereinswappen
             const sal_Bool bIsChanged = pModel->IsChanged();
@@ -142,8 +142,7 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
             else
                 pModel->SetChanged( bIsChanged );
         }
-        else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) !=
-                    SvxLinkManager::RegisterStatusInfoId() )
+        else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
             // only repaint, no objectchange
             pGrafObj->ActionChanged();
@@ -476,7 +475,7 @@ void SdrGrafObj::ForceSwapOut() const
 
 void SdrGrafObj::ImpLinkAnmeldung()
 {
-    SvxLinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
 
     if( pLinkManager != NULL && pGraphicLink == NULL )
     {
@@ -493,7 +492,7 @@ void SdrGrafObj::ImpLinkAnmeldung()
 
 void SdrGrafObj::ImpLinkAbmeldung()
 {
-    SvxLinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
 
     if( pLinkManager != NULL && pGraphicLink!=NULL)
     {

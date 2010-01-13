@@ -460,13 +460,6 @@
 #define RID_SVXSTR_RULER_TAB_DECIMAL        (RID_SVX_START + 247)
 #define RID_SVXSTR_RULER_TAB_CENTER         (RID_SVX_START + 248)
 
-// File-/Grafik-Link String, Dialog Name
-#define RID_SVXSTR_FILELINK                 (RID_SVX_START + 255)
-#define RID_SVXSTR_GRAFIKLINK               (RID_SVX_START + 256)
-#define RID_SVXSTR_EDITGRFLINK              (RID_SVX_START + 257)
-#define RID_SVXSTR_GRFLINKPROGRESS          (RID_SVX_START + 258)
-#define RID_SVXGRF_GRAPHICLOAD              (RID_SVX_START + 259)
-
 // Schlie"ssen (im TabDialog Line/Area)
 #define RID_SVXSTR_CLOSE                    (RID_SVX_START + 260)
 
@@ -733,14 +726,6 @@
 #define RID_SVXSTR_HATCH_DEF_END            RID_SVXSTR_HATCH10_DEF
 #define RID_SVXSTR_HATCH_START              RID_SVXSTR_HATCH0
 #define RID_SVXSTR_HATCH_END                RID_SVXSTR_HATCH10
-
-// strings for error messsages of OpenGraphics dialog
-#define RID_SVXSTR_GRFILTER_OPENERROR       (RID_SVX_START + 683)
-#define RID_SVXSTR_GRFILTER_IOERROR         (RID_SVX_START + 684)
-#define RID_SVXSTR_GRFILTER_FORMATERROR     (RID_SVX_START + 685)
-#define RID_SVXSTR_GRFILTER_VERSIONERROR    (RID_SVX_START + 686)
-#define RID_SVXSTR_GRFILTER_FILTERERROR     (RID_SVX_START + 687)
-#define RID_SVXSTR_GRFILTER_TOOBIG          (RID_SVX_START + 688)
 
 // Default-Bitmap-Names
 #define RID_SVXSTR_BMP0_DEF                 (RID_SVX_START + 691)

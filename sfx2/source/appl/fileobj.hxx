@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <sfx2/linksrc.hxx>
 #include <sfx2/docfile.hxx>
-#include "linkmgr.hxx"
+#include <sfx2/linkmgr.hxx>
 
 class Graphic;
 struct Impl_DownLoadData;
@@ -65,7 +65,7 @@ class SvFileObject : public sfx2::SvLinkSource
 
     BOOL GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
     BOOL LoadFile_Impl();
-    void SendStateChg_Impl( LinkState nState );
+    void SendStateChg_Impl( sfx2::LinkManager::LinkState nState );
 
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void* );

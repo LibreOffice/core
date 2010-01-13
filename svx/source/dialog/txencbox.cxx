@@ -181,7 +181,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
     FillFromTextEncodingTable( sal_False, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    rtl_TextEncoding nEnc = GetBestMimeEncoding();
+    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
     SelectTextEncoding( nEnc );
 }
 

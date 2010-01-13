@@ -68,7 +68,8 @@ SRC1FILES =  \
         svxbmpnumvalueset.src \
         swframeposstrings.src \
         txenctab.src \
-        ucsubset.src
+        ucsubset.src \
+        optgrid.src     
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -81,7 +82,6 @@ LIB1OBJFILES= \
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
         $(SLO)$/langbox.obj \
-        $(SLO)$/opengrf.obj \
         $(SLO)$/simptabl.obj \
         $(SLO)$/svxdlg.obj \
         $(SLO)$/stddlg.obj \
@@ -136,7 +136,9 @@ LIB2OBJFILES= \
         $(SLO)$/txenctab.obj \
         $(SLO)$/wrapfield.obj \
         $(SLO)$/_bmpmask.obj \
-        $(SLO)$/_contdlg.obj
+        $(SLO)$/_contdlg.obj \
+        $(SLO)$/optgrid.obj
+        
 
 .IF "$(GUI)"=="UNX"
 LIB2OBJFILES +=    $(SLO)$/sendreportunx.obj

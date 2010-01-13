@@ -73,7 +73,7 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 
 #include <algorithm>
-#include "opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

@@ -29,7 +29,8 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
+#include "precompiled_sfx2.hxx"
+
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
@@ -39,9 +40,6 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/progress.hxx>
-#ifndef _SFX_INTERNO_HXX
-//#include <sfx2/interno.hxx>
-#endif
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sot/exchange.hxx>
@@ -51,13 +49,11 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <sfx2/linkmgr.hxx>
+#include <sfx2/opengrf.hxx>
+#include "sfxresid.hxx"
 #include "fileobj.hxx"
-#include "linkmgr.hxx"
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
-#include "xoutbmp.hxx"
-#include "opengrf.hxx"
+#include "app.hrc"
 
 namespace css = ::com::sun::star;
 
@@ -328,8 +324,7 @@ BOOL SvFileObject::LoadFile_Impl()
 
     // Grafik ist fertig, also DataChanged von der Statusaederung schicken:
     SendStateChg_Impl( xMed->GetInStream() && xMed->GetInStream()->GetError()
-                        ? STATE_LOAD_ERROR : STATE_LOAD_OK );
-
+                        ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
     return TRUE;
 }
 
@@ -471,7 +466,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
             {
                 nType = FILETYPE_GRF;       // falls noch nicht gesetzt
 
-                SvxOpenGraphicDialog aDlg(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR()));
+                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK));
                 aDlg.EnableLink(sal_False);
                 aDlg.SetPath( sFile, sal_True );
                 aDlg.SetCurrentFilter( sTmpFilter );
@@ -538,7 +533,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
             // Grafik ist fertig, also DataChanged von der Status-
             // aederung schicken:
         pThis->bDataReady = TRUE;
-        pThis->SendStateChg_Impl( STATE_LOAD_OK );
+        pThis->SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_OK );
 
             // und dann nochmal die Daten senden
         pThis->NotifyDataChanged();
@@ -617,8 +612,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
     {
         // Grafik ist fertig, also DataChanged von der Status-
         // aederung schicken:
-        pThis->SendStateChg_Impl( pStrm->GetError() ? STATE_LOAD_ERROR
-                                                    : STATE_LOAD_OK );
+        pThis->SendStateChg_Impl( pStrm->GetError() ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
     }
 
     pThis->bInNewData = FALSE;
@@ -700,7 +694,7 @@ void SvFileObject::CancelTransfers()
         // nicht noch mal aufsetzen
         bLoadAgain = FALSE;
         bDataReady = bLoadError = bWaitForData = TRUE;
-        SendStateChg_Impl( STATE_LOAD_ABORT );
+        SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_ABORT );
     }
 }
 
@@ -710,14 +704,14 @@ void SvFileObject::SetTransferPriority( USHORT )
 }
 
 
-void SvFileObject::SendStateChg_Impl( LinkState nState )
+void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
 {
     if( !bStateChangeCalled && HasDataLinks() )
     {
         css::uno::Any aAny;
         aAny <<= rtl::OUString::valueOf( (sal_Int32)nState );
         DataChanged( SotExchange::GetFormatName(
-                        SvxLinkManager::RegisterStatusInfoId()), aAny );
+                        sfx2::LinkManager::RegisterStatusInfoId()), aAny );
         bStateChangeCalled = TRUE;
     }
 }

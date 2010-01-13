@@ -29,7 +29,8 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
+#include "precompiled_sfx2.hxx"
+
 #include <tools/urlobj.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -47,24 +48,16 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svl/urihelper.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <svtools/transfer.hxx>
-#include <svx/svdograf.hxx>
 #include <sot/formats.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/dialmgr.hxx>
-#include "opengrf.hxx"
-
-#include <svx/dialogs.hrc>
-//#include "impgrf.hrc"
-
+#include <sfx2/opengrf.hxx>
+#include "app.hrc"
+#include "sfxresid.hxx"
 
 //-----------------------------------------------------------------------------
 
@@ -178,7 +171,7 @@ short SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, SVX_RESSTR( SvxOpenGrfErr2ResId(nImpRet) ) );
+                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, String( SfxResId( SvxOpenGrfErr2ResId(nImpRet) ) ) );
                 bQuitLoop = aWarningBox.Execute()==RET_RETRY ? FALSE : TRUE;
             }
             else

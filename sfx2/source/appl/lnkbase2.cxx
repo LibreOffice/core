@@ -37,19 +37,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/msgbox.hxx>
-
 #include <sfx2/linkmgr.hxx>
-//#include "svuidlg.hrc"
-//#include "iface.hxx"
 #include <vcl/svapp.hxx>
-//#include <soerr.hxx>
-
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include <sfx2/filedlghelper.hxx>
-
 #include <tools/debug.hxx>
-
 #include <svl/svdde.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -66,7 +59,7 @@ class  ImplDdeItem;
 struct BaseLink_Impl
 {
     Link                m_aEndEditLink;
-    SvLinkManager*      m_pLinkMgr;
+    LinkManager*      m_pLinkMgr;
     Window*             m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
     bool                m_bIsConnect;
@@ -472,17 +465,17 @@ BOOL SvBaseLink::SetContentType( ULONG nType )
     return FALSE;
 }
 
-SvLinkManager* SvBaseLink::GetLinkManager()
+LinkManager* SvBaseLink::GetLinkManager()
 {
     return pImpl->m_pLinkMgr;
 }
 
-const SvLinkManager* SvBaseLink::GetLinkManager() const
+const LinkManager* SvBaseLink::GetLinkManager() const
 {
     return pImpl->m_pLinkMgr;
 }
 
-void SvBaseLink::SetLinkManager( SvLinkManager* _pMgr )
+void SvBaseLink::SetLinkManager( LinkManager* _pMgr )
 {
     pImpl->m_pLinkMgr = _pMgr;
 }

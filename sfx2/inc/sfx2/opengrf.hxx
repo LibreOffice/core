@@ -27,17 +27,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_OPENGRF_HXX
-#define _SVX_OPENGRF_HXX
+#ifndef _SFX2_OPENGRF_HXX
+#define _SFX2_OPENGRF_HXX
 
 #include <memory>       // auto_ptr
 #include <svtools/filter.hxx>
-#include "svx/svxdllapi.h"
-
+#include <sfx2/dllapi.h>
 
 struct  SvxOpenGrf_Impl;
 
-class SVX_DLLPUBLIC SvxOpenGraphicDialog
+class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
     SvxOpenGraphicDialog    ( const String& rTitle );
@@ -64,8 +63,8 @@ public:
     void                    SetDialogHelpId( const INT32 _nHelpId );
 private:
     // disable copy and assignment
-    SVX_DLLPRIVATE SvxOpenGraphicDialog (const SvxOpenGraphicDialog&);
-    SVX_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
+    SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
+    SFX2_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
 
     const std::auto_ptr< SvxOpenGrf_Impl >  mpImpl;
 };

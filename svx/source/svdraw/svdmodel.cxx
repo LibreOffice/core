@@ -73,7 +73,7 @@
 #include "svdoutlinercache.hxx"
 
 
-#include "asiancfg.hxx"
+#include <svl/asiancfg.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>

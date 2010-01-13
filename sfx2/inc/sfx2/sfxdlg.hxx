@@ -61,7 +61,7 @@ struct TransferableObjectDescriptor;
 
 namespace sfx2
 {
-    class SvLinkManager;
+    class LinkManager;
 }
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -141,7 +141,7 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
-    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML=FALSE, sfx2::SvBaseLink* p=0 )=0;
+    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML=FALSE, sfx2::SvBaseLink* p=0 )=0;
     virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( Window* pParent,  const String& rLanguage ) = 0;
 
     virtual AbstractScriptSelectorDialog*
