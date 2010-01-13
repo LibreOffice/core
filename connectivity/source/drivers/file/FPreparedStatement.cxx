@@ -514,6 +514,7 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
     Reference<XPropertySet> xParaColumn = new connectivity::parse::OParseColumn(sParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
+                                                    ,::rtl::OUString()
                                                     ,nNullable
                                                     ,nPrecision
                                                     ,nScale

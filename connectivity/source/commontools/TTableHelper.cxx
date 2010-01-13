@@ -203,9 +203,10 @@ namespace
             sal_Int32       nField7 = xRow->getInt(7)
                         ,   nField9 = xRow->getInt(9)
                         ,   nField11= xRow->getInt(11);
-            ::rtl::OUString sField13 = xRow->getString(13);
+            ::rtl::OUString  sField12 = xRow->getString(12)
+                            ,sField13 = xRow->getString(13);
             nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
-            _out_rColumns.push_back( ColumnDesc( sName,nField5,aField6,nField7,nField9,nField11,sField13, nOrdinalPosition ) );
+            _out_rColumns.push_back( ColumnDesc( sName,nField5,aField6,nField7,nField9,nField11,sField12,sField13, nOrdinalPosition ) );
         }
     }
 

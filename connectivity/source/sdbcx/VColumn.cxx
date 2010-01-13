@@ -92,6 +92,7 @@ OColumn::OColumn(sal_Bool _bCase)
 OColumn::OColumn(   const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
+                    const ::rtl::OUString& _Description,
                     sal_Int32       _IsNullable,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
@@ -104,6 +105,7 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
     ,m_TypeName(_TypeName)
     ,m_DefaultValue(_DefaultValue)
+    ,m_Description(_Description)
     ,m_IsNullable(_IsNullable)
     ,m_Precision(_Precision)
     ,m_Scale(_Scale)
@@ -198,6 +200,7 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     OColumn* pNewColumn = new OColumn(  m_Name,
                                         m_TypeName,
                                         m_DefaultValue,
+                                        m_Description,
                                         m_IsNullable,
                                         m_Precision,
                                         m_Scale,
@@ -206,7 +209,6 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
                                         m_IsRowVersion,
                                         m_IsCurrency,
                                         isCaseSensitive());
-    pNewColumn->m_Description = m_Description;
     pNewColumn->setNew(sal_True);
     return pNewColumn;
 }

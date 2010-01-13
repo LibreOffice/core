@@ -137,6 +137,11 @@
             <value>UserPassword</value>
           </prop>
         </node>
+        <node oor:name="SupportsColumnDescription" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
     </node>
     <node oor:name="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=*" oor:op="replace">
@@ -229,6 +234,11 @@
         <node oor:name="Extension" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
             <value>mdb</value>
+          </prop>
+        </node>
+        <node oor:name="SupportsColumnDescription" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
       </node>

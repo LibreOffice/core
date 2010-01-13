@@ -51,6 +51,7 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
     : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
@@ -72,6 +73,7 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
 OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
+                    const ::rtl::OUString& _Description,
                     sal_Int32       _IsNullable,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
@@ -82,6 +84,7 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
                 ) : connectivity::sdbcx::OColumn(_Name,
                                   _TypeName,
                                   _DefaultValue,
+                                  _Description,
                                   _IsNullable,
                                   _Precision,
                                   _Scale,
@@ -118,6 +121,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     OParseColumn* pColumn = new OParseColumn(
         _rxResMetaData->getColumnLabel( _nColumnPos ),
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
+        ::rtl::OUString(),
         ::rtl::OUString(),
         _rxResMetaData->isNullable( _nColumnPos ),
         _rxResMetaData->getPrecision( _nColumnPos ),
@@ -172,6 +176,7 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn
     : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
                                 ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
@@ -181,33 +186,6 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn
                                 ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
                                 ,   _bCase
                                 )
-    , m_bAscending(_bAscending)
-{
-    construct();
-}
-// -------------------------------------------------------------------------
-OOrderColumn::OOrderColumn( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase
-                    ,sal_Bool _bAscending
-                ) : connectivity::sdbcx::OColumn(_Name,
-                                  _TypeName,
-                                  _DefaultValue,
-                                  _IsNullable,
-                                  _Precision,
-                                  _Scale,
-                                  _Type,
-                                  _IsAutoIncrement,
-                                  sal_False,
-                                  _IsCurrency,
-                                  _bCase)
     , m_bAscending(_bAscending)
 {
     construct();

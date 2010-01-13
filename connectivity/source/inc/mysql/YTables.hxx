@@ -31,12 +31,14 @@
 #define CONNECTIVITY_MYSQL_TABLES_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
+#include "connectivity/SQLStatementHelper.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 namespace connectivity
 {
     namespace mysql
     {
-        class OTables : public sdbcx::OCollection
+        class OTables : public sdbcx::OCollection,
+            public ::dbtools::ISQLStatementHelper
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
 
@@ -79,6 +81,9 @@ namespace connectivity
                 @param  _sSql in/out
             */
             static ::rtl::OUString adjustSQL(const ::rtl::OUString& _sSql);
+
+            // ISQLStatementHelper
+            virtual void addComment(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut);
         };
     }
 }

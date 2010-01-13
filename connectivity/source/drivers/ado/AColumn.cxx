@@ -68,7 +68,7 @@ void WpADOColumn::Create()
 }
 // -------------------------------------------------------------------------
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
-    : connectivity::sdbcx::OColumn(::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),0,0,0,0,sal_False,sal_False,sal_False,_bCase)
+    : connectivity::sdbcx::OColumn(::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),0,0,0,0,sal_False,sal_False,sal_False,_bCase)
     ,m_pConnection(_pConnection)
 {
     construct();
@@ -186,12 +186,13 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( "Autoincrement" ), getBOOL( rValue ) );
                 break;
 
+            case PROPERTY_ID_IM001:
             case PROPERTY_ID_DESCRIPTION:
-                pAdoPropertyName = "Default";
+                pAdoPropertyName = "Description";
                 break;
 
             case PROPERTY_ID_DEFAULTVALUE:
-                pAdoPropertyName = "Description";
+                pAdoPropertyName = "Default";
                 break;
         }
 
