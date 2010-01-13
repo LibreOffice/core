@@ -81,8 +81,9 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
 # installing into the temp directory instead of the module output tree (in which
 # case installation.flag contains the path to the temp installation, which is
 # removed after smoketest); can be removed once issue 50885 is fixed:
-$(MISC)/installation.flag:
 .IF "$(OS)" == "WNT"
+$(MISC)/installation.flag: $(shell ls \
+        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
     unzip \
         $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
@@ -90,6 +91,8 @@ $(MISC)/installation.flag:
     mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .ELSE
+$(MISC)/installation.flag: $(shell ls \
+        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz)
     $(RM) -r $(MISC)/installation
     $(MKDIR) $(MISC)/installation
     cd $(MISC)/installation && $(GNUTAR) xfz \
