@@ -3217,7 +3217,7 @@ if test "$enable_epm" = "yes"; then
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do 
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed)
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
 			;;
 		*)
 			AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -3236,6 +3236,7 @@ OOo additionally supports:
 archive - .tar.gz or .zip
 dmg - Mac OS X .dmg
 installed - installation tree
+msi - Windows .msi
 			]) 
 			;;
 		esac

@@ -11723,7 +11723,7 @@ echo "$as_me: error: unknown system" >&2;}
    if test -n "$with_package_format"; then
 	for i in $with_package_format; do
 		case "$i" in
-			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed)
+			aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
 			;;
 		*)
 			{ { echo "$as_me:$LINENO: error: unsupported format $i. Supported by EPM are:
@@ -11742,6 +11742,7 @@ OOo additionally supports:
 archive - .tar.gz or .zip
 dmg - Mac OS X .dmg
 installed - installation tree
+msi - Windows .msi
 			" >&5
 echo "$as_me: error: unsupported format $i. Supported by EPM are:
 aix - AIX software distribution
@@ -11759,6 +11760,7 @@ OOo additionally supports:
 archive - .tar.gz or .zip
 dmg - Mac OS X .dmg
 installed - installation tree
+msi - Windows .msi
 			" >&2;}
    { (exit 1); exit 1; }; }
 			;;
