@@ -64,58 +64,17 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 using ::osl::MutexGuard;
+using ::com::sun::star::chart::XComplexDescriptionAccess;
+using ::com::sun::star::chart::XChartData;
+using ::com::sun::star::chart::XChartDataArray;
 
 namespace
 {
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartData" ));
-
-struct lcl_DataSequenceToDoubleSeq : public ::std::unary_function<
-        uno::Reference< chart2::data::XDataSequence >,
-        uno::Sequence< double > >
-{
-    uno::Sequence< double > operator() ( const uno::Reference< chart2::data::XDataSequence > & xSeq )
-    {
-        uno::Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-        if( xNumSeq.is())
-        {
-            return xNumSeq->getNumericalData();
-        }
-        else if( xSeq.is())
-        {
-            uno::Sequence< uno::Any > aValues = xSeq->getData();
-            uno::Sequence< double > aResult( aValues.getLength());
-            const sal_Int32 nLength = aValues.getLength();
-            for( sal_Int32 i = 0; i < nLength; ++i )
-            {
-                if( ! ( aValues[ i ] >>= aResult[ i ]) )
-                {
-                    aResult[ i ] = DBL_MIN;
-                }
-                double& rValue = aResult[ i ];
-                if( ::rtl::math::isNan( rValue ) )
-                    rValue = DBL_MIN;
-            }
-            return aResult;
-        }
-        return uno::Sequence< double >();
-    }
-};
-
-void lcl_AddSequences( uno::Reference< chart2::data::XLabeledDataSequence > xLSeq,
-                           ::std::vector< uno::Reference< chart2::data::XDataSequence > > & rOutSeqVector,
-                           ::std::vector< ::rtl::OUString > & rOutLabelVector )
-{
-    if( xLSeq.is() )
-    {
-        uno::Reference< chart2::data::XDataSequence > xSeq( xLSeq->getValues() );
-        rOutSeqVector.push_back( xSeq );
-
-        ::rtl::OUString aLabel( ::chart::DataSeriesHelper::getLabelForLabeledDataSequence( xLSeq ) );
-        rOutLabelVector.push_back( aLabel );
-    }
-}
 
 uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Sequence< uno::Sequence< double > >& rData )
 {
@@ -166,11 +125,197 @@ namespace chart
 namespace wrapper
 {
 
+//--------------------------------------------------------------------------------------
+
+struct lcl_Operator
+{
+    lcl_Operator()
+    {
+    }
+    virtual ~lcl_Operator()
+    {
+    }
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess ) = 0;
+
+    virtual bool setsCategories( bool /*bDataInColumns*/ )
+    {
+        return false;
+    }
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_AllOperator : public lcl_Operator
+{
+    lcl_AllOperator( const Reference< XChartData >& xDataToApply )
+        : lcl_Operator()
+        , m_xDataToApply( xDataToApply )
+    {
+    }
+
+    virtual bool setsCategories( bool /*bDataInColumns*/ )
+    {
+        return true;
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( !xDataAccess.is() )
+            return;
+
+        Reference< XComplexDescriptionAccess > xNewComplex( m_xDataToApply, uno::UNO_QUERY );
+        if( xNewComplex.is() )
+        {
+            xDataAccess->setData( xNewComplex->getData() );
+            xDataAccess->setComplexRowDescriptions( xNewComplex->getComplexRowDescriptions() );
+            xDataAccess->setComplexColumnDescriptions( xNewComplex->getComplexColumnDescriptions() );
+        }
+        else
+        {
+            Reference< XChartDataArray > xNew( m_xDataToApply, uno::UNO_QUERY );
+            if( xNew.is() )
+            {
+                xDataAccess->setData( xNew->getData() );
+                xDataAccess->setRowDescriptions( xNew->getRowDescriptions() );
+                xDataAccess->setColumnDescriptions( xNew->getColumnDescriptions() );
+            }
+        }
+    }
+
+    Reference< XChartData > m_xDataToApply;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_DataOperator : public lcl_Operator
+{
+    lcl_DataOperator( const Sequence< Sequence< double > >& rData )
+        : lcl_Operator()
+        , m_rData( rData )
+    {
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setData( lcl_getNANInsteadDBL_MIN( m_rData ) );
+    }
+
+    const Sequence< Sequence< double > >& m_rData;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_RowDescriptionsOperator : public lcl_Operator
+{
+    lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions )
+        : lcl_Operator()
+        , m_rRowDescriptions( rRowDescriptions )
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        return bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setRowDescriptions( m_rRowDescriptions );
+    }
+
+    const Sequence< OUString >& m_rRowDescriptions;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
+{
+    lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions )
+        : lcl_Operator()
+        , m_rComplexRowDescriptions( rComplexRowDescriptions )
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        return !bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setComplexRowDescriptions( m_rComplexRowDescriptions );
+    }
+
+    const Sequence< Sequence< OUString > >& m_rComplexRowDescriptions;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_ColumnDescriptionsOperator : public lcl_Operator
+{
+    lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions )
+        : lcl_Operator()
+        , m_rColumnDescriptions( rColumnDescriptions )
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        return !bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setColumnDescriptions( m_rColumnDescriptions );
+    }
+
+    const Sequence< OUString >& m_rColumnDescriptions;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
+{
+    lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions )
+        : lcl_Operator()
+        , m_rComplexColumnDescriptions( rComplexColumnDescriptions )
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        return !bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setComplexColumnDescriptions( m_rComplexColumnDescriptions );
+    }
+
+    const Sequence< Sequence< OUString > >& m_rComplexColumnDescriptions;
+};
+
+//--------------------------------------------------------------------------
+
 ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
-    refreshData();
+    initDataAccess();
+}
+
+ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+                                    const Reference< XChartData >& xNewData ) :
+        m_spChart2ModelContact( spChart2ModelContact ),
+        m_aEventListenerContainer( m_aMutex )
+{
+    lcl_AllOperator aOperator( xNewData );
+    applyData( aOperator );
 }
 
 ChartDataWrapper::~ChartDataWrapper()
@@ -182,87 +327,80 @@ ChartDataWrapper::~ChartDataWrapper()
 //     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 }
 
-// ____ XChartDataArray ____
-uno::Sequence< uno::Sequence< double > > SAL_CALL ChartDataWrapper::getData()
+// ____ XChartDataArray (read)____
+Sequence< Sequence< double > > SAL_CALL ChartDataWrapper::getData()
     throw (uno::RuntimeException)
 {
-    // until we have a data change notification mechanism we always have to
-    // update the data here
-    refreshData();
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_aData;
-    // \--
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return lcl_getDBL_MINInsteadNAN( m_xDataAccess->getData() );
+    return Sequence< Sequence< double > >();
 }
-
-void SAL_CALL ChartDataWrapper::setData(
-    const uno::Sequence< uno::Sequence< double > >& aData )
+Sequence< OUString > SAL_CALL ChartDataWrapper::getRowDescriptions()
     throw (uno::RuntimeException)
 {
-    refreshData();
-    {
-        // /--
-        MutexGuard aGuard( GetMutex());
-        m_aData = aData;
-        // \--
-    }
-    applyData( true, false, false );
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getRowDescriptions();
+    return Sequence< OUString >();
 }
-
-uno::Sequence< ::rtl::OUString > SAL_CALL ChartDataWrapper::getRowDescriptions()
+Sequence< OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
     throw (uno::RuntimeException)
 {
-    // until we have a data change notification mechanism we always have to
-    // update the data here
-    refreshData();
-
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_aRowDescriptions;
-    // \--
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getColumnDescriptions();
+    return Sequence< OUString > ();
+}
+// ____ XComplexDescriptionAccess (read) ____
+Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexRowDescriptions() throw (uno::RuntimeException)
+{
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getComplexRowDescriptions();
+    return Sequence< Sequence< OUString > >();
+}
+Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDescriptions() throw (uno::RuntimeException)
+{
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getComplexColumnDescriptions();
+    return Sequence< Sequence< OUString > >();
 }
 
-void SAL_CALL ChartDataWrapper::setRowDescriptions(
-    const uno::Sequence< ::rtl::OUString >& aRowDescriptions )
+// ____ XChartDataArray (write)____
+void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& rData )
     throw (uno::RuntimeException)
 {
-    refreshData();
-    {
-        // /--
-        MutexGuard aGuard( GetMutex());
-        m_aRowDescriptions = aRowDescriptions;
-        // \--
-    }
-    applyData( false, true, false );
+    lcl_DataOperator aOperator( rData );
+    applyData( aOperator );
 }
-
-uno::Sequence<
-    ::rtl::OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
+void SAL_CALL ChartDataWrapper::setRowDescriptions( const Sequence< OUString >& rRowDescriptions )
     throw (uno::RuntimeException)
 {
-    // until we have a data change notification mechanism we always have to
-    // update the data here
-    refreshData();
-    // /--
-    MutexGuard aGuard( GetMutex());
-    return m_aColumnDescriptions;
-    // \--
+    lcl_RowDescriptionsOperator aOperator( rRowDescriptions );
+    applyData( aOperator );
 }
-
-void SAL_CALL ChartDataWrapper::setColumnDescriptions(
-    const uno::Sequence< ::rtl::OUString >& aColumnDescriptions )
+void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString >& rColumnDescriptions )
     throw (uno::RuntimeException)
 {
-    refreshData();
-    {
-        // /--
-        MutexGuard aGuard( GetMutex());
-        m_aColumnDescriptions = aColumnDescriptions;
-        // \--
-    }
-    applyData( false, false, true );
+    lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions );
+    applyData( aOperator );
 }
 
+// ____ XComplexDescriptionAccess (write) ____
+void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rRowDescriptions ) throw (uno::RuntimeException)
+{
+    lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions );
+    applyData( aOperator );
+}
+void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rColumnDescriptions ) throw (uno::RuntimeException)
+{
+    lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions );
+    applyData( aOperator );
+}
+
+//--------------------------------------------------------------------------------------
 
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(
@@ -300,13 +438,7 @@ void SAL_CALL ChartDataWrapper::dispose()
     throw (uno::RuntimeException)
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
-
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_aData.realloc( 0 );
-    m_aColumnDescriptions.realloc( 0 );
-    m_aRowDescriptions.realloc( 0 );
-    // \--
+    m_xDataAccess=0;
 }
 
 void SAL_CALL ChartDataWrapper::addEventListener(
@@ -357,159 +489,38 @@ void ChartDataWrapper::fireChartDataChangeEvent(
     }
 }
 
-void ChartDataWrapper::refreshData()
+// --------------------------------------------------------------------------------
+
+void ChartDataWrapper::switchToInternalDataProvider()
 {
-    //todo mutex...
+    //create an internal data provider that is connected to the model
+    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    if( xChartDoc.is() )
+        xChartDoc->createInternalDataProvider( true /*bCloneExistingData*/ );
+    initDataAccess();
+}
+
+void ChartDataWrapper::initDataAccess()
+{
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( !xChartDoc.is() )
         return;
-    if( xChartDoc->hasInternalDataProvider())
-    {
-        try {
-            uno::Reference< ::com::sun::star::chart::XChartDataArray > xInternalData( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
-            m_aColumnDescriptions = xInternalData->getColumnDescriptions();
-            m_aRowDescriptions    = xInternalData->getRowDescriptions();
-            m_aData               = lcl_getDBL_MINInsteadNAN( xInternalData->getData() );
-        }
-        catch( const uno::Exception & ex ) {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
+    if( xChartDoc->hasInternalDataProvider() )
+        m_xDataAccess = Reference< XComplexDescriptionAccess >( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     else
     {
-        uno::Reference< chart2::XDiagram > xDia(
-            xChartDoc->getFirstDiagram() );
-        if( ! xDia.is())
-            return;
-
-        // get information about the segmentation of the assumed "rectangular" data
-        // range
-        ::rtl::OUString aRangeString;
-        bool bUseColumns = true;
-        bool bFirstCellAsLabel = true;
-        bool bHasCategories = true;
-        uno::Sequence< sal_Int32 > aSequenceMapping;
-
-        DataSourceHelper::detectRangeSegmentation(
-            uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ),
-            aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
-
-
-        // get data values from data series
-        // --------------------------------
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledSequences;
-        uno::Reference< chart2::data::XDataSource > xRectangularDataSource(
-                DataSourceHelper::pressUsedDataIntoRectangularFormat( xChartDoc, false /*bWithCategories*/ ) );
-        if( xRectangularDataSource.is() )
-        {
-            aLabeledSequences = xRectangularDataSource->getDataSequences();
-        }
-
-        ::std::vector< uno::Reference< chart2::data::XDataSequence > > aSequenceVector;
-        ::std::vector< ::rtl::OUString > aLabelVector;
-        for( sal_Int32 nN=0; nN<aLabeledSequences.getLength(); nN++ )
-            lcl_AddSequences( aLabeledSequences[nN], aSequenceVector, aLabelVector );
-
-        if( aSequenceMapping.getLength() )
-        {
-            //aSequenceVector and aLabelVector contain changed positions; resort them to the original position
-            ::std::vector< uno::Reference< chart2::data::XDataSequence > > aBackSortedSequences;
-            ::std::vector< ::rtl::OUString > aBackSortedLabels;
-
-            std::map< sal_Int32, sal_Int32 > aReverseMap;
-            {
-                sal_Int32 nNewIndex, nOldIndex;
-                for( sal_Int32 nS=0; nS <aSequenceMapping.getLength(); nS++ )
-                {
-                    nOldIndex = aSequenceMapping[nS];
-                    nNewIndex = nS;
-                    if( bHasCategories )
-                        nNewIndex--;
-                    if( nOldIndex >= 0 && nNewIndex >= 0 )
-                        aReverseMap[nOldIndex] = nNewIndex;
-                }
-            }
-
-            std::map< sal_Int32, sal_Int32 >::iterator aMapIt = aReverseMap.begin();
-            std::map< sal_Int32, sal_Int32 >::const_iterator aMapEnd = aReverseMap.end();
-
-            for( ; aMapIt != aMapEnd; ++aMapIt )
-            {
-                size_t nNewIndex = static_cast< size_t >( aMapIt->second );
-                if( nNewIndex < aSequenceVector.size() )
-                    aBackSortedSequences.push_back( aSequenceVector[nNewIndex] );
-                if( nNewIndex < aLabelVector.size() )
-                    aBackSortedLabels.push_back( aLabelVector[nNewIndex] );
-            }
-
-            // note: assign( beg, end ) doesn't work on solaris
-            aSequenceVector.clear();
-            aSequenceVector.insert(
-                aSequenceVector.begin(), aBackSortedSequences.begin(), aBackSortedSequences.end() );
-            aLabelVector.clear();
-            aLabelVector.insert(
-                aLabelVector.begin(), aBackSortedLabels.begin(), aBackSortedLabels.end() );
-        }
-
-        if( bUseColumns )
-        {
-            const sal_Int32 nInnerSize = aSequenceVector.size();
-            if( nInnerSize > 0 && aSequenceVector[0].is() )
-            {
-                // take the length of the first data series also as length for all
-                // other series
-                const sal_Int32 nOuterSize = aSequenceVector[0]->getData().getLength();
-
-                m_aData.realloc( nOuterSize );
-                for( sal_Int32 nOuter=0; nOuter<nOuterSize; ++nOuter )
-                    m_aData[nOuter].realloc( nInnerSize );
-
-                for( sal_Int32 nInner=0; nInner<nInnerSize; ++nInner )
-                {
-                    uno::Sequence< double > aValues = uno::Sequence< double > (
-                        lcl_DataSequenceToDoubleSeq() (aSequenceVector[nInner] ));
-                    sal_Int32 nMax = ::std::min( nOuterSize, aValues.getLength());
-                    for( sal_Int32 nOuter=0; nOuter<nMax; ++nOuter )
-                        m_aData[nOuter][nInner] = aValues[nOuter];
-                }
-            }
-        }
-        else
-        {
-            m_aData.realloc( static_cast< sal_Int32 >( aSequenceVector.size()));
-            ::std::transform( aSequenceVector.begin(), aSequenceVector.end(),
-                              m_aData.getArray(),
-                              lcl_DataSequenceToDoubleSeq() );
-        }
-
-        // labels (values already filled during parsing of data values)
-        if( bUseColumns )
-            m_aColumnDescriptions = ::chart::ContainerHelper::ContainerToSequence( aLabelVector );
-        else
-            m_aRowDescriptions = ::chart::ContainerHelper::ContainerToSequence( aLabelVector );
-
-        // get row-/column descriptions
-        // ----------------------------
-        // categories
-        uno::Sequence< ::rtl::OUString > & rSequence =
-                bUseColumns ? m_aRowDescriptions : m_aColumnDescriptions;
-        rSequence = DiagramHelper::getExplicitSimpleCategories( xChartDoc );
+        //create a separate "internal data provider" that is not connected to the model
+        m_xDataAccess = Reference< XComplexDescriptionAccess >( ChartModelHelper::createInternalDataProvider(
+            xChartDoc, false /*bConnectToModel*/ ), uno::UNO_QUERY_THROW );
     }
 }
 
-void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions )
+void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 {
+    //bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( !xChartDoc.is() )
         return;
-
-    // /-- locked controllers
-    ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
-    // should do nothing if we already have an internal data provider
-    xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
-
-    uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
-    uno::Reference< XChartDataArray > xDocDataArray( xDataProvider, uno::UNO_QUERY );
 
     // remember some diagram properties to reset later
     sal_Bool bStacked = sal_False;
@@ -536,71 +547,24 @@ void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, boo
         uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ),
         aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
 
-    if( !bFirstCellAsLabel )
-    {
-        if( bSetRowDescriptions && !bUseColumns )
-            bFirstCellAsLabel = true;
-        else if( bSetColumnDescriptions && bUseColumns )
-            bFirstCellAsLabel = true;
-    }
-    if( !bHasCategories )
-    {
-        if( bSetColumnDescriptions && bUseColumns )
-            bHasCategories = true;
-        else if( bSetRowDescriptions && !bUseColumns )
-            bHasCategories = true;
-    }
+    if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
+        bHasCategories = true;
 
-    aRangeString = C2U("all");
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
+
+    // /-- locked controllers
+    ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+
     // create and attach new data source
-    uno::Reference< chart2::data::XDataSource > xSource;
-    if( xDocDataArray.is() )
-    {
-        // we have an internal data provider that supports the XChartDataArray
-        // interface
-        if( bSetValues )
-            xDocDataArray->setData( lcl_getNANInsteadDBL_MIN( m_aData ) );
-        if( bSetRowDescriptions )
-            xDocDataArray->setRowDescriptions( m_aRowDescriptions );
-        if( bSetColumnDescriptions )
-            xDocDataArray->setColumnDescriptions( m_aColumnDescriptions );
-
-        xSource.set( xDataProvider->createDataSource( aArguments ));
-    }
-    else
-    {
-        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
-        OSL_ASSERT( xChartDoc.is());
-        OSL_ASSERT( xReceiver.is());
-        if( ! (xChartDoc.is() && xReceiver.is()))
-            return;
-
-        // create a data provider containing the new data
-        uno::Reference< chart2::data::XDataProvider > xTempDataProvider(
-             ChartModelHelper::createInternalDataProvider() );
-        if( ! xTempDataProvider.is())
-            throw uno::RuntimeException( C2U("Couldn't create temporary data provider"),
-                                         static_cast< ::cppu::OWeakObject * >( this ));
-
-        uno::Reference< ::com::sun::star::chart::XChartDataArray > xDataArray( xTempDataProvider, uno::UNO_QUERY );
-        OSL_ASSERT( xDataArray.is());
-        if( xDataArray.is())
-        {
-            if( bSetValues )
-                xDataArray->setData( lcl_getNANInsteadDBL_MIN( m_aData ) );
-            if( bSetRowDescriptions )
-                xDataArray->setRowDescriptions( m_aRowDescriptions );
-            if( bSetColumnDescriptions )
-                xDataArray->setColumnDescriptions( m_aColumnDescriptions );
-
-            // removes existing data provider and attaches the new one
-            xReceiver->attachDataProvider( xTempDataProvider );
-            xSource.set( xTempDataProvider->createDataSource( aArguments));
-        }
-    }
+    switchToInternalDataProvider();
+    rDataOperator.apply(m_xDataAccess);
+    uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+    OSL_ASSERT( xDataProvider.is() );
+    if( !xDataProvider.is() )
+        return;
+    uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );
 
     // determine a template
     uno::Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
@@ -624,8 +588,7 @@ void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, boo
         // argument detection works with internal knowledge of the
         // ArrayDataProvider
         OSL_ASSERT( xDia.is());
-        xTemplate->changeDiagramData(
-            xDia, xSource, aArguments );
+        xTemplate->changeDiagramData( xDia, xSource, aArguments );
     }
 
     //correct stacking mode

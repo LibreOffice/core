@@ -1780,7 +1780,8 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                                 if(!aLabeledSeq[nLSeqIdx].is())
                                     continue;
                                 Reference< data::XDataSequence > xSeq( aLabeledSeq[nLSeqIdx]->getValues());
-                                OSL_ASSERT( xSeq.is());
+                                if(!xSeq.is())
+                                    continue;
                                 Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
                                 ::rtl::OUString aRole;
                                 bool bTakeIntoAccount =

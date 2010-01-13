@@ -60,7 +60,7 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <comphelper/InlineContainer.hxx>
 // header for function SvxShapeCollection_NewInstance
 #include <svx/unoshcol.hxx>
@@ -79,6 +79,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
 
+using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -832,7 +833,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
 Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
     throw (uno::RuntimeException)
 {
-    if( ! m_xChartData.is())
+    if( !m_xChartData.is() )
     {
         m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact ) );
     }
@@ -841,128 +842,15 @@ Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
     return m_xChartData;
 }
 
-void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& xData )
+void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& xNewData )
     throw (uno::RuntimeException)
 {
-    if( !xData.is())
+    if( !xNewData.is() )
         return;
-
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
-    if( !xChartDoc.is() )
-        return;
-
-    uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
-    uno::Reference< XChartDataArray > xDocDataArray( xDataProvider, uno::UNO_QUERY );
-    uno::Reference< XChartDataArray > xDataArray( xData, uno::UNO_QUERY );
-    OSL_ASSERT( xDataArray.is());
-    if( ! xDataArray.is() ||
-        xDocDataArray == xDataArray )
-        return;
-
-    // remember some diagram properties to reset later
-    ChartDataRowSource eSeriesSource = ChartDataRowSource_ROWS;
-    sal_Bool bStacked = sal_False;
-    sal_Bool bPercent = sal_False;
-    sal_Bool bDeep = sal_False;
-    Reference< beans::XPropertySet > xDiaProp( getDiagram(), uno::UNO_QUERY );
-    if( xDiaProp.is())
-    {
-        xDiaProp->getPropertyValue( C2U("DataRowSource")) >>= eSeriesSource;
-        xDiaProp->getPropertyValue( C2U("Stacked")) >>= bStacked;
-        xDiaProp->getPropertyValue( C2U("Percent")) >>= bPercent;
-        xDiaProp->getPropertyValue( C2U("Deep")) >>= bDeep;
-    }
-
-    // create and attach new data source
-    uno::Reference< chart2::data::XDataSource > xSource;
-    Sequence< beans::PropertyValue > aArguments( 4 );
-    aArguments[0] = beans::PropertyValue(
-        C2U("CellRangeRepresentation"), -1, uno::makeAny( C2U("all") ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArguments[1] = beans::PropertyValue(
-        C2U("DataRowSource"), -1, uno::makeAny( eSeriesSource ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArguments[2] = beans::PropertyValue(
-        C2U("FirstCellAsLabel"), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
-    aArguments[3] = beans::PropertyValue(
-        C2U("HasCategories"), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
 
     // /-- locked controllers
-    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
-    if( xDocDataArray.is())
-    {
-        // we have an internal data provider that supports the XChartDataArray
-        // interface
-        xDocDataArray->setData( xDataArray->getData());
-        xDocDataArray->setRowDescriptions( xDataArray->getRowDescriptions());
-        xDocDataArray->setColumnDescriptions( xDataArray->getColumnDescriptions());
-
-        xSource.set( xDataProvider->createDataSource( aArguments ));
-    }
-    else
-    {
-        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
-        OSL_ASSERT( xChartDoc.is());
-        OSL_ASSERT( xReceiver.is());
-        OSL_ASSERT( xDataArray.is());
-        if( ! (xChartDoc.is() &&
-               xReceiver.is()))
-            return;
-
-        // create a data provider containing the new data
-        Reference< chart2::data::XDataProvider > xTempDataProvider(
-            ChartModelHelper::createInternalDataProvider( xDataArray ));
-
-        if( ! xTempDataProvider.is())
-            throw uno::RuntimeException( C2U("Couldn't create temporary data provider"),
-                                         static_cast< ::cppu::OWeakObject * >( this ));
-
-        // removes existing data provider and attaches the new one
-        xReceiver->attachDataProvider( xTempDataProvider );
-        xSource.set( xTempDataProvider->createDataSource( aArguments));
-    }
-
-    // determine a template
-    Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-    Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDia, xFact );
-    OUString aServiceName( aTemplateAndService.second );
-    Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
-
-    // (fall-back)
-    if( ! xTemplate.is())
-    {
-        if( aServiceName.getLength() == 0 )
-            aServiceName = C2U("com.sun.star.chart2.template.Column");
-        xTemplate.set( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-    }
-    OSL_ASSERT( xTemplate.is());
-
-    if( xTemplate.is() && xSource.is())
-    {
-        // argument detection works with internal knowledge of the
-        // ArrayDataProvider
-        OSL_ASSERT( xDia.is());
-        xTemplate->changeDiagramData(
-            xDia, xSource, aArguments );
-    }
-
-    // should do nothing if we already have an internal data provider
-    xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
-
-    //correct stacking mode
-    if( bStacked || bPercent || bDeep )
-    {
-        StackMode eStackMode = StackMode_Y_STACKED;
-        if( bDeep )
-            eStackMode = StackMode_Z_STACKED;
-        else if( bPercent )
-            eStackMode = StackMode_Y_STACKED_PERCENT;
-        DiagramHelper::setStackMode( xDia, eStackMode );
-    }
-
-    m_xChartData = xData;
+    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+    m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
     // \-- locked controllers
 }
 

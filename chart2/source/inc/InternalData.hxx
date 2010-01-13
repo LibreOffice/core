@@ -56,15 +56,14 @@ public:
     void setColumnValues( sal_Int32 nColumnIndex, const ::std::vector< double > & rNewData );
     void setRowValues( sal_Int32 nRowIndex, const ::std::vector< double > & rNewData );
 
+    void setComplexColumnLabel( sal_Int32 nColumnIndex, const ::std::vector< ::rtl::OUString >& rComplexLabel );
+    void setComplexRowLabel( sal_Int32 nRowIndex, const ::std::vector< ::rtl::OUString >& rComplexLabel );
+
+    ::std::vector< ::rtl::OUString > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
+    ::std::vector< ::rtl::OUString > getComplexRowLabel( sal_Int32 nRowIndex ) const;
+
     void swapRowWithNext( sal_Int32 nRowIndex );
     void swapColumnWithNext( sal_Int32 nColumnIndex );
-
-    /** resizes the data if at least one of the given dimensions is larger than
-        before.  The data is never becoming smaller only larger.
-
-        @return </TRUE>, if the data was enlarged
-    */
-    bool enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount );
 
     void insertColumn( sal_Int32 nAfterIndex );
     void insertRow( sal_Int32 nAfterIndex );
@@ -79,25 +78,33 @@ public:
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
 
-    void setRowLabels( const ::std::vector< ::rtl::OUString > & rNewRowLabels );
-    ::std::vector< ::rtl::OUString > getRowLabels() const;
-    void setColumnLabels( const ::std::vector< ::rtl::OUString > & rNewColumnLabels );
-    ::std::vector< ::rtl::OUString > getColumnLabels() const;
+    typedef ::std::valarray< double > tDataType;
+    typedef ::std::vector< ::std::vector< ::rtl::OUString > > tVecVecString; //inner index is hierarchical level
+
+    void setComplexRowLabels( const tVecVecString& rNewRowLabels );
+    tVecVecString getComplexRowLabels() const;
+    void setComplexColumnLabels( const tVecVecString& rNewColumnLabels );
+    tVecVecString getComplexColumnLabels() const;
 
 #if OSL_DEBUG_LEVEL > 2
     void traceData() const;
 #endif
 
+private: //methods
+    /** resizes the data if at least one of the given dimensions is larger than
+        before.  The data is never becoming smaller only larger.
+
+        @return </TRUE>, if the data was enlarged
+    */
+    bool enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount );
+
 private:
     sal_Int32   m_nColumnCount;
     sal_Int32   m_nRowCount;
 
-    typedef ::std::valarray< double > tDataType;
-    typedef ::std::vector< ::rtl::OUString > tLabelType;
-
-    tDataType    m_aData;
-    tLabelType   m_aRowLabels;
-    tLabelType   m_aColumnLabels;
+    tDataType       m_aData;
+    tVecVecString   m_aRowLabels;//outer index is row index, inner index is category level
+    tVecVecString   m_aColumnLabels;//outer index is column index
 };
 
 #endif

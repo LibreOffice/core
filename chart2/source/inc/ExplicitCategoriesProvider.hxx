@@ -52,6 +52,15 @@ struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
     {}
 };
 
+class OOO_DLLPUBLIC_CHARTTOOLS SplitCategoriesProvider
+{
+public:
+    virtual ~SplitCategoriesProvider();
+
+    virtual sal_Int32 getLevelCount() const = 0;
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
+};
+
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
@@ -74,8 +83,14 @@ public:
             ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nIndex );
 
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getExplicitSimpleCategories(
+            const SplitCategoriesProvider& rSplitCategoriesProvider );
+
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
+
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList();
 
 private: //member
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;

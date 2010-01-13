@@ -72,23 +72,10 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
 }
 
 //static
-uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider()
-{
-    return new InternalDataProvider();
-}
-
-//static
 uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy )
+    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
-    return new InternalDataProvider( xDataToCopy );
-}
-
-//static
-uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc )
-{
-    return new InternalDataProvider( xChartDoc );
+    return new InternalDataProvider( xChartDoc, bConnectToModel );
 }
 
 //static

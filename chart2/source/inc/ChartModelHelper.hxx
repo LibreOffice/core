@@ -37,7 +37,6 @@
 #include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <com/sun/star/awt/Size.hpp>
@@ -63,13 +62,8 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > createRangeHighlighter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >& xSelectionSupplier );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider();
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy );
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >

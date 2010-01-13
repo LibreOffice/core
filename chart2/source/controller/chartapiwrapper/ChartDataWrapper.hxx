@@ -34,7 +34,7 @@
 #include "MutexContainer.hxx"
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -48,23 +48,40 @@ namespace wrapper
 {
 
 class Chart2ModelContact;
+struct lcl_Operator;
 
 class ChartDataWrapper : public MutexContainer, public
     ::cppu::WeakImplHelper4<
-    com::sun::star::chart::XChartDataArray,
+    com::sun::star::chart::XComplexDescriptionAccess,
     com::sun::star::lang::XServiceInfo,
     com::sun::star::lang::XEventListener,
     com::sun::star::lang::XComponent >
 {
 public:
     ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartData >& xNewData );
     virtual ~ChartDataWrapper();
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 
 protected:
-    // ____ XChartDataArray ____
+    // ____ XComplexDescriptionAccess ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexRowDescriptions(
+        const ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aRowDescriptions )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexColumnDescriptions(
+        const ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence<
         double > > SAL_CALL getData()
@@ -115,20 +132,17 @@ protected:
 
     void fireChartDataChangeEvent( ::com::sun::star::chart::ChartDataChangeEvent& aEvent );
 
-private:
+private: //methods
+    void switchToInternalDataProvider();
+    void initDataAccess();
+    void applyData( lcl_Operator& rDataOperator );
+
+private: //member
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart::XComplexDescriptionAccess > m_xDataAccess;
+
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
-
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Sequence< double > > m_aData;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aColumnDescriptions;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aRowDescriptions;
-
-    /// re-reads the data from the model
-    void refreshData();
-
-    /// applies changed data to model
-    void applyData( bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions );
 };
 
 } //  namespace wrapper
