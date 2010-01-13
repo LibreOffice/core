@@ -766,9 +766,9 @@ void UniversalContentBroker::prepareAndRegister(
                              m_aArguments,
                              &aProviderArguments))
         {
-            bool bSuccess = registerAtUcb(this,
-                                          m_xSMgr,
-                                          aIt->ServiceName,
+            registerAtUcb(this,
+                                      m_xSMgr,
+                                      aIt->ServiceName,
                                           aProviderArguments,
                                           aIt->URLTemplate,
                                           0);
