@@ -74,7 +74,7 @@
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
@@ -119,6 +119,7 @@ using ::rtl::OUStringToOString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
+using ::std::vector;
 
 namespace
 {
@@ -463,12 +464,6 @@ sal_Int32 lcl_getMaxSequenceLength(
     for( SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( rContainer.begin());
          aIt != rContainer.end(); ++aIt )
     {
-        if( aIt->first.is())
-        {
-            sal_Int32 nSeqLength = aIt->first->getData().getLength();
-            if( nSeqLength > nResult )
-                nResult = nSeqLength;
-        }
         if( aIt->second.is())
         {
             sal_Int32 nSeqLength = aIt->second->getData().getLength();
@@ -547,17 +542,23 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
     return false;
 }
 
+typedef vector< OUString > tStringVector;
+typedef vector< vector< OUString > > t2DStringVector;
+typedef vector< vector< double > > t2DNumberContainer;
+
 struct lcl_TableData
 {
-    typedef ::std::vector< OUString > tStringContainer;
-    typedef ::std::vector< ::std::vector< double > > tTwoDimNumberContainer;
+    t2DNumberContainer  aDataInRows;
+    tStringVector       aDataRangeRepresentations;
 
-    tTwoDimNumberContainer aDataInRows;
-    tStringContainer       aDataRangeRepresentations;
-    tStringContainer       aFirstRowStrings;
-    tStringContainer       aFirstRowRangeRepresentations;
-    tStringContainer       aFirstColumnStrings;
-    tStringContainer       aFirstColumnRangeRepresentations;
+    tStringVector       aColumnDescriptions;
+    tStringVector       aColumnDescriptions_Ranges;
+
+    tStringVector       aRowDescriptions;
+    tStringVector       aRowDescriptions_Ranges;
+
+    Sequence< Sequence< OUString > >    aComplexColumnDescriptions;//outer index is columns - inner index is level
+    Sequence< Sequence< OUString > >    aComplexRowDescriptions;//outer index is rows - inner index is level
 
     ::std::vector< sal_Int32 > aHiddenColumns;
 };
@@ -623,97 +624,113 @@ void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
 
 
 lcl_TableData lcl_getDataForLocalTable(
-    const SchXMLExportHelper::tDataSequenceCont & aPassedSequences,
-    const Sequence< OUString >& rInputCategories,
+    const SchXMLExportHelper::tDataSequenceCont & aSequencesToExport,
+    const Reference< chart::XComplexDescriptionAccess >& xComplexDescriptionAccess,
     const OUString& rCategoriesRange,
-    bool bSwap,
-    bool bHasOwnData,
+    bool bSeriesFromColumns,
     const Reference< chart2::data::XRangeXMLConversion > & xRangeConversion )
 {
     lcl_TableData aResult;
 
-    SchXMLExportHelper::tDataSequenceCont aSequencesToExport( aPassedSequences );
-    if( bHasOwnData )
-        lcl_ReorderInternalSequencesAccordingToTheirRangeName( aSequencesToExport );
-
-    SchXMLExportHelper::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
-    SchXMLExportHelper::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
-    SchXMLExportHelper::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
-    SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
-
-    size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
-    nMaxSequenceLength = std::max( nMaxSequenceLength, size_t( rInputCategories.getLength() ) );
-    size_t nNumColumns( bSwap ? nMaxSequenceLength : nNumSequences );
-    size_t nNumRows( bSwap ? nNumSequences : nMaxSequenceLength );
-
-    // resize data
-    aResult.aDataInRows.resize( nNumRows );
-    double fNan = 0.0;
-    ::rtl::math::setNan( &fNan );
-    ::std::for_each( aResult.aDataInRows.begin(), aResult.aDataInRows.end(),
-                     lcl_resize< lcl_TableData::tTwoDimNumberContainer::value_type >( nNumColumns, fNan ));
-    aResult.aFirstRowStrings.resize( nNumColumns );
-    aResult.aFirstColumnStrings.resize( nNumRows );
-
-    lcl_TableData::tStringContainer & rCategories =
-        (bSwap ? aResult.aFirstRowStrings : aResult.aFirstColumnStrings );
-    lcl_TableData::tStringContainer & rLabels =
-        (bSwap ? aResult.aFirstColumnStrings : aResult.aFirstRowStrings );
-
-    //categories
-    lcl_SequenceToVector( rInputCategories, rCategories );
-    if(rCategoriesRange.getLength())
+    try
     {
-        OUString aRange(rCategoriesRange);
-        if( xRangeConversion.is())
-            aRange = xRangeConversion->convertRangeToXML( aRange );
-        if( bSwap )
-            aResult.aFirstRowRangeRepresentations.push_back( aRange );
-        else
-            aResult.aFirstColumnRangeRepresentations.push_back( aRange );
+        Sequence< OUString > aSimpleCategories;
+        if( xComplexDescriptionAccess.is() )
+        {
+            if( bSeriesFromColumns )
+                aSimpleCategories = xComplexDescriptionAccess->getRowDescriptions();
+            else
+                aSimpleCategories = xComplexDescriptionAccess->getColumnDescriptions();
+
+            aResult.aComplexColumnDescriptions = xComplexDescriptionAccess->getComplexColumnDescriptions();
+            aResult.aComplexRowDescriptions = xComplexDescriptionAccess->getComplexRowDescriptions();
+        }
+
+        SchXMLExportHelper::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
+        SchXMLExportHelper::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
+        SchXMLExportHelper::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
+        SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
+
+        size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
+        nMaxSequenceLength = std::max( nMaxSequenceLength, size_t( aSimpleCategories.getLength() ) );
+        size_t nNumColumns( bSeriesFromColumns ? nNumSequences : nMaxSequenceLength );
+        size_t nNumRows( bSeriesFromColumns ? nMaxSequenceLength : nNumSequences );
+
+        // resize data
+        aResult.aDataInRows.resize( nNumRows );
+        double fNan = 0.0;
+        ::rtl::math::setNan( &fNan );
+        ::std::for_each( aResult.aDataInRows.begin(), aResult.aDataInRows.end(),
+                         lcl_resize< t2DNumberContainer::value_type >( nNumColumns, fNan ));
+        aResult.aColumnDescriptions.resize( nNumColumns );
+        aResult.aComplexColumnDescriptions.realloc( nNumColumns );
+        aResult.aRowDescriptions.resize( nNumRows );
+        aResult.aComplexRowDescriptions.realloc( nNumRows );
+
+        tStringVector& rCategories = bSeriesFromColumns ? aResult.aRowDescriptions    : aResult.aColumnDescriptions;
+        tStringVector& rLabels     = bSeriesFromColumns ? aResult.aColumnDescriptions : aResult.aRowDescriptions;
+
+        //categories
+        lcl_SequenceToVector( aSimpleCategories, rCategories );
+        if( rCategoriesRange.getLength() )
+        {
+            OUString aRange(rCategoriesRange);
+            if( xRangeConversion.is())
+                aRange = xRangeConversion->convertRangeToXML( aRange );
+            if( bSeriesFromColumns )
+                aResult.aRowDescriptions_Ranges.push_back( aRange );
+            else
+                aResult.aColumnDescriptions_Ranges.push_back( aRange );
+        }
+
+        // iterate over all sequences
+        size_t nSeqIdx = 0;
+        for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
+        {
+            OUString aRange;
+            if( aIt->first.is())
+            {
+                rLabels[nSeqIdx] = lcl_getLabelString( aIt->first );
+                aRange = aIt->first->getSourceRangeRepresentation();
+                if( xRangeConversion.is())
+                    aRange = xRangeConversion->convertRangeToXML( aRange );
+            }
+            else if( aIt->second.is())
+                rLabels[nSeqIdx] = lcl_flattenStringSequence(
+                    aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+            if( bSeriesFromColumns )
+                aResult.aColumnDescriptions_Ranges.push_back( aRange );
+            else
+                aResult.aRowDescriptions_Ranges.push_back( aRange );
+
+            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
+            if( bSeriesFromColumns )
+            {
+                const sal_Int32 nSize( static_cast< sal_Int32 >( aNumbers.size()));
+                for( sal_Int32 nIdx=0; nIdx<nSize; ++nIdx )
+                    aResult.aDataInRows[nIdx][nSeqIdx] = aNumbers[nIdx];
+            }
+            else
+                aResult.aDataInRows[nSeqIdx] = aNumbers;
+
+            if( aIt->second.is())
+            {
+                aRange =  aIt->second->getSourceRangeRepresentation();
+                if( xRangeConversion.is())
+                    aRange = xRangeConversion->convertRangeToXML( aRange );
+            }
+            aResult.aDataRangeRepresentations.push_back( aRange );
+
+            //is column hidden?
+            if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
+                aResult.aHiddenColumns.push_back(nSeqIdx);
+        }
     }
-
-    // iterate over all sequences
-    size_t nSeqIdx = 0;
-    for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
+    catch( uno::Exception & rEx )
     {
-        OUString aRange;
-        if( aIt->first.is())
-        {
-            rLabels[nSeqIdx] = lcl_getLabelString( aIt->first );
-            aRange = aIt->first->getSourceRangeRepresentation();
-            if( xRangeConversion.is())
-                aRange = xRangeConversion->convertRangeToXML( aRange );
-        }
-        else if( aIt->second.is())
-            rLabels[nSeqIdx] = lcl_flattenStringSequence(
-                aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
-        if( bSwap )
-            aResult.aFirstColumnRangeRepresentations.push_back( aRange );
-        else
-            aResult.aFirstRowRangeRepresentations.push_back( aRange );
-
-        ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
-        if( bSwap )
-            aResult.aDataInRows[nSeqIdx] = aNumbers;
-        else
-        {
-            const sal_Int32 nSize( static_cast< sal_Int32 >( aNumbers.size()));
-            for( sal_Int32 nIdx=0; nIdx<nSize; ++nIdx )
-                aResult.aDataInRows[nIdx][nSeqIdx] = aNumbers[nIdx];
-        }
-
-        if( aIt->second.is())
-        {
-            aRange =  aIt->second->getSourceRangeRepresentation();
-            if( xRangeConversion.is())
-                aRange = xRangeConversion->convertRangeToXML( aRange );
-        }
-        aResult.aDataRangeRepresentations.push_back( aRange );
-
-        //is column hidden?
-        if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
-            aResult.aHiddenColumns.push_back(nSeqIdx);
+        (void)rEx; // avoid warning for pro build
+        OSL_TRACE( OUStringToOString( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "something went wrong during table data collection: " )) + rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
     return aResult;
@@ -1394,6 +1411,19 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
         delete pElChart;
 }
 
+void lcl_exportComplexLabel( const Sequence< OUString >& rComplexLabel, SvXMLExport& rExport )
+{
+    sal_Int32 nLength = rComplexLabel.getLength();
+    if( nLength<=1 )
+        return;
+    SvXMLElementExport aTextList( rExport, XML_NAMESPACE_TEXT, XML_LIST, sal_True, sal_True );
+    for(sal_Int32 nN=0; nN<nLength; nN++)
+    {
+        SvXMLElementExport aListItem( rExport, XML_NAMESPACE_TEXT, XML_LIST_ITEM, sal_True, sal_True );
+        SchXMLTools::exportText( rExport, rComplexLabel[nN], false /*bConvertTabsLFs*/ );
+    }
+}
+
 void SchXMLExportHelper::exportTable()
 {
     // table element
@@ -1410,30 +1440,24 @@ void SchXMLExportHelper::exportTable()
         xRangeConversion.set( xNewDoc->getDataProvider(), uno::UNO_QUERY );
     }
 
-    Sequence< OUString > aCategories;
-    if(mbHasCategoryLabels)
+    Reference< chart::XComplexDescriptionAccess > xComplexDescriptionAccess;
     {
-        //ensure correct strings even for complex hierarchical categories
         Reference< chart::XChartDocument > xChartDoc( mrExport.GetModel(), uno::UNO_QUERY );
         if( xChartDoc.is() )
-        {
-            Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
-            if(xData.is())
-            {
-                if( mbRowSourceColumns )
-                    aCategories = xData->getRowDescriptions();
-                else
-                    aCategories = xData->getColumnDescriptions();
-            }
-        }
+            xComplexDescriptionAccess = Reference< chart::XComplexDescriptionAccess >( xChartDoc->getData(), uno::UNO_QUERY );
     }
-    lcl_TableData aData( lcl_getDataForLocalTable(
-                             m_aDataSequencesToExport, aCategories, maCategoriesRange, !mbRowSourceColumns, bHasOwnData, xRangeConversion ));
 
-    lcl_TableData::tStringContainer::const_iterator aDataRangeIter( aData.aDataRangeRepresentations.begin());
-    const lcl_TableData::tStringContainer::const_iterator aDataRangeEndIter( aData.aDataRangeRepresentations.end());
-    lcl_TableData::tStringContainer::const_iterator aFirstColumnRangeIter( aData.aFirstColumnRangeRepresentations.begin());
-    const lcl_TableData::tStringContainer::const_iterator aFirstColumnRangeEndIter( aData.aFirstColumnRangeRepresentations.end());
+    if( bHasOwnData )
+        lcl_ReorderInternalSequencesAccordingToTheirRangeName( m_aDataSequencesToExport );
+    lcl_TableData aData( lcl_getDataForLocalTable( m_aDataSequencesToExport
+                                , xComplexDescriptionAccess, maCategoriesRange
+                                , mbRowSourceColumns, xRangeConversion ));
+
+    tStringVector::const_iterator aDataRangeIter( aData.aDataRangeRepresentations.begin());
+    const tStringVector::const_iterator aDataRangeEndIter( aData.aDataRangeRepresentations.end());
+
+    tStringVector::const_iterator aRowDescriptions_RangeIter( aData.aRowDescriptions_Ranges.begin());
+    const tStringVector::const_iterator aRowDescriptions_RangeEnd( aData.aRowDescriptions_Ranges.end());
 
     // declare columns
     {
@@ -1461,7 +1485,7 @@ void SchXMLExportHelper::exportTable()
             nNextIndex = nHiddenIndex+1;
         }
 
-        sal_Int32 nEndIndex = aData.aFirstRowStrings.size()-1;
+        sal_Int32 nEndIndex = aData.aColumnDescriptions.size()-1;
         if( nEndIndex >= nNextIndex )
         {
             sal_Int64 nRepeat = static_cast< sal_Int64 >( nEndIndex - nNextIndex + 1 );
@@ -1473,59 +1497,78 @@ void SchXMLExportHelper::exportTable()
     }
 
     // export rows with content
+    //export header row
     {
         SvXMLElementExport aHeaderRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, sal_True, sal_True );
         SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
+
+        //first one empty cell for the row descriptions
         {
             SvXMLElementExport aEmptyCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
             SvXMLElementExport aEmptyParagraph( mrExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_True );
         }
 
-        lcl_TableData::tStringContainer::const_iterator aFirstRowRangeIter( aData.aFirstRowRangeRepresentations.begin());
-        const lcl_TableData::tStringContainer::const_iterator aFirstRowRangeEndIter( aData.aFirstRowRangeRepresentations.end());
-        for( lcl_TableData::tStringContainer::const_iterator aIt( aData.aFirstRowStrings.begin());
-             aIt != aData.aFirstRowStrings.end(); ++aIt )
+        //export column descriptions
+        tStringVector::const_iterator aColumnDescriptions_RangeIter( aData.aColumnDescriptions_Ranges.begin());
+        const tStringVector::const_iterator aColumnDescriptions_RangeEnd( aData.aColumnDescriptions_Ranges.end());
+        const Sequence< Sequence< OUString > >& rComplexColumnDescriptions = aData.aComplexColumnDescriptions;
+        sal_Int32 nComplexCount = rComplexColumnDescriptions.getLength();
+        sal_Int32 nC = 0;
+        for( tStringVector::const_iterator aIt( aData.aColumnDescriptions.begin());
+             aIt != aData.aColumnDescriptions.end(); ++aIt )
         {
             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
             SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
             // write the original range name as id into the local table
             // to allow a correct re-association when copying via clipboard
-            if( !bHasOwnData && aFirstRowRangeIter != aFirstRowRangeEndIter )
+            if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
             {
-                if( (*aFirstRowRangeIter).getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aFirstRowRangeIter );
-                ++aFirstRowRangeIter;
+                if( (*aColumnDescriptions_RangeIter).getLength())
+                    mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aColumnDescriptions_RangeIter );
+                ++aColumnDescriptions_RangeIter;
             }
             exportText( *aIt );
+            if( nC < nComplexCount )
+                lcl_exportComplexLabel( rComplexColumnDescriptions[nC++], mrExport );
         }
-        OSL_ASSERT( bHasOwnData || aFirstRowRangeIter == aFirstRowRangeEndIter );
+        OSL_ASSERT( bHasOwnData || aColumnDescriptions_RangeIter == aColumnDescriptions_RangeEnd );
     } // closing row and header-rows elements
 
-    // value rows
+    // export value rows
     {
         SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, sal_True, sal_True );
-        lcl_TableData::tStringContainer::const_iterator aFirstColIt( aData.aFirstColumnStrings.begin());
-        for( lcl_TableData::tTwoDimNumberContainer::const_iterator aColIt( aData.aDataInRows.begin());
-             aColIt != aData.aDataInRows.end(); ++aColIt )
+        tStringVector::const_iterator aRowDescriptionsIter( aData.aRowDescriptions.begin());
+        const Sequence< Sequence< OUString > >& rComplexRowDescriptions = aData.aComplexRowDescriptions;
+        sal_Int32 nComplexCount = rComplexRowDescriptions.getLength();
+        sal_Int32 nC = 0;
+
+        for( t2DNumberContainer::const_iterator aRowIt( aData.aDataInRows.begin());
+             aRowIt != aData.aDataInRows.end(); ++aRowIt )
         {
             SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
+
+            //export row descriptions
             {
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
                 SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
-                if( aFirstColIt != aData.aFirstColumnStrings.end())
+                if( aRowDescriptionsIter != aData.aRowDescriptions.end())
                 {
                     // write the original range name as id into the local table
                     // to allow a correct re-association when copying via clipboard
-                    if( !bHasOwnData && aFirstColumnRangeIter != aFirstColumnRangeEndIter )
-                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aFirstColumnRangeIter++ );
-                    exportText( *aFirstColIt );
-                    ++aFirstColIt;
+                    if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
+                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aRowDescriptions_RangeIter++ );
+                    exportText( *aRowDescriptionsIter );
+                    ++aRowDescriptionsIter;
+                    if( nC < nComplexCount )
+                        lcl_exportComplexLabel( rComplexRowDescriptions[nC++], mrExport );
                 }
             }
-            for( lcl_TableData::tTwoDimNumberContainer::value_type::const_iterator aInnerIt( aColIt->begin());
-                 aInnerIt != aColIt->end(); ++aInnerIt )
+
+            //export row values
+            for( t2DNumberContainer::value_type::const_iterator aColIt( aRowIt->begin());
+                 aColIt != aRowIt->end(); ++aColIt )
             {
-                SvXMLUnitConverter::convertDouble( msStringBuffer, *aInnerIt );
+                SvXMLUnitConverter::convertDouble( msStringBuffer, *aColIt );
                 msString = msStringBuffer.makeStringAndClear();
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
@@ -1533,7 +1576,7 @@ void SchXMLExportHelper::exportTable()
                 // write the original range name as id into the local table to
                 // allow a correct re-association when copying via clipboard
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
-                    ( mbRowSourceColumns || (aInnerIt == aColIt->begin())) )
+                    ( mbRowSourceColumns || (aColIt == aRowIt->begin())) )
                 {
                     if( (*aDataRangeIter).getLength())
                         mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aDataRangeIter );
@@ -1546,7 +1589,7 @@ void SchXMLExportHelper::exportTable()
 
     // if range iterator was used it should have reached its end
     OSL_ASSERT( bHasOwnData || (aDataRangeIter == aDataRangeEndIter) );
-    OSL_ASSERT( bHasOwnData || (aFirstColumnRangeIter == aFirstColumnRangeEndIter) );
+    OSL_ASSERT( bHasOwnData || (aRowDescriptions_RangeIter == aRowDescriptions_RangeEnd) );
 }
 
 void SchXMLExportHelper::exportPlotArea(
@@ -2071,8 +2114,8 @@ void SchXMLExportHelper::exportAxes(
                         if( xValues.is())
                         {
                             Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
-                            aCategoriesRange = lcl_ConvertRange( xValues->getSourceRangeRepresentation(), xNewDoc );
-                            maCategoriesRange = aCategoriesRange;
+                            maCategoriesRange = xValues->getSourceRangeRepresentation();
+                            aCategoriesRange = lcl_ConvertRange( maCategoriesRange, xNewDoc );
                         }
                     }
                 }
@@ -3379,24 +3422,6 @@ awt::Size SchXMLExportHelper::getPageSize( const Reference< chart2::XChartDocume
         aSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
 
     return aSize;
-}
-
-void SchXMLExportHelper::swapDataArray( Sequence< Sequence< double > >& rSequence )
-{
-    sal_Int32 nOuterSize = rSequence.getLength();
-    sal_Int32 nInnerSize = rSequence[0].getLength();    // assume that all subsequences have same length
-    sal_Int32 i, o;
-
-    Sequence< Sequence< double > > aResult( nInnerSize );
-    Sequence< double >* pArray = aResult.getArray();
-    for( i = 0; i < nInnerSize; i++ )
-    {
-        pArray[ i ].realloc( nOuterSize );
-        for( o = 0 ; o < nOuterSize ; o++ )
-            aResult[ i ][ o ] = rSequence[ o ][ i ];
-    }
-
-    rSequence = aResult;
 }
 
 void SchXMLExportHelper::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )

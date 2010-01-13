@@ -139,10 +139,6 @@ public:
 
     static sal_uInt16 GetChartFamilyID() { return XML_STYLE_FAMILY_SCH_CHART_ID; }
 
-    sal_Int32   GetNumberOfSeries();
-    sal_Int32   GetLengthOfSeries();
-    void        ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints = -1 );
-
     /** @param bPushLastChartType If </FALSE>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the
                end of the chart-type container.  When </TRUE>, a new chart type

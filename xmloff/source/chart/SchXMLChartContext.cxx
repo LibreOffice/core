@@ -60,7 +60,6 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -877,6 +876,9 @@ void SchXMLChartContext::EndElement()
     {
         //own data or only rectangular range available
 
+        if( xNewDoc->hasInternalDataProvider() )
+            SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
+
         bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY ));
         bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && bHasOwnData && (meDataRowSource==chart::ChartDataRowSource_ROWS)); // in this case there are range addresses that are simply wrong.
 
@@ -885,20 +887,11 @@ void SchXMLChartContext::EndElement()
         {
             //bHasOwnData is true in this case!
             //e.g. for normal files with own data or also in case of copy paste scenario (e.g. calc to impress)
-            if( xNewDoc->hasInternalDataProvider() )
-                SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
             bSwitchRangesFromOuterToInternalIfNecessary = true;
         }
         else
         {
             //apply data from rectangular range
-
-            // apply data read from the table sub-element to the chart
-            // if the data provider supports the XChartDataArray interface like
-            // the internal data provider
-            uno::Reference< chart::XChartDataArray > xChartData( xNewDoc->getDataProvider(), uno::UNO_QUERY );
-            if( xChartData.is())
-                SchXMLTableHelper::applyTableSimple( maTable, xChartData );
 
             // create datasource from data provider with rectangular range
             // parameters and change the diagram via template mechanism
@@ -922,9 +915,7 @@ void SchXMLChartContext::EndElement()
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
-                        xChartData = uno::Reference< chart::XChartDataArray >( xNewDoc->getDataProvider(), uno::UNO_QUERY );
-                        if( xChartData.is())
-                            SchXMLTableHelper::applyTableSimple( maTable, xChartData );
+                        SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
                         try
                         {
                             lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );

@@ -47,7 +47,6 @@ namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
         class XChartDocument;
-        class XChartDataArray;
         struct ChartSeriesAddress;
     }
     namespace chart2 {
@@ -183,8 +182,6 @@ private:
     SAL_DLLPRIVATE void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// fills the member msString with the appropriate String (i.e. "A3")
     SAL_DLLPRIVATE void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
-    /// interchanges rows and columns of the sequence given
-    SAL_DLLPRIVATE void swapDataArray( com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< double > >& rSequence );
     /// exports a string as a paragraph element
     SAL_DLLPRIVATE void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
     SAL_DLLPRIVATE void exportErrorBarRanges();
