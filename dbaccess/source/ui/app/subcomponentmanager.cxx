@@ -525,6 +525,34 @@ namespace dbaui
         return true;
     }
 
+    // -----------------------------------------------------------------------------
+    bool SubComponentManager::lookupSubComponent( const Reference< XComponent >& i_rComponent,
+            ::rtl::OUString& o_rName, sal_Int32& o_rComponentType )
+    {
+        for (   SubComponentMap::const_iterator comp = m_pData->m_aComponents.begin();
+                comp != m_pData->m_aComponents.end();
+                ++comp
+            )
+        {
+            if  (   (   comp->second.xModel.is()
+                    &&  ( comp->second.xModel == i_rComponent )
+                    )
+                ||  (   comp->second.xController.is()
+                    &&  ( comp->second.xController == i_rComponent )
+                    )
+                ||  (   comp->second.xFrame.is()
+                    &&  ( comp->second.xFrame == i_rComponent )
+                    )
+                )
+            {
+                o_rName = comp->first.sName;
+                o_rComponentType = comp->first.nComponentType;
+                return true;
+            }
+        }
+        return false;
+    }
+
 //........................................................................
 } // namespace dbaui
 //........................................................................

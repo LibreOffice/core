@@ -31,8 +31,14 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #define DBACORE_SDBCORETOOLS_HXX
 
+/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+/** === end UNO includes === **/
 
 namespace comphelper
 {
@@ -76,6 +82,26 @@ namespace dbaccess
     /** retrieves a to-be-displayed string for a given caught exception;
     */
     ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Any& _rError );
+
+    namespace tools
+    {
+        namespace stor
+        {
+            bool    storageIsWritable_nothrow(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                    );
+
+            /// commits a given storage if it's not readonly
+            bool    commitStorageIfWriteable(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                    )
+                    SAL_THROW((
+                        ::com::sun::star::io::IOException,
+                        ::com::sun::star::lang::WrappedTargetException
+                ));
+        }
+
+    }
 
 //.........................................................................
 }   // namespace dbaccess

@@ -41,6 +41,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -58,10 +60,12 @@ namespace dbaccess
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
     // =========================================================================
@@ -163,7 +167,44 @@ namespace dbaccess
         return sDisplayMessage;
     }
 
-// -----------------------------------------------------------------------------
+    namespace tools { namespace stor {
+
+    // -----------------------------------------------------------------------------
+    bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
+    {
+        if ( !_rxStorage.is() )
+            return false;
+
+        sal_Int32 nMode = ElementModes::READ;
+        try
+        {
+            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
+            xStorageProps->getPropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return ( nMode & ElementModes::WRITE ) != 0;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+    {
+        bool bSuccess = false;
+        Reference< XTransactedObject > xTrans( _rxStorage, UNO_QUERY );
+        if ( xTrans.is() )
+        {
+            if ( storageIsWritable_nothrow( _rxStorage ) )
+                xTrans->commit();
+            bSuccess = true;
+        }
+        return bSuccess;
+    }
+
+    } } // tools::stor
+
 //.........................................................................
 }   // namespace dbaccess
 //.........................................................................

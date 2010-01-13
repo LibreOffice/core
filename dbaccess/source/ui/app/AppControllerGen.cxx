@@ -90,6 +90,7 @@ namespace dbaui
 using namespace ::dbtools;
 using namespace ::connectivity;
 using namespace ::svx;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
@@ -107,6 +108,7 @@ using namespace ::com::sun::star::ucb;
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::ui::XContextMenuInterceptor;
 /** === end UNO using === **/
+
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
@@ -385,6 +387,8 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( getMutex() );
+
     SQLExceptionInfo aError;
     SharedConnection xConnection = ensureConnection( &aError );
     if ( !xConnection.is() )
@@ -400,8 +404,28 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
 }
 
 // -----------------------------------------------------------------------------
+beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    sal_Int32 nType = -1;
+    ::rtl::OUString sName;
+
+    if ( !m_pSubComponentManager->lookupSubComponent( i_rSubComponent, sName, nType ) )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    if ( nType == SID_DB_APP_DSRELDESIGN )
+        // this is somewhat hacky ... we're expected to return a DatabaseObject value. However, there is no such
+        // value for the relation design. /me thinks we should change the API definition here ...
+        nType = -1;
+
+    return beans::Pair< ::sal_Int32, ::rtl::OUString >( nType, sName );
+}
+
+// -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
 

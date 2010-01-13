@@ -41,6 +41,7 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 #include "sdbcoretools.hxx"
+#include "dbdocrecovery.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/Optional.hpp>
@@ -544,29 +545,18 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
 namespace
 {
     // .........................................................................
-    const ::rtl::OUString& lcl_getRecoveryDataSubStorageName()
-    {
-        static const ::rtl::OUString s_sRecDataStorName( RTL_CONSTASCII_USTRINGPARAM( "recovery" ) );
-        return s_sRecDataStorName;
-    }
-
-    // .........................................................................
     bool lcl_hasAnyModifiedSubComponent_throw( const Reference< XController >& i_rController )
     {
         Reference< XDatabaseDocumentUI > xDatabaseUI( i_rController, UNO_QUERY_THROW );
-        Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
-        typedef ::std::vector< Reference< XComponent > > Components;
-        Components aSubComponents( aComponents.getLength() );
-        ::std::copy( aComponents.getConstArray(), aComponents.getConstArray() + aComponents.getLength(), aSubComponents.begin() );
+        Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
+        const Reference< XComponent >* component = aComponents.getConstArray();
+        const Reference< XComponent >* componentsEnd = aComponents.getConstArray() + aComponents.getLength();
 
         bool isAnyModified = false;
-        for (   Components::const_iterator comp = aSubComponents.begin();
-                !isAnyModified && ( comp != aSubComponents.end() );
-                ++comp
-            )
+        for ( ; component != componentsEnd; ++component )
         {
-            Reference< XModifiable > xModify( *comp, UNO_QUERY );
+            Reference< XModifiable > xModify( *component, UNO_QUERY );
             if ( xModify.is() )
             {
                 isAnyModified = xModify->isModified();
@@ -635,22 +625,19 @@ void SAL_CALL ODatabaseDocument::saveToRecoveryFile( const ::rtl::OUString& i_Ta
         // first store the document as a whole into this storage
         impl_storeToStorage_throw( xTargetStorage, i_MediaDescriptor, aGuard );
 
-        // create a sub storage for recovery data
-        if ( xTargetStorage->hasByName( lcl_getRecoveryDataSubStorageName() ) )
-            xTargetStorage->removeElement( lcl_getRecoveryDataSubStorageName() );
-        Reference< XStorage > xRecoveryStorage = xTargetStorage->openStorageElement( lcl_getRecoveryDataSubStorageName(), ElementModes::READWRITE );
-
-        // store recovery data for open sub components of our controller(s)
-        // TODO
+        // save the sub components which need saving
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext, xTargetStorage );
+        aDocRecovery.saveModifiedSubComponents( m_aControllers );
 
         // commit the root storage
-        ODatabaseModelImpl::commitStorageIfWriteable( xTargetStorage );
+        tools::stor::commitStorageIfWriteable( xTargetStorage );
     }
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
         if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
             )
         {
             // allowed to leave
@@ -1076,7 +1063,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
         // commit target storage
-        OSL_VERIFY( ODatabaseModelImpl::commitStorageIfWriteable( _rxTargetStorage ) );
+        OSL_VERIFY( tools::stor::commitStorageIfWriteable( _rxTargetStorage ) );
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }

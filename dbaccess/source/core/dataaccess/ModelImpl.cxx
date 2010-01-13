@@ -41,6 +41,7 @@
 #include "dbastrings.hrc"
 #include "ModelImpl.hxx"
 #include "userinformation.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XSet.hpp>
@@ -299,7 +300,7 @@ void DocumentStorageAccess::commitStorages() SAL_THROW(( IOException, RuntimeExc
                 ++aIter
             )
         {
-            m_pModelImplementation->commitStorageIfWriteable( aIter->second );
+            tools::stor::commitStorageIfWriteable( aIter->second );
         }
     }
     catch(const WrappedTargetException&)
@@ -320,7 +321,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     {
         NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
         if ( pos != m_aExposedStorages.end() )
-            bSuccess = m_pModelImplementation->commitStorageIfWriteable( pos->second );
+            bSuccess = tools::stor::commitStorageIfWriteable( pos->second );
     }
     catch( Exception& )
     {
@@ -953,48 +954,12 @@ bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
 }
 
 // -----------------------------------------------------------------------------
-namespace
-{
-    bool lcl_storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
-    {
-        if ( !_rxStorage.is() )
-            return false;
-
-        sal_Int32 nMode = ElementModes::READ;
-        try
-        {
-            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
-            xStorageProps->getPropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return ( nMode & ElementModes::WRITE ) != 0;
-    }
-}
-
-// -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
-{
-    bool bSuccess = false;
-    Reference<XTransactedObject> xTrans( _rxStorage, UNO_QUERY );
-    if ( xTrans.is() )
-    {
-        if ( lcl_storageIsWritable_nothrow( _rxStorage ) )
-            xTrans->commit();
-        bSuccess = true;
-    }
-    return bSuccess;
-}
-// -----------------------------------------------------------------------------
 bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage ) SAL_THROW(())
 {
     bool bSuccess = false;
     try
     {
-        bSuccess = commitStorageIfWriteable( _rxStorage );
+        bSuccess = tools::stor::commitStorageIfWriteable( _rxStorage );
     }
     catch( const Exception& )
     {
@@ -1346,7 +1311,7 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
     lcl_rebaseScriptStorage_throw( m_xBasicLibraries, m_xDocumentStorage.getTyped() );
     lcl_rebaseScriptStorage_throw( m_xDialogLibraries, m_xDocumentStorage.getTyped() );
 
-    m_bReadOnly = !lcl_storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
+    m_bReadOnly = !tools::stor::storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
     // TODO: our data source, if it exists, must broadcast the change of its ReadOnly property
 
     return m_xDocumentStorage.getTyped();
