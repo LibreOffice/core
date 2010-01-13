@@ -479,6 +479,25 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SA
     }
 }
 
+void WeakReferenceHelper::clear() SAL_THROW( () )
+{
+    try
+    {
+        if (m_pImpl)
+        {
+            if (m_pImpl->m_XWeakConnectionPoint.is())
+            {
+                m_pImpl->m_XWeakConnectionPoint->removeReference(
+                        (XReference*)m_pImpl);
+                m_pImpl->m_XWeakConnectionPoint.clear();
+            }
+            m_pImpl->release();
+            m_pImpl = 0;
+        }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+}
+
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
 {
     if (this == &rWeakRef)
@@ -495,16 +514,7 @@ SAL_THROW( () )
 {
     try
     {
-        if (m_pImpl)
-        {
-            if (m_pImpl->m_XWeakConnectionPoint.is())
-            {
-                m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
-                m_pImpl->m_XWeakConnectionPoint.clear();
-            }
-            m_pImpl->release();
-            m_pImpl = 0;
-        }
+        clear();
         if (xInt.is())
         {
             m_pImpl = new OWeakRefListener(xInt);
@@ -517,20 +527,7 @@ SAL_THROW( () )
 
 WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW( () )
 {
-    try
-    {
-    if (m_pImpl)
-    {
-        if (m_pImpl->m_XWeakConnectionPoint.is())
-        {
-            m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
-            m_pImpl->m_XWeakConnectionPoint.clear();
-        }
-        m_pImpl->release();
-        m_pImpl = 0; // for safety
-    }
-    }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    clear();
 }
 
 Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )

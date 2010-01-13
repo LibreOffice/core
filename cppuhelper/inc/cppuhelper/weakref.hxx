@@ -109,6 +109,12 @@ public:
     inline SAL_CALL operator Reference< XInterface > () const SAL_THROW( () )
         { return get(); }
 
+    /** Releases this reference.
+
+        @since UDK 3.2.12
+    */
+    void SAL_CALL clear() SAL_THROW( () );
+
 protected:
     /** @internal */
     OWeakRefListener * m_pImpl;
