@@ -87,6 +87,7 @@ namespace connectivity
             OColumn(    const ::rtl::OUString& _Name,
                                 const ::rtl::OUString& _TypeName,
                                 const ::rtl::OUString& _DefaultValue,
+                                const ::rtl::OUString& _Description,
                                 sal_Int32       _IsNullable,
                                 sal_Int32       _Precision,
                                 sal_Int32       _Scale,
