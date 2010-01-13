@@ -63,7 +63,7 @@
 #include <cuires.hrc>
 #include <helpid.hrc>
 #include "SpellDialog.hrc"
-#include <svx/optitems.hxx>
+#include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include "SpellDialog.hxx"

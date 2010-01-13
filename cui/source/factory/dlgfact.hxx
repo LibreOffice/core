@@ -646,7 +646,7 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
-   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
+   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );

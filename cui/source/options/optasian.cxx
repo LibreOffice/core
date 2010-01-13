@@ -39,7 +39,7 @@
 #include <cuires.hrc>
 #include <tools/table.hxx>
 #include <tools/shl.hxx>
-#include <svx/asiancfg.hxx>
+#include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>

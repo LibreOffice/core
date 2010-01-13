@@ -38,7 +38,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/srchcfg.hxx>
+#include <svl/srchcfg.hxx>
 
 #ifdef _SVX_OPTINET2_CXX
 #include <svtools/headbar.hxx>

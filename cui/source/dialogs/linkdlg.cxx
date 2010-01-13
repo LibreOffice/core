@@ -77,7 +77,7 @@ static long nTabs[] =
     };
 
 
-SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtml )
+SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, BOOL bHtml )
     : ModalDialog( pParent, CUI_RES( MD_UPDATE_BASELINKS ) ),
     aFtFiles( this, CUI_RES( FT_FILES ) ),
     aFtLinks( this, CUI_RES( FT_LINKS ) ),
@@ -304,7 +304,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
         }
 
         // falls jemand der Meinung ist, seine Links auszutauschen (SD)
-        SvLinkManager* pNewMgr = pLinkMgr;
+        LinkManager* pNewMgr = pLinkMgr;
         pLinkMgr = 0;
         SetManager( pNewMgr );
 
@@ -391,7 +391,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
             }
             if( pLinkMgr->GetPersist() )
                 pLinkMgr->GetPersist()->SetModified();
-            SvLinkManager* pNewMgr = pLinkMgr;
+            LinkManager* pNewMgr = pLinkMgr;
             pLinkMgr = 0;
             SetManager( pNewMgr );
         }
@@ -436,7 +436,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 
             if( bNewLnkMgr )
             {
-                SvLinkManager* pNewMgr = pLinkMgr;
+                LinkManager* pNewMgr = pLinkMgr;
                 pLinkMgr = 0;
                 SetManager( pNewMgr );
 
@@ -554,7 +554,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         }
         else
         {
-            SvLinkManager* pNewMgr = pLinkMgr;
+            LinkManager* pNewMgr = pLinkMgr;
             pLinkMgr = 0;
             SetManager( pNewMgr );
         }
@@ -582,7 +582,7 @@ String SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
     return sRet;
 }
 
-void SvBaseLinksDlg::SetManager( SvLinkManager* pNewMgr )
+void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 {
     if( pLinkMgr == pNewMgr )
         return;

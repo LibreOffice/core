@@ -34,8 +34,7 @@
 // include ---------------------------------------------------------------
 
 #include <svtools/langtab.hxx>
-
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include "opthtml.hxx"
 #include "opthtml.hrc"
 #include <cuires.hrc>

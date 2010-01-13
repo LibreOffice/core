@@ -127,7 +127,7 @@
 #endif
 
 
-#include <svx/optitems.hxx>
+#include <editeng/optitems.hxx>
 
 #include <svx/drawitem.hxx>
 #include <rtl/uri.hxx>

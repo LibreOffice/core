@@ -1922,7 +1922,7 @@ SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( Window* p
     return new AbstractPasteDialog_Impl( new SvPasteObjectDialog( pParent ) );
 }
 
-SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p)
+SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p)
 {
     SvBaseLinksDlg* pLinkDlg = new SvBaseLinksDlg( pParent, pMgr, bHTML );
     if ( p )

@@ -73,7 +73,7 @@
 #include "optlingu.hrc"
 
 #include <svx/svxdlg.hxx>
-#include <svx/optitems.hxx>
+#include <editeng/optitems.hxx>
 #include "optlingu.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
