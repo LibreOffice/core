@@ -909,7 +909,8 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
             warnlog( "Filepicker is not populated within reasonable timeframe, aborting" )
             kontext "OeffnenDlg"
             OeffnenDlg.Close()
-            goto endsub
+            hFindFileObjectViaFileOpen() = 0
+            exit function
         else
             printlog( "Waiting for filepicker list to populate..." )
         endif
