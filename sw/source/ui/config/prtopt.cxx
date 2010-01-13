@@ -69,8 +69,8 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
         "Page/LeftPage",                // 13 not in SW/Web
         "Page/RightPage",               // 14 not in SW/Web
         "EmptyPages",                   // 15 not in SW/Web
-        "Content/PrintPlaceholders",     // 16 not in Sw/Web
-        "Content/PrintHiddenText"      // 17
+        "Content/PrintPlaceholders",    // 16 not in Sw/Web
+        "Content/PrintHiddenText"       // 17 not in Sw/Web
     };
     const int nCount = bIsWeb ? 12 : 18;
     Sequence<OUString> aNames(nCount);
@@ -92,6 +92,8 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     bPrintPageBackground = !bWeb;
     bPrintBlackFont = bWeb;
     bPrintTextPlaceholder = bPrintHiddenText = sal_False;
+    if (bWeb)
+        bPrintEmptyPages = sal_False;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -133,6 +135,12 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
             }
         }
     }
+
+    // currently there is just one checkbox for print drawings and print graphics
+    // In the UI. (File/Print dialog and Tools/Options/.../Print)
+    // And since print graphics is the only available in Writer and WrtierWeb ...
+
+    bPrintDraw = bPrintGraphic;
 }
 /* -----------------------------06.09.00 16:50--------------------------------
 
@@ -176,6 +184,12 @@ void    SwPrintOptions::Commit()
             case 17: bVal = bPrintHiddenText; pValues[nProp].setValue(&bVal, rType);  break;
         }
     }
+
+    // currently there is just one checkbox for print drawings and print graphics
+    // In the UI. (File/Print dialog and Tools/Options/.../Print)
+    // And since print graphics is the only available in Writer and WrtierWeb ...
+    bPrintDraw = bPrintGraphic;
+
     PutProperties(aNames, aValues);
 }
 

@@ -394,7 +394,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
     const int nCTLOpts = bCTL ? 1 : 0;
-    const int nNumProps = nCTLOpts + (bWeb ? 16 : 20);
+    const int nNumProps = nCTLOpts + (bWeb ? 14 : 20);
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
@@ -455,15 +455,18 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlackFonts" ) ),
                                                   bDefaultVal );
 
-    // create subgroup for misc options
-    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 15 ) ), rtl::OUString() );
+    if (!bWeb)
+    {
+        // create subgroup for misc options
+        m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 15 ) ), rtl::OUString() );
 
-    // create a bool option for printing automatically inserted blank pages
-    bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 16 ),
-                                                   aLocalizedStrings.GetString( 17 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
-                                                   bDefaultVal );
+        // create a bool option for printing automatically inserted blank pages
+        bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 16 ),
+                                                       aLocalizedStrings.GetString( 17 ),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
+                                                       bDefaultVal );
+    }
 
     // create a bool option for paper tray
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();

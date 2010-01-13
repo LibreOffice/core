@@ -416,13 +416,26 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
         aPrintTextPlaceholderCB.Hide();
 //      aReverseCB.SetPosPixel(aLeftPageCB.GetPosPixel());
         aProspectCB.SetPosPixel(aLeftPageCB.GetPosPixel());
-        Point rPt( aRightPageCB.GetPosPixel() );
-        rPt.setX(rPt.getX() + 15); // indent
-        aProspectCB_RTL.SetPosPixel(rPt);
+        Point aPt( aRightPageCB.GetPosPixel() );
+        aPt.setX(aPt.getX() + 15); // indent
+        aProspectCB_RTL.SetPosPixel(aPt);
 //      aBlackFontCB.SetPosPixel(aBackgroundCB.GetPosPixel());
 //        aPrintHiddenTextCB.SetPosPixel(aBlackFontCB.GetPosPixel());
 //      aBackgroundCB.SetPosPixel(aCtrlFldCB.GetPosPixel());
 //      aCtrlFldCB.SetPosPixel(aDrawCB.GetPosPixel());
+
+        // hide aPrintEmptyPagesCB and move everything below up accordingly
+        long nDeltaY = aPaperFromSetupCB.GetPosPixel().getY() - aPrintEmptyPagesCB.GetPosPixel().getY();
+        aPrintEmptyPagesCB.Hide();
+        aPt = aPaperFromSetupCB.GetPosPixel();
+        aPt.setY( aPt.getY() - nDeltaY );
+        aPaperFromSetupCB.SetPosPixel( aPt );
+        aPt = aFaxFT.GetPosPixel();
+        aPt.setY( aPt.getY() - nDeltaY );
+        aFaxFT.SetPosPixel( aPt );
+        aPt = aFaxLB.GetPosPixel();
+        aPt.setY( aPt.getY() - nDeltaY );
+        aFaxLB.SetPosPixel( aPt );
     }
     aProspectCB_RTL.Disable();
     SvtCTLOptions aCTLOptions;
