@@ -808,9 +808,7 @@ enum SwPropNameIds
 /* 0737 */  UNO_NAME_DESCRIPTION,
 // <--
 /* 0738 */  UNO_NAME_META,       // #i91565#
-/* 0739 */  UNO_NAME_IS_TEMPLATE,
-/* 0740 */  UNO_NAME_VBA_DOCOBJ,
-/* 0741 */  SW_PROPNAME_END
+/* 0739 */  SW_PROPNAME_END
 };
 
 
