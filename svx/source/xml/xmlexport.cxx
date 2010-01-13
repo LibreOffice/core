@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -55,12 +56,12 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent )
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent )
 {
     return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLExporter" );
 }
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent, const char* pExportService )
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent, const char* pExportService )
 {
     sal_Bool bDocRet = xOut.is();
 
@@ -70,12 +71,13 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
+    Reference< lang::XComponent > xSourceDoc( xComponent );
     try
     {
-        if( !xComponent.is() )
+        if( !xSourceDoc.is() )
         {
-            xComponent = new SvxUnoDrawingModel( pModel );
-            pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+            xSourceDoc = new SvxUnoDrawingModel( pModel );
+            pModel->setUnoModel( Reference< XInterface >::query( xSourceDoc ) );
         }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
@@ -130,7 +132,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
                     uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );
                     if( xExporter.is() )
                     {
-                        xExporter->setSourceDocument( xComponent );
+                        xExporter->setSourceDocument( xSourceDoc );
 
                         uno::Sequence< beans::PropertyValue > aDescriptor( 0 );
                         bDocRet = xFilter->filter( aDescriptor );
@@ -141,11 +143,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
     }
     catch(uno::Exception e)
     {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno Exception caught while exporting:\n" );
-        aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#endif
+        DBG_UNHANDLED_EXCEPTION();
         bDocRet = sal_False;
     }
 
@@ -160,7 +158,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
     return bDocRet;
 }
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut )
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut )
 {
     Reference< lang::XComponent > xComponent;
     return SvxDrawingLayerExport( pModel, xOut, xComponent );
@@ -168,12 +166,12 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
 
 //-////////////////////////////////////////////////////////////////////
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent )
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent )
 {
     return SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
 }
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent, const char* pImportService  )
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent, const char* pImportService  )
 {
     sal_uInt32  nRet = 0;
 
@@ -183,13 +181,14 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    if( !xComponent.is() )
+    Reference< lang::XComponent > xTargetDocument( xComponent );
+    if( !xTargetDocument.is() )
     {
-        xComponent = new SvxUnoDrawingModel( pModel );
-        pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+        xTargetDocument = new SvxUnoDrawingModel( pModel );
+        pModel->setUnoModel( Reference< XInterface >::query( xTargetDocument ) );
     }
 
-    Reference< frame::XModel > xModel( xComponent, UNO_QUERY );
+    Reference< frame::XModel > xTargetModel( xTargetDocument, UNO_QUERY );
 
     try
     {
@@ -202,7 +201,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
 
         if( 0 == nRet )
         {
-            xModel->lockControllers();
+            if ( xTargetModel.is() )
+                xTargetModel->lockControllers();
 
             // -------------------------------------
 
@@ -251,7 +251,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
 
                 // connect model and filter
                 uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
-                xImporter->setTargetDocument( xComponent );
+                xImporter->setTargetDocument( xTargetDocument );
 
                 // finally, parser the stream
                 xParser->parseStream( aParserInput );
@@ -260,45 +260,9 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
             }
         }
     }
-    catch( xml::sax::SAXParseException& r )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#else
-        (void) r; // avoid warnings
-#endif
-    }
-    catch( xml::sax::SAXException& r )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#else
-        (void) r; // avoid warnings
-#endif
-    }
-    catch( io::IOException& r )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "IO exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#else
-        (void) r; // avoid warnings
-#endif
-    }
     catch( uno::Exception& r )
     {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#else
-        (void) r; // avoid warnings
-#endif
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if( pGraphicHelper )
@@ -309,13 +273,13 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
 
-    if( xModel.is() )
-        xModel->unlockControllers();
+    if ( xTargetModel.is() )
+        xTargetModel->unlockControllers();
 
     return nRet == 0;
 }
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream )
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream )
 {
     Reference< lang::XComponent > xComponent;
     return SvxDrawingLayerImport( pModel, xInputStream, xComponent );
