@@ -36,7 +36,10 @@
 
 #include <rtl/byteseq.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 using namespace rtl;
 
@@ -593,18 +596,13 @@ public:
 }; // class getData
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::ctor, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::assign, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::equal, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::notequal, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::getArray, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::realloc, "rtl_ByteSequence");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ByteSequence::getData, "rtl_ByteSequence");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::ctor);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::assign);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::equal);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::notequal);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::getArray);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::realloc);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ByteSequence::getData);
 } // namespace ByteSequence
 
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

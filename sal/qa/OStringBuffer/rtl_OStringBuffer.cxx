@@ -38,7 +38,10 @@
 
 #include <rtl/strbuf.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 using namespace rtl;
 
@@ -18407,67 +18410,34 @@ t_print("\n");
 
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::ctors,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::makeStringAndClear,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::getLength,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::getCapacity,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::ensureCapacity,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::setLength,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::charAt,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::csuc,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::getStr,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::setCharAt,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_001,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_002,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_003,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_004,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_005,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Bounderies,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Negative,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_WrongRadix,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_defaultParam,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Bounderies,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Negative,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_WrongRadix,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_defaultParam,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_008_float,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_009_double,
-                                                "rtl_OStringBuffer");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative,
-                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::makeStringAndClear);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::getLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::getCapacity);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ensureCapacity);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::setLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::charAt);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::csuc);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::getStr);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::setCharAt);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_001);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_002);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_003);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_004);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_005);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Bounderies);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Negative);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_WrongRadix);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_006_Int32_defaultParam);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Bounderies);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Negative);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_WrongRadix);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_007_Int64_defaultParam);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_float);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_double);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative);
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

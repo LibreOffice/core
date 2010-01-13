@@ -28,6 +28,11 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ=..$/..
 
 PRJNAME=sal
@@ -56,7 +61,6 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # --- BEGIN --------------------------------------------------------
@@ -80,3 +84,4 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
 
+.END
