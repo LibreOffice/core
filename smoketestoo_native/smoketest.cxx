@@ -186,11 +186,14 @@ void Test::setUp() {
     rtl::OUString userArg(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
         toUrl(getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")))));
+    rtl::OUString noquickArg(
+        RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
     rtl::OUString nofirstArg(
         RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
     rtl::OUString acceptArg(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc);
-    rtl_uString * args[] = { nofirstArg.pData, userArg.pData, acceptArg.pData };
+    rtl_uString * args[] = {
+        noquickArg.pData, nofirstArg.pData, userArg.pData, acceptArg.pData };
     rtl_uString ** envs = 0;
     rtl::OUString argEnv;
     if (getOptionalArgument(
