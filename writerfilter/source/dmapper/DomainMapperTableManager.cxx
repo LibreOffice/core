@@ -488,4 +488,14 @@ void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, Style
     }
     pContext->insert( m_pTableStyleTextProperies );
 }
+
+void DomainMapperTableManager::handle(const Handle_t & _handle)
+{
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("setHandle");
+#endif
+
+    DomainMapperTableManager_Base_t::setHandle(_handle);
+}
+
 }}
