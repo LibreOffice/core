@@ -80,25 +80,9 @@ static sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
 
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
-    mxFrame( rFrame ),
-    maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
-    maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
-    maImgParallel( SVX_RES( IMG_PARALLEL ) ),
-    maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
-    mbPopupMode     ( TRUE )
-{
-    implInit();
-}
-
-ExtrusionDirectionWindow::ExtrusionDirectionWindow(
-    USHORT nId,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParentWindow ) :
-    SfxPopupWindow( nId,
+    ToolbarMenu( nId,
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
@@ -126,10 +110,10 @@ void ExtrusionDirectionWindow::implInit()
 //  mpDirectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_DIRECTION, *this );
 //  mpProjectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_PROJECTION, *this );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
-    mpDirectionSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+//  mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
+    /*mpMenu->*/SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
+    /*mpMenu->*/SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
+    mpDirectionSet = new ValueSet( /*mpMenu->*/this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     mpDirectionSet->SetHelpId( HID_VALUESET_EXTRUSION_DIRECTION );
 
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
@@ -146,15 +130,15 @@ void ExtrusionDirectionWindow::implInit()
 
     mpDirectionSet->SetOutputSizePixel( Size( 72, 72 ) );
 
-    mpMenu->appendEntry( 2, mpDirectionSet );
-    mpMenu->appendSeparator();
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
+    /*mpMenu->*/appendEntry( 2, mpDirectionSet );
+    /*mpMenu->*/appendSeparator();
+    /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
+    /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
+    SetOutputSizePixel( /*mpMenu->*/getMenuSize() );
+    //mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
 
-    mpMenu->Show();
+    //mpMenu->Show();
 
     FreeResource();
 
@@ -164,7 +148,7 @@ void ExtrusionDirectionWindow::implInit()
 
 SfxPopupWindow* ExtrusionDirectionWindow::Clone() const
 {
-    return new ExtrusionDirectionWindow( GetId(), mxFrame );
+    return new ExtrusionDirectionWindow( GetId(), mxFrame, 0 );
 }
 
 void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -181,8 +165,8 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
             mpDirectionSet->SetItemImage( i+1, bHighContrast ? maImgDirectionH[ i ] : maImgDirection[ i ] );
         }
 
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgPerspectiveH : maImgPerspective );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgParallelH : maImgParallel );
+        /*mpMenu->*/setEntryImage( 0, bHighContrast ? maImgPerspectiveH : maImgPerspective );
+        /*mpMenu->*/setEntryImage( 1, bHighContrast ? maImgParallelH : maImgParallel );
     }
 }
 
@@ -190,7 +174,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
 {
-    delete mpMenu;
+    //delete mpMenu;
 }
 
 // -----------------------------------------------------------------------
@@ -215,9 +199,9 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
             mpDirectionSet->SetNoSelection();
         }
     }
-    if( mpMenu )
+//  if( mpMenu )
     {
-        mpMenu->enableEntry( 2, bEnabled );
+        /*mpMenu->*/enableEntry( 2, bEnabled );
     }
 }
 
@@ -225,12 +209,12 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
 
 void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bEnabled )
 {
-    if( mpMenu )
+//  if( mpMenu )
     {
-        mpMenu->checkEntry( 0, (nProjection == 0) && bEnabled );
-        mpMenu->checkEntry( 1, (nProjection == 1 ) && bEnabled );
-        mpMenu->enableEntry( 0, bEnabled );
-        mpMenu->enableEntry( 1, bEnabled );
+        /*mpMenu->*/checkEntry( 0, (nProjection == 0) && bEnabled );
+        /*mpMenu->*/checkEntry( 1, (nProjection == 1 ) && bEnabled );
+        /*mpMenu->*/enableEntry( 0, bEnabled );
+        /*mpMenu->*/enableEntry( 1, bEnabled );
     }
 }
 
@@ -303,7 +287,7 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     }
     else
     {
-        int nProjection = mpMenu->getSelectedEntryId();
+        int nProjection = /*mpMenu->*/getSelectedEntryId();
         if( (nProjection >= 0) && (nProjection < 2 ) )
         {
             SfxInt32Item    aItem( SID_EXTRUSION_PROJECTION, nProjection );
@@ -400,7 +384,7 @@ SfxPopupWindowType ExtrusionDirectionControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionDirectionControl::CreatePopupWindow()
 {
     ExtrusionDirectionWindow* pWin = new ExtrusionDirectionWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
+    pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_REMOVEDECORATION );
     pWin->StartSelection();
     SetPopupWindow( pWin );
     return pWin;
@@ -448,36 +432,10 @@ double ExtrusionDepthDialog::getDepth() const
 
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionDepthControl, SfxBoolItem );
 
-ExtrusionDepthWindow::ExtrusionDepthWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
-    maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
-    maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
-    maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
-    maImgDepth3( SVX_RES( IMG_DEPTH_3 ) ),
-    maImgDepth4( SVX_RES( IMG_DEPTH_4 ) ),
-    maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) ),
-    maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) ),
-    maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) ),
-    maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) ),
-    maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
-    maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
-    maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode     ( true ),
-    mfDepth( -1.0 ),
-    mbEnabled( false )
-{
-    implInit();
-}
-
 ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParentWindow ) :
-    SfxPopupWindow( nId,
+    ToolbarMenu( nId,
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
@@ -508,48 +466,43 @@ void ExtrusionDepthWindow::implInit()
 //  mpDepthForewarder = new SfxStatusForwarder( SID_EXTRUSION_DEPTH, *this );
 //  mpMetricForewarder = new SfxStatusForwarder( SID_ATTR_METRIC, *this );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DEPTH );
+//  mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
+    /*mpMenu->*/SetHelpId( HID_MENU_EXTRUSION_DEPTH );
 
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
+    /*mpMenu->*/SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     String aEmpty;
-    mpMenu->appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
-    mpMenu->appendEntry( 1, aEmpty, bHighContrast ? maImgDepth1h : maImgDepth1 );
-    mpMenu->appendEntry( 2, aEmpty, bHighContrast ? maImgDepth2h : maImgDepth2 );
-    mpMenu->appendEntry( 3, aEmpty, bHighContrast ? maImgDepth3h : maImgDepth3 );
-    mpMenu->appendEntry( 4, aEmpty, bHighContrast ? maImgDepth4h : maImgDepth4 );
-    mpMenu->appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
-    mpMenu->appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
+    /*mpMenu->*/appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
+    /*mpMenu->*/appendEntry( 1, aEmpty, bHighContrast ? maImgDepth1h : maImgDepth1 );
+    /*mpMenu->*/appendEntry( 2, aEmpty, bHighContrast ? maImgDepth2h : maImgDepth2 );
+    /*mpMenu->*/appendEntry( 3, aEmpty, bHighContrast ? maImgDepth3h : maImgDepth3 );
+    /*mpMenu->*/appendEntry( 4, aEmpty, bHighContrast ? maImgDepth4h : maImgDepth4 );
+    /*mpMenu->*/appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+    /*mpMenu->*/appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
+    SetOutputSizePixel( /*mpMenu->*/getMenuSize() );
+//  mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
 
-    mpMenu->Show();
+//  mpMenu->Show();
 
     FreeResource();
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" )));
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" )));
-//  rBindings.Update( SID_ATTR_METRIC );
-//  rBindings.Update( SID_EXTRUSION_DEPTH );
 }
 
 SfxPopupWindow* ExtrusionDepthWindow::Clone() const
 {
-    return new ExtrusionDepthWindow( GetId(), mxFrame );
+    return new ExtrusionDepthWindow( GetId(), mxFrame, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 ExtrusionDepthWindow::~ExtrusionDepthWindow()
 {
-//  delete mpDepthForewarder;
-//  delete mpMetricForewarder;
-
-    delete mpMenu;
+//  delete mpMenu;
 }
 
 // -----------------------------------------------------------------------
@@ -561,20 +514,20 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth, bool bEnabled )
 {
     mbEnabled = bEnabled;
     mfDepth = fDepth;
-    if( mpMenu )
+//  if( mpMenu )
     {
         int i;
         for( i = 0; i < 7; i++ )
         {
             if( i == 5 )
             {
-                mpMenu->checkEntry( i, (fDepth >= 338666) && bEnabled );
+                /*mpMenu->*/checkEntry( i, (fDepth >= 338666) && bEnabled );
             }
             else if( i != 6 )
             {
-                mpMenu->checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) && bEnabled ) );
+                /*mpMenu->*/checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) && bEnabled ) );
             }
-            mpMenu->enableEntry( i, bEnabled );
+            /*mpMenu->*/enableEntry( i, bEnabled );
         }
     }
 }
@@ -589,7 +542,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
     for( int i = 0; i < 5; i++ )
     {
         String aStr( SVX_RES( nResource + i ) );
-        mpMenu->setEntryText( i, aStr );
+        /*mpMenu->*/setEntryText( i, aStr );
     };
 }
 
@@ -636,12 +589,12 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
-        mpMenu->setEntryImage( 2, bHighContrast ? maImgDepth2h : maImgDepth2 );
-        mpMenu->setEntryImage( 3, bHighContrast ? maImgDepth3h : maImgDepth3 );
-        mpMenu->setEntryImage( 4, bHighContrast ? maImgDepth4h : maImgDepth4 );
-        mpMenu->setEntryImage( 5, bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+        /*mpMenu->*/setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
+        /*mpMenu->*/setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
+        /*mpMenu->*/setEntryImage( 2, bHighContrast ? maImgDepth2h : maImgDepth2 );
+        /*mpMenu->*/setEntryImage( 3, bHighContrast ? maImgDepth3h : maImgDepth3 );
+        /*mpMenu->*/setEntryImage( 4, bHighContrast ? maImgDepth4h : maImgDepth4 );
+        /*mpMenu->*/setEntryImage( 5, bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
     }
 }
 
@@ -652,7 +605,7 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
 {
 //  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
 
-    int nSelected = mpMenu->getSelectedEntryId();
+    int nSelected = /*mpMenu->*/getSelectedEntryId();
     if( nSelected != -1 )
     {
         if( nSelected == 6 )
@@ -746,8 +699,8 @@ void ExtrusionDepthWindow::GetFocus (void)
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
+    //if( mpMenu )
+        /*mpMenu->*/GrabFocus();
 }
 
 // ========================================================================
@@ -777,7 +730,7 @@ SfxPopupWindowType ExtrusionDepthControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionDepthControl::CreatePopupWindow()
 {
     ExtrusionDepthWindow* pWin = new ExtrusionDepthWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
+    pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_REMOVEDECORATION );
     pWin->StartSelection();
     SetPopupWindow( pWin );
     return pWin;
@@ -798,35 +751,13 @@ void ExtrusionDepthControl::StateChanged( USHORT, SfxItemState eState, const Sfx
 
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionLightingControl, SfxBoolItem );
 
-ExtrusionLightingWindow::ExtrusionLightingWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ) ),
-    maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) ),
-    maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) ),
-    maImgDim( SVX_RES( IMG_LIGHTING_DIM ) ),
-    maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
-    maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
-    maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true ),
-    mnLevel( 0 ),
-    mbLevelEnabled( false ),
-    mnDirection( FROM_FRONT ),
-    mbDirectionEnabled( false )
-{
-    implInit();
-}
-
-// -----------------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 ExtrusionLightingWindow::ExtrusionLightingWindow(
     USHORT nId,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParentWindow ) :
-    SfxPopupWindow( nId,
+    ToolbarMenu( nId,
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ) ),
@@ -866,14 +797,11 @@ void ExtrusionLightingWindow::implInit()
         maImgLightingPreviewh[i] = Image( SVX_RES( IMG_LIGHT_PREVIEW_H + i ) );
     }
 
-//  mpLightingDirectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_LIGHTING_DIRECTION, *this );
-//  mpLightingIntensityForewarder = new SfxStatusForwarder( SID_EXTRUSION_LIGHTING_INTENSITY, *this );
+//  mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
+    /*mpMenu->*/SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
+    /*mpMenu->*/SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
-
-    mpLightingSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpLightingSet = new ValueSet( /*mpMenu->*/this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
@@ -895,16 +823,16 @@ void ExtrusionLightingWindow::implInit()
     }
     mpLightingSet->SetOutputSizePixel( Size( 72, 72 ) );
 
-    mpMenu->appendEntry( 3, mpLightingSet );
-    mpMenu->appendSeparator();
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
+    /*mpMenu->*/appendEntry( 3, mpLightingSet );
+    /*mpMenu->*/appendSeparator();
+    /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
+    /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
+    /*mpMenu->*/appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
+    SetOutputSizePixel( /*mpMenu->*/getMenuSize() );
+    //mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
 
-    mpMenu->Show();
+    //mpMenu->Show();
 
     FreeResource();
 
@@ -916,14 +844,14 @@ void ExtrusionLightingWindow::implInit()
 
 SfxPopupWindow* ExtrusionLightingWindow::Clone() const
 {
-    return new ExtrusionLightingWindow( GetId(), mxFrame );
+    return new ExtrusionLightingWindow( GetId(), mxFrame, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 ExtrusionLightingWindow::~ExtrusionLightingWindow()
 {
-    delete mpMenu;
+    //delete mpMenu;
 }
 
 // -----------------------------------------------------------------------
@@ -935,8 +863,8 @@ void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
     int i = 0;
     for( i = 0; i < 3; i++ )
     {
-        mpMenu->checkEntry( i, (i == nLevel) && bEnabled );
-        mpMenu->enableEntry( i, bEnabled );
+        /*mpMenu->*/checkEntry( i, (i == nLevel) && bEnabled );
+        /*mpMenu->*/enableEntry( i, bEnabled );
     }
 }
 
@@ -972,7 +900,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
         }
     }
 
-    mpMenu->enableEntry( 3, bEnabled );
+    /*mpMenu->*/enableEntry( 3, bEnabled );
 }
 
 // -----------------------------------------------------------------------
@@ -1023,9 +951,9 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         implSetDirection( mnDirection, mbDirectionEnabled );
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgBrighth : maImgBright );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgNormalh : maImgNormal );
-        mpMenu->setEntryImage( 2, bHighContrast ? maImgDimh : maImgDim );
+        /*mpMenu->*/setEntryImage( 0, bHighContrast ? maImgBrighth : maImgBright );
+        /*mpMenu->*/setEntryImage( 1, bHighContrast ? maImgNormalh : maImgNormal );
+        /*mpMenu->*/setEntryImage( 2, bHighContrast ? maImgDimh : maImgDim );
     }
 }
 
@@ -1038,9 +966,9 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
 
 //  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
 
-    if( pControl == mpMenu )
+    if( pControl == /*mpMenu->*/this )
     {
-        int nLevel = mpMenu->getSelectedEntryId();
+        int nLevel = /*mpMenu->*/getSelectedEntryId();
         if( nLevel >= 0 )
         {
             if( nLevel != 3 )
@@ -1128,8 +1056,8 @@ void ExtrusionLightingWindow::GetFocus (void)
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
+//  if( mpMenu )
+        /*mpMenu->*/GrabFocus();
 }
 
 // ========================================================================
@@ -1158,7 +1086,7 @@ SfxPopupWindowType ExtrusionLightingControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionLightingControl::CreatePopupWindow()
 {
     ExtrusionLightingWindow* pWin = new ExtrusionLightingWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
+    pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_REMOVEDECORATION );
     pWin->StartSelection();
     SetPopupWindow( pWin );
     return pWin;
@@ -1181,31 +1109,10 @@ SFX_IMPL_TOOLBOX_CONTROL( ExtrusionSurfaceControl, SfxBoolItem );
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE )),
-    maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) ),
-    maImgSurface2( SVX_RES( IMG_MATTE ) ),
-    maImgSurface3( SVX_RES( IMG_PLASTIC ) ),
-    maImgSurface4( SVX_RES( IMG_METAL ) ),
-    maImgSurface1h( SVX_RES( IMG_WIRE_FRAME_H ) ),
-    maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
-    maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
-    maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
-{
-    implInit();
-}
-
-ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
-    USHORT nId,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParentWindow ) :
 
-    SfxPopupWindow( nId,
+    ToolbarMenu( nId,
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE )),
@@ -1231,54 +1138,50 @@ void ExtrusionSurfaceWindow::implInit()
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-//  mpSurfaceForewarder = new SfxStatusForwarder( SID_EXTRUSION_SURFACE, *this );
+//  mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
+    /*mpMenu->*/SetHelpId( HID_MENU_EXTRUSION_SURFACE );
+    /*mpMenu->*/SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_SURFACE );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
+    /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
+    /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
+    /*mpMenu->*/appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
+    /*mpMenu->*/appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
 
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
-    mpMenu->appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
+    SetOutputSizePixel( /*mpMenu->*/getMenuSize() );
+    //mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    //mpMenu->Show();
 
     FreeResource();
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" )));
-//  rBindings.Update( SID_EXTRUSION_SURFACE );
 }
 
 // -----------------------------------------------------------------------
 
 SfxPopupWindow* ExtrusionSurfaceWindow::Clone() const
 {
-    return new ExtrusionSurfaceWindow( GetId(), mxFrame );
+    return new ExtrusionSurfaceWindow( GetId(), mxFrame, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 ExtrusionSurfaceWindow::~ExtrusionSurfaceWindow()
 {
-//  delete mpSurfaceForewarder;
-    delete mpMenu;
+//  delete mpMenu;
 }
 
 // -----------------------------------------------------------------------
 
 void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 {
-    if( mpMenu )
+//  if( mpMenu )
     {
         int i;
         for( i = 0; i < 4; i++ )
         {
-            mpMenu->checkEntry( i, (i == nSurface) && bEnabled );
-            mpMenu->enableEntry( i, bEnabled );
+            /*mpMenu->*/checkEntry( i, (i == nSurface) && bEnabled );
+            /*mpMenu->*/enableEntry( i, bEnabled );
         }
     }
 }
@@ -1316,10 +1219,10 @@ void ExtrusionSurfaceWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
-        mpMenu->appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
-        mpMenu->appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
-        mpMenu->appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
+        /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
+        /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
+        /*mpMenu->*/appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
+        /*mpMenu->*/appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
     }
 }
 
@@ -1332,7 +1235,7 @@ IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, EMPTYARG )
 
 //  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
 
-    sal_Int32 nSurface = mpMenu->getSelectedEntryId();
+    sal_Int32 nSurface = /*mpMenu->*/getSelectedEntryId();
     if( nSurface >= 0 )
     {
         SfxInt32Item    aItem( SID_EXTRUSION_SURFACE, nSurface );
@@ -1388,8 +1291,8 @@ void ExtrusionSurfaceWindow::GetFocus (void)
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
+    //if( mpMenu )
+        /*mpMenu->*/GrabFocus();
 }
 
 // ========================================================================
@@ -1419,7 +1322,7 @@ SfxPopupWindowType ExtrusionSurfaceControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionSurfaceControl::CreatePopupWindow()
 {
     ExtrusionSurfaceWindow* pWin = new ExtrusionSurfaceWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
+    pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_REMOVEDECORATION );
     pWin->StartSelection();
     SetPopupWindow( pWin );
     return pWin;

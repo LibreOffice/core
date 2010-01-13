@@ -36,15 +36,26 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 
+#include <sfx2/tbxctrl.hxx>
+
 #include "svx/svxdllapi.h"
 
 class ToolbarMenuEntry;
 typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
 
-class SVX_DLLPUBLIC ToolbarMenu : public Control
+class SVX_DLLPUBLIC ToolbarMenu : public SfxPopupWindow
 {
 public:
-                    ToolbarMenu( Window* pParent, WinBits nStyle );
+                    ToolbarMenu( USHORT nId,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 Window* pParentWindow,
+                                 WinBits nBits );
+
+                    ToolbarMenu( USHORT nId,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 Window* pParentWindow,
+                                 const ResId& rResId );
+
                     ~ToolbarMenu();
 
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -62,7 +73,7 @@ public:
     void            appendEntry( int nEntryId, const Image& rImage, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, const String& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits = 0 );
-    void            appendEntry( int nEntryId, const String& rStr, Control* pControl, MenuItemBits nItemBits = 0 );
+//  void            appendEntry( int nEntryId, const String& rStr, Control* pControl, MenuItemBits nItemBits = 0 );
     void            appendSeparator();
 
     void            checkEntry( int nEntryId, bool bCheck = true );
@@ -103,6 +114,8 @@ private:
     Link            maHighlightHdl;
     Link            maSelectHdl;
 
+    void            implInit();
+
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -113,6 +126,7 @@ private:
     void            appendEntry( ToolbarMenuEntry* pEntry );
 
     void            implPaint( ToolbarMenuEntry* pThisOnly = NULL, bool bHighlight = false );
+    void            implDrawBorder();
 
     void            implHighlightEntry( int nHighlightEntry, bool bHighlight );
     void            implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown );

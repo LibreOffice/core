@@ -30,9 +30,10 @@
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #define _SVX_EXTRUSION_CONTROLS_HXX
 
+#include "svx/svxdllapi.h"
+
 #include <svtools/valueset.hxx>
 #include <svl/lstner.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <svtools/svtreebx.hxx>
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -40,10 +41,10 @@
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include "svx/svxdllapi.h"
+
+#include "svx/toolbarmenu.hxx"
 
 class SfxBindings;
-class ToolbarMenu;
 class SfxStatusForwarder;
 
 //========================================================================
@@ -52,12 +53,11 @@ namespace svx
 {
 class ToolboxButtonColorUpdater;
 
-class ExtrusionDirectionWindow : public SfxPopupWindow
+class ExtrusionDirectionWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 
 private:
-    ToolbarMenu*        mpMenu;
     ValueSet*           mpDirectionSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -93,8 +93,6 @@ protected:
 
 public:
     ExtrusionDirectionWindow( USHORT nId,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    ExtrusionDirectionWindow( USHORT nId,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                               Window* pParentWindow );
     ~ExtrusionDirectionWindow();
@@ -124,13 +122,11 @@ public:
 
 //========================================================================
 
-class ExtrusionDepthWindow : public SfxPopupWindow
+class ExtrusionDepthWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 
 private:
-    ToolbarMenu* mpMenu;
-
     Image maImgDepth0;
     Image maImgDepth1;
     Image maImgDepth2;
@@ -172,8 +168,6 @@ protected:
 
 public:
     ExtrusionDepthWindow( USHORT nId,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    ExtrusionDepthWindow( USHORT nId,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                           Window* pParentWindow );
     ~ExtrusionDepthWindow();
@@ -203,12 +197,11 @@ public:
 
 //========================================================================
 
-class ExtrusionLightingWindow : public SfxPopupWindow
+class ExtrusionLightingWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 
 private:
-    ToolbarMenu* mpMenu;
     ValueSet*    mpLightingSet;
 
     Image maImgLightingOff[9];
@@ -254,8 +247,6 @@ protected:
 
 public:
     ExtrusionLightingWindow( USHORT nId,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    ExtrusionLightingWindow( USHORT nId,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                              Window* pParentWindow );
     ~ExtrusionLightingWindow();
@@ -285,12 +276,10 @@ public:
 
 //========================================================================
 
-class ExtrusionSurfaceWindow : public SfxPopupWindow
+class ExtrusionSurfaceWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 private:
-    ToolbarMenu* mpMenu;
-
     Image maImgSurface1;
     Image maImgSurface2;
     Image maImgSurface3;
@@ -321,8 +310,6 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    ExtrusionSurfaceWindow( USHORT nId,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     ExtrusionSurfaceWindow( USHORT nId,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                             Window* pParentWindow );

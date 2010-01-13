@@ -58,7 +58,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
     Control CTL_FAVORITES
     {
         HelpId = HID_CTL_FONTWORK_FAVORITES ;
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 3 , 14 ) ;
         Size = MAP_APPFONT ( WIDTH - 6,
                              HEIGHT - RSC_CD_PUSHBUTTON_HEIGHT -
@@ -97,7 +97,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 
 FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -232,7 +232,7 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 
 FloatingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -309,7 +309,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
     };
     MetricField MF_VALUE
     {
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 32 , 12 ) ;
         TabStop = TRUE ;

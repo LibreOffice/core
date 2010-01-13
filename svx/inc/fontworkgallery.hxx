@@ -40,9 +40,8 @@
 #include <vcl/button.hxx>
 #endif
 #include <vcl/dialog.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
-
+#include "svx/toolbarmenu.hxx"
 #include <vector>
 
 class FmFormModel;
@@ -53,7 +52,6 @@ class SdrObject;
 class SdrModel;
 
 class SfxBindings;
-class ToolbarMenu;
 class SfxStatusForwarder;
 
 //------------------------------------------------------------------------
@@ -61,12 +59,10 @@ class SfxStatusForwarder;
 namespace svx
 {
 
-class FontWorkAlignmentWindow : public SfxPopupWindow
+class FontWorkAlignmentWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 private:
-    ToolbarMenu* mpMenu;
-
     Image maImgAlgin1;
     Image maImgAlgin2;
     Image maImgAlgin3;
@@ -99,8 +95,6 @@ protected:
 
 public:
     FontWorkAlignmentWindow( USHORT nId,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    FontWorkAlignmentWindow( USHORT nId,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                              Window* pParentWindow );
     ~FontWorkAlignmentWindow();
@@ -128,12 +122,10 @@ public:
 
 //------------------------------------------------------------------------
 
-class FontWorkCharacterSpacingWindow : public SfxPopupWindow
+class FontWorkCharacterSpacingWindow : public ToolbarMenu
 {
     using FloatingWindow::StateChanged;
 private:
-    ToolbarMenu* mpMenu;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     bool        mbPopupMode;

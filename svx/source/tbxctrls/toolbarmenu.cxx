@@ -39,8 +39,10 @@
 #include "svx/toolbarmenu.hxx"
 
 const int EXTRAITEMHEIGHT = 4;
-const int SEPARATOR_HEIGHT = 8;
+const int SEPARATOR_HEIGHT = 6;
 const int TITLE_ID = -1;
+const int BORDER_X = 3;
+const int BORDER_Y = 3;
 
 class ToolbarMenuEntry
 {
@@ -141,9 +143,30 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
     delete mpControl;
 }
 
-ToolbarMenu::ToolbarMenu( Window* pParent, WinBits nStyle ) :
-    Control( pParent, nStyle )
+ToolbarMenu::ToolbarMenu( USHORT nId,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                          Window* pParentWindow,
+                          WinBits nBits )
+: SfxPopupWindow(nId, rFrame, pParentWindow, nBits)
 {
+    implInit();
+}
+
+ToolbarMenu::ToolbarMenu( USHORT nId,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                          Window* pParentWindow,
+                          const ResId& rResId )
+: SfxPopupWindow(nId, rFrame, pParentWindow, rResId)
+{
+    implInit();
+}
+
+void ToolbarMenu::implInit()
+{
+//    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_NOBORDER | WB_SYSTEMWINDOW );
+
+//    EnableChildTransparentMode();
+
     mnCheckPos = 0;
     mnImagePos = 0;
     mnTextPos = 0;
@@ -267,8 +290,10 @@ void ToolbarMenu::initWindow()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
+    SetControlBackground( GetSettings().GetStyleSettings().GetFaceGradientColor() );
+
     SetPointFont( rStyleSettings.GetMenuFont() );
-    SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
+    SetBackground( Wallpaper( GetControlBackground() ) );
     SetTextColor( rStyleSettings.GetMenuTextColor() );
     SetTextFillColor();
     SetLineColor();
@@ -339,8 +364,12 @@ Size ToolbarMenu::implCalcSize()
 
     int gfxExtra = Max( nExtra, 7L );
 
+    if ( aMaxImgSz.Width() )
+        mnTextPos += gfxExtra;
+    if ( bCheckable )
+        mnTextPos += 16;
+
     mnCheckPos = nExtra;
-//  mnImagePos = mnCheckPos + nFontHeight/2 + gfxExtra;
     mnImagePos = nExtra;
     mnTextPos = mnImagePos + aMaxImgSz.Width();
 
@@ -353,31 +382,18 @@ Size ToolbarMenu::implCalcSize()
             // Text:
             if( pEntry->mbHasText )
             {
-                long nTextWidth = GetCtrlTextWidth( pEntry->maText );
-                if ( nTextWidth > nMaxTextWidth )
-                    nMaxTextWidth = nTextWidth;
-                long nTextHeight = GetTextHeight();
+                long nTextWidth = GetCtrlTextWidth( pEntry->maText ) + mnTextPos;
+                nMaxTextWidth = Max( nTextWidth, nMaxTextWidth );
 
-                pEntry->maSize.Height() = Max( Max( nTextHeight, pEntry->maSize.Height() ), nMinMenuItemHeight );
+                pEntry->maSize.Height() = Max( Max( GetTextHeight(), pEntry->maSize.Height() ), nMinMenuItemHeight );
             }
-
             // Control:
-            if( pEntry->mpControl )
+            else if( pEntry->mpControl )
             {
-                long nTextWidth = pEntry->mbHasText ? GetCtrlTextWidth( pEntry->maText ) : -mnTextPos;
-
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
 
-                if( nTextWidth )
-                    nTextWidth += nExtra;
-
-                nTextWidth += aControlSize.Width();
-
-                if ( nTextWidth > nMaxTextWidth )
-                    nMaxTextWidth = nTextWidth;
-
-                if ( aControlSize.Height() > pEntry->maSize.Height() )
-                    pEntry->maSize.Height() = aControlSize.Height();
+                nMaxTextWidth = Max( aControlSize.Width(), nMaxTextWidth );
+                pEntry->maSize.Height() = Max( aControlSize.Height(), pEntry->maSize.Height() );
             }
 
             pEntry->maSize.Height() += EXTRAITEMHEIGHT;
@@ -390,17 +406,11 @@ Size ToolbarMenu::implCalcSize()
         }
     }
 
-    if ( aMaxImgSz.Width() )
-        mnTextPos += gfxExtra;
-    if ( bCheckable )
-        mnTextPos += 16;
-
-
-    aSz.Width() = mnTextPos + nMaxTextWidth;
-    aSz.Width() += 2*nExtra;
+    aSz.Width() = nMaxTextWidth + (BORDER_X<<1);
+    aSz.Height() += BORDER_Y<<1;
 
     // positionate controls
-    int nY = 0;
+    int nY = BORDER_Y;
     for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
         ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
@@ -410,7 +420,7 @@ Size ToolbarMenu::implCalcSize()
             if( pEntry->mpControl )
             {
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
-                Point aControlPos( pEntry->mbHasText ? mnTextPos : ( aSz.Width() - aControlSize.Width() ) / 2, nY);
+                Point aControlPos( (aSz.Width() - aControlSize.Width())>>1, nY);
                 if( pEntry->mbHasText )
                     aControlPos.X() += GetCtrlTextWidth( pEntry->maText ) + 4*gfxExtra;
 
@@ -436,7 +446,7 @@ void ToolbarMenu::GetFocus()
         implChangeHighlightEntry( 0 );
     }
 */
-    Control::GetFocus();
+    SfxPopupWindow::GetFocus();
 }
 
 void ToolbarMenu::LoseFocus()
@@ -445,7 +455,7 @@ void ToolbarMenu::LoseFocus()
     {
         implChangeHighlightEntry( -1 );
     }
-    Control::LoseFocus();
+    SfxPopupWindow::LoseFocus();
 }
 
 void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits )
@@ -467,12 +477,12 @@ void ToolbarMenu::appendEntry( int nEntryId, Control* pControl, MenuItemBits nIt
 {
     appendEntry( new ToolbarMenuEntry( nEntryId, pControl, nItemBits ) );
 }
-
+/*
 void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, Control* pControl, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( nEntryId, rStr, pControl, nItemBits ) );
 }
-
+*/
 void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
 {
     maEntryVector.push_back( pEntry );
@@ -518,8 +528,8 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
 {
     Size    aSz = GetOutputSizePixel();
-    long    nY = 0;
-    long    nX = 0;
+    long    nY = BORDER_Y;
+    long    nX = BORDER_X;
 
     const int nEntryCount = maEntryVector.size();
     int nEntry;
@@ -530,34 +540,17 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
         {
             if(nEntry == nHighlightEntry)
             {
-//              bool bRestoreLineColor = false;
-                Color oldLineColor;
-/*
-                if( bHighlight && ((p->mpControl == NULL) || (p->mbHasText)) )
-                {
-                    if( p->mbEnabled )
-                    {
-                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                    }
-                    else
-                    {
-                        SetFillColor();
-                        oldLineColor = GetLineColor();
-                        SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                        bRestoreLineColor = true;
-                    }
-                }
-                else
-*/
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+                SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
 
-                Rectangle aRect( Point( nX, nY ), Size( aSz.Width(), p->maSize.Height() ) );
+                Rectangle aRect( Point( nX, nY ), Size( aSz.Width()-(BORDER_X<<1), p->maSize.Height() ) );
+/*
                 if( p->mnBits & MIB_POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
                     aRect.Right() -= nFontHeight + nFontHeight/4;
                 }
                 DrawRect( aRect );
+*/
 
                 if( bHighlight && ((p->mpControl == NULL) || (p->mbHasText)) )
                 {
@@ -570,10 +563,6 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
 
                 implPaint( p, bHighlight );
 
-/*
-                if( bRestoreLineColor )
-                    SetLineColor( oldLineColor );
-*/
                 maHighlightHdl.Call( this );
                 break;
             }
@@ -671,16 +660,20 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
 
 void ToolbarMenu::implChangeHighlightEntry( int nEntry )
 {
+/*
     if( mnHighlightedEntry != -1 )
     {
         implHighlightEntry( mnHighlightedEntry, false );
     }
-
+*/
     mnHighlightedEntry = nEntry;
+    Invalidate();
+ /*
     if( mnHighlightedEntry != -1 )
     {
         implHighlightEntry( mnHighlightedEntry, true );
     }
+ */
 }
 
 ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
@@ -860,6 +853,26 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
+void ToolbarMenu::implDrawBorder()
+{
+    SetFillColor();
+    SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
+    Point aPt;
+    Rectangle aRect( aPt, GetOutputSizePixel() );
+
+    Region oldClipRgn( GetClipRegion( ) );
+    Region aClipRgn( aRect );
+    Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
+    if( !aItemClipRect.IsEmpty() )
+    {
+        aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
+        aClipRgn.Exclude( aItemClipRect );
+        SetClipRegion( aClipRgn );
+    }
+    DrawRect( aRect );
+    SetClipRegion( oldClipRgn );
+}
+
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 {
     const long nFontHeight = GetTextHeight();
@@ -871,7 +884,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     const Size aOutSz( GetOutputSizePixel() );
 //    const long nMaxY = aOutSz.Height();
 
-    Point aTopLeft, aTmpPos;
+    Point aTopLeft( BORDER_X, BORDER_Y ), aTmpPos;
 
     const int nEntryCount = maEntryVector.size();
     int nEntry;
@@ -922,6 +935,10 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 if( bTitle )
                 {
                     Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
+                    aRect.nLeft   += 2;
+                    aRect.nTop    += 2;
+                    aRect.nRight  -= 4;
+                    aRect.nBottom -= 4;
 
                     // fill the background
                     Color aColor (rSettings.GetDialogColor());
@@ -951,7 +968,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 // Text:
                 if( pEntry->mbHasText )
                 {
-                    aTmpPos.X() = aPos.X() + mnTextPos;
+                    aTmpPos.X() = aPos.X() + (bTitle ? 4 : mnTextPos);
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     USHORT nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
@@ -1007,6 +1024,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
 void ToolbarMenu::Paint( const Rectangle& )
 {
+    implDrawBorder();
     implPaint();
 
     if( mnHighlightedEntry != -1 )
@@ -1020,7 +1038,7 @@ void ToolbarMenu::RequestHelp( const HelpEvent& rHEvt )
 
 void ToolbarMenu::StateChanged( StateChangedType nType )
 {
-    Control::StateChanged( nType );
+    SfxPopupWindow::StateChanged( nType );
 
     if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) || ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
     {
@@ -1031,7 +1049,7 @@ void ToolbarMenu::StateChanged( StateChangedType nType )
 
 void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Control::DataChanged( rDCEvt );
+    SfxPopupWindow::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
          (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
