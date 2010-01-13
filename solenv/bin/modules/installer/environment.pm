@@ -80,6 +80,30 @@ sub create_pathvariables
 }
 
 ##################################################
+# Replacing tilde in pathes, because of
+# problem with deep recursion (task 104830)
+##################################################
+
+sub check_tilde_in_directory
+{
+    if ( $ENV{'HOME'} )
+    {
+        my $home = $ENV{'HOME'};
+        $home =~ s/\Q$installer::globals::separator\E\s*$//;
+        $installer::globals::localinstalldir =~ s/~/$home/;
+        my $infoline = "Info: Changing LOCALINSTALLDIR to $installer::globals::localinstalldir\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        # exit, because "~" is not allowed, if HOME is not set
+        my $infoline = "ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!\n";
+        push(@installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program("ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!", "check_tilde_in_directory");
+    }
+}
+
+##################################################
 # Setting some fundamental global variables.
 # All these variables can be overwritten
 # by parameters.
@@ -111,6 +135,9 @@ sub set_global_environment_variables
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjavaset = 1; }
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
     if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
+
+    # Special handling, if LOCALINSTALLDIR contains "~" in the path
+    if ( $installer::globals::localinstalldir =~ /^\s*\~/ ) { check_tilde_in_directory(); }
 }
 
 1;
