@@ -158,7 +158,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                     SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
-                    SetHelpText(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT)));
+                {
+                    ::rtl::OUString sHelpText;
+                    xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
+                    SetHelpText(sHelpText);
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
                     SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
 

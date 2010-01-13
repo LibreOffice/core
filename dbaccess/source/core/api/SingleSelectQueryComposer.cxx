@@ -733,6 +733,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         const ::comphelper::TStringMixEqualFunctor aCaseCompareFunctor( bCase );
         typedef ::std::set< size_t > SizeTSet;
         SizeTSet aUsedSelectColumns;
+        ::connectivity::parse::OParseColumn::StringMap aColumnNames;
 
         sal_Int32 nCount = xResultSetMeta->getColumnCount();
         OSL_ENSURE( (size_t) nCount == aSelectColumns->get().size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
@@ -775,7 +776,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             if ( i > static_cast< sal_Int32>( aSelectColumns->get().size() ) )
             {
                 aSelectColumns->get().push_back(
-                    ::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i )
+                    ::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i ,aColumnNames)
                 );
                 OSL_ENSURE( aSelectColumns->get().size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
             }

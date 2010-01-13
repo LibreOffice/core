@@ -1900,6 +1900,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         xColumn = NULL;
                         bReFetchName = sal_True;
+                        sColumnLabel = ::rtl::OUString();
                     }
                     if(!xColumn.is())
                     {
