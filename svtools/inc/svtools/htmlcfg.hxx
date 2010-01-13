@@ -49,6 +49,7 @@
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 
+class Link;
 struct HtmlOptions_Impl;
 // -----------------------------------------------------------------------
 
@@ -56,6 +57,8 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {
     HtmlOptions_Impl*pImp;
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    void Load( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    void CallListeners();
 
 public:
                     SvxHtmlOptions();
@@ -95,6 +98,9 @@ public:
 
     BOOL        IsNumbersEnglishUS() const;
     void        SetNumbersEnglishUS(BOOL bSet);
+
+    void AddListenerLink( const Link& rLink );
+    void RemoveListenerLink( const Link& rLink );
 };
 
 #endif

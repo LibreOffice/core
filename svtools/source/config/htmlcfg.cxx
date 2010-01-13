@@ -33,11 +33,10 @@
 
 #include <svtools/htmlcfg.hxx>
 #include <svtools/parhtml.hxx>
-//#include <sfx2/bindings.hxx>
-//#include <sfx2/viewfrm.hxx>
-//#include <svx/svxids.hrc>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
+#include <tools/link.hxx>
 
 // -----------------------------------------------------------------------
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -56,12 +55,15 @@ using namespace com::sun::star::uno;
 
 static SvxHtmlOptions* pOptions = 0;
 
+DECLARE_LIST( LinkList, Link * )
+
 #define C2U(cChar) OUString::createFromAscii(cChar)
 /* -----------------------------23.11.00 11:39--------------------------------
 
  ---------------------------------------------------------------------------*/
 struct HtmlOptions_Impl
 {
+    LinkList    aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -124,7 +126,17 @@ SvxHtmlOptions::SvxHtmlOptions() :
     ConfigItem(C2U("Office.Common/Filter/HTML"))
 {
     pImp = new HtmlOptions_Impl;
-    const Sequence<OUString>& aNames = GetPropertyNames();
+    Load( GetPropertyNames() );
+}
+
+// -----------------------------------------------------------------------
+SvxHtmlOptions::~SvxHtmlOptions()
+{
+    delete pImp;
+}
+
+void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
+{
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
@@ -203,11 +215,6 @@ SvxHtmlOptions::SvxHtmlOptions() :
 }
 
 // -----------------------------------------------------------------------
-SvxHtmlOptions::~SvxHtmlOptions()
-{
-    delete pImp;
-}
-// -----------------------------------------------------------------------
 void    SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -265,8 +272,34 @@ void    SvxHtmlOptions::Commit()
     PutProperties(aNames, aValues);
 }
 
+void SvxHtmlOptions::AddListenerLink( const Link& rLink )
+{
+    pImp->aList.Insert( new Link( rLink ) );
+}
+
+void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
+{
+    for ( USHORT n=0; n<pImp->aList.Count(); n++ )
+    {
+        if ( (*pImp->aList.GetObject(n) ) == rLink )
+        {
+            delete pImp->aList.Remove(n);
+            break;
+        }
+    }
+}
+
+void SvxHtmlOptions::CallListeners()
+{
+    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
+        pImp->aList.GetObject(n)->Call( this );
+}
+
+
 void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
 {
+    Load( GetPropertyNames() );
+    CallListeners();
 }
 
 // -----------------------------------------------------------------------
@@ -325,10 +358,7 @@ void SvxHtmlOptions::SetExportMode(USHORT nSet)
     {
         pImp->nExportMode = nSet;
         SetModified();
-        // Invalidierung, falls blinkender Text erlaubt/verboten wurde
-/*        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        if(pViewFrame)
-            pViewFrame->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE); */
+        CallListeners();
     }
 }
 
