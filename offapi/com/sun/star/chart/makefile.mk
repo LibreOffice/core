@@ -107,6 +107,7 @@ IDLFILES=\
     XChartDataArray.idl\
     XChartDataChangeEventListener.idl\
     XChartDocument.idl\
+    XComplexDescriptionAccess.idl\
     XDiagram.idl\
     XStatisticDisplay.idl\
     XTwoAxisXSupplier.idl\
