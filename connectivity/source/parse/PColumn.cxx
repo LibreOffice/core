@@ -108,18 +108,33 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
     ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
 
+    StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
-        aReturn->get().push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ) );
+        aReturn->get().push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ,aColumnMap) );
 
     return aReturn;
 }
 
 // -------------------------------------------------------------------------
 OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
-    const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos )
+    const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos,StringMap& _rColumns )
 {
+    ::rtl::OUString sLabel = _rxResMetaData->getColumnLabel( _nColumnPos );
+    // retrieve the name of the column
+    // check for duplicate entries
+    if(_rColumns.find(sLabel) != _rColumns.end())
+    {
+        ::rtl::OUString sAlias(sLabel);
+        sal_Int32 searchIndex=1;
+        while(_rColumns.find(sAlias) != _rColumns.end())
+        {
+            (sAlias = sLabel) += ::rtl::OUString::valueOf(searchIndex++);
+        }
+        sLabel = sAlias;
+    }
+    _rColumns.insert(StringMap::value_type(sLabel,0));
     OParseColumn* pColumn = new OParseColumn(
-        _rxResMetaData->getColumnLabel( _nColumnPos ),
+        sLabel,
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
         ::rtl::OUString(),
         ::rtl::OUString(),

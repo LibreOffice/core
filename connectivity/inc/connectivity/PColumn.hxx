@@ -99,13 +99,16 @@ namespace connectivity
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData
                 );
 
-            /** creates a single OParseColumn, as described by a result set meta data instance
+            DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
+            /** creates a single OParseColumn, as described by a result set meta data instance.
+                The column names are unique.
             */
             static OParseColumn*
                 createColumnForResultSet(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,
-                    sal_Int32 _nColumnPos
+                    sal_Int32 _nColumnPos,
+                    StringMap& _rColumns
                 );
 
         private:
