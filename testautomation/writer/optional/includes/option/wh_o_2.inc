@@ -69,8 +69,7 @@ testcase tToolsOptionsHTMLPrint
 
     bCheckboxStatus(5)= Prospekt.IsChecked
 
-    bCheckboxStatus(6)= LeereSeitenDrucken.IsChecked
-    bCheckboxStatus(7)= AusDruckereinstellung.IsChecked
+    bCheckboxStatus(6)= AusDruckereinstellung.IsChecked
 
     iListBox(1) = Fax.GetSelIndex
 
@@ -88,8 +87,7 @@ testcase tToolsOptionsHTMLPrint
 
     if bCheckboxStatus(5) Then Prospekt.UnCheck               Else Prospekt.Check
 
-    if bCheckboxStatus(6) Then LeereSeitenDrucken.UnCheck Else LeereSeitenDrucken.Check
-    if bCheckboxStatus(7) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
+    if bCheckboxStatus(6) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
 
     if (Keine.IsChecked = True) Then NurNotizen.Check Else Keine.Check
 
@@ -123,8 +121,7 @@ testcase tToolsOptionsHTMLPrint
 
     if ( bCheckboxStatus(5)= Prospekt.IsChecked               ) Then WarnLog "'Brochure' state changed"
 
-    if ( bCheckboxStatus(6)= LeereSeitenDrucken.IsChecked ) Then WarnLog "#i108219#'Create single print jobs' state changed"
-    if ( bCheckboxStatus(7)= AusDruckereinstellung.IsChecked  ) Then WarnLog "'Paper tray from printer settings' state changed"
+    if ( bCheckboxStatus(6)= AusDruckereinstellung.IsChecked  ) Then WarnLog "'Paper tray from printer settings' state changed"
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) Then WarnLog "'None' state changed (Bug#99202)"
     if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) Then WarnLog "'Notes only' state changed (Bug#99202)"
@@ -142,7 +139,6 @@ testcase tToolsOptionsHTMLPrint
 
     Prospekt.UnCheck
 
-    LeereSeitenDrucken.UnCheck
     AusDruckereinstellung.UnCheck
 
     if (NurNotizen.IsChecked = True) Then Dokumentende.Check Else NurNotizen.Check
@@ -168,7 +164,6 @@ testcase tToolsOptionsHTMLPrint
 
     if Prospekt.IsChecked       Then WarnLog "'Brochure' x"
 
-    if LeereSeitenDrucken.IsChecked Then WarnLog "'Create single print jobs' x"
     if AusDruckereinstellung.IsChecked  Then WarnLog "'Paper tray from printer settings' x"
 
     ' Is saved with document
@@ -194,7 +189,6 @@ testcase tToolsOptionsHTMLPrint
 
     Prospekt.Check
 
-    LeereSeitenDrucken.Check
     AusDruckereinstellung.Check
 
     if (Dokumentende.IsChecked = True) Then Seitenende.Check Else Dokumentende.Check
@@ -220,7 +214,6 @@ testcase tToolsOptionsHTMLPrint
 
     if not Prospekt.IsChecked                Then WarnLog "'Brochure' o"
 
-    if not LeereSeitenDrucken.IsChecked  Then WarnLog "'Create single print jobs' o"
     if not AusDruckereinstellung.IsChecked   Then WarnLog "'Paper tray from printer settings' o"
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) Then WarnLog "'None' state changed"
@@ -244,7 +237,6 @@ testcase tToolsOptionsHTMLPrint
 
     if ( bCheckboxStatus(5) = TRUE ) Then  Prospekt.Check                Else Prospekt.UnCheck
 
-    if ( bCheckboxStatus(6) = TRUE ) Then  LeereSeitenDrucken.Check  Else LeereSeitenDrucken.UnCheck
     if ( bCheckboxStatus(7) = TRUE ) Then  AusDruckereinstellung.Check   Else AusDruckereinstellung.UnCheck
 
     try
