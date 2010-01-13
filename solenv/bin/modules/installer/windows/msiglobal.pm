@@ -1879,15 +1879,22 @@ sub set_global_code_variables
 
     if ( $#{$languagesref} > 0 )    # more than one language
     {
-        if (( ${$languagesref}[1] =~ /jp/ ) ||
-            ( ${$languagesref}[1] =~ /ko/ ) ||
-            ( ${$languagesref}[1] =~ /zh/ ))
+        if (( $installer::globals::added_english ) && ( $#{$languagesref} == 1 )) # only multilingual because of added English
         {
-            $onelanguage = "multiasia";
+            $onelanguage = ${$languagesref}[1];  # setting the first language, that is not english
         }
         else
         {
-            $onelanguage = "multiwestern";
+            if (( ${$languagesref}[1] =~ /jp/ ) ||
+                ( ${$languagesref}[1] =~ /ko/ ) ||
+                ( ${$languagesref}[1] =~ /zh/ ))
+            {
+                $onelanguage = "multiasia";
+            }
+            else
+            {
+                $onelanguage = "multiwestern";
+            }
         }
     }
     else    # only one language
