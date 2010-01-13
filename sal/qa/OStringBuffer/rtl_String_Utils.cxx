@@ -91,7 +91,7 @@ sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
     const sal_Char* psrc = src;
     sal_Char* pdst = dst;
 
-    while( *pdst++ = *psrc++ );
+    while( (*pdst++ = *psrc++) );
     return ( dst );
 }
 

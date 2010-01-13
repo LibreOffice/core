@@ -34,6 +34,10 @@
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include <osl_Mutex_Const.h>
 
 using namespace osl;
@@ -49,17 +53,17 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** print Boolean value.
 */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("YES!\n" ): printf("NO!\n" );
 }
 
 /** pause nSec seconds helper function.
@@ -78,7 +82,7 @@ namespace ThreadHelper
 #if ( defined UNX ) || ( defined OS2 )   //Unix
         sleep( _nSec );
 #endif
-        // t_print("# done\n" );
+        // printf("# done\n" );
     }
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
      {
@@ -230,7 +234,7 @@ protected:
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
-        t_print("# Mutex acquired. \n" );
+        printf("# Mutex acquired. \n" );
         pMyMutex->release( );
     }
 };
@@ -276,7 +280,7 @@ protected:
         Mutex* pGlobalMutex;
         pGlobalMutex = pGlobalMutex->getGlobalMutex( );
         pGlobalMutex->acquire( );
-        t_print("# Global Mutex acquired. \n" );
+        printf("# Global Mutex acquired. \n" );
         pGlobalMutex->release( );
     }
 };
@@ -341,7 +345,7 @@ namespace osl_Mutex
                 bRes = sal_True;
 
             /*for (sal_Int8 i=0; i<BUFFER_SIZE; i++)
-                t_print("#data in buffer is %d\n", m_Data.buffer[i]);
+                printf("#data in buffer is %d\n", m_Data.buffer[i]);
             */
 
             CPPUNIT_ASSERT_MESSAGE("Mutex ctor", bRes == sal_True);
@@ -695,7 +699,7 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        // t_print("# ClearGuardThread" );
+        // printf("# ClearGuardThread" );
         ClearableMutexGuard aGuard( pMyMutex );
         ThreadHelper::thread_sleep( 5 );
 
@@ -771,7 +775,7 @@ namespace osl_ClearableGuard
             TimeValue aTimeVal_after;
             osl_getSystemTime( &aTimeVal_after );
             sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
-            t_print("nSec is %d\n", nSec);
+            printf("nSec is %"SAL_PRIdINT32"\n", nSec);
 
             myThread.join();
 
@@ -837,7 +841,7 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        t_print("# ResettableGuard" );
+        printf("# ResettableGuard" );
         ResettableMutexGuard aGuard( pMyMutex );
         // release the mutex
         aGuard.clear( );
@@ -936,13 +940,11 @@ namespace osl_ResettableGuard
     }; // class reset
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ResettableGuard::ctor, "osl_ResettableGuard");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ResettableGuard::reset, "osl_ResettableGuard");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);
 } // namespace osl_ResettableGuard
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 // The following sets variables for GNU EMACS
 // Local Variables:

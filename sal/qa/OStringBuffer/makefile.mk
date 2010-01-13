@@ -61,14 +61,14 @@ SHL1OBJS= \
     $(SLO)$/rtl_String_Utils.obj
 
 SHL1TARGET= rtl_OStringBuffer
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-
+SHL1RPATH = NONE
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies

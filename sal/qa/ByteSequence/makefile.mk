@@ -55,24 +55,26 @@ SHL1OBJS= \
     $(SLO)$/ByteSequence.obj
 
 SHL1TARGET= rtl_ByteSequence
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1RPATH = NONE
 
 # --- BEGIN --------------------------------------------------------
 SHL2OBJS=  \
     $(SLO)$/rtl_old_testbyteseq.obj
 SHL2TARGET= rtl_old_testbyteseq
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 
 DEF2NAME    =$(SHL2TARGET)
 SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2RPATH = NONE
 # END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------

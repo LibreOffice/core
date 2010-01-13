@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -48,8 +48,6 @@
 #include <osl/mutex.hxx>
 #endif
 #include <osl/time.h>
-
-#include <testshl/simpleheader.hxx>
 
 #ifdef UNX
 #include <unistd.h>

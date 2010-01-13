@@ -29,6 +29,10 @@
 #
 #*************************************************************************
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ=..$/..$/..
 
 PRJNAME=sal
@@ -49,19 +53,16 @@ SHL1OBJS=  \
     $(SLO)$/osl_Mutex.obj
 
 SHL1TARGET= osl_Mutex
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS += $(WS2_32LIB)
-.ENDIF
-
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS += -ldl -lnsl
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1RPATH = NONE
 
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
@@ -70,3 +71,5 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
+
+.END
