@@ -872,6 +872,8 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
     dim iPathItems as integer
     dim asPathList( 100 ) as string
     
+    dim iWait as integer ' some increment variable
+    
     printlog( CFN & "Enter with option (File): " & cName )
 
     '///+<li>If a fully qualified path has been provided we have to split it up</li>
@@ -899,6 +901,20 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
         
     '///+<li>get the number of items in the filepicker</li>
     kontext "OeffnenDlg"
+    iWait = 0
+    while ( DateiAuswahl.getItemCount() = 0 )
+        wait( 100 )
+        iWait = iWait + 1
+        if ( iWait = 10 ) then
+            warnlog( "Filepicker is not populated within reasonable timeframe, aborting" )
+            kontext "OeffnenDlg"
+            OeffnenDlg.Close()
+            goto endsub
+        else
+            printlog( "Waiting for filepicker list to populate..." )
+        endif
+    wend
+    
     iFileOpenItemCount = DateiAuswahl.getItemCount()
     
     '///+<li>Jump to the first item in the filelist and select it with SPACE</li>
