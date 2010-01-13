@@ -50,22 +50,23 @@
 // die Spalten einer Feld-Beschreibung einer Tabelle
 #define FIELD_NAME                      1
 #define FIELD_TYPE                      2
-#define FIELD_DESCR                     3
+#define HELP_TEXT                       3
+#define COLUMN_DESCRIPTION              4
 
-#define FIELD_FIRST_VIRTUAL_COLUMN      4
+#define FIELD_FIRST_VIRTUAL_COLUMN      5
 
-#define FIELD_PROPERTY_REQUIRED         4
-#define FIELD_PROPERTY_NUMTYPE          5
-#define FIELD_PROPERTY_AUTOINC          6
-#define FIELD_PROPERTY_DEFAULT          7
-#define FIELD_PROPERTY_TEXTLEN          8
-#define FIELD_PROPERTY_LENGTH           9
-#define FIELD_PROPERTY_SCALE            10
-#define FIELD_PROPERTY_BOOL_DEFAULT     11
-#define FIELD_PROPERTY_FORMAT           12
-#define FIELD_PRPOERTY_COLUMNNAME       13
-#define FIELD_PRPOERTY_TYPE             14
-#define FIELD_PRPOERTY_AUTOINCREMENT    15
+#define FIELD_PROPERTY_REQUIRED         5
+#define FIELD_PROPERTY_NUMTYPE          6
+#define FIELD_PROPERTY_AUTOINC          7
+#define FIELD_PROPERTY_DEFAULT          8
+#define FIELD_PROPERTY_TEXTLEN          9
+#define FIELD_PROPERTY_LENGTH           10
+#define FIELD_PROPERTY_SCALE            11
+#define FIELD_PROPERTY_BOOL_DEFAULT     12
+#define FIELD_PROPERTY_FORMAT           13
+#define FIELD_PRPOERTY_COLUMNNAME       14
+#define FIELD_PRPOERTY_TYPE             15
+#define FIELD_PRPOERTY_AUTOINCREMENT    16
 
 class FixedText;
 class PushButton;

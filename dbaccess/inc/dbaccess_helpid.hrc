@@ -330,7 +330,7 @@
 #define HID_APP_VIEW_PREVIEW_CB                     (HID_DBACCESS_START + 276)
 #define HID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 277)
 #define HID_APP_VIEW_PREVIEW_2                      (HID_DBACCESS_START + 278)
-// free
+#define HID_TABDESIGN_HELPTEXT                      (HID_DBACCESS_START + 279)
 #define UID_APP_VIEW_HORZ_SPLIT                     (HID_DBACCESS_START + 280)
 #define UID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 281)
 #define HID_APP_VIEW_PREVIEW_3                      (HID_DBACCESS_START + 282)

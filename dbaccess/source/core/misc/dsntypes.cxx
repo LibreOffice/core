@@ -281,6 +281,12 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(const ::rtl::OUString& _sURL)
     return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
 }
 // -----------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::supportsColumnDescription(const ::rtl::OUString& _sURL) const
+{
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("SupportsColumnDescription",sal_False);
+}
+// -----------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::supportsBrowsing(const ::rtl::OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);

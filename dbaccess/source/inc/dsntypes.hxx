@@ -162,6 +162,9 @@ public:
     /// check if the given data source allows creation of tables
     sal_Bool supportsTableCreation(const ::rtl::OUString& _sURL) const;
 
+    /// check if the given data source allows to show column description.
+    sal_Bool supportsColumnDescription(const ::rtl::OUString& _sURL) const;
+
     // check if a Browse button may be shown to insert connection url
     sal_Bool supportsBrowsing(const ::rtl::OUString& _sURL) const;
 

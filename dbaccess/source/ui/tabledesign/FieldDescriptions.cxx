@@ -157,6 +157,8 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                     SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                     SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
+                    SetHelpText(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
                     SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
 
@@ -281,6 +283,21 @@ void OFieldDescription::SetName(const ::rtl::OUString& _rName)
             m_xDest->setPropertyValue(PROPERTY_NAME,makeAny(_rName));
         else
             m_sName = _rName;
+    }
+    catch(const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+// -----------------------------------------------------------------------------
+void OFieldDescription::SetHelpText(const ::rtl::OUString& _sHelpText)
+{
+    try
+    {
+        if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+            m_xDest->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_sHelpText));
+        else
+            m_sHelpText = _sHelpText;
     }
     catch(const Exception& )
     {
@@ -504,6 +521,14 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sDescription;
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString             OFieldDescription::GetHelpText()            const
+{
+    if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+        return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_HELPTEXT));
+    else
+        return m_sHelpText;
+}
+// -----------------------------------------------------------------------------
 ::com::sun::star::uno::Any  OFieldDescription::GetControlDefault()      const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
@@ -657,8 +682,8 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
             _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
         if ( GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
             _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
-        if ( GetDescription().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetDescription()));
+        if ( GetHelpText().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
         if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
             _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
 

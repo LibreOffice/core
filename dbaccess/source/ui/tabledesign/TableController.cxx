@@ -871,7 +871,7 @@ void OTableController::loadData()
             sal_Int32 nAlign        = 0;
 
             sal_Bool bIsAutoIncrement = false, bIsCurrency = false;
-            ::rtl::OUString sName,sDescription,sTypeName;
+            ::rtl::OUString sName,sDescription,sTypeName,sHelpText;
             Any aControlDefault;
 
             // get the properties from the column
@@ -883,10 +883,11 @@ void OTableController::loadData()
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
-
+            xColumn->getPropertyValue(PROPERTY_DESCRIPTION)     >>= sDescription;
 
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
-                xColumn->getPropertyValue(PROPERTY_HELPTEXT)    >>= sDescription;
+                xColumn->getPropertyValue(PROPERTY_HELPTEXT)    >>= sHelpText;
+
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
                 aControlDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
@@ -912,6 +913,7 @@ void OTableController::loadData()
                 pActFieldDescr->SetFormatKey(nFormatKey);
                 //  pActFieldDescr->SetPrimaryKey(pPrimary->GetValue());
                 pActFieldDescr->SetDescription(sDescription);
+                pActFieldDescr->SetHelpText(sHelpText);
                 pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
                 pActFieldDescr->SetHorJustify(dbaui::mapTextJustify(nAlign));
                 pActFieldDescr->SetCurrency(bIsCurrency);
@@ -1120,13 +1122,14 @@ void OTableController::alterColumns()
 
             sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0;
             sal_Bool bAutoIncrement = false;
-            ::rtl::OUString sTypeName;
+            ::rtl::OUString sTypeName,sDescription;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
             xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
             xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
             xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAutoIncrement;
+            xColumn->getPropertyValue(PROPERTY_DESCRIPTION)     >>= sDescription;
 
             try { xColumn->getPropertyValue(PROPERTY_TYPENAME) >>= sTypeName; }
             catch( const Exception& )
@@ -1145,6 +1148,7 @@ void OTableController::alterColumns()
                 (nPrecision != pField->GetPrecision() && nPrecision )       ||
                 nScale != pField->GetScale()                ||
                 nNullable != pField->GetIsNullable()        ||
+                sDescription != pField->GetDescription()        ||
                 bAutoIncrement != pField->IsAutoIncrement())&&
                 xColumnFactory.is())
             {
@@ -1264,7 +1268,8 @@ void OTableController::alterColumns()
             xColumns->getByName(pField->GetName()) >>= xColumn;
             Reference<XPropertySetInfo> xInfo = xColumn->getPropertySetInfo();
             if ( xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-                xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
+                xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetHelpText()));
+
             if(xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
                 xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,pField->GetControlDefault());
             if(xInfo->hasPropertyByName(PROPERTY_FORMATKEY))
