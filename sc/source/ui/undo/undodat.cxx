@@ -53,6 +53,7 @@
 #include "olinefun.hxx"
 #include "dpobject.hxx"
 #include "attrib.hxx"
+#include "hints.hxx"
 #include "sc.hrc"
 
 // -----------------------------------------------------------------------
@@ -1903,6 +1904,12 @@ void __EXPORT ScUndoDataPilot::Undo()
     if (pViewShell)
     {
         //! set current sheet
+    }
+
+    if (pNewDPObject)
+    {
+        // notify API objects
+        pDoc->BroadcastUno( ScDataPilotModifiedHint( pNewDPObject->GetName() ) );
     }
 
     EndUndo();

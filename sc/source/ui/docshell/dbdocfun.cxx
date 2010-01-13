@@ -59,6 +59,7 @@
 #include "attrib.hxx"
 #include "drwlayer.hxx"
 #include "dpshttab.hxx"
+#include "hints.hxx"
 
 // -----------------------------------------------------------------
 
@@ -1406,7 +1407,12 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     delete pUndoDPObj;
 
     if (bDone)
+    {
+        // notify API objects
+        if (pDestObj)
+            pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
         aModificator.SetDocumentModified();
+    }
 
     if ( nErrId && !bApi )
         rDocShell.ErrorMessage( nErrId );

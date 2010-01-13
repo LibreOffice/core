@@ -173,4 +173,16 @@ public:
     const ScImportParam&  GetImportParam() const    { return aParam; }
 };
 
+class ScDataPilotModifiedHint : public SfxHint
+{
+    String          maName;
+
+public:
+                    TYPEINFO();
+                    ScDataPilotModifiedHint( const String& rName );
+                    ~ScDataPilotModifiedHint();
+
+    const String&   GetName() const { return maName; }
+};
+
 #endif

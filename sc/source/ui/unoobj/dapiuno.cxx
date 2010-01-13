@@ -52,6 +52,8 @@
 #include "unonames.hxx"
 #include "dpgroup.hxx"
 #include "dpdimsave.hxx"
+#include "hints.hxx"
+
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
@@ -980,7 +982,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aParam.aStatement = pImportDesc->aObject;
                     aParam.bNative    = pImportDesc->bNative;
                     aParam.bSql       = ( pImportDesc->nType == sheet::DataImportMode_SQL );
-                    aParam.nType      = ( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable;
+                    aParam.nType      = static_cast<BYTE>(( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable);
 
                     uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
                     ScImportDescriptor::FillProperties( aSeq, aParam );
@@ -1123,7 +1125,8 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN) :
     ScDataPilotDescriptorBase( pDocSh ),
     nTab( nT ),
-    aName( rN )
+    aName( rN ),
+    aModifyListeners( 0 )
 {
 }
 
@@ -1138,6 +1141,7 @@ Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
     // we also need to do the same for XDataPilotTable
     SC_QUERYINTERFACE( XDataPilotTable )
     SC_QUERYINTERFACE( XDataPilotTable2 )
+    SC_QUERYINTERFACE( XModifyBroadcaster )
 
     return ScDataPilotDescriptorBase::queryInterface( rType );
 }
@@ -1161,12 +1165,13 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeExce
         sal_Int32 nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 1 );
+        aTypes.realloc( nParentLen + 2 );
         uno::Type* pPtr = aTypes.getArray();
         for (sal_Int32 i = 0; i < nParentLen; ++i)
             pPtr[ i ] = pParentPtr[ i ];               // parent types first
 
         pPtr[ nParentLen ] = getCppuType( (const Reference< XDataPilotTable2 >*)0 );
+        pPtr[ nParentLen+1 ] = getCppuType( (const Reference< XModifyBroadcaster >*)0 );
     }
     return aTypes;
 }
@@ -1338,6 +1343,70 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 n
     if (ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName))
         ScUnoConversion::FillApiRange( aRet, pDPObj->GetOutputRangeByType( nType ) );
     return aRet;
+}
+
+void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util::XModifyListener>& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<util::XModifyListener> *pObj = new uno::Reference<util::XModifyListener>( aListener );
+    aModifyListeners.Insert( pObj, aModifyListeners.Count() );
+
+    if ( aModifyListeners.Count() == 1 )
+    {
+        acquire();  // don't lose this object (one ref for all listeners)
+    }
+}
+
+void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<util::XModifyListener>& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    acquire();      // in case the listeners have the last ref - released below
+
+    USHORT nCount = aModifyListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<util::XModifyListener> *pObj = aModifyListeners[n];
+        if ( *pObj == aListener )
+        {
+            aModifyListeners.DeleteAndDestroy( n );
+
+            if ( aModifyListeners.Count() == 0 )
+            {
+                release();      // release the ref for the listeners
+            }
+
+            break;
+        }
+    }
+
+    release();      // might delete this object
+}
+
+void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA(ScDataPilotModifiedHint) &&
+         static_cast<const ScDataPilotModifiedHint&>(rHint).GetName() == aName )
+    {
+        Refreshed_Impl();
+    }
+
+    ScDataPilotDescriptorBase::Notify( rBC, rHint );
+}
+
+void ScDataPilotTableObj::Refreshed_Impl()
+{
+    lang::EventObject aEvent;
+    aEvent.Source.set((cppu::OWeakObject*)this);
+
+    // the EventObject holds a Ref to this object until after the listener calls
+
+    ScDocument* pDoc = GetDocShell()->GetDocument();
+    for ( USHORT n=0; n<aModifyListeners.Count(); n++ )
+        pDoc->AddUnoListenerCall( *aModifyListeners[n], aEvent );
 }
 
 // ============================================================================
