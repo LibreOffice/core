@@ -71,14 +71,4 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-
-# --- Enable testshl2 execution in normal build ------------------------
-
-$(MISC)$/unittest_succeeded : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(CPPUNITTESTER) $(SHL1TARGETN)
-        $(TOUCH) $@
-
-ALLTAR : $(MISC)$/unittest_succeeded
+.INCLUDE : _cppunit.mk

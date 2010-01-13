@@ -123,12 +123,5 @@ SLOFILES=$(SHL1OBJS)
 
 # --- Enable test execution in normal build ------------------------
 .IF "$(L10N_framework)"==""
-
-unittest : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(CPPUNITTESTER) $(SHL1TARGETN)
-
-ALLTAR : unittest
+.INCLUDE : _cppunit.mk
 .ENDIF
