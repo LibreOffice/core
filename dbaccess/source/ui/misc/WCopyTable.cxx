@@ -371,7 +371,7 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
         OFieldDescription aDesc;
 
         aDesc.SetName(          xStatementMeta->getColumnName(      i ) );
-        aDesc.SetDescription(   xStatementMeta->getColumnLabel(     i ) );
+        aDesc.SetHelpText(      xStatementMeta->getColumnLabel(     i ) );
         aDesc.SetTypeValue(     xStatementMeta->getColumnType(      i ) );
         aDesc.SetTypeName(      xStatementMeta->getColumnTypeName(  i ) );
         aDesc.SetPrecision(     xStatementMeta->getPrecision(       i ) );

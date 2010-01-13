@@ -3159,6 +3159,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         parse::OParseColumn* pColumn = new parse::OParseColumn( pEntry->GetField(),
                                                                 ::rtl::OUString(),
                                                                 ::rtl::OUString(),
+                                                                ::rtl::OUString(),
                                                                 ColumnValue::NULLABLE_UNKNOWN,
                                                                 0,
                                                                 0,
