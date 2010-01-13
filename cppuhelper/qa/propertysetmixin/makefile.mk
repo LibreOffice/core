@@ -29,6 +29,10 @@
 #
 #*************************************************************************
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ := ../..
 PRJNAME := cppuhelper
 
@@ -127,3 +131,5 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/uno.rdb
         -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
         -env:URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
         -env:arg-reg=$(MISC)/$(TARGET)/uno.rdb -env:arg-path=$(SOLARSHAREDBIN)
+
+.END
