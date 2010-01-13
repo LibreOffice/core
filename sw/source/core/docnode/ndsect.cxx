@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/itemiter.hxx>
 #include <tools/resid.hxx>
 #include <fmtcntnt.hxx>

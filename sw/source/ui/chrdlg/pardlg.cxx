@@ -40,7 +40,7 @@
 #include <svx/htmlmode.hxx>
 #include <svl/style.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSSORTDTOR

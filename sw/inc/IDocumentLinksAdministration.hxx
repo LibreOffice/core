@@ -34,11 +34,8 @@
 #include <tools/solar.h>
 
 class String;
-class SvxLinkManager;
-
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-
-namespace sfx2 { class SvLinkSource; }
+namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
  /** Document links administration interface
  */
@@ -55,11 +52,11 @@ namespace sfx2 { class SvLinkSource; }
 
     /**
     */
-    virtual SvxLinkManager& GetLinkManager() = 0;
+    virtual sfx2::LinkManager& GetLinkManager() = 0;
 
     /**
     */
-    virtual const SvxLinkManager& GetLinkManager() const = 0;
+    virtual const sfx2::LinkManager& GetLinkManager() const = 0;
 
     /** FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
         SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():

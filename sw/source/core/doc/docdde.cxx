@@ -42,7 +42,7 @@
 
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <svx/linkmgr.hxx>          // LinkManager
+#include <sfx2/linkmgr.hxx>         // LinkManager
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>

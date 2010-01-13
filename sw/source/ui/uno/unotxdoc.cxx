@@ -88,7 +88,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/progress.hxx>
@@ -2384,7 +2384,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if(!IsValid())
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
-      SvxLinkManager& rLnkMan = pDoc->GetLinkManager();
+      sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
     if( rLnkMan.GetLinks().Count() )
     {
         UnoActionContext aAction(pDoc);

@@ -48,7 +48,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>

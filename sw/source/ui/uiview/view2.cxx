@@ -86,7 +86,7 @@
 #include <sfx2/topfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif

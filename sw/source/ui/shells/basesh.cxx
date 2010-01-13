@@ -38,7 +38,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>

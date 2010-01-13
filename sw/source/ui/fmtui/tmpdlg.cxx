@@ -47,7 +47,7 @@
 #include <svx/hdft2.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <numpara.hxx>
 #include <fmtclds.hxx>

@@ -57,7 +57,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sortedobjs.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
 #include <tools/pstm.hxx>

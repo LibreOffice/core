@@ -42,7 +42,7 @@
 #include <svl/imageitm.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/protitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <svx/htmlmode.hxx>

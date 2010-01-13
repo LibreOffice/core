@@ -43,7 +43,7 @@
 #include <unoprnms.hxx>
 #include <unoobj.hxx>
 #include <unocoll.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>

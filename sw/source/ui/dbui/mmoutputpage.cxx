@@ -90,7 +90,7 @@
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>

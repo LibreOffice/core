@@ -33,7 +33,7 @@
 
 
 #include <sot/storage.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <doc.hxx>
 #include <swtypes.hxx>

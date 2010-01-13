@@ -53,7 +53,7 @@
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/svxids.hrc>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>

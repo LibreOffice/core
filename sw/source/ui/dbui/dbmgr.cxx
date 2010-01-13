@@ -116,7 +116,7 @@
 #include <comphelper/property.hxx>
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <editeng/langitem.hxx>

@@ -39,7 +39,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <undobj.hxx>
 #include <unoobj.hxx>

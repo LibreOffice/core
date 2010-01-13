@@ -54,7 +54,7 @@
 #include <editeng/sizeitem.hxx>
 #endif
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <section.hxx>
 #include <docary.hxx>
 #include <regionsw.hxx>

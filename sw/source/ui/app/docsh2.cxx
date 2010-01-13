@@ -79,7 +79,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>

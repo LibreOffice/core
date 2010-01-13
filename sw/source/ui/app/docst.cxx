@@ -52,7 +52,7 @@
 #include <wdocsh.hxx>
 #include <fmtfsize.hxx>
 #include <fchrfmt.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>

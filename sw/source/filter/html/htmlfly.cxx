@@ -44,7 +44,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>

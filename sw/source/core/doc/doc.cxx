@@ -52,7 +52,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/brkitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/charclass.hxx>
@@ -1806,12 +1806,12 @@ void SwDoc::SetVisibleLinks(bool bFlag)
     mbVisibleLinks = bFlag;
 }
 
-SvxLinkManager& SwDoc::GetLinkManager()
+sfx2::LinkManager& SwDoc::GetLinkManager()
 {
     return *pLinkMgr;
 }
 
-const SvxLinkManager& SwDoc::GetLinkManager() const
+const sfx2::LinkManager& SwDoc::GetLinkManager() const
 {
     return *pLinkMgr;
 }
@@ -1830,7 +1830,7 @@ bool SwDoc::LinksUpdated() const
 bool SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
-    SvxLinkManager& rLnkMgr = GetLinkManager();
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
     const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
     if( rLnks.Count() )
     {

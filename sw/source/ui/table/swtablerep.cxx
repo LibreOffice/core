@@ -48,7 +48,7 @@
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 

@@ -66,7 +66,7 @@
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 
 #include <sot/clsids.hxx>

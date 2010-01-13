@@ -33,7 +33,7 @@
 
 
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>

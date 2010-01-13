@@ -53,7 +53,7 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
@@ -61,7 +61,6 @@
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-//#include <basic/sbjsmod.hxx>
 #include <swevent.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
@@ -111,7 +110,7 @@
 #include <cfgid.h>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>

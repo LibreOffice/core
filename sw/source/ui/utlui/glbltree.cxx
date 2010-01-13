@@ -40,7 +40,7 @@
 #endif
 #include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>

@@ -39,7 +39,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sfx2/frmhtmlw.hxx>

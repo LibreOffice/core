@@ -43,7 +43,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
 
 

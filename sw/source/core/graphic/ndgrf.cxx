@@ -40,7 +40,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/filter.hxx>
 #include <sot/storage.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
 #include <sot/formats.hxx>
 #include <fmtfsize.hxx>
@@ -678,7 +678,7 @@ void SwGrfNode::SetTwipSize( const Size& rSz )
 void SwGrfNode::SetTransferPriority( USHORT nPrio )
 {
     if( refLink.Is() && refLink->GetObj() )
-        SvxLinkManager::SetTransferPriority( *refLink, nPrio );
+        sfx2::LinkManager::SetTransferPriority( *refLink, nPrio );
 }
 
 
@@ -940,7 +940,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
-    const sfx2::SvLinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
+    const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     String sFile, sFilter;
     if( IsLinkedFile() )
         rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
@@ -1040,7 +1040,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     if( pDoc )
     {
         // alle Graphic-Links mit dem Namen aus dem Cache loeschen
-        const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
+        const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         String sFileNm;

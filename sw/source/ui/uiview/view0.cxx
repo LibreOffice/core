@@ -48,6 +48,8 @@
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <swmodule.hxx>
@@ -554,3 +556,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     rReq.Done();
 }
 
+IMPL_LINK( SwView, HtmlOptionsHdl, void*, EMPTYARG )
+{
+    // Invalidierung, falls blinkender Text erlaubt/verboten wurde
+    GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
+    return 0;
+}

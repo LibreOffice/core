@@ -55,8 +55,8 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <svx/htmlcfg.hxx>
-#include <svx/linkmgr.hxx>
+#include <svtools/htmlcfg.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fhgtitem.hxx>

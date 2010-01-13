@@ -62,7 +62,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/flagitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <modcfg.hxx>
 #include <edtwin.hxx>
