@@ -231,13 +231,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         // <--
         case FN_NUMBER_NEWSTART:
         {
+            // a multi selection is not considered
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-            // --> OD 2006-10-19 #134160# - make code robust:
-            // consider case that PaM doesn't denote a text node
-            const SwNumRule* pRule = pTxtNd ? pTxtNd->GetNumRule() : 0;
+            // --> OD 2010-01-13 #b6912256#
+            if ( pTxtNd && pTxtNd->IsInList() )
             // <--
-            // hier wird Multiselektion nicht beruecksichtigt
-            if( pRule )
             {
                 if( pAny )
                 {
