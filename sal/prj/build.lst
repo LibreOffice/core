@@ -14,4 +14,4 @@ sa  sal\qa                                  nmake   -   all sa_qa sa_util NULL
 sa	sal\osl\unx								nmake	-	u	sa_oslu sa_tc.u sa_inc NULL
 sa	sal\osl\all								nmake	-	all	sa_oslall sa_tc.u sa_inc NULL
 sa	sal\util								nmake	-	all	sa_util sa_tc.u sa_oslall sa_uwinapi.n sa_kill.n sa_onlineupdate.n sa_osln.n sa_oslp.p sa_oslu.u sa_rtl sa_textenc NULL
-sa sal\cppunittester nmake - all sa_cppunittester sa_util NULL
+sa sal\cppunittester nmake - all sa_cppunittester sa_cpprt.u sa_util NULL
