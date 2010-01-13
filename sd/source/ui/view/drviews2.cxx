@@ -432,33 +432,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if (mePageKind==PK_STANDARD || mePageKind==PK_NOTES || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
             {
-                if( rReq.GetArgs() )
-                {
-                    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
-                    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
+                if ( mpDrawView->IsTextEdit() )
+                    mpDrawView->SdrEndTextEdit();
 
-                    if( pWhatLayout )
-                    {
-                        if ( mpDrawView->IsTextEdit() )
-                            mpDrawView->SdrEndTextEdit();
-
-                        USHORT nPage;
-                        if( pWhatPage )
-                        {
-                            nPage = pWhatPage->GetValue();
-                        }
-                        else
-                        {
-                            nPage = maTabControl.GetCurPageId() - 1;
-                        }
-
-                        ::sd::ViewShell::mpImpl->AssignLayout(GetDoc()->GetSdPage((USHORT)nPage, mePageKind),(AutoLayout)pWhatLayout->GetValue());
-                    }
-                 }
-                 else
-                 {
-                        GetViewFrame()->ToggleChildWindow( sd::LayoutDialogChildWindow::GetChildWindowId() );
-                 }
+                ::sd::ViewShell::mpImpl->AssignLayout(rReq, mePageKind);
             }
             Cancel();
             rReq.Done ();

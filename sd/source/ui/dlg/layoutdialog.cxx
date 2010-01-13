@@ -32,32 +32,24 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include "layoutdialog.hxx"
-#include <sfx2/dockwin.hxx>
-#include "app.hrc"
-#include <sfx2/app.hxx>
-
-// Instantiate the implementation of the docking window before files
-// are included that define ::sd::Window.  The ... macros are not really
-// namespace proof.
-namespace sd {
-SFX_IMPL_DOCKINGWINDOW(LayoutDialogChildWindow, SID_LAYOUT_DIALOG_WIN)
-}
+#include <com/sun/star/text/WritingMode.hpp>
 
 #include <vcl/image.hxx>
 
+#include <sfx2/dockwin.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 #include <svl/languageoptions.hxx>
+
 #include <svtools/valueset.hxx>
 
 #include <svx/toolbarmenu.hxx>
 
-#include <com/sun/star/text/WritingMode.hpp>
-
-#include "layoutdialog.hrc"
+#include "app.hrc"
+#include "layoutdialog.hxx"
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
@@ -76,52 +68,7 @@ using namespace ::com::sun::star::frame;
 
 namespace sd {
 
-///
-class SdLayoutDialogContent : public SfxPopupWindow
-{
-public:
-    SdLayoutDialogContent( ViewShellBase& rBase, Window* pParent);
-    virtual ~SdLayoutDialogContent();
-
-protected:
-    virtual void Resize (void);
-
-    DECL_LINK( SelectHdl, void * );
-
-private:
-    boost::scoped_ptr<ToolbarMenu> mpToolbarMenu;
-    ValueSet* mpLayoutSet;
-    AutoLayout meCurrentLayout;
-    ViewShellBase& mrBase;
-};
-
 // -----------------------------------------------------------------------
-
-LayoutDialogChildWindow::LayoutDialogChildWindow(::Window* _pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo)
-: SfxChildWindow (_pParent, nId)
-{
-    ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame()));
-    SdLayoutDialogContent* pContent = new SdLayoutDialogContent (rBase, _pParent);
-    pWindow = pContent;
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-//  pContent->Initialize(pInfo);
-}
-
-LayoutDialogChildWindow::~LayoutDialogChildWindow (void)
-{
-
-}
-
-SfxPopupWindow* LayoutDialogChildWindow::createChildWindow(SfxViewFrame& rViewFrame, ::Window* pParent)
-{
-    SfxPopupWindow* pWin = 0;
-    sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( &rViewFrame );
-    if( pViewShellBase )
-    {
-        pWin = new SdLayoutDialogContent( *pViewShellBase, pParent );
-    }
-    return pWin;
-}
 
 // -----------------------------------------------------------------------
 
@@ -141,28 +88,29 @@ static snewfoil_value_info standard[] =
     {BMP_LAYOUT_HEAD02A_57X71, BMP_LAYOUT_HEAD02A_57X71_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
     {BMP_LAYOUT_HEAD01_57X71, BMP_LAYOUT_HEAD01_57X71_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
     {BMP_LAYOUT_TEXTONLY_57X71, BMP_LAYOUT_TEXTONLY_57X71_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
-//  {BMP_FOIL_12, BMP_FOIL_12_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
-//    {BMP_FOIL_15, BMP_FOIL_15_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+//--
+    {BMP_LAYOUT_HEAD02B_57X71, BMP_LAYOUT_HEAD02B_57X71_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD02B_57X71, BMP_LAYOUT_HEAD02B_57X71_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+//--
     {BMP_LAYOUT_HEAD03A_57X71, BMP_LAYOUT_HEAD03A_57X71_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
     {BMP_LAYOUT_HEAD02B_57X71, BMP_LAYOUT_HEAD02B_57X71_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
     {BMP_LAYOUT_HEAD04_57X71, BMP_LAYOUT_HEAD04_57X71_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
     {BMP_LAYOUT_HEAD06_57X71, BMP_LAYOUT_HEAD06_57X71_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
-
+/*
     // vertical
     {BMP_LAYOUT_VERTICAL02_57X71, BMP_LAYOUT_VERTICAL02_57X71_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
     {BMP_LAYOUT_VERTICAL01_57X71, BMP_LAYOUT_VERTICAL01_57X71_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
     {BMP_LAYOUT_HEAD02_57X71, BMP_LAYOUT_HEAD02_57X71_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
     {BMP_LAYOUT_HEAD02A_57X71, BMP_LAYOUT_HEAD02A_57X71_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
-
+*/
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 // -----------------------------------------------------------------------
 
 
-SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, Window* pParent )
-: SfxPopupWindow(SID_ASSIGN_LAYOUT, rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_SYSTEMWINDOW/*SdResId( FLT_WIN_LAYOUT_DIALOG )*/)
-, meCurrentLayout( AUTOLAYOUT_NONE )
+SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent )
+: ToolbarMenu(SID_ASSIGN_LAYOUT, rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, WB_NOBORDER|WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_NOSHADOW|WB_SYSTEMWINDOW)
 , mrBase(rBase)
 {
     String sResetSlideLayout( SdResId( STR_RESET_LAYOUT ) );
@@ -182,17 +130,18 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, Window* pPar
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
-    mpToolbarMenu.reset( new ToolbarMenu( this, WB_CLIPCHILDREN ) );
+//  mpToolbarMenu.reset( new ToolbarMenu( this, WB_CLIPCHILDREN ) );
 //  mpToolbarMenu->SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
-    mpToolbarMenu->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+    /* mpToolbarMenu->*/ SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
 
 
-    mpLayoutSet = new ValueSet( mpToolbarMenu.get(), WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpLayoutSet = new ValueSet( /* mpToolbarMenu->.get()*/ this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 //  mpLayoutSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
     mpLayoutSet->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
     mpLayoutSet->SetColCount( 4 );
     mpLayoutSet->EnableFullItemMode( FALSE );
+    mpLayoutSet->SetColor( GetControlBackground() );
 
     Size aLayoutItemSize;
 
@@ -204,6 +153,7 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, Window* pPar
 
         String aText( SdResId( pInfo->mnStrResId ) );
         BitmapEx aBmp( SdResId( bHighContrast ? pInfo->mnHCBmpResId : pInfo->mnBmpResId ) );
+        aBmp.Expand( 4, 4, 0, TRUE );
         mpLayoutSet->InsertItem( static_cast<USHORT>(pInfo->maAutoLayout)+1, aBmp, aText );
 
         aLayoutItemSize.Width() = std::max( aLayoutItemSize.Width(), aBmp.GetSizePixel().Width() );
@@ -211,41 +161,45 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, Window* pPar
     }
 
     aLayoutItemSize = mpLayoutSet->CalcItemSizePixel( aLayoutItemSize );
-    Size aValueSize = mpLayoutSet->CalcWindowSizePixel( aLayoutItemSize );
-    mpLayoutSet->SetSizePixel( aValueSize );
+    mpLayoutSet->SetSizePixel( mpLayoutSet->CalcWindowSizePixel( aLayoutItemSize ) );
 
-    mpToolbarMenu->appendEntry( -1, String( SdResId( STR_UNDO_MODIFY_PAGE ) ) );
-    mpToolbarMenu->appendEntry( 0, mpLayoutSet );
-    mpToolbarMenu->appendSeparator();
+    SetText( String( SdResId( STR_UNDO_MODIFY_PAGE ) ) );
+    //mpToolbarMenu->appendEntry( -1,  );
+    /*mpToolbarMenu->*/appendEntry( 0, mpLayoutSet );
+    /*mpToolbarMenu->*/appendSeparator();
 
     Reference< XFrame > xFrame( GetFrame(), UNO_QUERY );
     if( xFrame.is() )
     {
         Image aImg( ::GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Undo") ), FALSE, FALSE ) );
-        mpToolbarMenu->appendEntry( 1, sResetSlideLayout, aImg);
+        /*mpToolbarMenu->*/appendEntry( 1, sResetSlideLayout, aImg);
     }
     else
     {
-        mpToolbarMenu->appendEntry( 1, sResetSlideLayout);
+        /*mpToolbarMenu->*/appendEntry( 1, sResetSlideLayout);
     }
 
-    SetOutputSizePixel( mpToolbarMenu->getMenuSize() );
-    mpToolbarMenu->SetOutputSizePixel( GetOutputSizePixel() );
+/*
+    Size aSize( mpToolbarMenu->getMenuSize() );
+    mpToolbarMenu->SetPosSizePixel( Point( 1,1 ), aSize );
 
-    mpToolbarMenu->Show();
+    aSize.Width() += 2;
+    aSize.Height() += 2;
+*/
+    SetOutputSizePixel( getMenuSize() );
 
-//    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )));
+//  mpToolbarMenu->Show();
 }
+
+// -----------------------------------------------------------------------
 
 SdLayoutDialogContent::~SdLayoutDialogContent()
 {
 }
 
-void SdLayoutDialogContent::Resize (void)
-{
-    SfxPopupWindow::Resize();
-    mpToolbarMenu->SetPosSizePixel( Point(0,0), GetSizePixel() );
-}
+
+// -----------------------------------------------------------------------
+
 
 /*
 void SdLayoutDialogContent::DataChanged( const DataChangedEvent& rDCEvt )
@@ -285,15 +239,20 @@ IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    AutoLayout eLayout = meCurrentLayout;
-
-    if( pControl == mpLayoutSet )
-        eLayout = static_cast< AutoLayout >(mpLayoutSet->GetSelectItemId()-1);
-
-    const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
     if( mrBase.GetMainViewShell().get() && mrBase.GetMainViewShell()->GetViewFrame() )
     {
-        mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
+        if( pControl == mpLayoutSet )
+        {
+            AutoLayout eLayout = static_cast< AutoLayout >(mpLayoutSet->GetSelectItemId()-1);
+
+            const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
+            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
+        }
+        else
+        {
+            // reset autolayout
+            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON);
+        }
     }
 
     return 0;

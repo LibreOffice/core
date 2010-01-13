@@ -1234,3 +1234,7 @@ String RID_ANNOTATIONS_START
 {
      Text [ en-US ] = "Comments";
 };
+String STR_RESET_LAYOUT
+{
+    Text[ en-US ] = "Reset Slide Layout";
+};

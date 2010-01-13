@@ -243,12 +243,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_ASSIGN_LAYOUT:
         {
-            SFX_REQUEST_ARG (rRequest, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-            SFX_REQUEST_ARG (rRequest, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-            pShell->mpImpl->AssignLayout(
-                pDocument->GetSdPage((USHORT)pWhatPage->GetValue(),
-                    mrSlideSorter.GetModel().GetPageType()),
-                (AutoLayout)pWhatLayout->GetValue());
+            pShell->mpImpl->AssignLayout( rRequest, mrSlideSorter.GetModel().GetPageType() );
             rRequest.Done ();
         }
         break;

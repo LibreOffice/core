@@ -322,30 +322,44 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     rRequest.Done ();
 }
 
-
-
-
-void ViewShell::Implementation::AssignLayout (
-    SdPage* pPage,
-    AutoLayout aLayout)
+void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind ePageKind )
 {
-    // Transform the given request into the four argument form that is
-    // understood by ProcessModifyPageSlot().
-    SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-    BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
-    BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
-    SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
-    SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
-    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
-    aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
-    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
+    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
 
-    // Forward the call with the new arguments.
-    ProcessModifyPageSlot (
-        aRequest,
-        pPage,
-        pPage->GetPageKind());
+    SdPage* pPage = 0;
+    if( pWhatPage )
+    {
+        SdDrawDocument* pDocument = mrViewShell.GetDoc();
+        if( pDocument )
+            pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
+    }
+
+    if( pPage == 0 )
+        pPage = mrViewShell.getCurrentPage();
+
+    if( pPage )
+    {
+        AutoLayout eLayout = pPage->GetAutoLayout();
+
+        if( pWhatLayout )
+            eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
+
+        // Transform the given request into the four argument form that is
+        // understood by ProcessModifyPageSlot().
+        SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
+        BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+        SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
+        SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
+        aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+        aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
+        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
+        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+
+        // Forward the call with the new arguments.
+        ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
+    }
 }
 
 

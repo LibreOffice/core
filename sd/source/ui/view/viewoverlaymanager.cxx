@@ -339,16 +339,18 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
+        if( 50 > nShapeSizePix )
+            return;
 
-        Image* pImages = &ViewOverlayManager::maLargeButtonImages[0]; //(nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        Image* pImages = &ViewOverlayManager::maSmallButtonImages[0]; //(nShapeSizePix > 300) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
 
         Size aButtonSize( pDev->PixelToLogic(pImages[0].GetSizePixel()) );
-        if( 200 > nShapeSizePix )
+        if( 100 > nShapeSizePix )
         {
             aButtonSize.Width() >>= 1; aButtonSize.Height() >>= 1;
         }
 
-        const long nBorderPix = (nShapeSizePix > 300) ? 4 : (nShapeSizePix > 100) ? 2 : 1;
+        const long nBorderPix = (nShapeSizePix > 100) ? 4 : (nShapeSizePix > 50) ? 2 : 1;
         Size aBorder( pDev->PixelToLogic(Size(nBorderPix,nBorderPix)) );
 
         const int nColumns = (ViewOverlayManager::ButtonCount+1) >> 1;
@@ -366,7 +368,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         for( int i = 0, c = 0; i < ViewOverlayManager::ButtonCount; i++ )
         {
             Image aImg( pImages[i] );
-            if( 200 > nShapeSizePix )
+            if( 100 > nShapeSizePix )
             {
                 BitmapEx b( aImg.GetBitmapEx() );
                 const double scale = 0.5;

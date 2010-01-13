@@ -443,8 +443,6 @@
 #define SID_SELECT_BACKGROUND               (SID_SD_START+422)
 #define SID_OBJECT_CROP                     (SID_SD_START+423)
 
-#define SID_LAYOUT_DIALOG_WIN               (SID_SD_START+424)
-
 // Slots for the tool pane popup
 #define SID_TP_APPLY_TO_ALL_SLIDES          (SID_SD_START+425)
 #define SID_TP_APPLY_TO_SELECTED_SLIDES     (SID_SD_START+426)

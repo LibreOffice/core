@@ -31,24 +31,33 @@
 #ifndef SD_LAYOUTDIALOG_HXX
 #define SD_LAYOUTDIALOG_HXX
 
-#include <sfx2/childwin.hxx>
+#include <svx/toolbarmenu.hxx>
 
-class SfxViewFrame;
+#include <svtools/valueset.hxx>
+
+#include <boost/scoped_ptr.hpp>
+
 class ::Window;
-class SfxPopupWindow;
+class ValueSet;
 
 namespace sd {
 
-class LayoutDialogChildWindow : public SfxChildWindow
+class ViewShellBase;
+
+class SdLayoutDialogContent : public ToolbarMenu
 {
 public:
-    LayoutDialogChildWindow ( ::Window*,  USHORT, SfxBindings*, SfxChildWinInfo*);
-    virtual ~LayoutDialogChildWindow (void);
+    SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent);
+    virtual ~SdLayoutDialogContent();
 
-    SFX_DECL_CHILDWINDOW(LayerDialogChildWindow);
+protected:
+    DECL_LINK( SelectHdl, void * );
 
-    static SfxPopupWindow* createChildWindow(SfxViewFrame& rViewFrame, ::Window* pParent);
+private:
+    ValueSet* mpLayoutSet;
+    ViewShellBase& mrBase;
 };
+
 
 } // end of namespace sd
 

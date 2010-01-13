@@ -79,10 +79,7 @@
 #include "AnimationChildWindow.hxx"
 #include "animobjs.hxx"
 #include "NavigatorChildWindow.hxx"
-#ifndef SD_LAZER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
-#endif
-//#include "3dchld.hxx"
 #include "app.hrc"
 #include "SpellDialogChildWindow.hxx"
 #include "DrawViewShell.hxx"
@@ -93,7 +90,6 @@
 
 #include "tmplctrl.hxx"
 #include "layoutctrl.hxx"
-#include "layoutdialog.hxx"
 
 /*************************************************************************
 |*
@@ -126,10 +122,6 @@ void SdDLL::RegisterControllers()
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
-//  SdTbxCtlDiaEffect::RegisterControl(0, pMod);
-//  SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
-//  SdTbxCtlDiaAuto::RegisterControl(0, pMod);
-//  SdTbxCtlDiaTime::RegisterControl(0, pMod);
 
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
@@ -138,15 +130,7 @@ void SdDLL::RegisterControllers()
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
-    //Sd3DChildWindow::RegisterChildWindow(0, pMod);
-/*
-    SvxChildWinCustomShapesBasic::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesSymbol::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesArrow::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesFlowChart::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesCallout::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesStar::RegisterChildWindow( 0, pMod );
-*/
+
     Svx3DChildWindow::RegisterChildWindow(0, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(0, pMod);
     SvxColorChildWindow::RegisterChildWindow(0, pMod, SFX_CHILDWIN_TASK);
@@ -234,5 +218,4 @@ void SdDLL::RegisterControllers()
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 
     SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
-    sd::LayoutDialogChildWindow::RegisterChildWindow( sal_False, pMod );
 }
