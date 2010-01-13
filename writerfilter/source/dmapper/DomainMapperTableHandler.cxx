@@ -779,7 +779,8 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
 #if DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("table.row");
     dmapper_logger->attribute("cells", nCells);
-    dmapper_logger->addTag(pProps->toTag());
+    if (pProps != NULL)
+        dmapper_logger->addTag(pProps->toTag());
 #endif
 
     m_pRowSeq = RowSequencePointer_t(new RowSequence_t(nCells));
