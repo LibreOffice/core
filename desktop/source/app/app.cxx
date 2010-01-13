@@ -1581,7 +1581,8 @@ void Desktop::Main()
 
 //    SetSplashScreenProgress(80);
 
-    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
+    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
+         !pCmdLineArgs->IsNoQuickstart() )
         InitializeQuickstartMode( xSMgr );
 
     RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );

@@ -390,6 +390,13 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 #if defined(WNT) || defined(OS2) || defined(QUARTZ)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
 #endif
+        SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart=no" )))
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_False );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-terminate_after_init" )) == sal_True )
@@ -646,6 +653,12 @@ sal_Bool CommandLineArgs::IsQuickstart() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_QUICKSTART ];
+}
+
+sal_Bool CommandLineArgs::IsNoQuickstart() const
+{
+    osl::MutexGuard aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_NOQUICKSTART ];
 }
 
 sal_Bool CommandLineArgs::IsTerminateAfterInit() const
