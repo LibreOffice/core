@@ -48,53 +48,29 @@ end sub
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLPrint
 
-    dim irgendwas(12) as boolean    ' Checkbox states
+    dim bCheckboxStatus(12) as boolean    ' Checkbox states
     dim iListBox(1) as integer         ' ListBox
     dim iTempListBox(1) as integer
     dim bRadioBut(4) as boolean         ' RadioButtons
     dim bTempRadioBut(4) as boolean
 
-    ' sMetricField(i) and sTempMetricField(i)
-    '(1) = Grafiken
-    '(2) = Tabellen
-    '(3) = Zeichnungen
-    '(4) = Kontrollfelder
-    '(5) = Hintergrund
-    '(6) = SchwarzDrucken
-    '
-    '(7) = LinkeSeiten
-    '(8) = RechteSeiten
-    '(9) = Umgekehrt
-    '(10)= Prospekt
-    '
-    '(11)= EinzelneDruckauftraege
-    '(12)= AusDruckereinstellung
-
-    ' bRadioBut(i) and bTempRadioBut(i) / RadioButton
-    '(1) = Keine
-    '(2) = NurNotizen
-    '(3) = Dokumentende
-    '(4) = Seitenende
-
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
     Call sMakeReadOnlyDocumentEditable
-    printlog "'///- Tools/Options/HTML: PrintHTML ///"
+    printlog "- Tools/Options/HTML: PrintHTML "
 
-    printlog ("'/// - save states ///")
+    printlog (" - save states ")
     ToolsOptions
     Call hToolsOptions ("HTML","PRINT")
 
-    irgendwas(1) = Grafiken.IsChecked
-    irgendwas(2) = Tabellen.IsChecked
-    irgendwas(4) = Kontrollfelder.IsChecked
-    irgendwas(5) = Hintergrund.IsChecked
-    irgendwas(6) = SchwarzDrucken.IsChecked
+    bCheckboxStatus(1) = Grafiken.IsChecked
+    bCheckboxStatus(2) = Kontrollfelder.IsChecked
+    bCheckboxStatus(3) = Hintergrund.IsChecked
+    bCheckboxStatus(4) = SchwarzDrucken.IsChecked
 
-    irgendwas(9) = Umgekehrt.IsChecked
-    irgendwas(10)= Prospekt.IsChecked
+    bCheckboxStatus(5)= Prospekt.IsChecked
 
-    irgendwas(11)= EinzelneDruckauftraege.IsChecked
-    irgendwas(12)= AusDruckereinstellung.IsChecked
+    bCheckboxStatus(6)= LeereSeitenDrucken.IsChecked
+    bCheckboxStatus(7)= AusDruckereinstellung.IsChecked
 
     iListBox(1) = Fax.GetSelIndex
 
@@ -103,19 +79,17 @@ testcase tToolsOptionsHTMLPrint
     bRadioBut(3) = Dokumentende.IsChecked
     bRadioBut(4) = Seitenende.IsChecked
 
-    printlog ("'/// - all states inverting ///")
+    printlog (" - all states inverting ")
 
-    if irgendwas(1) Then Grafiken.UnCheck               Else Grafiken.Check
-    if irgendwas(2) Then Tabellen.UnCheck               Else Tabellen.Check
-    if irgendwas(4) Then Kontrollfelder.UnCheck         Else Kontrollfelder.Check
-    if irgendwas(5) Then Hintergrund.UnCheck            Else Hintergrund.Check
-    if irgendwas(6) Then SchwarzDrucken.UnCheck         Else SchwarzDrucken.Check
+    if bCheckboxStatus(1) Then Grafiken.UnCheck               Else Grafiken.Check
+    if bCheckboxStatus(2) Then Kontrollfelder.UnCheck         Else Kontrollfelder.Check
+    if bCheckboxStatus(3) Then Hintergrund.UnCheck            Else Hintergrund.Check
+    if bCheckboxStatus(4) Then SchwarzDrucken.UnCheck         Else SchwarzDrucken.Check
 
-    if irgendwas(9) Then Umgekehrt.UnCheck              Else Umgekehrt.Check
-    if irgendwas(10) Then Prospekt.UnCheck               Else Prospekt.Check
+    if bCheckboxStatus(5) Then Prospekt.UnCheck               Else Prospekt.Check
 
-    if irgendwas(11) Then EinzelneDruckauftraege.UnCheck Else EinzelneDruckauftraege.Check
-    if irgendwas(12) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
+    if bCheckboxStatus(6) Then LeereSeitenDrucken.UnCheck Else LeereSeitenDrucken.Check
+    if bCheckboxStatus(7) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
 
     if (Keine.IsChecked = True) Then NurNotizen.Check Else Keine.Check
 
@@ -134,25 +108,23 @@ testcase tToolsOptionsHTMLPrint
     Call hFileSaveAsKill(gOfficepath + "user\work\printtest.html")
     Call hCloseDocument
 
-    printlog ("'/// - SO quit - start ///")
+    printlog (" - SO quit - start ")
 
     Call wOfficeRestart
 
-    printlog ("'/// - checking states ///")
+    printlog (" - checking states ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
-    if ( irgendwas(1) = Grafiken.IsChecked               ) Then WarnLog "'Graphics' state changed"
-    if ( irgendwas(2) = Tabellen.IsChecked               ) Then WarnLog "'Tables' state changed"
-    if ( irgendwas(4) = Kontrollfelder.IsChecked         ) Then WarnLog "'Controls' state changed"
-    if ( irgendwas(5) = Hintergrund.IsChecked            ) Then WarnLog "'Background' state changed"
-    if ( irgendwas(6) = SchwarzDrucken.IsChecked         ) Then WarnLog "'Print black' state changed"
+    if ( bCheckboxStatus(1) = Grafiken.IsChecked               ) Then WarnLog "#i108219#'Graphics' state changed"
+    if ( bCheckboxStatus(2) = Kontrollfelder.IsChecked         ) Then WarnLog "'Controls' state changed"
+    if ( bCheckboxStatus(3) = Hintergrund.IsChecked            ) Then WarnLog "'Background' state changed"
+    if ( bCheckboxStatus(4) = SchwarzDrucken.IsChecked         ) Then WarnLog "'Print black' state changed"
 
-    if ( irgendwas(9) = Umgekehrt.IsChecked              ) Then WarnLog "'Reversed' state changed"
-    if ( irgendwas(10)= Prospekt.IsChecked               ) Then WarnLog "'Brochure' state changed"
+    if ( bCheckboxStatus(5)= Prospekt.IsChecked               ) Then WarnLog "'Brochure' state changed"
 
-    if ( irgendwas(11)= EinzelneDruckauftraege.IsChecked ) Then WarnLog "'Create single print jobs' state changed"
-    if ( irgendwas(12)= AusDruckereinstellung.IsChecked  ) Then WarnLog "'Paper tray from printer settings' state changed"
+    if ( bCheckboxStatus(6)= LeereSeitenDrucken.IsChecked ) Then WarnLog "#i108219#'Create single print jobs' state changed"
+    if ( bCheckboxStatus(7)= AusDruckereinstellung.IsChecked  ) Then WarnLog "'Paper tray from printer settings' state changed"
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) Then WarnLog "'None' state changed (Bug#99202)"
     if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) Then WarnLog "'Notes only' state changed (Bug#99202)"
@@ -161,18 +133,16 @@ testcase tToolsOptionsHTMLPrint
 
     if ( Fax.GetSelIndex <> iTempListBox(1) ) Then warnlog "Fax state changed"
 
-    printlog ("'/// - all UnCheck -> o ///")
+    printlog (" - all UnCheck -> o ")
 
     Grafiken.UnCheck
-    Tabellen.UnCheck
     Kontrollfelder.UnCheck
     Hintergrund.UnCheck
     SchwarzDrucken.UnCheck
 
-    Umgekehrt.UnCheck
     Prospekt.UnCheck
 
-    EinzelneDruckauftraege.UnCheck
+    LeereSeitenDrucken.UnCheck
     AusDruckereinstellung.UnCheck
 
     if (NurNotizen.IsChecked = True) Then Dokumentende.Check Else NurNotizen.Check
@@ -187,20 +157,18 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all UnChecked ///")
+    printlog (" - check if all UnChecked ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
     if Grafiken.IsChecked       Then WarnLog "'Graphics' x"
-    if Tabellen.IsChecked       Then WarnLog "'Tables' x"
     if Kontrollfelder.IsChecked Then WarnLog "'Controls' x"
     if Hintergrund.IsChecked    Then WarnLog "'Background' x"
     if SchwarzDrucken.IsChecked Then WarnLog "'Print black' x"
 
-    if Umgekehrt.IsChecked      Then WarnLog "'Reversed' x"
     if Prospekt.IsChecked       Then WarnLog "'Brochure' x"
 
-    if EinzelneDruckauftraege.IsChecked Then WarnLog "'Create single print jobs' x"
+    if LeereSeitenDrucken.IsChecked Then WarnLog "'Create single print jobs' x"
     if AusDruckereinstellung.IsChecked  Then WarnLog "'Paper tray from printer settings' x"
 
     ' Is saved with document
@@ -217,18 +185,16 @@ testcase tToolsOptionsHTMLPrint
 
     if ( Fax.GetSelIndex <> 1 ) Then WarnLog "Fax is not item 1"
 
-    Printlog ("'/// - all Check -> x ///")
+    Printlog (" - all Check -> x ")
 
     Grafiken.Check
-    Tabellen.Check
     Kontrollfelder.Check
     Hintergrund.Check
     SchwarzDrucken.Check
 
-    Umgekehrt.Check
     Prospekt.Check
 
-    EinzelneDruckauftraege.Check
+    LeereSeitenDrucken.Check
     AusDruckereinstellung.Check
 
     if (Dokumentende.IsChecked = True) Then Seitenende.Check Else Dokumentende.Check
@@ -243,20 +209,18 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all Checked ///")
+    printlog (" - check if all Checked ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
     if not Grafiken.IsChecked                Then WarnLog "'Graphics' o"
-    if not Tabellen.IsChecked                Then WarnLog "'Tables' o"
     if not Kontrollfelder.IsChecked          Then WarnLog "'Controls' o"
     if not Hintergrund.IsChecked             Then WarnLog "'Background' o"
     if not SchwarzDrucken.IsChecked          Then WarnLog "'Print black' o"
 
-    if not Umgekehrt.IsChecked               Then WarnLog "'Reversed' o"
     if not Prospekt.IsChecked                Then WarnLog "'Brochure' o"
 
-    if not EinzelneDruckauftraege.IsChecked  Then WarnLog "'Create single print jobs' o"
+    if not LeereSeitenDrucken.IsChecked  Then WarnLog "'Create single print jobs' o"
     if not AusDruckereinstellung.IsChecked   Then WarnLog "'Paper tray from printer settings' o"
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) Then WarnLog "'None' state changed"
@@ -269,21 +233,19 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel
 
-    printlog ("'/// - restore states ///")
+    printlog (" - restore states ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
-    if ( irgendwas(1) =  TRUE ) Then  Grafiken.Check                Else Grafiken.UnCheck
-    if ( irgendwas(2) =  TRUE ) Then  Tabellen.Check                Else Tabellen.UnCheck
-    if ( irgendwas(4) =  TRUE ) Then  Kontrollfelder.Check          Else Kontrollfelder.UnCheck
-    if ( irgendwas(5) =  TRUE ) Then  Hintergrund.Check             Else Hintergrund.UnCheck
-    if ( irgendwas(6) =  TRUE ) Then  SchwarzDrucken.Check          Else SchwarzDrucken.UnCheck
+    if ( bCheckboxStatus(1) =  TRUE ) Then  Grafiken.Check                Else Grafiken.UnCheck
+    if ( bCheckboxStatus(2) =  TRUE ) Then  Kontrollfelder.Check          Else Kontrollfelder.UnCheck
+    if ( bCheckboxStatus(3) =  TRUE ) Then  Hintergrund.Check             Else Hintergrund.UnCheck
+    if ( bCheckboxStatus(4) =  TRUE ) Then  SchwarzDrucken.Check          Else SchwarzDrucken.UnCheck
 
-    if ( irgendwas(9) =  TRUE ) Then  Umgekehrt.Check               Else Umgekehrt.UnCheck
-    if ( irgendwas(10) = TRUE ) Then  Prospekt.Check                Else Prospekt.UnCheck
+    if ( bCheckboxStatus(5) = TRUE ) Then  Prospekt.Check                Else Prospekt.UnCheck
 
-    if ( irgendwas(11) = TRUE ) Then  EinzelneDruckauftraege.Check  Else EinzelneDruckauftraege.UnCheck
-    if ( irgendwas(12) = TRUE ) Then  AusDruckereinstellung.Check   Else AusDruckereinstellung.UnCheck
+    if ( bCheckboxStatus(6) = TRUE ) Then  LeereSeitenDrucken.Check  Else LeereSeitenDrucken.UnCheck
+    if ( bCheckboxStatus(7) = TRUE ) Then  AusDruckereinstellung.Check   Else AusDruckereinstellung.UnCheck
 
     try
         Fax.Select (iListBox(1))
@@ -332,9 +294,9 @@ testcase tToolsOptionsHTMLTable
     '(3) = Variabel
 
     Call hNewDocument
-    printlog ("'///- Tools/Options/HTML: Table ///")
+    printlog ("- Tools/Options/HTML: Table ")
 
-    printlog ("'/// - save states ///")
+    printlog (" - save states ")
     ToolsOptions
     Call hToolsOptions ("HTML","Table")
 
@@ -349,7 +311,7 @@ testcase tToolsOptionsHTMLTable
 
     if ((bRadioBut(1) Xor bRadioBut(2) Xor bRadioBut(3)) = False) Then Warnlog (" RadioButtons have NO init state: " + bRadioBut(1) +", BugID: 83097")
 
-    printlog ("'/// - all states inverting ///")
+    printlog (" - all states inverting ")
 
     VerschiebenZeile.ToMax
     VerschiebenSpalte.ToMax
@@ -373,11 +335,11 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - SO quit - start ///")
+    printlog (" - SO quit - start ")
 
     Call wOfficeRestart
 
-    printlog ("'/// - checking states ///")
+    printlog (" - checking states ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "Table" )
 
@@ -393,7 +355,7 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - all UnCheck -> o ///")
+    printlog (" - all UnCheck -> o ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "Table" )
 
@@ -405,7 +367,7 @@ testcase tToolsOptionsHTMLTable
     sTempMetricField(2) = VerschiebenSpalte.GetText
     sTempMetricField(3) = EinfuegenZeile.GetText
     sTempMetricField(4) = EinfuegenSpalte.GetText
-    printlog ("'/// More test ///'")
+    printlog (" More test ///'")
     VerschiebenZeile.More
     VerschiebenSpalte.More
     EinfuegenZeile.More
@@ -428,7 +390,7 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all UnChecked ///")
+    printlog (" - check if all UnChecked ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "Table" )
 
@@ -441,7 +403,7 @@ testcase tToolsOptionsHTMLTable
     if ( bTempRadioBut(2) <> FixProportional.IsChecked) Then WarnLog "Behaviour of rows/columns : 'Fixed, proportional' state changed"
     if ( bTempRadioBut(3) <> Variabel.IsChecked       ) Then WarnLog "Behaviour of rows/columns : 'Variable' state changed"
 
-    Printlog ("'/// - all Check -> x ///")
+    Printlog (" - all Check -> x ")
 
     VerschiebenZeile.ToMax
     VerschiebenSpalte.ToMax
@@ -451,7 +413,7 @@ testcase tToolsOptionsHTMLTable
     sTempMetricField(2) = VerschiebenSpalte.GetText
     sTempMetricField(3) = EinfuegenZeile.GetText
     sTempMetricField(4) = EinfuegenSpalte.GetText
-    printlog ("'/// Less test ///'")
+    printlog (" Less test ///'")
     VerschiebenZeile.Less
     VerschiebenSpalte.Less
     EinfuegenZeile.Less
@@ -474,7 +436,7 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all Checked ///")
+    printlog (" - check if all Checked ")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "Table" )
 
@@ -487,7 +449,7 @@ testcase tToolsOptionsHTMLTable
     if ( bTempRadioBut(2) <> FixProportional.IsChecked) Then WarnLog "Behaviour of rows/columns : 'Fixed, proportional' state changed"
     if ( bTempRadioBut(3) <> Variabel.IsChecked       ) Then WarnLog "Behaviour of rows/columns : 'Variable' state changed"
 
-    printlog ("'/// - restore states ///")
+    printlog (" - restore states ")
 
     VerschiebenZeile.SetText  (sMetricField(1))
     VerschiebenSpalte.SetText (sMetricField(2))
@@ -510,7 +472,7 @@ testcase tToolsOptionsHTMLTable1
     '/// This testcase check for this bug ///
 
     Call hNewDocument
-    printlog ("'///- Tools/Options/Text document: Table ///")
+    printlog ("- Tools/Options/Text document: Table ")
 
     ToolsOptions
     Call hToolsOptions ("WRITER","Table")
