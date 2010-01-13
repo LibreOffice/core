@@ -59,7 +59,12 @@ sub create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -1401,7 +1406,11 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
             system($localcall);
         }
         else
