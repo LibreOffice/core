@@ -53,7 +53,7 @@
 #include <svx/svdpool.hxx>
 #include <editeng/flditem.hxx>
 
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
@@ -923,7 +923,7 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
 
 /*************************************************************************
 |*
-|* Anzahl der Links im LinkManager zurueckgeben
+|* Anzahl der Links im sfx2::LinkManager zurueckgeben
 |*
 \************************************************************************/
 

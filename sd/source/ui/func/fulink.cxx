@@ -34,7 +34,7 @@
 
 #include "fulink.hxx"
 
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -79,7 +79,7 @@ FunctionReference FuLink::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuLink::DoExecute( SfxRequest& )
 {
-    SvxLinkManager* pLinkManager = mpDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager );

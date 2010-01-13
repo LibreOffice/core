@@ -71,7 +71,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 
 #include "strings.hrc"
 #include "sdpage.hxx"

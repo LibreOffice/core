@@ -53,7 +53,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
@@ -77,7 +77,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 
 #include <sfx2/viewfrm.hxx>
 

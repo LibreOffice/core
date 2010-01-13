@@ -47,7 +47,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "Outliner.hxx"
 #include "app.hxx"
@@ -284,7 +284,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetLinkManager( new SvxLinkManager(mpDocSh) );
+        SetLinkManager( new sfx2::LinkManager(mpDocSh) );
     }
 
     ULONG nCntrl = rOutliner.GetControlWord();
