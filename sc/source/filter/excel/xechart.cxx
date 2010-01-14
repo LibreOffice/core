@@ -2503,7 +2503,8 @@ bool XclExpChTypeGroup::CreateStockSeries( Reference< XDataSeries > xDataSeries,
 
 void XclExpChTypeGroup::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << maData.maRect << maData.mnFlags << maData.mnGroupIdx;
+    rStrm.WriteZeroBytes( 16 );
+    rStrm << maData.mnFlags << maData.mnGroupIdx;
 }
 
 // Axes =======================================================================
@@ -2709,9 +2710,9 @@ void XclExpChTick::WriteBody( XclExpStream& rStrm )
     rStrm   << maData.mnMajor
             << maData.mnMinor
             << maData.mnLabelPos
-            << maData.mnBackMode
-            << maData.maRect
-            << maData.maTextColor
+            << maData.mnBackMode;
+    rStrm.WriteZeroBytes( 16 );
+    rStrm   << maData.maTextColor
             << maData.mnFlags;
     if( GetBiff() == EXC_BIFF8 )
         rStrm << GetPalette().GetColorIndex( mnTextColorId ) << maData.mnRotation;
@@ -2865,7 +2866,8 @@ void XclExpChAxis::WriteSubRecords( XclExpStream& rStrm )
 
 void XclExpChAxis::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << maData.mnType << maData.maRect;
+    rStrm << maData.mnType;
+    rStrm.WriteZeroBytes( 16 );
 }
 
 // ----------------------------------------------------------------------------

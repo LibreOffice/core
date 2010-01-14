@@ -93,8 +93,7 @@ class ScTokenArray;
 class XclImpChRoot : public XclImpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >        XChartDocRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   XDataProviderRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
     explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
@@ -124,7 +123,11 @@ public:
     void                FinishConversion( ScfProgressBar& rProgress ) const;
 
     /** Returns the data provider for the chart document. */
-    XDataProviderRef    GetDataProvider() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+                        GetDataProvider() const;
+    /** Returns the drawing shape interface of the specified title object. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        GetTitleShape( const XclChTextKey& rTitleKey ) const;
 
     /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
     sal_Int32           CalcHmmFromChartX( sal_uInt16 nPosX ) const;
@@ -529,8 +532,8 @@ public:
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
     XTitleRef           CreateTitle() const;
-    /** Converts the manual position of the main title */
-    void                ConvertMainTitlePos( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxTitle ) const;
+    /** Converts the manual position of the specified title */
+    void                ConvertTitlePosition( const XclChTextKey& rTitleKey ) const;
 
 private:
     using               XclImpChRoot::ConvertFont;
@@ -1291,7 +1294,7 @@ public:
     inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
 
     /** Returns the outer plot area position, if existing. */
-    inline XclImpChFramePosRef GetPlotAreaPosition() const { return mxFramePos; }
+    inline XclImpChFramePosRef GetPlotAreaFramePos() const { return mxFramePos; }
     /** Returns the specified chart type group. */
     inline XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const { return maTypeGroups.get( nGroupIdx ); }
     /** Returns the first chart type group. */
@@ -1303,6 +1306,8 @@ public:
 
     /** Creates a coordinate system and converts all series and axis settings. */
     void                Convert( XDiagramRef xDiagram ) const;
+    /** Converts the manual positions of all axis titles. */
+    void                ConvertTitlePositions() const;
 
 private:
     /** Reads a CHAXIS record group containing a single axis. */

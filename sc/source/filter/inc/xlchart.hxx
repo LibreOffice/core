@@ -43,7 +43,9 @@
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace lang      { class XMultiServiceFactory; }
+    namespace chart     { class XChartDocument; }
     namespace chart2    { class XChartDocument; }
+    namespace drawing   { class XShape; }
 } } }
 
 class XclRoot;
@@ -178,7 +180,8 @@ const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
 
-const sal_Int32 EXC_CHART_TOTALUNITS            = 4000;     /// Chart objects are positioned in 1/4000 of chart area.
+const sal_Int32 EXC_CHART_TOTALUNITS            = 4000;     /// Most chart objects are positioned in 1/4000 of chart area.
+const sal_Int32 EXC_CHART_PLOTAREAUNITS         = 1000;     /// For objects that are positioned in 1/1000 of plot area.
 
 // (0x0850) CHFRINFO ----------------------------------------------------------
 
@@ -1023,7 +1026,6 @@ struct XclChLegend
 
 struct XclChTypeGroup
 {
-    XclChRectangle      maRect;             /// Position (not used).
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt16          mnGroupIdx;         /// Chart type group index.
 
@@ -1070,7 +1072,6 @@ struct XclChValueRange
 
 struct XclChTick
 {
-    XclChRectangle      maRect;             /// Position (not used).
     Color               maTextColor;        /// Tick labels color.
     sal_uInt8           mnMajor;            /// Type of tick marks of major grid.
     sal_uInt8           mnMinor;            /// Type of tick marks of minor grid.
@@ -1086,7 +1087,6 @@ struct XclChTick
 
 struct XclChAxis
 {
-    XclChRectangle      maRect;             /// Position (not used).
     sal_uInt16          mnType;             /// Axis type.
 
     explicit            XclChAxis();
@@ -1166,16 +1166,6 @@ enum XclChFrameType
 {
      EXC_CHFRAMETYPE_AUTO,          /// Missing frame represents automatic formatting.
      EXC_CHFRAMETYPE_INVISIBLE      /// Missing frame represents invisible formatting.
-};
-
-/** Enumerates different text box types for default text formatting. */
-enum XclChTextType
-{
-    EXC_CHTEXTTYPE_TITLE,           /// Chart title.
-    EXC_CHTEXTTYPE_LEGEND,          /// Chart legend.
-    EXC_CHTEXTTYPE_AXISTITLE,       /// Chart axis titles.
-    EXC_CHTEXTTYPE_AXISLABEL,       /// Chart axis labels.
-    EXC_CHTEXTTYPE_DATALABEL        /// Data point labels.
 };
 
 /** Contains information about auto formatting of a specific chart object type. */
@@ -1308,6 +1298,29 @@ private:
     XclChTypeInfoMap    maInfoMap;          /// Maps chart types to type info data.
 };
 
+// Chart text and title object helpers ========================================
+
+/** Enumerates different text box types for default text formatting. */
+enum XclChTextType
+{
+    EXC_CHTEXTTYPE_TITLE,           /// Chart title.
+    EXC_CHTEXTTYPE_LEGEND,          /// Chart legend.
+    EXC_CHTEXTTYPE_AXISTITLE,       /// Chart axis titles.
+    EXC_CHTEXTTYPE_AXISLABEL,       /// Chart axis labels.
+    EXC_CHTEXTTYPE_DATALABEL        /// Data point labels.
+};
+
+/** A map key for text and title objects. */
+struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16, sal_uInt16 > >
+{
+    inline explicit     XclChTextKey( XclChTextType eTextType, sal_uInt16 nMainIdx = 0, sal_uInt16 nSubIdx = 0 )
+                            { first = eTextType; second.first = nMainIdx; second.second = nSubIdx; }
+};
+
+/** Function prototype receiving a chart document and returning a title shape. */
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    (*XclChGetShapeFunc)( const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument >& );
+
 // Property helpers ===========================================================
 
 class XclChObjectTable
@@ -1432,9 +1445,10 @@ private:
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
-    typedef ScfRef< XclChTypeInfoProvider >     XclChTypeProvRef;
-    typedef ScfRef< XclChFormatInfoProvider >   XclChFmtInfoProvRef;
-    typedef ScfRef< XclChObjectTable >          XclChObjectTableRef;
+    typedef ScfRef< XclChTypeInfoProvider >                 XclChTypeProvRef;
+    typedef ScfRef< XclChFormatInfoProvider >               XclChFmtInfoProvRef;
+    typedef ScfRef< XclChObjectTable >                      XclChObjectTableRef;
+    typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
@@ -1445,6 +1459,7 @@ struct XclChRootData
     XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
     XclChObjectTableRef mxHatchTable;           /// Container for hatch fill styles.
     XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
+    XclChGetShapeFuncMap maGetShapeFuncs;       /// Maps title shape getter functions.
     sal_Int32           mnBorderGapX;           /// Border gap to chart space in 1/100mm.
     sal_Int32           mnBorderGapY;           /// Border gap to chart space in 1/100mm.
     double              mfUnitSizeX;            /// Size of a chart X unit (1/4000 of chart width) in 1/100 mm.
@@ -1460,6 +1475,10 @@ struct XclChRootData
                             const Rectangle& rChartRect );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
+
+    /** Returns the drawing shape interface of the specified title object. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
 
 // ============================================================================

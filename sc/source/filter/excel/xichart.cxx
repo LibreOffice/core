@@ -93,6 +93,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -262,6 +263,11 @@ Reference< XDataProvider > XclImpChRoot::GetDataProvider() const
     return mxChData->mxChartDoc->getDataProvider();
 }
 
+Reference< XShape > XclImpChRoot::GetTitleShape( const XclChTextKey& rTitleKey ) const
+{
+    return mxChData->GetTitleShape( rTitleKey );
+}
+
 sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_uInt16 nPosX ) const
 {
     return static_cast< sal_Int32 >( mxChData->mfUnitSizeX * nPosX + mxChData->mnBorderGapX + 0.5 );
@@ -380,7 +386,13 @@ void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 
 void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnTLMode >> maData.mnBRMode >> maData.maRect;
+    rStrm >> maData.mnTLMode >> maData.mnBRMode;
+    /*  According to the spec, the upper 16 bits of all members in the
+        rectangle are unused and may contain garbage. */
+    maData.maRect.mnX = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnY = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnWidth = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnHeight = rStrm.ReadInt16(); rStrm.Ignore( 2 );
 }
 
 // ----------------------------------------------------------------------------
@@ -1073,40 +1085,59 @@ Reference< XTitle > XclImpChText::CreateTitle() const
     return xTitle;
 }
 
-void XclImpChText::ConvertMainTitlePos( const Reference< XShape >& rxTitle ) const
+void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
 {
-    if( mxFramePos.is() && rxTitle.is() )
+    if( !mxFramePos ) return;
+
+    const XclChFramePos& rPosData = mxFramePos->GetFramePosData();
+    OSL_ENSURE( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rPosData.mnBRMode == EXC_CHFRAMEPOS_PARENT),
+        "XclImpChText::ConvertTitlePosition - unexpected frame position mode" );
+
+    /*  Check if title is moved manually. To get the actual position of the
+        title, we do some kind of hack and use the values from the CHTEXT
+        record, effectively ignoring the contents of the CHFRAMEPOS record
+        which contains the position relative to the default title position
+        (according to the spec, the CHFRAMEPOS supersedes the CHTEXT record).
+        Especially when it comes to axis titles, things would become very
+        complicated here, because the relative title position is stored in a
+        measurement unit that is dependent on the size of the inner plot area,
+        the interpretation of the X and Y coordinate is dependent on the
+        direction of the axis, and in 3D charts, and the title default
+        positions are dependent on the 3D view settings (rotation, elevation,
+        and perspective). Thus, it is easier to assume that the creator has
+        written out the correct absolute position and size of the title in the
+        CHTEXT record. This is assured by checking that the shape size stored
+        in the CHTEXT record is non-zero. */
+    if( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) &&
+        ((rPosData.maRect.mnX != 0) || (rPosData.maRect.mnY != 0)) &&
+        (maData.maRect.mnWidth > 0) && (maData.maRect.mnHeight > 0) ) try
     {
-        const XclChFramePos& rPosData = mxFramePos->GetFramePosData();
-        OSL_ENSURE( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rPosData.mnBRMode == EXC_CHFRAMEPOS_PARENT),
-            "XclImpChText::ConvertMainTitlePos - unexpected frame position mode" );
-        // title moved manually?
-        if( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && ((rPosData.maRect.mnX != 0) || (rPosData.maRect.mnY != 0)) )
-        {
-            // the call to XShape.getSize() may recalc the chart view
-            ::com::sun::star::awt::Size aTitleSize = rxTitle->getSize();
-            // rotated titles need special handling...
-            sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
-            double fRad = nScRot * F_PI18000;
-            double fSin = fabs( sin( fRad ) );
-            double fCos = fabs( cos( fRad ) );
-            ::com::sun::star::awt::Size aBoundSize(
-                static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
-                static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
-            // title position is given relative to the default position
-            // default X = left edge of centered title, default Y = 85 chart units
-            ::com::sun::star::awt::Point aTitlePos(
-                CalcHmmFromChartX( rPosData.maRect.mnX + EXC_CHART_TOTALUNITS / 2 ) - aBoundSize.Width / 2,
-                CalcHmmFromChartY( rPosData.maRect.mnY + 85 ) );
-            // add part of height to X direction, if title is rotated down
-            if( nScRot > 18000 )
-                aTitlePos.X += static_cast< sal_Int32 >( fSin * aTitleSize.Height + 0.5 );
-            // add part of width to Y direction, if title is rotated up
-            else if( nScRot > 0 )
-                aTitlePos.Y += static_cast< sal_Int32 >( fSin * aTitleSize.Width + 0.5 );
-            // set the resulting position at the title shape
-            rxTitle->setPosition( aTitlePos );
-        }
+        Reference< XShape > xTitleShape( GetTitleShape( rTitleKey ), UNO_SET_THROW );
+        // the call to XShape.getSize() may recalc the chart view
+        ::com::sun::star::awt::Size aTitleSize = xTitleShape->getSize();
+        // rotated titles need special handling...
+        sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
+        double fRad = nScRot * F_PI18000;
+        double fSin = fabs( sin( fRad ) );
+        double fCos = fabs( cos( fRad ) );
+        ::com::sun::star::awt::Size aBoundSize(
+            static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
+            static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
+        // calculate the title position from the values in the CHTEXT record
+        ::com::sun::star::awt::Point aTitlePos(
+            CalcHmmFromChartX( maData.maRect.mnX ),
+            CalcHmmFromChartY( maData.maRect.mnY ) );
+        // add part of height to X direction, if title is rotated down (clockwise)
+        if( nScRot > 18000 )
+            aTitlePos.X += static_cast< sal_Int32 >( fSin * aTitleSize.Height + 0.5 );
+        // add part of width to Y direction, if title is rotated up (counterclockwise)
+        else if( nScRot > 0 )
+            aTitlePos.Y += static_cast< sal_Int32 >( fSin * aTitleSize.Width + 0.5 );
+        // set the resulting position at the title shape
+        xTitleShape->setPosition( aTitlePos );
+    }
+    catch( Exception& )
+    {
     }
 }
 
@@ -2461,7 +2492,8 @@ XclImpChTypeGroup::XclImpChTypeGroup( const XclImpChRoot& rRoot ) :
 
 void XclImpChTypeGroup::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maRect >> maData.mnFlags >> maData.mnGroupIdx;
+    rStrm.Ignore( 16 );
+    rStrm >> maData.mnFlags >> maData.mnGroupIdx;
 }
 
 void XclImpChTypeGroup::ReadSubRecord( XclImpStream& rStrm )
@@ -2918,9 +2950,9 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
     rStrm   >> maData.mnMajor
             >> maData.mnMinor
             >> maData.mnLabelPos
-            >> maData.mnBackMode
-            >> maData.maRect
-            >> maData.maTextColor
+            >> maData.mnBackMode;
+    rStrm.Ignore( 16 );
+    rStrm   >> maData.maTextColor
             >> maData.mnFlags;
 
     if( GetBiff() == EXC_BIFF8 )
@@ -2967,7 +2999,7 @@ XclImpChAxis::XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType ) :
 
 void XclImpChAxis::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnType >> maData.maRect;
+    rStrm >> maData.mnType;
 }
 
 void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
@@ -3356,6 +3388,16 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const
     }
 }
 
+void XclImpChAxesSet::ConvertTitlePositions() const
+{
+    if( mxXAxisTitle.is() )
+        mxXAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_X ) );
+    if( mxYAxisTitle.is() )
+        mxYAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_Y ) );
+    if( mxZAxisTitle.is() )
+        mxZAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_Z ) );
+}
+
 void XclImpChAxesSet::ReadChAxis( XclImpStream& rStrm )
 {
     XclImpChAxisRef xAxis( new XclImpChAxis( GetChRoot() ) );
@@ -3462,11 +3504,15 @@ void XclImpChAxesSet::ConvertAxis(
         if( xAxis.is() )
         {
             // create and attach the axis title
-            if( xChAxisTitle.is() )
+            if( xChAxisTitle.is() ) try
             {
-                Reference< XTitled > xTitled( xAxis, UNO_QUERY );
-                if( xTitled.is() )
-                    xTitled->setTitleObject( xChAxisTitle->CreateTitle() );
+                Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
+                Reference< XTitle > xTitle( xChAxisTitle->CreateTitle(), UNO_SET_THROW );
+                xTitled->setTitleObject( xTitle );
+            }
+            catch( Exception& )
+            {
+                DBG_ERRORFILE( "XclImpChAxesSet::ConvertAxis - cannot set axis title" );
             }
 
             // insert axis into coordinate system
@@ -3639,12 +3685,14 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     }
 
     // chart title
-    if( mxTitle.is() )
+    if( mxTitle.is() ) try
     {
-        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
-        Reference< XTitle > xTitle = mxTitle->CreateTitle();
-        if( xTitled.is() && xTitle.is() )
-            xTitled->setTitleObject( xTitle );
+        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY_THROW );
+        Reference< XTitle > xTitle( mxTitle->CreateTitle(), UNO_SET_THROW );
+        xTitled->setTitleObject( xTitle );
+    }
+    catch( Exception& )
+    {
     }
 
     /*  Create the diagram object and attach it to the chart document. Currently,
@@ -3672,15 +3720,10 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
             flag correctly. */
         ScfPropertySet aDiaProp( xDiagram1 );
         bool bShowVisCells = ::get_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY );
-        aDiaProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
-
-        // chart title position
-        ScfPropertySet aDocProp( xChart1Doc );
-        if( aDocProp.GetBoolProperty( EXC_CHPROP_HASMAINTITLE ) )
-            mxTitle->ConvertMainTitlePos( xChart1Doc->getTitle() );
+        aDiaProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells );
 
         // plot area position and size (there is no real automatic mode in BIFF5 charts)
-        XclImpChFramePosRef xPlotAreaPos = mxPrimAxesSet->GetPlotAreaPosition();
+        XclImpChFramePosRef xPlotAreaPos = mxPrimAxesSet->GetPlotAreaFramePos();
         if( IsManualPlotArea() && xPlotAreaPos.is() ) try
         {
             const XclChFramePos& rFramePos = xPlotAreaPos->GetFramePosData();
@@ -3699,6 +3742,12 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
         catch( Exception& )
         {
         }
+
+        // positions of all title objects
+        if( mxTitle.is() )
+            mxTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_TITLE ) );
+        mxPrimAxesSet->ConvertTitlePositions();
+        mxSecnAxesSet->ConvertTitlePositions();
     }
 
     // unlock the model
