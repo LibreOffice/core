@@ -140,6 +140,7 @@ namespace dbaui
         /** return the corresponding driver for the selected URL
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const ::rtl::OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */
