@@ -105,6 +105,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         sal_Int32 nLen = sValue.getLength();
                         if ( nLen )
                         {
+
                             const static ::rtl::OUString s_sChanged(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
                             sal_Int32 nPos = sValue.indexOf(s_sChanged);
                             if ( nPos == -1 )
@@ -112,7 +113,15 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             else
                             {
                                 nPos = s_sChanged.getLength();
-                                --nLen;
+                                static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                                static ::rtl::OUString s_sSingleQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
+                                sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
+                                while ( nIndex > -1 )
+                                {
+                                    sValue = sValue.replaceAt(nIndex,2,s_sSingleQuote);
+                                    nIndex = sValue.indexOf(s_sQuote,nIndex+2);
+                                }
+                                nLen = sValue.getLength() - 1;
                             }
                             sValue = sValue.copy(nPos,nLen-nPos-1);
                             const ORptFilter::TGroupFunctionMap& aFunctions = _rImport.getFunctions();
