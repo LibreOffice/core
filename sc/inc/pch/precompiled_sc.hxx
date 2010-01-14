@@ -160,7 +160,7 @@
 #include <svl/listener.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <unotools/useroptions.hxx>
 #include <svx/editobj.hxx>
 #include <svx/eeitem.hxx>

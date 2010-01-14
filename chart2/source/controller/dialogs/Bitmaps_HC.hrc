@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #ifndef _SOLAR_HRC
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 // RID_SCH_START is 30512 (see svl/solar.hrc)

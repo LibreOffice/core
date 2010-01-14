@@ -108,7 +108,7 @@
 #include <markarr.hxx>
 #include <root.hxx>
 #include <flttypes.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <svl/cntwids.hrc>
 #include <sfx2/cntids.hrc>
