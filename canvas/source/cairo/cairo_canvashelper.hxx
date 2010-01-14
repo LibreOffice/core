@@ -276,6 +276,7 @@ namespace cairocanvas
 
     void doPolyPolygonPath( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                   Operation aOperation,
+                  bool bNoLineJoin = false,
                   const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
                   ::cairo::Cairo* pCairo=NULL ) const;
 

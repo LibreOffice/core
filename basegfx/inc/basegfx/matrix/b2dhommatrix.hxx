@@ -52,11 +52,21 @@ namespace basegfx
         B2DHomMatrix(const B2DHomMatrix& rMat);
         ~B2DHomMatrix();
 
+        /** constructor to allow setting all needed values for a 3x2 matrix at once. The
+            parameter f_0x1 e.g. is the same as using set(0, 1, f)
+         */
+        B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
+
         /// unshare this matrix with all internally shared instances
         void makeUnique();
 
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
+
+        /** allow setting all needed values for a 3x2 matrix in one call. The
+            parameter f_0x1 e.g. is the same as using set(0, 1, f)
+         */
+        void set3x2(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
 
         // test if last line is default to see if last line needs to be
         // involved in calculations

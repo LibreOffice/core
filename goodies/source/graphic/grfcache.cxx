@@ -37,6 +37,8 @@
 #include <tools/poly.hxx>
 #include "grfcache.hxx"
 
+#include <memory>
+
 // -----------
 // - Defines -
 // -----------
@@ -612,7 +614,12 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
         if( !bInserted )
         {
             GraphicCacheEntry* pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
-            const GraphicID aID( rObj );
+            ::std::auto_ptr< GraphicID > apID;
+
+            if( !pID )
+            {
+                apID.reset( new GraphicID( rObj ) );
+            }
 
             while( !bInserted && pEntry )
             {
@@ -647,10 +654,13 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
                         }
                     }
                 }
-                else if( rEntryID == aID )
+                else
                 {
-                    pEntry->AddGraphicObjectReference( rObj, rSubstitute );
-                    bInserted = TRUE;
+                    if( rEntryID == *apID )
+                    {
+                        pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                        bInserted = TRUE;
+                    }
                 }
 
                 if( !bInserted )

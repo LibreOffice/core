@@ -682,7 +682,7 @@ String SimpleTokenizer_Impl::getTokStr
     return String( pStartPos, (USHORT)( pEndPos - pStartPos ) );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // TEST: Token ausgeben
 String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
     /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
