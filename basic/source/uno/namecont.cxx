@@ -1737,7 +1737,7 @@ void SfxLibraryContainer::implImportLibDescriptor
 
 
 // Methods of new XLibraryStorage interface?
-void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& xStorage, sal_Bool bComplete )
+void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& i_rStorage, sal_Bool bComplete )
 {
     const Sequence< OUString > aNames = maNameContainer.getElementNames();
     sal_Int32 nNameCount = aNames.getLength();
@@ -1758,35 +1758,13 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     ::xmlscript::LibDescriptorArray* pLibArray = new ::xmlscript::LibDescriptorArray( nLibsToSave );
 
     // Write to storage?
-    sal_Bool bStorage = xStorage.is();
-    uno::Reference< embed::XStorage > xLibrariesStor;
+    sal_Bool bStorage = i_rStorage.is();
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
-    if( bStorage )
+    uno::Reference< embed::XStorage > xTargetLibrariesStor;
+    ::rtl::OUString sTempTargetStorName;
+    const bool bInplaceStorage = bStorage && ( i_rStorage == mxStorage );
+    if ( bStorage )
     {
-        // when we save to our root storage, ensure the libs are all loaded. Else the below cleaning
-        // of the target storage will loose them.
-        if ( xStorage == mxStorage )
-        {
-            pName = aNames.getConstArray();
-            for ( ; pName != pNamesEnd; ++pName )
-            {
-                if ( !isLibraryLoaded( *pName ) )
-                    loadLibrary( *pName );
-            }
-        }
-
-        // first of all, clean the target library storage, since the storing procedure must do overwrite
-        try
-        {
-            if ( xStorage->hasByName( maLibrariesDir ) )
-                xStorage->removeElement( maLibrariesDir );
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-            return;
-        }
-
         // Don't write if only empty standard lib exists
         if ( ( nNameCount == 1 ) && ( aNames[0].equalsAscii( "Standard" ) ) )
         {
@@ -1797,29 +1775,52 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 return;
         }
 
-        try {
-            xLibrariesStor.set( xStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
-        }
-        catch( uno::Exception& )
-        {
-        #if OSL_DEBUG_LEVEL > 0
-            Any aError( ::cppu::getCaughtException() );
-            ::rtl::OStringBuffer aMessage;
-            aMessage.append( "couln't open source library storage.\n\nException:" );
-            aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
-            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
-        #endif
-            return;
-        }
-
+        // create the empty target storage
         try
         {
-            if ( ( mxStorage != xStorage ) && ( mxStorage->hasByName( maLibrariesDir ) ) )
-                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
+            ::rtl::OUString sTargetLibrariesStoreName;
+            if ( bInplaceStorage )
+            {
+                // create a temporary target storage
+                const ::rtl::OUStringBuffer aTempTargetNameBase = maLibrariesDir + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_temp_" ) );
+                do
+                {
+                    ::rtl::OUStringBuffer aTempTargetName( aTempTargetNameBase );
+                    sal_Int32 index = 0;
+                    aTempTargetName.append( index );
+
+                    sTargetLibrariesStoreName = aTempTargetName.makeStringAndClear();
+                    if ( !i_rStorage->hasByName( sTargetLibrariesStoreName ) )
+                        break;
+                }
+                while ( true );
+                sTempTargetStorName = sTargetLibrariesStoreName;
+            }
+            else
+            {
+                sTargetLibrariesStoreName = maLibrariesDir;
+                if ( i_rStorage->hasByName( sTargetLibrariesStoreName ) )
+                    i_rStorage->removeElement( sTargetLibrariesStoreName );
+            }
+
+            xTargetLibrariesStor.set( i_rStorage->openStorageElement( sTargetLibrariesStoreName, embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
+            return;
+        }
+
+        // open the source storage which might be used to copy yet-unmodified libraries
+        try
+        {
+            if ( mxStorage->hasByName( maLibrariesDir ) )
+                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            return;
         }
     }
 
@@ -1831,7 +1832,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         SfxLibrary* pImplLib = getImplLib( *pName );
         if( pImplLib->mbSharedIndexFile )
             continue;
-        bool bExtensionLib = pImplLib->mbExtension;
+        const bool bExtensionLib = pImplLib->mbExtension;
         ::xmlscript::LibDescriptor& rLib = bExtensionLib ?
             aLibDescriptorForExtensionLibs : pLibArray->mpLibs[iArray];
         if( !bExtensionLib )
@@ -1851,12 +1852,14 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         if( pImplLib->implIsModified() || bComplete )
         {
-            // Can we copy the storage?
+            // Can we simply copy the storage?
             if( !mbOldInfoFormat && !pImplLib->implIsModified() && !mbOasis2OOoFormat && xSourceLibrariesStor.is() )
             {
-                try {
-                    xSourceLibrariesStor->copyElementTo( rLib.aName, xLibrariesStor, rLib.aName );
-                } catch( uno::Exception& )
+                try
+                {
+                    xSourceLibrariesStor->copyElementTo( rLib.aName, xTargetLibrariesStor, rLib.aName );
+                }
+                catch( const uno::Exception& )
                 {
                     DBG_UNHANDLED_EXCEPTION();
                     // TODO: error handling?
@@ -1869,7 +1872,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 {
                     try
                     {
-                        xLibraryStor = xLibrariesStor->openStorageElement(
+                        xLibraryStor = xTargetLibrariesStor->openStorageElement(
                                                                         rLib.aName,
                                                                         embed::ElementModes::READWRITE );
                     }
@@ -1901,7 +1904,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 implStoreLibraryIndexFile( pImplLib, rLib, xLibraryStor );
                 if( bStorage )
                 {
-                    try {
+                    try
+                    {
                         uno::Reference< embed::XTransactedObject > xTransact( xLibraryStor, uno::UNO_QUERY_THROW );
                         xTransact->commit();
                     }
@@ -1919,6 +1923,55 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         // For container info ReadOnly refers to mbReadOnlyLink
         rLib.bReadOnly = pImplLib->mbReadOnlyLink;
+    }
+
+    // if we did an in-place save into a storage (i.e. a save into the storage we were already based on),
+    // then we need to clean up the temporary storage we used for this
+    if ( bInplaceStorage && sTempTargetStorName.getLength() )
+    {
+        try
+        {
+            // for this, we first remove everything from the source storage, then copy the complete content
+            // from the temporary target storage. From then on, what used to be the "source storage" becomes
+            // the "targt storage" for all subsequent operations.
+
+            // (We cannot simply remove the storage, denoted by maLibrariesDir, from i_rStorage - there might be
+            // open references to it.)
+
+            // remove
+            const Sequence< ::rtl::OUString > aRemoveNames( xTargetLibrariesStor->getElementNames() );
+            for (   const ::rtl::OUString* pRemoveName = aRemoveNames.getConstArray();
+                    pRemoveName != aRemoveNames.getConstArray() + aRemoveNames.getLength();
+                    ++pRemoveName
+                )
+            {
+                xSourceLibrariesStor->removeElement( *pRemoveName );
+            }
+
+            // copy
+            const Sequence< ::rtl::OUString > aCopyNames( xTargetLibrariesStor->getElementNames() );
+            for (   const ::rtl::OUString* pCopyName = aCopyNames.getConstArray();
+                    pCopyName != aCopyNames.getConstArray() + aCopyNames.getLength();
+                    ++pCopyName
+                )
+            {
+                xTargetLibrariesStor->copyElementTo( *pCopyName, xSourceLibrariesStor, *pCopyName );
+            }
+
+            // close and remove temp target
+            xTargetLibrariesStor->dispose();
+            i_rStorage->removeElement( sTempTargetStorName );
+            xTargetLibrariesStor.clear();
+            sTempTargetStorName = ::rtl::OUString();
+
+            // adjust target
+            xTargetLibrariesStor = xSourceLibrariesStor;
+            xSourceLibrariesStor.clear();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     if( !mbOldInfoFormat && !maModifiable.isModified() )
@@ -1946,7 +1999,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         aStreamName += String( RTL_CONSTASCII_USTRINGPARAM("-lc.xml") );
 
         try {
-            xInfoStream = xLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
+            xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
             OSL_ENSURE ( xProps.is(), "The stream must implement XPropertySet!\n" );
             if ( !xProps.is() )
@@ -2005,7 +2058,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         xmlscript::exportLibraryContainer( xHandler, pLibArray );
         if ( bStorage )
         {
-            uno::Reference< embed::XTransactedObject > xTransact( xLibrariesStor, uno::UNO_QUERY );
+            uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY );
             OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
             if ( !xTransact.is() )
                 throw uno::RuntimeException();

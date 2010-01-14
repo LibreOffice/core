@@ -150,69 +150,80 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
         return xNewDescriptor;
     }
 
-    // if we're here, we belong to a table which is not new, i.e. already exists in the database.
-    // In this case, really append the new index.
-
     const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
-
-    ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-    ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-
-    aSql += composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
-
-    if ( nKeyType == KeyType::PRIMARY )
-    {
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ("));
-    }
-    else if ( nKeyType == KeyType::FOREIGN )
-    {
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ("));
-    }
-    else
-        throw SQLException();
-
-    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-    Reference< XPropertySet > xColProp;
-    for(sal_Int32 i=0;i<xColumns->getCount();++i)
-    {
-        ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-        aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
-                        +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-    }
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-
     sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
     ::rtl::OUString sReferencedName;
 
     if ( nKeyType == KeyType::FOREIGN )
     {
         descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)) >>= sReferencedName;
-
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" REFERENCES "))
-                +  ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::eInTableDefinitions);
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
-
-        for(sal_Int32 i=0;i<xColumns->getCount();++i)
-        {
-            xColumns->getByIndex(i) >>= xColProp;
-            aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))))
-                            +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        }
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-
         descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_UPDATERULE)) >>= nUpdateRule;
         descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE)) >>= nDeleteRule;
-
-        aSql += getKeyRuleString(sal_True   ,nUpdateRule);
-        aSql += getKeyRuleString(sal_False  ,nDeleteRule);
     }
 
-    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-    xStmt->execute(aSql);
+    if ( m_pTable->getKeyService().is() )
+    {
+        m_pTable->getKeyService()->addKey(m_pTable,descriptor);
+    }
+    else
+    {
+        // if we're here, we belong to a table which is not new, i.e. already exists in the database.
+        // In this case, really append the new index.
+        ::rtl::OUStringBuffer aSql;
+        aSql.appendAscii("ALTER TABLE ");
+        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+
+        aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
+        aSql.appendAscii(" ADD ");
+
+        if ( nKeyType == KeyType::PRIMARY )
+        {
+            aSql.appendAscii(" PRIMARY KEY (");
+        }
+        else if ( nKeyType == KeyType::FOREIGN )
+        {
+            aSql.appendAscii(" FOREIGN KEY (");
+        }
+        else
+            throw SQLException();
+
+        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+        Reference< XPropertySet > xColProp;
+        for(sal_Int32 i = 0 ; i < xColumns->getCount() ; ++i)
+        {
+            if ( i > 0 )
+                aSql.appendAscii(",");
+            ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+            aSql.append( ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) );
+
+        }
+        aSql.appendAscii(")");
+
+        if ( nKeyType == KeyType::FOREIGN )
+        {
+            aSql.appendAscii(" REFERENCES ");
+            aSql.append(::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::eInTableDefinitions));
+            aSql.appendAscii(" (");
+
+            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+            {
+                if ( i > 0 )
+                    aSql.appendAscii(",");
+                xColumns->getByIndex(i) >>= xColProp;
+                aSql.append(::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN)))));
+
+            }
+            aSql.appendAscii(")");
+            aSql.append(getKeyRuleString(sal_True   ,nUpdateRule));
+            aSql.append(getKeyRuleString(sal_False  ,nDeleteRule));
+        }
+
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+        xStmt->execute(aSql.makeStringAndClear());
+    }
     // find the name which the database gave the new key
     ::rtl::OUString sNewName( _rForName );
     try
@@ -269,34 +280,41 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( xConnection.is() && !m_pTable->isNew() )
     {
-        ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-
-        aSql += composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true );
-
         Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
-
-        sal_Int32 nKeyType = KeyType::PRIMARY;
-        if ( xKey.is() )
+        if ( m_pTable->getKeyService().is() )
         {
-            ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-            xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
-        }
-        if ( KeyType::PRIMARY == nKeyType )
-        {
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP PRIMARY KEY"));
+            m_pTable->getKeyService()->dropKey(m_pTable,xKey);
         }
         else
         {
-            aSql += getDropForeignKey();
-            const ::rtl::OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
-            aSql += ::dbtools::quoteName( aQuote,_sElementName);
-        }
+            ::rtl::OUStringBuffer aSql;
+            aSql.appendAscii("ALTER TABLE ");
 
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        if ( xStmt.is() )
-        {
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
+            aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true ));
+
+            sal_Int32 nKeyType = KeyType::PRIMARY;
+            if ( xKey.is() )
+            {
+                ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
+            }
+            if ( KeyType::PRIMARY == nKeyType )
+            {
+                aSql.appendAscii(" DROP PRIMARY KEY");
+            }
+            else
+            {
+                aSql.append(getDropForeignKey());
+                const ::rtl::OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+                aSql.append( ::dbtools::quoteName( aQuote,_sElementName) );
+            }
+
+            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+            if ( xStmt.is() )
+            {
+                xStmt->execute(aSql.makeStringAndClear());
+                ::comphelper::disposeComponent(xStmt);
+            }
         }
     }
 }
