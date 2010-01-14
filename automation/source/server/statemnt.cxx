@@ -85,7 +85,7 @@
 #include <vcl/wintypes.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
@@ -102,14 +102,14 @@
 //#include <vcl/drag.hxx>
 #endif
 #include <tools/fsys.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
 #include <basic/dispdefs.hxx>
 #include <vos/socket.hxx>
-#include <svtools/pickerhistory.hxx>
+#include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <sot/storage.hxx>

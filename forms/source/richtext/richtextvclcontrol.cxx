@@ -32,9 +32,9 @@
 #include "precompiled_forms.hxx"
 #include "richtextvclcontrol.hxx"
 #include "richtextimplcontrol.hxx"
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/languageoptions.hxx>
 #if OSL_DEBUG_LEVEL > 0
     #ifndef _TOOLS_TEMPFILE_HXX
     #include <tools/tempfile.hxx>
