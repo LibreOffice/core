@@ -560,7 +560,7 @@
 #include "svl/slstitm.hxx"
 #include "svl/smplhint.hxx"
 #include "svtools/soerr.hxx"
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 #include "unotools/startoptions.hxx"
 #include "svtools/statusbarcontroller.hxx"
 #include "svl/stritem.hxx"

@@ -36,7 +36,7 @@
 #include <svtools/accessibilityoptions.hxx>
 
 #include <svx/svdedxv.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 
 //#include <tools/string.h>
 #include <svl/itemiter.hxx>

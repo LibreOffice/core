@@ -39,7 +39,7 @@
 #include <tools/contnr.hxx>
 
 #ifndef _SOLAR_HRC
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #include <svx/xpoly.hxx>

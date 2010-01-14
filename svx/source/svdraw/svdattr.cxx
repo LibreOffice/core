@@ -52,7 +52,7 @@
 #include <svx/svdattrx.hxx>
 #include <svx/svdpool.hxx>
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include "xmlcnitm.hxx"
 
 #include <svx/svxids.hrc>

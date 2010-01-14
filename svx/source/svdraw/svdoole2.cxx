@@ -73,7 +73,7 @@
 #include <svtools/transfer.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>

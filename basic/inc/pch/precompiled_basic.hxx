@@ -183,7 +183,7 @@
 #include "unotools/pathoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svl/smplhint.hxx"
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 #include "svtools/stringtransfer.hxx"
 #include "svl/svarray.hxx"
 #include "svl/svdde.hxx"

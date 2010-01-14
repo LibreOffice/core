@@ -37,7 +37,7 @@
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itempool.hxx>

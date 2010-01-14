@@ -399,7 +399,7 @@
 #include "unotools/pathoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svl/smplhint.hxx"
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 #include "svtools/statusbarcontroller.hxx"
 #include "svl/svarray.hxx"
 #include "svtools/svmedit.hxx"

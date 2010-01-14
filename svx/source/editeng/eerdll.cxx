@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <svx/lspcitem.hxx>

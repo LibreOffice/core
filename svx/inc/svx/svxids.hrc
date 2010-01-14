@@ -32,7 +32,7 @@
 // include ------------------------------------------------------------------
 
 #include <svl/memberid.hrc>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 

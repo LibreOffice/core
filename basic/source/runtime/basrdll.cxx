@@ -32,7 +32,7 @@
 #include "precompiled_basic.hxx"
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 
