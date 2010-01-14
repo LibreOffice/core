@@ -157,7 +157,7 @@ TitleConverter::~TitleConverter()
 {
 }
 
-void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType )
+void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
 {
     if( rxTitled.is() )
     {
@@ -180,6 +180,9 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
             OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
             ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
             getFormatter().convertTextRotation( aPropSet, xTextProp, true );
+
+            // register the title and layout data for conversion of position
+            registerTitleLayout( xTitle, mrModel.mxLayout, eObjType, nMainIdx, nSubIdx );
         }
         catch( Exception& )
         {

@@ -115,12 +115,9 @@ void ChartSpaceConverter::convertFromModel()
         {
             if( aAutoTitle.getLength() == 0 )
                 aAutoTitle = CREATE_OUSTRING( "Chart Title" );
-            TitleModel& rTitle = mrModel.mxTitle.getOrCreate();
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
-            TitleConverter aTitleConv( *this, rTitle );
+            TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
             aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
-            // register the title and layout data for conversion of position
-            registerMainTitle( xTitled, rTitle.mxLayout );
         }
     }
     catch( Exception& )

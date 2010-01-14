@@ -1698,7 +1698,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_CHAXESSET:
             dumpDec< sal_uInt16 >( "axesset-id", "CHAXESSET-ID" );
-            dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+            dumpRect< sal_Int32 >( "inner-plotarea-pos", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
         break;
 
         case BIFF_ID_CHAXIS:
@@ -1748,7 +1748,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         case BIFF_ID_CHFRAMEPOS:
             dumpDec< sal_uInt16 >( "tl-mode", "CHFRAMEPOS-POSMODE" );
             dumpDec< sal_uInt16 >( "br-mode", "CHFRAMEPOS-POSMODE" );
-            dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
+            dumpRectWithGaps< sal_Int16 >( "position", 2 );
         break;
 
         case BIFF_ID_CHFRBLOCKBEGIN:

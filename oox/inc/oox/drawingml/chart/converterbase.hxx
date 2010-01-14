@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
     namespace chart2 { class XChartDocument; }
-    namespace chart2 { class XTitled; }
+    namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }
 } } }
 
@@ -52,7 +52,6 @@ namespace drawingml {
 namespace chart {
 
 class ChartConverter;
-class ObjectFormatter;
 struct ChartSpaceModel;
 struct ConverterData;
 
@@ -95,17 +94,12 @@ protected:
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
-    /** Registers the main title object and its layout data, needed for
-        conversion of the title position using the old Chart1 API. */
-    void                registerMainTitle(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
-                            const ModelRef< LayoutModel >& rxLayout );
-    /** Registers an axis title object and its layout data, needed for
-        conversion of the title position using the old Chart1 API. */
-    void                registerAxisTitle(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
-                            const ModelRef< LayoutModel >& rxLayout,
-                            sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx );
+    /** Registers a title object and its layout data, needed for conversion of
+        the title position using the old Chart1 API. */
+    void                registerTitleLayout(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >& rxTitle,
+                            const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType,
+                            sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
     /** Converts the positions of the main title and all axis titles. */
     void                convertTitlePositions();
 

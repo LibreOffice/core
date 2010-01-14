@@ -34,13 +34,12 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/XAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <tools/solar.h>    // for F_PI180
 #include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -61,7 +60,7 @@ using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::chart2::RelativePosition;
 using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::XTitled;
+using ::com::sun::star::chart2::XTitle;
 using ::com::sun::star::drawing::XShape;
 using ::oox::core::XmlFilterBase;
 
@@ -75,15 +74,23 @@ namespace chart {
 
 namespace {
 
-/** A helper structure to store all data related to axis titles. Needed for the
-    conversion of manual axis title positions that needs the old Chart1 API.
+struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_Int32 > >
+{
+    inline explicit     TitleKey( ObjectType eObjType, sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 )
+                            { first = eObjType; second.first = nMainIdx; second.second = nSubIdx; }
+};
+
+// ----------------------------------------------------------------------------
+
+/** A helper structure to store all data related to title objects. Needed for
+    the conversion of manual title positions that needs the old Chart1 API.
  */
 struct TitleLayoutInfo
 {
     typedef Reference< XShape > (*GetShapeFunc)( const Reference< cssc::XChartDocument >& );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >
-                        mxTitled;       /// The API title supplier.
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
+                        mxTitle;        /// The API title object.
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
 
@@ -96,13 +103,13 @@ struct TitleLayoutInfo
 
 void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cssc::XChartDocument >& rxChart1Doc )
 {
-    if( mxTitled.is() && mpGetShape ) try
+    if( mxTitle.is() && mpGetShape ) try
     {
         // try to get the title shape
         Reference< XShape > xTitleShape( mpGetShape( rxChart1Doc ), UNO_SET_THROW );
         // get title rotation angle, needed for correction of position of top-left edge
         double fAngle = 0.0;
-        PropertySet aTitleProp( mxTitled->getTitleObject() );
+        PropertySet aTitleProp( mxTitle );
         aTitleProp.getProperty( fAngle, PROP_TextRotation );
         // convert the position
         LayoutModel& rLayout = mxLayout.getOrCreate();
@@ -116,46 +123,41 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
 
 // ----------------------------------------------------------------------------
 
-typedef ::std::pair< sal_Int32, sal_Int32 >     AxisKey;
-typedef ::std::map< AxisKey, TitleLayoutInfo >  AxisTitleMap;
-
-// ----------------------------------------------------------------------------
-
 /*  The following local functions implement getting the XShape interface of all
     supported title objects (chart and axes). This needs some effort due to the
     design of the old Chart1 API used to access these objects. */
 
+/** A code fragment that returns a shape object from the passed shape supplier
+    using the specified interface function. Checks a boolean property first. */
+#define OOX_FRAGMENT_GETTITLESHAPE( shape_supplier, supplier_func, property_name ) \
+    PropertySet aPropSet( shape_supplier ); \
+    if( shape_supplier.is() && aPropSet.getBoolProperty( PROP_##property_name ) ) \
+        return shape_supplier->supplier_func(); \
+    return Reference< XShape >(); \
+
+/** Implements a function returning the drawing shape of an axis title, if
+    existing, using the specified API interface and its function. */
+#define OOX_DEFINEFUNC_GETAXISTITLESHAPE( func_name, interface_type, supplier_func, property_name ) \
+Reference< XShape > func_name( const Reference< cssc::XChartDocument >& rxChart1Doc ) \
+{ \
+    Reference< cssc::interface_type > xAxisSupp( rxChart1Doc->getDiagram(), UNO_QUERY ); \
+    OOX_FRAGMENT_GETTITLESHAPE( xAxisSupp, supplier_func, property_name ) \
+}
+
 /** Returns the drawing shape of the main title, if existing. */
 Reference< XShape > lclGetMainTitleShape( const Reference< cssc::XChartDocument >& rxChart1Doc )
 {
-    PropertySet aPropSet( rxChart1Doc );
-    if( rxChart1Doc.is() && aPropSet.getBoolProperty( PROP_HasMainTitle ) )
-        return rxChart1Doc->getTitle();
-    return Reference< XShape >();
+    OOX_FRAGMENT_GETTITLESHAPE( rxChart1Doc, getTitle, HasMainTitle )
 }
 
-/** Implements a function returning the drawing shape of an axis title, if existing. */
-#define OOX_DEFINEFUNC_GETAXISTITLE( func_name, interface_type, interface_func, property_name ) \
-Reference< XShape > func_name( const Reference< cssc::XChartDocument >& rxChart1Doc ) \
-{ \
-    try \
-    { \
-        Reference< cssc::interface_type > xAxisSupp( rxChart1Doc->getDiagram(), UNO_QUERY_THROW ); \
-        PropertySet aPropSet( xAxisSupp ); \
-        if( aPropSet.getBoolProperty( PROP_##property_name ) ) \
-            return xAxisSupp->interface_func(); \
-    } \
-    catch( Exception& ) {} \
-    return Reference< XShape >(); \
-}
+OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetXAxisTitleShape, XAxisXSupplier, getXAxisTitle, HasXAxisTitle )
+OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetYAxisTitleShape, XAxisYSupplier, getYAxisTitle, HasYAxisTitle )
+OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetZAxisTitleShape, XAxisZSupplier, getZAxisTitle, HasZAxisTitle )
+OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecXAxisTitleShape, XSecondAxisTitleSupplier, getSecondXAxisTitle, HasSecondaryXAxisTitle )
+OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupplier, getSecondYAxisTitle, HasSecondaryYAxisTitle )
 
-OOX_DEFINEFUNC_GETAXISTITLE( lclGetXAxisTitleShape, XAxisXSupplier, getXAxisTitle, HasXAxisTitle )
-OOX_DEFINEFUNC_GETAXISTITLE( lclGetYAxisTitleShape, XAxisYSupplier, getYAxisTitle, HasYAxisTitle )
-OOX_DEFINEFUNC_GETAXISTITLE( lclGetZAxisTitleShape, XAxisZSupplier, getZAxisTitle, HasZAxisTitle )
-OOX_DEFINEFUNC_GETAXISTITLE( lclGetSecXAxisTitleShape, XSecondAxisTitleSupplier, getSecondXAxisTitle, HasSecondaryXAxisTitle )
-OOX_DEFINEFUNC_GETAXISTITLE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupplier, getSecondYAxisTitle, HasSecondaryYAxisTitle )
-
-#undef OOX_DEFINEFUNC_GETAXISTITLE
+#undef OOX_DEFINEFUNC_GETAXISTITLESHAPE
+#undef OOX_IMPLEMENT_GETTITLESHAPE
 
 } // namespace
 
@@ -163,13 +165,14 @@ OOX_DEFINEFUNC_GETAXISTITLE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupplier,
 
 struct ConverterData
 {
+    typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
+
     ObjectFormatter     maFormatter;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
     Size                maSize;
-    TitleLayoutInfo     maMainTitle;
-    AxisTitleMap        maAxisTitles;
+    TitleMap            maTitles;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
@@ -206,12 +209,12 @@ ConverterData::ConverterData(
     }
 
     // prepare conversion of title positions
-    maMainTitle.mpGetShape = lclGetMainTitleShape;
-    maAxisTitles[ AxisKey( API_PRIM_AXESSET, API_X_AXIS ) ].mpGetShape = lclGetXAxisTitleShape;
-    maAxisTitles[ AxisKey( API_PRIM_AXESSET, API_Y_AXIS ) ].mpGetShape = lclGetYAxisTitleShape;
-    maAxisTitles[ AxisKey( API_PRIM_AXESSET, API_Z_AXIS ) ].mpGetShape = lclGetZAxisTitleShape;
-    maAxisTitles[ AxisKey( API_SECN_AXESSET, API_X_AXIS ) ].mpGetShape = lclGetSecXAxisTitleShape;
-    maAxisTitles[ AxisKey( API_SECN_AXESSET, API_Y_AXIS ) ].mpGetShape = lclGetSecYAxisTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_CHARTTITLE ) ].mpGetShape = lclGetMainTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_PRIM_AXESSET, API_X_AXIS ) ].mpGetShape = lclGetXAxisTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_PRIM_AXESSET, API_Y_AXIS ) ].mpGetShape = lclGetYAxisTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_PRIM_AXESSET, API_Z_AXIS ) ].mpGetShape = lclGetZAxisTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_SECN_AXESSET, API_X_AXIS ) ].mpGetShape = lclGetSecXAxisTitleShape;
+    maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_SECN_AXESSET, API_Y_AXIS ) ].mpGetShape = lclGetSecYAxisTitleShape;
 }
 
 ConverterData::~ConverterData()
@@ -282,20 +285,13 @@ ObjectFormatter& ConverterRoot::getFormatter() const
     return mxData->maFormatter;
 }
 
-void ConverterRoot::registerMainTitle( const Reference< XTitled >& rxTitled, const ModelRef< LayoutModel >& rxLayout )
+void ConverterRoot::registerTitleLayout( const Reference< XTitle >& rxTitle,
+        const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
 {
-    OSL_ENSURE( rxTitled.is(), "ConverterRoot::registerMainTitle - missing title supplier" );
-    mxData->maMainTitle.mxTitled = rxTitled;
-    mxData->maMainTitle.mxLayout = rxLayout;
-}
-
-void ConverterRoot::registerAxisTitle( const Reference< XTitled >& rxTitled,
-        const ModelRef< LayoutModel >& rxLayout, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
-{
-    OSL_ENSURE( rxTitled.is(), "ConverterRoot::registerAxisTitle - missing axis title supplier" );
-    TitleLayoutInfo& rTitleInfo = mxData->maAxisTitles[ AxisKey( nAxesSetIdx, nAxisIdx ) ];
-    OSL_ENSURE( rTitleInfo.mpGetShape, "ConverterRoot::registerAxisTitle - invalid axis key" );
-    rTitleInfo.mxTitled = rxTitled;
+    OSL_ENSURE( rxTitle.is(), "ConverterRoot::registerTitleLayout - missing title object" );
+    TitleLayoutInfo& rTitleInfo = mxData->maTitles[ TitleKey( eObjType, nMainIdx, nSubIdx ) ];
+    OSL_ENSURE( rTitleInfo.mpGetShape, "ConverterRoot::registerTitleLayout - invalid title key" );
+    rTitleInfo.mxTitle = rxTitle;
     rTitleInfo.mxLayout = rxLayout;
 }
 
@@ -304,8 +300,7 @@ void ConverterRoot::convertTitlePositions()
     try
     {
         Reference< cssc::XChartDocument > xChart1Doc( mxData->mxDoc, UNO_QUERY_THROW );
-        mxData->maMainTitle.convertTitlePos( *this, xChart1Doc );
-        for( AxisTitleMap::iterator aIt = mxData->maAxisTitles.begin(), aEnd = mxData->maAxisTitles.end(); aIt != aEnd; ++aIt )
+        for( ConverterData::TitleMap::iterator aIt = mxData->maTitles.begin(), aEnd = mxData->maTitles.end(); aIt != aEnd; ++aIt )
             aIt->second.convertTitlePos( *this, xChart1Doc );
     }
     catch( Exception& )

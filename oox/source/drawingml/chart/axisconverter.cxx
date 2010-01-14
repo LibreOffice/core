@@ -310,9 +310,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE );
-            // register the title and layout data for conversion of position
-            registerAxisTitle( xTitled, mrModel.mxTitle->mxLayout, nAxesSetIdx, nAxisIdx );
+            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
     }
     catch( Exception& )
