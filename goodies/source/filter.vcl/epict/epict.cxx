@@ -33,7 +33,7 @@
 
 #include <vcl/metaact.hxx>
 #include <svtools/filter.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 
 #include <math.h>

@@ -31,7 +31,7 @@
 #ifndef _SV_SVIDS_HRC
 #define _SV_SVIDS_HRC
 
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 
 #define SV_RESID_STDOFFSET                  0
 #define SV_RESID_WINOFFSET                  1

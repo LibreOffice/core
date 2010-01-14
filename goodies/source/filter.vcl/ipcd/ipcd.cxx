@@ -36,7 +36,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/fltcall.hxx>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svtools/FilterConfigItem.hxx>
 
 //============================ PCDReader ==================================

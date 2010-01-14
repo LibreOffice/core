@@ -100,7 +100,7 @@
 #include "svtools/fltcall.hxx"
 #include "svl/itemprop.hxx"
 #include "svl/lstner.hxx"
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 #include "svtools/stdctrl.hxx"
 #include "svl/svarray.hxx"
 
