@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #ifdef _MSC_VER
 #pragma hdrstop
 #endif
@@ -191,6 +194,7 @@ public:
 //---------------------------------------------------------------------------------------------------------
 
     virtual void Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
 //---------------------------------------------------------------------------------------------------------
 //  public interface
@@ -733,6 +737,10 @@ void SvtOptionsDrawinglayer_Impl::Commit()
     }
 
     PutProperties( aSeqNames, aSeqValues );
+}
+
+void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
 }
 
 //*****************************************************************************************************************

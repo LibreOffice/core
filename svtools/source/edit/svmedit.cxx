@@ -43,11 +43,11 @@
 
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/undo.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/undo.hxx>
 #include <svtools/textwindowpeer.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/lstner.hxx>
+#include <svl/smplhint.hxx>
 
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
@@ -1478,7 +1478,7 @@ long MultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
-#if (OSL_DEBUG_LEVEL > 1) && !defined( PRODUCT )
+#if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();

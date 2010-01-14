@@ -2449,8 +2449,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
             BROWSER_AUTO_HSCROLL |
             BROWSER_TRACKING_TIPS |
 //          BROWSER_HIGHLIGHT_NONE |
-            BROWSER_HIGHLIGHT_AUTO |
-//          BROWSER_HIGHLIGHT_MANU |
             BROWSER_HEADERBAR_NEW |
 //          BROWSER_AUTOSIZE_LASTCOL |
             0;
@@ -2520,9 +2518,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
     pVScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
 
-    getDataWindow()->bHighlightAuto =
-            BROWSER_HIGHLIGHT_AUTO == ( nMode & BROWSER_HIGHLIGHT_AUTO ) ||
-            BROWSER_HIGHLIGHT_MANU != ( nMode & BROWSER_HIGHLIGHT_MANU );
     getDataWindow()->bAutoSizeLastCol =
             BROWSER_AUTOSIZE_LASTCOL == ( nMode & BROWSER_AUTOSIZE_LASTCOL );
     getDataWindow()->bOwnDataChangedHdl =
