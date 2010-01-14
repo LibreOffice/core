@@ -1685,7 +1685,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             else
                 ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
-            SfxObjectShell &rObjSh = *GETOBJSHELL();
+            //SfxObjectShell &rObjSh = *GETOBJSHELL();
             const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
             {
