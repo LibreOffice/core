@@ -89,18 +89,6 @@ namespace dbmm
     //= InteractionHandler
     //====================================================================
     //--------------------------------------------------------------------
-    InteractionHandler::InteractionHandler( const ::comphelper::ComponentContext& _rContext )
-        :m_pData( new InteractionHandler_Data( _rContext ) )
-    {
-    }
-
-    //--------------------------------------------------------------------
-    InteractionHandler::InteractionHandler( const Reference< XInteractionHandler >& _rxHandler )
-        :m_pData( new InteractionHandler_Data( _rxHandler ) )
-    {
-    }
-
-    //--------------------------------------------------------------------
     InteractionHandler::InteractionHandler( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
         :m_pData( new InteractionHandler_Data( _rContext ) )
     {

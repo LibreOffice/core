@@ -61,13 +61,13 @@ namespace dbaui
         DBG_CTOR(OToolBoxHelper,NULL);
 
         OSL_ENSURE(m_nSymbolsSize != SvtMiscOptions().GetCurrentSymbolsSize(),"SymbolsSize should not be identical");
-        SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        SvtMiscOptions().AddListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
     // -----------------------------------------------------------------------------
     OToolBoxHelper::~OToolBoxHelper()
     {
-        SvtMiscOptions().RemoveListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        SvtMiscOptions().RemoveListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
         DBG_DTOR(OToolBoxHelper,NULL);
     }
@@ -79,10 +79,10 @@ namespace dbaui
         {
             sal_Int16 nCurSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
             if ( nCurSymbolsSize != m_nSymbolsSize ||
-                m_bIsHiContrast != m_pToolBox->GetBackground().GetColor().IsDark() )
+                m_bIsHiContrast != m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
                 m_nSymbolsSize  = nCurSymbolsSize;
-                m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
+                m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
 
 
                 m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
@@ -131,7 +131,7 @@ namespace dbaui
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {
-            //  m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
+            //  m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
             ConfigOptionsChanged(NULL);
             if ( bFirstTime )
                 adjustToolBoxSize(m_pToolBox);

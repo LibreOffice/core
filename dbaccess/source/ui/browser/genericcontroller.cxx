@@ -105,13 +105,13 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
 #include "datasourceconnector.hxx"
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -282,6 +282,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     }
 }
 
+#ifdef WNT
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
@@ -302,6 +303,7 @@ OGenericUnoController::OGenericUnoController()
     // we simply abort here.
     abort();
 }
+#endif
 
 // -----------------------------------------------------------------------------
 OGenericUnoController::~OGenericUnoController()

@@ -72,18 +72,6 @@ namespace dbaui
         Controller  m_xController;
 
     public:
-        /** constructs the object, and connects the controller to the model
-
-        @param _rxModel
-            the model to which the controller should be connected
-        @param _rxController
-            the controller which should be connected to the model
-        */
-        ModelControllerConnector(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
-        );
-
         /** connects the controller to the model
 
         @param _rxModel

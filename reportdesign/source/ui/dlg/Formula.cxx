@@ -38,7 +38,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <formula/formdata.hxx>
 #include <formula/funcutl.hxx>

@@ -44,7 +44,7 @@
 #include <vcl/stdtext.hxx>
 #include "localresaccess.hxx"
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

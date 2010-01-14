@@ -114,9 +114,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/storage.hxx>
-#include <svtools/filenotation.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/filenotation.hxx>
+#include <svl/intitem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svx/algitem.hxx>
@@ -3608,7 +3608,7 @@ sal_Bool SbaTableQueryBrowser::isHiContrast() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaTableQueryBrowser::isHiContrast" );
     sal_Bool bRet = sal_False;
     if ( m_pTreeView )
-        bRet = m_pTreeView->getListBox().GetBackground().GetColor().IsDark();
+        bRet = m_pTreeView->getListBox().GetSettings().GetStyleSettings().GetHighContrastMode();
     return bRet;
 }
 // -----------------------------------------------------------------------------

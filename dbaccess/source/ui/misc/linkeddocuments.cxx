@@ -92,7 +92,7 @@
 #include "dbu_misc.hrc"
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -279,10 +279,11 @@ namespace dbaui
         {
             ::svx::ODataAccessDescriptor aDesc;
             aDesc.setDataSource(m_sDataSourceName);
-            if ( _nCommandType != -1 )
+            if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
+            {
                 aDesc[::svx::daCommandType] <<= _nCommandType;
-            if ( _rObjectName.getLength() )
                 aDesc[::svx::daCommand] <<= _rObjectName;
+            }
             if ( m_xConnection.is() )
                 aDesc[::svx::daConnection] <<= m_xConnection;
 

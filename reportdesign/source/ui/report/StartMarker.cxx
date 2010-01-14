@@ -41,8 +41,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/smplhint.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/smplhint.hxx>
 
 #define CORNER_SPACE     5
 
@@ -194,7 +194,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 void OStartMarker::changeImage()
 {
     Image* pImage = NULL;
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
     else
         pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
@@ -212,7 +212,7 @@ void OStartMarker::initDefaultNodeImages()
     }
 
     Image* pImage = NULL;
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
     }

@@ -45,13 +45,13 @@
 #include "dsitems.hxx"
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -152,16 +152,6 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         pWin->Invalidate();
 
     SfxTabDialog::PageCreated(_nId, _rPage);
-}
-// -----------------------------------------------------------------------------
-void ODbAdminDialog::removeDetailPages()
-{
-    // remove all current detail pages
-    while (m_aCurrentDetailPages.size())
-    {
-        RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
-        m_aCurrentDetailPages.pop();
-    }
 }
 
 // -----------------------------------------------------------------------------
