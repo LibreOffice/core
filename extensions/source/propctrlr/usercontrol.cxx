@@ -44,6 +44,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include "modulepcr.hxx"
 #include "propresid.hrc"
+
 //............................................................................
 namespace pcr
 {
@@ -118,11 +119,44 @@ namespace pcr
             getTypedControlWindow()->SetFormatKey( nFormatKey );
 
             SvNumberFormatter* pNF = getTypedControlWindow()->GetFormatter();
-            getTypedControlWindow()->SetValue( getPreviewValue(pNF,getTypedControlWindow()->GetFormatKey()) );
+            const SvNumberformat* pEntry = pNF->GetEntry( nFormatKey );
+            OSL_ENSURE( pEntry, "OFormatSampleControl::setValue: invalid format entry!" );
+
+            const bool bIsTextFormat = ( pEntry && pEntry->IsTextFormat() );
+            if ( bIsTextFormat )
+                getTypedControlWindow()->SetText( String( PcrRes( RID_STR_TEXT_FORMAT ) ) );
+            else
+                getTypedControlWindow()->SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
         else
             getTypedControlWindow()->SetText( String() );
     }
+    //------------------------------------------------------------------
+    double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
+    {
+        double nValue = 1234.56789;
+        switch ( i_rEntry.GetType() & ~NUMBERFORMAT_DEFINED )
+        {
+            case NUMBERFORMAT_DATE:
+                {
+                    Date aCurrentDate;
+                    static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
+                    nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
+                }
+                break;
+            case NUMBERFORMAT_TIME:
+            case NUMBERFORMAT_DATETIME:
+                {
+                    Time aCurrentTime;
+                    nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
+                }
+                break;
+            default:
+                break;
+        }
+        return nValue;
+    }
+
     //------------------------------------------------------------------
     double OFormatSampleControl::getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey)
     {
@@ -130,27 +164,7 @@ namespace pcr
         DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
         double nValue = 1234.56789;
         if ( pEntry )
-        {
-            switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
-            {
-                case NUMBERFORMAT_DATE:
-                    {
-                        Date aCurrentDate;
-                        static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
-                        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
-                    }
-                    break;
-                case NUMBERFORMAT_TIME:
-                case NUMBERFORMAT_DATETIME:
-                    {
-                        Time aCurrentTime;
-                        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+            nValue = getPreviewValue( *pEntry );
         return nValue;
     }
     //------------------------------------------------------------------
