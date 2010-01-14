@@ -53,17 +53,13 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <tools/rcid.h>
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
@@ -71,9 +67,6 @@
 
 // Copied from svx
 // Function-Id's
-#define SID_LIB_START           10000
-#define SID_SVX_START           (SID_LIB_START +   0)
-
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
 #define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
 #define RID_SVXIMGLIST_FMEXPL_HC   (RID_FORMS_START + 2)
