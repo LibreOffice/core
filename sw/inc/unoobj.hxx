@@ -34,8 +34,8 @@
 #include <unoevtlstnr.hxx>
 #include <unobaseclass.hxx>
 #include <unocrsr.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/svarray.hxx>
 #include <frmfmt.hxx>
 #include <flyenum.hxx>
 #include <fldbas.hxx>

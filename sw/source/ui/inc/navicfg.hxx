@@ -50,7 +50,8 @@ public:
     SwNavigationConfig();
     ~SwNavigationConfig();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
     sal_Int32   GetRootType()const {return nRootType;}
     void        SetRootType(sal_Int32 nSet){

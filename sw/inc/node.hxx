@@ -89,7 +89,7 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 {
     friend class SwNodes;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static long nSerial;
     long nMySerial;
 #endif
@@ -114,7 +114,7 @@ protected:
 public:
     virtual ~SwNode();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     long int GetSerial() const { return nMySerial; }
 #endif
 

@@ -37,7 +37,7 @@
 
 
 #include <vcl/lstbox.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/htmlmode.hxx>
 #include <dbfld.hxx>

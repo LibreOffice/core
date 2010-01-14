@@ -53,7 +53,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <view.hxx>

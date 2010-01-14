@@ -43,7 +43,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include "fmtinfmt.hxx"
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>

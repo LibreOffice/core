@@ -37,9 +37,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/inetimg.hxx>

@@ -31,7 +31,7 @@
 #define _FMTINFMT_HXX
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
 class SvxMacro;

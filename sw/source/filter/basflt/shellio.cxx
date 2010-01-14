@@ -33,11 +33,11 @@
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>

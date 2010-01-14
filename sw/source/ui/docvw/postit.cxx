@@ -68,11 +68,11 @@
 #include <svx/unolingu.hxx>
 
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/slstitm.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <linguistic/lngprops.hxx>
@@ -1953,7 +1953,7 @@ private:
     ShadowState                 maShadowState;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -1977,7 +1977,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get logic sizes in object coordinate system
@@ -2140,7 +2140,7 @@ private:
     bool                            mbLineSolid : 1;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -2179,7 +2179,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;

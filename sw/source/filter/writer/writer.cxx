@@ -33,11 +33,11 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/fontitem.hxx>
@@ -250,7 +250,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 /////////////////////////////////////////////////////////////////////////////
 
 // Stream-spezifisches
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 SvStream& Writer::Strm()
 {
     ASSERT( pStrm, "Oh-oh. Dies ist ein Storage-Writer. Gleich knallts!" );
