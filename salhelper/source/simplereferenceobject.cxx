@@ -69,7 +69,7 @@ void SimpleReferenceObject::operator delete(void * pPtr) SAL_THROW(())
 void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
     SAL_THROW(())
 {
-#if defined WNT || (defined IRIX && !defined GCC)
+#if defined WNT
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
 #else // WNT
     ::operator delete(pPtr, std::nothrow);
