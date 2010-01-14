@@ -60,7 +60,7 @@
 #include <tools/resary.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <vector>
 
