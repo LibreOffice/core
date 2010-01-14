@@ -35,7 +35,7 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include "com/sun/star/view/XRenderable.hpp"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/prnsetup.hxx>
@@ -44,8 +44,8 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <tools/datetime.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
