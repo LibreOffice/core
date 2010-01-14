@@ -417,7 +417,7 @@ testcase t_TB_Form
         Call sMenufunktionen("-Checkbox-")
 
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTML" then
+        if gApplication <> "HTML" then
             wait 500
             Label.Click
             printlog " Insert a textbox from toolbox"

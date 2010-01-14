@@ -430,9 +430,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest9
-    qaerrorlog( "#i105756# - Test case outdated, needs adjustments" )
-    goto endsub
-    
   call  hNewDocument
 
     '/// turn on "Asian Language support" , Check if list box text direction appear
@@ -516,10 +513,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest11
-
-    qaerrorlog( "#i105756# - Test case outdated, needs adjustments" )
-    goto endsub
-
  Dim iHopeNumber1 , iHopeNumber2 as Integer
  dim i as integer
  dim iCount as integer

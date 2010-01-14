@@ -136,9 +136,9 @@ sub DialogeFuerTypenKontrollieren
                         if OeffnenDlg.Exists() then
                             if ( Dateityp.IsVisible ) then 
                                 Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
-                                OeffnenDlg.Cancel
-                                exit do
                             endif
+                            OeffnenDlg.Cancel
+                            exit do
                         endif
                         
                         Kontext "PfadeAuswaehlen"
@@ -146,6 +146,8 @@ sub DialogeFuerTypenKontrollieren
                             PfadeAuswaehlen.Cancel
                             exit do
                         end if
+
+                        iExitCounter = iExitCounter + 1
                     loop
                     Kontext "TabPfade"
                 else

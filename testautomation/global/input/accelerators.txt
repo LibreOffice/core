@@ -158,6 +158,7 @@ ko-KR=mod2 u
 zh-CN=mod2 u
 zh-TW=mod2 u
 sl=mod2 i
+cs=mod2 a
 
 
 # This is the accelerator that switches tabs in the BASIC IDE. I found it by accident

@@ -217,6 +217,17 @@ public:
                                                TestData& rStruct )
         throw(com::sun::star::uno::RuntimeException);
 
+    virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual MediumStruct SAL_CALL echoMediumStruct(const MediumStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual AllFloats SAL_CALL echoAllFloats(const AllFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
+        { return i2; }
+
     virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException)
         { return _aData.Bool; }
     virtual sal_Int8 SAL_CALL getByte() throw(com::sun::star::uno::RuntimeException)

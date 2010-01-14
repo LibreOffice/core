@@ -47,6 +47,7 @@ sub main
    use "math\required\includes\m_007_.inc"   ' help
    use "math\required\includes\m_010_.inc"
    use "math\required\includes\m_020_.inc"   ' toolbars
+   use "global\required\includes\g_009.inc"
 
    Call hStatusIn ( "Math","m_updt.bas" )
 
