@@ -588,7 +588,9 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
 {
     css::util::Duration d;
     if (textToDuration(d, i_rText)) {
-        return (d.Days * (24*3600))
+        // #i107372#: approximate years/months
+        const sal_Int32 days( (d.Years * 365) + (d.Months * 30) + d.Days );
+        return  (days * (24*3600))
                 + (d.Hours * 3600) + (d.Minutes * 60) + d.Seconds;
     } else {
         return 0; // default
