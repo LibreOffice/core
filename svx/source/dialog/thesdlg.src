@@ -56,47 +56,19 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 5 , 16 ) ;
-        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Size = MAP_APPFONT ( 143 , 60 ) ;   // have drop down space for several lines
     };
-    PushButton BTN_LANGUAGE
+    MenuButton MB_LANGUAGE
     {
         Pos = MAP_APPFONT ( 154 , 16 ) ;
+        Pos = MAP_APPFONT ( 154 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Language..." ;
-    };
-
-    FixedText FT_MEAN
-    {
-        Pos = MAP_APPFONT ( 5 , 33 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "~Meaning " ;
-        LEFT = TRUE ;
-    };
-    ListBox LB_MEAN
-    {
-        BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 5 , 45 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_SYNON
-    {
-       Pos = MAP_APPFONT ( 115 , 33 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "Sy~nonym" ;
-        LEFT = TRUE ;
-    };
-    ListBox LB_SYNON
-    {
-        BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 45 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
-        AutoHScroll = TRUE ;
+        Text [ en-US ] = "~Language" ;
     };
 
     FixedText FT_THES_ALTERNATIVES
     {
-        Pos = MAP_APPFONT ( 5 , 101 ) ;
+        Pos = MAP_APPFONT ( 5 , 33 ) ;
         Size = MAP_APPFONT ( 220 , 8 ) ;
         Text [ en-US ] = "~Alternatives" ;
         LEFT = TRUE ;
@@ -104,20 +76,12 @@ ModalDialog RID_SVXDLG_THESAURUS
     Control CT_THES_ALTERNATIVES
     {
         HelpID = HID_CT_THES_ALTERNATIVES ;
-        Pos = MAP_APPFONT ( 5 , 112 ) ;
-        Size = MAP_APPFONT ( 209 , 50 ) ;
+        Pos = MAP_APPFONT ( 5 , 45 ) ;
+        Size = MAP_APPFONT ( 209 , 121 ) ;
         Border = TRUE;
         TabStop = TRUE ;
-//        DialogControl = TRUE;
+// ???       DialogControl = TRUE;
 // ???       OutputSize = TRUE ;
-/*
-        ScrollBar VB_ALTERNATIVES_VSCROLL
-        {
-            Pos = MAP_APPFONT ( 228 , 10 ) ;
-            Size = MAP_APPFONT ( 8 , 124 ) ;
-            VScroll = TRUE;
-        };
-*/
     };
 
     FixedText FT_REPL
