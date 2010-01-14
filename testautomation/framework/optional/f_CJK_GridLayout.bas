@@ -60,17 +60,12 @@ sub main
 
        Call tGridDisplay_1            'Printgrid: The grid lines will be printed. (vice versa)
 
-       Call tUserDefineLayout_1       'Decrease characters per line will cause lines per page decrease accordingly
-
        Call tFontSizeChanges_1        'Change the font size to bigger enough will change the layout 
      
        Call tRubyText_1               'If Ruby Text is applied and longer than its Base Text it will stretch over more grid cells than the base text itself.
 
        Call tIndentsTest_1            'Indents should work and always indenting as close as possible to their measurements by snapping to the appropriate grid cell. Tabs therefore will be ignored.
 
-       'Excluded until errors resolved by HLI.
-       'Call tObjectsTest_1            'If objects are anchored to text they will "wander" with its surrounding text. If they are anchored as character they will snap to the appropriate grid cell (since they are a character).
-    
     Call hStatusOut
 
     if sAsianLanguageFlag = "Off" Then  
@@ -81,16 +76,11 @@ sub main
 end sub
 
 sub LoadIncludeFiles
-
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    
     use "global\tools\includes\required\t_doc1.inc"
     use "global\tools\includes\required\t_tools1.inc"
-   
     use "framework\tools\includes\CJK_tools.inc"    
-
     gApplication   = "WRITER"
     Call GetUseFiles
-    
-End sub
+end sub
