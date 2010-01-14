@@ -58,6 +58,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
                     $(SLO)$/print3.obj		\
+                    $(SLO)$/oldprintadaptor.obj		\
                     $(SLO)$/configsettings.obj 	\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/image.obj		\
@@ -73,7 +74,6 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
-                    $(SLO)$/impprn.obj \
                     $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj \
                     $(SLO)$/textlayout.obj   \
@@ -105,7 +105,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
             $(SLO)$/octree.obj		\
-            $(SLO)$/oldprintadaptor.obj		\
             $(SLO)$/outmap.obj		\
             $(SLO)$/outdev2.obj 	\
             $(SLO)$/outdev4.obj 	\
@@ -118,11 +117,7 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
-            $(SLO)$/salnativewidgets-none.obj	\
-            $(SLO)$/bmpconv.obj		\
-            $(SLO)$/pngread.obj		\
-            $(SLO)$/pngwrite.obj	\
-            $(SLO)$/graphictools.obj
+            $(SLO)$/salnativewidgets-none.obj
 
 
 # --- Targets ------------------------------------------------------
