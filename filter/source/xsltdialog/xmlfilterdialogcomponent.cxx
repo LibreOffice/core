@@ -51,7 +51,7 @@
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 
 #include "xmlfiltersettingsdialog.hxx"
 
