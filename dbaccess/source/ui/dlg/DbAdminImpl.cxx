@@ -356,6 +356,11 @@ void ODbDataSourceAdministrationHelper::clearPassword()
 // -----------------------------------------------------------------------------
 Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
 {
+    return getDriver(getConnectionURL());
+}
+// -----------------------------------------------------------------------------
+Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::OUString& _sURL)
+{
     // get the global DriverManager
     Reference< XDriverAccess > xDriverManager;
     String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
@@ -376,11 +381,11 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
 
 
-    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(getConnectionURL());
+    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
     if (!xDriver.is())
     {
         sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", getConnectionURL());
+        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
     }

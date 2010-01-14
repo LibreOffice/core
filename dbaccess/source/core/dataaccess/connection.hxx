@@ -30,62 +30,25 @@
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #define _DBA_CORE_CONNECTION_HXX_
 
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_CORE_QUERYCONTAINER_HXX_
 #include "querycontainer.hxx"
-#endif
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
-#endif
-#ifndef _DBA_CORE_VIEWCONTAINER_HXX_
 #include "viewcontainer.hxx"
-#endif
-#ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
-#endif
-#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
-#include <connectivity/warningscontainer.hxx>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMMANDPREPARATION_HPP_
 #include <com/sun/star/sdb/XCommandPreparation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XUSERSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XGROUPSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_TOOLS_XCONNECTIONTOOLS_HPP_
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_XTABLEUIPROVIDER_HPP_
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
-#endif
 /** === end UNO includes === **/
 
 #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
@@ -93,14 +56,10 @@
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
 #endif
-
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
-
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
-#endif
+#include <connectivity/warningscontainer.hxx>
 
 //........................................................................
 namespace dbaccess
@@ -150,6 +109,11 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                     m_xMasterConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >          m_xConnectionTools;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
+
+    // defines the helper services for example to query the command of a view
+    // @ see com.sun.star.sdb.tools.XViewSupport
+    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, TSupportServices);
+    TSupportServices                m_aSupportServices;
 
 
     OTableContainer*                m_pTables;

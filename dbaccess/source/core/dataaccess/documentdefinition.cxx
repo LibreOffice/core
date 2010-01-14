@@ -721,7 +721,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
         // opened
-        LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
+        LifetimeCoupler::couple( *this, xFrame.get() );
 
         // init the edit view
         if ( m_bForm && m_bOpenInDesign )
@@ -1035,6 +1035,11 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     {
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
         ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
+    }
+    else
+    {
+        // ensure that we ourself are kept alive as long as the document is open
+        LifetimeCoupler::couple( *this, xModel.get() );
     }
 
     if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign )

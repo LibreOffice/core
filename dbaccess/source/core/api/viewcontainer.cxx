@@ -31,74 +31,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_CORE_VIEWCONTAINER_HXX_
 #include "viewcontainer.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _WLDCRD_HXX
-#include <tools/wldcrd.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
-#include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
+#include "View.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
+#include <tools/debug.hxx>
+#include <tools/wldcrd.hxx>
+#include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
-#include <connectivity/sdbcx/VView.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/KeyRule.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -159,14 +115,12 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
                                             sSchema,
                                             sTable,
                                             ::dbtools::eInDataManipulation);
-        return new ::connectivity::sdbcx::OView(isCaseSensitive(),
-                                sTable,
-                                m_xMetaData,
-                                0,
-                                ::rtl::OUString(),
-                                sSchema,
-                                sCatalog
-                                );
+        return new View(m_xConnection,
+                        isCaseSensitive(),
+                        sCatalog,
+                        sSchema,
+                        sTable
+                        );
     }
 
     return xProp;

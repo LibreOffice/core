@@ -757,11 +757,22 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         bool bInternational = ( nPass % 2 ) == 0;
 
         ::rtl::OUString sSql;
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
         if ( bQuote )
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
             sSql += _sFieldName;
+
+        if  ( _pEntry->isAggreateFunction() )
+        {
+            DBG_ASSERT(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+            ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
+            aTmpStr2.appendAscii("(");
+            aTmpStr2.append(sSql);
+            aTmpStr2.appendAscii(")");
+            sSql = aTmpStr2.makeStringAndClear();
+        }
+
+        sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
         if ( sFieldAlias.getLength() )
         { // always quote the alias name there canbe no function in it
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
