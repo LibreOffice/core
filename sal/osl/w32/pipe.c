@@ -632,7 +632,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
         pPipe->m_Error = osl_Pipe_E_None;
     }
     else
-        Error = osl_Pipe_E_None;
+        Error = osl_Pipe_E_NotFound;
 
     return (Error);
 }
