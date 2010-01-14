@@ -54,8 +54,8 @@
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include <svtools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/view/XRenderable.hpp>

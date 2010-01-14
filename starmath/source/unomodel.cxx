@@ -52,7 +52,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <unomodel.hxx>
 #include <document.hxx>
