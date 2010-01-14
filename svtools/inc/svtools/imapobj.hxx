@@ -33,7 +33,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 class Point;
 class Rectangle;

@@ -44,6 +44,7 @@
 #include <tools/debug.hxx>
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <unotools/options.hxx>
 
 namespace com {
 namespace sun {
@@ -111,14 +112,21 @@ class ImplWheelWindow;
 class SalTimer;
 class SalI18NImeStatus;
 class DockingManager;
+class VclEventListeners2;
 
 namespace vos { class OMutex; }
 namespace vos { class OCondition; }
-namespace vcl { class DisplayConnection; class FontSubstConfiguration; class SettingsConfigItem; class DefaultFontConfiguration; class DeleteOnDeinitBase; }
+namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
+namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
 // -----------------
 // - ImplSVAppData -
 // -----------------
+class LocaleConfigurationListener : public utl::ConfigurationListener
+{
+public:
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+};
 
 struct ImplSVAppData
 {
@@ -132,6 +140,7 @@ struct ImplSVAppData
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
     String*                 mpMSFTempFileName;
     AllSettings*            mpSettings;         // Application settings
+    LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
     ImplAccelManager*       mpAccelMgr;         // Accelerator Manager
@@ -146,19 +155,22 @@ struct ImplSVAppData
     ImplWheelWindow*        mpWheelWindow;      // WheelWindow
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;   // Event-Hooks
-    ULONG                   mnLastInputTime;    // GetLastInputTime()
-    USHORT                  mnDispatchLevel;    // DispatchLevel
-    USHORT                  mnModalMode;        // ModalMode Count
-    USHORT                  mnModalDialog;      // ModalDialog Count
-    USHORT                  mnAccessCount;      // AccessHdl Count
-    USHORT                  mnSysWinMode;       // Modus, wann SystemWindows erzeugt werden sollen
-    USHORT                  mnLayout;           // --- RTL-Flags --- currently not used, only for testing
-    short                   mnDialogScaleX;     // Scale X-Positions and sizes in Dialogs
-    BOOL                    mbInAppMain;        // is Application::Main() on stack
-    BOOL                    mbInAppExecute;     // is Application::Execute() on stack
-    BOOL                    mbAppQuit;          // is Application::Quit() called
-    BOOL                    mbSettingsInit;     // TRUE: Settings are init
-    BOOL                    mbDialogCancel;     // TRUE: Alle Dialog::Execute()-Aufrufe werden mit return FALSE sofort beendet
+    VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
+    ULONG                   mnLastInputTime;                // GetLastInputTime()
+    USHORT                  mnDispatchLevel;                // DispatchLevel
+    USHORT                  mnModalMode;                    // ModalMode Count
+    USHORT                  mnModalDialog;                  // ModalDialog Count
+    USHORT                  mnAccessCount;                  // AccessHdl Count
+    USHORT                  mnSysWinMode;                   // Modus, wann SystemWindows erzeugt werden sollen
+    USHORT                  mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
+    short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
+    BOOL                    mbInAppMain;                    // is Application::Main() on stack
+    BOOL                    mbInAppExecute;                 // is Application::Execute() on stack
+    BOOL                    mbAppQuit;                      // is Application::Quit() called
+    BOOL                    mbSettingsInit;                 // TRUE: Settings are initialized
+    BOOL                    mbDialogCancel;                 // TRUE: Alle Dialog::Execute()-Aufrufe werden mit return FALSE sofort beendet
+    BOOL                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+                                                            // essentially that makes it the same as Application::Reschedule
 
     /** Controls whether showing any IME status window is toggled on or off.
 
@@ -197,8 +209,8 @@ struct ImplSVGDIData
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
-    vcl::DefaultFontConfiguration* mpDefaultFontConfiguration;
-    vcl::FontSubstConfiguration* mpFontSubstConfiguration;
+    utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
+    utl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects

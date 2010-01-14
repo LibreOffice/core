@@ -601,7 +601,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   "Symbol", // PSName
   1010, -293, // ascend, descend
   FAMILY_DONTKNOW, // family style
-  RTL_TEXTENCODING_SYMBOL, // charset
+  RTL_TEXTENCODING_ADOBE_SYMBOL, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
   WEIGHT_NORMAL, // weight type

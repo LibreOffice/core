@@ -144,10 +144,10 @@ protected:
     SAL_DLLPRIVATE                 PushButton( const PushButton & );
     SAL_DLLPRIVATE                 PushButton& operator=( const PushButton & );
 
-protected:
-    using Window::ImplInit;
     SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
 
+    using Control::ImplInitSettings;
+    using Window::ImplInit;
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( BOOL bSet );
     SAL_DLLPRIVATE static void     ImplDrawPushButtonFrame( Window* pDev, Rectangle& rRect, USHORT nStyle );
@@ -158,6 +158,10 @@ protected:
                     PushButton( WindowType nType );
 
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 public:
                     PushButton( Window* pParent, WinBits nStyle = 0 );
                     PushButton( Window* pParent, const ResId& rResId );
@@ -307,19 +311,20 @@ private:
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                               const Point& rPos, const Size& rSize,
-                              const Size& rImageSize, long nImageSep,
-                              Rectangle& rStateRect, Rectangle& rMouseRect,
-                              bool bLayout = false );
+                              const Size& rImageSize, Rectangle& rStateRect,
+                              Rectangle& rMouseRect, bool bLayout = false );
     SAL_DLLPRIVATE void     ImplDrawRadioButton( bool bLayout = false );
     SAL_DLLPRIVATE void     ImplInvalidateOrDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
+    SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE          RadioButton(const RadioButton &);
     SAL_DLLPRIVATE          RadioButton& operator= (const RadioButton &);
 
 protected:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
@@ -330,6 +335,10 @@ public:
 
 protected:
     virtual void FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
     inline void             SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
     inline const Rectangle& GetMouseRect( ) const                           { return maMouseRect; }
@@ -419,10 +428,10 @@ private:
     SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                                     const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, long nImageSep,
-                                    Rectangle& rStateRect,
+                                    const Size& rImageSize, Rectangle& rStateRect,
                                     Rectangle& rMouseRect, bool bLayout );
     SAL_DLLPRIVATE void         ImplDrawCheckBox( bool bLayout = false );
+    SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
     // Copy assignment is forbidden and not implemented.
@@ -430,10 +439,15 @@ private:
     SAL_DLLPRIVATE              CheckBox& operator= (const CheckBox &);
 
 protected:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE virtual void FillLayoutData() const;
+    SAL_DLLPRIVATE virtual const Font&
+                                GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    SAL_DLLPRIVATE virtual const Color&
+                                GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }

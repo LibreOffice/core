@@ -49,7 +49,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Any.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include "vcl/svapp.hxx"
 
 #if defined WIN || (defined OS2 && !defined ICC)

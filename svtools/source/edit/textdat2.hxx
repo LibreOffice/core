@@ -32,7 +32,7 @@
 #ifndef _TEXTDAT2_HXX
 #define _TEXTDAT2_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/list.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/virdev.hxx>
