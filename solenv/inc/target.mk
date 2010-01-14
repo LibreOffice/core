@@ -55,9 +55,6 @@ target_empty=warn_target_empty
 INCEXT*=.
 INCPRE*=.
 INCPOST*=.
-.IF "$(PRE)"!=""
-ENVINCPRE+=-I$(PRE)/inc
-.ENDIF			# "$(PRE)"!=""
 .IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 UNOINCLUDES=$(SOLARINCDIR)/offuh
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
@@ -66,9 +63,9 @@ SOLARINC+=$(JDKINCS)
 INCLUDE:=
 .EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
@@ -1259,9 +1256,6 @@ CPPUMAKERFLAGS*=-L
 .IF "$(UNOTYPES)" != ""
 # makeing all in one
 .DIRCACHE=no
-.IF "$(ENVINCPRE)"!=""
-MKDEPFLAGS+=-I:$(ENVINCPRE)
-.ENDIF			# "$(ENVINCPRE))"!=""
 .IF "$(OBJFILES)"!=""
 $(OBJFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(OBJFILES)"!=""
@@ -1389,24 +1383,26 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(WITH_LANG)"!=""
-.IF "$(LOCALIZATION_FOUND)"==""
 .IF "$(LOCALIZESDF)"!=""
+
+# dummy target to keep the build happy if not even the .zip exists. localization tools deal with not existing
+# localize.sdf themself
+"$(LOCALIZESDF)%":
+    @echo $(LOCALIZESDF)
+    @@-$(MKDIRHIER) $(@:d)
+    $(TOUCH) $@
+
+.IF "$(LOCALIZATION_FOUND)"==""
+.IF "$(LOCALSDFFILE)"!=""
 "$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)/$(PRJNAME)_$(TARGET)
-    @@$(IFNOTEXIST) $(LOCALIZESDF) $(THEN) unzip -o -d $(COMMONMISC)/$(PRJNAME)_$(TARGET) $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip $(FI)
-    @@-cp -r $(COMMONMISC)/$(PRJNAME)_$(TARGET)/* $(COMMONMISC)/$(PRJNAME)
-    @@-$(RM) -rf $(COMMONMISC)/$(PRJNAME)_$(TARGET)
-.ENDIF			# "$(LOCALIZESDF)"!=""
+    @-unzip -o -d $(COMMONMISC)/$(PRJNAME) $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip $(subst,$(COMMONMISC)/$(PRJNAME)/, $@)
+    @@$(TOUCH) $@
+.ENDIF			# "$(LOCALSDFFILE)"!=""
 .ENDIF			# "$(LOCALIZATION_FOUND)"==""
-.ENDIF			# "$(WITH_LANG)"!=""
-
-.IF "$(LOCALIZESDF)"!=""
-"$(LOCALIZESDF)%" :
-    echo $(LOCALIZESDF)
-    @@-$(MKDIRHIER) $(@:d)
-    @$(TOUCH) $(LOCALIZESDF)
 .ENDIF			# "$(LOCALIZESDF)"!=""
+.ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(EXTUPDATEINFO_NAME)"!=""
 $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
