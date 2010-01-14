@@ -31,7 +31,7 @@
 #include <vcl/solar.hrc>
 #endif
 
-// RID_SCH_START is 30512 (see svtools/solar.hrc)
+// RID_SCH_START is 30512 (see svl/solar.hrc)
 
 // next free: 100
 

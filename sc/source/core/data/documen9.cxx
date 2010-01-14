@@ -56,8 +56,8 @@
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "document.hxx"
 #include "docoptio.hxx"

@@ -39,7 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 
 #include "tabvwsh.hxx"
 #include "gridwin.hxx"

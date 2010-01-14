@@ -300,7 +300,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdmodel.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include "prevwsh.hxx"
 #include "docsh.hxx"

@@ -33,10 +33,10 @@
 #include "ItemConverter.hxx"
 #include "macros.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
-#include <svtools/itemprop.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/itemiter.hxx>
 // header for class SfxWhichIter
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;

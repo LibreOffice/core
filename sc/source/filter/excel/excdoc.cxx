@@ -42,8 +42,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>

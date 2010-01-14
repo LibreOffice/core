@@ -40,7 +40,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
@@ -94,7 +94,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
                                      hasBigImages(),
-                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                     GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }

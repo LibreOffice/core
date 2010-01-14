@@ -92,7 +92,7 @@ ScVbaPalette::getDefaultPalette()
 }
 
 uno::Reference< container::XIndexAccess >
-ScVbaPalette::getPalette()
+ScVbaPalette::getPalette() const
 {
     uno::Reference< container::XIndexAccess > xIndex;
     uno::Reference< beans::XPropertySet > xProps;

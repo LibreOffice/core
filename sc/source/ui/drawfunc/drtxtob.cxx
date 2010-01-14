@@ -65,8 +65,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -799,7 +799,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, RID_SVXDLG_TEXT, pView );
+                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView );
 
                     bDone = ( RET_OK == pDlg->Execute() );
 

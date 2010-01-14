@@ -31,9 +31,9 @@
 #define SC_VBA_SERIESCOLLECTION_HXX
 
 #include <ooo/vba/excel/XSeriesCollection.hpp>
-#include "vbahelperinterface.hxx"
-#include "vbacollectionimpl.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbacollectionimpl.hxx>
+#include "excelvbahelper.hxx"
 
 
 typedef CollTestImplHelper< ov::excel::XSeriesCollection > SeriesCollection_BASE;
