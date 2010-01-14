@@ -155,8 +155,6 @@ void AlternativesString_Impl::Paint(
 class ThesaurusAlternativesCtrl_Impl :
     public SvxCheckListBox
 {
-    std::vector< SvLBoxEntry * >    m_aEntries;
-
     // disable copy c-tor and assignment operator
     ThesaurusAlternativesCtrl_Impl( const ThesaurusAlternativesCtrl_Impl & );
     ThesaurusAlternativesCtrl_Impl & operator = ( const ThesaurusAlternativesCtrl_Impl & );
@@ -165,8 +163,12 @@ public:
     ThesaurusAlternativesCtrl_Impl( Window* pParent );
     virtual ~ThesaurusAlternativesCtrl_Impl();
 
+
+
     SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
     void            ClearUserData();
+
+    virtual void KeyInput( const KeyEvent& rKEvt );
 };
 
 
@@ -210,9 +212,20 @@ SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( sal_Int32 nVal, const St
     pEntry->SetUserData( pUserData );
     GetModel()->Insert( pEntry );
 
-    m_aEntries.push_back( pEntry );
     return pEntry;
 }
+
+
+void ThesaurusAlternativesCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode& rKey = rKEvt.GetKeyCode();
+
+    if (rKey.GetCode() == KEY_RETURN)
+        GetParent()->KeyInput( rKEvt ); // parent will close dialog...
+    else if ( GetEntryCount() )
+        SvxCheckListBox::KeyInput( rKEvt );
+}
+
 
 // struct SvxThesaurusDialog_Impl ----------------------------------------
 
