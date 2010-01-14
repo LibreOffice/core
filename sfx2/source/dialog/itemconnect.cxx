@@ -34,7 +34,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 // ============================================================================
 

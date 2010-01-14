@@ -66,8 +66,8 @@
 
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_

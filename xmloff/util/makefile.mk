@@ -71,15 +71,12 @@ SHL1IMPLIB= _ixo
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS= \
-        $(SVTOOLLIB)	\
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB) \
         $(VOSLIB)		\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
         $(COMPHELPERLIB)\
-        $(VCLLIB)		\
-        $(TKLIB)		\
         $(SVLLIB)		\
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\

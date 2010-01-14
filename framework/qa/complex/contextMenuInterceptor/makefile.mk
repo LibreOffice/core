@@ -40,7 +40,7 @@ PACKAGE = contextMenuInterceptor
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = mysql.jar mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = ContextMenuInterceptor.java CheckContextMenuInterceptor.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

@@ -33,7 +33,7 @@
 
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include "svx/fmglob.hxx"
 
@@ -75,6 +75,8 @@
 /** === end UNO includes === **/
 
 #include <basic/sbxvar.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -89,8 +91,8 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

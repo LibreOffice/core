@@ -41,7 +41,7 @@
 #include <i18npool/lang.h>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/debug.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 

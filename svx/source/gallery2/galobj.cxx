@@ -38,17 +38,17 @@
 #include <sfx2/docfac.hxx>
 
 #include <comphelper/classids.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
 #include "gallery.hrc"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galobj.hxx"
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>

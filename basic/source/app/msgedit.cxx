@@ -48,7 +48,7 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #endif
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif

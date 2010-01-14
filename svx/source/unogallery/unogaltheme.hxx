@@ -34,7 +34,7 @@
 #include <list>
 
 #include <cppuhelper/implbase1.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 

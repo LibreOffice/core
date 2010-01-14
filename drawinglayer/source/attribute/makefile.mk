@@ -47,6 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES= \
         $(SLO)$/fillattribute.obj			\
         $(SLO)$/fillbitmapattribute.obj		\
+        $(SLO)$/fontattribute.obj			\
         $(SLO)$/materialattribute3d.obj		\
         $(SLO)$/sdrallattribute3d.obj		\
         $(SLO)$/sdrattribute.obj			\

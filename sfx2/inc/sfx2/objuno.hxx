@@ -51,7 +51,7 @@
 
 #include <com/sun/star/io/IOException.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <cppuhelper/implbase10.hxx>
 
 #include "sfxuno.hxx"
