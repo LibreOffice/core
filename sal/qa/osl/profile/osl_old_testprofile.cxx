@@ -70,7 +70,8 @@ void oldtests::test_profile(void)
 
 
     // successful write
-    if ((hProfile = osl_openProfile( ustrProfileName, 0 )))
+    hProfile = osl_openProfile( ustrProfileName, 0 );
+    if (hProfile != 0)
     {
         if (! osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
             printf( "### cannot write into init file!\n" );
@@ -79,7 +80,8 @@ void oldtests::test_profile(void)
     }
 
     // unsuccessful write
-    if ((hProfile = osl_openProfile( ustrProfileName2, 0 )))
+    hProfile = osl_openProfile( ustrProfileName2, 0 );
+    if (hProfile != 0)
     {
         if (osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
             printf( "### unexpected success writing into test2.ini!\n" );

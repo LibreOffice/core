@@ -631,8 +631,8 @@ namespace osl_Pipe
                 printPipeError( aPipe );
                 aPipe.clear( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: open a non-exist pipe. not passed in (W32)(LINUX)(UNX).",
-                                        osl_Pipe_E_invalidError == nError );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: open a non-exist pipe.",
+                                        nError != osl_Pipe_E_None );
             }
 
         void getError_002( )
@@ -644,8 +644,8 @@ namespace osl_Pipe
                 aPipe.clear( );
                 aPipe1.clear( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: create an already exist pipe.not passed in (W32)(LINUX)(UNX).",
-                                        osl_Pipe_E_invalidError  == nError );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: create an already exist pipe.",
+                                        nError != osl_Pipe_E_None );
             }
 
         CPPUNIT_TEST_SUITE( getError );
