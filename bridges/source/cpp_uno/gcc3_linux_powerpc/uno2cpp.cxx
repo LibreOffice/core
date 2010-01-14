@@ -74,12 +74,14 @@ static void callVirtualMethod(
      void (*ptr)();
      int gpr[8];                   // storage for gpregisters, map to r3-r10
      int off;                      // offset used to find function
+#ifndef __NO_FPRS__
      double fpr[8];                // storage for fpregisters, map to f1-f8
-     int n;                        // number of gprs mapped so far
      int f;                        // number of fprs mapped so far
+     double dret;                  // temporary function return values
+#endif
+     int n;                        // number of gprs mapped so far
      long *p;                      // pointer to parameter overflow area
      int c;                        // character of parameter type being decoded
-     double dret;                  // temporary function return values
      int iret, iret2;
 
      // Because of the Power PC calling conventions we could be passing
@@ -93,7 +95,7 @@ static void callVirtualMethod(
 
      // Note: could require up to  2*nStackLongs words of parameter stack area
      // if the call has many float parameters (i.e. floats take up only 1
-     // word on the stack but take 2 words in parameter area in the
+     // word on the stack but double takes 2 words in parameter area in the
      // stack frame .
 
      // Update! floats on the outgoing parameter stack only take up 1 word
@@ -119,7 +121,9 @@ static void callVirtualMethod(
 
      // now begin to load the C++ function arguments into storage
      n = 0;
+#ifndef __NO_FPRS__
      f = 0;
+#endif
 
      // now we need to parse the entire signature string */
      // until we get the END indicator */
@@ -143,8 +147,16 @@ static void callVirtualMethod(
        c = *pPT;
        switch (c) {
        case 'D':                   /* type is double */
+#ifndef __NO_FPRS__
             if (f < 8) {
                fpr[f++] = *((double *)pStackLongs);   /* store in register */
+#else
+            if (n & 1)
+               n++;
+            if (n < 8) {
+               gpr[n++] = *pStackLongs;
+               gpr[n++] = *(pStackLongs+1);
+#endif
         } else {
            if (((long) p) & 4)
               p++;
@@ -163,8 +175,13 @@ static void callVirtualMethod(
             store floats as a *single* word on outgoing parameter stack
             to match what gcc actually does
      */
+#ifndef __NO_FPRS__
             if (f < 8) {
                fpr[f++] = *((float *)pStackLongs);
+#else
+            if (n < 8) {
+               gpr[n++] = *pStackLongs;
+#endif
         } else {
 #if 0 /* if abi were followed */
            if (((long) p) & 4)
@@ -243,6 +260,7 @@ static void callVirtualMethod(
         "lwz    8,  20(%0)\n\t"
         "lwz    9,  24(%0)\n\t"
         "lwz    10, 28(%0)\n\t"
+#ifndef __NO_FPRS__
         "lfd    1,  0(%1)\n\t"
         "lfd    2,  8(%1)\n\t"
         "lfd    3,  16(%1)\n\t"
@@ -252,16 +270,24 @@ static void callVirtualMethod(
         "lfd    7,  48(%1)\n\t"
         "lfd    8,  56(%1)\n\t"
             : : "r" (gpr), "r" (fpr)
+#else
+            : : "r" (gpr)
+#endif
         : "0", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
     );
 
     (*ptr)();
 
     __asm__ __volatile__ (
-        "mr %1, 3\n\t"
-        "mr %2, 4\n\t"
-        "fmr    %0, 1\n\t"
-        : "=f" (dret), "=r" (iret), "=r" (iret2) : );
+       "mr     %0,     3\n\t"
+       "mr     %1,     4\n\t"
+#ifndef __NO_FPRS__
+       "fmr    %2,     1\n\t"
+       : "=r" (iret), "=r" (iret2), "=f" (dret)
+#else
+       : "=r" (iret), "=r" (iret2)
+#endif
+       : );
 
     switch( eReturnType )
     {
@@ -284,10 +310,21 @@ static void callVirtualMethod(
                 *(unsigned char*)pRegisterReturn = (unsigned char)iret;
             break;
         case typelib_TypeClass_FLOAT:
+#ifndef __NO_FPRS__
                 *(float*)pRegisterReturn = (float)dret;
+#else
+                ((unsigned int*)pRegisterReturn)[0] = iret;
+#endif
             break;
         case typelib_TypeClass_DOUBLE:
+#ifndef __NO_FPRS__
             *(double*)pRegisterReturn = dret;
+#else
+            ((unsigned int*)pRegisterReturn)[0] = iret;
+            ((unsigned int*)pRegisterReturn)[1] = iret2;
+#endif
+            break;
+        default:
             break;
     }
 }
@@ -399,6 +436,8 @@ static void cpp_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
                 *pPT++ = 'H';
                 pCppStack += sizeof(sal_Int32); // extra long
+            default:
+                break;
             }
 
             // no longer needed
@@ -518,7 +557,6 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
             = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {
