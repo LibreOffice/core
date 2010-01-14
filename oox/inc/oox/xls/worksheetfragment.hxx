@@ -182,6 +182,8 @@ private:
     void                importPTDefinition();
     /** Imports the SCENARIOS record and the following scenarios. */
     void                importScenarios();
+    /** Imports the SHAREDFEATHEAD record. */
+    void                importSharedFeatHead();
     /** Imports the STANDARDWIDTH record and sets standard column width. */
     void                importStandardWidth();
 

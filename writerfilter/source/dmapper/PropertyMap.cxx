@@ -176,6 +176,7 @@ void PropertyMap::insertTableProperties( const PropertyMap* )
   -----------------------------------------------------------------------*/
 SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     m_bIsFirstSection( bIsFirstSection )
+    ,m_nBorderParams( 0 )
     ,m_bTitlePage( false )
     ,m_nColumnCount( 0 )
     ,m_nColumnDistance( 1249 )
@@ -377,21 +378,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
     //sal_Int32 bPageDepth = (nValue & 0x0018) >> 3; //unused infromation: 0 - in front 1 - in back
     //todo: negative spacing (from ww8par6.cxx)
-    if( nOffsetFrom == 1 )
-    {
-//        USHORT nDist;
-//        if (aBox.GetLeft())
-//        {
-//            nDist = aBox.GetDistance(BOX_LINE_LEFT);
-//    lcl_MakeSafeNegativeSpacing( ) sets the distance to 0 if  > SHRT_MAX
-//
-//            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetLeft() - nDist)), BOX_LINE_LEFT);
-//            aSizeArray[WW8_LEFT] =
-//                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(BOX_LINE_LEFT);
-//        }
-        //the same for right, top, bottom
-
-    }
     switch( nValue & 0x07)
     {
         case 0: /*all styles*/
@@ -422,8 +408,16 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
         PROP_LEFT_BORDER_DISTANCE,
         PROP_RIGHT_BORDER_DISTANCE,
         PROP_TOP_BORDER_DISTANCE,
-        PROP_BOTTOM_BORDER_DISTANCE,
+        PROP_BOTTOM_BORDER_DISTANCE
     };
+    static const PropertyIds aMarginIds[4] =
+    {
+        PROP_LEFT_MARGIN,
+        PROP_RIGHT_MARGIN,
+        PROP_TOP_MARGIN,
+        PROP_BOTTOM_MARGIN
+    };
+
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder)
     {
@@ -436,19 +430,38 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
         }
         if( m_nBorderDistances[nBorder] >= 0 )
         {
-            const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( aBorderDistanceIds[nBorder] );
-            xFirst->setPropertyValue( sBorderDistanceName, uno::makeAny( m_nBorderDistances[nBorder] ));
+            SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
+                  m_nBorderDistances[nBorder], nOffsetFrom );
             if(xSecond.is())
-                xSecond->setPropertyValue( sBorderDistanceName, uno::makeAny( m_nBorderDistances[nBorder] ));
+                SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
+                      m_nBorderDistances[nBorder], nOffsetFrom );
         }
     }
-
-//                rContext->Insert( aBorderIds[nId - 0x702B], uno::makeAny( aBorderLine ));
-//                rContext->Insert( aBorderDistanceIds[nId - 0x702B], uno::makeAny( nLineDistance) );
-
-//    uno::Reference< beans::XPropertySet > xStyle = GetPageStyle( ePageType );
-
 }
+
+void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle,
+        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom )
+{
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+    sal_Int32 nDist = nDistance;
+    if( nOffsetFrom == 1 )
+    {
+        const ::rtl::OUString sMarginName = rPropNameSupplier.GetName( eMarginId );
+        uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
+        sal_Int32 nMargin = 0;
+        aMargin >>= nMargin;
+
+        // Change the margins with the border distance
+        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance ) );
+
+        // Set the distance to ( Margin - distance )
+        nDist = nMargin - nDistance;
+    }
+    const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( eDistId );
+    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
+}
+
 /*-- 14.12.2006 12:50:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -726,8 +739,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
-        const StyleSheetEntry* pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
-        if( pEntry )
+        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
+        if( pEntry.get( ) )
         {
             PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
             if( aElement_ != pEntry->pProperties->end())
@@ -766,6 +779,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
                                 rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
             _ApplyProperties( xFirstPageStyle );
+
             sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
             if( nPaperBin )
                 xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( nPaperBin ) );
@@ -773,6 +787,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 xFollowPageStyle->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
         }
+
+        ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
+
         try
         {
 //            if( m_xStartingRange.is() )
@@ -877,7 +894,8 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_TblWidth_wSet( false ),
     mbCT_TblWidth_typeSet( false ),
     mnListId( -1 ),
-    mnListLevel( -1 )
+    mnListLevel( -1 ),
+    mnOutlineLevel( -1 )
 {
 }
 /*-- 14.06.2007 13:57:43---------------------------------------------------

@@ -34,6 +34,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vector>
@@ -51,6 +52,7 @@
 #include <LFOTable.hxx>
 #include <StyleSheetTable.hxx>
 #include <ThemeTable.hxx>
+#include <SettingsTable.hxx>
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
 #include <map>
@@ -177,6 +179,7 @@ typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
 typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
+typedef std::stack< com::sun::star::uno::Reference< com::sun::star::text::XTextContent > >  TextContentStack;
 
 /*-- 18.07.2006 08:49:08---------------------------------------------------
 
@@ -225,6 +228,15 @@ struct BookmarkInsertPosition
      {}
 };
 
+struct RedlineParams
+{
+    ::rtl::OUString m_sAuthor;
+    ::rtl::OUString m_sDate;
+    sal_Int32       m_nId;
+    sal_Int32       m_nToken;
+};
+typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
+
 /*-- 03.03.2008 11:01:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -267,12 +279,17 @@ private:
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
+    TextContentStack
+              m_aAnchoredStack;
+
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    bool                                                                            m_bIsInShape;
+    bool                                                                            m_bShapeContextAdded;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -293,6 +310,7 @@ private:
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     GraphicImportPtr        m_pGraphicImport;
+    SettingsTablePtr        m_pSettingsTable;
 
     PropertyMapPtr                  m_pTopContext;
 
@@ -311,14 +329,11 @@ private:
     ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameStartRange;
     ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameEndRange;
 
-    //current redline
-    ::rtl::OUString                 m_CurrentRedlineAuthor;
-    ::rtl::OUString                 m_CurrentRedlineDate;
-    ::rtl::OUString                 m_CurrentRedlineId;
-    sal_Int32                       n_CurrentRedlineToken;
+    // Redline stack
+    std::vector< RedlineParamsPtr > m_aRedlines;
+    RedlineParamsPtr                m_pParaRedline;
+    bool                            m_bIsParaChange;
 
-    //shape import
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >      m_xTemporaryShape;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -356,6 +371,15 @@ public:
         return m_xTextDocument;
     }
     void SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue );
+
+    void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange, RedlineParamsPtr& pRedline  );
+
+    void CheckParaRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange );
+
+    void CheckRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange );
+
+    void StartParaChange( );
+    void EndParaChange( );
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -412,6 +436,13 @@ public:
         return m_pThemeTable;
     }
 
+    SettingsTablePtr GetSettingsTable( )
+    {
+        if ( !m_pSettingsTable )
+            m_pSettingsTable.reset( new SettingsTable );
+        return m_pSettingsTable;
+    }
+
     GraphicImportPtr GetGraphicImport( GraphicImportType eGraphicImportType );
     void            ResetGraphicImport();
     // this method deletes the current m_pGraphicImport after import
@@ -432,10 +463,8 @@ public:
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
 
-    void PushShapeContext();
+    void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     void PopShapeContext();
-    bool IsInShapeContext() const { return m_xTemporaryShape.is(); }
-    void CopyTemporaryShapeText( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
@@ -495,19 +524,17 @@ public:
         );
     bool ExecuteFrameConversion();
 
-    ::rtl::OUString  GetCurrentRedlineAuthor() const { return m_CurrentRedlineAuthor; }
-    void SetCurrentRedlineAuthor( const ::rtl::OUString& rSet ) { m_CurrentRedlineAuthor = rSet; }
+    void AddNewRedline( );
 
-    ::rtl::OUString  GetCurrentRedlineDate() const   { return m_CurrentRedlineDate;   }
-    void SetCurrentRedlineDate( const ::rtl::OUString& rSet )    { m_CurrentRedlineDate = rSet;   }
+    RedlineParamsPtr GetTopRedline( );
 
-    ::rtl::OUString  GetCurrentRedlineId() const     { return m_CurrentRedlineId;     }
-    void SetCurrentRedlineId( const ::rtl::OUString& rSet ) { m_CurrentRedlineId = rSet;     }
-
-    sal_Int32        GetCurrentRedlineToken() const  { return n_CurrentRedlineToken;  }
-    void SetCurrentRedlineToken(sal_Int32 nSet) { n_CurrentRedlineToken = nSet;  }
-
-    void ResetRedlineProperties();
+    sal_Int32 GetCurrentRedlineToken( );
+    void SetCurrentRedlineAuthor( rtl::OUString sAuthor );
+    void SetCurrentRedlineDate( rtl::OUString sDate );
+    void SetCurrentRedlineId( sal_Int32 nId );
+    void SetCurrentRedlineToken( sal_Int32 nToken );
+    void RemoveCurrentRedline( );
+    void ResetParaRedline( );
 
 };
 } //namespace dmapper

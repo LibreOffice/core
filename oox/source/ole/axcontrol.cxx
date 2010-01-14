@@ -52,6 +52,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/ole/axbinaryreader.hxx"
 #include "oox/ole/axcontrolhelper.hxx"
 #include "oox/ole/olehelper.hxx"
 
@@ -254,25 +255,20 @@ void lclConvertVisualEffect( AxControlHelper& /*rHelper*/, PropertyMap& rPropMap
 
 // ----------------------------------------------------------------------------
 
-/** Converts the AX picture to UNO properties. */
+/** Converts the passed picture stream to UNO properties. */
 void lclConvertPicture( AxControlHelper& rHelper, PropertyMap& rPropMap, const StreamDataSequence& rPicData )
 {
     if( rPicData.hasElements() )
     {
-        SequenceInputStream aInStrm( rPicData );
-        StreamDataSequence aPictureData;
-        if( OleHelper::importStdPic( aPictureData, aInStrm, true ) )
-        {
-            OUString aGraphicUrl = rHelper.getFilter().getGraphicHelper().importGraphicObject( aPictureData );
-            if( aGraphicUrl.getLength() > 0 )
-                rPropMap.setProperty( PROP_ImageURL, aGraphicUrl );
-        }
+        OUString aGraphicUrl = rHelper.getFilter().getGraphicHelper().importGraphicObject( rPicData );
+        if( aGraphicUrl.getLength() > 0 )
+            rPropMap.setProperty( PROP_ImageURL, aGraphicUrl );
     }
 }
 
 // ----------------------------------------------------------------------------
 
-/** Converts the AX picture and position to UNO properties. */
+/** Converts the passed picture stream and position to UNO properties. */
 void lclConvertPicture( AxControlHelper& rHelper, PropertyMap& rPropMap, const StreamDataSequence& rPicData, sal_uInt32 nPicPos )
 {
     // the picture
@@ -303,7 +299,7 @@ void lclConvertPicture( AxControlHelper& rHelper, PropertyMap& rPropMap, const S
 
 // ----------------------------------------------------------------------------
 
-/** Converts the AX picture and position to UNO properties. */
+/** Converts the passed picture stream and position to UNO properties. */
 void lclConvertPicture( AxControlHelper& rHelper, PropertyMap& rPropMap, const StreamDataSequence& rPicData, sal_Int32 nPicSizeMode, sal_Int32 /*nPicAlign*/, bool /*bPicTiling*/ )
 {
     // the picture
@@ -392,7 +388,11 @@ void AxControlModelBase::importProperty( sal_Int32 nPropId, const OUString& rVal
     }
 }
 
-void AxControlModelBase::importPictureData( sal_Int32 /*nPropId*/, const StreamDataSequence& /*rDataSeq*/ )
+void AxControlModelBase::importBinaryModel( BinaryInputStream& /*rInStrm*/ )
+{
+}
+
+void AxControlModelBase::importPictureData( sal_Int32 /*nPropId*/, BinaryInputStream& /*rInStrm*/ )
 {
 }
 
@@ -421,6 +421,20 @@ void AxFontDataModel::importProperty( sal_Int32 nPropId, const OUString& rValue 
         case XML_ParagraphAlign:    mnHorAlign = AttributeList::decodeInteger( rValue );        break;
         default:                    AxControlModelBase::importProperty( nPropId, rValue );
     }
+}
+
+void AxFontDataModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readStringProperty( maFontName );
+    aReader.readIntProperty< sal_uInt32 >( mnFontEffects );
+    aReader.readIntProperty< sal_Int32 >( mnFontHeight );
+    aReader.skipIntProperty< sal_Int32 >(); // font offset
+    aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
+    aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
+    aReader.readIntProperty< sal_uInt8 >( mnHorAlign );
+    aReader.skipIntProperty< sal_uInt16 >(); // font weight
+    aReader.finalizeImport();
 }
 
 void AxFontDataModel::convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const
@@ -491,13 +505,31 @@ void AxCommandButtonModel::importProperty( sal_Int32 nPropId, const OUString& rV
     }
 }
 
-void AxCommandButtonModel::importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq )
+void AxCommandButtonModel::importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm )
 {
     switch( nPropId )
     {
-        case XML_Picture:   maPictureData = rDataSeq;   break;
-        default:            AxFontDataModel::importPictureData( nPropId, rDataSeq );
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        default:            AxFontDataModel::importPictureData( nPropId, rInStrm );
     }
+}
+
+void AxCommandButtonModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.readStringProperty( maCaption );
+    aReader.readIntProperty< sal_uInt32 >( mnPicturePos );
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.readPictureProperty( maPictureData );
+    aReader.skipIntProperty< sal_uInt16 >(); // accelerator
+    aReader.readBoolProperty( mbFocusOnClick, true ); // binary flag means "do not take focus"
+    aReader.skipPictureProperty(); // mouse icon
+    if( aReader.finalizeImport() )
+        AxFontDataModel::importBinaryModel( rInStrm );
 }
 
 OUString AxCommandButtonModel::getServiceName() const
@@ -543,6 +575,26 @@ void AxLabelModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
         case XML_SpecialEffect:         mnSpecialEffect = AttributeList::decodeInteger( rValue );       break;
         default:                        AxFontDataModel::importProperty( nPropId, rValue );
     }
+}
+
+void AxLabelModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.readStringProperty( maCaption );
+    aReader.skipIntProperty< sal_uInt32 >(); // picture position
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.readIntProperty< sal_uInt32 >( mnBorderColor );
+    aReader.readIntProperty< sal_uInt16 >( mnBorderStyle );
+    aReader.readIntProperty< sal_uInt16 >( mnSpecialEffect );
+    aReader.skipPictureProperty(); // picture
+    aReader.skipIntProperty< sal_uInt16 >(); // accelerator
+    aReader.skipPictureProperty(); // mouse icon
+    if( aReader.finalizeImport() )
+        AxFontDataModel::importBinaryModel( rInStrm );
 }
 
 OUString AxLabelModel::getServiceName() const
@@ -592,13 +644,34 @@ void AxImageModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
     }
 }
 
-void AxImageModel::importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq )
+void AxImageModel::importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm )
 {
     switch( nPropId )
     {
-        case XML_Picture:   maPictureData = rDataSeq;   break;
-        default:            AxControlModelBase::importPictureData( nPropId, rDataSeq );
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        default:            AxControlModelBase::importPictureData( nPropId, rInStrm );
     }
+}
+
+void AxImageModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.skipUndefinedProperty();
+    aReader.skipUndefinedProperty();
+    aReader.skipBoolProperty(); // auto-size
+    aReader.readIntProperty< sal_uInt32 >( mnBorderColor );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt8 >( mnBorderStyle );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.readIntProperty< sal_uInt8 >( mnPicSizeMode );
+    aReader.readIntProperty< sal_uInt8 >( mnSpecialEffect );
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.readPictureProperty( maPictureData );
+    aReader.readIntProperty< sal_uInt8 >( mnPicAlign );
+    aReader.readBoolProperty( mbPicTiling );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.skipPictureProperty(); // mouse icon
+    aReader.finalizeImport();
 }
 
 OUString AxImageModel::getServiceName() const
@@ -662,13 +735,53 @@ void AxMorphDataModel::importProperty( sal_Int32 nPropId, const OUString& rValue
     }
 }
 
-void AxMorphDataModel::importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq )
+void AxMorphDataModel::importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm )
 {
     switch( nPropId )
     {
-        case XML_Picture:   maPictureData = rDataSeq;   break;
-        default:            AxFontDataModel::importPictureData( nPropId, rDataSeq );
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        default:            AxFontDataModel::importPictureData( nPropId, rInStrm );
     }
+}
+
+void AxMorphDataModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm, true );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
+    aReader.readIntProperty< sal_Int32 >( mnMaxLength );
+    aReader.readIntProperty< sal_uInt8 >( mnBorderStyle );
+    aReader.readIntProperty< sal_uInt8 >( mnScrollBars );
+    aReader.readIntProperty< sal_uInt8 >( mnDisplayStyle );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.readIntProperty< sal_uInt16 >( mnPasswordChar );
+    aReader.skipIntProperty< sal_uInt32 >(); // list width
+    aReader.skipIntProperty< sal_uInt16 >(); // bound column
+    aReader.skipIntProperty< sal_Int16 >(); // text column
+    aReader.skipIntProperty< sal_Int16 >(); // column count
+    aReader.readIntProperty< sal_uInt16 >( mnListRows );
+    aReader.skipIntProperty< sal_uInt16 >(); // column info count
+    aReader.readIntProperty< sal_uInt8 >( mnMatchEntry );
+    aReader.skipIntProperty< sal_uInt8 >(); // list style
+    aReader.readIntProperty< sal_uInt8 >( mnShowDropButton );
+    aReader.skipUndefinedProperty();
+    aReader.skipIntProperty< sal_uInt8 >(); // drop down style
+    aReader.readIntProperty< sal_uInt8 >( mnMultiSelect );
+    aReader.readStringProperty( maValue );
+    aReader.readStringProperty( maCaption );
+    aReader.readIntProperty< sal_uInt32 >( mnPicturePos );
+    aReader.readIntProperty< sal_uInt32 >( mnBorderColor );
+    aReader.readIntProperty< sal_uInt32 >( mnSpecialEffect );
+    aReader.skipPictureProperty(); // mouse icon
+    aReader.readPictureProperty( maPictureData );
+    aReader.skipIntProperty< sal_uInt16 >(); // accelerator
+    aReader.skipUndefinedProperty();
+    aReader.skipBoolProperty();
+    aReader.readStringProperty( maGroupName );
+    if( aReader.finalizeImport() )
+        AxFontDataModel::importBinaryModel( rInStrm );
 }
 
 void AxMorphDataModel::convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const
@@ -865,6 +978,27 @@ void AxSpinButtonModel::importProperty( sal_Int32 nPropId, const OUString& rValu
     }
 }
 
+void AxSpinButtonModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_uInt32 >( mnArrowColor );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.skipIntProperty< sal_uInt32 >(); // unused
+    aReader.readIntProperty< sal_Int32 >( mnMin );
+    aReader.readIntProperty< sal_Int32 >( mnMax );
+    aReader.readIntProperty< sal_Int32 >( mnPosition );
+    aReader.skipIntProperty< sal_uInt32 >(); // prev enabled
+    aReader.skipIntProperty< sal_uInt32 >(); // next enabled
+    aReader.readIntProperty< sal_Int32 >( mnSmallChange );
+    aReader.readIntProperty< sal_Int32 >( mnOrientation );
+    aReader.readIntProperty< sal_Int32 >( mnDelay );
+    aReader.skipPictureProperty(); // mouse icon
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.finalizeImport();
+}
+
 void AxSpinButtonModel::convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const
 {
     sal_Int32 nMin = ::std::min( mnMin, mnMax );
@@ -924,6 +1058,29 @@ void AxScrollBarModel::importProperty( sal_Int32 nPropId, const OUString& rValue
     }
 }
 
+void AxScrollBarModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_uInt32 >( mnArrowColor );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.readPairProperty( mnWidth, mnHeight );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.readIntProperty< sal_Int32 >( mnMin );
+    aReader.readIntProperty< sal_Int32 >( mnMax );
+    aReader.readIntProperty< sal_Int32 >( mnPosition );
+    aReader.skipIntProperty< sal_uInt32 >(); // unused
+    aReader.skipIntProperty< sal_uInt32 >(); // prev enabled
+    aReader.skipIntProperty< sal_uInt32 >(); // next enabled
+    aReader.readIntProperty< sal_Int32 >( mnSmallChange );
+    aReader.readIntProperty< sal_Int32 >( mnLargeChange );
+    aReader.readIntProperty< sal_Int32 >( mnOrientation );
+    aReader.readIntProperty< sal_Int16 >( mnPropThumb );
+    aReader.readIntProperty< sal_Int32 >( mnDelay );
+    aReader.skipPictureProperty(); // mouse icon
+    aReader.finalizeImport();
+}
+
 void AxScrollBarModel::convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const
 {
     sal_Int32 nMin = ::std::min( mnMin, mnMax );
@@ -962,32 +1119,39 @@ AxControl::~AxControl()
 AxControlModelBase* AxControl::createModel( const OUString& rClassId )
 {
     // TODO: move into a factory
-    if( rClassId.equalsIgnoreAsciiCaseAscii( "{D7053240-CE69-11CD-A777-00DD01143C57}" ) )       // Forms.CommandButton.1
+    maClassId = rClassId.toAsciiUpperCase();
+    if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{D7053240-CE69-11CD-A777-00DD01143C57}" ) ) )       // Forms.CommandButton.1
         mxModel.reset( new AxCommandButtonModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{978C9E23-D4B0-11CE-BF2D-00AA003F40D0}" ) )  // Forms.Label.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{978C9E23-D4B0-11CE-BF2D-00AA003F40D0}" ) ) )  // Forms.Label.1
         mxModel.reset( new AxLabelModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{4C599241-6926-101B-9992-00000B65C6F9}" ) )  // Forms.Image.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{4C599241-6926-101B-9992-00000B65C6F9}" ) ) )  // Forms.Image.1
         mxModel.reset( new AxImageModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D60-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.ToggleButton.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D60-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.ToggleButton.1
         mxModel.reset( new AxToggleButtonModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D40-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.CheckBox.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D40-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.CheckBox.1
         mxModel.reset( new AxCheckBoxModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D50-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.OptionButton.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D50-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.OptionButton.1
         mxModel.reset( new AxOptionButtonModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D10-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.TextBox.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D10-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.TextBox.1
         mxModel.reset( new AxTextBoxModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D20-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.ListBox.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D20-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.ListBox.1
         mxModel.reset( new AxListBoxModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{8BD21D30-EC42-11CE-9E0D-00AA006002F3}" ) )  // Forms.ComboBox.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{8BD21D30-EC42-11CE-9E0D-00AA006002F3}" ) ) )  // Forms.ComboBox.1
         mxModel.reset( new AxComboBoxModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{79176FB0-B7F2-11CE-97EF-00AA006D2776}" ) )  // Forms.SpinButton.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{79176FB0-B7F2-11CE-97EF-00AA006D2776}" ) ) )  // Forms.SpinButton.1
         mxModel.reset( new AxSpinButtonModel );
-    else if( rClassId.equalsIgnoreAsciiCaseAscii( "{DFD181E0-5E2F-11CE-A449-00AA004A803D}" ) )  // Forms.ScrollBar.1
+    else if( maClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{DFD181E0-5E2F-11CE-A449-00AA004A803D}" ) ) )  // Forms.ScrollBar.1
         mxModel.reset( new AxScrollBarModel );
     else
         mxModel.reset();
 
     return mxModel.get();
+}
+
+void AxControl::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    if( AxControlModelBase* pModel = createModel( OleHelper::importGuid( rInStrm ) ) )
+        pModel->importBinaryModel( rInStrm );
 }
 
 Reference< XControlModel > AxControl::convertAndInsert( AxControlHelper& rHelper ) const

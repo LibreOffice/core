@@ -107,6 +107,7 @@ protected:
     sal_Bool                    mbAddStream;
     sal_Int32                   mnFormsType;
     sal_Bool                    mbExportFormFields;
+    sal_Bool                    mbAllowDuplicateFieldNames;
     sal_Bool                    mbExportBookmarks;
     sal_Int32                   mnOpenBookmarkLevels;
 
@@ -196,6 +197,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     sal_Bool                    mbExportFormFieldsUserSelection;
     FixedText                   maFtFormsFormat;
     ListBox                     maLbFormsFormat;
+    CheckBox                    maCbAllowDuplicateFieldNames;
 
     CheckBox                    maCbExportBookmarks;
     CheckBox                    maCbExportNotes;
