@@ -107,7 +107,7 @@ REGISTERJARS=\
 #	xsec_jxsec.jar
 
 # jar-files, which regcomp needs so that it can use java
-REGCOMP_JARS=unoil.jar java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
+REGCOMP_JARS=unoil.jar java_uno.jar ridl.jar jurt.jar juh.jar
 
 # CLASSPATH, which regcomp needs to be run
 # $(SOLARLIBDIR) needs to be included in case Java components are registered,

@@ -38,8 +38,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/hint.hxx>
+#include <svl/brdcst.hxx>
 
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
