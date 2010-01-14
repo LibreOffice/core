@@ -677,7 +677,7 @@
 #include "svl/slstitm.hxx"
 #include "svl/smplhint.hxx"
 #include "svtools/soerr.hxx"
-#include "vcl/solar.hrc"
+#include "svl/solar.hrc"
 #include "unotools/sourceviewconfig.hxx"
 #include "svtools/stdctrl.hxx"
 #include "svl/stritem.hxx"

@@ -131,7 +131,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <chaos/cntids.hrc>
 #include <svl/cntwids.hrc>
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svl/lstner.hxx>
 #include <starmath.hrc>
 #include <basic/sbx.hxx>
