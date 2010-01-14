@@ -33,7 +33,6 @@
 #include "fmobj.hxx"
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
-#include "fmtools.hxx"
 #include "fmpgeimp.hxx"
 #include "fmresids.hrc"
 #include "svx/fmview.hxx"
@@ -51,6 +50,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 /** === end UNO includes === **/
+#include "svx/fmtools.hxx"
 
 #include <tools/shl.hxx>
 #include <comphelper/property.hxx>

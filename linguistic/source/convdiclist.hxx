@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 
 #include "misc.hxx"

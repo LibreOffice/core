@@ -32,6 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include "tabwin.hxx"
+#include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 #include "stringlistresource.hxx"
 

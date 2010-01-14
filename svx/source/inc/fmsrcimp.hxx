@@ -31,7 +31,7 @@
 #ifndef _FMSRCIMP_HXX
 #define _FMSRCIMP_HXX
 
-#include "fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "svx/svxdllapi.h"
 
 /** === begin UNO includes === **/
@@ -51,7 +51,7 @@
 
 #ifndef _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 // ===================================================================================================

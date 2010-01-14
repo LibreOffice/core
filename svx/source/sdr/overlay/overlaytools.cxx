@@ -40,6 +40,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +60,7 @@ namespace drawinglayer
             mnCenterY(nCenterY)
         {}
 
-        Primitive2DSequence OverlayBitmapExPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
@@ -129,7 +130,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayCrosshairPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayCrosshairPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;
@@ -208,7 +209,7 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DSequence OverlayHatchRectanglePrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayHatchRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -230,11 +231,8 @@ namespace drawinglayer
 
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
-                    basegfx::B2DHomMatrix aTransform;
-
-                    aTransform.translate(-getObjectRange().getMinX(), -getObjectRange().getMinY());
-                    aTransform.rotate(getRotation());
-                    aTransform.translate(getObjectRange().getMinX(), getObjectRange().getMinY());
+                    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
+                        getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
 
                     aHatchPolyPolygon.transform(aTransform);
                 }
@@ -301,7 +299,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayHelplineStripedPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence OverlayHelplineStripedPrimitive::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;
@@ -417,7 +415,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayRollingRectanglePrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayRollingRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;

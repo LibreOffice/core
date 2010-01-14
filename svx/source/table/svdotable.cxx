@@ -45,7 +45,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include "editstat.hxx"
 #include "svx/outlobj.hxx"
 #include "svx/svdview.hxx"

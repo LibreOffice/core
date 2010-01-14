@@ -30,11 +30,11 @@
 #ifndef _SVX_FMEXPL_HXX
 #define _SVX_FMEXPL_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <svl/brdcst.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -62,6 +62,7 @@
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
+#include "svx/fmtools.hxx"
 
 class SdrObjListIter;
 class FmFormShell;

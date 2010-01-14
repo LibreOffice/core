@@ -31,7 +31,7 @@
 #define _SXCIKITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 enum SdrCircKind {SDRCIRC_FULL,
                   SDRCIRC_SECT,

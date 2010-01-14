@@ -34,6 +34,7 @@
 #include "fmitems.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
+#include "svx/fmtools.hxx"
 #include "fmprop.hrc"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
@@ -4089,6 +4090,10 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >&
             implAdjustConfigCache();
             InvalidateSlot( SID_FM_USE_WIZARDS, sal_True );
         }
+}
+
+void FmXFormShell::Commit()
+{
 }
 
 //------------------------------------------------------------------------

@@ -34,6 +34,7 @@
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
+#include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -68,11 +69,8 @@
 #include "fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
 
-#ifndef _FMSEARCH_HRC
-#include "fmsearch.hrc"
-#endif
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 

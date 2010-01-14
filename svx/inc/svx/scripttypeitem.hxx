@@ -32,11 +32,11 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include "svx/svxdllapi.h"
 
 // class SvxScriptTypeItem ----------------------------------------------

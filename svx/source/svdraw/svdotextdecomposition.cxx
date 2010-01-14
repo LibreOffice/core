@@ -42,7 +42,7 @@
 #include <editstat.hxx>
 #include <vcl/salbtype.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
@@ -60,6 +60,7 @@
 #include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/outlobj.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helpers
@@ -77,32 +78,6 @@ namespace
         }
 
         return aRetval;
-    }
-
-    static drawinglayer::primitive2d::FontUnderline mapTextLineStyle(FontUnderline eLineStyle)
-    {
-        switch(eLineStyle)
-        {
-            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_SINGLE;
-            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLE;
-            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOTTED;
-            case UNDERLINE_DASH:            return drawinglayer::primitive2d::FONT_UNDERLINE_DASH;
-            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_LONGDASH;
-            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOT;
-            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOTDOT;
-            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::FONT_UNDERLINE_SMALLWAVE;
-            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::FONT_UNDERLINE_WAVE;
-            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLEWAVE;
-            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::FONT_UNDERLINE_BOLD;
-            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDOTTED;
-            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASH;
-            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDLONGDASH;
-            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOT;
-            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT;
-            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDWAVE;
-            // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
-            default:                        return drawinglayer::primitive2d::FONT_UNDERLINE_NONE;
-        }
     }
 
     class impTextBreakupHandler
@@ -216,8 +191,8 @@ namespace
         if(rInfo.mrText.Len() && rInfo.mnTextLen)
         {
             basegfx::B2DVector aFontScaling;
-            drawinglayer::primitive2d::FontAttributes aFontAttributes(
-                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+            drawinglayer::attribute::FontAttribute aFontAttribute(
+                drawinglayer::primitive2d::getFontAttributeFromVclFont(
                     aFontScaling,
                     rInfo.mrFont,
                     rInfo.IsRTL(),
@@ -295,6 +270,11 @@ namespace
             const Color aFontColor(rInfo.mrFont.GetColor());
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
+            // prepare wordLineMode (for underline and strikeout)
+            // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
+            // to be splitted which would not look like the original
+            const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+
             // prepare new primitive
             drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = 0;
             const bool bDecoratedIsNeeded(
@@ -303,7 +283,8 @@ namespace
                 || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
                 || EMPHASISMARK_NONE != (rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 || RELIEF_NONE != rInfo.mrFont.GetRelief()
-                || rInfo.mrFont.IsShadow());
+                || rInfo.mrFont.IsShadow()
+                || bWordLineMode);
 
             if(bDecoratedIsNeeded)
             {
@@ -315,51 +296,40 @@ namespace
                 const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
 
                 // prepare overline and underline data
-                const drawinglayer::primitive2d::FontUnderline eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
-                const drawinglayer::primitive2d::FontUnderline eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
+                const drawinglayer::primitive2d::TextLine eFontOverline(
+                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontUnderline(
+                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetUnderline()));
 
                 // check UndelineAbove
-                const bool bUnderlineAbove(drawinglayer::primitive2d::FONT_UNDERLINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
+                const bool bUnderlineAbove(
+                    drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
                 // prepare strikeout data
-                drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
-
-                switch(rInfo.mrFont.GetStrikeout())
-                {
-                    case STRIKEOUT_SINGLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SINGLE; break;
-                    case STRIKEOUT_DOUBLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_DOUBLE; break;
-                    case STRIKEOUT_BOLD:    eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_BOLD; break;
-                    case STRIKEOUT_SLASH:   eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SLASH; break;
-                    case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
-                    default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
-                }
-
-                // prepare wordLineMode (for underline and strikeout)
-                // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-                // to be splitted which would not look like the original
-                const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+                const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
+                    drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
 
                 // prepare emphasis mark data
-                drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
+                drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_EMPHASISMARK_NONE);
 
                 switch(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 {
-                    case EMPHASISMARK_DOT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DOT; break;
-                    case EMPHASISMARK_CIRCLE : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_CIRCLE; break;
-                    case EMPHASISMARK_DISC : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DISC; break;
-                    case EMPHASISMARK_ACCENT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_ACCENT; break;
+                    case EMPHASISMARK_DOT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DOT; break;
+                    case EMPHASISMARK_CIRCLE : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_CIRCLE; break;
+                    case EMPHASISMARK_DISC : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DISC; break;
+                    case EMPHASISMARK_ACCENT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_ACCENT; break;
                 }
 
                 const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_ABOVE);
                 const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_BELOW);
 
                 // prepare font relief data
-                drawinglayer::primitive2d::FontRelief eFontRelief(drawinglayer::primitive2d::FONT_RELIEF_NONE);
+                drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
 
                 switch(rInfo.mrFont.GetRelief())
                 {
-                    case RELIEF_EMBOSSED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_EMBOSSED; break;
-                    case RELIEF_ENGRAVED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_ENGRAVED; break;
+                    case RELIEF_EMBOSSED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                    case RELIEF_ENGRAVED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
                     default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
                 }
 
@@ -375,7 +345,7 @@ namespace
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
-                    aFontAttributes,
+                    aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor,
 
@@ -385,12 +355,12 @@ namespace
                     eFontOverline,
                     eFontUnderline,
                     bUnderlineAbove,
-                    eFontStrikeout,
+                    eTextStrikeout,
                     bWordLineMode,
-                    eFontEmphasisMark,
+                    eTextEmphasisMark,
                     bEmphasisMarkAbove,
                     bEmphasisMarkBelow,
-                    eFontRelief,
+                    eTextRelief,
                     bShadow);
             }
             else
@@ -402,7 +372,7 @@ namespace
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
-                    aFontAttributes,
+                    aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor);
             }
@@ -723,9 +693,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare contour polygon, force to non-mirrored for layouting
     basegfx::B2DPolyPolygon aPolyPolygon(rSdrContourTextPrimitive.getUnitPolyPolygon());
-    basegfx::B2DHomMatrix aTransform;
-    aTransform.scale(fabs(aScale.getX()), fabs(aScale.getY()));
-    aPolyPolygon.transform(aTransform);
+    aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
 
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
@@ -740,19 +708,17 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
 
     // mirroring. We are now in the polygon sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
@@ -938,27 +904,23 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare matrices to apply to newly created primitives. aNewTransformA
     // will get coordinates in aOutlinerScale size and positive in X, Y.
-    basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
-
-    // translate relative to given primitive to get same rotation and shear
+    // Translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
     const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
-    aNewTransformA.translate(aAdjOffset.getX(), aAdjOffset.getY());
+    basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // #SJ# create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
@@ -1018,7 +980,6 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
 
     // #i101957# Check for vertical text. If used, aNewTransformA
     // needs to translate the text initially around object width to orient
@@ -1040,13 +1001,12 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);

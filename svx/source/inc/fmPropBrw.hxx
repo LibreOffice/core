@@ -30,7 +30,7 @@
 #ifndef SVX_FMPROPBRW_HXX
 #define SVX_FMPROPBRW_HXX
 
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
