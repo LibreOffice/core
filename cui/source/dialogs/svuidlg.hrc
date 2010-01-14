@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <helpid.hrc>
 
 #define TB_LINKS                32014

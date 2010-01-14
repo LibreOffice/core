@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <vcl/solar.hrc>
+#include <svl/solar.hrc>
 #include <svx/svxids.hrc>
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
