@@ -43,7 +43,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef
 
 #include <functional>

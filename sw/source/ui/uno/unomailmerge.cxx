@@ -35,8 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/shl.hxx>    // GetAppData
 #include <tools/tempfile.hxx>

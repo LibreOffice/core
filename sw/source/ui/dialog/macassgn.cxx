@@ -39,7 +39,7 @@
 #include "hintids.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/htmlmode.hxx>
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>

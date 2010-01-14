@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 #include <sot/factory.hxx>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/languageoptions.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -45,8 +45,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/visitem.hxx>
 #include <sfx2/objitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/gallery.hxx>
@@ -55,11 +55,11 @@
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
 #include <svx/impgrf.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/stritem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/boxitem.hxx>
@@ -517,6 +517,9 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
+    // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
+    SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
+
     switch( nId )
     {
         case SID_UNDO:
@@ -538,7 +541,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             DBG_ERROR("falscher Dispatcher");
     }
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
 }
 
 /*--------------------------------------------------------------------

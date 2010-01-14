@@ -43,7 +43,7 @@ class SwIndex;
 class SwIndexReg;
 struct SwPosition;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define INLINE inline
 #else
 #define INLINE
@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nSerial;
     int MySerial;
 #endif
@@ -150,7 +150,7 @@ public:
     void MoveTo( SwIndexReg& rArr );
 };
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
 inline xub_StrLen SwIndex::operator++()
 {

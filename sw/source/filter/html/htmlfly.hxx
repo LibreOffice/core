@@ -35,7 +35,7 @@
 #include <tools/string.hxx>
 
 #ifndef _SVARRAY_H
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #endif
 
 class SdrObject;

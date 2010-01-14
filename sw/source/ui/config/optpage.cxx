@@ -42,11 +42,11 @@
 #include <vcl/svapp.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -97,10 +97,10 @@
 #include <optdlg.hrc>
 #endif
 #include <svx/strarray.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include <swwrtshitem.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 
 #include <unomid.h>
 
@@ -1776,7 +1776,7 @@ void SwMarkPreview::InitColors( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
-    BOOL bHC = m_aBgCol.IsDark();
+    BOOL bHC = rSettings.GetHighContrastMode();
     m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
     m_aTxtCol = bHC? SwViewOption::GetFontColor() : Color( COL_GRAY );
@@ -2458,7 +2458,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*******************************************************
  ******************************************************/
 /*----------------- OS 11.01.95  -----------------------

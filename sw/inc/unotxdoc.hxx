@@ -31,7 +31,7 @@
 #define _UNOTXDOC_HXX
 
 #include "swdllapi.h"
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -73,7 +73,7 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/fmdmod.hxx>
 #include <svx/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>

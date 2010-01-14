@@ -29,8 +29,8 @@
  ************************************************************************/
 #ifndef _PARATR_HXX
 #define _PARATR_HXX
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <calbck.hxx>

@@ -60,13 +60,13 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <sot/storage.hxx>
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xmlexchg.hxx>
@@ -75,7 +75,7 @@
 #include <sfx2/mieclip.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svtools/htmlout.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svtools/inetimg.hxx>

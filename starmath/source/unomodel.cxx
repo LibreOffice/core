@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/processfactory.hxx>
 #include <svx/paperinf.hxx>
@@ -93,16 +93,16 @@ SmPrintUIOptions::SmPrintUIOptions()
     DBG_ASSERT( pConfig, "SmConfig not found" );
     if (!pConfig)
         return;
-    
+
     // create sequence of print UI options
     // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
     m_aUIProperties.realloc( 9 );
-    
+
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
-                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ); 
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
     m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
 
     // create subgroup for print options
@@ -142,7 +142,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
-    
+
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
@@ -152,7 +152,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                      10,     // min value
                                                      1000,   // max value
                                                      aRangeOpt );
-    
+
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
     aHintNoLayoutPage[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HintNoLayoutPage" ) );
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
@@ -1013,7 +1013,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = new SmPrintUIOptions();
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
-    
+
     return aRenderer;
 }
 

@@ -38,9 +38,9 @@
 #include <rsc/rscsfx.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

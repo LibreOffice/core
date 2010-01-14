@@ -40,9 +40,9 @@
 #include <tools/solar.h>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <svtools/urihelper.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #ifndef _UCBHELPER_CONTENT_HXX_

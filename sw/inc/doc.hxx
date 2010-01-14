@@ -60,7 +60,7 @@ class SwList;
 // <--
 #include <IDocumentExternalData.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
@@ -77,7 +77,7 @@ class SwList;
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -499,7 +499,7 @@ private:
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
@@ -1073,7 +1073,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif

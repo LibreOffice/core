@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #ifndef _SFX_ITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
 #include <svx/colritem.hxx>
@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )
     #define _DEBUG_REDLINE( pDoc )
@@ -309,9 +309,11 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#ifndef PRODUCT
+#if 0
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
+    bool bError = true;
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( eRedlineMode ) &&
@@ -431,6 +433,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 pRedlineTbl->Insert( pRedl );
                             }
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
@@ -446,6 +449,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl );
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
@@ -1108,7 +1112,8 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                     case POS_EQUAL:
                     case POS_INSIDE:
-                        delete pNewRedl, pNewRedl = 0;
+                        // TODO Check if there is any side effect
+                        //delete pNewRedl, pNewRedl = 0;
                         break;
 
                     case POS_OUTSIDE:
@@ -1271,7 +1276,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     }
     _CHECK_REDLINE( this )
 
-    return 0 != pNewRedl;
+    return ( 0 != pNewRedl ) || !bError;
 }
 
 void SwDoc::CompressRedlines()
@@ -3693,7 +3698,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "das ist keine gueltige Operation" );
 #endif

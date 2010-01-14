@@ -58,7 +58,7 @@
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -1899,11 +1899,11 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
                 nSize -= sizeof(BYTE);
             }
             if(rOut.Write(pBuf, padx) != padx){
-                delete pBuf;
+                delete [] pBuf;
                 goto error;
             }
         }
-        delete pBuf;
+        delete [] pBuf;
     }
 #else
     for (j=0;nSize>0&&j<maxy;j++)

@@ -46,8 +46,8 @@
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sizeitem.hxx>
@@ -2641,8 +2641,8 @@ void BmpWindow::Paint( const Rectangle& )
         aGraphic.Draw( this, aPntPos, aPntSz );
     else
     {
-        bool bIsDark = ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() != FALSE );
-        DrawBitmapEx( aPntPos, aPntSz, bIsDark ? aBmpHC : aBmp );
+        bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+        DrawBitmapEx( aPntPos, aPntSz, bHC ? aBmpHC : aBmp );
     }
 }
 

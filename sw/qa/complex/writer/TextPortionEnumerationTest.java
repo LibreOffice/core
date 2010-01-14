@@ -2099,6 +2099,19 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             .appendChild( url4.dup().appendChild( new TextNode("7") ) )
             .appendChild( new TextNode("89") );
         doTest(root, false);
+        // empty
+        TreeNode url6 = new HyperlinkNode( mkName("url") );
+        inserter.insertRange( new Range(7, 7, url6) );
+        root = new TreeNode()
+            .appendChild( url2.dup().appendChild( new TextNode("12") ) )
+            .appendChild( url1.dup().appendChild( new TextNode("3") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("4") ) )
+            .appendChild( url5.dup().appendChild( new TextNode("56") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("7") ) )
+// this one gets eaten, but we still need to test inserting it (#i106930#)
+//            .appendChild( url6.dup().appendChild( new TextNode("") ) )
+            .appendChild( new TextNode("89") );
+        doTest(root, false);
     }
 
     public void testRangeHyperlinkRuby() throws Exception

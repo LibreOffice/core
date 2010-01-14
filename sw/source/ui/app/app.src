@@ -30,7 +30,7 @@
 
 
 
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #include <sfx2/sfx.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/globlmn.hrc>

@@ -41,7 +41,7 @@
 #endif
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/brshitem.hxx>
@@ -1366,7 +1366,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         //Flys, die innerhalb des eigenen verankert sind, muessen eine
         //groessere OrdNum haben oder Zeichengebunden sein.
         if ( pSelfFly && bLowerOfSelf )
@@ -2052,7 +2052,7 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 
     io_aSwRect = SwRect( aSizedRect );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     ASSERT( aTestOrgPxRect == aTestNewPxRect,

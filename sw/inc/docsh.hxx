@@ -39,7 +39,7 @@
 #include <swdll.hxx>
 #include <shellid.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>
 
 class SwDoc;

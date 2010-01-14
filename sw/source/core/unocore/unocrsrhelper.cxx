@@ -59,7 +59,7 @@
 #include <swundo.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/urlobj.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
@@ -70,11 +70,11 @@
 #include <svtools/ctrltool.hxx>
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <SwStyleNameMapper.hxx>
 #include <redline.hxx>
@@ -1032,9 +1032,11 @@ void makeRedline( SwPaM& rPaM,
     }
 
     SwRedline* pRedline = new SwRedline( aRedlineData, rPaM );
+    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
     bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
-    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
+    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
 }

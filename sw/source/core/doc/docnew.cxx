@@ -48,14 +48,14 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdogrp.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/forbiddencharacterstable.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/compatibility.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/compatibility.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>
@@ -338,7 +338,7 @@ SwDoc::SwDoc() :
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#
@@ -1372,6 +1372,7 @@ SwDoc* SwDoc::CreateCopy() const
     ResetModified();
 
 */
+    pRet->ReplaceStyles( *(SwDoc*)this );
     //copy content
     pRet->Paste( *this );
     return pRet;
@@ -1436,7 +1437,7 @@ void SwDoc::Paste( const SwDoc& rSource )
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
                     if( FLY_PAGE == aAnchor.GetAnchorId() )
                     {
-                        aAnchor.SetPageNum( aAnchor.GetPageNum() + /*nStartPageNumber - */1 );
+                        aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
                     }
                     else
                         continue;

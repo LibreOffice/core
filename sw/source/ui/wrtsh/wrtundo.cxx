@@ -36,7 +36,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <swdtflvr.hxx>

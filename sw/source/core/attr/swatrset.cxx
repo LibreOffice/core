@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/colritem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/bolnitem.hxx>
@@ -387,7 +387,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // <--
         }
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "weder Format noch ContentNode - keine Attribute kopiert");
 #endif
