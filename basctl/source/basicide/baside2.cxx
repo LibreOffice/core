@@ -1446,7 +1446,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     m_aSyntaxColors[TT_UNKNOWN] = aColor;
     m_aSyntaxColors[TT_WHITESPACE] = aColor;
     m_aSyntaxColors[TT_EOL] = aColor;
-    StartListening(m_aColorConfig);
+    m_aColorConfig.AddListener(this);
     m_aSyntaxColors[TT_IDENTIFIER]
         = Color(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).nColor);
     m_aSyntaxColors[TT_NUMBER]
@@ -1474,7 +1474,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
 
 ModulWindowLayout::~ModulWindowLayout()
 {
-    EndListening(m_aColorConfig);
+    m_aColorConfig.RemoveListener(this);
 }
 
 void __EXPORT ModulWindowLayout::Resize()
@@ -1618,7 +1618,7 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
         // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         DBG_ERROR( "Wer will sich denn hier andocken ?" );
 #endif
@@ -1668,13 +1668,8 @@ void ModulWindowLayout::DataChanged(DataChangedEvent const & rDCEvt)
 }
 
 // virtual
-void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
+void ModulWindowLayout::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    (void)rBc;
-
-    if (rHint.ISA(SfxSimpleHint)
-        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
-            == SFX_HINT_COLORS_CHANGED))
     {
         Color aColor(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).
                      nColor);

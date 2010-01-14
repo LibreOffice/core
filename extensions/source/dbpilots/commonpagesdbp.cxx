@@ -50,10 +50,10 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 //.........................................................................
 namespace dbp
@@ -376,7 +376,7 @@ namespace dbp
         {
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
-            bool bIsHiContrast = m_aTable.GetBackground().GetColor().IsDark();
+            bool bIsHiContrast = m_aTable.GetSettings().GetStyleSettings().GetHighContrastMode();
             aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
             aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
         }

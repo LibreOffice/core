@@ -31,7 +31,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "updatehdl.hxx"
-#include "extensio.hrc"
+#include "update.hrc"
 
 #include "osl/diagnose.h"
 #include "osl/thread.hxx"
@@ -199,6 +199,10 @@ void UpdateHandler::setVisible( bool bVisible )
     {
         if ( !mxUpdDlg.is() )
             createDialog();
+
+        // this should never happen, but if it happens we better return here
+        if ( !mxUpdDlg.is() )
+            return;
 
         updateState( meCurState );
 
@@ -1032,6 +1036,12 @@ void UpdateHandler::showControls( short nControls )
 //--------------------------------------------------------------------
 void UpdateHandler::createDialog()
 {
+    if ( !mxContext.is() )
+    {
+        OSL_ASSERT( false );
+        return;
+    }
+
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
 
     if( xServiceManager.is() )

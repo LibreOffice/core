@@ -36,7 +36,7 @@
 #endif
 
 #include <bastypes.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>

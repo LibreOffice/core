@@ -899,7 +899,7 @@ std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
         if( !bAlsoContainedInSecondSeq )
             avRet.push_back( rFirstLocale );
     }
-    
+
     return avRet;
 }
 
@@ -925,7 +925,7 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
 }
 
@@ -951,7 +951,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
 }
 
@@ -1004,10 +1004,10 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
                 ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
-         
+
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
-                xInput = xSFI->openFileRead( aCurPath ); 
+                xInput = xSFI->openFileRead( aCurPath );
 
             Reference< XComponentContext > xContext;
             Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
@@ -1048,7 +1048,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
                 String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
-                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName ); 
+                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 USHORT nRet = aQueryBox.Execute();
@@ -1069,7 +1069,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                     return bDone;
                 }
             }
-     
+
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             if( pIDEShell == NULL )
             {
@@ -1082,7 +1082,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             Reference< task::XInteractionHandler > xDummyHandler;
             bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
-                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly, 
+                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly,
                 aLocale, aXmlDlgName, ::rtl::OUString(), xDummyHandler );
 
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
@@ -1250,7 +1250,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             bDone = TRUE;
         }
         catch( Exception& )
-        {} 
+        {}
     }
 
     return bDone;

@@ -46,7 +46,7 @@
 #include <iderdll.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/shl.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #ifndef _SVX_SVXIDS_HRC

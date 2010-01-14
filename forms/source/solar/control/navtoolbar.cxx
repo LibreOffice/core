@@ -72,10 +72,6 @@ namespace frm
             sLabel += String::CreateFromAscii( " " );
             return sLabel;
         }
-        static bool lcl_isHighContrast( const Color& _rColor )
-        {
-            return _rColor.IsDark();
-        }
     }
 
     //=====================================================================
@@ -346,7 +342,7 @@ namespace frm
         {
             m_eImageSize = _eSize;
             ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-            pImageManager->SetImagesForceSize( *m_pToolbar, lcl_isHighContrast( GetBackground().GetColor() ), m_eImageSize == eLarge );
+            pImageManager->SetImagesForceSize( *m_pToolbar, GetSettings().GetStyleSettings().GetHighContrastMode(), m_eImageSize == eLarge );
 
             // parts of our layout is dependent on the size of our icons
             Resize();

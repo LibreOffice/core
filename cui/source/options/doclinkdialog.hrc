@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: formhelpid.hrc,v $
- * $Revision: 1.17 $
+ * $RCSfile: doclinkdialog.hrc,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,28 +28,26 @@
  *
  ************************************************************************/
 
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#define _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
+#ifndef _SVX_DOCLINKDIALOG_HRC_
+#define _SVX_DOCLINKDIALOG_HRC_
 
-#ifndef _SOLAR_HRC
-#include <vcl/solar.hrc>
-#endif
+#define FT_NAME         1
+#define FT_URL          2
 
-// TODO: create a new help id range in <svtools/solar.hrc>
-// at the moment, the help ids are ripped from svx/inc/fmhelper.hrc
-// (the old property browser was implemented in svx)
+#define ET_NAME         1
 
-#define HID_PROPCONTROLLER_START        HID_FORMS_START + 400
+#define CMB_URL         1
 
-// FREE
-// FREE
-// FREE
-// FREE
-// FREE
-#define HID_FM_PROPDLG_TABCTR           (HID_PROPCONTROLLER_START +   5)
-#define HID_FM_PROPDLG_TAB_GENERAL      (HID_PROPCONTROLLER_START +   6)
-#define HID_FM_PROPDLG_TAB_DATA         (HID_PROPCONTROLLER_START +   7)
-#define HID_FM_PROPDLG_TAB_EVT          (HID_PROPCONTROLLER_START +   8)
+#define PB_BROWSEFILE   1
 
-#endif // _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
+#define BTN_OK          1
+#define BTN_CANCEL      1
+#define BTN_HELP        1
+
+#define FL_BOTTOM       1
+
+#define STR_EDIT_LINK       1
+#define STR_NEW_LINK        2
+
+#endif // _SVX_DOCLINKDIALOG_HRC_
 
