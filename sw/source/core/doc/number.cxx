@@ -64,7 +64,7 @@
 #include <algorithm>
 // <--
 // --> OD 2008-06-06 #i89178#
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 // <--
 // --> OD 2008-07-08 #i91400#
 #include <IDocumentListsAccess.hxx>
@@ -478,7 +478,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long int SwNumRule::nInstances = 0;
 #endif
 
@@ -512,7 +512,7 @@ SwNumRule::SwNumRule( const String& rNm,
     msDefaultListId()
     // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 
@@ -632,7 +632,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       msDefaultListId( rNumRule.msDefaultListId )
       // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 
@@ -1317,6 +1317,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwDefBulletConfig* mpInstance;
 
@@ -1487,6 +1488,10 @@ namespace numfunc
         InitFont();
     }
 
+    void SwDefBulletConfig::Commit()
+    {
+    }
+
     const String& GetDefBulletFontname()
     {
         return SwDefBulletConfig::getInstance()->GetFontname();
@@ -1562,6 +1567,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwNumberingUIBehaviorConfig* mpInstance;
 
@@ -1595,6 +1601,8 @@ namespace numfunc
 
         return aPropNames;
     }
+
+    void SwNumberingUIBehaviorConfig::Commit() {}
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {

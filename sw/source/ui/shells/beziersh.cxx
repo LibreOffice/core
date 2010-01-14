@@ -35,8 +35,8 @@
 #include "cmdid.h"
 #include <svx/svdview.hxx>
 #include <svx/srchitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

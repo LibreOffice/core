@@ -46,7 +46,7 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);

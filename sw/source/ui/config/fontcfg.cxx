@@ -35,7 +35,7 @@
 #include <fontcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -357,4 +357,6 @@ sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);
     return nRet;
 }
+
+void SwStdFontConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 

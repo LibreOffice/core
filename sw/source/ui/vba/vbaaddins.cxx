@@ -30,7 +30,7 @@
 #include "vbaaddins.hxx"
 #include "vbaaddin.hxx"
 #include <cppuhelper/implbase3.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 

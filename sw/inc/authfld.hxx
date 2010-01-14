@@ -35,7 +35,7 @@
 #include <toxe.hxx>
 
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 class SwAuthDataArr;
 /* -----------------21.09.99 13:32-------------------

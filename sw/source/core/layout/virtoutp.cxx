@@ -42,7 +42,7 @@
 // OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
 #include "setmapvirtdev.hxx"
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                          class DbgRect
@@ -186,7 +186,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 {
     Flush();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( pShell->GetViewOptions()->IsTest3() )
         {
             ++nCount;

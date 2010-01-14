@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -2781,7 +2781,7 @@ void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
         pDestroy->Remove( nPos );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {

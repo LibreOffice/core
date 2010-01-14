@@ -39,7 +39,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 struct SW_DLLPUBLIC ShellResource : public Resource
@@ -72,6 +72,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aStrNone;
     // fuer Felder, die Fixiert sind
     String          aFixedStr;
+    // custom fields of type css::util::Duration
+    String          sDurationFormat;
 
     //names of TOXs
     String          aTOXIndexName;

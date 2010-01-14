@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <tools/table.hxx>
 #endif
 #include <swtypes.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 typedef SwFieldType* SwFldTypePtr;
 #define GROW_FLDTYPES   16
