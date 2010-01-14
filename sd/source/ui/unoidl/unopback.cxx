@@ -33,7 +33,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>

@@ -50,7 +50,7 @@
 #include <vcl/bmpacc.hxx>
 //#include <vcl/toolbox.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -456,6 +456,10 @@ void TableDesignPane::updateLayout()
             pValueSet->SetColor( GetSettings().GetStyleSettings().GetWindowColor() );
 
             Point aPos( pValueSet->GetPosPixel() );
+
+            // The following line may look like a no-op but without it the
+            // control is placed off-screen when RTL is active.
+            pValueSet->SetPosPixel(pValueSet->GetPosPixel());
 
             // shift show options section down
             const long nOptionsPos = aPos.Y() + aValueSetSize.Height();

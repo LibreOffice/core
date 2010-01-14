@@ -48,6 +48,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -120,10 +121,9 @@ namespace slideshow
                 aLinearTransform.set( 1, 2, 0.0 );
                 pBitmapCanvas->setTransformation( aLinearTransform );
 
-                ::basegfx::B2DHomMatrix aShapeTransform;
-
-                aShapeTransform.scale( maBounds.getWidth(), maBounds.getHeight() );
-                aShapeTransform.translate( maBounds.getMinX(), maBounds.getMinY() );
+                const basegfx::B2DHomMatrix aShapeTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    maBounds.getWidth(), maBounds.getHeight(),
+                    maBounds.getMinX(), maBounds.getMinY()));
 
                 ::cppcanvas::RendererSharedPtr pRenderer(
                     ::cppcanvas::VCLFactory::getInstance().createRenderer(

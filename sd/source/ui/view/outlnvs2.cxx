@@ -40,7 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef _ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
@@ -49,7 +49,7 @@
 #include <svx/flditem.hxx>
 #include <svx/editstat.hxx>
 #include "optsitem.hxx"
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include "Outliner.hxx"

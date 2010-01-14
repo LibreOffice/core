@@ -172,6 +172,7 @@ SHL2STDLIBS= \
             $(VCLLIB) \
                         $(SOTLIB) \
             $(TOOLSLIB) \
+              $(UNOTOOLSLIB)      \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
@@ -250,7 +251,7 @@ DEF5NAME=$(SHL5TARGET)
 
 SHL5STDLIBS = $(ISDLIB) \
               $(SVXCORELIB)       \
-              $(SVXMSFILTERLIB)   \
+              $(MSFILTERLIB)   \
               $(SFX2LIB)          \
               $(SVTOOLLIB)        \
               $(SOTLIB)           \

@@ -53,7 +53,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdstr.hrc>
 #include "sdresid.hxx"
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include "CustomAnimationCreateDialog.hxx"
 #ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HRC

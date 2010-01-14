@@ -133,17 +133,17 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
         }
 
         if (mbPageIsFocused)
-            ShowFocusIndicator(GetFocusedPageDescriptor());
+            ShowFocusIndicator(GetFocusedPageDescriptor(), true);
     }
 }
 
 
 
 
-void FocusManager::ShowFocus (void)
+void FocusManager::ShowFocus (const bool bScrollToFocus)
 {
     mbPageIsFocused = true;
-    ShowFocusIndicator(GetFocusedPageDescriptor());
+    ShowFocusIndicator(GetFocusedPageDescriptor(), bScrollToFocus);
 }
 
 
@@ -254,20 +254,25 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
 
 
 
-void FocusManager::ShowFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
+void FocusManager::ShowFocusIndicator (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const bool bScrollToFocus)
 {
     if (rpDescriptor.get() != NULL)
     {
         rpDescriptor->SetFocus ();
 
-        // Scroll the focused page object into the visible area and repaint
-        // it, so that the focus indicator becomes visible.
-        view::SlideSorterView& rView (mrSlideSorter.GetView());
-        mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
-            rView.GetPageBoundingBox (
-                GetFocusedPageDescriptor(),
-                view::SlideSorterView::CS_MODEL,
-                view::SlideSorterView::BBT_INFO));
+        if (bScrollToFocus)
+        {
+            // Scroll the focused page object into the visible area and repaint
+            // it, so that the focus indicator becomes visible.
+            view::SlideSorterView& rView (mrSlideSorter.GetView());
+            mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
+                rView.GetPageBoundingBox (
+                    GetFocusedPageDescriptor(),
+                    view::SlideSorterView::CS_MODEL,
+                    view::SlideSorterView::BBT_INFO));
+        }
 
         mrSlideSorter.GetView().RequestRepaint (rpDescriptor);
         NotifyFocusChangeListeners();

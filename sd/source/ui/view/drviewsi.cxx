@@ -34,7 +34,7 @@
 #include "DrawViewShell.hxx"
 #include <svx/xtable.hxx>
 #include "sdattr.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svditer.hxx>

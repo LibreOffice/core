@@ -56,8 +56,8 @@
 #include <svx/eeitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/srchdlg.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -334,6 +334,9 @@ void Outliner::EndSpelling (void)
 {
     if (mbViewShellValid)
     {
+        // Keep old view shell alive until we release the outliner view.
+        ::boost::shared_ptr<ViewShell> pOldViewShell (mpViewShell);
+
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
             mpViewShell = pBase->GetMainViewShell();

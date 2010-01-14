@@ -88,10 +88,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -905,7 +905,7 @@ void SlotManager::RenameSlide (void)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetActiveWindow(),
-                aPageName, aDescr, RID_SVXDLG_NAME);
+                aPageName, aDescr);
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
@@ -1083,6 +1083,14 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
             .GetInsertionIndicatorOverlay().GetInsertionPageIndex();
         nInsertionIndex --;
         rSelector.SelectPage (nInsertionIndex);
+    }
+
+    // Is there a stored insertion position?
+    else if (mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() >= 0)
+    {
+        nInsertionIndex
+            = mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
+        rSelector.SelectPage(nInsertionIndex);
     }
 
     // Select the last page when there is at least one page.

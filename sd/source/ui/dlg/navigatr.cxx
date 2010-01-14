@@ -36,11 +36,11 @@
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/menu.hxx>
@@ -863,7 +863,7 @@ void SdNavigatorWin::SetDragImage()
 
 void SdNavigatorWin::ApplyImageList()
 {
-    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
 
