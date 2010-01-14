@@ -35,7 +35,7 @@
 #include <comphelper/types.hxx>
 #include "uistrings.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

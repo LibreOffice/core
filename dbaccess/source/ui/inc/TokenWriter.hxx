@@ -30,51 +30,25 @@
 #ifndef DBAUI_TOKENWRITER_HXX
 #define DBAUI_TOKENWRITER_HXX
 
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
+
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+
+#include <cppuhelper/implbase1.hxx>
+#include <tools/stream.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+
 #include <memory>
 
 namespace com { namespace sun { namespace star {
@@ -98,13 +72,15 @@ namespace dbaui
     protected:
         ::com::sun::star::lang::Locale                                                  m_aLocale;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
+        sal_Bool                                                                        m_bBookmarkSelection;
         SvStream*                                                                       m_pStream;
         ::com::sun::star::awt::FontDescriptor                                           m_aFont;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;      // table/query
-        SharedConnection                                                                m_xConnection;  //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow; //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
+        SharedConnection                                                                m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >         m_xRowLocate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;

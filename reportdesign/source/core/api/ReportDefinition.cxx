@@ -102,7 +102,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include "RptModel.hxx"
 #include "UndoEnv.hxx"
 #include "FormattedField.hxx"
@@ -110,8 +110,8 @@
 #include "ImageControl.hxx"
 #include "Shape.hxx"
 #include "ReportHelperImpl.hxx"
-#include <svtools/itempool.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <osl/thread.hxx>
 
 #include <svx/paperinf.hxx>
@@ -1508,23 +1508,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     } // if ( aSaveOpt.IsSaveRelFSys() )
     const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),::rtl::OUString()) );
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath")), uno::makeAny(sHierarchicalDocumentName));
-    ::rtl::OUString aVersion;
-    SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
-
-    // older versions can not have this property set, it exists only starting from ODF1.2
-    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
-        aVersion = ODFVER_012_TEXT;
-
-    if ( aVersion.getLength() )
-    {
-        try
-        {
-            xInfoSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Version" )), uno::makeAny( aVersion ) );
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
 
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();

@@ -49,7 +49,7 @@
 #include <vcl/split.hxx>
 #endif
 #ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -133,7 +133,7 @@
 #include "sqlmessage.hxx"
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #endif
 
 using namespace ::dbaui;

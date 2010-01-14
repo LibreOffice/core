@@ -842,8 +842,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         final String otherURL = copyToTempFile(databaseDoc.getURL());
         final XModel otherDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
                 loader.loadComponentFromURL(otherURL, _BLANK, 0, impl_getDefaultLoadArgs()));
-        impl_waitForEvent(m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1);
         impl_raise(otherDoc);
+        impl_waitForEvent(m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1);
 
         // ... and switch between the two
         impl_startObservingEvents(context);

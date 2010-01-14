@@ -31,7 +31,7 @@
 #define DBAUI_GENERALUNDO_HXX
 
 #ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
