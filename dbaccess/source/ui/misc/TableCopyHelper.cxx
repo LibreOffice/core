@@ -163,21 +163,15 @@ using namespace ::com::sun::star::ucb;
 OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
     :m_pController(_pControler)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::OTableCopyHelper" );
 }
 
 // -----------------------------------------------------------------------------
-void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
-                                        ,const Reference<XConnection>& _xSrcConnection
-                                        ,const Sequence< Any >& _aSelection
-                                        ,sal_Bool _bBookmarkSelection
-                                        ,const ::rtl::OUString& _sCommand
-                                        ,const ::rtl::OUString& _sSrcDataSourceName
-                                        ,const ::rtl::OUString& _sDestDataSourceName
-                                        ,const Reference<XConnection>& _xDestConnection)
+void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
+        const ::rtl::OUString& i_rCommand, const sal_Int32 i_nCommandType,
+        const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const sal_Bool i_bBookmarkSelection,
+        const ::rtl::OUString& i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::insertTable" );
-    if ( CommandType::QUERY != _nCommandType && CommandType::TABLE != _nCommandType )
+    if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
         DBG_ERROR( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
         return;
@@ -185,11 +179,11 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
 
     try
     {
-        Reference<XConnection> xSrcConnection( _xSrcConnection );
-        if ( _sSrcDataSourceName == _sDestDataSourceName )
-            xSrcConnection = _xDestConnection;
+        Reference<XConnection> xSrcConnection( i_rSourceConnection );
+        if ( i_rSourceDataSource == i_rDestDataSource )
+            xSrcConnection = i_rDestConnection;
 
-        if ( !xSrcConnection.is() || !_xDestConnection.is() )
+        if ( !xSrcConnection.is() || !i_rDestConnection.is() )
         {
             OSL_ENSURE( false, "OTableCopyHelper::insertTable: no connection/s!" );
             return;
@@ -200,14 +194,15 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
         Reference< XDataAccessDescriptorFactory > xFactory( DataAccessDescriptorFactory::get( aContext.getUNOContext() ) );
 
         Reference< XPropertySet > xSource( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
-        xSource->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( _nCommandType ) );
-        xSource->setPropertyValue( PROPERTY_COMMAND, makeAny( _sCommand ) );
+        xSource->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( i_nCommandType ) );
+        xSource->setPropertyValue( PROPERTY_COMMAND, makeAny( i_rCommand ) );
         xSource->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSrcConnection ) );
-        xSource->setPropertyValue( PROPERTY_SELECTION, makeAny( _aSelection ) );
-        xSource->setPropertyValue( PROPERTY_BOOKMARK_SELECTION, makeAny( _bBookmarkSelection ) );
+        xSource->setPropertyValue( PROPERTY_RESULT_SET, makeAny( i_rSourceRows ) );
+        xSource->setPropertyValue( PROPERTY_SELECTION, makeAny( i_rSelection ) );
+        xSource->setPropertyValue( PROPERTY_BOOKMARK_SELECTION, makeAny( i_bBookmarkSelection ) );
 
         Reference< XPropertySet > xDest( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
-        xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( _xDestConnection ) );
+        xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( i_rDestConnection ) );
 
         Reference< XCopyTableWizard > xWizard( CopyTableWizard::create( aContext.getUNOContext(), xSource, xDest ), UNO_SET_THROW );
 
@@ -230,72 +225,62 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
 }
 
 // -----------------------------------------------------------------------------
-void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const ::rtl::OUString& _sDestDataSourceName,
-                                  const SharedConnection& _xDestConnection )
+void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const ::rtl::OUString& i_rDestDataSourceName,
+                                  const SharedConnection& i_rDestConnection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
-    Reference<XConnection> xSrcConnection;
-    ::rtl::OUString sCommand,
-        sSrcDataSourceName = _rPasteData.getDataSource();
+    ::rtl::OUString sSrcDataSourceName = _rPasteData.getDataSource();
 
-    _rPasteData[daCommand]          >>= sCommand;
+    ::rtl::OUString sCommand;
+    _rPasteData[ daCommand ] >>= sCommand;
+
+    Reference<XConnection> xSrcConnection;
     if ( _rPasteData.has(daConnection) )
-        _rPasteData[daConnection]   >>= xSrcConnection;
-#if OSL_DEBUG_LEVEL > 0
+    {
+        OSL_VERIFY( _rPasteData[daConnection] >>= xSrcConnection );
+    }
+
+    Reference< XResultSet > xResultSet;
     if ( _rPasteData.has(daCursor) )
     {
-        Reference< XResultSet > xSrcRs;
-        _rPasteData[daCursor] >>= xSrcRs;
-        OSL_ENSURE( !xSrcRs.is(), "OTableCopyHelper::pasteTable: source result set not supported anymore!" );
-        // There was a time where we supported passing a result set as shortcut to the source
-        // object. That is, we do not need to create an own result set we already have one.
-        // Since we UNOized the Copy Table Wizard (#i81658#), we removed this support, since it
-        // contradicted the semantics of DataAccessDescriptor.ResultSet.
-        //
-        // This shouldn't be a problem, since there seems to be no client which actually
-        // passed a result set here.
-        // However, if there still is, we probably need to introduce an (undocumented?) property
-        // at the DataAccessDescriptor, which takes this "source result set".
+        OSL_VERIFY( _rPasteData[ daCursor ] >>= xResultSet );
     }
 
-    if ( _rPasteData.has( daSelection ) || _rPasteData.has( daBookmarkSelection ) )
+    Sequence< Any > aSelection;
+    if ( _rPasteData.has( daSelection ) )
     {
-        OSL_ENSURE( false, "OTableCopyHelper::pasteTable: bookmark/selection not supported anymore!" );
-        // similar notes here: Selection and BookmarkSelection are not supported in the UNOized
-        // copy table wizard anymore (it doesn't make sense without support for a source result set),
-        // and there seem to be no clients which actually use it. So, instead of implementing an
-        // unused case, we dropped this here.
+        OSL_VERIFY( _rPasteData[ daSelection ] >>= aSelection );
+        OSL_ENSURE( _rPasteData.has( daBookmarkSelection ), "OTableCopyHelper::pasteTable: you should specify BookmarkSelection, too, to be on the safe side!" );
     }
-#endif
 
-    // paste into the tables
+
+    sal_Bool bBookmarkSelection( sal_True );
+    if ( _rPasteData.has( daBookmarkSelection ) )
+    {
+        OSL_VERIFY( _rPasteData[ daBookmarkSelection ] >>= bBookmarkSelection );
+    }
+    OSL_ENSURE( bBookmarkSelection, "OTableCopyHelper::pasteTable: working with selection-indicies (instead of bookmarks) is error-prone, and thus deprecated!" );
+
     sal_Int32 nCommandType = CommandType::COMMAND;
     if ( _rPasteData.has(daCommandType) )
         _rPasteData[daCommandType] >>= nCommandType;
 
-    insertTable( nCommandType
-                ,xSrcConnection
-                ,Sequence< Any >()
-                ,sal_False
-                ,sCommand
-                ,sSrcDataSourceName
-                ,_sDestDataSourceName
-                ,_xDestConnection);
+    insertTable( sSrcDataSourceName, xSrcConnection, sCommand, nCommandType,
+                 xResultSet, aSelection, bBookmarkSelection,
+                 i_rDestDataSourceName, i_rDestConnection );
 }
 
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
-                                  ,const ::rtl::OUString& _sDestDataSourceName
+                                  ,const ::rtl::OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
     if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
     {
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
         {
             ::svx::ODataAccessDescriptor aPasteData = ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData);
-            pasteTable( aPasteData,_sDestDataSourceName,_xConnection);
+            pasteTable( aPasteData,i_rDestDataSource,_xConnection);
         }
     }
     else if ( _rTransData.HasFormat(_nFormatId) )
@@ -329,22 +314,20 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
 
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
-                                  ,const ::rtl::OUString& _sDestDataSourceName
+                                  ,const ::rtl::OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
     if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
-        pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,_sDestDataSourceName,_xConnection);
+        pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,i_rDestDataSource,_xConnection);
     else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) )
-        pasteTable( SOT_FORMATSTR_ID_HTML,_rTransData,_sDestDataSourceName,_xConnection);
+        pasteTable( SOT_FORMATSTR_ID_HTML,_rTransData,i_rDestDataSource,_xConnection);
     else if ( _rTransData.HasFormat(SOT_FORMAT_RTF) )
-        pasteTable( SOT_FORMAT_RTF,_rTransData,_sDestDataSourceName,_xConnection);
+        pasteTable( SOT_FORMAT_RTF,_rTransData,i_rDestDataSource,_xConnection);
 }
 
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const SharedConnection& _xConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::copyTagTable" );
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = NULL;
     if ( _rDesc.bHtml )
@@ -367,7 +350,6 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::isTableFormat" );
     sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                 ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                 ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
@@ -380,7 +362,6 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
                                         ,DropDescriptor& _rAsyncDrop
                                         ,const SharedConnection& _xConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::copyTagTable" );
     sal_Bool bRet = sal_False;
     sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
     if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
@@ -413,10 +394,9 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
 }
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
-                                ,const ::rtl::OUString& _sDestDataSourceName
+                                ,const ::rtl::OUString& i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::asyncCopyTagTable" );
     if ( _rDesc.aHtmlRtfStorage.Is() )
     {
         copyTagTable(_rDesc,sal_False,_xConnection);
@@ -427,7 +407,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
         ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
     }
     else if ( !_rDesc.bError )
-        pasteTable(_rDesc.aDroppedData,_sDestDataSourceName,_xConnection);
+        pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);
     else
         m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
 }

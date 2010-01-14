@@ -121,7 +121,7 @@
 #endif
 
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
@@ -137,19 +137,19 @@
 #endif
 
 #ifndef _NUMUNO_HXX
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemInfo
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 
 #ifndef _SFXRNGITEM_HXX
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #endif
 
 #ifndef _SV_WAITOBJ_HXX
@@ -160,7 +160,7 @@
 #endif
 
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -1443,39 +1443,30 @@ void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
 // -----------------------------------------------------------------------
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
-    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::implTransferSelectedRows : invalid data source !");
+    Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
+    DBG_ASSERT( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
+    sal_Bool bSelectionBookmarks = sal_True;
 
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
-        aSelectedRows.realloc(1);
+        aSelectedRows.realloc( 1 );
         aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
+        bSelectionBookmarks = sal_False;
     }
     else if ( !IsAllSelected() && GetSelectRowCount() )
     {
-        aSelectedRows.realloc(GetSelectRowCount());
-        Any* pSelectedRows = aSelectedRows.getArray();
-
-        for (long nIdx = FirstSelectedRow();
-             nIdx >= 0;
-             nIdx = NextSelectedRow(), ++pSelectedRows)
-        {
-            (*pSelectedRows) <<= (sal_Int32)(nIdx + 1);
-        }
+        aSelectedRows = getSelectionBookmarks();
+        bSelectionBookmarks = sal_True;
     }
 
     Reference< XResultSet> xRowSetClone;
     try
     {
-        Reference< XResultSetAccess > xResultSetAccess(xDataSource,UNO_QUERY);
-        if ( xResultSetAccess.is() )
-            xRowSetClone = xResultSetAccess->createResultSet();
-
-        ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone, getServiceManager());
+        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getServiceManager() );
 
         Reference< XTransferable > xEnsureDelete = pTransfer;
         if ( _bTrueIfClipboardFalseIfDrag )

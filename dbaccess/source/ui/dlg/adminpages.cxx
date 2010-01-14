@@ -35,6 +35,9 @@
 #include "dbadmin.hrc"
 #include "dbadmin.hxx"
 #include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsselect.hxx"
@@ -44,9 +47,9 @@
 #include "sqlmessage.hxx"
 
 #include <osl/file.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

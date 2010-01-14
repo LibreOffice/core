@@ -29,7 +29,7 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "ColorListener.hxx"
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif

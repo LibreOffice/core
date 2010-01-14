@@ -39,7 +39,7 @@
 #include <tools/resmgr.hxx>
 #endif
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>

@@ -38,6 +38,9 @@
 #include "dbadmin.hrc"
 #include "dbadmin.hxx"
 #include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
@@ -46,9 +49,9 @@
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"
 
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/msgbox.hxx>
 
