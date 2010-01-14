@@ -52,16 +52,31 @@ namespace dbaccess
     {
     public:
         DatabaseDocumentRecovery(
-            const ::comphelper::ComponentContext& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rDocumentSalvageStorage
+            const ::comphelper::ComponentContext& i_rContext
         );
         ~DatabaseDocumentRecovery();
 
         /** saves the modified sub components of the given controller(s) to the "recovery" sub storage of the document
             storage.
+
+            @throws ::com::sun::star::uno::Exception
+                in case of an error.
         */
         void saveModifiedSubComponents(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rTargetStorage,
                 const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >& i_rControllers
+            );
+
+        /** recovery sub components from the given document storage, if applicable
+
+            If the given document storage does not contain a recovery folder, the method silently returns.
+
+            @throws ::com::sun::star::uno::Exception
+                in case of an error.
+        */
+        void recoverSubDocuments(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rDocumentStorage,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& i_rTargetController
             );
 
     private:

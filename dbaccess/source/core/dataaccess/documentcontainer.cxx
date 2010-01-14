@@ -85,6 +85,7 @@
 #endif
 #include "core_resource.hxx"
 #include "core_resource.hrc"
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
@@ -570,28 +571,15 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         {
             Command aCommand;
 
-            static const ::rtl::OUString s_sOpenMode = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
-            const PropertyValue* pIter = Arguments.getConstArray();
-            const PropertyValue* pEnd     = pIter + Arguments.getLength();
-            for( ; pIter != pEnd ; ++pIter)
-            {
-                if ( pIter->Name == s_sOpenMode )
-                {
-                    pIter->Value >>= aCommand.Name;
-                    break;
-                }
-            }
-            if ( !aCommand.Name.getLength() ) // default mode
-                aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+            ::comphelper::NamedValueCollection aArgs( Arguments );
+            aCommand.Name = aArgs.getOrDefault( "OpenMode", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ) );
+            aArgs.remove( "OpenMode" );
+
             OpenCommandArgument2 aOpenCommand;
             aOpenCommand.Mode = OpenMode::DOCUMENT;
+            aArgs.put( "OpenCommandArgument", aOpenCommand );
 
-            Sequence< PropertyValue > aArguments(Arguments);
-            sal_Int32 nLen = aArguments.getLength();
-            aArguments.realloc(nLen + 1);
-
-            aArguments[nLen].Value <<= aOpenCommand;
-            aCommand.Argument <<= aArguments;
+            aCommand.Argument <<= aArgs.getPropertyValues();
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
         }
     }

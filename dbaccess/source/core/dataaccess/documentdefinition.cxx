@@ -1689,7 +1689,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
                     if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
                     {
-                        // we seems to be a new report, check if report extension is present.
+                        // we seem to be a "new style" report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
                         const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getLegacyServiceFactory());
                         Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);

@@ -173,6 +173,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_eInitState( NotInitialized )
             ,m_bClosing( false )
             ,m_bAllowDocumentScripting( false )
+            ,m_bHasBeenRecovered( false )
 {
     DBG_CTOR(ODatabaseDocument,NULL);
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
@@ -626,8 +627,8 @@ void SAL_CALL ODatabaseDocument::saveToRecoveryFile( const ::rtl::OUString& i_Ta
         impl_storeToStorage_throw( xTargetStorage, i_MediaDescriptor, aGuard );
 
         // save the sub components which need saving
-        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext, xTargetStorage );
-        aDocRecovery.saveModifiedSubComponents( m_aControllers );
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext);
+        aDocRecovery.saveModifiedSubComponents( xTargetStorage, m_aControllers );
 
         // commit the root storage
         tools::stor::commitStorageIfWriteable( xTargetStorage );
@@ -651,16 +652,37 @@ void SAL_CALL ODatabaseDocument::saveToRecoveryFile( const ::rtl::OUString& i_Ta
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
-    // delegate this to our "load" method, to load the database document itself
+    DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
+    try
+    {
+        // load the document itself, by simply delegating to our "load" method
 
-    // our load implementation expects the SalvagedFile and URL to be in the media descriptor
-    ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
-    aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
-    aMediaDescriptor.put( "URL", i_SourceLocation );
+        // our load implementation expects the SalvagedFile and URL to be in the media descriptor
+        ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
+        aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
+        aMediaDescriptor.put( "URL", i_SourceLocation );
 
-    load( aMediaDescriptor.getPropertyValues() );
+        aGuard.clear(); // (load has an own guarding scheme)
+        load( aMediaDescriptor.getPropertyValues() );
 
-    // TODO: recover any things in the "recovery" sub folder of the storage
+        // Without a controller, we are unable to recover the sub components, as they're always tied to a controller.
+        // So, everything else is done when the first controller is connected.
+        m_bHasBeenRecovered = true;
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -739,6 +761,20 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     // check/adjust our macro mode.
     m_pImpl->checkMacrosOnLoading();
+
+    // check if there are sub components to recover from our document storage
+    if ( !m_bHasBeenRecovered )
+        return;
+
+    try
+    {
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext );
+        aDocRecovery.recoverSubDocuments( m_pImpl->getRootStorage(), _xController );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 // -----------------------------------------------------------------------------

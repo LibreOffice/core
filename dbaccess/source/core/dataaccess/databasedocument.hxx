@@ -209,6 +209,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
     bool                                                                                        m_bAllowDocumentScripting;
+    bool                                                                                        m_bHasBeenRecovered;
 
     enum StoreType { SAVE, SAVE_AS };
     /** stores the document to the given URL, rebases it to the respective new storage, if necessary, resets
