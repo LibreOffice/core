@@ -38,7 +38,11 @@
 
 namespace osl
 {
+    /** C++ wrapper class around C semaphore functions.
 
+        @deprecated
+        Must not be used, as unnamed semaphores are not supported on Mac OS X.
+    */
     class Semaphore {
 
     public:

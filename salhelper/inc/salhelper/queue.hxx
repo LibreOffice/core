@@ -96,6 +96,12 @@ public:
 
 //----------------------------------------------------------------------------
 
+/** Queue.
+
+    @deprecated
+    Must not be used, as it internally uses unnamed semaphores, which are not
+    supported on Mac OS X.
+*/
 template<class element_type>
 class Queue : protected QueueBase<element_type>
 {
@@ -133,6 +139,12 @@ public:
 
 //----------------------------------------------------------------------------
 
+/** Bounded queue.
+
+    @deprecated
+    Must not be used, as it internally uses unnamed semaphores, which are not
+    supported on Mac OS X.
+*/
 template<class element_type>
 class BoundedQueue : protected Queue<element_type>
 {

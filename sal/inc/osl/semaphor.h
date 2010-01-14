@@ -40,6 +40,10 @@ extern "C" {
 typedef void* oslSemaphore;
 
 /** Creates a semaphore.<BR>
+
+    @deprecated
+    Must not be used, as unnamed semaphores are not supported on Mac OS X.
+
     @param InitialCount denotes the starting value the semaphore. If you set it to
     zero, the first acquire() blocks. Otherwise InitialCount acquire()s  are
     immedeatly  successfull.
@@ -48,12 +52,20 @@ typedef void* oslSemaphore;
 oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);
 
 /** Release the OS-structures and free semaphore data-structure
+
+    @deprecated
+    Must not be used, as unnamed semaphores are not supported on Mac OS X.
+
     @return fbbb
 */
 void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
 
 /** acquire() decreases the count. It will block if it tries to
     decrease below zero.
+
+    @deprecated
+    Must not be used, as unnamed semaphores are not supported on Mac OS X.
+
     @return False if the system-call failed.
 */
 sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
@@ -62,10 +74,17 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
     return with False if it would decrease the count below zero.
     (When acquire() would block.) If it could successfully
     decrease the count, it will return True.
+
+    @deprecated
+    Must not be used, as unnamed semaphores are not supported on Mac OS X.
 */
 sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
 
 /** release() increases the count.
+
+    @deprecated
+    Must not be used, as unnamed semaphores are not supported on Mac OS X.
+
     @return False if the system-call failed.
 */
 sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
