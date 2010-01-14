@@ -38,7 +38,7 @@
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 #include <svtools/filter.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>

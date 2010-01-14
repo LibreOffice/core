@@ -71,7 +71,7 @@
 #include <svx/gallery.hxx>
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>
-#include "svx/opengrf.hxx"
+#include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 

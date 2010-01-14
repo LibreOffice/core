@@ -61,7 +61,7 @@
 #include "backgrnd.hxx"
 
 #include <svx/xtable.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/drawitem.hxx>
 #include <dialmgr.hxx>

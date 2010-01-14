@@ -76,7 +76,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "svx/opengrf.hxx"
+#include "sfx2/opengrf.hxx"
 
 #include <cuires.hrc> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
