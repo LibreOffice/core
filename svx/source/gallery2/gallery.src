@@ -74,412 +74,8 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     };
 };
 
-
 /******************************************************************************/
 
-TabDialog RID_SVXTABDLG_GALLERY
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Properties of " ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
-                Text [ en-US ] = "General" ;
-            };
-        };
-    };
-};
-
-/******************************************************************************/
-
-TabDialog RID_SVXTABDLG_GALLERYTHEME
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Properties of " ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
-                Text [ en-US ] = "General" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXTABPAGE_GALLERYTHEME_FILES ;
-                Text [ en-US ] = "Files" ;
-            };
-        };
-    };
-};
-
-/******************************************************************************/
-
-TabPage RID_SVXTABPAGE_GALLERY_GENERAL
-{
-    HelpId = HID_GALLERY_PROPERTIES_GENERAL;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedImage FI_MS_IMAGE
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 20 , 20 ) ;
-    };
-    Edit EDT_MS_NAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 10 ) ;
-        Size = MAP_APPFONT ( 194 , 12 ) ;
-    };
-    FixedLine FL_MS_GENERAL_FIRST
-    {
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
-    };
-    FixedText FT_MS_TYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "Type:" ;
-    };
-    FixedText FT_MS_SHOW_TYPE
-    {
-        Pos = MAP_APPFONT ( 60 , 43 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
-    };
-    FixedText FT_MS_PATH
-    {
-        Pos = MAP_APPFONT ( 6 , 57 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "Location:" ;
-    };
-    FixedText FT_MS_SHOW_PATH
-    {
-        Pos = MAP_APPFONT ( 60 , 57 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
-    };
-    FixedText FT_MS_CONTENT
-    {
-        Pos = MAP_APPFONT ( 6 , 71 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "Contents:" ;
-    };
-    FixedText FT_MS_SHOW_CONTENT
-    {
-        Pos = MAP_APPFONT ( 60 , 71 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
-    };
-    FixedLine FL_MS_GENERAL_SECOND
-    {
-        Pos = MAP_APPFONT ( 6 , 91 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
-    };
-    FixedText FT_MS_CHANGEDATE
-    {
-        Pos = MAP_APPFONT ( 6 , 98 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "Modified:" ;
-    };
-    FixedText FT_MS_SHOW_CHANGEDATE
-    {
-        Pos = MAP_APPFONT ( 60 , 98 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
-    };
-};
-
-/******************************************************************************/
-
-TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
-{
-    HelpId = HID_GALLERY_BROWSER ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedText FT_FILETYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ en-US ] = "~File type" ;
-    };
-    ComboBox CBB_FILETYPE
-    {
-        Pos = MAP_APPFONT ( 57 , 6 ) ;
-        Size = MAP_APPFONT ( 121 , 69 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        AutoSize = TRUE;
-        AutoHScroll = TRUE ;
-    };
-    MultiListBox LBX_FOUND
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 23  ) ;
-        Size = MAP_APPFONT ( 172 , 156 ) ;
-        TabStop = TRUE ;
-        SimpleMode = TRUE ;
-    };
-    PushButton BTN_SEARCH
-    {
-        Pos = MAP_APPFONT ( 184 , 6  ) ;
-        Size = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Find Files..." ;
-    };
-    PushButton BTN_TAKE
-    {
-        Pos = MAP_APPFONT ( 184 , 24  ) ;
-        Size = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Add" ;
-    };
-    PushButton BTN_TAKEALL
-    {
-        Pos = MAP_APPFONT ( 184 , 42 ) ;
-        Size = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "A~dd All" ;
-    };
-    CheckBox CBX_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 184 , 76  ) ;
-        Size = MAP_APPFONT ( 70 , 12 ) ;
-        Text [ en-US ] = "Pr~eview" ;
-    };
-    Window WND_BRSPRV
-    {
-        HelpId = HID_GALLERY_PREVIEW;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 91 ) ;
-        Size = MAP_APPFONT ( 70 , 88 ) ;
-    };
-    PushButton BTN_MADDIN1
-    {
-        Pos = MAP_APPFONT ( 220 , 63 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Maddin1" ;
-    };
-    PushButton BTN_MADDIN2
-    {
-        Pos = MAP_APPFONT ( 220 , 80 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Maddin2" ;
-    };
-};
-
-/******************************************************************************/
-
-ModalDialog RID_SVXDLG_GALLERY_TITLE
-{
-    HelpId = HID_GALLERY_TITLE;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 63 ) ;
-    Text [ en-US ] = "Enter Title" ;
-    Moveable = TRUE ;
-
-    OkButton BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
-    FixedLine FL_TITLE
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "Title" ;
-    };
-    Edit EDT_TITLE
-    {
-        HelpId = HID_GALLERY_TITLE_EDIT;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 18 ) ;
-        Size = MAP_APPFONT ( 88, 12 ) ;
-    };
-};
-
-/******************************************************************************/
-
-ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
-{
-    HelpId = HID_GALLERY_SEARCH ;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 124 , 86 ) ;
-    Text [ en-US ] = "Find" ;
-    Moveable = TRUE ;
-    FixedLine FL_SEARCH_DIR
-    {
-        Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "Directory" ;
-    };
-    FixedText FT_SEARCH_DIR
-    {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 37 , 66 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_SEARCH_TYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "File type" ;
-    };
-    FixedText FT_SEARCH_TYPE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-};
-
-/******************************************************************************/
-
-ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
-{
-    HelpId = HID_GALLERY_APPLY ;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ en-US ] = "Apply" ;
-    Moveable = TRUE ;
-    FixedLine FL_TAKE_PROGRESS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "File" ;
-    };
-    FixedText FT_TAKE_FILE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 37 , 36 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
-/******************************************************************************/
-
-ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
-{
-    HelpId = HID_GALLERY_ACTUALIZE ;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ en-US ] = "Update" ;
-    Moveable = TRUE ;
-    FixedLine FL_ACTUALIZE_PROGRESS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "File" ;
-    };
-    FixedText FT_ACTUALIZE_FILE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 37 , 36 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
-ModalDialog RID_SVXDLG_GALLERY_THEMEID
-{
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 180 , 63 ) ;
-    Text [ en-US ] = "Theme ID" ;
-    Moveable = TRUE ;
-    OkButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 124 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 124 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_ID
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "ID";
-    };
-    ListBox LB_RESNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HScroll = TRUE ;
-        VScroll = TRUE ;
-    };
-};
-
-/******************************************************************************/
-
-CheckBox RID_SVXDLG_GALLERY_CBX
-{
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 120 , 12 ) ;
-    TabStop = TRUE ;
-    Text [ en-US ] = "S~ubdirectories" ;
-};
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
     Text [ en-US ] = "Update";
@@ -487,10 +83,6 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
     Text [ en-US ] = "This file cannot be opened" ;
-};
-String RID_SVXSTR_GALLERY_NOFILES
-{
-    Text [ en-US ] = "<No Files>" ;
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
@@ -544,10 +136,6 @@ String RID_SVXSTR_GALLERY_DELETEDD
 {
     Text [ en-US ] = "Do you want to delete the linked file?" ;
 };
-String RID_SVXSTR_GALLERY_SEARCH
-{
-    Text [ en-US ] = "Do you want to update the file list?" ;
-};
 String RID_SVXSTR_GALLERY_SGIERROR
 {
     Text [ en-US ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
@@ -564,18 +152,6 @@ String RID_SVXSTR_GALLERY_THEMEERR
 {
     Text [ en-US ] = "This theme name already exists.\nPlease choose a different one." ;
 };
-String RID_SVXSTR_GALLERYPROPS_THEME
-{
-    Text [ en-US ] = "Theme;Themes" ;
-};
-String RID_SVXSTR_GALLERYPROPS_OBJECT
-{
-    Text [ en-US ] = "Object;Objects" ;
-};
-String RID_SVXSTR_GALLERYPROPS_GALTHEME
-{
-    Text [ en-US ] = "Gallery Theme" ;
-};
 String RID_SVXSTR_GALLERY_IMPORTTHEME
 {
     Text [ en-US ] = "I~mport..." ;
@@ -584,21 +160,9 @@ String RID_SVXSTR_GALLERY_CREATETHEME
 {
     Text [ en-US ] = "New Theme..." ;
 };
-String RID_SVXSTR_GALLERY_READONLY
-{
-    Text [ en-US ] = " (read-only)" ;
-};
-String RID_SVXSTR_GALLERY_ALLFILES
-{
-    Text [ en-US ] = "<All Files>" ;
-};
 String RID_SVXSTR_GALLERY_DIALOGID
 {
     Text [ en-US ] = "Assign ID" ;
-};
-String RID_SVXSTR_GALLERY_ID_EXISTS
-{
-    Text [ en-US ] = "This ID already exists..." ;
 };
 String RID_SVXSTR_GALLERY_TITLE
 {
@@ -629,19 +193,9 @@ Bitmap RID_SVXBMP_THEME_NORMAL
     File = "galnors.bmp" ;
 };
 
-Bitmap RID_SVXBMP_THEME_NORMAL_BIG
-{
-    File = "galnorl.bmp" ;
-};
-
 Bitmap RID_SVXBMP_THEME_IMPORTED
 {
     File = "galimps.bmp" ;
-};
-
-Bitmap RID_SVXBMP_THEME_IMPORTED_BIG
-{
-    File = "galimpl.bmp" ;
 };
 
 Bitmap RID_SVXBMP_THEME_READONLY
@@ -649,19 +203,9 @@ Bitmap RID_SVXBMP_THEME_READONLY
     File = "galrdos.bmp" ;
 };
 
-Bitmap RID_SVXBMP_THEME_READONLY_BIG
-{
-    File = "galrdol.bmp" ;
-};
-
 Bitmap RID_SVXBMP_THEME_DEFAULT
 {
     File = "galdefs.bmp" ;
-};
-
-Bitmap RID_SVXBMP_THEME_DEFAULT_BIG
-{
-    File = "galdefl.bmp" ;
 };
 
 Bitmap RID_SVXBMP_GALLERY_MEDIA

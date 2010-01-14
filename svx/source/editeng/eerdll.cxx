@@ -46,7 +46,7 @@
 #include <svx/flditem.hxx>
 #include <svx/emphitem.hxx>
 #include <svx/scriptspaceitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 

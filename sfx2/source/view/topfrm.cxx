@@ -60,15 +60,15 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <vcl/menu.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 
@@ -535,7 +535,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         aTitle += String(aProductName);
         aTitle += ' ';
         aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
         String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
@@ -1098,7 +1098,7 @@ String SfxTopViewFrame::UpdateTitle()
     aTitle += ' ';
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ::rtl::OUString aDefault;
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));

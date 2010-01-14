@@ -345,7 +345,7 @@
 #define RID_RES_SBACHAOS_ERR_CONTEXTS   (OFA_RES_UNNAMED_START +  1)
 
 // HelpIds ---------------------------------------------------------------
-
+/*
 #define HID_AUTOCORR_DLG                (HID_OFA_START +  0)
 #define HID_OFAPAGE_AUTOCORR_OPTIONS    (HID_OFA_START +  1)
 #define HID_OFAPAGE_AUTOCORR_REPLACE    (HID_OFA_START +  2)
@@ -435,7 +435,7 @@
 #define UID_OFA_CONNPOOL_DRIVERLIST_BACK    (HID_OFA_START + 122)
 #define HID_OFA_TP_HELPERPROG               (HID_OFA_START + 123)
 #define HID_OFA_TP_MEMORY                   (HID_OFA_START + 124)
-
+*/
 // "Uberlaufkontrolle der HID's
 #define ACT_HID_END     HID_OFA_TP_MEMORY
 #if ACT_HID_END > HID_OFA_END

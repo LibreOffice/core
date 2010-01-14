@@ -37,70 +37,163 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling class for BasePrimitive2D baseed classes which are view-dependent
-// regarding the size of a discrete unit. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocalDecomposition
-// implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DiscreteMetricDependentPrimitive2D : public BasePrimitive2D
+        /** DiscreteMetricDependentPrimitive2D class
+
+            tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
+            regarding the size of a discrete unit. The implementation of get2DDecomposition
+            guards the buffered local decomposition and ensures that a create2DDecomposition
+            implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
+         */
+        class DiscreteMetricDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // the last used fDiscreteUnit definitions for decomposition. Since this
-            // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocalDecomposition()
+            /** the last used fDiscreteUnit definitions for decomposition. Since this
+                is checked and updated from get2DDecomposition() it will be current and
+                usable in create2DDecomposition()
+             */
             double                                  mfDiscreteUnit;
 
         public:
+            /// constructor
             DiscreteMetricDependentPrimitive2D()
-            :   BasePrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 mfDiscreteUnit(0.0)
             {
             }
 
-            // data access
+            /// data read access
             double getDiscreteUnit() const { return mfDiscreteUnit; }
 
-            // get local decomposition. Overloaded since this decomposition is view-dependent
+            /// get local decomposition. Overloaded since this decomposition is view-dependent
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling class for BasePrimitive2D baseed classes which are view-dependent
-// regarding the viewport. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocalDecomposition
-// implementation may use an up-to-date Viewport accessible using getViewport()
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ViewportDependentPrimitive2D : public BasePrimitive2D
+        /** ViewportDependentPrimitive2D class
+
+            tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
+            regarding the viewport. The implementation of get2DDecomposition
+            guards the buffered local decomposition and ensures that a create2DDecomposition
+            implementation may use an up-to-date Viewport accessible using getViewport()
+         */
+        class ViewportDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // the last used Viewport definition for decomposition. Since this
-            // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocalDecomposition()
+            /** the last used Viewport definition for decomposition. Since this
+                is checked and updated from get2DDecomposition() it will be current and
+                usable in create2DDecomposition()
+             */
             basegfx::B2DRange                       maViewport;
 
         public:
+            /// constructor
             ViewportDependentPrimitive2D()
-            :   BasePrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maViewport()
             {
             }
 
-            // data access
+            /// data read access
             const basegfx::B2DRange& getViewport() const { return maViewport; }
 
-            // get local decomposition. Overloaded since this decomposition is view-dependent
+            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        /** ViewTransformationDependentPrimitive2D class
+
+            tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
+            regarding the complete Viewtransformation. The implementation of get2DDecomposition
+            guards the buffered local decomposition and ensures that a create2DDecomposition
+            implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
+         */
+        class ViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        {
+        private:
+            /** the last used ViewTransformation definition for decomposition. Since this
+                is checked and updated from get2DDecomposition() it will be current and
+                usable in create2DDecomposition()
+             */
+            basegfx::B2DHomMatrix                   maViewTransformation;
+
+        public:
+            /// constructor
+            ViewTransformationDependentPrimitive2D()
+            :   BufferedDecompositionPrimitive2D(),
+                maViewTransformation()
+            {
+            }
+
+            /// data read access
+            const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
+
+            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        /** ObjectAndViewTransformationDependentPrimitive2D class
+
+            tooling class for BufferedDecompositionPrimitive2D based classes which are view-dependent
+            and Object-Transform dependent. The implementation of get2DDecomposition
+            guards the buffered local decomposition and ensures that a create2DDecomposition
+            implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
+            and an object transformation via getObjectTransformation()
+         */
+        class ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        {
+        private:
+            /** the last used ViewTransformation and the last ObjectTransformation
+                definition for decomposition. Since this is checked and updated from
+                get2DDecomposition() it will be current and usable in create2DDecomposition()
+             */
+            basegfx::B2DHomMatrix                   maViewTransformation;
+            basegfx::B2DHomMatrix                   maObjectTransformation;
+
+        public:
+            /// constructor
+            ObjectAndViewTransformationDependentPrimitive2D()
+            :   BufferedDecompositionPrimitive2D(),
+                maViewTransformation(),
+                maObjectTransformation()
+            {
+            }
+
+            /// data read access
+            const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
+            const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
+
+            /// get local decomposition. Overloaded since this decomposition is view-dependent
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

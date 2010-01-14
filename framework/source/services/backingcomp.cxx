@@ -77,7 +77,7 @@
 #ifndef _SOLAR_HRC
 #include <vcl/solar.hrc>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 

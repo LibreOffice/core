@@ -41,25 +41,25 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <tools/cachestr.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <math.h>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/oldprintadaptor.hxx>
@@ -1414,31 +1414,35 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
 {
-    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-    xDocProps->setTemplateURL( ::rtl::OUString() );
-    xDocProps->setTemplateName( ::rtl::OUString() );
-    xDocProps->setTemplateDate( util::DateTime() );
-    xDocProps->resetUserData( ::rtl::OUString() );
-
-    // TODO/REFACTOR:
-    // Title?
-
-    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+    // only care about reseting this data for openoffice formats otherwise
+    if ( IsOwnStorageFormat_Impl( *GetMedium())  )
     {
-        String aFoundName;
-        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+        uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+        xDocProps->setTemplateURL( ::rtl::OUString() );
+        xDocProps->setTemplateName( ::rtl::OUString() );
+        xDocProps->setTemplateDate( util::DateTime() );
+        xDocProps->resetUserData( ::rtl::OUString() );
+
+        // TODO/REFACTOR:
+        // Title?
+
+        if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
-            INetURLObject aObj( rFileName );
-            xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            xDocProps->setTemplateName( rTemplateName );
+            String aFoundName;
+            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+            {
+                INetURLObject aObj( rFileName );
+                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+                xDocProps->setTemplateName( rTemplateName );
 
-            ::DateTime now;
-            xDocProps->setTemplateDate( util::DateTime(
-                now.Get100Sec(), now.GetSec(), now.GetMin(),
-                now.GetHour(), now.GetDay(), now.GetMonth(),
-                now.GetYear() ) );
+                ::DateTime now;
+                xDocProps->setTemplateDate( util::DateTime(
+                    now.Get100Sec(), now.GetSec(), now.GetMin(),
+                    now.GetHour(), now.GetDay(), now.GetMonth(),
+                    now.GetYear() ) );
 
-            SetQueryLoadTemplate( sal_True );
+                SetQueryLoadTemplate( sal_True );
+            }
         }
     }
 }

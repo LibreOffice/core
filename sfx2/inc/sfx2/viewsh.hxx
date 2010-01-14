@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>

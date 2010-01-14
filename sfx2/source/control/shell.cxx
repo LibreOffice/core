@@ -33,13 +33,13 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/undo.hxx>
+#include <svl/itempool.hxx>
+#include <svl/undo.hxx>
 #include <svtools/itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 
-#include <svtools/undoopt.hxx>
+#include <unotools/undoopt.hxx>
 
 #ifndef GCC
 #endif
@@ -659,7 +659,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;
@@ -702,7 +702,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;

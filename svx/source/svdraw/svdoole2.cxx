@@ -74,7 +74,7 @@
 #include <cppuhelper/implbase5.hxx>
 
 #include <vcl/solar.hrc>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -85,7 +85,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include <svtools/chartprettypainter.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>

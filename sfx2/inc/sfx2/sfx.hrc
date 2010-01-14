@@ -37,7 +37,7 @@
 #endif
 
 #ifndef _MEMBERID_HRC
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #endif
 
 #define RID_GROUPS_OFFSET           32000

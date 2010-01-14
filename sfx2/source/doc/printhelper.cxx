@@ -44,10 +44,10 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 
-#include <svtools/lstner.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/lstner.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>

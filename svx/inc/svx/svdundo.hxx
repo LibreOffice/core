@@ -34,7 +34,7 @@
 #ifndef _SOLAR_HRC
 #include <vcl/solar.hrc>
 #endif
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts

@@ -60,7 +60,7 @@
 #include <svtools/stringtransfer.hxx>
 #include <vcl/splitwin.hxx>
 #ifndef _ZFORLIST_HXX //autogen
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #endif
 #include <svtools/ctrltool.hxx>
 

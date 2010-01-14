@@ -43,9 +43,9 @@
 
 #include "tools/urlobj.hxx"
 
-#include "svtools/dynamicmenuoptions.hxx"
+#include "unotools/dynamicmenuoptions.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svtools/svtools.hrc"
+#include "svl/svtools.hrc"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -229,6 +229,13 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 BackingWindow::~BackingWindow()
 {
     delete mpAccExec;
+}
+
+void BackingWindow::GetFocus()
+{
+    if( IsVisible() )
+        maWriterButton.GrabFocus();
+    Window::GetFocus();
 }
 
 class ImageContainerRes : public Resource
