@@ -142,6 +142,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     
     ' ========== Workaround begin ==========
     hUseAsyncSlot( "EditDoc" )
+    kontext "Active"
     if ( Active.exists() ) then
         if ( VERBOSE ) then printlog( "Handling create copy message" )
         Active.yes()
