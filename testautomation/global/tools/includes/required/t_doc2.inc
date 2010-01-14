@@ -139,7 +139,15 @@ function sMakeReadOnlyDocumentEditable() as boolean
     ' This is a little bit tricky because the state of the document is altered but if
     ' the slot has been executed once we know for sure that the button on the toolbar is
     ' available and can check its state and - if need be - chenge the document state back.
+    
+    ' ========== Workaround begin ==========
     hUseAsyncSlot( "EditDoc" )
+    if ( Active.exists() ) then
+        if ( VERBOSE ) then printlog( "Handling create copy message" )
+        Active.yes()
+        wait( 1000 )
+    endif
+    ' ==========  Workaround end  ==========
     
     Kontext "Standardbar"
     if ( Bearbeiten.IsEnabled() ) then
