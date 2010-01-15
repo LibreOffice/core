@@ -77,6 +77,7 @@
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -185,9 +186,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
             // buld transfoprmation: translate and rotate so that given edge is
             // on x axis, them mirror in y and translate back
             const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
-            basegfx::B2DHomMatrix aMatrixTransform;
-
-            aMatrixTransform.translate(-aMirrorAxisA.X(), -aMirrorAxisA.Y());
+            basegfx::B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aMirrorAxisA.X(), -aMirrorAxisA.Y()));
             aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
             aMatrixTransform.scale(1.0, -1.0);
             aMatrixTransform.rotate(atan2(aEdge.getY(), aEdge.getX()));
@@ -932,9 +932,8 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
 
                 if(fRot3D != 0.0)
                 {
-                    aLatheMat.translate(-aPnt2.getX(), -aPnt2.getY());
-                    aLatheMat.rotate(-fRot3D);
-                    aLatheMat.translate(aPnt2.getX(), aPnt2.getY());
+                    aLatheMat = basegfx::tools::createRotateAroundPoint(aPnt2, -fRot3D)
+                        * aLatheMat;
                 }
             }
 

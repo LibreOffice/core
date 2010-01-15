@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <vcl/menu.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/util/XStringWidth.hpp>
 
 #include <vector>

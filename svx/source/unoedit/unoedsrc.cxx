@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 #include <svx/unoedsrc.hxx>
 
