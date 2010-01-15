@@ -114,16 +114,16 @@ public:
     void                SetSystemColor( Color& rColor, sal_uInt32& rnColorId, sal_uInt16 nSysColorIdx ) const;
 
     /** Converts the passed horizontal coordinate from 1/100 mm to Excel chart units. */
-    sal_uInt16          CalcChartXFromHmm( sal_Int32 nPosX ) const;
+    sal_Int32           CalcChartXFromHmm( sal_Int32 nPosX ) const;
     /** Converts the passed vertical coordinate from 1/100 mm to Excel chart units. */
-    sal_uInt16          CalcChartYFromHmm( sal_Int32 nPosY ) const;
+    sal_Int32           CalcChartYFromHmm( sal_Int32 nPosY ) const;
     /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
     XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
 
     /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
-    sal_uInt16          CalcChartXFromRelative( double fPosX ) const;
+    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
     /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
-    sal_uInt16          CalcChartYFromRelative( double fPosY ) const;
+    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
 
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
@@ -553,6 +553,7 @@ private:
 
 private:
     XclChText           maData;             /// Contents of the CHTEXT record.
+    XclExpChFramePosRef mxFramePos;         /// Relative text frame position (CHFRAMEPOS record).
     XclExpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclExpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclExpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).

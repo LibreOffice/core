@@ -130,16 +130,16 @@ public:
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 
     /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
-    sal_Int32           CalcHmmFromChartX( sal_uInt16 nPosX ) const;
+    sal_Int32           CalcHmmFromChartX( sal_Int32 nPosX ) const;
     /** Converts the passed vertical coordinate from Excel chart units into 1/100 mm. */
-    sal_Int32           CalcHmmFromChartY( sal_uInt16 nPosY ) const;
+    sal_Int32           CalcHmmFromChartY( sal_Int32 nPosY ) const;
     /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
     ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
 
     /** Converts the passed horizontal coordinate from Excel chart units into a relative position. */
-    double              CalcRelativeFromChartX( sal_uInt16 nPosX ) const;
+    double              CalcRelativeFromChartX( sal_Int32 nPosX ) const;
     /** Converts the passed vertical coordinate from Excel chart units into a relative position. */
-    double              CalcRelativeFromChartY( sal_uInt16 nPosY ) const;
+    double              CalcRelativeFromChartY( sal_Int32 nPosY ) const;
 
     /** Writes all line properties to the passed property set. */
     void                ConvertLineFormat(

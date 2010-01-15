@@ -101,37 +101,38 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XShape;
 
-using ::com::sun::star::chart::XDiagramPositioning;
-
+using ::com::sun::star::chart2::IncrementData;
+using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::ScaleData;
+using ::com::sun::star::chart2::SubIncrement;
+using ::com::sun::star::chart2::XAxis;
 using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::XDiagram;
-using ::com::sun::star::chart2::XCoordinateSystemContainer;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XChartTypeContainer;
 using ::com::sun::star::chart2::XChartType;
-using ::com::sun::star::chart2::XDataSeriesContainer;
+using ::com::sun::star::chart2::XChartTypeContainer;
+using ::com::sun::star::chart2::XCoordinateSystem;
+using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDataSeries;
+using ::com::sun::star::chart2::XDataSeriesContainer;
+using ::com::sun::star::chart2::XDiagram;
+using ::com::sun::star::chart2::XFormattedString;
+using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XRegressionCurve;
 using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::XAxis;
 using ::com::sun::star::chart2::XScaling;
-using ::com::sun::star::chart2::ScaleData;
-using ::com::sun::star::chart2::IncrementData;
-using ::com::sun::star::chart2::SubIncrement;
-using ::com::sun::star::chart2::RelativePosition;
-using ::com::sun::star::chart2::XLegend;
-using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::XTitle;
-using ::com::sun::star::chart2::XFormattedString;
+using ::com::sun::star::chart2::XTitled;
 
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataReceiver;
+using ::com::sun::star::chart2::data::XDataSequence;
 using ::com::sun::star::chart2::data::XDataSink;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
-using ::com::sun::star::chart2::data::XDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
+
+namespace cssc = ::com::sun::star::chart;
+namespace cssc2 = ::com::sun::star::chart2;
 
 // Helpers ====================================================================
 
@@ -268,12 +269,12 @@ Reference< XShape > XclImpChRoot::GetTitleShape( const XclChTextKey& rTitleKey )
     return mxChData->GetTitleShape( rTitleKey );
 }
 
-sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_uInt16 nPosX ) const
+sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_Int32 nPosX ) const
 {
     return static_cast< sal_Int32 >( mxChData->mfUnitSizeX * nPosX + mxChData->mnBorderGapX + 0.5 );
 }
 
-sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_uInt16 nPosY ) const
+sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
 {
     return static_cast< sal_Int32 >( mxChData->mfUnitSizeY * nPosY + mxChData->mnBorderGapY + 0.5 );
 }
@@ -287,12 +288,12 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_uInt16 nPosY ) const
         CalcHmmFromChartY( rRect.mnHeight ) );
 }
 
-double XclImpChRoot::CalcRelativeFromChartX( sal_uInt16 nPosX ) const
+double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
 {
     return static_cast< double >( CalcHmmFromChartX( nPosX ) ) / mxChData->maChartRect.GetWidth();
 }
 
-double XclImpChRoot::CalcRelativeFromChartY( sal_uInt16 nPosY ) const
+double XclImpChRoot::CalcRelativeFromChartY( sal_Int32 nPosY ) const
 {
     return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRect.GetHeight();
 }
@@ -1023,8 +1024,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     bool bShowSymbol = bShowAny && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL );
 
     // create API struct for label values, set API label separator
-    namespace cssc = ::com::sun::star::chart2;
-    cssc::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+    cssc2::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
     String aSep = mxLabelProps.is() ? mxLabelProps->maSeparator : String( sal_Unicode( '\n' ) );
     if( aSep.Len() == 0 )
@@ -1037,7 +1037,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
         ConvertFont( rPropSet );
         ConvertRotation( rPropSet, false );
         // label placement
-        using namespace ::com::sun::star::chart::DataLabelPlacement;
+        using namespace cssc::DataLabelPlacement;
         sal_Int32 nPlacement = rTypeInfo.mnDefaultLabelPos;
         switch( ::extract_value< sal_uInt16 >( maData.mnFlags2, 0, 4 ) )
         {
@@ -1623,7 +1623,6 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
         aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, pNegBar != 0 );
 
         // type of displayed error
-        namespace cssc = ::com::sun::star::chart;
         switch( pPrimaryBar->maData.mnSourceType )
         {
             case EXC_CHSERERR_PERCENT:
@@ -2377,7 +2376,6 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
     Reference< XLegend > xLegend( ScfApiHelper::CreateInstance( SERVICE_CHART2_LEGEND ), UNO_QUERY );
     if( xLegend.is() )
     {
-        namespace cssc = ::com::sun::star::chart2;
         ScfPropertySet aLegendProp( xLegend );
         aLegendProp.SetBoolProperty( EXC_CHPROP_SHOW, true );
 
@@ -2392,20 +2390,20 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             plot area is positioned automatically (Excel sets the plot area to
             manual mode, if the legend is moved or resized). With manual plot
             areas, Excel ignores the value in maData.mnDockMode completely. */
-        cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
-        cssc::LegendExpansion eApiExpand = cssc::LegendExpansion_BALANCED;
+        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
         if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
         {
-            case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  eApiExpand = cssc::LegendExpansion_HIGH;    break;
-            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    eApiExpand = cssc::LegendExpansion_HIGH;    break;
-            case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  eApiExpand = cssc::LegendExpansion_WIDE;    break;
-            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    eApiExpand = cssc::LegendExpansion_WIDE;    break;
+            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc2::LegendExpansion_WIDE;   break;
             // top-right not supported
-            case EXC_CHLEGEND_CORNER:   eApiPos = cssc::LegendPosition_LINE_END;    eApiExpand = cssc::LegendExpansion_HIGH;    break;
+            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
         }
 
         // no automatic position: try to find the correct position and size
-        if( eApiPos == cssc::LegendPosition_CUSTOM )
+        if( eApiPos == cssc2::LegendPosition_CUSTOM )
         {
             const XclChFramePos* pFramePos = mxFramePos.is() ? &mxFramePos->GetFramePosData() : 0;
 
@@ -2423,7 +2421,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             else
             {
                 // no manual position found, just go for the default
-                eApiPos = cssc::LegendPosition_LINE_END;
+                eApiPos = cssc2::LegendPosition_LINE_END;
             }
 
 
@@ -2434,18 +2432,18 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             {
                 // automatic size: determine entry direction from flags
                 eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
-                    cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
+                    cssc2::LegendExpansion_HIGH, cssc2::LegendExpansion_WIDE );
             }
             else
             {
                 // legend size is given in points, not in chart units
                 double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
                 if( fRatio > 1.5 )
-                    eApiExpand = cssc::LegendExpansion_WIDE;
+                    eApiExpand = cssc2::LegendExpansion_WIDE;
                 else if( fRatio < 0.75 )
-                    eApiExpand = cssc::LegendExpansion_HIGH;
+                    eApiExpand = cssc2::LegendExpansion_HIGH;
                 else
-                    eApiExpand = cssc::LegendExpansion_BALANCED;
+                    eApiExpand = cssc2::LegendExpansion_BALANCED;
             }
         }
         aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );
@@ -2683,13 +2681,12 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
     if( xSeriesCont.is() && xSeries.is() )
     {
         // series stacking mode
-        namespace cssc = ::com::sun::star::chart2;
-        cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
+        cssc2::StackingDirection eStacking = cssc2::StackingDirection_NO_STACKING;
         // stacked overrides deep-3d
         if( maType.IsStacked() || maType.IsPercent() )
-            eStacking = cssc::StackingDirection_Y_STACKING;
+            eStacking = cssc2::StackingDirection_Y_STACKING;
         else if( Is3dDeepChart() )
-            eStacking = cssc::StackingDirection_Z_STACKING;
+            eStacking = cssc2::StackingDirection_Z_STACKING;
 
         // additional series properties
         ScfPropertySet aSeriesProp( xSeries );
@@ -2809,11 +2806,9 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
     // do not break text into several lines unless all labels are visible
     rPropSet.SetBoolProperty( EXC_CHPROP_TEXTBREAK, maData.mnLabelFreq == 1 );
     // do not stagger labels in two lines
-    namespace cssc = ::com::sun::star::chart;
     rPropSet.SetProperty( EXC_CHPROP_ARRANGEORDER, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
 
     // reverse order
-    namespace cssc2 = ::com::sun::star::chart2;
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
@@ -2827,7 +2822,6 @@ void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3d
         But: the Y axis has to be moved to "end", if the X axis is mirrored,
         to keep it at the left end of the chart. */
     bool bMaxCross = ::get_flag( maData.mnFlags, b3dChart ? EXC_CHLABELRANGE_REVERSE : EXC_CHLABELRANGE_MAXCROSS );
-    namespace cssc = ::com::sun::star::chart;
     cssc::ChartAxisPosition eAxisPos = bMaxCross ? cssc::ChartAxisPosition_END : cssc::ChartAxisPosition_VALUE;
     rPropSet.SetProperty( EXC_CHPROP_CROSSOVERPOSITION, eAxisPos );
 
@@ -2891,7 +2885,6 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     }
 
     // reverse order
-    namespace cssc2 = ::com::sun::star::chart2;
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 }
@@ -2903,7 +2896,6 @@ void XclImpChValueRange::ConvertAxisPosition( ScfPropertySet& rPropSet ) const
     bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
 
     // crossing mode (max-cross flag overrides other crossing settings)
-    namespace cssc = ::com::sun::star::chart;
     cssc::ChartAxisPosition eAxisPos = bMaxCross ? cssc::ChartAxisPosition_END : cssc::ChartAxisPosition_VALUE;
     rPropSet.SetProperty( EXC_CHPROP_CROSSOVERPOSITION, eAxisPos );
 
@@ -2926,7 +2918,7 @@ sal_Int32 lclGetApiTickmarks( sal_uInt8 nXclTickPos )
     return nApiTickmarks;
 }
 
-::com::sun::star::chart::ChartAxisLabelPosition lclGetApiLabelPosition( sal_Int8 nXclLabelPos )
+cssc::ChartAxisLabelPosition lclGetApiLabelPosition( sal_Int8 nXclLabelPos )
 {
     using namespace ::com::sun::star::chart;
     switch( nXclLabelPos )
@@ -2985,7 +2977,7 @@ void XclImpChTick::Convert( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty( EXC_CHPROP_MAJORTICKS, lclGetApiTickmarks( maData.mnMajor ) );
     rPropSet.SetProperty( EXC_CHPROP_MINORTICKS, lclGetApiTickmarks( maData.mnMinor ) );
     rPropSet.SetProperty( EXC_CHPROP_LABELPOSITION, lclGetApiLabelPosition( maData.mnLabelPos ) );
-    rPropSet.SetProperty( EXC_CHPROP_MARKPOSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_AXIS );
+    rPropSet.SetProperty( EXC_CHPROP_MARKPOSITION, cssc::ChartAxisMarkPosition_AT_AXIS );
 }
 
 // ----------------------------------------------------------------------------
@@ -3076,8 +3068,6 @@ sal_uInt16 XclImpChAxis::GetRotation() const
 
 Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const
 {
-    namespace cssc2 = ::com::sun::star::chart2;
-
     // create the axis object (always)
     Reference< XAxis > xAxis( ScfApiHelper::CreateInstance( SERVICE_CHART2_AXIS ), UNO_QUERY );
     if( xAxis.is() )
@@ -3710,10 +3700,10 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
 
     /*  Following all conversions needing the old Chart1 API that involves full
         initialization of the chart view. */
-    Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
+    Reference< cssc::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
     if( xChart1Doc.is() )
     {
-        Reference< ::com::sun::star::chart::XDiagram > xDiagram1 = xChart1Doc->getDiagram();
+        Reference< cssc::XDiagram > xDiagram1 = xChart1Doc->getDiagram();
 
         /*  Set the 'IncludeHiddenCells' property via the old API as only this
             ensures that the data provider and all created sequences get this
@@ -3729,7 +3719,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
             const XclChFramePos& rFramePos = xPlotAreaPos->GetFramePosData();
             if( (rFramePos.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rFramePos.mnBRMode == EXC_CHFRAMEPOS_PARENT) )
             {
-                Reference< XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
+                Reference< cssc::XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
                 ::com::sun::star::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
                 // for pie charts, always set inner plot area size to exclude the data labels as Excel does
                 const XclImpChTypeGroup* pFirstTypeGroup = mxPrimAxesSet->GetFirstTypeGroup().get();
@@ -3895,7 +3885,7 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
     ScfPropertySet aDiaProp( xDiagram );
 
     // treatment of missing values
-    using namespace ::com::sun::star::chart::MissingValueTreatment;
+    using namespace cssc::MissingValueTreatment;
     sal_Int32 nMissingValues = LEAVE_GAP;
     switch( maProps.mnEmptyMode )
     {

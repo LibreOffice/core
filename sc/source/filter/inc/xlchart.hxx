@@ -1300,7 +1300,8 @@ private:
 
 // Chart text and title object helpers ========================================
 
-/** Enumerates different text box types for default text formatting. */
+/** Enumerates different text box types for default text formatting and title
+    positioning. */
 enum XclChTextType
 {
     EXC_CHTEXTTYPE_TITLE,           /// Chart title.
