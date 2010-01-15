@@ -38,9 +38,9 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/style.hxx>
+#include <svl/lstner.hxx>
+#include <svl/hint.hxx>
+#include <svl/style.hxx>
 
 #include "celleditsource.hxx"
 #include "cell.hxx"

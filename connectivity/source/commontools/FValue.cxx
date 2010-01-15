@@ -1989,7 +1989,7 @@ namespace detail
         virtual Reference< XBlob >          getBlob() const             { return m_xColumn->getBlob(); };
         virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
         virtual Any                         getObject() const           { return m_xColumn->getObject( NULL ); };
-        virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull(); };
+        virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull( ); };
 
     private:
         const Reference< XColumn >  m_xColumn;

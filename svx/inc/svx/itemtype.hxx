@@ -41,7 +41,7 @@
 #include <tools/resid.hxx>
 #include <tools/bigint.hxx>
 #include <svx/dialmgr.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/shl.hxx>
 #include "svx/svxdllapi.h"
 

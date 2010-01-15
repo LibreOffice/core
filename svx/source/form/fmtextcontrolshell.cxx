@@ -66,12 +66,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>

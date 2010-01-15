@@ -39,6 +39,7 @@
 #include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/obj3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -223,13 +224,14 @@ namespace sdr
                     }
 
                     // create primitive
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        *pAttribute,
-                        xGroup,
-                        aTextBoxMatrix,
-                        bWordWrap,
-                        false,          // #SJ# New parameter to force to clipped BlockText for SC
-                        b3DShape));
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
+                            *pAttribute,
+                            xGroup,
+                            aTextBoxMatrix,
+                            bWordWrap,
+                            b3DShape,
+                            false));        // #SJ# New parameter to force to clipped BlockText for SC
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
 

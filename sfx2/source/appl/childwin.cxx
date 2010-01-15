@@ -37,7 +37,7 @@
 #ifndef _RCID_H
 #include <tools/rcid.h>
 #endif
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

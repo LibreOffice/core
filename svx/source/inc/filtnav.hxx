@@ -33,12 +33,12 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/runtime/XFilterController.hpp>
+#include <svl/lstner.hxx>
+#include <svl/brdcst.hxx>
 
-#include <svtools/lstner.hxx>
-#include <svtools/brdcst.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -48,6 +48,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
 #include <vcl/dockwin.hxx>
+#include "svx/fmtools.hxx"
 #include "fmexch.hxx"
 #include <connectivity/sqlparse.hxx>
 #include "fmexch.hxx"

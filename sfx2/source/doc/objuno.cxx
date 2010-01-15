@@ -59,7 +59,7 @@
 #include <vos/mutex.hxx>
 
 #include <tools/errcode.hxx>
-#include <svtools/cntwids.hrc>
+#include <svl/cntwids.hrc>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>

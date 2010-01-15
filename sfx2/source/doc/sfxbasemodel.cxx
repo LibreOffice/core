@@ -73,9 +73,9 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
 #include <comphelper/componentcontext.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
