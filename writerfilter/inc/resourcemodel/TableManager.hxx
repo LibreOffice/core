@@ -144,6 +144,20 @@ class TableManager
          */
         PropertiesPointer mpTableProps;
 
+        /**
+         true if at the end of a row
+         */
+        bool mbRowEnd;
+
+        /**
+         true when in a cell
+         */
+        bool mbInCell;
+
+        /**
+         true when at the end of a cell
+         */
+        bool mbCellEnd;
     };
 
     /**
@@ -200,6 +214,36 @@ protected:
         mState.mpRowProps.reset();
     }
 
+    void setInCell(bool bInCell)
+    {
+        mState.mbInCell = bInCell;
+    }
+
+    bool isInCell() const
+    {
+        return mState.mbInCell;
+    }
+
+    void setCellEnd(bool bCellEnd)
+    {
+        mState.mbCellEnd = bCellEnd;
+    }
+
+    bool isCellEnd() const
+    {
+        return mState.mbCellEnd;
+    }
+
+    void setRowEnd(bool bRowEnd)
+    {
+        mState.mbRowEnd = bRowEnd;
+    }
+
+    bool isRowEnd() const
+    {
+        return mState.mbRowEnd;
+    }
+
     PropertiesPointer getTableProps()
     {
         return mState.mpTableProps;
@@ -227,21 +271,6 @@ protected:
 
 private:
     typedef boost::shared_ptr<T> T_p;
-
-    /**
-       true if at the end of a row
-     */
-    bool mbRowEnd;
-
-    /**
-       true when in a cell
-    */
-    bool mbInCell;
-
-    /**
-       true when at the end of a cell
-    */
-    bool mbCellEnd;
 
     /**
        depth of the current cell
@@ -453,9 +482,11 @@ public:
 
 template <typename T, typename PropertiesPointer>
 TableManager<T, PropertiesPointer>::TableManager()
-: mbRowEnd(false), mbInCell(false), mbCellEnd(false), mnTableDepthNew(0),
-  mnTableDepth(0)
+: mnTableDepthNew(0), mnTableDepth(0)
 {
+    setRowEnd(false);
+    setInCell(false);
+    setCellEnd(false);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -480,7 +511,7 @@ void TableManager<T, PropertiesPointer>::inCell()
     if (mpTableLogger.get() != NULL)
         mpTableLogger->element("tablemanager.inCell");
 #endif
-    mbInCell = true;
+    setInCell(true);
 
     if (mnTableDepthNew < 1)
         mnTableDepthNew = 1;
@@ -494,7 +525,7 @@ void TableManager<T, PropertiesPointer>::endCell()
         mpTableLogger->element("tablemanager.endCell");
 #endif
 
-    mbCellEnd = true;
+    setCellEnd(true);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -505,7 +536,7 @@ void TableManager<T, PropertiesPointer>::endRow()
         mpTableLogger->element("tablemanager.endRow");
 #endif
 
-    mbRowEnd = true;
+    setRowEnd(true);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -572,9 +603,9 @@ void TableManager<T, PropertiesPointer>::endLevel()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startParagraphGroup()
 {
-    mbRowEnd = false;
-    mbInCell = false;
-    mbCellEnd = false;
+    setRowEnd(false);
+    setInCell(false);
+    setCellEnd(false);
     mnTableDepthNew = 0;
 }
 
@@ -602,19 +633,19 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
         typename TableData<T, PropertiesPointer>::Pointer_t pTableData =
         mTableDataStack.top();
 
-        if (mbRowEnd)
+        if (isRowEnd())
         {
             endOfRowAction();
             pTableData->endRow(getRowProps());
             resetRowProps();
         }
 
-        else if (mbInCell)
+        else if (isInCell())
         {
             if (! pTableData->isCellOpen())
                 openCell(getHandle(), getCellProps());
 
-            if (mbCellEnd)
+            if (isCellEnd())
             {
                 endOfCellAction();
                 closeCell(getHandle());
@@ -669,7 +700,7 @@ void TableManager<T, PropertiesPointer>::handle0x7()
     if (mnTableDepthNew < 1)
         mnTableDepthNew = 1;
 
-    if (mbInCell)
+    if (isInCell())
         endCell();
     else
         endRow();
@@ -839,7 +870,7 @@ void TableManager<T, PropertiesPointer>::endOfRowAction()
 template <typename T, typename PropertiesPointer>
 bool TableManager<T, PropertiesPointer>::isIgnore() const
 {
-    return mbRowEnd;
+    return isRowEnd();
 }
 
 template <typename T, typename PropertiesPointer>
