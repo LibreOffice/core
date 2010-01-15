@@ -62,6 +62,12 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
+
+#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_TABLE
+    setTagLogger(dmapper_logger);
+#endif
+#endif
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
 
@@ -303,12 +309,6 @@ boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpa
 
 void DomainMapperTableManager::startLevel( )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("tablemanager.startLevel");
-    dmapper_logger->attribute("level", m_aTableGrid.size());
-    dmapper_logger->endElement("tablemanager.startLevel");
-#endif
-
     DomainMapperTableManager_Base_t::startLevel( );
 
     IntVectorPtr pNewGrid( new vector<sal_Int32> );
@@ -325,14 +325,12 @@ void DomainMapperTableManager::endLevel( )
 
     DomainMapperTableManager_Base_t::endLevel( );
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("tablemanager.endLevel");
-    dmapper_logger->attribute("level", m_aTableGrid.size());
-
+    dmapper_logger->startElement("dmappertablemanager.endLevel");
     PropertyMapPtr pProps = getTableProps();
     if (pProps.get() != NULL)
         dmapper_logger->addTag(getTableProps()->toTag());
 
-    dmapper_logger->endElement("tablemanager.endLevel");
+    dmapper_logger->endElement("dmappertablemanager.endLevel");
 #endif
 }
 
@@ -489,13 +487,5 @@ void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, Style
     pContext->insert( m_pTableStyleTextProperies );
 }
 
-void DomainMapperTableManager::handle(const Handle_t & _handle)
-{
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->element("setHandle");
-#endif
-
-    DomainMapperTableManager_Base_t::setHandle(_handle);
-}
 
 }}

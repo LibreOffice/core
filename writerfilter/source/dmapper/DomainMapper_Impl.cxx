@@ -77,6 +77,7 @@
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
+#include <dmapperLoggers.hxx>
 #endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
@@ -843,8 +844,8 @@ void lcl_AddRangeAndStyle(
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-#if DEBUG
-    clog << "finishParagraph" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("finishParagraph");
 #endif
 
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
@@ -1096,6 +1097,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             //OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("finishParagraph");
+#endif
 }
 /*-------------------------------------------------------------------------
 

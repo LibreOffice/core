@@ -4507,12 +4507,12 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
             else
                 m_pImpl->appendTextPortion( sText, pContext );
 
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->startElement("utext");
-            dmapper_logger->chars(sText);
-            dmapper_logger->endElement("utext");
-#endif
         }
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("utext");
+        dmapper_logger->chars(sText);
+        dmapper_logger->endElement("utext");
+#endif
     }
     catch( const uno::RuntimeException& )
     {

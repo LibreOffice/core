@@ -114,7 +114,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     m_nRowIndex = 0;
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("tablemanager.table");
+    dmapper_logger->startElement("tablehandler.table");
     dmapper_logger->attribute("rows", nRows);
 
     if (pProps.get() != NULL)
@@ -285,6 +285,10 @@ void lcl_debug_TableBorder(table::TableBorder & rBorder)
 
 void DomainMapperTableHandler::endTable()
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("tablehandler.endTable");
+#endif
+
     TablePropertyValues_t       aTableProperties;
     sal_Int32 nLeftBorderDistance, nRightBorderDistance, nTopBorderDistance, nBottomBorderDistance;
     nLeftBorderDistance = nRightBorderDistance = DEF_BORDER_DIST;
@@ -663,11 +667,11 @@ void DomainMapperTableHandler::endTable()
 #ifdef DEBUG_DOMAINMAPPER
 //-->debug cell properties of all rows
     {
-        dmapper_logger->startElement("debug.table");
+        dmapper_logger->startElement("cellProps.table");
         ::rtl::OUString sNames;
         for( sal_Int32  nDebugRow = 0; nDebugRow < aCellProperties.getLength(); ++nDebugRow)
         {
-            dmapper_logger->startElement("debug.row");
+            dmapper_logger->startElement("cellProps.row");
             dmapper_logger->attribute("n", nDebugRow);
 
             const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nDebugRow];
@@ -675,7 +679,7 @@ void DomainMapperTableHandler::endTable()
             (void) nDebugCells;
             for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
             {
-                dmapper_logger->startElement("debug.cell");
+                dmapper_logger->startElement("cellProps.cell");
                 dmapper_logger->attribute("n", nDebugCell);
 
                 const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
@@ -683,22 +687,22 @@ void DomainMapperTableHandler::endTable()
                 for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
                 {
                     const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
-                    dmapper_logger->startElement("debug.property");
+                    dmapper_logger->startElement("cellProps.property");
                     dmapper_logger->attribute("name", sName);
-                    dmapper_logger->endElement("debug.property");
+                    dmapper_logger->endElement("cellProps.property");
                     sNames += sName;
                     sNames += ::rtl::OUString('-');
                 }
                 sNames += ::rtl::OUString('+');
 
-                dmapper_logger->endElement("debug.cell");
+                dmapper_logger->endElement("cellProps.cell");
             }
             sNames += ::rtl::OUString('|');
 
-            dmapper_logger->endElement("debug.row");
+            dmapper_logger->endElement("cellProps.row");
         }
 
-        dmapper_logger->endElement("debug.table");
+        dmapper_logger->endElement("cellProps.table");
         (void)sNames;
     }
 //--<
@@ -766,7 +770,8 @@ void DomainMapperTableHandler::endTable()
     m_aRowProperties.clear();
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("tablemanager.table");
+    dmapper_logger->endElement("tablehandler.table");
+    dmapper_logger->endElement("tablehandler.endTable");
 #endif
 }
 

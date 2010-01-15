@@ -119,7 +119,6 @@ public:
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };
 
-    virtual void handle(const Handle_t & _handle);
 };
 
 }}
