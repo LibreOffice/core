@@ -36,7 +36,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/spin.h"
 #include "vcl/spinfld.hxx"
-#include "vcl/controllayout.hxx"
+#include "vcl/controldata.hxx"
 #include "vcl/svdata.hxx"
 
 // =======================================================================
@@ -637,7 +637,7 @@ void SpinField::FillLayoutData() const
 {
     if( mbSpin )
     {
-        mpLayoutData = new vcl::ControlLayoutData();
+        mpControlData->mpLayoutData = new vcl::ControlLayoutData();
         AppendLayoutData( *GetSubEdit() );
         GetSubEdit()->SetLayoutDataParent( this );
     }
