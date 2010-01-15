@@ -1001,5 +1001,11 @@ namespace DOM
         events::CEventDispatcher::dispatchEvent(m_aNodePtr, evt);
         return sal_True;
     }
+
+    ::sal_Int64 SAL_CALL CNode::getSomething(const Sequence< ::sal_Int8 >& /*aIdentifier*/)
+        throw (RuntimeException)
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_aNodePtr));
+    }
 }
 

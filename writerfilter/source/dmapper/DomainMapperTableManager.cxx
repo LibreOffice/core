@@ -56,14 +56,18 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
-    m_bOOXML( bOOXML )
+    m_bOOXML( bOOXML ),
+    m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
+    m_pTablePropsHandler->SetTableManager( this );
 }
 /*-- 23.04.2007 14:57:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapperTableManager::~DomainMapperTableManager()
 {
+    if ( m_pTablePropsHandler )
+        delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
 }
 /*-- 23.04.2007 15:25:37---------------------------------------------------
 
@@ -73,39 +77,17 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     bool bRet = DomainMapperTableManager_Base_t::sprm(rSprm);
     if( !bRet )
     {
+        bRet = m_pTablePropsHandler->sprm( rSprm );
+    }
+
+    if ( !bRet )
+    {
         bRet = true;
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
-        /* WRITERFILTERSTATUS: table: table_sprmdata */
-        switch( nSprmId )
+        switch ( nSprmId )
         {
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
-            case NS_ooxml::LN_CT_TrPrBase_jc: //90706
-            /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0.5 */
-            case NS_ooxml::LN_CT_TblPrBase_jc:
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
-            case 0x5400: // sprmTJc
-            {
-                //table justification 0: left, 1: center, 2: right
-                sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
-                TablePropertyMapPtr pTableMap( new TablePropertyMap );
-                pTableMap->setValue( TablePropertyMap::HORI_ORIENT, nOrient );
-                insertTableProps( pTableMap );
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-            case 0x9601: // sprmTDxaLeft
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0x9602: // sprmTDxaGapHalf
-            {
-                //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->setValue( TablePropertyMap::GAP_HALF, ConversionHelper::convertTwipToMM100( nIntValue ) );
-                insertTableProps(pPropMap);
-            }
-            break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xf661: //sprmTTRLeft left table indent
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
@@ -136,32 +118,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
-            case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
-            {
-                //contains unit and value
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
-                    MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
-                    pProperties->resolve(*pMeasureHandler);
-                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                    pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ));
-                    pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(pMeasureHandler->getMeasureValue() ));
-                    insertRowProps(pPropMap);
-                }
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0x3403: // sprmTFCantSplit
-            case NS_sprm::LN_TCantSplit: // 0x3644
-            {
-                //row can't break across pages if nIntValue == 1
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
-                insertRowProps(pPropMap);
-            }
-            break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x3404:// sprmTTableHeader
             case NS_ooxml::LN_CT_TrPrBase_tblHeader: //90704
@@ -176,23 +132,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 else
                     m_nHeaderRepeat = -1;
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0x9407: // sprmTDyaRowHeight
-            {
-                // table row height - negative values indicate 'exact height' - positive 'at least'
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                bool bMinHeight = true;
-                sal_Int16 nHeight = static_cast<sal_Int16>( nIntValue );
-                if( nHeight < 0 )
-                {
-                    bMinHeight = false;
-                    nHeight *= -1;
-                }
-                pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
-                pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(ConversionHelper::convertTwipToMM100( nHeight )));
-                insertRowProps(pPropMap);
-            }
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd608: // TDefTable
@@ -226,22 +165,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             }
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
-            {
-                sal_Int16 nVertOrient = text::VertOrientation::NONE;
-                switch( nIntValue ) //0 - top 1 - center 3 - bottom
-                {
-                    case 1: nVertOrient = text::VertOrientation::CENTER; break;
-                    case 3: nVertOrient = text::VertOrientation::BOTTOM; break;
-                    default:;
-                };
-                TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
-                pCellPropMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
-                //todo: in ooxml import the value of m_ncell is wrong
-                cellProps( pCellPropMap );
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xD605: // sprmTTableBorders
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -253,70 +176,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     pCellPropMap->insert( pBorderHandler->getProperties() );
                     cellPropsByCell( m_nCellBorderIndex, pCellPropMap );
                     ++m_nCellBorderIndex;
-                }
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
-            {
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
-                    pProperties->resolve(*pBorderHandler);
-                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
-                    pTablePropMap->insert( pBorderHandler->getProperties() );
-                    insertTableProps( pTablePropMap );
-                }
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
-            //contains CT_TcBorders_left, right, top, bottom
-            {
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    //in OOXML there's one set of borders at each cell (if there is any)
-                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler( m_bOOXML ));
-                    pProperties->resolve( *pTDefTableHandler );
-                    TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
-                    pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
-                    cellProps( pCellPropMap );
-                }
-            }
-            break;
-            case NS_ooxml::LN_CT_TblPrBase_shd:
-            {
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler);
-                    pProperties->resolve( *pCellColorHandler );
-                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
-                    insertTableProps( pCellColorHandler->getProperties() );
-                }
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0xd61a : // sprmTCellTopColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0xd61b : // sprmTCellLeftColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0xd61c : // sprmTCellBottomColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case 0xd61d : // sprmTCellRightColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TcPrBase_shd:
-            {
-                // each color sprm contains as much colors as cells are in a row
-                //LN_CT_TcPrBase_shd: cell shading contains: LN_CT_Shd_val, LN_CT_Shd_fill, LN_CT_Shd_color
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
-                    pProperties->resolve( *pCellColorHandler );
-                    cellProps( pCellColorHandler->getProperties());
                 }
             }
             break;
@@ -356,7 +215,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case 0xf618 : //unknown
                 bRet = false;
             break;
-//OOXML table properties
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
             {
@@ -368,32 +226,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblGridBase_gridCol:
-
-            if(!m_nRow)
             {
-                m_aTableGrid.push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
-            }
-            break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
-            {
-                //contains LN_CT_TblCellMar_top, LN_CT_TblCellMar_left, LN_CT_TblCellMar_bottom, LN_CT_TblCellMar_right
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    CellMarginHandlerPtr pCellMarginHandler( new CellMarginHandler );
-                    pProperties->resolve( *pCellMarginHandler );
-                    TablePropertyMapPtr pMarginProps( new TablePropertyMap );
-                    if( pCellMarginHandler->m_bTopMarginValid )
-                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_TOP, pCellMarginHandler->m_nTopMargin );
-                    if( pCellMarginHandler->m_bBottomMarginValid )
-                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_BOTTOM, pCellMarginHandler->m_nBottomMargin );
-                    if( pCellMarginHandler->m_bLeftMarginValid )
-                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_LEFT, pCellMarginHandler->m_nLeftMargin );
-                    if( pCellMarginHandler->m_bRightMarginValid )
-                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_RIGHT, pCellMarginHandler->m_nRightMargin );
-                    insertTableProps(pMarginProps);
-                }
+                getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
             }
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
@@ -408,25 +242,84 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
+#if DEBUG
+                clog << "GridSpan: " << nIntValue << endl;
+#endif
                 //the cell width is determined by its position in the table grid
                 //it takes 'gridSpan' grid elements
-                if( m_aGridSpans.size() < m_nCell)
+                IntVectorPtr pCurrentSpans = getCurrentSpans( );
+                if( pCurrentSpans->size() < m_nCell)
                 {
                     //fill missing elements with '1'
-                    m_aGridSpans.insert( m_aGridSpans.end(), m_nCell - m_aGridSpans.size(), 1 );
+                    pCurrentSpans->insert( pCurrentSpans->end(), m_nCell - pCurrentSpans->size(), 1 );
                 }
-                m_aGridSpans.push_back( nIntValue );
+                pCurrentSpans->push_back( nIntValue );
             }
             break;
             /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-            case NS_ooxml::LN_CT_TblPrBase_tblLook: break; //todo: table look specifier
+            case NS_ooxml::LN_CT_TblPrBase_tblLook:
+                break; //todo: table look specifier
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            case NS_ooxml::LN_CT_TcPrBase_tcW: break; //fixed column width is not supported
-            default: bRet = false;
+            case NS_ooxml::LN_CT_TcPrBase_tcW:
+                break; //fixed column width is not supported
+            case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
+                {
+                    TablePropertyMapPtr pProps( new TablePropertyMap );
+                    pProps->Insert( PROP_CNF_STYLE, true, uno::makeAny( pValue->getString( ) ) );
+                    insertRowProps( pProps );
+                }
+                break;
+            case NS_ooxml::LN_CT_PPrBase_cnfStyle:
+                // TODO cnfStyle on a paragraph
+                break;
+            case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
+                {
+                    TablePropertyMapPtr pProps( new TablePropertyMap );
+                    pProps->Insert( PROP_CNF_STYLE, true, uno::makeAny( pValue->getString( ) ) );
+                    cellProps( pProps );
+                }
+                break;
+            case NS_ooxml::LN_tblStart:
+                {
+                    startLevel( );
+                }
+                break;
+            default:
+                bRet = false;
         }
     }
     return bRet;
 }
+
+boost::shared_ptr< vector<sal_Int32> > DomainMapperTableManager::getCurrentGrid( )
+{
+    return m_aTableGrid.back( );
+}
+
+boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpans( )
+{
+    return m_aGridSpans.back( );
+}
+
+void DomainMapperTableManager::startLevel( )
+{
+    DomainMapperTableManager_Base_t::startLevel( );
+
+    IntVectorPtr pNewGrid( new vector<sal_Int32> );
+    IntVectorPtr pNewSpans( new vector<sal_Int32> );
+    m_aTableGrid.push_back( pNewGrid );
+    m_aGridSpans.push_back( pNewSpans );
+    m_nTableWidth = 0;
+}
+
+void DomainMapperTableManager::endLevel( )
+{
+    m_aTableGrid.pop_back( );
+    m_aGridSpans.pop_back( );
+
+    DomainMapperTableManager_Base_t::endLevel( );
+}
+
 /*-- 02.05.2007 14:36:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -439,10 +332,11 @@ void DomainMapperTableManager::endOfCellAction()
   -----------------------------------------------------------------------*/
 void DomainMapperTableManager::endOfRowAction()
 {
-    if(!m_nRow && !m_nTableWidth && m_aTableGrid.size())
+    IntVectorPtr pTableGrid = getCurrentGrid( );
+    if(!m_nTableWidth && pTableGrid->size())
     {
-        ::std::vector<sal_Int32>::const_iterator aCellIter = m_aTableGrid.begin();
-        while( aCellIter != m_aTableGrid.end() )
+        ::std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
+        while( aCellIter != pTableGrid->end() )
              m_nTableWidth += *aCellIter++;
         if( m_nTableWidth > 0)
         {
@@ -452,18 +346,20 @@ void DomainMapperTableManager::endOfRowAction()
             insertTableProps(pPropMap);
         }
     }
-    if( m_aGridSpans.size() < m_nCell)
+
+    IntVectorPtr pCurrentSpans = getCurrentSpans( );
+    if( pCurrentSpans->size() < m_nCell)
     {
         //fill missing elements with '1'
-        m_aGridSpans.insert( m_aGridSpans.end(), m_nCell - m_aGridSpans.size(), 1 );
+        pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell - pCurrentSpans->size(), 1 );
     }
     //calculate number of used grids - it has to match the size of m_aTableGrid
     size_t nGrids = 0;
-    ::std::vector<sal_Int32>::const_iterator aGridSpanIter = m_aGridSpans.begin();
-    for( ; aGridSpanIter != m_aGridSpans.end(); ++aGridSpanIter)
+    ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
+    for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
         nGrids += *aGridSpanIter;
 
-    if( m_aTableGrid.size() == nGrids )
+    if( pTableGrid->size() == nGrids )
     {
         //determine table width
         double nFullWidth = m_nTableWidth;
@@ -473,13 +369,15 @@ void DomainMapperTableManager::endOfRowAction()
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
         sal_uInt32 nBorderGridIndex = 0;
+
+        ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
         for( sal_uInt32 nBorder = 0; nBorder < m_nCell - 1; ++nBorder )
         {
-            sal_Int32 nGridCount = m_aGridSpans[nBorder];
+            sal_Int32 nGridCount = *aSpansIter;
             double fGridWidth = 0.;
             do
             {
-                fGridWidth += m_aTableGrid[nBorderGridIndex++];
+                fGridWidth += (*pTableGrid.get())[nBorderGridIndex++];
             }while( --nGridCount );
 
             sal_Int16 nRelPos =
@@ -488,6 +386,7 @@ void DomainMapperTableManager::endOfRowAction()
             pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
             pSeparators[nBorder].IsVisible = sal_True;
             nLastRelPos = nLastRelPos + nRelPos;
+            aSpansIter++;
         }
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
@@ -497,7 +396,7 @@ void DomainMapperTableManager::endOfRowAction()
     ++m_nRow;
     m_nCell = 0;
     m_nCellBorderIndex = 0;
-    m_aGridSpans.clear();
+    pCurrentSpans->clear();
 }
 /*-- 18.06.2007 10:34:37---------------------------------------------------
 
@@ -505,8 +404,6 @@ void DomainMapperTableManager::endOfRowAction()
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
-    m_aTableGrid.clear();
-    m_aGridSpans.clear();
     m_sTableStyleName = ::rtl::OUString();
     m_pTableStyleTextProperies.reset();
 }
@@ -521,10 +418,10 @@ void lcl_CopyTextProperties(PropertyMapPtr pToFill,
     //fill base style properties first, recursively
     if( pStyleSheetEntry->sBaseStyleIdentifier.getLength())
     {
-        const StyleSheetEntry* pParentStyleSheet =
+        const StyleSheetEntryPtr pParentStyleSheet =
             pStyleSheetTable->FindStyleSheetByISTD(pStyleSheetEntry->sBaseStyleIdentifier);
         OSL_ENSURE( pParentStyleSheet, "table style not found" );
-        lcl_CopyTextProperties( pToFill, pParentStyleSheet, pStyleSheetTable);
+        lcl_CopyTextProperties( pToFill, pParentStyleSheet.get( ), pStyleSheetTable);
     }
 
     PropertyMap::const_iterator aPropIter = pStyleSheetEntry->pProperties->begin();
@@ -541,10 +438,10 @@ void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, Style
     if( !m_pTableStyleTextProperies.get())
     {
         m_pTableStyleTextProperies.reset( new PropertyMap );
-        const StyleSheetEntry* pStyleSheetEntry = pStyleSheetTable->FindStyleSheetByISTD(
+        const StyleSheetEntryPtr pStyleSheetEntry = pStyleSheetTable->FindStyleSheetByISTD(
                                                         m_sTableStyleName);
         OSL_ENSURE( pStyleSheetEntry, "table style not found" );
-        lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry, pStyleSheetTable);
+        lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry.get( ), pStyleSheetTable);
     }
     pContext->insert( m_pTableStyleTextProperies );
 }

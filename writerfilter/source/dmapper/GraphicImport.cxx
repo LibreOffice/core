@@ -29,7 +29,9 @@
  *
  ************************************************************************/
 
-#include <GraphicImport.hxx>
+#include "GraphicImport.hxx"
+#include "GraphicHelpers.hxx"
+
 #include <dmapper/DomainMapper.hxx>
 #include <PropertyMap.hxx>
 #include <doctok/resourceids.hxx>
@@ -995,35 +997,79 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_ooxml::LN_shape:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             {
-                val.getAny() >>= m_xShape;
+                uno::Reference< drawing::XShape> xShape;
+                val.getAny( ) >>= xShape;
 
-                if (m_xShape.is())
+                if ( xShape.is( ) )
                 {
-                    uno::Reference< beans::XPropertySet > xShapeProps
-                        (m_xShape, uno::UNO_QUERY_THROW);
+                    // Is it a graphic image
+                    bool bUseShape = true;
+                    try
+                    {
+                        uno::Reference< beans::XPropertySet > xShapeProps
+                            ( xShape, uno::UNO_QUERY_THROW );
 
-                    PropertyNameSupplier& rPropNameSupplier =
-                        PropertyNameSupplier::GetPropertyNameSupplier();
-                    xShapeProps->setPropertyValue
-                        (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
-                         uno::makeAny
-                         (text::TextContentAnchorType_AS_CHARACTER));
-                    xShapeProps->setPropertyValue
-                        (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
-                         uno::makeAny
-                         (m_pImpl->rDomainMapper.GetCurrentTextRange()));
+                        rtl::OUString sUrl;
+                        xShapeProps->getPropertyValue( rtl::OUString::createFromAscii( "GraphicURL" ) ) >>= sUrl;
 
-                    awt::Point aPoint(m_xShape->getPosition());
-                    awt::Size aSize(m_xShape->getSize());
+                        ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
+                        aMediaProperties[0].Name = rtl::OUString::createFromAscii( "URL" );
+                        aMediaProperties[0].Value <<= sUrl;
 
-                    if (m_pImpl->isXSizeValid())
-                        aSize.Width = m_pImpl->getXSize();
-                    if (m_pImpl->isYSizeValis())
-                        aSize.Height = m_pImpl->getYSize();
+                        m_xGraphicObject = createGraphicObject( aMediaProperties );
 
-                    m_xShape->setSize(aSize);
+                        bUseShape = !m_xGraphicObject.is( );
 
-                    m_pImpl->bIsGraphic = true;
+                        if ( !bUseShape )
+                        {
+                            // Define the object size
+                            uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
+                                    uno::UNO_QUERY );
+                            awt::Size aSize = xShape->getSize( );
+                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Height" ),
+                                   uno::makeAny( aSize.Height ) );
+                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Width" ),
+                                   uno::makeAny( aSize.Width ) );
+                        }
+                    }
+                    catch( const beans::UnknownPropertyException e )
+                    {
+                        // It isn't a graphic image
+                    }
+
+                    if ( bUseShape )
+                        m_xShape = xShape;
+
+
+                    if ( m_xShape.is( ) )
+                    {
+                        uno::Reference< beans::XPropertySet > xShapeProps
+                            (m_xShape, uno::UNO_QUERY_THROW);
+
+
+                        PropertyNameSupplier& rPropNameSupplier =
+                            PropertyNameSupplier::GetPropertyNameSupplier();
+                        xShapeProps->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
+                             uno::makeAny
+                             (text::TextContentAnchorType_AS_CHARACTER));
+                        xShapeProps->setPropertyValue
+                            (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
+                             uno::makeAny
+                             (m_pImpl->rDomainMapper.GetCurrentTextRange()));
+
+                        awt::Point aPoint(m_xShape->getPosition());
+                        awt::Size aSize(m_xShape->getSize());
+
+                        if (m_pImpl->isXSizeValid())
+                            aSize.Width = m_pImpl->getXSize();
+                        if (m_pImpl->isYSizeValis())
+                            aSize.Height = m_pImpl->getYSize();
+
+                        m_xShape->setSize(aSize);
+
+                        m_pImpl->bIsGraphic = true;
+                    }
                 }
             }
         break;
@@ -1769,8 +1815,6 @@ void GraphicImport::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_NonVisualGraphicFrameProperties_graphicFrameLocks:// 90657
         case NS_ooxml::LN_CT_Inline_a_graphic:// 90915
         case NS_ooxml::LN_CT_Anchor_simplePos_elem: // 90975;
-        case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
-        case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
         case NS_ooxml::LN_CT_Anchor_extent: // 90978;
         case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
         case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
@@ -1788,6 +1832,36 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
+        {
+            // Use a special handler for the positionning
+            PositionHandlerPtr pHandler( new PositionHandler );
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get( ) )
+            {
+                pProperties->resolve( *pHandler );
+
+                m_pImpl->nHoriRelation = pHandler->m_nRelation;
+                m_pImpl->nHoriOrient = pHandler->m_nOrient;
+                m_pImpl->nLeftPosition = pHandler->m_nPosition;
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
+        {
+            // Use a special handler for the positionning
+            PositionHandlerPtr pHandler( new PositionHandler );
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get( ) )
+            {
+                pProperties->resolve( *pHandler );
+
+                m_pImpl->nVertRelation = pHandler->m_nRelation;
+                m_pImpl->nVertOrient = pHandler->m_nOrient;
+                m_pImpl->nTopPosition = pHandler->m_nPosition;
             }
         }
         break;
@@ -1858,11 +1932,9 @@ void lcl_CalcCrop( sal_Int32& nCrop, sal_Int32 nRef )
        + (((nCrop & 0xffff) * nRef ) >> 16);
 }
 
-/*-- 01.11.2006 09:45:02---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const beans::PropertyValues& aMediaProperties )
 {
+    uno::Reference< text::XTextContent > xGraphicObject;
     try
     {
         uno::Reference< graphic::XGraphicProvider > xGraphicProvider(
@@ -1870,28 +1942,22 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")),
                                 m_xComponentContext),
                             uno::UNO_QUERY_THROW );
-        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
 
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
-        ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
-        aMediaProperties[0].Name = rPropNameSupplier.GetName(PROP_INPUT_STREAM);
-        aMediaProperties[0].Value <<= xIStream;
         uno::Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
-        //
+
         if(xGraphic.is())
         {
-            clog << "Graphic loaded" << endl;
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
             uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
             m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextGraphicObject"))),
-            uno::UNO_QUERY_THROW);
+                uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
                 uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
-            m_xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+            xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
             //shapes have only one border, PICF might have four
             table::BorderLine aBorderLine;
@@ -2083,11 +2149,28 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e )
     {
-        clog << __FILE__ << __LINE__ << " failed!" << endl;
+        clog << __FILE__ << ":" << __LINE__ << " failed. Message :" ;
+        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( )  << endl;
     }
+    return xGraphicObject;
+}
 
+/*-- 01.11.2006 09:45:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+{
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+        ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
+        aMediaProperties[0].Name = rPropNameSupplier.GetName(PROP_INPUT_STREAM);
+
+        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
+        aMediaProperties[0].Value <<= xIStream;
+
+        m_xGraphicObject = createGraphicObject( aMediaProperties );
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
@@ -2161,6 +2244,15 @@ void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Po
 void GraphicImport::info(const string & /*info*/)
 {
 }
+
+void GraphicImport::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+}
+
+void GraphicImport::endShape( )
+{
+}
+
 /*-- 09.08.2007 10:17:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
