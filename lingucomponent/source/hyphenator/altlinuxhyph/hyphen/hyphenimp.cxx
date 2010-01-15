@@ -39,8 +39,8 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18npool/mslangid.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
@@ -57,14 +57,15 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <linguistic/lngprops.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <osl/file.hxx>
 
 #include "dictmgr.hxx"
 
 #include <stdio.h>
+#include <string.h>
 
 #include <list>
 #include <set>
@@ -622,7 +623,7 @@ Reference< XPossibleHyphens > SAL_CALL
       lcword = new char[wordlen+1];
       hyphens = new char[wordlen+5];
       char ** rep = NULL; // replacements of discretionary hyphenation
-      int * pos = NULL; // array of [hyphenation point] minus [deletion position] 
+      int * pos = NULL; // array of [hyphenation point] minus [deletion position]
       int * cut = NULL; // length of deletions in original word
 
       // copy converted word into simple char buffer

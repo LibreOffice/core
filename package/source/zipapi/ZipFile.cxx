@@ -880,8 +880,8 @@ sal_Int32 ZipFile::recover()
                             if ( aEntry.nExtraLen < 0 ) aEntry.nExtraLen = 0x7FFF;
                             // End of quick fix
 
-
-                            sal_Int32 nBlockLength = aEntry.nSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            sal_Int32 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
+                            sal_Int32 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
                             if ( aEntry.nPathLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {

@@ -32,8 +32,8 @@
 #include "precompiled_forms.hxx"
 #include "parametrizedattributedispatcher.hxx"
 #include <svx/editview.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

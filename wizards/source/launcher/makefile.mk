@@ -42,9 +42,6 @@ TARGET=launcher
 
 ZIP1TARGET      = $(LAUNCHER_ALL_TARGET)
 XBAFILES	= DicOOo.xba
-.IF "$(WITH_FONTOOO)" == "YES"
-XBAFILES	+= FontOOo.xba
-.ENDIF
 ZIP1LIST        = *.xdl $(XBAFILES) *.xlb
 
 # --- Targets ------------------------------------------------------

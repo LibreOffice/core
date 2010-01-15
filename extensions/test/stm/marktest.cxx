@@ -48,10 +48,6 @@
 #include <vos/mutex.hxx>
 #include <vos/thread.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <string.h>
 
 #include "testfactreg.hxx"
@@ -166,8 +162,8 @@ INT32 OMarkableOutputStreamTest::test(  const UString& TestName,
 
                 XOutputStreamRef rOutput( TestObject , USR_QUERY );
 
-                assert( rPipeInput.is() );
-                assert( rOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rOutput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rOutput , rPipeInput );
@@ -533,8 +529,8 @@ INT32 OMarkableInputStreamTest::test(   const UString& TestName,
 
                 XInputStreamRef rInput( TestObject , USR_QUERY );
 
-                assert( rPipeOutput.is() );
-                assert( rInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
+                OSL_ASSERT( rInput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rPipeOutput , rInput );
