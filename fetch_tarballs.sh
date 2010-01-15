@@ -66,11 +66,13 @@ for i in `cat $1` ; do
                 failed="$failed $i"
                 wret=0
             fi
-            sum=`md5sum $i | sed "s/ [ *].*//"`
-            sum2=`echo $i | sed "s/-.*//"`
-            if [ "$sum" != "$sum2" ]; then
-                echo checksum failure for $i
-                failed="$failed $i"
+            if [ -f $i ]; then
+                sum=`md5sum $i | sed "s/ [ *].*//"`
+                sum2=`echo $i | sed "s/-.*//"`
+                if [ "$sum" != "$sum2" ]; then
+                    echo checksum failure for $i
+                    failed="$failed $i"
+                fi
             fi
             cd - > /dev/null
         fi
@@ -83,7 +85,7 @@ done
 #done
 #popd > /dev/null
 
-if [ ! -z $failed ]; then
-    echo "failed downloads: $failed"
+if [ ! -z "$failed" ]; then
+    echo $failed | sed "s/ /\n/g" | sed "s/^/ERROR: failed to download: /"
 fi
 

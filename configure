@@ -14892,7 +14892,15 @@ $as_echo "$as_me: WARNING: Building SeaMonkey with mingwin is not tested, and li
    for e in gz bz2; do
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
 $as_echo_n "checking for $MOZILLA_SOURCE_VERSION.tar.$e... " >&6; }
+      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+$as_echo "not found" >&6; }
+         HAVE_MOZILLA_TARBALL=n
+      else
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: found" >&5
+$as_echo "found" >&6; }
          HAVE_MOZILLA_TARBALL=y
+      fi
    done
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
          as_fn_error "Mozilla/SeaMonkey source archive not found.
