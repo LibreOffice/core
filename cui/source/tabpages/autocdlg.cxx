@@ -270,7 +270,7 @@ BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(IngnoreDoubleSpace,   aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
 
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -318,7 +318,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IngnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
 
     aCheckLB.SetUpdateMode(TRUE);
 }
@@ -613,7 +613,7 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,
                         aCheckLB.IsChecked(BOLD_UNDERLINE, CBCOL_SECOND));
 
-    pAutoCorrect->SetAutoCorrFlag(IngnoreDoubleSpace,
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,
                         aCheckLB.IsChecked(IGNORE_DBLSPACE, CBCOL_SECOND));
 
     bCheck = aCheckLB.IsChecked(DETECT_URL, CBCOL_FIRST);
@@ -751,7 +751,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CptlSttSntnc) );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
-    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IngnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_FIRST,    pOpt->bSetINetAttr );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
