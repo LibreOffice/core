@@ -519,58 +519,54 @@ void SwXPrintSettings::_preGetValues ()
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    sal_Bool bBool = TRUE;
-    sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
         case HANDLE_PRINTSET_LEFT_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintLeftPage();
+            rValue <<= mpPrtOpt->IsPrintLeftPage();
         break;
         case HANDLE_PRINTSET_RIGHT_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintRightPage();
+            rValue <<= mpPrtOpt->IsPrintRightPage();
         break;
         case HANDLE_PRINTSET_REVERSED:
-            bBoolVal = mpPrtOpt->IsPrintReverse();
+            rValue <<= mpPrtOpt->IsPrintReverse();
         break;
         case HANDLE_PRINTSET_PROSPECT:
-            bBoolVal = mpPrtOpt->IsPrintProspect();
+            rValue <<= mpPrtOpt->IsPrintProspect();
         break;
         case HANDLE_PRINTSET_GRAPHICS:
-            bBoolVal = mpPrtOpt->IsPrintGraphic();
+            rValue <<= mpPrtOpt->IsPrintGraphic();
         break;
         case HANDLE_PRINTSET_TABLES:
-            bBoolVal = mpPrtOpt->IsPrintTable();
+            rValue <<= mpPrtOpt->IsPrintTable();
         break;
         case HANDLE_PRINTSET_DRAWINGS:
-            bBoolVal = mpPrtOpt->IsPrintDraw();
+            rValue <<= mpPrtOpt->IsPrintDraw();
         break;
         case HANDLE_PRINTSET_CONTROLS:
-            bBoolVal = mpPrtOpt->IsPrintControl();
+            rValue <<= mpPrtOpt->IsPrintControl();
         break;
         case HANDLE_PRINTSET_PAGE_BACKGROUND:
-            bBoolVal = mpPrtOpt->IsPrintPageBackground();
+            rValue <<= mpPrtOpt->IsPrintPageBackground();
         break;
         case HANDLE_PRINTSET_BLACK_FONTS:
-            bBoolVal = mpPrtOpt->IsPrintBlackFont();
+            rValue <<= mpPrtOpt->IsPrintBlackFont();
         break;
         case HANDLE_PRINTSET_SINGLE_JOBS:
-            bBoolVal = mpPrtOpt->IsPrintSingleJobs();
+            rValue <<= mpPrtOpt->IsPrintSingleJobs();
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintEmptyPages();
+            rValue <<= mpPrtOpt->IsPrintEmptyPages();
         break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
-            bBoolVal = mpPrtOpt->IsPaperFromSetup();
+            rValue <<= mpPrtOpt->IsPaperFromSetup();
         break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
-            bBool = FALSE;
             rValue <<= static_cast < sal_Int16 > ( mpPrtOpt->GetPrintPostIts() );
         }
         break;
         case HANDLE_PRINTSET_FAX_NAME :
         {
-            bBool = FALSE;
             rValue <<= mpPrtOpt->GetFaxName();
         }
         break;
@@ -592,8 +588,6 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         default:
             throw UnknownPropertyException();
     }
-    if(bBool)
-        rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
 void SwXPrintSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
