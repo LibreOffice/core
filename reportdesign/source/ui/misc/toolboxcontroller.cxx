@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <vos/mutex.hxx>
 #include <svx/svxids.hrc>

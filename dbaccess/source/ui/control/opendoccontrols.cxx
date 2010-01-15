@@ -72,7 +72,7 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
@@ -81,7 +81,7 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 
 //........................................................................

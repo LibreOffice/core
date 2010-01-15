@@ -46,16 +46,16 @@
 #include "dbadmin.hrc"
 
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -64,7 +64,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #endif
 #include <jvmaccess/virtualmachine.hxx>
 #ifndef DBAUI_ADABASPAGE_HRC

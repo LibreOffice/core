@@ -76,7 +76,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errcode.hxx>

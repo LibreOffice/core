@@ -61,13 +61,13 @@ namespace dbaui
         DBG_CTOR(OToolBoxHelper,NULL);
 
         OSL_ENSURE(m_nSymbolsSize != SvtMiscOptions().GetCurrentSymbolsSize(),"SymbolsSize should not be identical");
-        SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        SvtMiscOptions().AddListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
     // -----------------------------------------------------------------------------
     OToolBoxHelper::~OToolBoxHelper()
     {
-        SvtMiscOptions().RemoveListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        SvtMiscOptions().RemoveListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
         DBG_DTOR(OToolBoxHelper,NULL);
     }
