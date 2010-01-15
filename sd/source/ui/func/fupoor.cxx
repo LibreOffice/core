@@ -35,7 +35,7 @@
 #include "fupoor.hxx"
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>

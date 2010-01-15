@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
 
@@ -70,11 +71,7 @@ basegfx::B2DPolyPolygon createClipPolygon(
     // rotate polygons, such that the strips are parallel to
     // the given direction vector
     const ::basegfx::B2DVector aUpVec(0.0, 1.0);
-    ::basegfx::B2DHomMatrix    aMatrix;
-
-    aMatrix.translate( -0.5, -0.5 );
-    aMatrix.rotate( aUpVec.angle( rDirection ) );
-    aMatrix.translate( 0.5, 0.5 );
+    basegfx::B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(0.5, 0.5, aUpVec.angle( rDirection )));
 
     // blow up clip polygon to slide size
     aMatrix.scale( rSlideSize.getX(),
@@ -129,7 +126,6 @@ void CombTransition::renderComb( double           t,
     // change transformation on cloned canvas to be in
     // device pixel
     cppcanvas::CanvasSharedPtr pCanvas( pCanvas_->clone() );
-    basegfx::B2DHomMatrix transform;
     basegfx::B2DPoint p;
 
     // TODO(Q2): Use basegfx bitmaps here
@@ -156,17 +152,14 @@ void CombTransition::renderComb( double           t,
         pLeavingBitmap->clip( aClipPolygon1 );
         // don't modify bitmap object (no move!):
         p = basegfx::B2DPoint( pageOrigin + (t * aPushDirection) );
-        transform.translate( p.getX(), p.getY() );
-        pCanvas->setTransformation( transform );
+        pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
         pLeavingBitmap->draw( pCanvas );
 
         // render even strips:
         pLeavingBitmap->clip( aClipPolygon2 );
         // don't modify bitmap object (no move!):
-        transform.identity();
         p = basegfx::B2DPoint( pageOrigin - (t * aPushDirection) );
-        transform.translate( p.getX(), p.getY() );
-        pCanvas->setTransformation( transform );
+        pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
         pLeavingBitmap->draw( pCanvas );
     }
 
@@ -176,19 +169,15 @@ void CombTransition::renderComb( double           t,
     // render odd strips:
     pEnteringBitmap->clip( aClipPolygon1 );
     // don't modify bitmap object (no move!):
-    transform.identity();
     p = basegfx::B2DPoint( pageOrigin + ((t - 1.0) * aPushDirection) );
-    transform.translate( p.getX(), p.getY() );
-    pCanvas->setTransformation( transform );
+    pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
     pEnteringBitmap->draw( pCanvas );
 
     // render even strips:
     pEnteringBitmap->clip( aClipPolygon2 );
     // don't modify bitmap object (no move!):
-    transform.identity();
     p = basegfx::B2DPoint( pageOrigin + ((1.0 - t) * aPushDirection) );
-    transform.translate( p.getX(), p.getY() );
-    pCanvas->setTransformation( transform );
+    pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
     pEnteringBitmap->draw( pCanvas );
 }
 

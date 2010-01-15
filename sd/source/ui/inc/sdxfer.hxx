@@ -34,7 +34,7 @@
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 // ------------------
 // - SdTransferable -

@@ -42,7 +42,7 @@
 #include "sdresid.hxx"
 #include "prntopts.hxx"
 #include "app.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 // STATIC DATA -----------------------------------------------------------
 

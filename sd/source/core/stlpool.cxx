@@ -42,14 +42,14 @@
 #include <svx/wghtitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/editeng.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/langitem.hxx>
 #include <svx/charreliefitem.hxx>
 #ifndef _SVX_EMPHITEM_HXX
@@ -64,7 +64,7 @@
 #include <svx/bulitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/adjitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #define _SDR_POSITIVE
 #define _SDR_ITEMS
@@ -78,7 +78,7 @@
 #include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "helpids.h"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
