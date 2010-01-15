@@ -38,15 +38,11 @@
 #include <osl/diagnose.h>
 
 #if OSL_DEBUG_LEVEL > 0
-    #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
-    #ifndef _CPPUHELPER_EXC_HLP_HXX_
     #include <cppuhelper/exc_hlp.hxx>
-    #endif
-    #ifndef _OSL_THREAD_H_
     #include <osl/thread.h>
-    #endif
+    #include <com/sun/star/lang/XServiceInfo.hpp>
+    #include <typeinfo.h>
 #endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -71,6 +67,8 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;
+    using ::com::sun::star::lang::XServiceInfo;
+    using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
@@ -110,7 +108,18 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 ::rtl::OStringBuffer aBuffer;
                 aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
                 aBuffer.append( ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US ) );
-                aBuffer.append( "' to the destination set.\n" );
+                aBuffer.append( "' to the destination set (a '" );
+
+                Reference< XServiceInfo > xSI( _rxDest, UNO_QUERY );
+                if ( xSI.is() )
+                {
+                    aBuffer.append( ::rtl::OUStringToOString( xSI->getImplementationName(), osl_getThreadTextEncoding() ) );
+                }
+                else
+                {
+                    aBuffer.append( typeid( *_rxDest.get() ).name() );
+                }
+                aBuffer.append( "' implementation).\n" );
 
                 Any aException( ::cppu::getCaughtException() );
                 aBuffer.append( "Caught an exception of type '" );
