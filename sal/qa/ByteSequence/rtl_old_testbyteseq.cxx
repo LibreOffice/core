@@ -42,7 +42,7 @@
 
 using namespace ::rtl;
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 
 namespace rtl_testbyteseq
