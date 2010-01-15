@@ -260,6 +260,7 @@ namespace writerfilter
         else {
             XMLTag::Pointer_t pTag(new XMLTag("end.mismatch"));
             pTag->addAttr("name", name);
+            pTag->addAttr("top", nameRemoved);
 
             currentTag()->addTag(pTag);
         }
