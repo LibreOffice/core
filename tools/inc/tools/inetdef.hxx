@@ -61,8 +61,6 @@
 #define TOOLS_INETDEF_OS "FreeBSD/amd64"
 #elif defined SINIX
 #define TOOLS_INETDEF_OS "SINIX"
-#elif defined IRIX
-#define TOOLS_INETDEF_OS "IRIX"
 #else // AIX, HPUX, SOLARIS, ...
 #define TOOLS_INETDEF_OS "Unix"
 #endif // AIX, HPUX, SOLARIS, ...
