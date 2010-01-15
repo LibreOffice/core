@@ -59,7 +59,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     }
 
     pBox->Enable( nCount != 0 );
-    pPropBtn->Enable( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+    pPropBtn->Show( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
 }
 
 // -----------------------------------------------------------------------
