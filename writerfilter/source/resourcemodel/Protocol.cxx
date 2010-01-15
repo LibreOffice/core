@@ -103,9 +103,9 @@ void StreamProtocol::utext(const sal_uInt8 * data, size_t len)
     aBuffer.append( (const sal_Unicode *) data, len);
     sText = aBuffer.makeStringAndClear();
 
-    m_pTagLogger->startElement("protocol-text");
+    m_pTagLogger->startElement("protocol-utext");
     m_pTagLogger->chars(sText);
-    m_pTagLogger->endElement("protocol-text");
+    m_pTagLogger->endElement("protocol-utext");
 
     m_pStream->utext(data, len);
 }
