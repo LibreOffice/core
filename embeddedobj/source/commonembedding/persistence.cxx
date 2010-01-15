@@ -272,7 +272,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     {
         uno::Reference< document::XStorageBasedDocument > xDoc( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xDoc.is() )
-            xDoc->switchToStorage( m_xObjectStorage );
+            SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
     }
 #endif
 
@@ -452,10 +452,9 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 }
 
 //------------------------------------------------------
-uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl(
-                                                            const uno::Reference< embed::XStorage >& xStorage )
+uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl()
 {
-    OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
+    OSL_ENSURE( m_xObjectStorage.is(), "The storage can not be empty!" );
 
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
@@ -478,7 +477,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
         throw uno::RuntimeException();
 
-    ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( xStorage ) );
+    ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( m_xObjectStorage ) );
 
     OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
     if ( !aFilterName.getLength() )
@@ -499,7 +498,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     uno::Reference< io::XInputStream > xTempInpStream;
     if ( !xDoc.is() )
     {
-        xTempInpStream = createTempInpStreamFromStor( xStorage, m_xFactory );
+        xTempInpStream = createTempInpStreamFromStor( m_xObjectStorage, m_xFactory );
         if ( !xTempInpStream.is() )
             throw uno::RuntimeException();
 
@@ -550,7 +549,15 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         }
 
         if ( xDoc.is() )
-            xDoc->loadFromStorage( xStorage, aArgs );
+        {
+            if ( m_xObjectLoadStorage.is() )
+            {
+                xDoc->loadFromStorage( m_xObjectLoadStorage, aArgs );
+                SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
+            }
+            else
+                xDoc->loadFromStorage( m_xObjectStorage, aArgs );
+        }
         else
             xLoadable->load( aArgs );
     }
@@ -726,6 +733,18 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 
 
 //------------------------------------------------------
+void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< document::XStorageBasedDocument >& xDoc, const uno::Reference< embed::XStorage >& xStorage )
+{
+    xDoc->switchToStorage( xStorage );
+    uno::Reference< util::XModifiable > xModif( xDoc, uno::UNO_QUERY );
+    if ( xModif.is() )
+        xModif->setModified( sal_False );
+
+    if ( m_xObjectLoadStorage.is() )
+        m_xObjectLoadStorage.clear();
+}
+
+//------------------------------------------------------
 void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Int32 nStorageFormat,
                                                     const ::rtl::OUString& aBaseURL,
@@ -763,12 +782,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )
-        {
-            xDoc->switchToStorage( xStorage );
-            uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-            if ( xModif.is() )
-                xModif->setModified( sal_False );
-        }
+            SwitchDocToStorage_Impl( xDoc, xStorage );
     }
     else
 #endif
@@ -1062,6 +1076,10 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "DocumentRecoverySupport" ) )
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "RecoverFromStorage" ) )
+        {
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xObjectLoadStorage );
         }
 
 

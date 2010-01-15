@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -150,6 +151,7 @@ protected:
     ::rtl::OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xObjectStorage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xObjectLoadStorage;
 
     // link related stuff
     ::rtl::OUString m_aLinkURL;
@@ -200,8 +202,7 @@ private:
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
     ::rtl::OUString GetFilterName( sal_Int32 nVersion );
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadLink_Impl();
 
@@ -212,6 +213,10 @@ private:
                                 const ::rtl::OUString& aBaseURL,
                                 const ::rtl::OUString& aHierarchName,
                                 sal_Bool bAttachToStorage );
+
+    void SwitchDocToStorage_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& xDoc,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr );

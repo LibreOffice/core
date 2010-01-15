@@ -646,7 +646,8 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
             } catch ( uno::Exception& ) {}
         }
 
-        m_xObjectStorage = uno::Reference< embed::XStorage >();
+        m_xObjectStorage.clear();
+        m_xObjectLoadStorage.clear();
     }
 
     m_bClosed = sal_True; // the closing succeeded
