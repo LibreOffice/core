@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #include <o3tl/heap_ptr.hxx>
 

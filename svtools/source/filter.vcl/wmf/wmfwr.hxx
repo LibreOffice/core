@@ -65,6 +65,9 @@ struct WMFWriterAttrStackMember
 // -------------
 
 class StarSymbolToMSMultiFont;
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
+
 class WMFWriter
 {
 private:
@@ -202,6 +205,7 @@ private:
     void SetLineAndFillAttr();
     void SetAllAttr();
 
+    void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteRecords(const GDIMetaFile & rMTF);
 
     void WriteHeader(const GDIMetaFile & rMTF, BOOL bPlaceable);

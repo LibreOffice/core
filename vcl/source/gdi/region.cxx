@@ -49,6 +49,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // =======================================================================
 //
@@ -1303,9 +1304,7 @@ void Region::Move( long nHorzMove, long nVertMove )
         mpImplRegion->mpPolyPoly->Move( nHorzMove, nVertMove );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate( nHorzMove, nVertMove );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
     }
     else
     {
@@ -1346,9 +1345,7 @@ void Region::Scale( double fScaleX, double fScaleY )
         mpImplRegion->mpPolyPoly->Scale( fScaleX, fScaleY );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.scale( fScaleX, fScaleY );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createScaleB2DHomMatrix(fScaleX, fScaleY));
     }
     else
     {
@@ -2457,6 +2454,14 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                         pCurrBand->Union( nXLeft, nXRight );
                         rRegion.mpImplRegion->mnRectCount++;
                     }
+                }
+
+                if( rIStrm.IsEof() )
+                {
+                    DBG_ERROR( "premature end of region stream" );
+                    delete rRegion.mpImplRegion;
+                    rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
+                    return rIStrm;
                 }
 
                 // get next header

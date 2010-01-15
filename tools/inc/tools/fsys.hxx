@@ -570,7 +570,7 @@ void FSysEnableSysErrorBox( BOOL bEnable );
 
 //========================================================================
 
-#if defined(DBG_UTIL) && !defined(PRODUCT)
+#if defined(DBG_UTIL)
 void FSysTest();
 #endif
 
