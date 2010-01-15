@@ -852,6 +852,12 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->attribute("isTextAppend", xTextAppend.is());
+    dmapper_logger->attribute("isIgnor", m_TableManager.isIgnore());
+#endif
+
     if(xTextAppend.is() && ! m_TableManager.isIgnore())
     {
         try
