@@ -802,7 +802,24 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow)
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
-        *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
+        ORowSetValue aValue((_rInsertRow->get())[aPosIter->second.nPosition]);
+        switch(aPosIter->second.nType)
+        {
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                {
+                    ::rtl::OUString sValue = aValue.getString();
+                    sal_Int32 nIndex = sValue.indexOf('.');
+                    if ( nIndex != -1 )
+                    {
+                        aValue = sValue.copy(0,nIndex + (aPosIter->second.nScale > 0 ? aPosIter->second.nScale + 1 : 0));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        *aIter = aValue;
         aIter->setTypeKind(aPosIter->second.nType);
     }
 }
