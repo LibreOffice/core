@@ -52,7 +52,7 @@
 
 #define _SOLAR__PRIVATE 1
 #include <basic/sbx.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include <tools/diagnose_ex.h>
 #include <basidesh.hrc>
 #include <basidesh.hxx>

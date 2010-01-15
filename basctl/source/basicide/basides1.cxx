@@ -36,7 +36,7 @@
 #define GLOBALOVERFLOW2
 #include <basic/sbx.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <ide_pch.hxx>
 
 #define _SOLAR__PRIVATE 1

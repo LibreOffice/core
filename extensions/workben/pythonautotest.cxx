@@ -44,10 +44,6 @@
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
 #include <vos/conditn.hxx>
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 
 using namespace rtl;
 using namespace vos;
@@ -302,7 +298,7 @@ void TestListener::cmdLine()
 
 void TestListener::detach()
 {
-    assert( m_pDebuggingRef );
+    OSL_ASSERT( m_pDebuggingRef );
 
        m_pDebuggingRef = 0;
 }
@@ -322,15 +318,15 @@ void checkInvokation( const XInvokationRef &xInvoke )
     UsrAny anyList;
 
     // check exporting an object as an invokation
-    assert( xInvoke->hasProperty( L"list" ) );
+    OSL_ASSERT( xInvoke->hasProperty( L"list" ) );
     anyList = xInvoke->getValue( L"list" );
 
-    assert( anyList.getReflection() == XInvokation_getReflection() );
+    OSL_ASSERT( anyList.getReflection() == XInvokation_getReflection() );
     XInvokationRef *pRef = ( XInvokationRef * ) anyList.get();
-    assert( (*pRef).is() );
+    OSL_ASSERT( (*pRef).is() );
 
-    assert( (*pRef)->hasMethod( L"append"  ) );
-    assert( (*pRef)->hasMethod( L"count" ) );
+    OSL_ASSERT( (*pRef)->hasMethod( L"append"  ) );
+    OSL_ASSERT( (*pRef)->hasMethod( L"count" ) );
 
     Sequence<UsrAny> seq(1);
     UsrAny any( (INT32) 1);
@@ -342,7 +338,7 @@ void checkInvokation( const XInvokationRef &xInvoke )
     any = (*pRef)->invoke( L"append" , seq  , Sequence<INT16>(), Sequence<UsrAny>() );
     any = (*pRef)->invoke( L"count" , seq , Sequence<INT16>(), Sequence<UsrAny>() );
 
-    assert( nOldSize + 1 == any.getINT32() );
+    OSL_ASSERT( nOldSize + 1 == any.getINT32() );
 }
 
 // just for testing !
@@ -448,30 +444,30 @@ int __LOADONCALLAPI main (int argc, char **argv)
     *****/
     // get/set an int !
     {
-        assert( xInvoke->hasProperty( L"nIntTest" ) );
+        OSL_ASSERT( xInvoke->hasProperty( L"nIntTest" ) );
         UsrAny any = xInvoke->getValue( L"nIntTest" );
 
-        assert( any.getReflection()->getTypeClass() == TypeClass_LONG );
-        assert( any.getINT32() == 5 );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( any.getINT32() == 5 );
 
         // simple test: set an int !
         xInvoke->setValue( L"nIntTest" , UsrAny( (INT32) 10 ) );
         any = xInvoke->getValue( L"nIntTest" );
 
-        assert( any.getReflection()->getTypeClass() == TypeClass_LONG );
-        assert( any.getINT32() == 10 );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( any.getINT32() == 10 );
     }
 
     //  call a python method !
     {
         xEngine->run( L"def foo():\n"
                       L"    return 'this is foo'\n" , XInterfaceRef() , Sequence<UsrAny> () );
-        assert( xInvoke->hasMethod( L"foo" ) );
+        OSL_ASSERT( xInvoke->hasMethod( L"foo" ) );
         UsrAny any = xInvoke->invoke(   L"foo" ,
                                         Sequence<UsrAny>(),
                                         Sequence<INT16>() ,
                                         Sequence<UsrAny> () );
-        assert( any.getString() == L"this is foo" );
+        OSL_ASSERT( any.getString() == L"this is foo" );
     }
 
 
@@ -480,7 +476,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
         try {
             xInvoke->invoke( L"foo" , Sequence<UsrAny>(1) , Sequence<INT16>(), Sequence<UsrAny> () );
             // wrong number of arguments
-            assert( 0 );
+            OSL_ASSERT( 0 );
         }
         catch ( IllegalArgumentException& e ) {
         }
@@ -501,21 +497,21 @@ int __LOADONCALLAPI main (int argc, char **argv)
     *******/
     {
         XIntrospectionAccessRef xIntrospection = xInvoke->getIntrospection();
-        assert( xIntrospection.is() );
+        OSL_ASSERT( xIntrospection.is() );
 
         // no further test, simply call them
         xIntrospection->getMethods(0);
         xIntrospection->getProperties(0);
 
-        assert( xIntrospection->getSuppliedMethodConcepts() == 0 );
-        assert( xIntrospection->getSuppliedPropertyConcepts() == 0 );
+        OSL_ASSERT( xIntrospection->getSuppliedMethodConcepts() == 0 );
+        OSL_ASSERT( xIntrospection->getSuppliedPropertyConcepts() == 0 );
 
         Property prop = xIntrospection->getProperty( L"nIntTest" ,0 );
-        assert( prop.Name == L"nIntTest" );
-        assert( prop.Type->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( prop.Name == L"nIntTest" );
+        OSL_ASSERT( prop.Type->getTypeClass() == TypeClass_LONG );
 
         XIdlMethodRef method = xIntrospection->getMethod( L"foo" , 0 );
-        assert( method->getName() == L"foo" );
+        OSL_ASSERT( method->getName() == L"foo" );
     }
 
 
@@ -567,8 +563,8 @@ int __LOADONCALLAPI main (int argc, char **argv)
         xEngine->run(   L"import testmodul\n"
                         L"x = testmodul.testmethod()\n" , XInterfaceRef() , Sequence<UsrAny>() );
         UsrAny any = xInvoke->getValue( L"x" );
-        assert( any.getReflection()->getTypeClass() == TypeClass_LONG );
-        assert( any.getINT32() == 42 );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( any.getINT32() == 42 );
     }
 
     // check other imports
@@ -577,11 +573,11 @@ int __LOADONCALLAPI main (int argc, char **argv)
         xEngine->run(   L"import math\n"
                         L"dMathTest = math.exp(0)\n"  , XInterfaceRef() , Sequence<UsrAny> () );
 
-        assert( xInvoke->hasProperty( L"dMathTest" ) );
+        OSL_ASSERT( xInvoke->hasProperty( L"dMathTest" ) );
         UsrAny any = xInvoke->getValue( L"dMathTest" );
 
-        assert( any.getReflection()->getTypeClass() == TypeClass_DOUBLE );
-        assert( any.getDouble() == 1. );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_DOUBLE );
+        OSL_ASSERT( any.getDouble() == 1. );
     }
 
     // Test connection to root object !
@@ -592,36 +588,36 @@ int __LOADONCALLAPI main (int argc, char **argv)
                         L"z = y.value\n" , XInterfaceRef() , Sequence<UsrAny> () );
 
         UsrAny any = xInvoke->getValue( L"x" );
-        assert( any.getReflection()->getTypeClass() == TypeClass_LONG );
-        assert( any.getINT32() == 15 );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( any.getINT32() == 15 );
 
         any = xInvoke->getValue( L"z" );
-        assert( any.getReflection()->getTypeClass() == TypeClass_LONG );
-        assert( any.getINT32() == 15 );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
+        OSL_ASSERT( any.getINT32() == 15 );
     }
 
     // Test exactName interface
     {
         UsrAny any = xInvoke->getValue( L"__builtins__" );
-        assert( any.getReflection()->getTypeClass() == TypeClass_INTERFACE );
+        OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_INTERFACE );
 
         XInvokationRef rInv( *((XInterfaceRef *) any.get() ), USR_QUERY );
-        assert( rInv.is() );
+        OSL_ASSERT( rInv.is() );
 
         XExactNameRef rName( *((XInterfaceRef*) any.get() ), USR_QUERY );
-        assert( rName.is() );
+        OSL_ASSERT( rName.is() );
 
         UString str = rName->getExactName( L"SYNTAXERROR" );
-        assert( str.len() );
+        OSL_ASSERT( str.len() );
     }
 
 
     // Test exactName interface of the engine itself
     {
         XExactNameRef rName( xInvoke , USR_QUERY );
-        assert( rName.is() );
+        OSL_ASSERT( rName.is() );
         UString str = rName->getExactName( L"STARDIV" );
-        assert( str.len() );
+        OSL_ASSERT( str.len() );
     }
 
 
