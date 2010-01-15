@@ -29,7 +29,11 @@
 #
 #*************************************************************************
 
-PRJ := ..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
+PRJ := ../..
 PRJNAME := stoc
 TARGET := test_uriproc
 
@@ -39,25 +43,11 @@ ENABLE_EXCEPTIONS := TRUE
 
 DLLPRE = # no leading "lib" on .so files
 
-UNOTYPES = \
-    com.sun.star.beans.XPropertySet \
-    com.sun.star.lang.XComponent \
-    com.sun.star.lang.XMultiComponentFactory \
-    com.sun.star.uno.XComponentContext \
-    com.sun.star.uri.ExternalUriReferenceTranslator \
-    com.sun.star.uri.UriReferenceFactory \
-    com.sun.star.uri.VndSunStarPkgUrlReferenceFactory \
-    com.sun.star.uri.XExternalUriReferenceTranslator \
-    com.sun.star.uri.XUriReference \
-    com.sun.star.uri.XUriReferenceFactory \
-    com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory \
-    com.sun.star.uri.XVndSunStarScriptUrlReference \
-    com.sun.star.util.XMacroExpander
-
 SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_uriproc.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
+SHL1OBJS = $(SLO)/test_uriproc.obj
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
+SHL1RPATH = NONE
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
@@ -65,11 +55,24 @@ SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
 
+.IF "$(OS)" == "WNT"
+my_file = file:///
+.ELSE
+my_file = file://
+.END
+
 ALLTAR: test
 
-$(BIN)$/$(TARGET).rdb .ERRREMOVE:
-    $(COPY) $(SOLARBINDIR)$/types.rdb $@
-    regcomp -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/stocservices.uno$(DLLPOST))
+test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb \
+        -env:OOO_TEST_PREFIX=$(my_file)$(PWD)/$(DLLDEST)/
 
-test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).rdb
-    testshl2 $(SHL1TARGETN) -forward $(BIN)$/$(TARGET).rdb
+$(MISC)/$(TARGET)/services.rdb:
+    $(MKDIRHIER) $(@:d)
+    $(RM) $@
+    $(REGCOMP) -register -r $@ -wop=vnd.sun.star.expand:\$${{OOO_TEST_PREFIX}} \
+        -c $(DLLDEST)/stocservices.uno$(DLLPOST)
+
+.END
