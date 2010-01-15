@@ -770,8 +770,8 @@ void DomainMapperTableHandler::endTable()
     m_aRowProperties.clear();
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("tablehandler.table");
     dmapper_logger->endElement("tablehandler.endTable");
+    dmapper_logger->endElement("tablehandler.table");
 #endif
 }
 
