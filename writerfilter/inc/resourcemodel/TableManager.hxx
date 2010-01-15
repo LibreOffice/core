@@ -334,6 +334,11 @@ private:
      */
     void closeCell(const T & handle);
 
+    /**
+     Ensure a cell is open at the current level.
+    */
+    void ensureOpenCell();
+
 protected:
 
     /**
@@ -471,6 +476,7 @@ public:
        only control information, e.g. end of row.
      */
     virtual bool isIgnore() const;
+
 
 #ifdef DEBUG_TABLE
     void setTagLogger(TagLogger::Pointer_t _tagLogger)
@@ -615,6 +621,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
     sal_Int32 nTableDepthDifference = mnTableDepthNew - mnTableDepth;
     while (nTableDepthDifference > 0)
     {
+        ensureOpenCell();
         startLevel();
 
         --nTableDepthDifference;
@@ -642,8 +649,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
 
         else if (isInCell())
         {
-            if (! pTableData->isCellOpen())
-                openCell(getHandle(), getCellProps());
+            ensureOpenCell();
 
             if (isCellEnd())
             {
@@ -915,6 +921,28 @@ void  TableManager<T, PropertiesPointer>::closeCell
         pTableData->endCell(handle);
     }
 }
+
+template <typename T, typename PropertiesPointer>
+void  TableManager<T, PropertiesPointer>::ensureOpenCell()
+{
+#ifdef DEBUG_TABLE
+    mpTableLogger->startElement("tablemanager.ensureOpenCell");
+#endif
+
+    if (mnTableDepth > 0)
+    {
+        typename TableData<T, PropertiesPointer>::Pointer_t
+        pTableData = mTableDataStack.top();
+
+        if (!pTableData->isCellOpen())
+            openCell(getHandle(), getCellProps());
+    }
+
+#ifdef DEBUG_TABLE
+    mpTableLogger->endElement("tablemanager.ensureOpenCell");
+#endif
+}
+
 }
 
 #endif // INCLUDED_TABLE_MANAGER_HXX
