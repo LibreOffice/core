@@ -38,9 +38,11 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -78,6 +80,8 @@ namespace dbaccess
     using ::com::sun::star::io::XActiveDataSource;
     using ::com::sun::star::io::XTextInputStream;
     using ::com::sun::star::io::XActiveDataSink;
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::util::XModifiable;
     /** === end UNO using === **/
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
@@ -331,6 +335,36 @@ namespace dbaccess
                 o_mapStorageToObjectName[ sStorageName ] = aCompDesc;
             }
         }
+
+        // .........................................................................
+        bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
+        {
+            Reference< XModel > xDocument( i_rComponent, UNO_QUERY );
+            if ( !xDocument.is() )
+            {
+                Reference< XController > xController( i_rComponent, UNO_QUERY_THROW );
+                xDocument = xController->getModel();
+            }
+
+            if ( !xDocument.is() )
+                return false;
+
+            ::comphelper::NamedValueCollection aDocArgs( xDocument->getArgs() );
+            return aDocArgs.getOrDefault( "ReadOnly", false );
+        }
+
+        // .........................................................................
+        void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
+        {
+            const Reference< XModifiable > xModify( i_rSubComponent, UNO_QUERY );
+            if ( !xModify.is() )
+            {
+                OSL_ENSURE( false, "lcl_markModified: unhandled case!" );
+                return;
+            }
+
+            xModify->setModified( sal_True );
+        }
     }
 
     //====================================================================
@@ -404,7 +438,7 @@ namespace dbaccess
         }
     }
 
-    // .........................................................................
+    //--------------------------------------------------------------------
     void SubComponentRecovery::impl_identifyComponent_throw( const Reference< XDatabaseDocumentUI >& i_rController )
     {
         ENSURE_OR_THROW( i_rController.is(), "illegal controller" );
@@ -438,7 +472,7 @@ namespace dbaccess
             // fall through
 
         case FORM:
-            // TODO: how to know whether the thing is opened for editing?
+            m_aCompDesc.bForEditing = !lcl_determineReadOnly( m_xComponent );
             break;
 
         default:
@@ -563,7 +597,7 @@ namespace dbaccess
         const Reference< XController >& i_rTargetController )
     {
         ENSURE_OR_THROW( i_rDocumentStorage.is(), "illegal document storage" );
-        ENSURE_OR_THROW( i_rTargetController.is(), "illegal controller" );
+        Reference< XDatabaseDocumentUI > xDocumentUI( i_rTargetController, UNO_QUERY_THROW );
 
         if ( !i_rDocumentStorage->hasByName( lcl_getRecoveryDataSubStorageName() ) )
             // that's allowed
@@ -616,10 +650,28 @@ namespace dbaccess
                     continue;
                 }
 
+                // the controller needs to have a connection to be able to open sub components
+                if ( !xDocumentUI->isConnected() )
+                    xDocumentUI->connect();
+
                 // recover the single component
                 Reference< XStorage > xCompStor( xComponentsStor->openStorageElement( stor->first, ElementModes::READ ) );
-                // TODO
-                xCompStor->dispose();
+
+                ::comphelper::NamedValueCollection aLoadArgs;
+                aLoadArgs.put( "RecoverFromStorage", xCompStor );
+                try
+                {
+                    Reference< XComponent > xSubComponent = xDocumentUI->loadComponentWithArguments( map->first, stor->second.sName, stor->second.bForEditing,
+                        aLoadArgs.getPropertyValues() );
+
+                    // at the moment, we only store, during session save, sub components which are modified. So, set this
+                    // recovered sub component to "modified", too.
+                    lcl_markModified( xSubComponent );
+                }
+                catch ( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
 
             xComponentsStor->dispose();

@@ -67,6 +67,11 @@
 #include <com/sun/star/sdb/XSubDocument.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 //........................................................................
 namespace dbaccess
 {
@@ -247,8 +252,28 @@ private:
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
             const bool _bSuppressMacros,
             const bool _bReadOnly,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rAdditionalArgs,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rOpenCommandArguments,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
+        );
+
+    /** splits the given arguments to an "open*" command into arguments for loading the document, and arguments to be
+        put into the EmbeddedObjectDescriptor
+
+        Any values already present in <code>o_rDocumentLoadArgs</code> and <code>o_rEmbeddedObjectDescriptor</code>
+        will be overwritten by values from <code>i_rOpenCommandArguments</code>, if applicable, otherwise they will
+        be preserved.
+
+        @param i_rOpenCommandArguments
+            the arguments passed to the "open*" command at the content
+        @param o_rDocumentLoadArgs
+            the arguments to be passed when actually loading the embedded document.
+        @param o_rEmbeddedObjectDescriptor
+            the EmbeddedObjectDescriptor to be passed when initializing the embedded object
+    */
+    void separateOpenCommandArguments(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    i_rOpenCommandArguments,
+            ::comphelper::NamedValueCollection&                                                 o_rDocumentLoadArgs,
+            ::comphelper::NamedValueCollection&                                                 o_rEmbeddedObjectDescriptor
         );
 
     /** loads the EmbeddedObject if not already loaded

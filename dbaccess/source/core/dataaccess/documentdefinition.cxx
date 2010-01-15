@@ -1117,16 +1117,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             Reference< XStorage> xStorage = getContainerStorage();
             // -----------------------------------------------------------------------------
             xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
-            /*loadEmbeddedObject( true );
-            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-            if ( xPersist.is() )
-            {
-                xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
-                xPersist->storeOwn();
-                m_xEmbeddedObject->changeState(EmbedStates::LOADED);
-            }
-            else
-                throw CommandAbortedException();*/
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
         {
@@ -1578,8 +1568,24 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::separateOpenCommandArguments( const Sequence< PropertyValue >& i_rOpenCommandArguments,
+        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& o_rEmbeddedObjectDescriptor )
+{
+    ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
+    o_rDocumentLoadArgs.merge( aOpenCommandArguments, false );
+
+    // the only OpenCommandArgument so far, which belongs into the EmbeddedObjectDescriptor, and not the document's
+    // media descriptor, is RecoverFromStorage
+    if ( aOpenCommandArguments.has( "RecoverFromStorage" ) )
+    {
+        o_rEmbeddedObjectDescriptor.put( "RecoverFromStorage", aOpenCommandArguments.get( "RecoverFromStorage" ) );
+        o_rDocumentLoadArgs.remove( "RecoverFromStorage" );
+    }
+}
+
+// -----------------------------------------------------------------------------
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
-        const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
+        const Sequence< PropertyValue >& i_rOpenCommandArguments, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
 {
     // .........................................................................
     // (re-)create interceptor, and put it into the descriptor of the embedded object
@@ -1596,6 +1602,10 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
+
+    // .........................................................................
+    ::comphelper::NamedValueCollection aMediaDesc;
+    separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );
 
     // .........................................................................
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
@@ -1639,9 +1649,6 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
 
     // .........................................................................
-    ::comphelper::NamedValueCollection aMediaDesc( _rAdditionalArgs );
-
-    // .........................................................................
     // create the ComponentData, and put it into the document's media descriptor
     {
         ::comphelper::NamedValueCollection aComponentData;
@@ -1663,7 +1670,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _xConnection, const Sequence< sal_Int8 >& _aClassID,
-        const Sequence< PropertyValue >& _rAdditionalArgs, const bool _bSuppressMacros, const bool _bReadOnly )
+        const Sequence< PropertyValue >& i_rOpenCommandArguments, const bool _bSuppressMacros, const bool _bReadOnly )
 {
     if ( !m_xEmbeddedObject.is() )
     {
@@ -1716,7 +1723,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
                 Sequence< PropertyValue > aEmbeddedObjectDescriptor;
                 Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                    _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+                    _xConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
@@ -1761,7 +1768,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;
             Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+                _xConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
             Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
             OSL_ENSURE(xCommon.is(),"unsupported interface!");
@@ -1778,21 +1785,25 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
             // then just re-set some model parameters
             try
             {
-                Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
-                Sequence< PropertyValue > aArgs = xModel->getArgs();
+                // ensure the media descriptor doesn't contain any values which are intended for the
+                // EmbeddedObjectDescriptor only
+                ::comphelper::NamedValueCollection aEmbeddedObjectDescriptor;
+                ::comphelper::NamedValueCollection aNewMediaDesc;
+                separateOpenCommandArguments( i_rOpenCommandArguments, aNewMediaDesc, aEmbeddedObjectDescriptor );
 
-                ::comphelper::NamedValueCollection aMediaDesc( aArgs );
-                ::comphelper::NamedValueCollection aArguments( _rAdditionalArgs );
-                aMediaDesc.merge( aArguments, sal_False );
+                // merge the new media descriptor into the existing media descriptor
+                const Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
+                const Sequence< PropertyValue > aArgs = xModel->getArgs();
+                ::comphelper::NamedValueCollection aExistentMediaDesc( aArgs );
+                aExistentMediaDesc.merge( aNewMediaDesc, sal_False );
 
-                lcl_putLoadArgs( aMediaDesc, optional_bool(), optional_bool() );
+                lcl_putLoadArgs( aExistentMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
                     // #i88977# / 2008-05-05 / frank.schoenheit@sun.com
                     // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
 
-                aMediaDesc >>= aArgs;
-                xModel->attachResource( xModel->getURL(), aArgs );
+                xModel->attachResource( xModel->getURL(), aExistentMediaDesc.getPropertyValues() );
             }
             catch( const Exception& )
             {
