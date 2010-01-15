@@ -34,7 +34,7 @@
 #include <vector>
 #include <vcl/toolbox.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>

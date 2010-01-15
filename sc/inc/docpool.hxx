@@ -31,7 +31,7 @@
 #ifndef SC_SCDOCPOL_HXX
 #define SC_SCDOCPOL_HXX
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "scdllapi.h"
 
 class ScStyleSheet;

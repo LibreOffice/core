@@ -34,8 +34,8 @@
 #include "global.hxx"
 #include "dpobject.hxx"
 #include "rangeutl.hxx"     // ScArea
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

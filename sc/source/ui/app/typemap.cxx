@@ -64,8 +64,8 @@
 
 
 #include <sfx2/msg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -80,7 +80,7 @@
 #include <svx/colritem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/bolnitem.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -117,15 +117,15 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/drawitem.hxx>
-#include <svtools/ilstitem.hxx>
-#include <svtools/globalnameitem.hxx>
+#include <svl/ilstitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/zoomslideritem.hxx>
 
 // #i25616#
 #include <svx/sdshitm.hxx>
 
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <avmedia/mediaitem.hxx>
 #include "attrib.hxx"
 

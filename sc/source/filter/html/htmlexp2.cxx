@@ -46,7 +46,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/embedtransfer.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 
 #include "htmlexp.hxx"

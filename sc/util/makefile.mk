@@ -41,10 +41,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 # --- Resourcen ----------------------------------------------------
 
 RESLIB1LIST=\
@@ -190,7 +186,7 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
-    $(SVXMSFILTERLIB)		\
+    $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
