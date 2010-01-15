@@ -71,22 +71,28 @@ const sal_uInt8 A = EXC_TOKCLASS_ARR;
 #define VR_E { EXC_PARAM_EXCELONLY, EXC_PARAMCONV_RPT, true  }
 #define C    { EXC_PARAM_CALCONLY,  EXC_PARAMCONV_ORG, false }
 
+const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF/OOBIN function identifier available.
+const sal_uInt8 MX    = 30;                 /// Maximum parameter count.
+
+#define EXC_FUNCNAME( ascii )       "_xlfn." ascii
+#define EXC_FUNCNAME_ODF( ascii )   "_xlfnodf." ascii
+
 /** Functions new in BIFF2. */
 static const XclFunctionInfo saFuncTable_2[] =
 {
-    { ocCount,              0,      0,  30, V, { RX }, 0, 0 },
+    { ocCount,              0,      0,  MX, V, { RX }, 0, 0 },
     { ocIf,                 1,      2,  3,  R, { VO, RO }, 0, 0 },
     { ocIsNA,               2,      1,  1,  V, { VR }, 0, 0 },
     { ocIsError,            3,      1,  1,  V, { VR }, 0, 0 },
-    { ocSum,                4,      0,  30, V, { RX }, 0, 0 },
-    { ocAverage,            5,      1,  30, V, { RX }, 0, 0 },
-    { ocMin,                6,      1,  30, V, { RX }, 0, 0 },
-    { ocMax,                7,      1,  30, V, { RX }, 0, 0 },
+    { ocSum,                4,      0,  MX, V, { RX }, 0, 0 },
+    { ocAverage,            5,      1,  MX, V, { RX }, 0, 0 },
+    { ocMin,                6,      1,  MX, V, { RX }, 0, 0 },
+    { ocMax,                7,      1,  MX, V, { RX }, 0, 0 },
     { ocRow,                8,      0,  1,  V, { RO }, 0, 0 },
     { ocColumn,             9,      0,  1,  V, { RO }, 0, 0 },
     { ocNotAvail,           10,     0,  0,  V, {}, 0, 0 },
-    { ocNPV,                11,     2,  30, V, { VR, RX }, 0, 0 },
-    { ocStDev,              12,     1,  30, V, { RX }, 0, 0 },
+    { ocNPV,                11,     2,  MX, V, { VR, RX }, 0, 0 },
+    { ocStDev,              12,     1,  MX, V, { RX }, 0, 0 },
     { ocCurrency,           13,     1,  2,  V, { VR }, 0, 0 },
     { ocFixed,              14,     1,  2,  V, { VR, VR, C }, 0, 0 },
     { ocSin,                15,     1,  1,  V, { VR }, 0, 0 },
@@ -112,8 +118,8 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocValue,              33,     1,  1,  V, { VR }, 0, 0 },
     { ocTrue,               34,     0,  0,  V, {}, 0, 0 },
     { ocFalse,              35,     0,  0,  V, {}, 0, 0 },
-    { ocAnd,                36,     1,  30, V, { RX }, 0, 0 },
-    { ocOr,                 37,     1,  30, V, { RX }, 0, 0 },
+    { ocAnd,                36,     1,  MX, V, { RX }, 0, 0 },
+    { ocOr,                 37,     1,  MX, V, { RX }, 0, 0 },
     { ocNot,                38,     1,  1,  V, { VR }, 0, 0 },
     { ocMod,                39,     2,  2,  V, { VR }, 0, 0 },
     { ocDBCount,            40,     3,  3,  V, { RO, RR }, 0, 0 },
@@ -122,7 +128,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocDBMin,              43,     3,  3,  V, { RO, RR }, 0, 0 },
     { ocDBMax,              44,     3,  3,  V, { RO, RR }, 0, 0 },
     { ocDBStdDev,           45,     3,  3,  V, { RO, RR }, 0, 0 },
-    { ocVar,                46,     1,  30, V, { RX }, 0, 0 },
+    { ocVar,                46,     1,  MX, V, { RX }, 0, 0 },
     { ocDBVar,              47,     3,  3,  V, { RO, RR }, 0, 0 },
     { ocText,               48,     2,  2,  V, { VR }, 0, 0 },
     { ocRGP,                49,     1,  2,  A, { RA, RA, C, C }, 0, 0 },
@@ -158,7 +164,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocArcTan2,            97,     2,  2,  V, { VR }, 0, 0 },
     { ocArcSin,             98,     1,  1,  V, { VR }, 0, 0 },
     { ocArcCos,             99,     1,  1,  V, { VR }, 0, 0 },
-    { ocChose,              100,    2,  30, R, { VO, RO }, 0, 0 },
+    { ocChose,              100,    2,  MX, R, { VO, RO }, 0, 0 },
     { ocHLookup,            101,    3,  3,  V, { VV, RO, RO, C }, 0, 0 },
     { ocVLookup,            102,    3,  3,  V, { VV, RO, RO, C }, 0, 0 },
     { ocIsRef,              105,    1,  1,  V, { RX }, 0, 0 },
@@ -194,13 +200,13 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocMatMult,            165,    2,  2,  A, { VA }, 0, 0 },
     { ocZinsZ,              167,    4,  6,  V, { VR }, 0, 0 },
     { ocKapz,               168,    4,  6,  V, { VR }, 0, 0 },
-    { ocCount2,             169,    0,  30, V, { RX }, 0, 0 },
-    { ocProduct,            183,    0,  30, V, { RX }, 0, 0 },
+    { ocCount2,             169,    0,  MX, V, { RX }, 0, 0 },
+    { ocProduct,            183,    0,  MX, V, { RX }, 0, 0 },
     { ocFact,               184,    1,  1,  V, { VR }, 0, 0 },
     { ocDBProduct,          189,    3,  3,  V, { RO, RR }, 0, 0 },
     { ocIsNonString,        190,    1,  1,  V, { VR }, 0, 0 },
-    { ocStDevP,             193,    1,  30, V, { RX }, 0, 0 },
-    { ocVarP,               194,    1,  30, V, { RX }, 0, 0 },
+    { ocStDevP,             193,    1,  MX, V, { RX }, 0, 0 },
+    { ocVarP,               194,    1,  MX, V, { RX }, 0, 0 },
     { ocDBStdDevP,          195,    3,  3,  V, { RO, RR }, 0, 0 },
     { ocDBVarP,             196,    3,  3,  V, { RO, RR }, 0, 0 },
     { ocTrunc,              197,    1,  1,  V, { VR, C }, 0, 0 },
@@ -209,7 +215,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocCurrency,           204,    1,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },
     { ocRoundUp,            212,    2,  2,  V, { VR }, 0, 0 },
     { ocRoundDown,          213,    2,  2,  V, { VR }, 0, 0 },
-    { ocExternal,           255,    1,  30, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, 0 }
+    { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, 0 }
 };
 
 /** Functions new in BIFF3. */
@@ -224,8 +230,8 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocGetDiffDate360,     220,    2,  2,  V, { VR, VR, C }, 0, 0 },
     { ocGetActDate,         221,    0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE, 0 },
     { ocVBD,                222,    5,  7,  V, { VR }, 0, 0 },
-    { ocMedian,             227,    1,  30, V, { RX }, 0, 0 },
-    { ocSumProduct,         228,    1,  30, V, { VA }, 0, 0 },
+    { ocMedian,             227,    1,  MX, V, { RX }, 0, 0 },
+    { ocSumProduct,         228,    1,  MX, V, { VA }, 0, 0 },
     { ocSinHyp,             229,    1,  1,  V, { VR }, 0, 0 },
     { ocCosHyp,             230,    1,  1,  V, { VR }, 0, 0 },
     { ocTanHyp,             231,    1,  1,  V, { VR }, 0, 0 },
@@ -248,7 +254,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocGDA2,               247,    4,  5,  V, { VR }, 0, 0 },
     { ocFrequency,          252,    2,  2,  A, { RA }, 0, 0 },
     { ocErrorType,          261,    1,  1,  V, { VR }, 0, 0 },
-    { ocAveDev,             269,    1,  30, V, { RX }, 0, 0 },
+    { ocAveDev,             269,    1,  MX, V, { RX }, 0, 0 },
     { ocBetaDist,           270,    3,  5,  V, { VR }, 0, 0 },
     { ocGammaLn,            271,    1,  1,  V, { VR }, 0, 0 },
     { ocBetaInv,            272,    3,  5,  V, { VR }, 0, 0 },
@@ -297,19 +303,19 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocSlope,              315,    2,  2,  V, { VA }, 0, 0 },
     { ocTTest,              316,    4,  4,  V, { VA, VA, VR }, 0, 0 },
     { ocProb,               317,    3,  4,  V, { VA, VA, VR }, 0, 0 },
-    { ocDevSq,              318,    1,  30, V, { RX }, 0, 0 },
-    { ocGeoMean,            319,    1,  30, V, { RX }, 0, 0 },
-    { ocHarMean,            320,    1,  30, V, { RX }, 0, 0 },
-    { ocSumSQ,              321,    0,  30, V, { RX }, 0, 0 },
-    { ocKurt,               322,    1,  30, V, { RX }, 0, 0 },
-    { ocSchiefe,            323,    1,  30, V, { RX }, 0, 0 },
+    { ocDevSq,              318,    1,  MX, V, { RX }, 0, 0 },
+    { ocGeoMean,            319,    1,  MX, V, { RX }, 0, 0 },
+    { ocHarMean,            320,    1,  MX, V, { RX }, 0, 0 },
+    { ocSumSQ,              321,    0,  MX, V, { RX }, 0, 0 },
+    { ocKurt,               322,    1,  MX, V, { RX }, 0, 0 },
+    { ocSchiefe,            323,    1,  MX, V, { RX }, 0, 0 },
     { ocZTest,              324,    2,  3,  V, { RX, VR }, 0, 0 },
     { ocLarge,              325,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocSmall,              326,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocQuartile,           327,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocPercentile,         328,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocPercentrank,        329,    2,  3,  V, { RX, VR, VR_E }, 0, 0 },
-    { ocModalValue,         330,    1,  30, V, { VA }, 0, 0 },
+    { ocModalValue,         330,    1,  MX, V, { VA }, 0, 0 },
     { ocTrimMean,           331,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocTInv,               332,    2,  2,  V, { VR }, 0, 0 }
 };
@@ -321,13 +327,13 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocHLookup,            101,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      // BIFF2-4: 3, BIFF5: 3-4
     { ocVLookup,            102,    3,  4,  V, { VV, RO, RO, VV }, 0, 0 },      // BIFF2-4: 3, BIFF5: 3-4
     { ocGetDiffDate360,     220,    2,  3,  V, { VR }, 0, 0 },                  // BIFF3-4: 2, BIFF5: 2-3
-    { ocMacro,              255,    1,  30, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
-    { ocExternal,           255,    1,  30, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
-    { ocConcat,             336,    0,  30, V, { VR }, 0, 0 },
+    { ocMacro,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
+    { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, 0 },
+    { ocConcat,             336,    0,  MX, V, { VR }, 0, 0 },
     { ocPower,              337,    2,  2,  V, { VR }, 0, 0 },
     { ocRad,                342,    1,  1,  V, { VR }, 0, 0 },
     { ocDeg,                343,    1,  1,  V, { VR }, 0, 0 },
-    { ocSubTotal,           344,    2,  30, V, { VR, RO }, 0, 0 },
+    { ocSubTotal,           344,    2,  MX, V, { VR, RO }, 0, 0 },
     { ocSumIf,              345,    2,  3,  V, { RO, VR, RO }, 0, 0 },
     { ocCountIf,            346,    2,  2,  V, { RO, VR }, 0, 0 },
     { ocCountEmptyCells,    347,    1,  1,  V, { RO }, 0, 0 },
@@ -338,66 +344,90 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocRoman,              354,    1,  2,  V, { VR }, 0, 0 }
 };
 
-#define EXC_FUNCNAME_PREFIX "_xlfn."
-
-const sal_Char* const EXC_FUNCNAME_BAHTTEXT = EXC_FUNCNAME_PREFIX "BAHTTEXT";
-
 /** Functions new in BIFF8. Unsupported functions: PHONETIC. */
 static const XclFunctionInfo saFuncTable_8[] =
 {
-    { ocGetPivotData,       358,    2,  30, V, { RR, RR, VR }, 0, 0 },
+    { ocGetPivotData,       358,    2,  MX, V, { RR, RR, VR }, 0, 0 },
     { ocHyperLink,          359,    1,  2,  V, { VV, VO }, 0, 0 },
     { ocNoName,             360,    1,  1,  V, { RO }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // PHONETIC
-    { ocAverageA,           361,    1,  30, V, { RX }, 0, 0 },
-    { ocMaxA,               362,    1,  30, V, { RX }, 0, 0 },
-    { ocMinA,               363,    1,  30, V, { RX }, 0, 0 },
-    { ocStDevPA,            364,    1,  30, V, { RX }, 0, 0 },
-    { ocVarPA,              365,    1,  30, V, { RX }, 0, 0 },
-    { ocStDevA,             366,    1,  30, V, { RX }, 0, 0 },
-    { ocVarA,               367,    1,  30, V, { RX }, 0, 0 },
-    { ocBahtText,           368,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME_BAHTTEXT },
-    { ocBahtText,           255,    2,  2,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME_BAHTTEXT },
+    { ocAverageA,           361,    1,  MX, V, { RX }, 0, 0 },
+    { ocMaxA,               362,    1,  MX, V, { RX }, 0, 0 },
+    { ocMinA,               363,    1,  MX, V, { RX }, 0, 0 },
+    { ocStDevPA,            364,    1,  MX, V, { RX }, 0, 0 },
+    { ocVarPA,              365,    1,  MX, V, { RX }, 0, 0 },
+    { ocStDevA,             366,    1,  MX, V, { RX }, 0, 0 },
+    { ocVarA,               367,    1,  MX, V, { RX }, 0, 0 },
+    { ocBahtText,           368,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "BAHTTEXT" ) },
+    { ocBahtText,           255,    2,  2,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "BAHTTEXT" ) },
     { ocEuroConvert,        255,    4,  6,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, "EUROCONVERT" }
 };
+
+#define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
+
+/** Functions defined by OpenFormula, but not supported by Calc (ocNoName) or by Excel (defined op-code). */
+static const XclFunctionInfo saFuncTable_Odf[] =
+{
+    EXC_FUNCENTRY_ODF( ocArabic,        1,  1,  0,  "ARABIC" ),
+    EXC_FUNCENTRY_ODF( ocB,             3,  4,  0,  "B" ),
+    EXC_FUNCENTRY_ODF( ocBase,          2,  3,  0,  "BASE" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "BITAND" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "BITLSHIFT" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "BITOR" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "BITRSHIFT" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "BITXOR" ),
+    EXC_FUNCENTRY_ODF( ocChiSqDist,     2,  3,  0,  "CHISQDIST" ),
+    EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" ),
+    EXC_FUNCENTRY_ODF( ocKombin2,       2,  2,  0,  "COMBINA" ),
+    EXC_FUNCENTRY_ODF( ocGetDiffDate,   2,  2,  0,  "DAYS" ),
+    EXC_FUNCENTRY_ODF( ocDecimal,       2,  2,  0,  "DECIMAL" ),
+    EXC_FUNCENTRY_ODF( ocFDist,         3,  4,  0,  "FDIST" ),
+    EXC_FUNCENTRY_ODF( ocFInv,          3,  3,  0,  "FINV" ),
+    EXC_FUNCENTRY_ODF( ocFormula,       1,  1,  0,  "FORMULA" ),
+    EXC_FUNCENTRY_ODF( ocGamma,         1,  1,  0,  "GAMMA" ),
+    EXC_FUNCENTRY_ODF( ocGauss,         1,  1,  0,  "GAUSS" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        2,  2,  0,  "IFNA" ),
+    EXC_FUNCENTRY_ODF( ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
+    EXC_FUNCENTRY_ODF( ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
+    EXC_FUNCENTRY_ODF( ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
+    EXC_FUNCENTRY_ODF( ocNumberValue,   2,  2,  0,  "NUMBERVALUE" ),
+    EXC_FUNCENTRY_ODF( ocLaufz,         3,  3,  0,  "PDURATION" ),
+    EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
+    EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
+    EXC_FUNCENTRY_ODF( ocZGZ,           3,  3,  0,  "RRI" ),
+    EXC_FUNCENTRY_ODF( ocTable,         1,  1,  0,  "SHEET" ),
+    EXC_FUNCENTRY_ODF( ocTables,        0,  1,  0,  "SHEETS" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
+    EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
+    EXC_FUNCENTRY_ODF( ocUnicode,       1,  1,  0,  "UNICODE" ),
+    EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "XOR" )
+};
+
+#undef EXC_FUNCENTRY_ODF
 
 // ----------------------------------------------------------------------------
 
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 {
-    XclBiff eBiff = rRoot.GetBiff();
+    void (XclFunctionProvider::*pFillFunc)( const XclFunctionInfo*, const XclFunctionInfo* ) =
+        rRoot.IsImport() ? &XclFunctionProvider::FillXclFuncMap : &XclFunctionProvider::FillScFuncMap;
 
-    if( rRoot.IsImport() )
-    {
-        /*  Import: only read functions supported in the current BIFF version.
-            Function tables from later BIFF versions may overwrite single
-            functions from earlier tables. */
-        if( eBiff >= EXC_BIFF2 )
-            FillXclFuncMap( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
-        if( eBiff >= EXC_BIFF3 )
-            FillXclFuncMap( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
-        if( eBiff >= EXC_BIFF4 )
-            FillXclFuncMap( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
-        if( eBiff >= EXC_BIFF5 )
-            FillXclFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
-        if( eBiff >= EXC_BIFF8 )
-            FillXclFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-    }
-    else
-    {
-        /*  Export: only write functions supported in the current BIFF version.
-            Function tables from later BIFF versions may overwrite single
-            functions from earlier tables. */
-        if( eBiff >= EXC_BIFF2 )
-            FillScFuncMap( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
-        if( eBiff >= EXC_BIFF3 )
-            FillScFuncMap( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
-        if( eBiff >= EXC_BIFF4 )
-            FillScFuncMap( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
-        if( eBiff >= EXC_BIFF5 )
-            FillScFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
-        if( eBiff >= EXC_BIFF8 )
-            FillScFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-    }
+    /*  Only read/write functions supported in the current BIFF version.
+        Function tables from later BIFF versions may overwrite single functions
+        from earlier tables. */
+    XclBiff eBiff = rRoot.GetBiff();
+    if( eBiff >= EXC_BIFF2 )
+        (this->*pFillFunc)( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
+    if( eBiff >= EXC_BIFF3 )
+        (this->*pFillFunc)( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
+    if( eBiff >= EXC_BIFF4 )
+        (this->*pFillFunc)( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
+    if( eBiff >= EXC_BIFF5 )
+        (this->*pFillFunc)( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
+    if( eBiff >= EXC_BIFF8 )
+        (this->*pFillFunc)( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
+    (this->*pFillFunc)( saFuncTable_Odf, STATIC_TABLE_END( saFuncTable_Odf ) );
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const

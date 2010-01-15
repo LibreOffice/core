@@ -116,7 +116,12 @@ const XclGuid XclTools::maGuidFileMoniker(
 
 double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
-    double fVal = 0.0;
+    union
+    {
+        double fVal;
+        sal_math_Double smD;
+    };
+    fVal = 0.0;
 
     if( ::get_flag( nRKValue, EXC_RK_INTFLAG ) )
     {
@@ -126,8 +131,7 @@ double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
     }
     else
     {
-        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fVal );
-        pDouble->w32_parts.msw = nRKValue & EXC_RK_VALUEMASK;
+        smD.w32_parts.msw = nRKValue & EXC_RK_VALUEMASK;
     }
 
     if( ::get_flag( nRKValue, EXC_RK_100FLAG ) )

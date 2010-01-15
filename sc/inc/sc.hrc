@@ -265,6 +265,8 @@
 
 #define HID_SC_RENAME_OBJECT    ( HID_SC_TOOLBOX_START + 9 )
 
+#define HID_SC_REN_AFMT_DLG     ( HID_SC_TOOLBOX_START + 10 )
+
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
 #define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )

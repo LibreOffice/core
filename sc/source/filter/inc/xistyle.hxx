@@ -319,6 +319,9 @@ struct XclImpCellBorder : public XclCellBorder
     /** Fills this struct with BIFF8 CF (conditional format) record data. */
     void                FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor, sal_uInt32 nFlags );
 
+    /** Returns true, if any of the outer border lines is visible. */
+    bool                HasAnyOuterBorder() const;
+
     /** Inserts a box item representing this border style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillToItemSet(
@@ -426,8 +429,6 @@ private:
         @descr  In cell XFs, a set bit represents "used", in style XFs it is a cleared bit.
         Therefore mbCellXF must be set correctly before calling this method. */
     void                SetUsedFlags( sal_uInt8 nUsedFlags );
-    /** Sets own "attribute used" flags, if attributes are different from passed parent XF. */
-    void                UpdateUsedFlags( const XclImpXF& rParentXF );
 
 private:
     typedef ::std::auto_ptr< ScPatternAttr > ScPatternAttrPtr;

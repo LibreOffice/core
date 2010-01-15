@@ -1024,7 +1024,7 @@ Resource RID_GLOBSTR
     };
     String STR_QUERY_DELTAB
     {
-        Text [ en-US ] = "Are you sure you want to permanently delete the current sheet(s)?" ;
+        Text [ en-US ] = "Are you sure you want to delete the selected sheet(s)?" ;
     };
     String STR_QUERY_DELSCENARIO
     {

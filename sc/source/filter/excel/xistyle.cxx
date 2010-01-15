@@ -704,7 +704,6 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     sal_uInt8 nXclRot = (mnOrient == EXC_ORIENT_NONE) ? mnRotation : XclTools::GetXclRotFromOrient( mnOrient );
     bool bStacked = (nXclRot == EXC_ROT_STACKED);
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, bStacked ), bSkipPoolDefs );
-    ScfTools::PutItem( rItemSet, SvxRotateModeItem( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     // set an angle in the range from -90 to 90 degrees
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
@@ -800,6 +799,15 @@ void XclImpCellBorder::FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor
     mbTopUsed     = !::get_flag( nFlags, EXC_CF_BORDER_TOP );
     mbBottomUsed  = !::get_flag( nFlags, EXC_CF_BORDER_BOTTOM );
     mbDiagUsed    = false;
+}
+
+bool XclImpCellBorder::HasAnyOuterBorder() const
+{
+    return
+        (mbLeftUsed   && (mnLeftLine != EXC_LINE_NONE)) ||
+        (mbRightUsed  && (mnRightLine != EXC_LINE_NONE)) ||
+        (mbTopUsed    && (mnTopLine != EXC_LINE_NONE)) ||
+        (mbBottomUsed && (mnBottomLine != EXC_LINE_NONE));
 }
 
 namespace {
@@ -1094,13 +1102,32 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     // create new pattern attribute set
     mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : 0;
 
     // parent cell style
     if( IsCellXF() && !mpStyleSheet )
     {
         mpStyleSheet = GetXFBuffer().CreateStyleSheet( mnParent );
-        if( XclImpXF* pParentXF = GetXFBuffer().GetXF( mnParent ) )
-            UpdateUsedFlags( *pParentXF );
+
+        /*  Enables mb***Used flags, if the formatting attributes differ from
+            the passed XF record. In cell XFs Excel uses the cell attributes,
+            if they differ from the parent style XF.
+            #109899# ...or if the respective flag is not set in parent style XF. */
+        if( pParentXF )
+        {
+            if( !mbProtUsed )
+                mbProtUsed = !pParentXF->mbProtUsed || !(maProtection == pParentXF->maProtection);
+            if( !mbFontUsed )
+                mbFontUsed = !pParentXF->mbFontUsed || (mnXclFont != pParentXF->mnXclFont);
+            if( !mbFmtUsed )
+                mbFmtUsed = !pParentXF->mbFmtUsed || (mnXclNumFmt != pParentXF->mnXclNumFmt);
+            if( !mbAlignUsed )
+                mbAlignUsed = !pParentXF->mbAlignUsed || !(maAlignment == pParentXF->maAlignment);
+            if( !mbBorderUsed )
+                mbBorderUsed = !pParentXF->mbBorderUsed || !(maBorder == pParentXF->maBorder);
+            if( !mbAreaUsed )
+                mbAreaUsed = !pParentXF->mbAreaUsed || !(maArea == pParentXF->maArea);
+        }
     }
 
     // cell protection
@@ -1138,6 +1165,20 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
         GetTracer().TraceFillPattern(maArea.mnPattern != EXC_PATT_NONE &&
             maArea.mnPattern != EXC_PATT_SOLID);
+    }
+
+    /*  #i38709# Decide which rotation reference mode to use. If any outer
+        border line of the cell is set (either explicitly or via cell style),
+        and the cell contents are rotated, set rotation reference to bottom of
+        cell. This causes the borders to be painted rotated with the text. */
+    if( mbAlignUsed || mbBorderUsed )
+    {
+        SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
+        const XclImpCellAlign* pAlign = mbAlignUsed ? &maAlignment : (pParentXF ? &pParentXF->maAlignment : 0);
+        const XclImpCellBorder* pBorder = mbBorderUsed ? &maBorder : (pParentXF ? &pParentXF->maBorder : 0);
+        if( pAlign && pBorder && (0 < pAlign->mnRotation) && (pAlign->mnRotation <= 180) && pBorder->HasAnyOuterBorder() )
+            eRotateMode = SVX_ROTATE_MODE_BOTTOM;
+        ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     }
 
     return *mpPattern;
@@ -1181,26 +1222,6 @@ void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )
     mbAlignUsed  = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_ALIGN ));
     mbBorderUsed = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_BORDER ));
     mbAreaUsed   = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_AREA ));
-}
-
-void XclImpXF::UpdateUsedFlags( const XclImpXF& rParentXF )
-{
-    /*  Enables mb***Used flags, if the formatting attributes differ from
-        the passed XF record. In cell XFs Excel uses the cell attributes,
-        if they differ from the parent style XF.
-        #109899# ...or if the respective flag is not set in parent style XF. */
-    if( !mbProtUsed )
-        mbProtUsed = !rParentXF.mbProtUsed || !(maProtection == rParentXF.maProtection);
-    if( !mbFontUsed )
-        mbFontUsed = !rParentXF.mbFontUsed || (mnXclFont != rParentXF.mnXclFont);
-    if( !mbFmtUsed )
-        mbFmtUsed = !rParentXF.mbFmtUsed || (mnXclNumFmt != rParentXF.mnXclNumFmt);
-    if( !mbAlignUsed )
-        mbAlignUsed = !rParentXF.mbAlignUsed || !(maAlignment == rParentXF.maAlignment);
-    if( !mbBorderUsed )
-        mbBorderUsed = !rParentXF.mbBorderUsed || !(maBorder == rParentXF.maBorder);
-    if( !mbAreaUsed )
-        mbAreaUsed = !rParentXF.mbAreaUsed || !(maArea == rParentXF.maArea);
 }
 
 // ----------------------------------------------------------------------------
