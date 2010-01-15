@@ -36,10 +36,10 @@
 #ifndef _ZFORLIST_DECLARE_TABLE
 #define _ZFORLIST_DECLARE_TABLE
 #endif
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #endif
 // header for SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "DataBrowser.hxx"
 #include "DataBrowserModel.hxx"

@@ -31,15 +31,11 @@
 #ifndef SC_INPUTWIN_HXX
 #define SC_INPUTWIN_HXX
 
-
-#ifndef _TOOLBOX_HXX //autogen
+#include <vector>
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/childwin.hxx>
-#include <svtools/lstner.hxx>
-#ifndef _COMBOBOX_HXX //autogen
+#include <svl/lstner.hxx>
 #include <vcl/combobox.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 
@@ -77,7 +73,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    void            SetAccessibleTextData(ScAccessibleEditLineTextData* pTextData) {pAccTextData = pTextData;}
+    void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
+    void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -102,11 +99,13 @@ private:
     void            UpdateAutoCorrFlag();
 
 private:
+    typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
+
     String      aString;
     Font        aTextFont;
     ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
     EditView*   pEditView;
-    ScAccessibleEditLineTextData* pAccTextData;
+    AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
     BOOL        bIsRTL;
     BOOL        bIsInsertMode;
     BOOL        bFormulaMode;

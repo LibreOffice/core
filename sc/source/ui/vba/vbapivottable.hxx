@@ -33,8 +33,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <ooo/vba/excel/XPivotTable.hpp>
-#include "vbahelper.hxx"
-#include "vbahelperinterface.hxx"
+#include "excelvbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XPivotTable >  PivotTableImpl_BASE;
 

@@ -30,7 +30,7 @@
 #ifndef CHART_HELPIDS_HRC
 #define CHART_HELPIDS_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 //next is 120
 
 //see old chart: schhids.h

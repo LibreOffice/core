@@ -38,7 +38,7 @@
 #include "rangelst.hxx"
 #include "scitems.hxx"
 #include <sfx2/dispatch.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "uiitems.hxx"

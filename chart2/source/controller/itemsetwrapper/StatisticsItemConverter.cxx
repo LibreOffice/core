@@ -43,9 +43,9 @@
 
 #include "GraphicPropertyItemConverter.hxx"
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>

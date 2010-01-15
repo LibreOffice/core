@@ -35,9 +35,9 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -152,7 +152,9 @@ public:
 namespace ooo
 {
     namespace vba {
+        namespace excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
+    }
     }
 }
 
@@ -175,7 +177,7 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
 {
     friend class ScTabViewObj;      // fuer select()
     friend class ScTableSheetObj;   // fuer createCursorByRange()
-     friend class ooo::vba::ScVbaCellRangeAccess;
+     friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
     const SfxItemPropertySet* pPropSet;

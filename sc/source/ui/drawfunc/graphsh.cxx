@@ -38,7 +38,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>

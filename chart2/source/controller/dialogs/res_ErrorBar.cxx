@@ -43,7 +43,7 @@
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 using namespace ::com::sun::star;
 

@@ -34,7 +34,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

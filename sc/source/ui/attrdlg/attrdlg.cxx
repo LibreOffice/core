@@ -45,7 +45,7 @@
 //CHINA001 #include <svx/chardlg.hxx>
 //CHINA001 #include <svx/numfmt.hxx>
 //CHINA001 #include <svx/paragrph.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "tabpages.hxx"
 #include "attrdlg.hxx"
