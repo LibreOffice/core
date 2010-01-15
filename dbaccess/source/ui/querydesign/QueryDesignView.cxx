@@ -330,6 +330,8 @@ namespace
 
         return eErrorCode;
     }
+                case DataType::CLOB:
+                case DataType::BLOB:
     // -----------------------------------------------------------------------------
 
     /** FillDragInfo fills the field description out of the table
