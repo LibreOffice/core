@@ -43,8 +43,8 @@
 #include "sfx2/dllapi.h"
 
 #include <basic/sbx.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/rectitem.hxx>
 #include <tools/debug.hxx>
 #include <tools/wldcrd.hxx>
 
@@ -60,12 +60,12 @@
 #endif
 
 #include <basic/sbxcore.hxx>
-#include <svtools/ownlist.hxx>
-#include <svtools/lckbitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/ownlist.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

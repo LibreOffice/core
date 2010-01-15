@@ -90,14 +90,6 @@ xml_parser::xml_parser(const XML_Char* EncodingName) :
 }
 
 //###################################################
-xml_parser::xml_parser(const XML_Char* EncodingName, XML_Char /*NamespaceSeparator*/) :
-    document_handler_(0),
-    xml_parser_(XML_ParserCreate(EncodingName))
-{
-    init();
-}
-
-//###################################################
 xml_parser::~xml_parser()
 {
     XML_ParserFree(xml_parser_);
@@ -223,10 +215,4 @@ void xml_parser::set_document_handler(
 i_xml_parser_event_handler* xml_parser::get_document_handler() const
 {
     return document_handler_;
-}
-
-//###################################################
-void xml_parser::set_encoding(const XML_Char* Encoding)
-{
-    XML_SetEncoding(xml_parser_, Encoding);
 }

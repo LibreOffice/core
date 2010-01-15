@@ -872,14 +872,19 @@ namespace sdr { namespace contact {
     //====================================================================
     //= LazyControlCreationPrimitive2D
     //====================================================================
-    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BasePrimitive2D
+    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
     {
     private:
-        typedef ::drawinglayer::primitive2d::BasePrimitive2D  BasePrimitive2D;
+        typedef ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D  BufferedDecompositionPrimitive2D;
 
     protected:
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
-            createLocalDecomposition(
+            get2DDecomposition(
+                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
+            ) const;
+
+        virtual ::drawinglayer::primitive2d::Primitive2DSequence
+            create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const;
 
@@ -1577,7 +1582,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
-        if ( !BasePrimitive2D::operator==( rPrimitive ) )
+        if ( !BufferedDecompositionPrimitive2D::operator==( rPrimitive ) )
             return false;
 
         const LazyControlCreationPrimitive2D* pRHS = dynamic_cast< const LazyControlCreationPrimitive2D* >( &rPrimitive );
@@ -1623,7 +1628,20 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocalDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    {
+    #if OSL_DEBUG_LEVEL > 1
+        ::basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
+    #endif
+        if ( m_pVOCImpl->hasControl() )
+            impl_positionAndZoomControl( _rViewInformation );
+        return BufferedDecompositionPrimitive2D::get2DDecomposition( _rViewInformation );
+    }
+
+    //--------------------------------------------------------------------
+    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
         ::basegfx::B2DVector aScale, aTranslate;

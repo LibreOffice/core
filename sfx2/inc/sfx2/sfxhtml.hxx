@@ -36,7 +36,7 @@
 #include "sal/types.h"
 #include <i18npool/lang.h>
 #include <svtools/parhtml.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 
 class ImageMap;

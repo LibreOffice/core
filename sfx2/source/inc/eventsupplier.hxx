@@ -57,8 +57,8 @@
 
 #include <vos/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/eventcfg.hxx>
+#include <svl/lstner.hxx>
+#include <unotools/eventcfg.hxx>
 
 //--------------------------------------------------------------------------------------------------------
 

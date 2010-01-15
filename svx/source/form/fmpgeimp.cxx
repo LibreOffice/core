@@ -34,7 +34,7 @@
 #include "svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "fmobj.hxx"

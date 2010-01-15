@@ -31,8 +31,8 @@
 #define _SYLAYITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdtypes.hxx>
 
 //------------------------------

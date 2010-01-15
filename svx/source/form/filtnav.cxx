@@ -47,6 +47,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
+#include <svx/fmtools.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>

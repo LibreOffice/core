@@ -54,7 +54,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/string.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
 
 #include <cstring>

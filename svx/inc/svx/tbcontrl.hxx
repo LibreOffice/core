@@ -158,7 +158,7 @@
 // ITEMID_...-Defines im *.cxx
 
 #include <rsc/rscsfx.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/strarray.hxx>
 #include "svx/svxdllapi.h"

@@ -35,8 +35,8 @@
 #include <svx/xcolit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
-#include <svtools/metitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/metitem.hxx>
+#include <svl/eitem.hxx>
 
 class XDash;
 class XDashTable;

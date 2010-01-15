@@ -62,8 +62,8 @@ namespace drawinglayer
         // virtual render method when the primitive implementation is BasePrimitive3D-based.
         void Geometry2DExtractingProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {
-            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-            switch(rCandidate.getPrimitiveID())
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
+            switch(rCandidate.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                 {
