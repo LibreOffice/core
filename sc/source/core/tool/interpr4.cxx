@@ -3336,7 +3336,7 @@ void ScInterpreter::ScSpewFunc()
 #include "sctictac.hxx"
 #include "scmod.hxx"
 
-extern "C" { static void SAL_CALL thisModule() {} }
+//extern "C" { static void SAL_CALL thisModule() {} }
 
 void ScInterpreter::ScGame()
 {
