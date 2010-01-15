@@ -4464,6 +4464,13 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
     OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data_, len);
     sText = aBuffer.makeStringAndClear();
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("utext");
+    dmapper_logger->chars(sText);
+    dmapper_logger->endElement("utext");
+#endif
+
     try
     {
         m_pImpl->getTableManager().utext(data_, len);
@@ -4508,11 +4515,6 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->appendTextPortion( sText, pContext );
 
         }
-#ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->startElement("utext");
-        dmapper_logger->chars(sText);
-        dmapper_logger->endElement("utext");
-#endif
     }
     catch( const uno::RuntimeException& )
     {
