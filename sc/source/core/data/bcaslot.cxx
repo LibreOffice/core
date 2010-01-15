@@ -34,8 +34,8 @@
 
 
 #include <sfx2/objsh.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/listeneriter.hxx>
+#include <svl/listener.hxx>
+#include <svl/listeneriter.hxx>
 
 #include "document.hxx"
 #include "brdcst.hxx"

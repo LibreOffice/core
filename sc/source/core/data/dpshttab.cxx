@@ -36,7 +36,7 @@
 // INCLUDE --------------------------------------------------------------
 
 #include <tools/debug.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "dpshttab.hxx"
 #include "dptabres.hxx"

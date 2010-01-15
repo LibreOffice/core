@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 
 #include <algorithm>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <rtl/uuid.h>
 
 #include "dapiuno.hxx"

@@ -34,7 +34,7 @@
 #include <algorithm>
 #include <math.h>
 #include <sal/mathconf.h>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/editstat.hxx>
 #include "xestream.hxx"

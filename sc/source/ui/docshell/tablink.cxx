@@ -42,8 +42,8 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

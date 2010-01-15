@@ -570,7 +570,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 }
                 else
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     String aTmp;
                     ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
@@ -600,7 +600,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 if ( !nEdges )
                     nEdges = 1;             // mittendrin
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 String aTmp;
@@ -679,6 +679,14 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
        Union of these references must form one range and their
        intersection must be empty set.
     */
+
+    // Detect the simple case of exactly one reference in advance without all
+    // overhead.
+    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference)
+    // work again, where the function does not have only references.
+    if (HasOneReference( rRange))
+        return true;
+
     pCode->Reset();
     // Get first reference, if any
     ScToken* const pFirstReference(

@@ -55,6 +55,9 @@ class SfxStyleSheetBase;
 class ScDPObject;
 struct ScDPFuncData;
 struct ScDPNumGroupInfo;
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+class ScTabViewShell;
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -459,8 +462,13 @@ public:
     virtual SfxAbstractTabDialog * CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,//add for ScParagraphDlg
                                                             int nId ) = 0;
 
+    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+    //virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
+    //                                              const SfxItemSet* pArgSet,int nId  ) = 0;
+
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
-                                                        const SfxItemSet* pArgSet,int nId  ) = 0;
+                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  ) = 0;
+    //-->Modified by PengYunQuan for Validity Cell Range Picker
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId ) = 0;
     // for tabpage

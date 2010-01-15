@@ -31,8 +31,8 @@
 #ifndef SC_STYLEUNO_HXX
 #define SC_STYLEUNO_HXX
 
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>

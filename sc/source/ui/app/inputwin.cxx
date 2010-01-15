@@ -31,9 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
+#include <algorithm>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -54,7 +52,7 @@
 #include <svx/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"
@@ -131,7 +129,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 
 //==================================================================
 
-#define IMAGE(id) pImgMgr->SeekImage(id, bDark)
+#define IMAGE(id) pImgMgr->SeekImage(id, bHC)
 
 //==================================================================
 //  class ScInputWindow
@@ -170,7 +168,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     }
     DBG_ASSERT( pViewSh, "no view shell for input window" );
 
-    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
@@ -558,7 +556,7 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
-        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
         RemoveItem( 3 );
@@ -582,7 +580,7 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
-        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
         RemoveItem( 3 );
@@ -710,8 +708,8 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
         ScModule*        pScMod  = SC_MOD();
         SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
-        // IMAGE macro uses pScMod, pImgMgr, bDark
+        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+        // IMAGE macro uses pScMod, pImgMgr, bHC
 
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
         if ( bIsOkCancelMode )
@@ -738,7 +736,6 @@ ScTextWnd::ScTextWnd( Window* pParent )
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
-        pAccTextData ( NULL ),
         bIsInsertMode( TRUE ),
         bFormulaMode ( FALSE ),
         bInputMode   ( FALSE )
@@ -774,8 +771,8 @@ __EXPORT ScTextWnd::~ScTextWnd()
 {
     delete pEditView;
     delete pEditEngine;
-    if (pAccTextData)
-        pAccTextData->Dispose();
+    for( AccTextDataVector::reverse_iterator aIt = maAccTextDatas.rbegin(), aEnd = maAccTextDatas.rend(); aIt != aEnd; ++aIt )
+        (*aIt)->Dispose();
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
@@ -1112,8 +1109,8 @@ void ScTextWnd::StartEditEngine()
 
         pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
 
-        if (pAccTextData)
-            pAccTextData->StartEdit();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->StartEdit();
 
         //  as long as EditEngine and DrawText sometimes differ for CTL text,
         //  repaint now to have the EditEngine's version visible
@@ -1154,8 +1151,8 @@ void ScTextWnd::StopEditEngine( BOOL bAll )
 {
     if (pEditView)
     {
-        if (pAccTextData)
-            pAccTextData->EndEdit();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->EndEdit();
 
         ScModule* pScMod = SC_MOD();
 
@@ -1259,8 +1256,8 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         aString = rNewString;
 
-        if (pAccTextData)
-            pAccTextData->TextChanged();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->TextChanged();
 
         bInputMode = FALSE;
     }
@@ -1317,8 +1314,8 @@ void ScTextWnd::MakeDialogEditView()
     if ( bIsRTL )
         lcl_ModifyRTLVisArea( pEditView );
 
-    if (pAccTextData)
-        pAccTextData->StartEdit();
+    if (!maAccTextDatas.empty())
+        maAccTextDatas.back()->StartEdit();
 }
 
 void ScTextWnd::ImplInitSettings()
@@ -1341,6 +1338,22 @@ void ScTextWnd::ImplInitSettings()
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), EditLine);
+}
+
+void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    OSL_ENSURE( ::std::find( maAccTextDatas.begin(), maAccTextDatas.end(), &rTextData ) == maAccTextDatas.end(),
+        "ScTextWnd::InsertAccessibleTextData - passed object already registered" );
+    maAccTextDatas.push_back( &rTextData );
+}
+
+void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    AccTextDataVector::iterator aEnd = maAccTextDatas.end();
+    AccTextDataVector::iterator aIt = ::std::find( maAccTextDatas.begin(), aEnd, &rTextData );
+    OSL_ENSURE( aIt != aEnd, "ScTextWnd::RemoveAccessibleTextData - passed object not registered" );
+    if( aIt != aEnd )
+        maAccTextDatas.erase( aIt );
 }
 
 // -----------------------------------------------------------------------

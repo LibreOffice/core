@@ -53,9 +53,9 @@
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 

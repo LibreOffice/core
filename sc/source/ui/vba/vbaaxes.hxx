@@ -32,7 +32,7 @@
 #include <ooo/vba/excel/XAxes.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XAxes > ScVbaAxes_BASE;
 class ScVbaAxes : public ScVbaAxes_BASE

@@ -37,8 +37,8 @@
 #include <svx/langitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <sfx2/docfile.hxx>
@@ -780,6 +780,7 @@ double ScInterpreter::Compare()
         switch ( GetRawStackType() )
         {
             case svEmptyCell:
+                Pop();
                 aComp.bEmpty[ i ] = TRUE;
                 break;
             case svMissing:
@@ -836,6 +837,7 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
         switch (GetRawStackType())
         {
             case svEmptyCell:
+                Pop();
                 aComp.bEmpty[ i ] = TRUE;
                 break;
             case svMissing:

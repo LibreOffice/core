@@ -49,7 +49,7 @@
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
 

@@ -35,14 +35,14 @@
 
 #include <set>
 #include <tools/mempool.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "global.hxx"
 #include "rangenam.hxx"
 #include "formula/grammar.hxx"
 #include "tokenarray.hxx"
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
 
 #define USE_MEMPOOL

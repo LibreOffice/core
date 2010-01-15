@@ -45,7 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/sound.hxx>
 
 #include "tabvwsh.hxx"

@@ -34,8 +34,8 @@
 
 
 #include <tools/debug.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>

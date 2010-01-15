@@ -35,7 +35,7 @@
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
 #include <tools/table.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/editdata.hxx>
 #include <address.hxx>
 

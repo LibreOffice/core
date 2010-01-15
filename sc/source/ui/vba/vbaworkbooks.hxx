@@ -31,21 +31,20 @@
 #define SC_VBA_WORKBOOKS_HXX
 
 
-#include "vbacollectionimpl.hxx"
-#include <ooo/vba/XGlobals.hpp>
+#include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/excel/XWorkbooks.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include "vbahelper.hxx"
+#include <vbahelper/vbadocumentsbase.hxx>
+#include "excelvbahelper.hxx"
 
 
 class ScModelObj;
 
-typedef CollTestImplHelper< ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaDocumentsBase, ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
 
 class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 {
 private:
-    css::uno::Reference< ov::XGlobals > getGlobals() throw (css::uno::RuntimeException);
     rtl::OUString   getFileFilterType( const rtl::OUString& rString );
     bool    isTextFile( const rtl::OUString& rString );
     bool    isSpreadSheetFile( const rtl::OUString& rString );
@@ -68,6 +67,8 @@ public:
     virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Open( const ::rtl::OUString& Filename, const css::uno::Any& UpdateLinks, const css::uno::Any& ReadOnly, const css::uno::Any& Format, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& IgnoreReadOnlyRecommended, const css::uno::Any& Origin, const css::uno::Any& Delimiter, const css::uno::Any& Editable, const css::uno::Any& Notify, const css::uno::Any& Converter, const css::uno::Any& AddToMru ) throw (css::uno::RuntimeException);
 
+    // VbaDocumentsBase / XDocumentsBase (to avoid warning C4266 for hiding function on wntmsci)
+    virtual css::uno::Any SAL_CALL Open( const ::rtl::OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKBOOKS_HXX */
