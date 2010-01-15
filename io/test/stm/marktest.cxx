@@ -46,12 +46,6 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
-#include <string.h>
-
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
@@ -159,8 +153,8 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
                 Reference< XOutputStream > rOutput( TestObject , UNO_QUERY );
 
-                assert( rPipeInput.is() );
-                assert( rOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rOutput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rOutput , rPipeInput );
@@ -526,8 +520,8 @@ sal_Int32 OMarkableInputStreamTest::test(
 
                 Reference < XInputStream > rInput( TestObject , UNO_QUERY );
 
-                assert( rPipeOutput.is() );
-                assert( rInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
+                OSL_ASSERT( rInput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rPipeOutput , rInput );

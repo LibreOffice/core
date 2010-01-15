@@ -34,7 +34,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>

@@ -117,7 +117,7 @@ public:
         osl_joinWithThread(m_hThread);
     }
 
-    sal_Bool SAL_CALL isRunning()
+    sal_Bool SAL_CALL isRunning() const
     {
         return osl_isThreadRunning(m_hThread);
     }
@@ -128,7 +128,7 @@ public:
             osl_setThreadPriority(m_hThread, Priority);
     }
 
-    oslThreadPriority SAL_CALL getPriority()
+    oslThreadPriority SAL_CALL getPriority() const
     {
         return m_hThread ? osl_getThreadPriority(m_hThread) : osl_Thread_PriorityUnknown;
     }
