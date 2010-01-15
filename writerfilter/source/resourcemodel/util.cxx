@@ -412,6 +412,10 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
             result = aOStr.getStr();
         }
+        else
+        {
+            result="(nil)";
+        }
 
         return result;
     }

@@ -45,16 +45,6 @@ using namespace ::std;
 #define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
 #ifdef DEBUG_DOMAINMAPPER
-static void lcl_printHandle(const Handle_t rHandle)
-{
-    if (!rHandle.get())
-        return;
-    rtl::OUString aOUStr = rHandle->getString();
-    rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-
-    dmapper_logger->chars(aOStr.getStr());
-}
-
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
     if( pProps.get() )
@@ -818,7 +808,9 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 
 #if DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("table.cell");
-    lcl_printHandle(start);
+    dmapper_logger->startElement("table.cell.start");
+    dmapper_logger->chars(toString(start));
+    dmapper_logger->endElement("table.cell.start");
     lcl_printProperties( pProps );
 #endif
 
@@ -835,7 +827,9 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    lcl_printHandle(end);
+    dmapper_logger->startElement("table.cell.end");
+    dmapper_logger->chars(toString(end));
+    dmapper_logger->endElement("table.cell.end");
     dmapper_logger->endElement("table.cell");
     clog << "</table.cell>" << endl;
 #endif
