@@ -47,6 +47,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=db-4.7.25.NC-custom
+TARFILE_MD5=d70951c80dabecc2892c919ff5d07172
 TARFILE_ROOTDIR=db-4.7.25.NC
 
 ADDITIONAL_FILES= \

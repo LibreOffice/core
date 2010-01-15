@@ -49,6 +49,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=source-9.0.0.7-bj
+TARFILE_MD5=ada24d37d8d638b3d8a9985e80bc2978
 ADDITIONAL_FILES=build.xml
 TARFILE_ROOTDIR=src
 

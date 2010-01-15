@@ -49,6 +49,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=zlib-1.1.4
+TARFILE_MD5=abc405d0bdd3ee22782d7aa20e440f08
 
 PATCH_FILES=zlib-1.1.4.patch
 ADDITIONAL_FILES=makefile.mk

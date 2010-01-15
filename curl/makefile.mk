@@ -46,6 +46,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=curl-7.12.2
+TARFILE_MD5=7a776ce208f321700d8fb0f92a133069
 PATCH_FILES=curl-7.12.2.patch
 CONVERTFILES= \
     lib$/Makefile.vc6

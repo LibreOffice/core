@@ -41,6 +41,7 @@ TARGET=hunspell
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hunspell-1.2.8
+TARFILE_MD5=1177af54a09e320d2c24015f29c3a93e
 TARFILE_ROOTDIR=hunspell-1.2.8
 
 #ADDITIONAL_FILES += src/hunspell/makefile.mk

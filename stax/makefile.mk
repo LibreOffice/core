@@ -53,6 +53,7 @@ all:
 
 # --- Files --------------------------------------------------------
 TARFILE_NAME=stax-api-1.0-2-sources
+TARFILE_MD5=8294d6c42e3553229af9934c5c0ed997
 TARFILE_ROOTDIR=src
 
 BUILD_ACTION=$(JAVAC) javax$/xml$/stream$/*.java && jar -cf jsr173_1.0_api.jar javax$/xml$/stream$/*.class javax$/xml$/stream$/events$/*.class javax$/xml$/stream$/util$/*.class

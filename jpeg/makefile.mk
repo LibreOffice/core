@@ -47,6 +47,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=jpeg-6b
+TARFILE_MD5=dbd5f3b47ed13132f04c685d608a7547
 
 PATCH_FILES=jpeg-6b.patch
 ADDITIONAL_FILES=makefile.mk \

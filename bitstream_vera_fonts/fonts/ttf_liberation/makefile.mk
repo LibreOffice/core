@@ -37,6 +37,7 @@ TARGET=ttf_liberation
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=liberation-fonts-1.05
+TARFILE_MD5=30102daecfb3a6aa022d2691dc075180
 TARFILE_ROOTDIR=liberation-fonts-1.05
 
 PATCH_FILES=

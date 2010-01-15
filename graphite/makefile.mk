@@ -71,6 +71,7 @@ TARGET=so_graphite
 # --- Files --------------------------------------------------------
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
 TARFILE_NAME=silgraphite-2.3.1
+TARFILE_MD5=d35724900f6a4105550293686688bbb3
 PATCH_FILES=graphite-2.3.1.patch
 
 # convert line-endings to avoid problems when patching
