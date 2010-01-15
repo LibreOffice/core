@@ -323,6 +323,8 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbColumnNames.GetEntryData(m_lbColumnNames.GetEntryPos(aColumnName)));
     if(pField)
         m_aTypeControl.DisplayData(pField);
+
+    m_aTypeControl.Enable(m_lbColumnNames.GetSelectEntryCount() == 1 );
     return 0;
 }
 // -----------------------------------------------------------------------
