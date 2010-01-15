@@ -41,6 +41,7 @@ TARGET=getopt
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=glibc-2.1.3-stub
+TARFILE_MD5=4a660ce8466c9df01f19036435425c3a
 TARFILE_ROOTDIR=glibc-2.1.3
 ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h posix$/readdir_r.c
 

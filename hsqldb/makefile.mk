@@ -49,6 +49,7 @@ ANT_BUILDFILE=build$/build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
+TARFILE_MD5=17410483b5b5f267aa18b7e00b65e6e0
 
 TARFILE_ROOTDIR=hsqldb
 

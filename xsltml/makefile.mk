@@ -43,6 +43,7 @@ TARGET=xsltml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=xsltml_2.1.2
+TARFILE_MD5=a7983f859eafb2677d7ff386a023bc40
 PATCH_FILES=$(TARFILE_NAME).patch
 TARFILE_IS_FLAT:=TRUE
 

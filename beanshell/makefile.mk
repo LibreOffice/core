@@ -42,6 +42,7 @@ TARGET=ooo_beanshell
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=bsh-2.0b1-src
+TARFILE_MD5=ea570af93c284aa9e5621cd563f54f4d
 TARFILE_ROOTDIR=BeanShell
 PATCH_FILES=bsh-2.0b1-src.patch
 

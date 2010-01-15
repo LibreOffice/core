@@ -49,6 +49,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 XMLSEC1VERSION=1.2.12
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
+TARFILE_MD5=195d042623bcc2e1668ab8370de6dc2a
 
 #xmlsec1-configure.patch: Set up the build. Straightforward
 #configuration

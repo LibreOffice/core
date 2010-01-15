@@ -51,6 +51,7 @@ all:
 REDLANDVERSION=1.0.8
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
+TARFILE_MD5=ca66e26082cab8bb817185a116db809b
 
 ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 

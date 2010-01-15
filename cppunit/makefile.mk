@@ -41,6 +41,7 @@ TARGET=so_cppunit
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=cppunit-1.8.0
+TARFILE_MD5=9f18d97ca99b4f095f5ff18139df59c3
 
 ADDITIONAL_FILES=\
  include$/cppunit$/config-auto.h \

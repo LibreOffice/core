@@ -51,6 +51,7 @@ all:
 RASQALVERSION=0.9.16
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
+TARFILE_MD5=fca8706f2c4619e2fa3f8f42f8fc1e9d
 
 ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 

@@ -41,6 +41,7 @@ TARGET=afms
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=Adobe-Core35_AFMs-314
+TARFILE_MD5=1756c4fa6c616ae15973c104cd8cb256
 TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
 # TAR_EXCLUDES broken for solaris tar - #i77247#
 # TAR_EXCLUDES=*/*Helvetica-Narrow*

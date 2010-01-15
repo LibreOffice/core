@@ -41,6 +41,7 @@ TARGET=lpsolve
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=lp_solve_5.5
+TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
 .IF "$(GUI)"=="WNT"
 PATCH_FILES=lp_solve_5.5-windows.patch

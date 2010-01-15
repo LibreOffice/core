@@ -41,6 +41,7 @@ TARGET=libtextcat
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=libtextcat-2.2
+TARFILE_MD5=128cfc86ed5953e57fe0f5ae98b62c2e
 TARFILE_ROOTDIR=libtextcat-2.2
 
 PATCH_FILES=libtextcat-2.2.patch

@@ -43,6 +43,7 @@ TARGET=ooo_rhino
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=rhino1_5R5
+TARFILE_MD5=798b2ffdc8bcfe7bca2cf92b62caf685
 TARFILE_ROOTDIR=rhino1_5R5
 
 ADDITIONAL_FILES= \

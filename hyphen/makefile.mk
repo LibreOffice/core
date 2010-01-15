@@ -41,6 +41,7 @@ TARGET=hyphen
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hyphen-2.4
+TARFILE_MD5=d0b5af6e408b8d2958f3d83b5244f5e8
 
 ADDITIONAL_FILES += makefile.mk
 
