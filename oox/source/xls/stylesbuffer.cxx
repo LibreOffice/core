@@ -73,6 +73,7 @@ using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::XFont2;
 using ::com::sun::star::table::BorderLine;
+using ::com::sun::star::table::TableBorder;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::style::XStyle;
 using ::oox::core::FilterBase;
@@ -1402,7 +1403,6 @@ void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
     rPropMap[ PROP_VertJustify ]     <<= maApiData.meVerJustify;
     rPropMap[ PROP_WritingMode ]     <<= maApiData.mnWritingMode;
     rPropMap[ PROP_RotateAngle ]     <<= maApiData.mnRotation;
-    rPropMap[ PROP_RotateReference ] <<= ::com::sun::star::table::CellVertJustify_STANDARD;    // rotation reference
     rPropMap[ PROP_Orientation ]     <<= maApiData.meOrientation;
     rPropMap[ PROP_ParaIndent ]      <<= maApiData.mnIndent;
     rPropMap[ PROP_IsTextWrapped ]   <<= maApiData.mbWrapText;
@@ -1519,6 +1519,57 @@ ApiBorderData::ApiBorderData() :
     mbBorderUsed( false ),
     mbDiagUsed( false )
 {
+}
+
+bool ApiBorderData::hasAnyOuterBorder() const
+{
+    return
+        (maBorder.IsTopLineValid    && (maBorder.TopLine.OuterLineWidth > 0)) ||
+        (maBorder.IsBottomLineValid && (maBorder.BottomLine.OuterLineWidth > 0)) ||
+        (maBorder.IsLeftLineValid   && (maBorder.LeftLine.OuterLineWidth > 0)) ||
+        (maBorder.IsRightLineValid  && (maBorder.RightLine.OuterLineWidth > 0));
+}
+
+namespace {
+
+bool operator==( const BorderLine& rLeft, const BorderLine& rRight )
+{
+    return
+        (rLeft.Color          == rRight.Color) &&
+        (rLeft.InnerLineWidth == rRight.InnerLineWidth) &&
+        (rLeft.OuterLineWidth == rRight.OuterLineWidth) &&
+        (rLeft.LineDistance   == rRight.LineDistance);
+}
+
+bool operator==( const TableBorder& rLeft, const TableBorder& rRight )
+{
+    return
+        (rLeft.TopLine               == rRight.TopLine) &&
+        (rLeft.IsTopLineValid        == rRight.IsTopLineValid) &&
+        (rLeft.BottomLine            == rRight.BottomLine) &&
+        (rLeft.IsBottomLineValid     == rRight.IsBottomLineValid) &&
+        (rLeft.LeftLine              == rRight.LeftLine) &&
+        (rLeft.IsLeftLineValid       == rRight.IsLeftLineValid) &&
+        (rLeft.RightLine             == rRight.RightLine) &&
+        (rLeft.IsRightLineValid      == rRight.IsRightLineValid) &&
+        (rLeft.HorizontalLine        == rRight.HorizontalLine) &&
+        (rLeft.IsHorizontalLineValid == rRight.IsHorizontalLineValid) &&
+        (rLeft.VerticalLine          == rRight.VerticalLine) &&
+        (rLeft.IsVerticalLineValid   == rRight.IsVerticalLineValid) &&
+        (rLeft.Distance              == rRight.Distance) &&
+        (rLeft.IsDistanceValid       == rRight.IsDistanceValid);
+}
+
+} // namespace
+
+bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
+{
+    return
+        (rLeft.maBorder     == rRight.maBorder) &&
+        (rLeft.maTLtoBR     == rRight.maTLtoBR) &&
+        (rLeft.maBLtoTR     == rRight.maBLtoTR) &&
+        (rLeft.mbBorderUsed == rRight.mbBorderUsed) &&
+        (rLeft.mbDiagUsed   == rRight.mbDiagUsed);
 }
 
 // ============================================================================
@@ -1822,6 +1873,14 @@ ApiSolidFillData::ApiSolidFillData() :
     mbTransparent( true ),
     mbUsed( false )
 {
+}
+
+bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight )
+{
+    return
+        (rLeft.mnColor       == rRight.mnColor) &&
+        (rLeft.mbTransparent == rRight.mbTransparent) &&
+        (rLeft.mbUsed        == rRight.mbUsed);
 }
 
 // ============================================================================
@@ -2136,7 +2195,8 @@ XfModel::XfModel() :
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maAlignment( rHelper ),
-    maProtection( rHelper )
+    maProtection( rHelper ),
+    meRotationRef( ::com::sun::star::table::CellVertJustify_STANDARD )
 {
 }
 
@@ -2319,13 +2379,46 @@ void Xf::importXf( BiffInputStream& rStrm )
 
 void Xf::finalizeImport()
 {
+    StylesBuffer& rStyles = getStyles();
+
     // alignment and protection
     maAlignment.finalizeImport();
     maProtection.finalizeImport();
-    // update used flags from cell style
-    if( maModel.mbCellXf )
-        if( const Xf* pStyleXf = getStyles().getStyleXf( maModel.mnStyleXfId ).get() )
-            updateUsedFlags( *pStyleXf );
+
+    /*  Enables the used flags, if the formatting attributes differ from the
+        style XF. In cell XFs Excel uses the cell attributes, if they differ
+        from the parent style XF (even if the used flag is switched off).
+        #109899# ...or if the respective flag is not set in parent style XF.
+     */
+    const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : 0;
+    if( pStyleXf )
+    {
+        const XfModel& rStyleData = pStyleXf->maModel;
+        if( !maModel.mbFontUsed )
+            maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
+        if( !maModel.mbNumFmtUsed )
+            maModel.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maModel.mnNumFmtId != rStyleData.mnNumFmtId);
+        if( !maModel.mbAlignUsed )
+            maModel.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == pStyleXf->maAlignment.getApiData());
+        if( !maModel.mbProtUsed )
+            maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == pStyleXf->maProtection.getApiData());
+        if( !maModel.mbBorderUsed )
+            maModel.mbBorderUsed = !rStyleData.mbBorderUsed || !rStyles.equalBorders( maModel.mnBorderId, rStyleData.mnBorderId );
+        if( !maModel.mbAreaUsed )
+            maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !rStyles.equalFills( maModel.mnFillId, rStyleData.mnFillId );
+    }
+
+    /*  #i38709# Decide which rotation reference mode to use. If any outer
+        border line of the cell is set (either explicitly or via cell style),
+        and the cell contents are rotated, set rotation reference to bottom of
+        cell. This causes the borders to be painted rotated with the text. */
+    if( const Alignment* pAlignment = maModel.mbAlignUsed ? &maAlignment : (pStyleXf ? &pStyleXf->maAlignment : 0) )
+    {
+        sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
+        if( const Border* pBorder = rStyles.getBorder( nBorderId ).get() )
+            if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
+                meRotationRef = ::com::sun::star::table::CellVertJustify_BOTTOM;
+    }
 }
 
 FontRef Xf::getFont() const
@@ -2345,7 +2438,7 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
     StylesBuffer& rStyles = getStyles();
 
     // create and set cell style
-    if( maModel.mbCellXf )
+    if( isCellXf() )
         rPropMap[ PROP_CellStyle ] <<= rStyles.createCellStyle( maModel.mnStyleXfId );
 
     if( maModel.mbFontUsed )
@@ -2360,6 +2453,8 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
         rStyles.writeBorderToPropertyMap( rPropMap, maModel.mnBorderId );
     if( maModel.mbAreaUsed )
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
+    if( maModel.mbAlignUsed || maModel.mbBorderUsed )
+        rPropMap[ PROP_RotateReference ] <<= meRotationRef;
 }
 
 void Xf::writeToPropertySet( PropertySet& rPropSet ) const
@@ -2375,37 +2470,15 @@ void Xf::setBiffUsedFlags( sal_uInt8 nUsedFlags )
         - In cell XFs a *set* bit means a used attribute.
         - In style XFs a *cleared* bit means a used attribute.
         The boolean flags always store true, if the attribute is used.
-        The "maModel.mbCellXf == getFlag(...)" construct evaluates to true in
-        both mentioned cases: cell XF and set bit; or style XF and cleared bit.
+        The "isCellXf() == getFlag(...)" construct evaluates to true in both
+        mentioned cases: cell XF and set bit; or style XF and cleared bit.
      */
-    maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_FONT_USED );
-    maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_NUMFMT_USED );
-    maModel.mbAlignUsed  = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_ALIGN_USED );
-    maModel.mbProtUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
-    maModel.mbBorderUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
-    maModel.mbAreaUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
-}
-
-void Xf::updateUsedFlags( const Xf& rStyleXf )
-{
-    /*  Enables the used flags, if the formatting attributes differ from the
-        passed style XF. In cell XFs Excel uses the cell attributes, if they
-        differ from the parent style XF.
-        #109899# ...or if the respective flag is not set in parent style XF.
-     */
-    const XfModel& rStyleData = rStyleXf.maModel;
-    if( !maModel.mbFontUsed )
-        maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
-    if( !maModel.mbNumFmtUsed )
-        maModel.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maModel.mnNumFmtId != rStyleData.mnNumFmtId);
-    if( !maModel.mbAlignUsed )
-        maModel.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == rStyleXf.maAlignment.getApiData());
-    if( !maModel.mbProtUsed )
-        maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == rStyleXf.maProtection.getApiData());
-    if( !maModel.mbBorderUsed )
-        maModel.mbBorderUsed = !rStyleData.mbBorderUsed || (maModel.mnBorderId != rStyleData.mnBorderId);
-    if( !maModel.mbAreaUsed )
-        maModel.mbAreaUsed = !rStyleData.mbAreaUsed || (maModel.mnFillId != rStyleData.mnFillId);
+    maModel.mbFontUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_FONT_USED );
+    maModel.mbNumFmtUsed = isCellXf() == getFlag( nUsedFlags, BIFF_XF_NUMFMT_USED );
+    maModel.mbAlignUsed  = isCellXf() == getFlag( nUsedFlags, BIFF_XF_ALIGN_USED );
+    maModel.mbProtUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
+    maModel.mbBorderUsed = isCellXf() == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
+    maModel.mbAreaUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
 }
 
 // ============================================================================
@@ -3137,11 +3210,12 @@ void StylesBuffer::importFormat( BiffInputStream& rStrm )
 void StylesBuffer::importXf( BiffInputStream& rStrm )
 {
     XfRef xXf( new Xf( *this ) );
-    // store XF in both lists (except BIFF2 which does not support cell styles)
-    maCellXfs.push_back( xXf );
-    if( getBiff() != BIFF2 )
-        maStyleXfs.push_back( xXf );
     xXf->importXf( rStrm );
+
+    XfRef xCellXf, xStyleXf;
+    (xXf->isCellXf() ? xCellXf : xStyleXf) = xXf;
+    maCellXfs.push_back( xCellXf );
+    maStyleXfs.push_back( xStyleXf );
 }
 
 void StylesBuffer::importStyle( BiffInputStream& rStrm )
@@ -3160,20 +3234,11 @@ void StylesBuffer::finalizeImport()
     // borders and fills
     maBorders.forEachMem( &Border::finalizeImport );
     maFills.forEachMem( &Fill::finalizeImport );
-
-    /*  Style XFs and cell XFs. The BIFF format stores cell XFs and style XFs
-        mixed in a single list. The import filter has stored the XFs in both
-        lists to make the getStyleXf() function working correctly (e.g. for
-        retrieving the default font, see getDefaultFont() function), except for
-        BIFF2 which does not support cell styles at all. Therefore, if in BIFF
-        filter mode, we do not need to finalize the cell styles list. */
-    if( getFilterType() == FILTER_OOX )
-        maStyleXfs.forEachMem( &Xf::finalizeImport );
+    // style XFs and cell XFs
+    maStyleXfs.forEachMem( &Xf::finalizeImport );
     maCellXfs.forEachMem( &Xf::finalizeImport );
-
     // built-in and user defined cell styles
     maCellStyles.finalizeImport();
-
     // differential formatting (for conditional formatting)
     maDxfs.forEachMem( &Dxf::finalizeImport );
 }
@@ -3186,6 +3251,11 @@ sal_Int32 StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const
 FontRef StylesBuffer::getFont( sal_Int32 nFontId ) const
 {
     return maFonts.get( nFontId );
+}
+
+BorderRef StylesBuffer::getBorder( sal_Int32 nBorderId ) const
+{
+    return maBorders.get( nBorderId );
 }
 
 XfRef StylesBuffer::getCellXf( sal_Int32 nXfId ) const
@@ -3227,6 +3297,56 @@ const FontModel& StylesBuffer::getDefaultFontModel() const
 {
     FontRef xDefFont = getDefaultFont();
     return xDefFont.get() ? xDefFont->getModel() : getTheme().getDefaultFontModel();
+}
+
+bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) const
+{
+    if( nBorderId1 == nBorderId2 )
+        return true;
+
+    switch( getFilterType() )
+    {
+        case FILTER_OOX:
+            // in OOXML, borders are assumed to be unique
+            return false;
+
+        case FILTER_BIFF:
+        {
+            // in BIFF, a new border entry has been created for every XF
+            const Border* pBorder1 = maBorders.get( nBorderId1 ).get();
+            const Border* pBorder2 = maBorders.get( nBorderId2 ).get();
+            return pBorder1 && pBorder2 && (pBorder1->getApiData() == pBorder2->getApiData());
+        }
+
+        case FILTER_UNKNOWN:
+        break;
+    }
+    return false;
+}
+
+bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const
+{
+    if( nFillId1 == nFillId2 )
+        return true;
+
+    switch( getFilterType() )
+    {
+        case FILTER_OOX:
+            // in OOXML, fills are assumed to be unique
+            return false;
+
+        case FILTER_BIFF:
+        {
+            // in BIFF, a new fill entry has been created for every XF
+            const Fill* pFill1 = maFills.get( nFillId1 ).get();
+            const Fill* pFill2 = maFills.get( nFillId2 ).get();
+            return pFill1 && pFill2 && (pFill1->getApiData() == pFill2->getApiData());
+        }
+
+        case FILTER_UNKNOWN:
+        break;
+    }
+    return false;
 }
 
 OUString StylesBuffer::getDefaultStyleName() const

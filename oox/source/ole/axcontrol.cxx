@@ -210,6 +210,16 @@ enum ApiTransparencyMode
 
 // ----------------------------------------------------------------------------
 
+/** Specifies how a form control supports the DefaultState property. */
+enum ApiDefaultStateMode
+{
+    API_DEFAULTSTATE_BOOLEAN,           /// Control does not support tri-state, state is given as boolean.
+    API_DEFAULTSTATE_SHORT,             /// Control does not support tri-state, state is given as short.
+    API_DEFAULTSTATE_TRISTATE           /// Control supports tri-state, state is given as short.
+};
+
+// ----------------------------------------------------------------------------
+
 /** Converts the AX background formatting to UNO properties. */
 void lclConvertBackground( AxControlHelper& rHelper, PropertyMap& rPropMap, sal_uInt32 nBackColor, sal_uInt32 nFlags, ApiTransparencyMode eTranspMode )
 {
@@ -325,8 +335,11 @@ void lclConvertPicture( AxControlHelper& rHelper, PropertyMap& rPropMap, const S
 // ----------------------------------------------------------------------------
 
 /** Converts the AX value for checked/unchecked/dontknow to UNO properties. */
-void lclConvertState( AxControlHelper& /*rHelper*/, PropertyMap& rPropMap, const OUString& rValue, sal_Int32 nMultiSelect, bool bSupportsTriState )
+void lclConvertState( AxControlHelper& /*rHelper*/, PropertyMap& rPropMap, const OUString& rValue, sal_Int32 nMultiSelect, ApiDefaultStateMode eDefStateMode )
 {
+    bool bBooleanState = eDefStateMode == API_DEFAULTSTATE_BOOLEAN;
+    bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
+
     // state
     sal_Int16 nState = bSupportsTriState ? API_STATE_DONTKNOW : API_STATE_UNCHECKED;
     if( rValue.getLength() == 1 ) switch( rValue[ 0 ] )
@@ -335,7 +348,10 @@ void lclConvertState( AxControlHelper& /*rHelper*/, PropertyMap& rPropMap, const
         case '1':   nState = API_STATE_CHECKED;     break;
         // any other string (also empty) means 'dontknow'
     }
-    rPropMap.setProperty( PROP_DefaultState, nState );
+    if( bBooleanState )
+        rPropMap.setProperty( PROP_DefaultState, nState != API_STATE_UNCHECKED );
+    else
+        rPropMap.setProperty( PROP_DefaultState, nState );
 
     // tristate
     if( bSupportsTriState )
@@ -698,6 +714,7 @@ void AxToggleButtonModel::convertProperties( AxControlHelper& rHelper, PropertyM
     rPropMap.setProperty( PROP_Toggle, true );
     lclConvertBackground( rHelper, rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     lclConvertPicture( rHelper, rPropMap, maPictureData, mnPicturePos );
+    lclConvertState( rHelper, rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModel::convertProperties( rHelper, rPropMap );
 }
 
@@ -721,7 +738,7 @@ void AxCheckBoxModel::convertProperties( AxControlHelper& rHelper, PropertyMap& 
     lclConvertBackground( rHelper, rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     lclConvertVisualEffect( rHelper, rPropMap, mnSpecialEffect );
     lclConvertPicture( rHelper, rPropMap, maPictureData, mnPicturePos );
-    lclConvertState( rHelper, rPropMap, maValue, mnMultiSelect, true );
+    lclConvertState( rHelper, rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_TRISTATE );
     AxMorphDataModel::convertProperties( rHelper, rPropMap );
 }
 
@@ -745,7 +762,7 @@ void AxOptionButtonModel::convertProperties( AxControlHelper& rHelper, PropertyM
     lclConvertBackground( rHelper, rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     lclConvertVisualEffect( rHelper, rPropMap, mnSpecialEffect );
     lclConvertPicture( rHelper, rPropMap, maPictureData, mnPicturePos );
-    lclConvertState( rHelper, rPropMap, maValue, mnMultiSelect, false );
+    lclConvertState( rHelper, rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_SHORT );
     AxMorphDataModel::convertProperties( rHelper, rPropMap );
 }
 

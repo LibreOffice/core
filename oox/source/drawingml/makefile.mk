@@ -70,6 +70,7 @@ SLOFILES =	\
         $(SLO)$/spdefcontext.obj\
         $(SLO)$/textbody.obj\
         $(SLO)$/textbodycontext.obj\
+        $(SLO)$/textbodyproperties.obj\
         $(SLO)$/textbodypropertiescontext.obj\
         $(SLO)$/textcharacterproperties.obj\
         $(SLO)$/textcharacterpropertiescontext.obj\

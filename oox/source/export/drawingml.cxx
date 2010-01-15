@@ -1342,15 +1342,10 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
 // from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
 static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, String& rFontName)
 {
-    StarSymbolToMSMultiFont *pConvert = 0;
-    FontFamily eFamily = FAMILY_DECORATIVE;
-
-    if (!pConvert)
-    {
-        pConvert = CreateStarSymbolToMSMultiFont();
-    }
     sal_Unicode cChar = rNumStr.GetChar(0);
+    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
     String sFont = pConvert->ConvertChar(cChar);
+    delete pConvert;
     if (sFont.Len())
     {
         rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
@@ -1366,7 +1361,6 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
            let words own font substitution kick in
            */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        eFamily = FAMILY_SWISS;
         rFontName = ::GetFontToken(rFontName, 0);
     }
     else
@@ -1379,7 +1373,6 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
         rFontName.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Wingdings"));
         rNumStr = static_cast< sal_Unicode >(0x6C);
     }
-    delete pConvert;
 }
 
 sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc )
