@@ -31,6 +31,7 @@
 #ifndef INCLUDED_RESOURCEMODEL_UTIL_HXX
 #define INCLUDED_RESOURCEMODEL_UTIL_HXX
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <WriterFilterDllApi.hxx>
 #include <string>
 
@@ -44,5 +45,7 @@ namespace writerfilter
     string WRITERFILTER_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 
+    string toString(uno::Reference< text::XTextRange > textRange);
+    string toString(const string & rString);
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX

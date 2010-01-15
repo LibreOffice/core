@@ -40,6 +40,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/TagLogger.hxx>
+#include <resourcemodel/util.hxx>
 
 namespace writerfilter
 {
@@ -400,4 +401,23 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
         return result;
     }
 
+    string toString(uno::Reference< text::XTextRange > textRange)
+    {
+        string result;
+
+        if (textRange.get())
+        {
+            rtl::OUString aOUStr = textRange->getString();
+            rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
+
+            result = aOStr.getStr();
+        }
+
+        return result;
+    }
+
+    string toString(const string & rString)
+    {
+        return rString;
+    }
 }
