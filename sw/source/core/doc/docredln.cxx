@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #ifndef _SFX_ITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
 #include <svx/colritem.hxx>
@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )
     #define _DEBUG_REDLINE( pDoc )
@@ -310,7 +310,7 @@ Verhalten von Delete-Redline:
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
 #if 0
-// #i93179# disabled: ASSERT in ~SwIndexReg     #ifndef PRODUCT
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
     bool bError = true;
@@ -3698,7 +3698,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "das ist keine gueltige Operation" );
 #endif

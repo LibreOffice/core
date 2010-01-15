@@ -39,7 +39,7 @@
 #include <algorithm>
 
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/sizeitem.hxx>

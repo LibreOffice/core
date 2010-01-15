@@ -74,7 +74,7 @@ class SwFtnFrm: public SwLayoutFrm
     // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
     // <--
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
@@ -89,7 +89,7 @@ public:
 
     BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     const SwCntntFrm *GetRef() const    { return pRef; }
          SwCntntFrm  *GetRef()          { return pRef; }
 #else

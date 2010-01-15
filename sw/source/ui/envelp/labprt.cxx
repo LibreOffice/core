@@ -37,7 +37,7 @@
 
 
 #include <svtools/prnsetup.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>
 #include <wrtsh.hxx>
 #include <label.hxx>
@@ -137,7 +137,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
     if ( bEnable )
         aColField.GrabFocus();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( pButton == &aPageButton, "NewButton?" );
 #endif

@@ -47,8 +47,8 @@
 #include <svx/svdview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <doc.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>

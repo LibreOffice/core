@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/langitem.hxx>
@@ -938,17 +938,6 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         case RES_LINENUMBER:
         {
             InvalidateLineNum();
-        }
-        break;
-        case RES_INS_CHR:
-        {
-            nPos = ((SwInsChr*)pNew)->nPos;
-            InvalidateRange( SwCharRange( nPos, 1 ), 1 );
-            SET_WRONG( nPos, 1, true )
-            SET_SCRIPT_INVAL( nPos )
-            bSetFldsDirty = sal_True;
-            if( HasFollow() )
-                lcl_ModifyOfst( this, nPos, 1 );
         }
         break;
         case RES_INS_TXT:

@@ -35,9 +35,9 @@
 #include <svx/svxids.hrc>
 #endif
 #include <tools/stream.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>

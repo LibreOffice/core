@@ -47,7 +47,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <cppuhelper/implbase8.hxx> // helper for implementations
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include "calbck.hxx"
 #include "TextCursorHelper.hxx"
 #include <comphelper/uno3.hxx>
