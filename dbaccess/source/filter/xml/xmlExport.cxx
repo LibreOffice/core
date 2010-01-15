@@ -57,8 +57,8 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <svtools/filenotation.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/filenotation.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbtools.hxx>

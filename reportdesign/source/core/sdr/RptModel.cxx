@@ -33,7 +33,7 @@
 #include "RptPage.hxx"
 #include <dbaccess/singledoccontroller.hxx>
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"

@@ -26,7 +26,7 @@
 #ifndef DBACCESS_OPTIONALBOOLITEM_HXX
 #define DBACCESS_OPTIONALBOOLITEM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 #include <boost/optional.hpp>
 

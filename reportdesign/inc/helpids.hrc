@@ -31,7 +31,7 @@
 #define RTPUI_REPORTDESIGN_HELPID_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>    // HID_RPT_DBACCESS_START
+#include <svl/solar.hrc>    // HID_RPT_DBACCESS_START
 #endif
 
 #define UID_RPT_RPT_APP_VIEW        (HID_RPT_START +  0)

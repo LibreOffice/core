@@ -194,30 +194,17 @@ namespace dbaui
         );
 
         /** insert a table into the data source. The source can eihter be a table or a query
-            @param  _nCommandType
-                The command type.
-            @param  _xSrcConnection
-                The connection of the source.
-            @param  _aSelection
-                The selection of the rows to copy.
-            @param  _bBookmarkSelection
-                If <TRUE/> the selection is bookmark selection.
-            @param  _sCommand
-                The name of the query or table.
-            @param  _sSrcDataSourceName
-                The name of the source data source.
-            @param  _sDestDataSourceName
-                The name of the dest data source.
         */
         void insertTable(
-            sal_Int32 _nCommandType,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xSrcConnection,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _aSelection,
-            sal_Bool _bBookmarkSelection,
-            const ::rtl::OUString& _sCommand,
-            const ::rtl::OUString& _sSrcDataSourceName,
-            const ::rtl::OUString& _sDestDataSourceName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xDestConnection
+            const ::rtl::OUString& i_rSourceDataSource,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rSourceConnection,
+            const ::rtl::OUString& i_rCommand,
+            const sal_Int32 i_nCommandType,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& i_rSourceRows,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelection,
+            const sal_Bool i_bBookmarkSelection,
+            const ::rtl::OUString& i_rDestDataSource,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rDestConnection
         );
 
     };

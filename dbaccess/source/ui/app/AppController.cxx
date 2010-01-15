@@ -83,16 +83,16 @@
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
 
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/filenotation.hxx>
+#include <unotools/historyoptions.hxx>
+#include <svl/filenotation.hxx>
 #include <svtools/insdlg.hxx>
 
 #include <unotools/tempfile.hxx>
@@ -130,15 +130,20 @@
 #include "dbu_reghelper.hxx"
 #include "dbu_app.hrc"
 #include "defaultobjectnamecheck.hxx"
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
 #include "databaseobjectview.hxx"
 #include "listviewitems.hxx"
 #include "AppDetailView.hxx"
 #include "linkeddocuments.hxx"
 #include "sqlmessage.hxx"
+#include <unotools/moduleoptions.hxx>
 #include "UITools.hxx"
 #include "dsntypes.hxx"
 #include "dbaccess_helpid.hrc"
 #include "dlgsave.hxx"
+#include <unotools/historyoptions.hxx>
+#include <svl/filenotation.hxx>
 #include <vos/mutex.hxx>
 #include "dbaccess_slotid.hrc"
 

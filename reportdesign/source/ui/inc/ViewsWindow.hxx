@@ -41,7 +41,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/svdedtv.hxx>
 #include <SectionView.hxx>
-
+#include <unotools/options.hxx>
 #include <list>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -117,7 +117,7 @@ namespace rptui
     };
 
     class OViewsWindow :    public Window
-                        ,   public SfxListener
+                        ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
     {
         typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
@@ -161,10 +161,9 @@ namespace rptui
         // windows overload
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
         virtual void MouseButtonUp( const MouseEvent& rMEvt );
-        using Window::Notify;
+
         virtual void Paint( const Rectangle& rRect );
-        // SfxListener
-        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);

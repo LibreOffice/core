@@ -86,7 +86,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>

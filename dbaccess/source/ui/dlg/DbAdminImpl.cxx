@@ -34,6 +34,11 @@
 #include "DbAdminImpl.hxx"
 #include "dsmeta.hxx"
 
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include "DriverSettings.hxx"
 #include "IItemSetHelper.hxx"
 #include "UITools.hxx"
@@ -59,12 +64,12 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/logindlg.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
 #include <typelib/typedescription.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
