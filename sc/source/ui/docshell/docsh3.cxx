@@ -1093,6 +1093,16 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
                                 GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, TRUE, FALSE );
+
+                                // #i101099# [Collaboration] Changes are not correctly shown
+                                if ( bShared )
+                                {
+                                    ScChangeAction* pAct = pThisTrack->GetLast();
+                                    if ( pAct && pAct->GetType() == eSourceType && pAct->IsDeletedIn() && !pSourceAction->IsDeletedIn() )
+                                    {
+                                        pAct->RemoveAllDeletedIn();
+                                    }
+                                }
                             }
                         }
                         break;

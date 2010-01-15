@@ -311,7 +311,6 @@ protected:
                                             GetDeletedInAddress(), p );
                                     }
             BOOL                RemoveDeletedIn( const ScChangeAction* );
-            void                RemoveAllDeletedIn();
             void                SetDeletedIn( ScChangeAction* );
 
             ScChangeActionLinkEntry*    AddDeleted( ScChangeAction* p )
@@ -417,6 +416,7 @@ public:
                                     { return IsDeleteType() || IsDeletedIn(); }
             BOOL                IsDeletedIn( const ScChangeAction* ) const;
             BOOL                IsDeletedInDelType( ScChangeActionType ) const;
+            void                RemoveAllDeletedIn();
 
             const ScChangeActionLinkEntry* GetFirstDeletedEntry() const
                                     { return pLinkDeleted; }
