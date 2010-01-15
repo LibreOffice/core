@@ -177,7 +177,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     PushButton BT_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 152 ) ;
-        Size = MAP_APPFONT ( 66 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "Auto~Format..." ;

@@ -30,7 +30,7 @@
 #ifndef _SORT_HXX
 #define _SORT_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <ndindex.hxx>
 
 

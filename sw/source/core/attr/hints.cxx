@@ -47,12 +47,6 @@ SwFmtChg::SwFmtChg( SwFmt *pFmt )
 {}
 
 
-SwInsChr::SwInsChr( xub_StrLen nP )
-    : SwMsgPoolItem( RES_INS_CHR ),
-    nPos( nP )
-{}
-
-
 
 SwInsTxt::SwInsTxt( xub_StrLen nP, xub_StrLen nL )
     : SwMsgPoolItem( RES_INS_TXT ),
@@ -147,7 +141,7 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwAttrSetChg::ClearItem( USHORT nWhch )
 {
@@ -183,7 +177,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
@@ -226,12 +220,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 //{
 //    aList.Insert(rNd.GetIndex(), &rNd);
 //}
-
-SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
-    : SwMsgPoolItem( RES_GETLOWERNUMLEVEL ), rName( rRuleName ),
-    nLvl(nSrchLvl)
-{
-}
 
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )

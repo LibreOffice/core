@@ -70,7 +70,7 @@
 #include <fldbas.hxx>
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif

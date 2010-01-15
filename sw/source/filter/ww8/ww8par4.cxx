@@ -46,10 +46,10 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 
 #include <sot/exchange.hxx>
 #include <swtypes.hxx>

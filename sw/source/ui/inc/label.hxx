@@ -33,7 +33,7 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/frame/XModel.hpp>

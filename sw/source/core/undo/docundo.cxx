@@ -203,7 +203,7 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     USHORT nEnde = UNDO_ACTION_LIMIT;
 
 // nur zum Testen der neuen DOC-Member
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 {
     SwUndoId nId = UNDO_EMPTY;
     USHORT nUndosCnt = 0, nSttEndCnt = 0;
@@ -551,7 +551,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
     pUndoEnd->SetSttOffset( nSize );
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         USHORT nEndCnt = 1, nCnt = pUndos->Count();
         SwUndoId nTmpId = UNDO_EMPTY;

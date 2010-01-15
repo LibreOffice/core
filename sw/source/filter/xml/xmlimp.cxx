@@ -65,7 +65,7 @@
 #include <sfx2/printer.hxx>
 #include <ForbiddenCharactersEnum.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>
@@ -842,7 +842,7 @@ void SwXMLImport::endDocument( void )
                                             pTxtNode->GetTxt().Len() );
                 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 // !!! This should be impossible !!!!
                 ASSERT( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_True ).nNode.GetIndex(),

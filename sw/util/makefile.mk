@@ -43,10 +43,6 @@ USE_DEFFILE=TRUE
 
 # --- Allgemein -----------------------------------------------------------
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
-.ENDIF
-
 sw_res_files= \
     $(SRS)$/app.srs          \
     $(SRS)$/dialog.srs       \
@@ -149,6 +145,7 @@ DEF2NAME=       $(SHL2TARGET)
 SHL2STDLIBS= \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SOTLIB) \
@@ -164,7 +161,7 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/detreg.obj \
         $(SLO)$/iodetect.obj
 
-.IF "$(product)"==""
+.IF "$(dbgutil)"!=""
 SHL2OBJS+=  \
         $(SLO)$/errhdl.obj
 .ENDIF
@@ -322,7 +319,7 @@ DEF4NAME=$(SHL4TARGET)
 SHL4STDLIBS= \
     $(ISWLIB) \
     $(SVXCORELIB) \
-    $(SVXMSFILTERLIB) \
+    $(MSFILTERLIB) \
     $(SFXLIB) \
     $(GOODIESLIB) \
     $(BASEGFXLIB) \
