@@ -166,7 +166,7 @@ const String& SvtLanguageTable::GetString( const LanguageType eType ) const
     return aEmptyStr;
 }
 
-String SvtLanguageTable::GetLanguageString( LanguageType eType )
+String SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
     static const SvtLanguageTable aLangTable;
     return aLangTable.GetString( eType );

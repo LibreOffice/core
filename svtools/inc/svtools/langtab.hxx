@@ -32,8 +32,8 @@
 
 
 #include <tools/resary.hxx>
-
-#include "svtdllapi.h"
+#include <i18npool/lang.h>
+#include <svtools/svtdllapi.h>
 
 //========================================================================
 //  class SvtLanguageTable
