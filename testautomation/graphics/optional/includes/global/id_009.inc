@@ -165,9 +165,9 @@ testcase tmHelpContents
             Active.Ok
         end if
 
-        kontext "DruckenDLG"
-        if DruckenDLG.Exists then
-            DruckenDLG.cancel
+        kontext "Printing"
+        if Printing.Exists( 2 ) then
+            Printing.cancel
         else
             warnlog "the Print-Dialogue didnt appear."
         end if

@@ -75,6 +75,7 @@ sub main
     call id_008
     call id_009
     call id_001
+    Call g_printing
     Call tFileExportAsPDF
     Call tExportAsPDFButton
 
@@ -88,6 +89,9 @@ sub LoadIncludeFiles
     use "global\required\includes\g_option.inc"
     use "global\required\includes\g_customize.inc"
     use "global\required\includes\g_001.inc"
+    use "global\required\includes\g_printing.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
    Call GetUseFiles
    gApplication   = "DRAW"
 end sub
