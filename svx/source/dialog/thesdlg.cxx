@@ -220,7 +220,7 @@ void ThesaurusAlternativesCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKey = rKEvt.GetKeyCode();
 
-    if (rKey.GetCode() == KEY_RETURN)
+    if (rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_ESCAPE)
         GetParent()->KeyInput( rKEvt ); // parent will close dialog...
     else if ( GetEntryCount() )
         SvxCheckListBox::KeyInput( rKEvt );

@@ -182,7 +182,6 @@
 // ResId fuer die Linguistik-Dialoge
 #define RID_SVXDLG_HYPHENATE                (RID_SVX_START +  30)
 #define RID_SVXDLG_THESAURUS                (RID_SVX_START +  31)
-#define RID_SVXDLG_THES_LANGUAGE            (RID_SVX_START +  38)
 
 // ResIds fuer HM-QueryBoxen und Error-Strings
 #define RID_SVXQB_THESAURUS                 (RID_SVX_START +  33)
@@ -190,7 +189,6 @@
 #define RID_SVXQB_BODYTEXT                  (RID_SVX_START +  35)
 #define RID_SVXQB_SPECIAL                   (RID_SVX_START +  36)
 #define RID_SVXQB_SPECIAL_FORCED            (RID_SVX_START +  37)
-// + 38 ist vergeben, siehe RID_SVXDLG_THES_LANGUAGE
 #define RID_SVXQB_BW_CONTINUE               (RID_SVX_START +  39)
 
 // ResId's fuer Dialoge aus StarDraw

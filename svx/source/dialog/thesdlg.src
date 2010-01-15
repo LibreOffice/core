@@ -80,15 +80,13 @@ ModalDialog RID_SVXDLG_THESAURUS
         Size = MAP_APPFONT ( 209 , 121 ) ;
         Border = TRUE;
         TabStop = TRUE ;
-// ???       DialogControl = TRUE;
-// ???       OutputSize = TRUE ;
     };
 
     FixedText FT_REPL
     {
         Pos = MAP_APPFONT ( 5 , 173 ) ;
         Size = MAP_APPFONT ( 143 , 8 ) ;
-        Text [ en-US ] = "~Replace with" ;
+        Text [ en-US ] = "Replace ~with" ;
         LEFT = TRUE ;
     };
     Edit ED_REPL
@@ -108,7 +106,6 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 0 , 200 ) ;
         Size = MAP_APPFONT ( 220 , 8 ) ;
-//       Text [ en-US ] = "Variations" ;
     };
 
 
@@ -119,8 +116,9 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     OkButton BTN_THES_OK
     {
-        Pos = MAP_APPFONT ( 88 , 210 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Pos = MAP_APPFONT ( 70 , 210 ) ;
+        Size = MAP_APPFONT ( 79 , 14 ) ;
+        Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
     };
     CancelButton BTN_THES_CANCEL
@@ -134,74 +132,4 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ en-US ] = "Word not found in thesaurus" ;
     };
 };
- // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
-ModalDialog RID_SVXDLG_THES_LANGUAGE
-{
-    HelpId = HID_THES_LANGUAGE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 170 , 86 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sprache auswählen : Sprache auswõhlen */
-    /* ### ACHTUNG: Neuer Text in Resource? Sprache auswählen : Sprache auswõhlen */
-    Text [ en-US ] = "Select Language" ;
-    Moveable = TRUE ;
-    ListBox LB_THES_LANGUAGE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 90 , 60 ) ;
-        Sort = TRUE ;
-    };
-    FixedLine FL_THES_LANGUAGE
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ en-US ] = "Selection" ;
-    };
-    OKButton BTN_LANG_OK
-    {
-        Pos = MAP_APPFONT ( 114 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_LANG_CANCEL
-    {
-        Pos = MAP_APPFONT ( 114 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_LANG_HELP
-    {
-        Pos = MAP_APPFONT ( 114 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

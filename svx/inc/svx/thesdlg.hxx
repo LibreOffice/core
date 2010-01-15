@@ -54,23 +54,12 @@ class SVX_DLLPUBLIC SvxThesaurusDialog : public SvxStandardDialog
 {
     boost::shared_ptr< SvxThesaurusDialog_Impl > m_pImpl;
 
-public:
-
-    SvxThesaurusDialog( Window* pParent,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
-                        const String &rWord, sal_Int16 nLanguage );
-    ~SvxThesaurusDialog();
-
-    String          GetWord();
-    sal_uInt16      GetLanguage() const;
-
-    SVX_DLLPRIVATE virtual void     Apply();
-
 #ifdef _SVX_THESDLG_CXX
     SVX_DLLPRIVATE bool     UpdateAlternativesBox_Impl();
     SVX_DLLPRIVATE void     SetWindowTitle(sal_Int16 nLanguage);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XMeaning > > SAL_CALL queryMeanings_Impl( ::rtl::OUString& rTerm, const ::com::sun::star::lang::Locale& rLocale, const ::com::sun::star::beans::PropertyValues& rProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
+            queryMeanings_Impl( ::rtl::OUString& rTerm, const ::com::sun::star::lang::Locale& rLocale, const ::com::sun::star::beans::PropertyValues& rProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // Handler
     DECL_LINK( LanguageHdl_Impl, MenuButton * );
@@ -79,6 +68,17 @@ public:
     DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
 #endif
+
+    SVX_DLLPRIVATE virtual void     Apply();
+
+public:
+    SvxThesaurusDialog( Window* pParent,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                        const String &rWord, sal_Int16 nLanguage );
+    ~SvxThesaurusDialog();
+
+    String          GetWord();
+    sal_uInt16      GetLanguage() const;
 };
 
 #endif
