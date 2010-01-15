@@ -849,6 +849,24 @@ End
 
 // "OpenWith" Windows Registry keys for extensions supported by Calc
 
+// .ODS
+RegistryItem gid_Regitem_OpenOffice_ODS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ods\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .OTS
+RegistryItem gid_Regitem_OpenOffice_OTS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ots\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
 // .SXC
 RegistryItem gid_Regitem_OpenOffice_SXC_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
