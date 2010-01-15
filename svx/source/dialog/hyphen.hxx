@@ -32,6 +32,8 @@
 
 // include ---------------------------------------------------------------
 
+#include <boost/shared_ptr.hpp>
+
 #include <vcl/edit.hxx>
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -62,63 +64,39 @@ protected:
 
 // class SvxHyphenWordDialog ---------------------------------------------
 
+struct SvxHyphenWordDialog_Impl;
+
 class SvxHyphenWordDialog : public SfxModalDialog
 {
+    boost::shared_ptr< SvxHyphenWordDialog_Impl > m_pImpl;
+
+#ifdef _SVX_HYPHEN_CXX
+    void            EnableLRBtn_Impl();
+    void            SetLabel_Impl( LanguageType nLang );
+    String          EraseUnusableHyphens_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
+
+    void            InitControls_Impl();
+    void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
+    sal_uInt16      GetHyphIndex_Impl();
+
+    DECL_LINK( Left_Impl, Button* );
+    DECL_LINK( Right_Impl, Button* );
+    DECL_LINK( CutHdl_Impl, Button* );
+    DECL_LINK( ContinueHdl_Impl, Button* );
+    DECL_LINK( DeleteHdl_Impl, Button* );
+    DECL_LINK( HyphenateAllHdl_Impl, Button* );
+    DECL_LINK( CancelHdl_Impl, Button* );
+    DECL_LINK( GetFocusHdl_Impl, Edit* );
+#endif
+
 public:
     SvxHyphenWordDialog( const String &rWord, LanguageType nLang,
                          Window* pParent,
-                         ::com::sun::star::uno::Reference<
-                             ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
 
     void            SelLeft();
     void            SelRight();
-
-private:
-    FixedText           aWordFT;
-    SvxHyphenEdit       aWordEdit;
-    ImageButton         aLeftBtn;
-    ImageButton         aRightBtn;
-    OKButton            aOkBtn;
-    CancelButton        aCancelBtn;
-    PushButton          aContBtn;
-    PushButton          aDelBtn;
-    HelpButton          aHelpBtn;
-    String              aLabel;
-    SvxSpellWrapper*    pHyphWrapper;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >        xHyphenator;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XPossibleHyphens >   xPossHyph;
-    String              aActWord;       // actual (to be displayed) word
-    LanguageType        nActLanguage;   // and language
-    sal_uInt16              nMaxHyphenationPos; // right most valid hyphenation pos
-    sal_uInt16              nHyphPos;
-    sal_uInt16              nOldPos;
-    sal_Bool                bBusy;
-
-#ifdef _SVX_HYPHEN_CXX
-    void            EnableLRBtn_Impl();
-    //void          EnableCutBtn_Impl();
-    void            SetLabel_Impl( LanguageType nLang );
-    String          EraseUnusableHyphens_Impl(
-                        ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XPossibleHyphens >  &rxPossHyph,
-                        sal_uInt16 nMaxHyphenationPos );
-
-    void            InitControls_Impl();
-    void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
-    sal_uInt16          GetHyphIndex_Impl();
-
-    DECL_LINK( CutHdl_Impl, Button* );
-    DECL_LINK( DeleteHdl_Impl, Button* );
-    DECL_LINK( ContinueHdl_Impl, Button* );
-    DECL_LINK( CancelHdl_Impl, Button* );
-    DECL_LINK( Left_Impl, Button* );
-    DECL_LINK( Right_Impl, Button* );
-    DECL_LINK( GetFocusHdl_Impl, Edit* );
-    DECL_LINK( LangError_Impl, void* );
-#endif
 };
 
 
