@@ -35,6 +35,13 @@ AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
 ],,)
+AC_ARG_ENABLE(fetch-external,
+[  --disable-fetch-external Disables fetching external tarballs from web sources
+],,)
+AC_ARG_WITH(external-tar,
+[  --with-external-tar=<TARFILE PATH>   Specify path to tarfiles manually ],
+[ TARFILE_LOCATION="$withval"
+])
 AC_ARG_WITH(openldap,
 [  --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
@@ -6750,6 +6757,18 @@ else
 fi
 AC_SUBST(VERBOSE)
 
+dnl ===================================================================
+dnl external tarballs.
+dnl ===================================================================
+if test -z $TARFILE_LOCATION; then
+   TARFILE_LOCATION="DEFAULT"
+fi
+AC_SUBST(TARFILE_LOCATION)
+
+if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes"; then
+   DO_FETCH_TARBALLS="yes"
+fi
+AC_SUBST(DO_FETCH_TARBALLS)
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================

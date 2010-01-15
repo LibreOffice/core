@@ -89,7 +89,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
-	 $PROEXT,
+	 $PROEXT, $TARFILE_LOCATION,
      $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
@@ -197,6 +197,7 @@ $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
+$TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -980,6 +981,12 @@ $SOLARSRC             = '$SRC_ROOT';
 my @splitlist = split( /\//, $SRC_ROOT );
 pop @splitlist;
 $SOURCE_ROOT_DIR      = join("/", @splitlist);
+
+# default TARFILE_LOCATION
+if ('@TARFILE_LOCATION@' eq "DEFAULT")
+{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/ext_sources";
+}
+
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1668,6 +1675,8 @@ ToFile( "MOC4",              "@MOC4@",             "e" );
 ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
+ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )

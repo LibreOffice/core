@@ -66,17 +66,21 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
+    TARFILE_MD5=18f577b374d60b3c760a3a3350407632
     PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
+        TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
         PATCH_FILES=STLport-4.0.patch
     .ELSE
         TARFILE_NAME=STLport-4.5-0119
+        TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
         PATCH_FILES=STLport-4.5-0119.patch
     .ENDIF
 .ELSE
     TARFILE_NAME=STLport-4.0
+    TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
     PATCH_FILES=STLport-4.0.patch STLport-4.0-sunstudio12u1.patch
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
@@ -167,14 +171,6 @@ BUILD_FLAGS=-f sunpro6.mak
 
 OUT2INC= \
     stlport$/SC5$/*.SUNWCCh
-.ENDIF
-
-.IF "$(OS)"=="IRIX"
-TARFILE_NAME=STLport-4.5
-PATCH_FILES=STLport-4.5.patch
-BUILD_ACTION=gmake
-BUILD_FLAGS=-f gcc-3.0.mak
-BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 
 OUTDIR2INC= \
