@@ -120,7 +120,6 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "SetInetAttribute",                     //  6
         "ChangeOrdinalNumber",                  //  7
         "AddNonBreakingSpace",                  //  8
-        "ChangeFraction",                       //  8
         "ChangeDash",                           //  9
         "RemoveDoubleSpaces",                   // 10
         "ReplaceSingleQuote",                   // 11
@@ -200,7 +199,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                     break;//"ChangeDash",
                     case 10:
                         if(*(sal_Bool*)pValues[nProp].getValue())
-                            nFlags |= IngnoreDoubleSpace;
+                            nFlags |= IgnoreDoubleSpace;
                     break;//"RemoveDoubleSpaces",
                     case 11:
                         if(*(sal_Bool*)pValues[nProp].getValue())
@@ -311,7 +310,7 @@ void SvxBaseAutoCorrCfg::Commit()
                 pValues[nProp].setValue(&bVal, rType);
             break;//"ChangeDash",
             case 10:
-                bVal = 0 != (nFlags & IngnoreDoubleSpace);
+                bVal = 0 != (nFlags & IgnoreDoubleSpace);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"RemoveDoubleSpaces",
             case 11:

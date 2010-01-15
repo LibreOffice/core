@@ -63,7 +63,7 @@ const long Autocorrect      = 0x00000080;   // Autokorrektur aufrufen
 const long ChgQuotes        = 0x00000100;   // doppelte Quotes ersetzen
 const long SaveWordCplSttLst= 0x00000200;   // GrB. am SatzAnf. auto. aufnehmen
 const long SaveWordWrdSttLst= 0x00000400;   // 2 GrB. am WortAnf. auto. aufnehmen
-const long IngnoreDoubleSpace= 0x00000800;  // 2 Spaces ignorieren
+const long IgnoreDoubleSpace= 0x00000800;   // 2 Spaces ignorieren
 const long ChgSglQuotes     = 0x00001000;   // einfache Quotes ersetzen
 
 const long ChgWordLstLoad   = 0x20000000;   // Ersetzungsliste geladen

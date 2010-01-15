@@ -1190,10 +1190,10 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         {
             //JP 10.02.97: doppelte Spaces verhindern
             if( nInsPos && ' ' == cChar &&
-                IsAutoCorrFlag( IngnoreDoubleSpace ) &&
+                IsAutoCorrFlag( IgnoreDoubleSpace ) &&
                 ' ' == rTxt.GetChar( nInsPos - 1 ) )
             {
-                nRet = IngnoreDoubleSpace;
+                nRet = IgnoreDoubleSpace;
                 break;
             }
 
@@ -1365,7 +1365,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                  if( nRet & ChgQuotes)          nHelpId = 16;
             else if( nRet & ChgSglQuotes)       nHelpId = 17;
             else if( nRet & SetINetAttr)        nHelpId = 18;
-            else if( nRet & IngnoreDoubleSpace) nHelpId = 19;
+            else if( nRet & IgnoreDoubleSpace)  nHelpId = 19;
             else if( nRet & ChgWeightUnderl)    nHelpId = 20;
             else if( nRet & AddNonBrkSpace)     nHelpId = 21;
             else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
