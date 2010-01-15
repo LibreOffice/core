@@ -69,6 +69,8 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
 
+#include <typeinfo.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -157,19 +159,25 @@ ODataSettings_Base::ODataSettings_Base()
 
 //--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
+    :m_sFilter( _rSource.m_sFilter )
+    ,m_sHavingClause( _rSource.m_sHavingClause )
+    ,m_sGroupBy( _rSource.m_sGroupBy )
+    ,m_sOrder( _rSource.m_sOrder )
+    ,m_bApplyFilter( _rSource.m_bApplyFilter )
+    ,m_aFont( _rSource.m_aFont )
+    ,m_aRowHeight( _rSource.m_aRowHeight )
+    ,m_aTextColor( _rSource.m_aTextColor )
+    ,m_aTextLineColor( _rSource.m_aTextLineColor )
+    ,m_nFontEmphasis( _rSource.m_nFontEmphasis )
+    ,m_nFontRelief( _rSource.m_nFontRelief )
 {
-    m_sFilter       = _rSource.m_sFilter;
-    m_sHavingClause = _rSource.m_sHavingClause;
-    m_sGroupBy      = _rSource.m_sGroupBy;
-    m_sOrder        = _rSource.m_sOrder;
-    m_bApplyFilter  = _rSource.m_bApplyFilter;
-    m_aFont         = _rSource.m_aFont;
-    m_aRowHeight    = _rSource.m_aRowHeight;
-    m_aTextColor    = _rSource.m_aTextColor;
-    m_aTextLineColor= _rSource.m_aTextLineColor;
-    m_nFontEmphasis = _rSource.m_nFontEmphasis;
-    m_nFontRelief   = _rSource.m_nFontRelief;
 }
+
+// -----------------------------------------------------------------------------
+ODataSettings_Base::~ODataSettings_Base()
+{
+}
+
 // -----------------------------------------------------------------------------
 void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {

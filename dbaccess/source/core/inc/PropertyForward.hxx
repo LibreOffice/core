@@ -55,24 +55,31 @@
 namespace dbaccess
 {
 //........................................................................
+
+    // ===================================================================
+    // = OPropertyForward
+    // ===================================================================
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   OPropertyForward_Base;
-    class OPropertyForward : public ::comphelper::OBaseMutex
+    class OPropertyForward  :public ::comphelper::OBaseMutex
                             ,public OPropertyForward_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDest;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xDestInfo;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xDestContainer;
-        ::rtl::OUString m_sName;
-        sal_Bool        m_bInInsert;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDestContainer;
+        ::rtl::OUString     m_sName;
+        sal_Bool            m_bInInsert;
+
     protected:
         virtual ~OPropertyForward();
+
     public:
-        OPropertyForward(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSource
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xDestContainer
-                        ,const ::rtl::OUString& _sName
-                        ,const ::std::vector< ::rtl::OUString>& _aPropertyList = ::std::vector< ::rtl::OUString>());
+        OPropertyForward( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSource,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xDestContainer,
+                          const ::rtl::OUString& _sName,
+                          const ::std::vector< ::rtl::OUString >& _aPropertyList
+                         );
 
         // ::com::sun::star::beans::XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
@@ -80,10 +87,11 @@ namespace dbaccess
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
-        inline void setName(const ::rtl::OUString& _sName) { m_sName = _sName; }
-        void setDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest);
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getDefinition() const { return m_xDest;}
+        inline void setName( const ::rtl::OUString& _sName ) { m_sName = _sName; }
+        void setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDest);
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

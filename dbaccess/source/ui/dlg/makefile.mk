@@ -124,13 +124,13 @@ EXCEPTIONSFILES=						\
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
         $(SLO)$/advancedsettings.obj    \
-        $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
         $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj 
+        $(SLO)$/dlgattr.obj             \
+        $(SLO)$/optionalboolitem.obj 
 
 .IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
 DISABLE_ADO=TRUE

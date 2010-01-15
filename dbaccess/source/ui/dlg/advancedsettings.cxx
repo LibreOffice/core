@@ -37,8 +37,7 @@
 #include "dsitems.hxx"
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
-#include "datasourceui.hxx"
-
+#include "optionalboolitem.hxx"
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
@@ -98,15 +97,16 @@ namespace dbaui
         ,m_pCheckRequiredFields( NULL )
         ,m_pIgnoreCurrency(NULL)
         ,m_pEscapeDateTime(NULL)
+        ,m_pPrimaryKeySupport(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
         ,m_aControlDependencies()
         ,m_aBooleanSettings()
-        ,m_aSupported( _rDSMeta.getAdvancedSettingsSupport() )
+        ,m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
     {
         impl_initBooleanSettings();
 
-        DataSourceUI aDSUI( _rDSMeta );
+        const FeatureSet& rFeatures( _rDSMeta.getFeatureSet() );
         // create all the check boxes for the boolean settings
         for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
                 setting != m_aBooleanSettings.end();
@@ -114,11 +114,16 @@ namespace dbaui
              )
         {
             USHORT nItemId = setting->nItemId;
-            if ( aDSUI.hasSetting( nItemId ) )
+            if ( rFeatures.has( nItemId ) )
             {
-                USHORT nID = setting->nControlResId;
-                (*setting->ppControl) = new CheckBox( this, ModuleRes( nID ) );
+                USHORT nResourceId = setting->nControlResId;
+                (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
+
+                // check whether this must be a tristate check box
+                const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
+                if ( rItem.ISA( OptionalBoolItem ) )
+                    (*setting->ppControl)->EnableTriState( TRUE );
             }
         }
 
@@ -148,7 +153,7 @@ namespace dbaui
         }
 
         // create the controls for the boolean comparison mode
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             m_pBooleanComparisonModeLabel = new FixedText( this, ModuleRes( FT_BOOLEANCOMPARISON ) );
             m_pBooleanComparisonMode = new ListBox( this, ModuleRes( LB_BOOLEANCOMPARISON ) );
@@ -185,6 +190,7 @@ namespace dbaui
         DELETEZ( m_pCheckRequiredFields );
         DELETEZ( m_pIgnoreCurrency );
         DELETEZ( m_pEscapeDateTime );
+        DELETEZ( m_pPrimaryKeySupport );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
     }
@@ -210,13 +216,12 @@ namespace dbaui
             { &m_pCheckRequiredFields,      CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
             { &m_pIgnoreCurrency,           CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
             { &m_pEscapeDateTime,           CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
+            { &m_pPrimaryKeySupport,        CB_PRIMARY_KEY_SUPPORT, DSID_PRIMARY_KEY_SUPPORT,   false },
             { NULL,                         0,                      0,                          false }
         };
 
         for ( const BooleanSettingDesc* pCopy = aSettings; pCopy->nItemId != 0; ++pCopy )
         {
-            USHORT nID = pCopy->nItemId;
-            (void) nID;
             m_aBooleanSettings.push_back( *pCopy );
         }
     }
@@ -224,7 +229,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void SpecialSettingsPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             _rControlList.push_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
         }
@@ -244,7 +249,7 @@ namespace dbaui
             }
         }
 
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
             _rControlList.push_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
     }
 
@@ -270,16 +275,35 @@ namespace dbaui
             if ( !*setting->ppControl )
                 continue;
 
-            SFX_ITEMSET_GET( _rSet, pItem, SfxBoolItem, setting->nItemId, sal_True );
-            bool bValue = pItem->GetValue();
-            if ( setting->bInvertedDisplay )
-                bValue = !bValue;
+            ::boost::optional< bool > aValue;
 
-            (*setting->ppControl)->Check( bValue );
+            SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, sal_True );
+            if ( pItem->ISA( SfxBoolItem ) )
+            {
+                aValue.reset( PTR_CAST( SfxBoolItem, pItem )->GetValue() );
+            }
+            else if ( pItem->ISA( OptionalBoolItem ) )
+            {
+                aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
+            }
+            else
+                DBG_ERROR( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
+
+            if ( !aValue )
+            {
+                (*setting->ppControl)->SetState( STATE_DONTKNOW );
+            }
+            else
+            {
+                BOOL bValue = *aValue;
+                if ( setting->bInvertedDisplay )
+                    bValue = !bValue;
+                (*setting->ppControl)->Check( bValue );
+            }
         }
 
         // the non-boolean items
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             SFX_ITEMSET_GET( _rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True );
             m_pBooleanComparisonMode->SelectEntryPos( static_cast< USHORT >( pBooleanComparison->GetValue() ) );
@@ -305,7 +329,7 @@ namespace dbaui
         }
 
         // the non-boolean items
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             if ( m_pBooleanComparisonMode->GetSelectEntryPos() != m_pBooleanComparisonMode->GetSavedValue() )
             {
@@ -420,14 +444,14 @@ namespace dbaui
         const ::rtl::OUString eType = m_pImpl->getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
-        const AdvancedSettingsSupport& rAdvancedSupport( aMeta.getAdvancedSettingsSupport() );
+        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
 
         // auto-generated values?
-        if ( rAdvancedSupport.bGeneratedValues )
+        if ( rFeatures.supportsGeneratedValues() )
             AddTabPage( PAGE_GENERATED_VALUES, String( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
 
         // any "special settings"?
-        if ( rAdvancedSupport.supportsAnySpecialSetting() )
+        if ( rFeatures.supportsAnySpecialSetting() )
             AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, String( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
@@ -446,8 +470,8 @@ namespace dbaui
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const ::rtl::OUString& _sURL )
     {
         DataSourceMetaData aMeta( _sURL );
-        const AdvancedSettingsSupport& rSupport( aMeta.getAdvancedSettingsSupport() );
-        if ( rSupport.bGeneratedValues || rSupport.supportsAnySpecialSetting() )
+        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
+        if ( rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting() )
             return true;
         return false;
     }

@@ -1207,6 +1207,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 case DataType::CHAR:
                                 case DataType::VARCHAR:
                                 case DataType::LONGVARCHAR:
+                                case DataType::CLOB:
                                     if(aText.GetChar(0) != '\'' || aText.GetChar(aText.Len() -1) != '\'')
                                     {
                                         aText.SearchAndReplaceAll(String::CreateFromAscii("'"),String::CreateFromAscii("''"));
