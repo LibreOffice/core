@@ -1997,7 +1997,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
             dumpHex< sal_uInt16 >( "flags-1", "CHTEXT-FLAGS1" );
             if( eBiff == BIFF8 ) dumpColorIdx();
-            if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "flags-2", "CHTEXT-FLAGS2" );
+            if( eBiff == BIFF8 ) dumpHex< sal_uInt16 >( "flags-2", "CHTEXT-FLAGS2" );
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "rotation", "TEXTROTATION" );
         break;
 
