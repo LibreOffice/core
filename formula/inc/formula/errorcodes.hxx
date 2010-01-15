@@ -86,9 +86,13 @@ const USHORT NOTAVAILABLE            = 0x7fff;
     represent an interpreter error code. */
 inline double CreateDoubleError( USHORT nErr )
 {
-    double fVal;
+    union
+    {
+        double fVal;
+        sal_math_Double smVal;
+    };
     ::rtl::math::setNan( &fVal );
-    reinterpret_cast< sal_math_Double * >(&fVal)->nan_parts.fraction_lo = nErr;
+    smVal.nan_parts.fraction_lo = nErr;
     return fVal;
 }
 
