@@ -40,11 +40,10 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <toolkit/controls/unocontrol.hxx>
 
-#ifndef _TOOLKIT_AWT_LISTENERMULTIPLEXER_HXX_
 #include <toolkit/helper/listenermultiplexer.hxx>
-#endif
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
@@ -72,7 +71,7 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xORB;
+        ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;
