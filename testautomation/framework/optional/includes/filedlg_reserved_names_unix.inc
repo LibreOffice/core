@@ -39,9 +39,10 @@
 
 testcase tSaveReservedNamesUNIX()
 
+    printlog( "Names that are reserved on WINDOWS but are OK on UNIX" ) 
     
     if ( gPlatGroup = "w95" ) then
-        printlog( "Test not relevant for Unix(like)"
+        printlog( "Test not relevant for Windows/DOS family of OSes" )
         goto endsub
     endif
     
@@ -53,7 +54,6 @@ testcase tSaveReservedNamesUNIX()
     
         printlog( "" )
         printlog( "Document Type is: " & hNumericDocType( iCurrentDocType ) )
-        printlog( "Names that are reserved on WINDOWS but are OK on UNIX" )
         
         irc = hSaveLoadDelSuccess( "NUL" , true )
         if ( irc <> 0 ) then warnlog( "failed" )

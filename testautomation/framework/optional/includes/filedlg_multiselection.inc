@@ -157,7 +157,8 @@ testcase tFiledlgMultiselection1()
             wend
             
             if ( iCurrentTime > 120000 ) then
-                warnlog( "#i105289# Slow loading of files, should be less than 120 seconds on all platforms" )
+                'Closed issue: qaerrorlog( "#i105289# Slow loading of files, should be less than 120 seconds on all platforms" )
+                printlog( "Slow file loading (exceeds 120 seconds)" )
             endif
             lWait = getSystemTicks - lTime ' time diff
 

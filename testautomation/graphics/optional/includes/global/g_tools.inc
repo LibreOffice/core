@@ -126,7 +126,7 @@ testcase tiToolsThesaurus
 ToolsOptions
 Kontext "ExtrasOptionenDlg"
 hToolsOptions("LANGUAGESETTINGS","Languages")
-Westlich.Select 32
+Westlich.Select 34
 Kontext "ExtrasOptionenDlg"
 ExtrasOptionenDlg.OK
 sleep 1
