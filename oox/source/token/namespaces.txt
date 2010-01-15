@@ -1,0 +1,48 @@
+# Relations, XML
+XML
+PACKAGE_RELATIONSHIPS
+RELATIONSHIPS
+CONTENT_TYPES
+
+# Office global
+THEME
+ACTIVATION
+MATH
+
+#DrawingML
+DRAWINGML
+PICTURE
+DIAGRAM
+CHART
+DOC_DRAWINGML
+
+# VML
+VML
+OFFICE
+VML_DOC
+VML_XLS
+VML_PPT
+AX
+
+#SpreadsheetML
+XLS
+XDR
+XM
+
+#PresentationML
+PPT
+
+#WordprocessingML
+DOC
+SML
+
+# Document properties
+COREPR
+DC
+DCTERMS
+EXTPR
+CUSTPR
+VT
+
+# Other elements: used by writerfilter
+SPRM

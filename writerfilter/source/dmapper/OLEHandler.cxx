@@ -29,6 +29,8 @@
  ************************************************************************/
 #include <OLEHandler.hxx>
 #include <PropertyMap.hxx>
+#include "GraphicHelpers.hxx"
+
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -54,7 +56,8 @@ using namespace ::com::sun::star;
   -----------------------------------------------------------------------*/
 OLEHandler::OLEHandler() :
     m_nDxaOrig(0),
-    m_nDyaOrig(0)
+    m_nDyaOrig(0),
+    m_nWrapMode(0)
 {
 }
 /*-- 23.04.2008 10:46:14---------------------------------------------------
@@ -108,15 +111,28 @@ void OLEHandler::attribute(Id rName, Value & rVal)
             rVal.getAny() >>= xTempShape;
             if( xTempShape.is() )
             {
-                m_aShapeSize = xTempShape->getSize();
-                m_aShapePosition = xTempShape->getPosition();
+                m_xShape.set( xTempShape );
+
                 try
                 {
+                    m_aShapeSize = xTempShape->getSize();
+                    m_aShapePosition = xTempShape->getPosition();
+
                     uno::Reference< beans::XPropertySet > xShapeProps( xTempShape, uno::UNO_QUERY_THROW );
-                    xShapeProps->getPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_BITMAP ) ) >>= m_xReplacement;
+                    PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+                    xShapeProps->getPropertyValue( rNameSupplier.GetName( PROP_BITMAP ) ) >>= m_xReplacement;
+
+                    xShapeProps->setPropertyValue(
+                        rNameSupplier.GetName( PROP_SURROUND ),
+                        uno::makeAny( m_nWrapMode ) );
                 }
-                catch( const uno::Exception& )
+                catch( const uno::Exception& e )
                 {
+#if DEBUG
+                    clog << "Exception in OLE Handler: ";
+                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#endif
                 }
             }
         }
@@ -142,8 +158,39 @@ void OLEHandler::sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_wrap_wrap:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if ( pProperties.get( ) )
+            {
+                WrapHandlerPtr pHandler( new WrapHandler );
+                pProperties->resolve( *pHandler );
+
+                m_nWrapMode = pHandler->getWrapMode( );
+
+                try
+                {
+                    uno::Reference< beans::XPropertySet > xShapeProps( m_xShape, uno::UNO_QUERY_THROW );
+                    PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+                    xShapeProps->setPropertyValue(
+                        rNameSupplier.GetName( PROP_SURROUND ),
+                        uno::makeAny( m_nWrapMode ) );
+                }
+                catch( const uno::Exception& e )
+                {
+#if DEBUG
+                    clog << "Exception in OLE Handler: ";
+                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#endif
+                }
+            }
+        }
+        break;
         default:
+        {
             OSL_ENSURE( false, "unknown attribute");
+        }
     }
 }
 /*-- 23.04.2008 11:15:19---------------------------------------------------
@@ -152,9 +199,10 @@ void OLEHandler::sprm(Sprm & rSprm)
 ::rtl::OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
     ::rtl::OUString sRet;
-    if( !m_xInputStream.is() )
+    if( !m_xInputStream.is( ) )
         return sRet;
-    try{
+    try
+    {
         uno::Reference < lang::XMultiServiceFactory > xFactory(xTextDocument, uno::UNO_QUERY_THROW);
         uno::Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver(
             xFactory->createInstance(
