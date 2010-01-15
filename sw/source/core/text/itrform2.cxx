@@ -2107,7 +2107,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
 {
     // Only if hidden text should not be shown:
-    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+//    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+    const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
+    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+    if (bShowInDocView || bShowForPrinting)
         return false;
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();

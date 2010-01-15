@@ -269,7 +269,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
 |*
 *************************************************************************/
 
-void SwNoTxtFrm::Paint( const SwRect &rRect ) const
+void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
 {
     if ( Frm().IsEmpty() )
         return;

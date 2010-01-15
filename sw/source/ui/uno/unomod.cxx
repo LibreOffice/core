@@ -572,7 +572,7 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_PROSPECT_RTL:
         {
-            bBoolVal = mpPrtOpt->IsPrintProspect_RTL();
+            bBoolVal = mpPrtOpt->IsPrintProspectRTL();
         }
         break;
         case HANDLE_PRINTSET_PLACEHOLDER:
