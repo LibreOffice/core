@@ -44,6 +44,7 @@ VERSION=-0.9.2
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=core
+TARFILE_MD5=d4c4d91ab3a8e52a2e69d48d34ef4df4
 TARFILE_ROOTDIR=core
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 # ADDITIONAL_FILES=MANIFEST.MF

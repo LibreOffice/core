@@ -49,6 +49,7 @@ ANT_BUILDFILE=build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=sacjava-1.3
+TARFILE_MD5=39bb3fcea1514f1369fcfc87542390fd
 
 TARFILE_ROOTDIR=$(TARGET)
 

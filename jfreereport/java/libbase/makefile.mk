@@ -43,6 +43,7 @@ VERSION=-1.0.0
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(TARGET)
+TARFILE_MD5=8ea307d71d11140574bfb9fcc2487e33
 TARFILE_ROOTDIR=$(TARGET)
 
 # PATCH_FILES=$(PRJ)$/patches$/libbase.patch

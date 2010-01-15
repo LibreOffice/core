@@ -47,6 +47,7 @@ ANT_BUILDFILE=build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-codec-1.3-src
+TARFILE_MD5=af3c3acf618de6108d65fcdc92b492e1
 
 TARFILE_ROOTDIR=commons-codec-1.3
 

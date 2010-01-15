@@ -51,6 +51,7 @@ dummy:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=xpdf-3.02
+TARFILE_MD5=599dc4cc65a07ee868cf92a667a913d2
 PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=

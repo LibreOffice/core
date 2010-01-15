@@ -49,6 +49,7 @@ TAR!:=$(GNUTAR)
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-lang-2.3-src
+TARFILE_MD5=2ae988b339daec234019a7066f96733e
 
 TARFILE_ROOTDIR=commons-lang-2.3-src
 

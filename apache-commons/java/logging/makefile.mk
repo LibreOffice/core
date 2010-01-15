@@ -47,6 +47,7 @@ ANT_BUILDFILE=build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-logging-1.1.1-src
+TARFILE_MD5=3c219630e4302863a9a83d0efde889db
 
 TARFILE_ROOTDIR=commons-logging-1.1.1-src
 

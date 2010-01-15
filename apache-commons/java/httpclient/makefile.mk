@@ -49,6 +49,7 @@ TAR!:=$(GNUTAR)
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-httpclient-3.1-src
+TARFILE_MD5=2c9b0f83ed5890af02c0df1c1776f39b
 
 TARFILE_ROOTDIR=commons-httpclient-3.1
 

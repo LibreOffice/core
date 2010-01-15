@@ -44,6 +44,7 @@ VERSION=-0.2.0
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)
+TARFILE_MD5=d1a3205871c3c52e8a50c9f18510ae12
 TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml \

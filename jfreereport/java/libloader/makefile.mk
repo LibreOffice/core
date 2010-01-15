@@ -44,6 +44,7 @@ VERSION=-1.0.0
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(TARGET)
+TARFILE_MD5=a06a496d7a43cbdc35e69dbe678efadb
 TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml
