@@ -276,7 +276,7 @@ namespace drawinglayer
             if(maGradientInfo.mnSteps)
             {
                 const double fStepSize=1.0 / maGradientInfo.mnSteps;
-                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
+                for(sal_uInt32 a(maGradientInfo.mnSteps-1L); a > 0; a--)
                 {
                     const basegfx::B2DRange aRect(0, 0, fStepSize*a, fStepSize*a);
                     impAppendMatrix(rMatrices, aRect);
@@ -391,7 +391,7 @@ namespace drawinglayer
             if(maGradientInfo.mnSteps)
             {
                 const double fStepSize=1.0 / maGradientInfo.mnSteps;
-                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
+                for(sal_uInt32 a(maGradientInfo.mnSteps-1L); a > 0; a--)
                 {
                     const basegfx::B2DRange aRect(0, 0, fStepSize*a, fStepSize*a);
                     impAppendMatrix(rMatrices, aRect);
