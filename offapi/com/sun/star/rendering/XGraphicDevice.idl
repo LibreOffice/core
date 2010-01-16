@@ -48,9 +48,6 @@
 #ifndef __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.idl>
 #endif
-#ifndef __com_sun_star_rendering_XParametricPolyPolygon2DFactory_idl__
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.idl>
-#endif
 #ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #endif
