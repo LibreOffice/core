@@ -703,6 +703,7 @@ inline void SaxWriterHelper::clearBuffer() throw( SAXException )
         m_Sequence.realloc(nCurrentPos);
         nCurrentPos = writeSequence();
         m_Sequence.realloc(SEQUENCESIZE);
+        mp_Sequence = m_Sequence.getArray();
     }
 }
 
