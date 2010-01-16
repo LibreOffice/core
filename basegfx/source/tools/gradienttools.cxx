@@ -72,31 +72,28 @@ namespace basegfx
             fTargetSizeY = fNewY;
         }
 
-        double fSizeWithoutBorder=0;
-        double fTranslateY=0;
+        const double fSizeWithoutBorder=1.0 - fBorder;
         if( bAxial )
         {
-            fSizeWithoutBorder = (1.0 - fBorder) * 0.5;
-            fTranslateY = 0.5;
+            o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder * .5);
+            o_rGradientInfo.maTextureTransform.translate(0.0, 0.5);
         }
         else
         {
-            fSizeWithoutBorder = 1.0 - fBorder;
-            fTranslateY = fBorder;
+            if(!fTools::equal(fSizeWithoutBorder, 1.0))
+            {
+                o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder);
+                o_rGradientInfo.maTextureTransform.translate(0.0, fBorder);
+            }
         }
 
-        if(!fTools::equal(fSizeWithoutBorder, 0.0))
-            o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder);
-
-        o_rGradientInfo.maTextureTransform.translate(0.0, fTranslateY);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
         if(0.0 != fAngle)
         {
-            B2DPoint aCenter(0.5, 0.5);
-            aCenter *= o_rGradientInfo.maTextureTransform;
-
+            const B2DPoint aCenter(0.5*fTargetSizeX,
+                                   0.5*fTargetSizeY);
             o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
             o_rGradientInfo.maTextureTransform.rotate(fAngle);
             o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
@@ -153,8 +150,7 @@ namespace basegfx
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);
-        if(!fTools::equal(fHalfBorder, 0.0))
-            o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
+        o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
 
         o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
@@ -226,8 +222,7 @@ namespace basegfx
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);
-        if(!fTools::equal(fHalfBorder, 0.0))
-            o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
+        o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
 
         o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
