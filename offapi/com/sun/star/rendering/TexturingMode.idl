@@ -39,13 +39,24 @@ module com { module sun { module star { module rendering {
  */
 constants TexturingMode
 {
+    /** Pixel outside the texture area are fully transparent.<p>
+
+        This completely switches off pixel generation outside the
+        texture coordinate range [0,1]. This results in only one
+        instance of the texture generated per textured primitive.<p>
+       */
+    const byte NONE=0;
+
+    //-------------------------------------------------------------------------
+
     /** Clamp texture coordinate.<p>
 
-        This value clamps the texture coordinate to the range
+        This value clamps the texture coordinates to the range
         [0,1]. This results in only one instance of the texture
-        generated per textured primitive.<p>
+        generated per textured primitive, with the remaining area
+        filled with the color of the outermost texels<p>
        */
-    const byte CLAMP=0;
+    const byte CLAMP=1;
 
     //-------------------------------------------------------------------------
 
@@ -54,7 +65,7 @@ constants TexturingMode
         This value repeats the texture over the textured primitive,
         for the given texture coordinate.<p>
      */
-    const byte REPEAT=1;
+    const byte REPEAT=2;
 };
 
 }; }; }; };
