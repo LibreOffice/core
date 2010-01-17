@@ -76,7 +76,8 @@ SRC1FILES =\
     LayerDialog.src			\
     PaneDockingWindow.src \
     layeroptionsdlg.src \
-    printdialog.src
+    printdialog.src \
+    layoutdialog.src
 
 
 SLOFILES =  \

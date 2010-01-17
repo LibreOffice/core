@@ -107,23 +107,56 @@ SfxPopupWindowType SdLayoutControl::GetPopupWindowType() const
 
 SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
 {
-    SfxPopupWindow* pWin = 0;
+    Window* pWin = 0;
 
     ToolBox& rTbx = GetToolBox();
     sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( SfxViewFrame::Current() );
     if( pViewShellBase )
     {
         pWin = pWin = new sd::SdLayoutDialogContent( *pViewShellBase, &rTbx );
-          pWin->StartPopupMode( &rTbx, TRUE );
-
-/*        if( pWin )
+//          pWin->StartPopupMode( &rTbx, TRUE );
+        if( pWin )
         {
+            StartPopupMode( pWin );
+/*
             pWin->EnableDocking(true);
             Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
-        }
+
+            pWin->AddEventListener( LINK( this, SdLayoutControl, WindowEventListener ) );
 */
+        }
      }
 
-    SetPopupWindow( pWin );
-    return pWin;
+//    SetPopupWindow( pWin );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SdLayoutControl, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >( pEvent );
+    if ( pWindowEvent && pWindowEvent->GetWindow() )
+    {
+        Window* pWindow = pWindowEvent->GetWindow();
+        switch( pWindowEvent->GetId() )
+        {
+        case VCLEVENT_WINDOW_ENDPOPUPMODE:
+            {
+                EndPopupModeData *pData = static_cast<EndPopupModeData*>(pWindowEvent->GetData());
+                if( pData && pData->mbTearoff );
+                {
+                    pWindow->SetPosPixel( Point( pData->maFloatingPos.X(), pData->maFloatingPos.Y() ) );
+                    pWindow->Show();
+                }
+            }
+            // fall through!
+        case VCLEVENT_WINDOW_CLOSE:
+        case VCLEVENT_OBJECT_DYING:
+            pWindow->RemoveEventListener( LINK( this, SdLayoutControl, WindowEventListener ) );
+//          static_cast<SfxPopupWindow*>(pWindow)->PopupModeEnd();
+            break;
+        }
+    }
+    return 0;
 }

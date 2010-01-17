@@ -58,6 +58,7 @@
 #include "drawdoc.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
+#include "layoutdialog.hrc"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -110,12 +111,12 @@ static snewfoil_value_info standard[] =
 
 
 SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent )
-: ToolbarMenu(SID_ASSIGN_LAYOUT, rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, WB_NOBORDER|WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_NOSHADOW|WB_SYSTEMWINDOW)
+: ToolbarMenu(rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, SdResId( DLG_LAYOUTDIALOG ) /*WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_SYSTEMWINDOW|WB_MOVEABLE|WB_SIZEABLE|WB_CLOSEABLE*/)
 , mrBase(rBase)
 {
-    String sResetSlideLayout( SdResId( STR_RESET_LAYOUT ) );
-
 //  FreeResource();
+
+    String sResetSlideLayout( SdResId( STR_RESET_LAYOUT ) );
 
     //SetStyle( 2 );
 
@@ -153,7 +154,7 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
 
         String aText( SdResId( pInfo->mnStrResId ) );
         BitmapEx aBmp( SdResId( bHighContrast ? pInfo->mnHCBmpResId : pInfo->mnBmpResId ) );
-        aBmp.Expand( 4, 4, 0, TRUE );
+        aBmp.Expand( 3, 3, 0, TRUE );
         mpLayoutSet->InsertItem( static_cast<USHORT>(pInfo->maAutoLayout)+1, aBmp, aText );
 
         aLayoutItemSize.Width() = std::max( aLayoutItemSize.Width(), aBmp.GetSizePixel().Width() );
