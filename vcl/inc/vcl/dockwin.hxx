@@ -238,6 +238,7 @@ public:
 
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
     BOOL    IsInPopupMode( const Window *pWin );
+    void    EndPopupMode( const Window *pWin );
 
     // required because those methods are not virtual in Window (!!!) and must
     // be availbale from the toolkit

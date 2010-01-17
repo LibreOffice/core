@@ -445,6 +445,17 @@ BOOL DockingManager::IsInPopupMode( const Window *pWindow )
         return FALSE;
 }
 
+// -----------------------------------------------------------------------
+
+void DockingManager::EndPopupMode( const Window *pWin )
+{
+    ImplDockingWindowWrapper *pWrapper = GetDockingWindowWrapper( pWin );
+    if( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() )
+        pWrapper->GetFloatingWindow()->EndPopupMode();
+}
+
+// -----------------------------------------------------------------------
+
 void DockingManager::AddWindow( const Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
@@ -1350,7 +1361,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 aSettings.SetStyleSettings( aStyleSettings );
                 pWin->SetSettings( aSettings );*/
 
-                mpFloatWin      = pWin;
+//                mpFloatWin      = pWin;
 
 
                 GetWindow()->mpWindowImpl->mpBorderWindow  = NULL;
@@ -1384,6 +1395,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
                 pWin->SetMinOutputSizePixel( maMinOutSize );
                 pWin->SetMaxOutputSizePixel( maMaxOutSize );
+
+                mpFloatWin      = pWin;
 
                 if ( bVisible )
                     GetWindow()->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
