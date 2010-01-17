@@ -32,6 +32,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <comphelper/processfactory.hxx>
+
+#include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
@@ -143,20 +146,20 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
     delete mpControl;
 }
 
-ToolbarMenu::ToolbarMenu( USHORT nId,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+ToolbarMenu::ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                           Window* pParentWindow,
                           WinBits nBits )
-: SfxPopupWindow(nId, rFrame, pParentWindow, nBits)
+: DockingWindow(pParentWindow, nBits)
+, mxFrame( rFrame )
 {
     implInit();
 }
 
-ToolbarMenu::ToolbarMenu( USHORT nId,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+ToolbarMenu::ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                           Window* pParentWindow,
                           const ResId& rResId )
-: SfxPopupWindow(nId, rFrame, pParentWindow, rResId)
+: DockingWindow(pParentWindow, rResId)
+, mxFrame( rFrame )
 {
     implInit();
 }
@@ -166,6 +169,8 @@ void ToolbarMenu::implInit()
 //    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_NOBORDER | WB_SYSTEMWINDOW );
 
 //    EnableChildTransparentMode();
+
+    mxServiceManager = ::comphelper::getProcessServiceFactory();
 
     mnCheckPos = 0;
     mnImagePos = 0;
@@ -178,6 +183,12 @@ void ToolbarMenu::implInit()
 
 ToolbarMenu::~ToolbarMenu()
 {
+    if ( mxStatusListener.is() )
+    {
+        mxStatusListener->dispose();
+        mxStatusListener.clear();
+    }
+
     // delete all menu entries
     const int nEntryCount = maEntryVector.size();
     int nEntry;
@@ -446,7 +457,7 @@ void ToolbarMenu::GetFocus()
         implChangeHighlightEntry( 0 );
     }
 */
-    SfxPopupWindow::GetFocus();
+    DockingWindow::GetFocus();
 }
 
 void ToolbarMenu::LoseFocus()
@@ -455,7 +466,7 @@ void ToolbarMenu::LoseFocus()
     {
         implChangeHighlightEntry( -1 );
     }
-    SfxPopupWindow::LoseFocus();
+    DockingWindow::LoseFocus();
 }
 
 void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits )
@@ -498,7 +509,7 @@ void ToolbarMenu::appendSeparator()
 
 void ToolbarMenu::Resize()
 {
-    Window::Resize();
+    DockingWindow::Resize();
 }
 
 ToolbarMenuEntry* ToolbarMenu::implGetEntry( int nEntry ) const
@@ -853,6 +864,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
+/*
 void ToolbarMenu::implDrawBorder()
 {
     SetFillColor();
@@ -872,6 +884,7 @@ void ToolbarMenu::implDrawBorder()
     DrawRect( aRect );
     SetClipRegion( oldClipRgn );
 }
+*/
 
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 {
@@ -1024,7 +1037,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
 void ToolbarMenu::Paint( const Rectangle& )
 {
-    implDrawBorder();
+//    implDrawBorder();
     implPaint();
 
     if( mnHighlightedEntry != -1 )
@@ -1033,12 +1046,12 @@ void ToolbarMenu::Paint( const Rectangle& )
 
 void ToolbarMenu::RequestHelp( const HelpEvent& rHEvt )
 {
-    Window::RequestHelp( rHEvt );
+    DockingWindow::RequestHelp( rHEvt );
 }
 
 void ToolbarMenu::StateChanged( StateChangedType nType )
 {
-    SfxPopupWindow::StateChanged( nType );
+    DockingWindow::StateChanged( nType );
 
     if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) || ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
     {
@@ -1049,7 +1062,7 @@ void ToolbarMenu::StateChanged( StateChangedType nType )
 
 void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    DockingWindow::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
          (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
@@ -1072,3 +1085,85 @@ void ToolbarMenu::Command( const CommandEvent& rCEvt )
         }
     }
 }
+
+// todo: move to new base class that will replace SfxPopupWindo
+void ToolbarMenu::AddStatusListener( const rtl::OUString& rCommandURL )
+{
+    initStatusListener();
+    mxStatusListener->addStatusListener( rCommandURL );
+}
+
+// --------------------------------------------------------------------
+
+void ToolbarMenu::RemoveStatusListener( const rtl::OUString& rCommandURL )
+{
+    mxStatusListener->removeStatusListener( rCommandURL );
+}
+// --------------------------------------------------------------------
+
+
+void ToolbarMenu::UpdateStatus( const rtl::OUString& rCommandURL )
+{
+    mxStatusListener->updateStatus( rCommandURL );
+}
+
+// --------------------------------------------------------------------
+
+// XStatusListener (subclasses must override this one to get the status updates
+void SAL_CALL ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException )
+{
+}
+
+// --------------------------------------------------------------------
+
+class ToolbarMenuStatusListener : public svt::FrameStatusListener
+{
+public:
+    ToolbarMenuStatusListener( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
+                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+                               ToolbarMenu& rToolbarMenu );
+
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+
+    ToolbarMenu* mpMenu;
+};
+
+ToolbarMenuStatusListener::ToolbarMenuStatusListener(
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    ToolbarMenu& rToolbarMenu )
+: svt::FrameStatusListener( xServiceManager, xFrame )
+, mpMenu( &rToolbarMenu )
+{
+}
+
+void SAL_CALL ToolbarMenuStatusListener::dispose() throw (::com::sun::star::uno::RuntimeException)
+{
+    mpMenu = 0;
+    svt::FrameStatusListener::dispose();
+}
+
+void SAL_CALL ToolbarMenuStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
+{
+    if( mpMenu )
+        mpMenu->statusChanged( Event );
+}
+
+void ToolbarMenu::initStatusListener()
+{
+    if( !mxStatusListener.is() )
+        mxStatusListener.set( new ToolbarMenuStatusListener( mxServiceManager, mxFrame, *this ) );
+}
+
+bool ToolbarMenu::IsInPopupMode()
+{
+    return GetDockingManager()->IsInPopupMode(this);
+}
+
+void ToolbarMenu::EndPopupMode()
+{
+    GetDockingManager()->EndPopupMode(this);
+}
+
+

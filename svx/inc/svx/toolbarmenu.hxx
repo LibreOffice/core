@@ -31,28 +31,37 @@
 #ifndef _SVX_TOOLBARMENU_HXX_
 #define _SVX_TOOLBARMENU_HXX_
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+
 #include <vector>
+
+#include <rtl/ref.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/dockwin.hxx>
+
+#include <svtools/framestatuslistener.hxx>
 
 #include <sfx2/tbxctrl.hxx>
+
 
 #include "svx/svxdllapi.h"
 
 class ToolbarMenuEntry;
+
 typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
 
-class SVX_DLLPUBLIC ToolbarMenu : public SfxPopupWindow
+class SVX_DLLPUBLIC ToolbarMenu : public DockingWindow
 {
+    friend class ToolbarMenuStatusListener;
 public:
-                    ToolbarMenu( USHORT nId,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                    ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                  Window* pParentWindow,
                                  WinBits nBits );
 
-                    ToolbarMenu( USHORT nId,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                    ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                  Window* pParentWindow,
                                  const ResId& rResId );
 
@@ -99,7 +108,29 @@ public:
     int             getSelectedEntryId() const;
     int             getHighlightedEntryId() const;
 
+protected:
+    // todo: move to new base class that will replace SfxPopupWindo
+    void                    AddStatusListener( const rtl::OUString& rCommandURL );
+    void                    RemoveStatusListener( const rtl::OUString& rCommandURL );
+    void                    UpdateStatus( const rtl::OUString& rCommandURL );
+
+    bool IsInPopupMode();
+    void EndPopupMode();
+
+    // XStatusListener (subclasses must override this one to get the status updates
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+
+    void            StateChanged( StateChangedType nType );
+    void            DataChanged( const DataChangedEvent& rDCEvt );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame() const { return mxFrame; }
 private:
+    void initStatusListener();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              mxFrame;
+    rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceManager;
+
     ToolbarMenuEntryVector  maEntryVector;
 
     int mnCheckPos;
@@ -116,9 +147,6 @@ private:
 
     void            implInit();
 
-    void            StateChanged( StateChangedType nType );
-    void            DataChanged( const DataChangedEvent& rDCEvt );
-
     void            initWindow();
 
     Size            implCalcSize();
@@ -126,7 +154,7 @@ private:
     void            appendEntry( ToolbarMenuEntry* pEntry );
 
     void            implPaint( ToolbarMenuEntry* pThisOnly = NULL, bool bHighlight = false );
-    void            implDrawBorder();
+//    void            implDrawBorder();
 
     void            implHighlightEntry( int nHighlightEntry, bool bHighlight );
     void            implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown );

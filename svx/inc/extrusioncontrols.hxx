@@ -55,8 +55,6 @@ class ToolboxButtonColorUpdater;
 
 class ExtrusionDirectionWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
-
 private:
     ValueSet*           mpDirectionSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
@@ -72,7 +70,8 @@ private:
     Image       maImgParallel;
     Image       maImgParallelH;
 
-    bool        mbPopupMode;
+    const rtl::OUString msExtrusionDirection;
+    const rtl::OUString msExtrusionProjection;
 
     DECL_LINK( SelectHdl, void * );
     void            FillValueSet();
@@ -82,9 +81,6 @@ private:
     void implInit();
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -99,9 +95,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -124,8 +118,6 @@ public:
 
 class ExtrusionDepthWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
-
 private:
     Image maImgDepth0;
     Image maImgDepth1;
@@ -145,10 +137,12 @@ private:
     SfxStatusForwarder* mpMetricForewarder;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    bool        mbPopupMode;
     FieldUnit   meUnit;
     double      mfDepth;
     bool        mbEnabled;
+
+    const rtl::OUString msExtrusionDepth;
+    const rtl::OUString msMetricUnit;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -157,9 +151,6 @@ private:
     void    implInit();
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -174,9 +165,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -199,8 +188,6 @@ public:
 
 class ExtrusionLightingWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
-
 private:
     ValueSet*    mpLightingSet;
 
@@ -223,11 +210,13 @@ private:
     SfxStatusForwarder* mpLightingIntensityForewarder;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    bool    mbPopupMode;
     int     mnLevel;
     bool    mbLevelEnabled;
     int     mnDirection;
     bool    mbDirectionEnabled;
+
+    const rtl::OUString msExtrusionLightingDirection;
+    const rtl::OUString msExtrusionLightingIntensity;
 
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
@@ -236,9 +225,6 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -253,9 +239,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -278,7 +262,6 @@ public:
 
 class ExtrusionSurfaceWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
 private:
     Image maImgSurface1;
     Image maImgSurface2;
@@ -292,7 +275,7 @@ private:
     SfxStatusForwarder* mpSurfaceForewarder;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    bool        mbPopupMode;
+    const rtl::OUString msExtrusionSurface;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -300,9 +283,6 @@ private:
     void    implInit();
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -317,9 +297,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 

@@ -61,7 +61,6 @@ namespace svx
 
 class FontWorkAlignmentWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
 private:
     Image maImgAlgin1;
     Image maImgAlgin2;
@@ -76,7 +75,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    bool        mbPopupMode;
+    const rtl::OUString msFontworkAlignment;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -84,9 +83,6 @@ private:
     void    implInit();
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -101,9 +97,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -124,11 +118,11 @@ public:
 
 class FontWorkCharacterSpacingWindow : public ToolbarMenu
 {
-    using FloatingWindow::StateChanged;
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    bool        mbPopupMode;
+    const rtl::OUString msFontworkCharacterSpacing;
+    const rtl::OUString msFontworkKernCharacterPairs;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -137,9 +131,6 @@ private:
     void    implInit();
 
 protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
@@ -156,9 +147,7 @@ public:
 
     void            StartSelection();
 
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -187,8 +176,6 @@ public:
     ~FontWorkShapeTypeControl();
 
     virtual void                Select( BOOL bMod1 = FALSE );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 };

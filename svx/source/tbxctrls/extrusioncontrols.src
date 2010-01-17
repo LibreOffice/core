@@ -33,7 +33,7 @@
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
+DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 {
     Border = FALSE ;
     Hide = TRUE ;
@@ -203,7 +203,7 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
+DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
 {
     Border = FALSE ;
     Hide = TRUE ;
@@ -292,7 +292,7 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
+DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 {
     Border = FALSE ;
     Hide = TRUE ;
@@ -608,7 +608,7 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
+DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
 {
     Border = FALSE ;
     Hide = TRUE ;

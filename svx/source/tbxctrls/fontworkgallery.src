@@ -95,7 +95,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
     };
 };
 
-FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
+DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 {
     Border = FALSE ;
     Hide = TRUE ;
@@ -230,7 +230,7 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     };
 };
 
-FloatingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
+DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
 {
     Border = FALSE ;
     Hide = TRUE ;
