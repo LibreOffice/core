@@ -215,30 +215,100 @@ struct SfxToolBoxControl_Impl
     SfxTbxCtrlFactory*      pFact;
     USHORT                  nTbxId;
     USHORT                  nSlotId;
-    SfxPopupWindow*         mpFloatingWindow;
-    SfxPopupWindow*         mpPopupWindow;
+    Window*                 mpFloatingWindow;
+    Window*                 mpPopupWindow;
     Reference< XUIElement > mxUIElement;
+    ULONG                   mnAsyncEndPopupModeEvent;
+    EndPopupModeData        maEndPopupModeData;
+    Link                    maPopupModeEndHdl;
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK( AsyncEndPopupModeHdl, void* );
+
+    ~SfxToolBoxControl_Impl();
 };
+
+SfxToolBoxControl_Impl::~SfxToolBoxControl_Impl()
+{
+    if( mnAsyncEndPopupModeEvent )
+    {
+        Application::RemoveUserEvent( mnAsyncEndPopupModeEvent );
+    }
+}
 
 IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    if ( pEvent &&
-         pEvent->ISA( VclWindowEvent ) &&
-         (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
-          ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
+    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >( pEvent );
+    if( pWindowEvent )
     {
-        Window* pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
-        if (( pWindow == mpFloatingWindow ) &&
-            ( mpPopupWindow != 0 ))
+        Window* pWindow( pWindowEvent->GetWindow() );
+        if( pWindow )
         {
-            delete mpPopupWindow;
-            mpPopupWindow = 0;
+            switch( pWindowEvent->GetId() )
+            {
+            case VCLEVENT_WINDOW_MOVE:
+            case VCLEVENT_WINDOW_ACTIVATE:
+                if( (pWindow == mpFloatingWindow) && (mpPopupWindow != 0) )
+                {
+                    delete mpPopupWindow;
+                    mpPopupWindow = 0;
+                }
+                break;
+            case VCLEVENT_WINDOW_ENDPOPUPMODE:
+                if( pWindow == mpPopupWindow )
+                {
+                    pWindow->RemoveEventListener( LINK( this, SfxToolBoxControl_Impl, WindowEventListener ) );
+
+                    if( mnAsyncEndPopupModeEvent )
+                        Application::RemoveUserEvent( mnAsyncEndPopupModeEvent );
+                    EndPopupModeData *pData = static_cast<EndPopupModeData*>(pWindowEvent->GetData());
+                    if( pData )
+                        maEndPopupModeData = *pData;
+                    mnAsyncEndPopupModeEvent = Application::PostUserEvent( LINK( this, SfxToolBoxControl_Impl, AsyncEndPopupModeHdl ) );
+                    break;
+                }
+            }
         }
     }
-
     return 1;
+}
+
+//--------------------------------------------------------------------
+
+IMPL_LINK( SfxToolBoxControl_Impl, AsyncEndPopupModeHdl, void*, EMPTYARG )
+{
+    mnAsyncEndPopupModeEvent = 0;
+
+    if( mpPopupWindow )
+    {
+        if( maEndPopupModeData.mbTearoff )
+        {
+            //mpPopupWindow->SetParent( SFX_APP()->GetTopWindow() );
+            Window::GetDockingManager()->SetFloatingMode(mpPopupWindow, TRUE );
+            mpPopupWindow->SetPosPixel( Point( maEndPopupModeData.maFloatingPos.X(), maEndPopupModeData.maFloatingPos.Y() ) );
+            mpPopupWindow->Show();
+        }
+        FloatingWindow* pFloat = dynamic_cast< FloatingWindow* >( mpPopupWindow );
+        if( pFloat )
+            pFloat->PopupModeEnd();
+        else
+        {
+            maPopupModeEndHdl.Call(0);
+
+            if( !maEndPopupModeData.mbTearoff )
+            {
+                SystemWindow* pSystemWindow = dynamic_cast< SystemWindow* >( mpPopupWindow );
+
+                if( pSystemWindow )
+                    pSystemWindow->Close();
+
+                Window *pTmp = mpPopupWindow;
+                mpPopupWindow = 0;
+                delete pTmp;
+            }
+        }
+    }
+    return 0;
 }
 
 //--------------------------------------------------------------------
@@ -260,6 +330,7 @@ SfxToolBoxControl::SfxToolBoxControl(
     pImpl->nSlotId = nSlotID;
     pImpl->mpFloatingWindow = 0;
     pImpl->mpPopupWindow = 0;
+    pImpl->mnAsyncEndPopupModeEvent = 0;
 }
 
 //--------------------------------------------------------------------
@@ -782,18 +853,17 @@ throw (::com::sun::star::uno::RuntimeException)
             Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
             if ( xSubToolBar.is() && xProp.is() )
             {
-                rtl::OUString aPersistentString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
                 try
                 {
                     Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                     ToolBox* pToolBar( 0 );
                     if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     {
+                        const rtl::OUString aPersistentString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
                         pToolBar = (ToolBox *)pTbxWindow;
 
-                        Any a;
-                        a = xProp->getPropertyValue( aPersistentString );
-                        xProp->setPropertyValue( aPersistentString, makeAny( sal_False ));
+                        Any a( xProp->getPropertyValue( aPersistentString ) );
+                        xProp->setPropertyValue( aPersistentString, Any( sal_False ));
 
                         xLayoutManager->hideElement( aSubToolBarResName );
                         xLayoutManager->floatWindow( aSubToolBarResName );
@@ -801,7 +871,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
                         xLayoutManager->showElement( aSubToolBarResName );
 
-                        xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" )), a );
+                        xProp->setPropertyValue( aPersistentString, a );
                     }
                 }
                 catch ( ::com::sun::star::uno::RuntimeException& )
@@ -873,7 +943,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
         if ( xUIElement.is() )
         {
-            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
+//            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
 
             Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
             if ( xSubToolBar.is() )
@@ -922,15 +992,37 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 {
     pImpl->mpPopupWindow = pWindow;
-    pImpl->mpPopupWindow->SetPopupModeEndHdl( LINK( this, SfxToolBoxControl, PopupModeEndHdl ));
-    pImpl->mpPopupWindow->SetDeleteLink_Impl( LINK( this, SfxToolBoxControl, ClosePopupWindow ));
+    pWindow->SetPopupModeEndHdl( LINK( this, SfxToolBoxControl, PopupModeEndHdl ));
+    pWindow->SetDeleteLink_Impl( LINK( this, SfxToolBoxControl, ClosePopupWindow ));
+}
+
+//--------------------------------------------------------------------
+
+void SfxToolBoxControl::StartPopupMode( Window* pWindow )
+{
+    if( pWindow )
+    {
+        pWindow->EnableDocking(true);
+        ToolBox& rTbx = GetToolBox();
+        Window::GetDockingManager()->StartPopupMode( &rTbx, pWindow );
+        pWindow->AddEventListener( LINK( pImpl, SfxToolBoxControl_Impl, WindowEventListener ) );
+
+        SfxPopupWindow* pPopupWindow = dynamic_cast< SfxPopupWindow* >( pWindow );
+        if( pPopupWindow )
+            SetPopupWindow( pPopupWindow );
+        else
+        {
+            pImpl->mpPopupWindow = pWindow;
+            pImpl->maPopupModeEndHdl = LINK( this, SfxToolBoxControl, PopupModeEndHdl );
+        }
+    }
 }
 
 //--------------------------------------------------------------------
 
 IMPL_LINK( SfxToolBoxControl, PopupModeEndHdl, void *, EMPTYARG )
 {
-    if ( pImpl->mpPopupWindow->IsVisible() )
+    if ( pImpl->mpPopupWindow && pImpl->mpPopupWindow->IsVisible() )
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
