@@ -779,7 +779,20 @@ namespace cairocanvas
 
              if( aTexture.RepeatModeX == rendering::TexturingMode::REPEAT &&
                 aTexture.RepeatModeY == rendering::TexturingMode::REPEAT )
+            {
                 cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_REPEAT );
+            }
+            else if ( aTexture.RepeatModeX == rendering::TexturingMode::NONE &&
+                      aTexture.RepeatModeY == rendering::TexturingMode::NONE )
+            {
+                cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_NONE );
+            }
+            else if ( aTexture.RepeatModeX == rendering::TexturingMode::CLAMP &&
+                      aTexture.RepeatModeY == rendering::TexturingMode::CLAMP )
+            {
+                cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_PAD );
+            }
+
             aScaledTextureMatrix.x0 = basegfx::fround( aScaledTextureMatrix.x0 );
             aScaledTextureMatrix.y0 = basegfx::fround( aScaledTextureMatrix.y0 );
             cairo_pattern_set_matrix( pPattern, &aScaledTextureMatrix );

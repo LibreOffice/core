@@ -1111,6 +1111,14 @@ public:
         aNonRect4.append( B2DPoint(1,1) );
         aNonRect4.append( B2DPoint(0,1) );
 
+        B2DPolygon aNonRect5;
+        aNonRect5.append( B2DPoint(0,0) );
+        aNonRect5.append( B2DPoint(1,0) );
+        aNonRect5.append( B2DPoint(1,1) );
+        aNonRect5.append( B2DPoint(0,1) );
+        aNonRect5.setControlPoints(1,B2DPoint(1,0),B2DPoint(-11,0));
+        aNonRect5.setClosed(true);
+
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1",
                                tools::isRectangle( aRect1 ));
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 2",
@@ -1123,6 +1131,8 @@ public:
                                !tools::isRectangle( aNonRect3 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 4",
                                !tools::isRectangle( aNonRect4 ));
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 5",
+                               !tools::isRectangle( aNonRect5 ));
     }
 
     // Change the following lines only, if you add, remove or rename

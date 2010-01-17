@@ -1774,8 +1774,8 @@ namespace cppcanvas
                                     }
                                     else
                                     {
-                                        aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
-                                        aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+                                        aTexture.RepeatModeX = rendering::TexturingMode::NONE;
+                                        aTexture.RepeatModeY = rendering::TexturingMode::NONE;
                                     }
 
                                     ::PolyPolygon aPath;

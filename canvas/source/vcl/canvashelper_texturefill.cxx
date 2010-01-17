@@ -836,10 +836,6 @@ namespace vclcanvas
             }
             else if( textures[0].Bitmap.is() )
             {
-//                OSL_ENSURE( textures[0].RepeatModeX == rendering::TexturingMode::REPEAT &&
-//                            textures[0].RepeatModeY == rendering::TexturingMode::REPEAT,
-//                            "CanvasHelper::fillTexturedPolyPolygon(): VCL canvas cannot currently clamp textures." );
-
                 const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
 
                 ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
@@ -913,23 +909,6 @@ namespace vclcanvas
                                            viewState,
                                            aLocalState );
                     }
-                }
-                else if ( textures[0].RepeatModeX == rendering::TexturingMode::CLAMP &&
-                          textures[0].RepeatModeY == rendering::TexturingMode::CLAMP )
-                {
-                    rendering::RenderState aLocalState( renderState );
-                    ::canvas::tools::appendToRenderState(aLocalState,
-                                                         aTextureTransform);
-                    ::basegfx::B2DHomMatrix aScaleCorrection;
-                    aScaleCorrection.scale( 1.0/aBmpSize.Width,
-                                            1.0/aBmpSize.Height );
-                    ::canvas::tools::appendToRenderState(aLocalState,
-                                                         aScaleCorrection);
-
-                    return drawBitmap( pCanvas, 
-                                       textures[0].Bitmap,
-                                       viewState,
-                                       aLocalState );
                 }
                 else
                 {
@@ -1064,15 +1043,21 @@ namespace vclcanvas
                                                                 aSingleTextureRect,
                                                                 aPureTotalTransform );
 
-                    const ::Point aPt( ::vcl::unotools::pointFromB2DPoint(
-                                           aSingleDeviceTextureRect.getMinimum() ) );
+                    const ::Point aPtRepeat( ::vcl::unotools::pointFromB2DPoint(
+                                                 aSingleDeviceTextureRect.getMinimum() ) );
                     const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width ),
                                        ::basegfx::fround( aScale.getY() * aBmpSize.Height ) );
                     const ::Size  aIntegerNextTileX( ::vcl::unotools::sizeFromB2DSize(aNextTileX) );
                     const ::Size  aIntegerNextTileY( ::vcl::unotools::sizeFromB2DSize(aNextTileY) );
 
-                    const sal_Int32 nTilesX( nX2 - nX1 );
-                    const sal_Int32 nTilesY( nY2 - nY1 );
+                    const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                       ::basegfx::fround( aOutputPos.getX() ) : aPtRepeat.X(),
+                                       textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
+                                       ::basegfx::fround( aOutputPos.getY() ) : aPtRepeat.Y() );
+                    const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                             1 : nX2 - nX1 );
+                    const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                                             1 : nY2 - nY1 );
 
                     OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -1153,20 +1138,9 @@ namespace vclcanvas
                             aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
                                                           -aPolygonDeviceRect.Top() ) );
 
-                            aVDev.SetRasterOp( ROP_XOR );
-                            textureFill( aVDev,
-                                         *pGrfObj,
-                                         aOutPos,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            aVDev.SetFillColor( COL_BLACK );
-                            aVDev.SetRasterOp( ROP_0 );
-                            aVDev.DrawPolyPolygon( aPolyPoly );
-                            aVDev.SetRasterOp( ROP_XOR );
+                            const Region aPolyClipRegion( aPolyPoly );
+
+                            aVDev.SetClipRegion( aPolyClipRegion );
                             textureFill( aVDev,
                                          *pGrfObj,
                                          aOutPos,
@@ -1198,7 +1172,6 @@ namespace vclcanvas
                                                                        aOutputBmpEx );
                         }
                         else
-#if defined(QUARTZ) // TODO: other ports should avoid the XOR-trick too (implementation vs. interface!)
                         {
                             const Region aPolyClipRegion( aPolyPoly );
 
@@ -1234,66 +1207,6 @@ namespace vclcanvas
                                 r2ndOutDev.Pop();
                             }
                         }
-#else // TODO: remove once doing the XOR-trick in the canvas-layer becomes redundant
-                        {
-                            // output via repeated XORing
-                            rOutDev.Push( PUSH_RASTEROP );
-                            rOutDev.SetRasterOp( ROP_XOR );
-                            textureFill( rOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            rOutDev.SetFillColor( COL_BLACK );
-                            rOutDev.SetRasterOp( ROP_0 );
-                            rOutDev.DrawPolyPolygon( aPolyPoly );
-                            rOutDev.SetRasterOp( ROP_XOR );
-                            textureFill( rOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                            rOutDev.Pop();
-
-                            if( mp2ndOutDev )
-                            {
-                                OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
-                                r2ndOutDev.Push( PUSH_RASTEROP );
-                                r2ndOutDev.SetRasterOp( ROP_XOR );
-                                textureFill( r2ndOutDev,
-                                             *pGrfObj,
-                                             aPt,
-                                             aIntegerNextTileX,
-                                             aIntegerNextTileY,
-                                             nTilesX,
-                                             nTilesY,
-                                             aSz,
-                                             aGrfAttr );
-                                r2ndOutDev.SetFillColor( COL_BLACK );
-                                r2ndOutDev.SetRasterOp( ROP_0 );
-                                r2ndOutDev.DrawPolyPolygon( aPolyPoly );
-                                r2ndOutDev.SetRasterOp( ROP_XOR );
-                                textureFill( r2ndOutDev,
-                                             *pGrfObj,
-                                             aPt,
-                                             aIntegerNextTileX,
-                                             aIntegerNextTileY,
-                                             nTilesX,
-                                             nTilesY,
-                                             aSz,
-                                             aGrfAttr );
-                                r2ndOutDev.Pop();
-                            }
-                        }
-#endif // complex-clipping vs. XOR-trick
                     }
                 }
             }

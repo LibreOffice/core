@@ -609,8 +609,8 @@ namespace dxcanvas
                         rTexture.RepeatModeY,
                         "CanvasHelper::fillBitmap(): GDI+ cannot handle differing X/Y repeat mode." );
 
-            const bool bClamp( rTexture.RepeatModeX == rendering::TexturingMode::CLAMP &&
-                               rTexture.RepeatModeY == rendering::TexturingMode::CLAMP );
+            const bool bClamp( rTexture.RepeatModeX == rendering::TexturingMode::NONE &&
+                               rTexture.RepeatModeY == rendering::TexturingMode::NONE );
 
             const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
             ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
