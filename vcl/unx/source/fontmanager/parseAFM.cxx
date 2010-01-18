@@ -413,89 +413,91 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
             switch(recognize(keyword, tokenlen))
             {
                 case STARTFONTMETRICS:
-                    keyword = token(fp,tokenlen);
-                    gfi->afmVersion = strdup( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->afmVersion = strdup( keyword );
                     break;
                 case COMMENT:
                     keyword = linetoken(fp);
                     break;
                 case FONTNAME:
-                    keyword = token(fp, tokenlen);
-                    gfi->fontName = strdup( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->fontName = strdup( keyword );
                     break;
                 case ENCODINGSCHEME:
-                    keyword = token(fp, tokenlen);
-                    gfi->encodingScheme = strdup( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->encodingScheme = strdup( keyword );
                     break;
                 case FULLNAME:
-                    keyword = linetoken(fp);
-                    gfi->fullName = strdup( keyword );
+                    if ((keyword = linetoken(fp)) != NULL)
+                        gfi->fullName = strdup( keyword );
                     break;
                 case FAMILYNAME:
-                    keyword = linetoken(fp);
-                    gfi->familyName = strdup( keyword );
+                    if ((keyword = linetoken(fp)) != NULL)
+                        gfi->familyName = strdup( keyword );
                     break;
                 case WEIGHT:
-                    keyword = token(fp, tokenlen);
-                    gfi->weight = strdup( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->weight = strdup( keyword );
                     break;
                 case ITALICANGLE:
-                    keyword = token(fp,tokenlen);
-                    gfi->italicAngle = StringToDouble( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->italicAngle = StringToDouble( keyword );
                     break;
                 case ISFIXEDPITCH:
-                    keyword = token(fp,tokenlen);
-                    if (MATCH(keyword, False))
-                        gfi->isFixedPitch = 0;
-                    else
-                        gfi->isFixedPitch = 1;
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    {
+                        if (MATCH(keyword, False))
+                            gfi->isFixedPitch = 0;
+                        else
+                            gfi->isFixedPitch = 1;
+                    }
                     break;
                 case UNDERLINEPOSITION:
-                    keyword = token(fp,tokenlen);
-                    gfi->underlinePosition = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->underlinePosition = atoi(keyword);
                     break;
                 case UNDERLINETHICKNESS:
-                    keyword = token(fp,tokenlen);
-                    gfi->underlineThickness = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->underlineThickness = atoi(keyword);
                     break;
                 case VERSION:
-                    keyword = token(fp,tokenlen);
-                    gfi->version = strdup( keyword );
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->version = strdup( keyword );
                     break;
                 case NOTICE:
-                    keyword = linetoken(fp);
-                    gfi->notice = strdup( keyword );
+                    if ((keyword = linetoken(fp)) != NULL)
+                        gfi->notice = strdup( keyword );
                     break;
                 case FONTBBOX:
-                    keyword = token(fp,tokenlen);
-                    gfi->fontBBox.llx = atoi(keyword);
-                    keyword = token(fp,tokenlen);
-                    gfi->fontBBox.lly = atoi(keyword);
-                    keyword = token(fp,tokenlen);
-                    gfi->fontBBox.urx = atoi(keyword);
-                    keyword = token(fp,tokenlen);
-                    gfi->fontBBox.ury = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->fontBBox.llx = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->fontBBox.lly = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->fontBBox.urx = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->fontBBox.ury = atoi(keyword);
                     break;
                 case CAPHEIGHT:
-                    keyword = token(fp,tokenlen);
-                    gfi->capHeight = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->capHeight = atoi(keyword);
                     break;
                 case XHEIGHT:
-                    keyword = token(fp,tokenlen);
-                    gfi->xHeight = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->xHeight = atoi(keyword);
                     break;
                 case DESCENT:
-                    keyword = token(fp,tokenlen);
-                    gfi->descender = -atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->descender = -atoi(keyword);
                     break;
                 case DESCENDER:
-                    keyword = token(fp,tokenlen);
-                    gfi->descender = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->descender = atoi(keyword);
                     break;
                 case ASCENT:
                 case ASCENDER:
-                    keyword = token(fp,tokenlen);
-                    gfi->ascender = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        gfi->ascender = atoi(keyword);
                     break;
                 case STARTCHARMETRICS:
                     cont = false;
@@ -509,8 +511,8 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
                     keyword = token(fp,tokenlen);
                     break;
                 case STARTDIRECTION:
-                    keyword = token(fp,tokenlen);
-                    direction = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        direction = atoi(keyword);
                     break; /* ignore this for now */
                 case ENDDIRECTION:
                     break; /* ignore this for now */
@@ -533,9 +535,11 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
                     keyword=token(fp,tokenlen); //ignore
                     break;
                 case CHARWIDTH:
-                    keyword = token(fp,tokenlen);
-                    if (direction == 0)
-                        gfi->charwidth = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    {
+                        if (direction == 0)
+                            gfi->charwidth = atoi(keyword);
+                    }
                     keyword = token(fp,tokenlen);
                     /* ignore y-width for now */
                     break;
@@ -594,24 +598,27 @@ static int initializeArray( FileInputStream* fp, register int* cwi)
                 keyword = linetoken(fp);
                 break;
             case CODE:
-                code = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    code = atoi(keyword);
                 break;
             case CODEHEX:
-                sscanf(token(fp,tokenlen),"<%x>", &code);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    sscanf(keyword,"<%x>", &code);
                 break;
             case XWIDTH:
-                width = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    width = atoi(keyword);
                 break;
             case X0WIDTH:
                 (void) token(fp,tokenlen);
                 break;
             case CHARNAME:
-                keyword = token(fp,tokenlen);
-                if (MATCH(keyword, Space))
-                {
-                    cont = false;
-                    found = true;
-                }
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    if (MATCH(keyword, Space))
+                    {
+                        cont = false;
+                        found = true;
+                    }
                 break;
             case ENDCHARMETRICS:
                 cont = false;
@@ -700,8 +707,8 @@ static int parseCharWidths( FileInputStream* fp, register int* cwi)
                     keyword = linetoken(fp);
                     break;
                 case CODE:
-                    keyword = token(fp,tokenlen);
-                    pos = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        pos = atoi(keyword);
                     break;
                 case XYWIDTH:
                     /* PROBLEM: Should be no Y-WIDTH when doing "quick & dirty" */
@@ -709,16 +716,16 @@ static int parseCharWidths( FileInputStream* fp, register int* cwi)
                     error = parseError;
                     break;
                 case CODEHEX:
-                    keyword = token(fp,tokenlen);
-                    sscanf(keyword, "<%x>", &pos);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        sscanf(keyword, "<%x>", &pos);
                     break;
                 case X0WIDTH:
                     (void) token(fp,tokenlen);
                     break;
                 case XWIDTH:
-                    keyword = token(fp,tokenlen);
-                    if (pos >= 0) /* ignore unmapped chars */
-                        cwi[pos] = atoi(keyword);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        if (pos >= 0) /* ignore unmapped chars */
+                            cwi[pos] = atoi(keyword);
                     break;
                 case ENDCHARMETRICS:
                     cont = false;
@@ -845,7 +852,8 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
                 {
                     if (firstTime) firstTime = false;
                     else temp++;
-                    temp->code = atoi(token(fp,tokenlen));
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        temp->code = atoi(keyword);
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
                     count++;
@@ -869,7 +877,8 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
                         firstTime = false;
                     else
                         temp++;
-                    sscanf(token(fp,tokenlen),"<%x>", &temp->code);
+                    if ((keyword = token(fp,tokenlen)) != NULL)
+                        sscanf(keyword,"<%x>", &temp->code);
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
                     count++;
@@ -880,24 +889,32 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
                 }
                 break;
             case XYWIDTH:
-                temp->wx = atoi(token(fp,tokenlen));
-                temp->wy = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->wx = atoi(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->wy = atoi(keyword);
                 break;
             case X0WIDTH:
-                temp->wx = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->wx = atoi(keyword);
                 break;
             case XWIDTH:
-                temp->wx = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->wx = atoi(keyword);
                 break;
             case CHARNAME:
-                keyword = token(fp,tokenlen);
-                temp->name = (char *)strdup(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->name = (char *)strdup(keyword);
                 break;
             case CHARBBOX:
-                temp->charBBox.llx = atoi(token(fp,tokenlen));
-                temp->charBBox.lly = atoi(token(fp,tokenlen));
-                temp->charBBox.urx = atoi(token(fp,tokenlen));
-                temp->charBBox.ury = atoi(token(fp,tokenlen));
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->charBBox.llx = atoi(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->charBBox.lly = atoi(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->charBBox.urx = atoi(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    temp->charBBox.ury = atoi(keyword);
                 break;
             case LIGATURE: {
                 Ligature **tail = &(temp->ligs);
@@ -911,10 +928,10 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
                 }
 
                 *tail = (Ligature *) calloc(1, sizeof(Ligature));
-                keyword = token(fp,tokenlen);
-                (*tail)->succ = (char *)strdup(keyword);
-                keyword = token(fp,tokenlen);
-                (*tail)->lig = (char *)strdup(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    (*tail)->succ = (char *)strdup(keyword);
+                if ((keyword = token(fp,tokenlen)) != NULL)
+                    (*tail)->lig = (char *)strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
                 cont = false;;
@@ -1010,16 +1027,16 @@ static int parseTrackKernData( FileInputStream* fp, register FontInfo* fi)
 
                     if (tcount < fi->numOfTracks)
                     {
-                        keyword = token(fp,tokenlen);
-                        fi->tkd[pos].degree = atoi(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->tkd[pos].minPtSize = StringToDouble(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->tkd[pos].minKernAmt = StringToDouble(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->tkd[pos].maxPtSize = StringToDouble(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->tkd[pos++].maxKernAmt = StringToDouble(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->tkd[pos].degree = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->tkd[pos].minPtSize = StringToDouble(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->tkd[pos].minKernAmt = StringToDouble(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->tkd[pos].maxPtSize = StringToDouble(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->tkd[pos++].maxKernAmt = StringToDouble(keyword);
                         tcount++;
                     }
                     else
@@ -1117,14 +1134,14 @@ static int parsePairKernData( FileInputStream* fp, register FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos].name1 = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos].name2 = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos].xamt = atoi(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos++].yamt = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos].name1 = strdup( keyword );
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos].name2 = strdup( keyword );
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos].xamt = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos++].yamt = atoi(keyword);
                         pcount++;
                     }
                     else
@@ -1141,12 +1158,12 @@ static int parsePairKernData( FileInputStream* fp, register FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos].name1 = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos].name2 = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->pkd[pos++].xamt = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos].name1 = strdup( keyword );
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos].name2 = strdup( keyword );
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->pkd[pos++].xamt = atoi(keyword);
                         pcount++;
                     }
                     else
@@ -1268,8 +1285,8 @@ static int parseCompCharData( FileInputStream* fp, register FontInfo* fi)
                         if (firstTime) firstTime = false;
                         else pos++;
                         fi->ccd[pos].ccName = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->ccd[pos].numOfPieces = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->ccd[pos].numOfPieces = atoi(keyword);
                         fi->ccd[pos].pieces = (Pcc *)
                             calloc(fi->ccd[pos].numOfPieces, sizeof(Pcc));
                         j = 0;
@@ -1284,12 +1301,12 @@ static int parseCompCharData( FileInputStream* fp, register FontInfo* fi)
                 case COMPCHARPIECE:
                     if (pcount < fi->ccd[pos].numOfPieces)
                     {
-                        keyword = token(fp,tokenlen);
-                        fi->ccd[pos].pieces[j].pccName = strdup( keyword );
-                        keyword = token(fp,tokenlen);
-                        fi->ccd[pos].pieces[j].deltax = atoi(keyword);
-                        keyword = token(fp,tokenlen);
-                        fi->ccd[pos].pieces[j++].deltay = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->ccd[pos].pieces[j].pccName = strdup( keyword );
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->ccd[pos].pieces[j].deltax = atoi(keyword);
+                        if ((keyword = token(fp,tokenlen)) != NULL)
+                            fi->ccd[pos].pieces[j++].deltay = atoi(keyword);
                         pcount++;
                     }
                     else
@@ -1383,7 +1400,8 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 
     if ((code != normalEOF) && (code != earlyEOF))
     {
-        (*fi)->numOfChars = atoi(token(&aFile,tokenlen));
+        if ((keyword = token(&aFile,tokenlen)) != NULL)
+            (*fi)->numOfChars = atoi(keyword);
         if (flags & (P_M ^ P_W))
         {
             (*fi)->cmi = (CharMetricInfo *)
@@ -1433,7 +1451,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 break;
             case STARTTRACKKERN:
                 keyword = token(&aFile,tokenlen);
-                if (flags & P_T)
+                if ((flags & P_T) && keyword)
                 {
                     (*fi)->numOfTracks = atoi(keyword);
                     (*fi)->tkd = (TrackKernData *)
@@ -1448,7 +1466,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 break;
             case STARTKERNPAIRS:
                 keyword = token(&aFile,tokenlen);
-                if (flags & P_P)
+                if ((flags & P_P) && keyword)
                 {
                     (*fi)->numOfPairs = atoi(keyword);
                     (*fi)->pkd = (PairKernData *)
@@ -1463,7 +1481,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 break;
             case STARTCOMPOSITES:
                 keyword = token(&aFile,tokenlen);
-                if (flags & P_C)
+                if ((flags & P_C) && keyword)
                 {
                     (*fi)->numOfComps = atoi(keyword);
                     (*fi)->ccd = (CompCharData *)
