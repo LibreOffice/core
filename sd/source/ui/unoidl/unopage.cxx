@@ -54,7 +54,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <sdresid.hxx>
 #include <glob.hrc>
@@ -68,7 +68,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <svx/svdorect.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
@@ -322,6 +322,7 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    &::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
@@ -1001,7 +1002,21 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= (sal_Int16)( GetPage()->GetAutoLayout() );
         break;
     case WID_PAGE_NUMBER:
-        aAny <<= (sal_Int16)((sal_uInt16)((GetPage()->GetPageNum()-1)>>1) + 1);
+        {
+            const sal_uInt16 nPageNumber(GetPage()->GetPageNum());
+
+            if(nPageNumber > 0)
+            {
+                // for all other pages calculate the number
+                aAny <<= (sal_Int16)((sal_uInt16)((nPageNumber-1)>>1) + 1);
+            }
+            else
+            {
+                // for pages with number 0 (Handout Master, Handout page)
+                // return 0
+                aAny <<= (sal_Int16)0;
+            }
+        }
         break;
     case WID_PAGE_DURATION:
         aAny <<= (sal_Int32)(GetPage()->GetTime());
@@ -1014,7 +1029,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_LDBITMAP:
         {
-            BOOL bHC = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+            BOOL bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             Reference< awt::XBitmap > xBitmap(
                 VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( bHC ? BMP_PAGE_H : BMP_PAGE ) ) ) );
             aAny <<= xBitmap;

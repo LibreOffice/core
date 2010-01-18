@@ -34,6 +34,7 @@
 #include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "randomwipe.hxx"
 #include "tools.hxx"
 
@@ -85,11 +86,9 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     ::basegfx::B2DPolyPolygon res;
     for ( sal_Int32 pos = static_cast<sal_Int32>(t * m_nElements); pos--; )
     {
-        ::basegfx::B2DHomMatrix aTransform;
         ::basegfx::B2DPoint const & point = m_positions[ pos ];
-        aTransform.translate( point.getX(), point.getY() );
         ::basegfx::B2DPolygon poly( m_rect );
-        poly.transform( aTransform );
+        poly.transform(basegfx::tools::createTranslateB2DHomMatrix(point.getX(), point.getY()));
         res.append( poly );
     }
     return res;

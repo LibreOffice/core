@@ -604,7 +604,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 
             case VCLEVENT_WINDOW_GETFOCUS:
                 if (pActiveWindow != NULL && pWindow == pActiveWindow)
-                    GetFocusManager().ShowFocus();
+                    GetFocusManager().ShowFocus(false);
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:

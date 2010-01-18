@@ -45,11 +45,11 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/style.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/saveopt.hxx>
+#include <svl/style.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -199,7 +199,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
     if( pOptions )
-        mbShowAnnotations = pOptions->IsPreviewTransitions() == sal_True;
+        mbShowAnnotations = pOptions->IsShowComments() == TRUE;
 }
 
 // --------------------------------------------------------------------

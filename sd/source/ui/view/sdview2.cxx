@@ -52,8 +52,8 @@
 #include <sfx2/childwin.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>
@@ -963,7 +963,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc, RID_SVXDLG_NAME ) : 0;
+                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc ) : 0;
                     if( pDlg )
                     {
                         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );

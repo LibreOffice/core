@@ -35,10 +35,10 @@
 
 #include <i18npool/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editstat.hxx>

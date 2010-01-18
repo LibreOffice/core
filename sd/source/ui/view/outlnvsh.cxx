@@ -55,9 +55,9 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
@@ -67,7 +67,7 @@
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <sfx2/srchitem.hxx>
 #include <svx/editobj.hxx>
