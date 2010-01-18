@@ -206,8 +206,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
         if( pFlyFrm )
         {
-            if( rContext.GetParent(pFlyFrm, rContext.IsInPagePreview()) ==
-                rContext.GetFrm() )
+            if( rContext.GetParent( SwFrmOrObj(pFlyFrm), rContext.IsInPagePreview()) ==
+                    rContext.GetFrm() )
             {
                 nCount = 1;
             }
@@ -262,7 +262,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( pFlyFrm )
     {
         if( 0 == nSelectedChildIndex &&
-            rContext.GetParent(pFlyFrm, rContext.IsInPagePreview()) ==
+            rContext.GetParent( SwFrmOrObj(pFlyFrm), rContext.IsInPagePreview()) ==
                 rContext.GetFrm() )
         {
             aChild = pFlyFrm;

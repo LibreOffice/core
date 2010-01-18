@@ -799,9 +799,10 @@ void SwAccessibleMap::InvalidateCursorPosition(
     ASSERT( pAccImpl->GetFrm(), "caret context is disposed" );
     if( GetShell()->ActionPend() )
     {
-        SwAccessibleEvent_Impl aEvent(
-            SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
-            pAccImpl->GetFrm(), ACC_STATE_CARET );
+        SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
+                                       pAccImpl,
+                                       SwFrmOrObj(pAccImpl->GetFrm()),
+                                       ACC_STATE_CARET );
         AppendEvent( aEvent );
     }
     else
@@ -876,11 +877,10 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                 }
                 if( bChanged )
                 {
-                    SwFrmOrObj aFrmOrObj( pShape->first );
-                    SwFrmOrObj aParent =
-                        SwAccessibleFrame::GetParent( aFrmOrObj,
-                                                      GetShell()->IsPreView() );
-                    aParents.push_back( aParent.GetSwFrm() );
+                    const SwFrm* pParent = SwAccessibleFrame::GetParent(
+                                                    SwFrmOrObj( pShape->first ),
+                                                    GetShell()->IsPreView() );
+                    aParents.push_back( pParent );
                 }
             }
 
@@ -1888,9 +1888,10 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
         static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
     {
-        SwAccessibleEvent_Impl aEvent(
-                SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
-                        pAccImpl->GetFrm(), _nStates );
+        SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
+                                       pAccImpl,
+                                       SwFrmOrObj(pAccImpl->GetFrm()),
+                                       _nStates );
         AppendEvent( aEvent );
     }
     else
@@ -1930,9 +1931,11 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
                             static_cast< SwAccessibleContext *>( xAcc.get() );
             if( GetShell()->ActionPend() )
             {
-                SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl, pFrm,
-                    bFrom ? ACC_STATE_RELATION_FROM : ACC_STATE_RELATION_TO );
+                SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
+                                               pAccImpl, SwFrmOrObj(pFrm),
+                                               ( bFrom
+                                                 ? ACC_STATE_RELATION_FROM
+                                                 : ACC_STATE_RELATION_TO ) );
                 AppendEvent( aEvent );
             }
             else
@@ -2001,7 +2004,8 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CARET_OR_STATES,
-                    pAccImpl, &_rTxtFrm,
+                    pAccImpl,
+                    SwFrmOrObj( &_rTxtFrm ),
                     ACC_STATE_TEXT_SELECTION_CHANGED );
                 AppendEvent( aEvent );
             }

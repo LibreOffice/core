@@ -45,8 +45,8 @@ class SwFrmOrObj
 public:
 
     inline SwFrmOrObj();
-    inline SwFrmOrObj( const SdrObject *pO );
-    inline SwFrmOrObj( const SwFrm *pF );
+    inline explicit SwFrmOrObj( const SdrObject *pO );
+    inline explicit SwFrmOrObj( const SwFrm *pF );
     inline SwFrmOrObj( const SwFrm *pF, const SdrObject *pO );
     inline SwFrmOrObj( const SwFrmOrObj& r );
 

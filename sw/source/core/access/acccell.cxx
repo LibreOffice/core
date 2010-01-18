@@ -187,7 +187,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 void SwAccessibleCell::_InvalidateCursorPos()
 {
 
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwFrmOrObj(GetFrm()), IsInPagePreview() );
     ASSERT( pParent->IsTabFrm(), "parent is not a tab frame" );
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
@@ -256,21 +256,21 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 
 void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 {
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwFrmOrObj(GetFrm()), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
-        xAccImpl->DisposeChild( GetFrm(), bRecursive );
+        xAccImpl->DisposeChild( SwFrmOrObj(GetFrm()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
 }
 
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwFrmOrObj(GetFrm()), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
-        xAccImpl->InvalidateChildPosOrSize( GetFrm(), rOldBox );
+        xAccImpl->InvalidateChildPosOrSize( SwFrmOrObj(GetFrm()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 

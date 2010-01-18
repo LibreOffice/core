@@ -61,11 +61,10 @@
 #include <viewimp.hxx>
 #include <accmap.hxx>
 #include <accfrmobjslist.hxx>
-#ifndef _ACCCONTEXT_HXX
 #include <acccontext.hxx>
-#endif
 #include <svx/AccessibleShape.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+
 
 #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #define DBG_MSG( _msg ) \
@@ -659,7 +658,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
             GetMap()->GetContextImpl( pUpper, !bDisposing )  );
         ASSERT( xAccImpl.isValid() || bDisposing, "no parent found" );
         if( xAccImpl.isValid() )
-            nIndex = xAccImpl->GetChildIndex( GetFrm() );
+            nIndex = xAccImpl->GetChildIndex( SwFrmOrObj(GetFrm()) );
     }
 
     return nIndex;
