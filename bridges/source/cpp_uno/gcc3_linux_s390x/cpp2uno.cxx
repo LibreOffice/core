@@ -522,15 +522,21 @@ long privateSnippetExecutor(long r2, long r3, long r4, long r5, long r6, long fi
 
     switch( aType )
     {
-        case typelib_TypeClass_VOID:
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
+            nRegReturn[0] = (unsigned long)(*(unsigned char *)nRegReturn);
+            break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_SHORT:
+            nRegReturn[0] = (unsigned long)(*(unsigned short *)nRegReturn);
+            break;
         case typelib_TypeClass_ENUM:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_LONG:
+            nRegReturn[0] = (unsigned long)(*(unsigned int *)nRegReturn);
+            break;
+        case typelib_TypeClass_VOID:
         default:
             break;
         case typelib_TypeClass_FLOAT:
