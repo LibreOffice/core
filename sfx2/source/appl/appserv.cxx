@@ -551,8 +551,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_CRASH :
         {
-            GetpApp()->Exception( EXC_SYSTEM );
-            abort();
+            // Provoke a crash:
+            char * crash = 0;
+            *crash = 0;
+            break;
         }
 
         case SID_SHOW_IME_STATUS_WINDOW:
