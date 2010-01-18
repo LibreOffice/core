@@ -759,8 +759,8 @@ public:
     FontConfigHints getFontConfigHints(const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void *));
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type eItalic, weight::type eWeight,
-        width::type eWidth, pitch::type ePitch) const;
+        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
+        width::type& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

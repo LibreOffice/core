@@ -885,8 +885,12 @@ void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     }
 }
 
-void PspGraphics::GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const
+void PspGraphics::GetFontHints( const ImplFontAttributes& /*rFontAttributes*/,
+    int /*nSize*/, ImplFontHints& /*rFontHints*/) const
 {
+    // psprint just exports the fonts including hints
+    // the printer is then free to use the hints any way it wants
+    // AFAIK there is no printer driver that uses the fc-settings for this
 }
 
 void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric )

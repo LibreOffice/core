@@ -2072,8 +2072,10 @@ void RegisterFontSubstitutors( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
-static rtl::OUString GetFcSubstitute(const ImplFontSelectData &rFontSelData, OUString& rMissingCodes )
+static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData, OUString& rMissingCodes )
 {
+    ImplFontSelectData aRet(rFontSelData);
+
     const rtl::OString aLangAttrib; //TODO: = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
     psp::italic::type eItalic = psp::italic::Unknown;
@@ -2141,7 +2143,72 @@ static rtl::OUString GetFcSubstitute(const ImplFontSelectData &rFontSelData, OUS
     }
 
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    return rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch);
+    aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch);
+
+    switch (eItalic)
+    {
+        case psp::italic::Upright: aRet.meItalic = ITALIC_NONE; break;
+        case psp::italic::Italic: aRet.meItalic = ITALIC_NORMAL; break;
+        case psp::italic::Oblique: aRet.meItalic = ITALIC_OBLIQUE; break;
+        default:
+            break;
+    }
+
+    switch (eWeight)
+    {
+        case psp::weight::Thin: aRet.meWeight = WEIGHT_THIN; break;
+        case psp::weight::UltraLight: aRet.meWeight = WEIGHT_ULTRALIGHT; break;
+        case psp::weight::Light: aRet.meWeight = WEIGHT_LIGHT; break;
+        case psp::weight::SemiLight: aRet.meWeight = WEIGHT_SEMILIGHT; break;
+        case psp::weight::Normal: aRet.meWeight = WEIGHT_NORMAL; break;
+        case psp::weight::Medium: aRet.meWeight = WEIGHT_MEDIUM; break;
+        case psp::weight::SemiBold: aRet.meWeight = WEIGHT_SEMIBOLD; break;
+        case psp::weight::Bold: aRet.meWeight = WEIGHT_BOLD; break;
+        case psp::weight::UltraBold: aRet.meWeight = WEIGHT_ULTRABOLD; break;
+        case psp::weight::Black: aRet.meWeight = WEIGHT_BLACK; break;
+        default:
+                break;
+    }
+
+    switch (eWidth)
+    {
+        case psp::width::UltraCondensed: aRet.meWidthType = WIDTH_ULTRA_CONDENSED; break;
+        case psp::width::ExtraCondensed: aRet.meWidthType = WIDTH_EXTRA_CONDENSED; break;
+        case psp::width::Condensed: aRet.meWidthType = WIDTH_CONDENSED; break;
+        case psp::width::SemiCondensed: aRet.meWidthType = WIDTH_SEMI_CONDENSED; break;
+        case psp::width::Normal: aRet.meWidthType = WIDTH_NORMAL; break;
+        case psp::width::SemiExpanded: aRet.meWidthType = WIDTH_SEMI_EXPANDED; break;
+        case psp::width::Expanded: aRet.meWidthType = WIDTH_EXPANDED; break;
+        case psp::width::ExtraExpanded: aRet.meWidthType = WIDTH_EXTRA_EXPANDED; break;
+        case psp::width::UltraExpanded: aRet.meWidthType = WIDTH_ULTRA_EXPANDED; break;
+        default:
+            break;
+    }
+
+    switch (ePitch)
+    {
+        case psp::pitch::Fixed: aRet.mePitch = PITCH_FIXED; break;
+        case psp::pitch::Variable: aRet.mePitch = PITCH_VARIABLE; break;
+        default:
+            break;
+    }
+
+    return aRet;
+}
+
+namespace
+{
+    bool uselessmatch(const ImplFontSelectData &rOrig, const ImplFontSelectData &rNew)
+    {
+        return
+          (
+            rOrig.maTargetName == rNew.maSearchName &&
+            rOrig.meWeight == rNew.meWeight &&
+            rOrig.meItalic == rNew.meItalic &&
+            rOrig.mePitch == rNew.mePitch &&
+            rOrig.meWidthType == rNew.meWidthType
+          );
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -2157,20 +2224,19 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
         return false;
 
     rtl::OUString aDummy;
-    const rtl::OUString aOUName = GetFcSubstitute( rFontSelData, aDummy );
-    if( !aOUName.getLength() )
+    const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
+    if (!aOut.maSearchName.Len())
         return false;
-    const String aName( aOUName );
-    if( aName == rFontSelData.maTargetName )
+    if( uselessmatch(rFontSelData, aOut ) )
         return false;
 
 #ifdef DEBUG
     ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    ByteString aSubstName( aName, RTL_TEXTENCODING_UTF8 );
+    ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
     printf( "FcPreMatchSubstititution \"%s\" -> \"%s\"\n",
         aOrigName.GetBuffer(), aSubstName.GetBuffer() );
 #endif
-    rFontSelData.maSearchName = aName;
+    rFontSelData = aOut;
     return true;
 }
 
@@ -2187,21 +2253,20 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFon
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
-    const rtl::OUString aOUName = GetFcSubstitute( rFontSelData, rMissingCodes );
+    const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
     // TODO: cache the unicode+font specific result
-    if( !aOUName.getLength() )
+    if (!aOut.maSearchName.Len())
         return false;
-    const String aName( aOUName );
-    if( aName == rFontSelData.maTargetName )
+    if (uselessmatch(rFontSelData, aOut))
         return false;
 
 #ifdef DEBUG
     ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    ByteString aSubstName( aName, RTL_TEXTENCODING_UTF8 );
+    ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
     printf( "FcGlyphFallbackSubstititution \"%s\" -> \"%s\"\n",
         aOrigName.GetBuffer(), aSubstName.GetBuffer() );
 #endif
-    rFontSelData.maSearchName = aName;
+    rFontSelData = aOut;
     return true;
 }
 

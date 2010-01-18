@@ -572,6 +572,72 @@ bool PrintFontManager::initFontconfig()
     return true;
 }
 
+namespace
+{
+    weight::type convertWeight(int weight)
+    {
+        // set weight
+        if( weight <= FC_WEIGHT_THIN )
+            return weight::Thin;
+        else if( weight <= FC_WEIGHT_ULTRALIGHT )
+            return weight::UltraLight;
+        else if( weight <= FC_WEIGHT_LIGHT )
+            return weight::Light;
+        else if( weight <= FC_WEIGHT_BOOK )
+            return weight::SemiLight;
+        else if( weight <= FC_WEIGHT_NORMAL )
+            return weight::Normal;
+        else if( weight <= FC_WEIGHT_MEDIUM )
+            return weight::Medium;
+        else if( weight <= FC_WEIGHT_SEMIBOLD )
+            return weight::SemiBold;
+        else if( weight <= FC_WEIGHT_BOLD )
+            return weight::Bold;
+        else if( weight <= FC_WEIGHT_ULTRABOLD )
+            return weight::UltraBold;
+        return weight::Black;
+    }
+
+    italic::type convertSlant(int slant)
+    {
+        // set italic
+        if( slant == FC_SLANT_ITALIC )
+            return italic::Italic;
+        else if( slant == FC_SLANT_OBLIQUE )
+            return italic::Oblique;
+        return italic::Upright;
+    }
+
+    pitch::type convertSpacing(int spacing)
+    {
+        // set pitch
+        if( spacing == FC_MONO || spacing == FC_CHARCELL )
+            return pitch::Fixed;
+        return pitch::Variable;
+    }
+
+    width::type convertWidth(int width)
+    {
+        if (width == FC_WIDTH_ULTRACONDENSED)
+            return width::UltraCondensed;
+        else if (width == FC_WIDTH_EXTRACONDENSED)
+            return width::ExtraCondensed;
+        else if (width == FC_WIDTH_CONDENSED)
+            return width::Condensed;
+        else if (width == FC_WIDTH_SEMICONDENSED)
+            return width::SemiCondensed;
+        else if (width == FC_WIDTH_SEMIEXPANDED)
+            return width::SemiExpanded;
+        else if (width == FC_WIDTH_EXPANDED)
+            return width::Expanded;
+        else if (width == FC_WIDTH_EXTRAEXPANDED)
+            return width::ExtraExpanded;
+        else if (width == FC_WIDTH_ULTRAEXPANDED)
+            return width::UltraExpanded;
+        return width::Normal;
+    }
+}
+
 int PrintFontManager::countFontconfigFonts()
 {
     int nFonts = 0;
@@ -699,47 +765,11 @@ int PrintFontManager::countFontconfigFonts()
                     pUpdate->m_nFamilyName = nFamilyName;
                 }
                 if( eWeightRes == FcResultMatch )
-                {
-                    // set weight
-                    if( weight <= FC_WEIGHT_THIN )
-                        pUpdate->m_eWeight = weight::Thin;
-                    else if( weight <= FC_WEIGHT_ULTRALIGHT )
-                        pUpdate->m_eWeight = weight::UltraLight;
-                    else if( weight <= FC_WEIGHT_LIGHT )
-                        pUpdate->m_eWeight = weight::Light;
-                    else if( weight <= FC_WEIGHT_BOOK )
-                        pUpdate->m_eWeight = weight::SemiLight;
-                    else if( weight <= FC_WEIGHT_NORMAL )
-                        pUpdate->m_eWeight = weight::Normal;
-                    else if( weight <= FC_WEIGHT_MEDIUM )
-                        pUpdate->m_eWeight = weight::Medium;
-                    else if( weight <= FC_WEIGHT_SEMIBOLD )
-                        pUpdate->m_eWeight = weight::SemiBold;
-                    else if( weight <= FC_WEIGHT_BOLD )
-                        pUpdate->m_eWeight = weight::Bold;
-                    else if( weight <= FC_WEIGHT_ULTRABOLD )
-                        pUpdate->m_eWeight = weight::UltraBold;
-                    else
-                        pUpdate->m_eWeight = weight::Black;
-                }
+                    pUpdate->m_eWeight = convertWeight(weight);
                 if( eSpacRes == FcResultMatch )
-                {
-                    // set pitch
-                    if( spacing == FC_PROPORTIONAL )
-                        pUpdate->m_ePitch = pitch::Variable;
-                    else if( spacing == FC_MONO || spacing == FC_CHARCELL )
-                        pUpdate->m_ePitch = pitch::Fixed;
-                }
+                    pUpdate->m_ePitch = convertSpacing(spacing);
                 if( eSlantRes == FcResultMatch )
-                {
-                    // set italic
-                    if( slant == FC_SLANT_ROMAN )
-                        pUpdate->m_eItalic = italic::Upright;
-                    else if( slant == FC_SLANT_ITALIC )
-                        pUpdate->m_eItalic = italic::Italic;
-                    else if( slant == FC_SLANT_OBLIQUE )
-                        pUpdate->m_eItalic = italic::Oblique;
-                }
+                    pUpdate->m_eItalic = convertSlant(slant);
                 if( eStyleRes == FcResultMatch )
                 {
                     pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), RTL_TEXTENCODING_UTF8 );
@@ -879,8 +909,8 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
 
 rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
-    italic::type eItalic, weight::type eWeight,
-    width::type eWidth, pitch::type ePitch) const
+    italic::type &rItalic, weight::type &rWeight,
+    width::type &rWidth, pitch::type &rPitch) const
 {
     rtl::OUString aName;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -915,7 +945,7 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
        rWrapper.FcCharSetDestroy( unicodes );
     }
 
-    addtopattern(rWrapper, pPattern, eItalic, eWeight, eWidth, ePitch);
+    addtopattern(rWrapper, pPattern, rItalic, rWeight, rWidth, rPitch);
 
     // query fontconfig for a substitute
     rWrapper.FcConfigSubstitute( rWrapper.FcConfigGetCurrent(), pPattern, FcMatchPattern );
@@ -952,6 +982,17 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
                 if (aI != rWrapper.m_aFontNameToLocalized.end())
                     sFamily = aI->second;
                 aName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
+
+
+                int val = 0;
+                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_WEIGHT, 0, &val))
+                    rWeight = convertWeight(val);
+                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_SLANT, 0, &val))
+                    rItalic = convertSlant(val);
+                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_SPACING, 0, &val))
+                    rPitch = convertSpacing(val);
+                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_WIDTH, 0, &val))
+                    rWidth = convertWidth(val);
             }
 
             // update rMissingCodes by removing resolved unicodes
