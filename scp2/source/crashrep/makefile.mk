@@ -46,7 +46,7 @@ TARGETTYPE=CUI
 SCP_PRODUCT_TYPE=osl
 
 PARFILES = \
-    file_crashrep_dynamic.par
+    file_crashrep.par
 
 .ENDIF # "$(ENABLE_CRASHDUMP)" != ""
 
