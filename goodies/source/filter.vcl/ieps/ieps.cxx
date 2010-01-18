@@ -293,7 +293,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 
         aMemStm.Seek(0);
         if (
-            aMemStm.GetSize() &&
+            aMemStm.GetEndOfData() &&
             GraphicConverter::Import(aMemStm, rGraphic, CVT_PNG) == ERRCODE_NONE
            )
         {
