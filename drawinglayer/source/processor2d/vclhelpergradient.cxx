@@ -229,7 +229,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientLinear aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_AXIAL:
@@ -245,7 +245,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientRadial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetY);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0,0), 1, 1);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_ELLIPTICAL:
@@ -253,7 +253,7 @@ namespace drawinglayer
                 texture::GeoTexSvxGradientElliptical aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
                 aGradient.appendTransformations(aMatrices);
                 aGradient.appendColors(aColors);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0,0), 1, 1);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_SQUARE:

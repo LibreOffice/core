@@ -221,16 +221,16 @@ namespace drawinglayer
             if(attribute::GRADIENTSTYLE_RADIAL == maFillGradient.getStyle()
                 || attribute::GRADIENTSTYLE_ELLIPTICAL == maFillGradient.getStyle())
             {
-                const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
+                aUnitPolygon = basegfx::tools::createPolygonFromCircle(
+                    basegfx::B2DPoint(0,0), 1);
             }
             else if(attribute::GRADIENTSTYLE_LINEAR == maFillGradient.getStyle())
             {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
             }
             else
             {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
             }
 
             // get the transform matrices and colors (where colors
