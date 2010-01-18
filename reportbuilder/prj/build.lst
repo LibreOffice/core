@@ -12,5 +12,5 @@ rpb  reportbuilder\registry\data\org\openoffice\Office                    nmake 
 rpb  reportbuilder\registry\data\org\openoffice\Office\UI                 nmake   -   all rpb_reg_data_ooo_ui rpb_reg_schema_ooo_ui NULL
 rpb  reportbuilder\registry\data\org\openoffice\TypeDetection             nmake   -   all rpb_reg_data_oot NULL
 rpb  reportbuilder\template\en-US\wizard\report				nmake   -   all rpb_template_en_us_wiz_rep NULL
-rpb  reportbuilder\util                                                   nmake   -   all rpb_util rpb_jreport_pe rpb_reg_data_ooo rpb_data_ooOffice rpb_reg_data_oot rpb_template_en_us_wiz_rep NULL
+rpb  reportbuilder\util                                                   nmake   -   all rpb_util rpb_jreport_pe rpb_reg_data_ooo rpb_data_ooOffice rpb_reg_data_oot rpb_template_en_us_wiz_rep rpb_reg_data_ooo_ui NULL
 

@@ -734,8 +734,11 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             final AttributeList attrList = buildAttributeList(attrs);
             xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
 
-            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs) &&
-                tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH && variables != null)
+            if ( tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH
+                    && variables != null
+                    && !isRepeatingSection()
+                    && ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs)
+                )
             {
                 //LOGGER.debug("Variables-Section in existing cell " + variables);
                 xmlWriter.writeText(variables);
@@ -1374,7 +1377,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
         final XmlWriter xmlWriter = getXmlWriter();
         if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH &&
-                isTableNs && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType))
+            isTableNs && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType) &&
+            !isRepeatingSection() )
         {
             if (variables != null)
             {
