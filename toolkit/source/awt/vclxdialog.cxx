@@ -66,6 +66,7 @@ DBG_NAME( VCLXDialog )
 
 VCLXDialog::VCLXDialog()
     : VCLXWindow()
+    , VCLXTopWindow_Base( true )
     , VCLXDialog_Base()
     , Bin()
     , bRealized( false )

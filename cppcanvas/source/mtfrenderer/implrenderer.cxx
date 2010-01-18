@@ -34,19 +34,14 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
-
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-
 #include <cppcanvas/canvas.hxx>
-
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -58,7 +53,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -73,7 +67,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/salbtype.hxx>
@@ -84,11 +77,9 @@
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
 #include <i18npool/mslangid.hxx>
-
 #include <implrenderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>
-
 #include <action.hxx>
 #include <bitmapaction.hxx>
 #include <lineaction.hxx>
@@ -96,15 +87,13 @@
 #include <polypolyaction.hxx>
 #include <textaction.hxx>
 #include <transparencygroupaction.hxx>
-
 #include <vector>
 #include <algorithm>
 #include <iterator>
-
 #include <boost/scoped_array.hpp>
-
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -286,10 +275,25 @@ namespace
             (getState( rParms.mrStates ).mapModeTransform * aWidth).getX();
 
         // setup reasonable defaults
-        o_rStrokeAttributes.MiterLimit   = 1.0;
+        o_rStrokeAttributes.MiterLimit   = 15.0; // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
         o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
         o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
-        o_rStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+        switch(rLineInfo.GetLineJoin())
+        {
+            default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
+                break;
+            case basegfx::B2DLINEJOIN_BEVEL:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
+                break;
+            case basegfx::B2DLINEJOIN_MITER:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
+                break;
+            case basegfx::B2DLINEJOIN_ROUND:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
+                break;
+        }
 
         if( LINE_DASH == rLineInfo.GetStyle() )
         {

@@ -32,9 +32,9 @@
 #include "precompiled_basegfx.hxx"
 
 #include <basegfx/tools/gradienttools.hxx>
-
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace basegfx
 {
@@ -94,9 +94,9 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5*fTargetSizeX,
                                    0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-            o_rGradientInfo.maTextureTransform.rotate(fAngle);
-            o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+            o_rGradientInfo.maTextureTransform =
+                o_rGradientInfo.maTextureTransform
+                * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add object translate
@@ -162,9 +162,9 @@ namespace basegfx
             {
                 const B2DPoint aCenter(0.5*fTargetSizeX,
                                        0.5*fTargetSizeY);
-                o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                o_rGradientInfo.maTextureTransform.rotate(fAngle);
-                o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+                o_rGradientInfo.maTextureTransform =
+                    o_rGradientInfo.maTextureTransform
+                    * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
             }
         }
 
@@ -232,9 +232,9 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5*fTargetSizeX,
                                    0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-            o_rGradientInfo.maTextureTransform.rotate(fAngle);
-            o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+            o_rGradientInfo.maTextureTransform =
+                o_rGradientInfo.maTextureTransform
+                * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation

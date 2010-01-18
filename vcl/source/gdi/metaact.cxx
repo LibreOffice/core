@@ -52,14 +52,6 @@ inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 
 // ------------------------------------------------------------------------
 
-inline void ImplScaleSize( Size& rSz, double fScaleX, double fScaleY )
-{
-    rSz.Width() = FRound( fScaleX * rSz.Width() );
-    rSz.Height() = FRound( fScaleY * rSz.Height() );
-}
-
-// ------------------------------------------------------------------------
-
 inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
 {
     Point aTL( rRect.TopLeft() );
@@ -69,6 +61,7 @@ inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
     ImplScalePoint( aBR, fScaleX, fScaleY );
 
     rRect = Rectangle( aTL, aBR );
+    rRect.Justify();
 }
 
 // ------------------------------------------------------------------------
@@ -85,7 +78,7 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
 {
     if( !rLineInfo.IsDefault() )
     {
-        const double fScale = ( fScaleX + fScaleY ) * 0.5;
+        const double fScale = ( fabs(fScaleX) + fabs(fScaleY) ) * 0.5;
 
         rLineInfo.SetWidth( FRound( fScale * rLineInfo.GetWidth() ) );
         rLineInfo.SetDashLen( FRound( fScale * rLineInfo.GetDashLen() ) );
@@ -598,8 +591,8 @@ void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
 void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
-    mnHorzRound = FRound( mnHorzRound * fScaleX );
-    mnVertRound = FRound( mnVertRound * fScaleY );
+    mnHorzRound = FRound( mnHorzRound * fabs(fScaleX) );
+    mnVertRound = FRound( mnVertRound * fabs(fScaleY) );
 }
 
 // ------------------------------------------------------------------------
@@ -989,7 +982,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 3, pData );
 
     Polygon aSimplePoly;
-    maPoly.GetSimple( aSimplePoly );
+    maPoly.AdaptiveSubdivide( aSimplePoly );
 
     rOStm << aSimplePoly;                               // Version 1
     rOStm << maLineInfo;                                // Version 2
@@ -1077,7 +1070,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
     Polygon aSimplePoly;                            // Version 1
-    maPoly.GetSimple( aSimplePoly );
+    maPoly.AdaptiveSubdivide( aSimplePoly );
     rOStm << aSimplePoly;
 
     sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
@@ -1169,7 +1162,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         const Polygon& rPoly = maPolyPoly.GetObject( i );
         if ( rPoly.HasFlags() )
             nNumberOfComplexPolygons++;
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
         rOStm << aSimplePoly;
     }
 
@@ -1396,7 +1389,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     if ( mpDXAry && mnLen )
     {
         for ( USHORT i = 0, nCount = mnLen; i < nCount; i++ )
-            mpDXAry[ i ] = FRound( mpDXAry[ i ] * fScaleX );
+            mpDXAry[ i ] = FRound( mpDXAry[ i ] * fabs(fScaleX) );
     }
 }
 
@@ -1524,7 +1517,7 @@ void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = (ULONG)FRound( mnWidth * fScaleX );
+    mnWidth = (ULONG)FRound( mnWidth * fabs(fScaleX) );
 }
 
 // ------------------------------------------------------------------------
@@ -1717,7 +1710,7 @@ void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
 void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPos, fScaleX, fScaleY );
-    mnWidth = FRound( mnWidth * fScaleX );
+    mnWidth = FRound( mnWidth * fabs(fScaleX) );
 }
 
 // ------------------------------------------------------------------------
@@ -1876,8 +1869,10 @@ void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maPt, fScaleX, fScaleY );
-    ImplScaleSize( maSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maPt, maSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPt = aRectangle.TopLeft();
+    maSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -1953,8 +1948,10 @@ void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maDstPt, fScaleX, fScaleY );
-    ImplScaleSize( maDstSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maDstPt, maDstSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maDstPt = aRectangle.TopLeft();
+    maDstSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -2099,8 +2096,10 @@ void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maPt, fScaleX, fScaleY );
-    ImplScaleSize( maSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maPt, maSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPt = aRectangle.TopLeft();
+    maSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -2176,8 +2175,10 @@ void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maDstPt, fScaleX, fScaleY );
-    ImplScaleSize( maDstSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maDstPt, maDstSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maDstPt = aRectangle.TopLeft();
+    maDstSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -2328,8 +2329,10 @@ void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maPt, fScaleX, fScaleY );
-    ImplScaleSize( maSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maPt, maSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPt = aRectangle.TopLeft();
+    maSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -2408,8 +2411,10 @@ void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maDstPt, fScaleX, fScaleY );
-    ImplScaleSize( maDstSz, fScaleX, fScaleY );
+    Rectangle aRectangle(maDstPt, maDstSz);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maDstPt = aRectangle.TopLeft();
+    maDstSz = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------
@@ -2581,7 +2586,13 @@ sal_Bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly << maGradient;
+
+    // #i105373# see comment at MetaTransparentAction::Write
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
+    rOStm << maGradient;
 }
 
 // ------------------------------------------------------------------------
@@ -2649,7 +2660,13 @@ sal_Bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly << maHatch;
+
+    // #i105373# see comment at MetaTransparentAction::Write
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
+    rOStm << maHatch;
 }
 
 // ------------------------------------------------------------------------
@@ -3486,9 +3503,9 @@ MetaAction* MetaFontAction::Clone()
 
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
 {
-    Size aSize( maFont.GetSize() );
-
-    ImplScaleSize( aSize, fScaleX, fScaleY );
+    const Size aSize(
+        FRound(maFont.GetSize().Width() * fabs(fScaleX)),
+        FRound(maFont.GetSize().Height() * fabs(fScaleY)));
     maFont.SetSize( aSize );
 }
 
@@ -3716,7 +3733,20 @@ sal_Bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly;
+
+    // #i105373# The PolyPolygon in this action may be a curve; this
+    // was ignored until now what is an error. To make older office
+    // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
+    // to the PolyPoylgon.
+    // The alternative would be to really write the curve information
+    // like in MetaPolyPolygonAction::Write (where someone extended it
+    // correctly, but not here :-( ).
+    // The golden solution would be to combine both, but i think it's
+    // not necessary; a good subdivision will be sufficient.
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
     rOStm << mnTransPercent;
 }
 
@@ -3766,14 +3796,18 @@ MetaAction* MetaFloatTransparentAction::Clone()
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
+    maMtf.Move(nHorzMove, nVertMove);
 }
 
 // ------------------------------------------------------------------------
 
 void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maPoint, fScaleX, fScaleY );
-    ImplScaleSize( maSize, fScaleX, fScaleY );
+    Rectangle aRectangle(maPoint, maSize);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPoint = aRectangle.TopLeft();
+    maSize = aRectangle.GetSize();
+    maMtf.Scale(fScaleX, fScaleY);
 }
 
 // ------------------------------------------------------------------------
@@ -3847,8 +3881,10 @@ void MetaEPSAction::Move( long nHorzMove, long nVertMove )
 
 void MetaEPSAction::Scale( double fScaleX, double fScaleY )
 {
-    ImplScalePoint( maPoint, fScaleX, fScaleY );
-    ImplScaleSize( maSize, fScaleX, fScaleY );
+    Rectangle aRectangle(maPoint, maSize);
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPoint = aRectangle.TopLeft();
+    maSize = aRectangle.GetSize();
 }
 
 // ------------------------------------------------------------------------

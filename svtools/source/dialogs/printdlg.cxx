@@ -47,7 +47,7 @@
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
 #include <filedlg.hxx>
-#include "pickerhelper.hxx"
+#include "svl/pickerhelper.hxx"
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
 #endif
@@ -172,7 +172,7 @@ PrintDialog::~PrintDialog()
 
 void PrintDialog::ImplSetImages()
 {
-    if( ! GetSettings().GetStyleSettings().GetDialogColor().IsDark() )
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         maImgCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_COLLATE ) ), BMP_COLOR_NORMAL );
         maImgNotCollate.SetModeImage( Image( SvtResId( RID_IMG_PRNDLG_NOCOLLATE ) ), BMP_COLOR_NORMAL );

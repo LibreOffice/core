@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygon.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +87,9 @@ namespace basegfx
 
         /// Coordinate insert/append
         void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
-        void append(const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+        void append(const basegfx::B2DPoint& rPoint, sal_uInt32 nCount);
+        void append(const basegfx::B2DPoint& rPoint);
+        void reserve(sal_uInt32 nCount);
 
         /// Basic ControlPoint interface
         basegfx::B2DPoint getPrevControlPoint(sal_uInt32 nIndex) const;

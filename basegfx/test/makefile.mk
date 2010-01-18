@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -69,24 +69,25 @@ SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                        $(CPPULIB)       \
+                $(CPPULIB)       \
+                $(TESTSHL2LIB) \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
