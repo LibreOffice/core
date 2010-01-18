@@ -298,6 +298,8 @@ void WorkbookSettings::finalizeImport()
     // write protection
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) )
         getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
+    if( maFileSharing.mnPasswordHash != 0 )
+        aPropSet.setProperty( PROP_WriteProtectionPassword, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
 
     // calculation settings
     Date aNullDate = getNullDate();

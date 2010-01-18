@@ -62,7 +62,6 @@ typedef std::vector< com::sun::star::beans::PropertyValue > PropertyValueVector_
 namespace writerfilter {
 namespace dmapper
 {
-using namespace std;
 
 class PropertyMap;
 class DomainMapper_Impl;
@@ -109,6 +108,9 @@ public:
     virtual void endParagraphGroup();
     virtual void startCharacterGroup();
     virtual void endCharacterGroup();
+    virtual void startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
+
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
     virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
@@ -120,8 +122,8 @@ public:
 
     void sprm( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext, SprmType = SPRM_DEFAULT );
 
-    void PushStyleSheetProperties( ::boost::shared_ptr<PropertyMap> pStyleProperties );
-    void PopStyleSheetProperties();
+    void PushStyleSheetProperties( ::boost::shared_ptr<PropertyMap> pStyleProperties, bool bAffectTableMngr = false );
+    void PopStyleSheetProperties( bool bAffectTableMngr = false );
 
     void PushListProperties( ::boost::shared_ptr<PropertyMap> pListProperties );
     void PopListProperties();

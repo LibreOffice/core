@@ -1,3 +1,4 @@
+
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
  ************************************************************************/
 
 #include "oox/xls/stylesbuffer.hxx"
-#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -65,8 +66,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XEnumerationAccess;
-using ::com::sun::star::container::XEnumeration;
+using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::awt::FontDescriptor;
@@ -2526,30 +2526,27 @@ void Dxf::finalizeImport()
         mxFill->finalizeImport();
 }
 
-const OUString& Dxf::createDxfStyle( sal_Int32 nDxfId )
+void Dxf::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    if( maFinalName.getLength() == 0 )
-    {
-        maFinalName = OUStringBuffer( CREATE_OUSTRING( "ConditionalStyle_" ) ).append( nDxfId + 1 ).makeStringAndClear();
-        Reference< XStyle > xStyle = createStyleObject( maFinalName, false );
-        // write style formatting properties
-        PropertyMap aPropMap;
-        if( mxFont.get() )
-            mxFont->writeToPropertyMap( aPropMap, FONT_PROPTYPE_CELL );
-        if( mxNumFmt.get() )
-            mxNumFmt->writeToPropertyMap( aPropMap );
-        if( mxAlignment.get() )
-            mxAlignment->writeToPropertyMap( aPropMap );
-        if( mxProtection.get() )
-            mxProtection->writeToPropertyMap( aPropMap );
-        if( mxBorder.get() )
-            mxBorder->writeToPropertyMap( aPropMap );
-        if( mxFill.get() )
-            mxFill->writeToPropertyMap( aPropMap );
-        PropertySet aPropSet( xStyle );
-        aPropSet.setProperties( aPropMap );
-    }
-    return maFinalName;
+    if( mxFont.get() )
+        mxFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
+    if( mxNumFmt.get() )
+        mxNumFmt->writeToPropertyMap( rPropMap );
+    if( mxAlignment.get() )
+        mxAlignment->writeToPropertyMap( rPropMap );
+    if( mxProtection.get() )
+        mxProtection->writeToPropertyMap( rPropMap );
+    if( mxBorder.get() )
+        mxBorder->writeToPropertyMap( rPropMap );
+    if( mxFill.get() )
+        mxFill->writeToPropertyMap( rPropMap );
+}
+
+void Dxf::writeToPropertySet( PropertySet& rPropSet ) const
+{
+    PropertyMap aPropMap;
+    writeToPropertyMap( aPropMap );
+    rPropSet.setProperties( aPropMap );
 }
 
 // ============================================================================
@@ -2732,6 +2729,11 @@ CellStyleModel::CellStyleModel() :
 {
 }
 
+bool CellStyleModel::isBuiltin() const
+{
+    return mbBuiltin && (mnBuiltinId >= 0);
+}
+
 bool CellStyleModel::isDefaultStyle() const
 {
     return mbBuiltin && (mnBuiltinId == OOX_STYLE_NORMAL);
@@ -2801,11 +2803,6 @@ void CellStyle::importStyle( BiffInputStream& rStrm )
     }
 }
 
-OUString CellStyle::calcInitialStyleName() const
-{
-    return isBuiltin() ? lclGetBuiltinStyleName( maModel.mnBuiltinId, maModel.maName, maModel.mnLevel ) : maModel.maName;
-}
-
 void CellStyle::createCellStyle()
 {
     // #i1624# #i1768# ignore unnamed user styles
@@ -2832,7 +2829,7 @@ void CellStyle::createCellStyle()
         // write style formatting properties
         PropertySet aPropSet( xStyle );
         getStyles().writeStyleXfToPropertySet( aPropSet, maModel.mnXfId );
-        if( !isDefaultStyle() )
+        if( !maModel.isDefaultStyle() )
             xStyle->setParentStyle( getStyles().getDefaultStyleName() );
     }
     catch( Exception& )
@@ -2840,10 +2837,172 @@ void CellStyle::createCellStyle()
     }
 }
 
-void CellStyle::finalizeImport()
+void CellStyle::finalizeImport( const OUString& rFinalName )
 {
-    if( !isBuiltin() || maModel.mbCustom )
+    maFinalName = rFinalName;
+    if( !maModel.isBuiltin() || maModel.mbCustom )
         createCellStyle();
+}
+
+// ============================================================================
+
+CellStyleBuffer::CellStyleBuffer( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper )
+{
+}
+
+CellStyleRef CellStyleBuffer::importCellStyle( const AttributeList& rAttribs )
+{
+    CellStyleRef xCellStyle( new CellStyle( *this ) );
+    xCellStyle->importCellStyle( rAttribs );
+    insertCellStyle( xCellStyle );
+    return xCellStyle;
+}
+
+CellStyleRef CellStyleBuffer::importCellStyle( RecordInputStream& rStrm )
+{
+    CellStyleRef xCellStyle( new CellStyle( *this ) );
+    xCellStyle->importCellStyle( rStrm );
+    insertCellStyle( xCellStyle );
+    return xCellStyle;
+}
+
+CellStyleRef CellStyleBuffer::importStyle( BiffInputStream& rStrm )
+{
+    CellStyleRef xCellStyle( new CellStyle( *this ) );
+    xCellStyle->importStyle( rStrm );
+    insertCellStyle( xCellStyle );
+    return xCellStyle;
+}
+
+void CellStyleBuffer::finalizeImport()
+{
+    // calculate final names of all styles
+    typedef RefMap< OUString, CellStyle, IgnoreCaseCompare > CellStyleNameMap;
+    CellStyleNameMap aCellStyles;
+    CellStyleVector aConflictNameStyles;
+
+    /*  First, reserve style names that are built-in in Calc. This causes that
+        imported cell styles get different unused names and thus do not try to
+        overwrite these built-in styles. For BIFF4 workbooks (which contain a
+        separate list of cell styles per sheet), reserve all existing styles if
+        current sheet is not the first sheet (this styles buffer will be
+        constructed again for every new sheet). This will create unique names
+        for styles in different sheets with the same name. Assuming that the
+        BIFF4W import filter is never used to import from clipboard... */
+    bool bReserveAll = (getFilterType() == FILTER_BIFF) && (getBiff() == BIFF4) && isWorkbookFile() && (getCurrentSheetIndex() > 0);
+    try
+    {
+        // unfortunately, com.sun.star.style.StyleFamily does not implement XEnumerationAccess...
+        Reference< XIndexAccess > xStyleFamilyIA( getStyleFamily( false ), UNO_QUERY_THROW );
+        for( sal_Int32 nIndex = 0, nCount = xStyleFamilyIA->getCount(); nIndex < nCount; ++nIndex )
+        {
+            Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
+            if( bReserveAll || !xStyle->isUserDefined() )
+            {
+                Reference< XNamed > xStyleName( xStyle, UNO_QUERY_THROW );
+                // create an empty entry by using ::std::map<>::operator[]
+                aCellStyles[ xStyleName->getName() ];
+            }
+        }
+    }
+    catch( Exception& )
+    {
+    }
+
+    /*  Calculate names of built-in styles. Store styles with reserved names
+        in the aConflictNameStyles list. */
+    for( CellStyleVector::iterator aIt = maBuiltinStyles.begin(), aEnd = maBuiltinStyles.end(); aIt != aEnd; ++aIt )
+    {
+        const CellStyleModel& rModel = (*aIt)->getModel();
+        OUString aStyleName = lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel );
+        OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
+            "CellStyleBuffer::finalizeImport - multiple styles with equal built-in identifier" );
+        if( aCellStyles.count( aStyleName ) > 0 )
+            aConflictNameStyles.push_back( *aIt );
+        else
+            aCellStyles[ aStyleName ] = *aIt;
+    }
+
+    /*  Calculate names of user defined styles. Store styles with reserved
+        names in the aConflictNameStyles list. */
+    for( CellStyleVector::iterator aIt = maUserStyles.begin(), aEnd = maUserStyles.end(); aIt != aEnd; ++aIt )
+    {
+        const CellStyleModel& rModel = (*aIt)->getModel();
+        // #i1624# #i1768# ignore unnamed user styles
+        if( rModel.maName.getLength() > 0 )
+        {
+            if( aCellStyles.count( rModel.maName ) > 0 )
+                aConflictNameStyles.push_back( *aIt );
+            else
+                aCellStyles[ rModel.maName ] = *aIt;
+        }
+    }
+
+    // find unused names for all styles with conflicting names
+    for( CellStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
+    {
+        const CellStyleModel& rModel = (*aIt)->getModel();
+        OUString aUnusedName;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aUnusedName = OUStringBuffer( rModel.maName ).append( sal_Unicode( ' ' ) ).append( ++nIndex ).makeStringAndClear();
+        }
+        while( aCellStyles.count( aUnusedName ) > 0 );
+        aCellStyles[ aUnusedName ] = *aIt;
+    }
+
+    // set final names and create user-defined and modified built-in cell styles
+    aCellStyles.forEachMemWithKey( &CellStyle::finalizeImport );
+}
+
+sal_Int32 CellStyleBuffer::getDefaultXfId() const
+{
+    return mxDefStyle.get() ? mxDefStyle->getModel().mnXfId : -1;
+}
+
+OUString CellStyleBuffer::getDefaultStyleName() const
+{
+    return createCellStyle( mxDefStyle );
+}
+
+OUString CellStyleBuffer::createCellStyle( sal_Int32 nXfId ) const
+{
+    return createCellStyle( maStylesByXf.get( nXfId ) );
+}
+
+// private --------------------------------------------------------------------
+
+void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
+{
+    const CellStyleModel& rModel = xCellStyle->getModel();
+    if( rModel.mnXfId >= 0 )
+    {
+        // insert into the built-in map or user defined map
+        (rModel.isBuiltin() ? maBuiltinStyles : maUserStyles).push_back( xCellStyle );
+
+        // insert into the XF identifier map
+        OSL_ENSURE( maStylesByXf.count( rModel.mnXfId ) == 0, "CellStyleBuffer::insertCellStyle - multiple styles with equal XF identifier" );
+        maStylesByXf[ rModel.mnXfId ] = xCellStyle;
+
+        // remember default cell style
+        if( rModel.isDefaultStyle() )
+            mxDefStyle = xCellStyle;
+    }
+}
+
+OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) const
+{
+    if( rxCellStyle.get() )
+    {
+        rxCellStyle->createCellStyle();
+        const OUString& rStyleName = rxCellStyle->getFinalStyleName();
+        if( rStyleName.getLength() > 0 )
+            return rStyleName;
+    }
+    // on error: fallback to default style
+    return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() );
 }
 
 // ============================================================================
@@ -2852,35 +3011,8 @@ StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maPalette( rHelper ),
     maNumFmts( rHelper ),
-    maDefStyleName( lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() ) ),
-    mnDefStyleXf( -1 )
+    maCellStyles( rHelper )
 {
-    /*  Reserve style names that are built-in in Calc. This causes that
-        imported cell styles get different unused names and thus do not try to
-        overwrite these built-in styles. For BIFF4 workbooks (which contain a
-        separate list of cell styles per sheet), reserve all existing names if
-        current sheet is not the first sheet (this styles buffer will be
-        constructed again for every new sheet). This will create unique names
-        for styles in different sheets with the same name. */
-    bool bReserveAll = (getFilterType() == FILTER_BIFF) && (getBiff() == BIFF4) && isWorkbookFile() && (getCurrentSheetIndex() > 0);
-    try
-    {
-        Reference< XEnumerationAccess > xCellStylesEA( getStyleFamily( false ), UNO_QUERY_THROW );
-        Reference< XEnumeration > xCellStylesEnum( xCellStylesEA->createEnumeration(), UNO_SET_THROW );
-        while( xCellStylesEnum->hasMoreElements() )
-        {
-            Reference< XStyle > xCellStyle( xCellStylesEnum->nextElement(), UNO_QUERY_THROW );
-            if( bReserveAll || !xCellStyle->isUserDefined() )
-            {
-                Reference< XNamed > xCellStyleName( xCellStyle, UNO_QUERY_THROW );
-                // create an empty entry by using ::std::map<>::operator[]
-                maCellStylesByName[ xCellStyleName->getName() ];
-            }
-        }
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 FontRef StylesBuffer::createFont( sal_Int32* opnFontId )
@@ -2948,10 +3080,7 @@ NumberFormatRef StylesBuffer::importNumFmt( const AttributeList& rAttribs )
 
 CellStyleRef StylesBuffer::importCellStyle( const AttributeList& rAttribs )
 {
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
-    xCellStyle->importCellStyle( rAttribs );
-    insertCellStyle( xCellStyle );
-    return xCellStyle;
+    return maCellStyles.importCellStyle( rAttribs );
 }
 
 void StylesBuffer::importPaletteColor( RecordInputStream& rStrm )
@@ -2966,9 +3095,7 @@ void StylesBuffer::importNumFmt( RecordInputStream& rStrm )
 
 void StylesBuffer::importCellStyle( RecordInputStream& rStrm )
 {
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
-    xCellStyle->importCellStyle( rStrm );
-    insertCellStyle( xCellStyle );
+    maCellStyles.importCellStyle( rStrm );
 }
 
 void StylesBuffer::importPalette( BiffInputStream& rStrm )
@@ -3019,9 +3146,7 @@ void StylesBuffer::importXf( BiffInputStream& rStrm )
 
 void StylesBuffer::importStyle( BiffInputStream& rStrm )
 {
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
-    xCellStyle->importStyle( rStrm );
-    insertCellStyle( xCellStyle );
+    maCellStyles.importStyle( rStrm );
 }
 
 void StylesBuffer::finalizeImport()
@@ -3046,14 +3171,11 @@ void StylesBuffer::finalizeImport()
         maStyleXfs.forEachMem( &Xf::finalizeImport );
     maCellXfs.forEachMem( &Xf::finalizeImport );
 
-    // conditional formatting
-    maDxfs.forEachMem( &Dxf::finalizeImport );
+    // built-in and user defined cell styles
+    maCellStyles.finalizeImport();
 
-    // create the default cell style first
-    if( CellStyle* pDefStyle = maCellStylesById.get( mnDefStyleXf ).get() )
-        pDefStyle->createCellStyle();
-    // create user-defined and modified built-in cell styles
-    maCellStylesById.forEachMem( &CellStyle::finalizeImport );
+    // differential formatting (for conditional formatting)
+    maDxfs.forEachMem( &Dxf::finalizeImport );
 }
 
 sal_Int32 StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const
@@ -3092,7 +3214,7 @@ FontRef StylesBuffer::getFontFromCellXf( sal_Int32 nXfId ) const
 FontRef StylesBuffer::getDefaultFont() const
 {
     FontRef xDefFont;
-    if( const Xf* pXf = getStyleXf( mnDefStyleXf ).get() )
+    if( const Xf* pXf = getStyleXf( maCellStyles.getDefaultXfId() ).get() )
         xDefFont = pXf->getFont();
     // no font from styles - try first loaded font (e.g. BIFF2)
     if( !xDefFont )
@@ -3107,30 +3229,35 @@ const FontModel& StylesBuffer::getDefaultFontModel() const
     return xDefFont.get() ? xDefFont->getModel() : getTheme().getDefaultFontModel();
 }
 
-const OUString& StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
+OUString StylesBuffer::getDefaultStyleName() const
 {
-    if( CellStyle* pCellStyle = maCellStylesById.get( nXfId ).get() )
+    return maCellStyles.getDefaultStyleName();
+}
+
+OUString StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
+{
+    return maCellStyles.createCellStyle( nXfId );
+}
+
+OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
+{
+    OUString& rStyleName = maDxfStyles[ nDxfId ];
+    if( rStyleName.getLength() == 0 )
     {
-        pCellStyle->createCellStyle();
-        const OUString& rStyleName = pCellStyle->getFinalStyleName();
-        if( rStyleName.getLength() > 0 )
-            return rStyleName;
+        if( Dxf* pDxf = maDxfs.get( nDxfId ).get() )
+        {
+            rStyleName = OUStringBuffer( CREATE_OUSTRING( "ConditionalStyle_" ) ).append( nDxfId + 1 ).makeStringAndClear();
+            // create the style sheet (this may change rStyleName if such a style already exists)
+            Reference< XStyle > xStyle = createStyleObject( rStyleName, false );
+            // write style formatting properties
+            PropertySet aPropSet( xStyle );
+            pDxf->writeToPropertySet( aPropSet );
+        }
+        // on error: fallback to default style
+        if( rStyleName.getLength() == 0 )
+            rStyleName = maCellStyles.getDefaultStyleName();
     }
-    // on error: fallback to default style
-    return maDefStyleName;
-}
-
-const OUString& StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
-{
-    if( Dxf* pDxf = maDxfs.get( nDxfId ).get() )
-        return pDxf->createDxfStyle( nDxfId );
-    // on error: fallback to default style
-    return maDefStyleName;
-}
-
-const OUString& StylesBuffer::getDefaultStyleName() const
-{
-    return createCellStyle( mnDefStyleXf );
+    return rStyleName;
 }
 
 void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const
@@ -3178,43 +3305,6 @@ void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 n
 {
     if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
         pXf->writeToPropertySet( rPropSet );
-}
-
-void StylesBuffer::insertCellStyle( CellStyleRef xCellStyle )
-{
-    sal_Int32 nXfId = xCellStyle->getXfId();
-    OUString aStyleName = xCellStyle->calcInitialStyleName();
-    // #i1624# #i1768# ignore unnamed user styles
-    if( (nXfId >= 0) && (aStyleName.getLength() > 0) )
-    {
-        // insert into the XF identifier map
-        maCellStylesById[ nXfId ] = xCellStyle;
-
-        // find an unused name
-        OUString aUnusedName = aStyleName;
-        sal_Int32 nIndex = 0;
-        while( maCellStylesByName.count( aUnusedName ) > 0 )
-            aUnusedName = OUStringBuffer( aStyleName ).append( sal_Unicode( ' ' ) ).append( ++nIndex ).makeStringAndClear();
-
-        // move old existing style to new unused name, if new style is built-in
-        if( xCellStyle->isBuiltin() && (aStyleName != aUnusedName) )
-        {
-            CellStyleRef& rxCellStyle = maCellStylesByName[ aUnusedName ];
-            rxCellStyle = maCellStylesByName[ aStyleName ];
-            // the entry may be empty if the style name has been reserved in c'tor
-            if( rxCellStyle.get() )
-                rxCellStyle->setFinalStyleName( aUnusedName );
-            aUnusedName = aStyleName;
-        }
-
-        // insert new style
-        maCellStylesByName[ aUnusedName ] = xCellStyle;
-        xCellStyle->setFinalStyleName( aUnusedName );
-
-        // remember XF identifier of default cell style
-        if( xCellStyle->isDefaultStyle() )
-            mnDefStyleXf = nXfId;
-    }
 }
 
 // ============================================================================
