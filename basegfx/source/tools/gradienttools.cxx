@@ -94,9 +94,8 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5*fTargetSizeX,
                                    0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform =
-                o_rGradientInfo.maTextureTransform
-                * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            o_rGradientInfo.maTextureTransform *=
+                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add object translate
@@ -155,17 +154,13 @@ namespace basegfx
         o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
-        if( !bCircular )
+        // add texture rotate after scale to keep perpendicular angles
+        if( !bCircular && 0.0 != fAngle)
         {
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                const B2DPoint aCenter(0.5*fTargetSizeX,
-                                       0.5*fTargetSizeY);
-                o_rGradientInfo.maTextureTransform =
-                    o_rGradientInfo.maTextureTransform
-                    * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
-            }
+            const B2DPoint aCenter(0.5*fTargetSizeX,
+                                   0.5*fTargetSizeY);
+            o_rGradientInfo.maTextureTransform *=
+                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
@@ -232,9 +227,8 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5*fTargetSizeX,
                                    0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform =
-                o_rGradientInfo.maTextureTransform
-                * basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            o_rGradientInfo.maTextureTransform *=
+                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
