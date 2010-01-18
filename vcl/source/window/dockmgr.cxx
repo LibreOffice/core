@@ -532,6 +532,7 @@ private:
     bool                        mbTrackingEnabled;
     Point                       maDelta;
     Point                       maTearOffPosition;
+    bool                        mbGripAtBottom;
     void                        ImplSetBorder();
 
 public:
@@ -563,6 +564,7 @@ ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper*
     mbHighlight = FALSE;
     mbMoving = FALSE;
     mbTrackingEnabled = FALSE;
+    mbGripAtBottom = TRUE;
 
     ImplSetBorder();
 }
@@ -612,13 +614,22 @@ void ImplPopupFloatWin::Resize()
 
 Rectangle ImplPopupFloatWin::GetDragRect() const
 {
-    return Rectangle( 1, 1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
+    Rectangle aRect( 1,1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
+    if( mbGripAtBottom )
+    {
+        int height = GetOutputSizePixel().Height();
+        aRect.Top() = height - 3 - POPUP_DRAGHEIGHT;
+        aRect.Bottom() = aRect.Top() + 1 + POPUP_DRAGHEIGHT;
+    }
+
+    return aRect;
 }
 
 Point ImplPopupFloatWin::GetToolboxPosition() const
 {
     // return inner position where a toolbox could be placed
-    Point aPt( 1, 1+GetDragRect().getHeight() );    // grip + border
+    Point aPt( 1, 1 + (mbGripAtBottom ? 0 : GetDragRect().getHeight()) );    // grip + border
+
     return aPt;
 }
 
