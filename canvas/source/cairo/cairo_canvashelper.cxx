@@ -1794,12 +1794,12 @@ namespace cairocanvas
                 rendering::RGBColor* pOut( aRes.getArray() );
                 for( sal_Size i=0; i<nLen; i+=4 )
                 {
-                    const sal_Int8 nAlpha(pIn[3]);
-                    if( nAlpha )
+                    const double fAlpha((sal_uInt8)pIn[3]);
+                    if( fAlpha )
                         *pOut++ = rendering::RGBColor(
-                            vcl::unotools::toDoubleColor(pIn[2]/nAlpha),
-                            vcl::unotools::toDoubleColor(pIn[1]/nAlpha),
-                            vcl::unotools::toDoubleColor(pIn[0]/nAlpha));
+                            pIn[2]/fAlpha,
+                            pIn[1]/fAlpha,
+                            pIn[0]/fAlpha);
                     else
                         *pOut++ = rendering::RGBColor(0,0,0);
                     pIn += 4;
@@ -1819,13 +1819,13 @@ namespace cairocanvas
                 rendering::ARGBColor* pOut( aRes.getArray() );
                 for( sal_Size i=0; i<nLen; i+=4 )
                 {
-                    const sal_Int8 nAlpha(pIn[3]);
-                    if( nAlpha )
+                    const double fAlpha((sal_uInt8)pIn[3]);
+                    if( fAlpha )
                         *pOut++ = rendering::ARGBColor(
-                            vcl::unotools::toDoubleColor(nAlpha),
-                            vcl::unotools::toDoubleColor(pIn[2]/nAlpha),
-                            vcl::unotools::toDoubleColor(pIn[1]/nAlpha),
-                            vcl::unotools::toDoubleColor(pIn[0]/nAlpha));
+                            fAlpha/255.0,
+                            pIn[2]/fAlpha,
+                            pIn[1]/fAlpha,
+                            pIn[0]/fAlpha);
                     else
                         *pOut++ = rendering::ARGBColor(0,0,0,0);
                     pIn += 4;
