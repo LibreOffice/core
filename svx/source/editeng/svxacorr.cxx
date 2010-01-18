@@ -673,12 +673,16 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
 
     if ( rLocale.Language == OUString::createFromAscii( "fr" ) )
     {
-        OUString chars = OUString::createFromAscii( ":;!?" );
-        if ( rLocale.Country == OUString::createFromAscii( "CA" ) )
+        bool bFrCA = rLocale.Country == OUString::createFromAscii( "CA" );
+        OUString allChars = OUString::createFromAscii( ":;!?" );
+        OUString chars( allChars );
+        if ( bFrCA )
             chars = OUString::createFromAscii( ":" );
 
         sal_Unicode cChar = rTxt.GetChar( nEndPos );
-        if ( chars.indexOf( sal_Unicode( cChar ) ) != -1 )
+        bool bHasSpace = chars.indexOf( sal_Unicode( cChar ) ) != -1;
+        bool bIsSpecial = allChars.indexOf( sal_Unicode( cChar ) ) != -1;
+        if ( bIsSpecial )
         {
             // Check the previous char
             sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
@@ -700,7 +704,8 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                         rDoc.Delete( nPos, nEndPos );
 
                     // Add the non-breaking space at the end pos
-                    rDoc.Insert( nPos, CHAR_HARDBLANK );
+                    if ( bHasSpace )
+                        rDoc.Insert( nPos, CHAR_HARDBLANK );
                     bRet = true;
                 }
             }
