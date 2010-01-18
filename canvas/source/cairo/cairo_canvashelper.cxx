@@ -1072,14 +1072,15 @@ namespace cairocanvas
                     aEdge.append(aCandidate.getB2DPoint(0));
                     aEdge.append(basegfx::B2DPoint(0.0, 0.0));
 
-                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    for(sal_uInt32 b(0); b < nEdgeCount; b++)
                     {
-                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        const sal_uInt32 nNextIndex((b + 1) % nPointCount);
                         aEdge.setB2DPoint(1, aCandidate.getB2DPoint(nNextIndex));
-                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(a));
+                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(b));
                         aEdge.setPrevControlPoint(1, aCandidate.getPrevControlPoint(nNextIndex));
 
-                        doPolyPolygonImplementation( aEdge, aOperation,
+                        doPolyPolygonImplementation( basegfx::B2DPolyPolygon(aEdge),
+                                                     aOperation,
                                                      pCairo, pTextures,
                                                      mpSurfaceProvider,
                                                      xPolyPolygon->getFillRule() );
@@ -1276,7 +1277,7 @@ namespace cairocanvas
         cairo_save( mpCairo.get() );
 
         useStates( viewState, renderState, true );
-        doPolyPolygonPath( xPolyPolygon, Fill, &textures );
+        doPolyPolygonPath( xPolyPolygon, Fill, false, &textures );
 
         cairo_restore( mpCairo.get() );
     }
