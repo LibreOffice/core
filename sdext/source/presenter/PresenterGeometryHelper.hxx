@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <vector>
 
 namespace css = ::com::sun::star;
