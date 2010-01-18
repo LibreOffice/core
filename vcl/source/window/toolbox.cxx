@@ -229,6 +229,22 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
     }
     return width;
 }
+
+ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
+{
+    ButtonType tmpButtonType = defaultType;
+    ToolBoxItemBits nBits( pItem->mnBits & 0x300 );
+    if ( nBits & TIB_TEXTICON ) // item has custom setting
+    {
+        tmpButtonType = BUTTON_SYMBOLTEXT;
+        if ( nBits == TIB_TEXT_ONLY )
+            tmpButtonType = BUTTON_TEXT;
+        else if ( nBits == TIB_ICON_ONLY )
+            tmpButtonType = BUTTON_SYMBOL;
+    }
+    return tmpButtonType;
+}
+
 // -----------------------------------------------------------------------
 
 void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
@@ -1992,12 +2008,13 @@ BOOL ToolBox::ImplCalcItem()
                     bText = FALSE;
                 else
                     bText = TRUE;
-
+                ButtonType tmpButtonType = determineButtonType( &(*it), meButtonType ); // default to toolbox setting
                 if ( bImage || bText )
                 {
+
                     it->mbEmptyBtn = FALSE;
 
-                    if ( meButtonType == BUTTON_SYMBOL )
+                    if ( tmpButtonType == BUTTON_SYMBOL )
                     {
                         // we're drawing images only
                         if ( bImage || !bText )
@@ -2011,7 +2028,7 @@ BOOL ToolBox::ImplCalcItem()
                             it->mbVisibleText = TRUE;
                         }
                     }
-                    else if ( meButtonType == BUTTON_TEXT )
+                    else if ( tmpButtonType == BUTTON_TEXT )
                     {
                         // we're drawing text only
                         if ( bText || !bImage )
@@ -3625,7 +3642,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     // determine what has to be drawn on the button: image, text or both
     BOOL bImage;
     BOOL bText;
-    pItem->DetermineButtonDrawStyle( meButtonType, bImage, bText );
+    ButtonType tmpButtonType = determineButtonType( pItem, meButtonType ); // default to toolbox setting
+    pItem->DetermineButtonDrawStyle( tmpButtonType, bImage, bText );
 
     // compute output values
     long    nBtnWidth = aBtnSize.Width()-SMALLBUTTON_HSIZE;
