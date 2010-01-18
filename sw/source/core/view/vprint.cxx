@@ -562,7 +562,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         // 0 : all pages (left & right)
         // 1 : left pages
         // 2 : right pages
-        DBG_ASSERT( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRigthPage(),
+        DBG_ASSERT( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
                 "unexpected value combination" );
         sal_Int16 nPagesChoice = 0;
         if (rDefaultPrintData.IsPrintLeftPage() && !rDefaultPrintData.IsPrintRightPage())
