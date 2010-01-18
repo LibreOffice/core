@@ -791,15 +791,19 @@ bool getJREInfoByPath(const rtl::OUString& path,
 /** Checks if the path is a directory. Links are resolved.
     In case of an error the returned string has the length 0.
     Otherwise the returned string is the "resolved" file URL.
-
  */
-OUString resolveDirPath(const OUString & dirUrl)
+OUString resolveDirPath(const OUString & path)
 {
-     OUString ret;
+    OUString ret;
+    OUString sResolved;
+    //getAbsoluteFileURL also resolves links
+    if (File::getAbsoluteFileURL(
+            OUSTR("file:///"), path, sResolved) != File::E_None)
+        return OUString();
 
     //check if this is a valid path and if it is a directory
     DirectoryItem item;
-    if (DirectoryItem::get(dirUrl, item) == File::E_None)
+    if (DirectoryItem::get(sResolved, item) == File::E_None)
     {
         FileStatus status(FileStatusMask_Type |
                           FileStatusMask_LinkTargetURL |
@@ -808,7 +812,7 @@ OUString resolveDirPath(const OUString & dirUrl)
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Directory)
         {
-            ret = dirUrl;
+            ret = sResolved;
         }
     }
     else
@@ -824,7 +828,7 @@ OUString resolveFilePath(const OUString & path)
     OUString sResolved;
 
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path to a file or and if it is a link
