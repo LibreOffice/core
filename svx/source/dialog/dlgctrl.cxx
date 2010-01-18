@@ -60,6 +60,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include "linectrl.hrc"
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
@@ -1202,7 +1203,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             OutputDevice* pDevice = rUDEvt.GetDevice();
 
             ULONG nOldDrawMode = pDevice->GetDrawMode();
-            pDevice->SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+            pDevice->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
             XHatch& rXHatch = mpList->GetHatch( rUDEvt.GetItemId() )->GetHatch();
             MapMode aMode( MAP_100TH_MM );
@@ -1774,6 +1775,30 @@ void LineLB::Fill( const XDashList* pList )
     SetUpdateMode( TRUE );
 }
 
+void LineLB::FillStyles()
+{
+    ResMgr& rMgr = DIALOG_MGR();
+
+    // Linienstile
+    Clear();
+    InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, rMgr ) ) );
+
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
+    Color aSourceColors[2];
+    Color aDestColors[2];
+
+    aSourceColors[0] = Color( COL_WHITE );
+    aSourceColors[1] = Color( COL_BLACK );
+
+    aDestColors[0] = rStyles.GetFieldColor();
+    aDestColors[1] = rStyles.GetFieldTextColor();
+
+    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
+    Image aSolidLine ( aBitmap );
+    InsertEntry( String( ResId( RID_SVXSTR_SOLID, rMgr ) ), aSolidLine );
+}
+
 /************************************************************************/
 
 void LineLB::Append( XDashEntry* pEntry, Bitmap* pBmp )
@@ -1943,7 +1968,7 @@ SvxPreviewBase::SvxPreviewBase( Window* pParent, const ResId& rResId )
 {
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle(WINDOW_BORDER_MONO);
-    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     SetMapMode(MAP_100TH_MM);
 
     // init model
@@ -2006,7 +2031,7 @@ void SvxPreviewBase::StateChanged(StateChangedType nType)
 
 void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    SetDrawMode(GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
+    SetDrawMode(GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
 
     if((DATACHANGED_SETTINGS == rDCEvt.GetType()) && (rDCEvt.GetFlags() & SETTINGS_STYLE))
     {

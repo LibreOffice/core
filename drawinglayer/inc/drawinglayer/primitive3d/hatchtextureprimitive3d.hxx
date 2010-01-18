@@ -44,16 +44,32 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** HatchTexturePrimitive3D class
+
+            HatchTexturePrimitive3D is derived from GroupPrimitive3D, but implements
+            a decomposition which is complicated enough for buffering. Since the group
+            primitive has no default buffering, it is necessary here to add a local
+            buffering mechanism for the decomposition
+         */
         class HatchTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// the hatch definition
             attribute::FillHatchAttribute                   maHatch;
 
+            /// the buffered decomposed hatch
+            Primitive3DSequence                             maBuffered3DDecomposition;
+
         protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            /// helper: local decomposition
+            Primitive3DSequence impCreate3DDecomposition() const;
+
+            /// local access methods to maBufferedDecomposition
+            const Primitive3DSequence& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
+            void setBuffered3DDecomposition(const Primitive3DSequence& rNew) { maBuffered3DDecomposition = rNew; }
 
         public:
+            /// constructor
             HatchTexturePrimitive3D(
                 const attribute::FillHatchAttribute& rHatch,
                 const Primitive3DSequence& rChildren,
@@ -61,13 +77,16 @@ namespace drawinglayer
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const attribute::FillHatchAttribute& getHatch() const { return maHatch; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// local decomposition.
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

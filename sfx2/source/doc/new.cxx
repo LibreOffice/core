@@ -37,8 +37,8 @@
 #ifndef _SVMEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>

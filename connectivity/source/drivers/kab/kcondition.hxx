@@ -34,7 +34,7 @@
 #ifndef _COMPHELPER_TYPES_H_
 #include <comphelper/types.hxx>
 #endif
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include <connectivity/dbexception.hxx>
 
 namespace connectivity

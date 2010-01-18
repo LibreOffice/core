@@ -32,7 +32,7 @@
 #define UUI_IDS_HRC
 
 #ifndef _SOLAR_HRC
-#include "svtools/solar.hrc"
+#include "svl/solar.hrc"
 #endif
 #ifndef _ERRCODE_HXX
 #include "tools/errcode.hxx"

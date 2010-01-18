@@ -186,6 +186,7 @@ class Desktop : public Application
         static sal_Bool         _bTasksSaved;
 
         static void             retrieveCrashReporterState();
+        static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
         static void                         createAcceptor(const OUString& aDescription);

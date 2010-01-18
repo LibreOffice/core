@@ -50,7 +50,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <svtools/converter.hxx>
+#include <svl/converter.hxx>
 #include "calc/CConnection.hxx"
 #include "calc/CColumns.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
@@ -58,7 +58,7 @@
 #include <osl/thread.h>
 #include <tools/config.hxx>
 #include <comphelper/sequence.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>

@@ -38,7 +38,7 @@
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
 
-#include "svtools/moduleoptions.hxx"
+#include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
 #include "com/sun/star/frame/XDispatchProvider.hpp"
@@ -173,6 +173,7 @@ namespace framework
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
         virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
         virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };

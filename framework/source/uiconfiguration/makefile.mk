@@ -43,7 +43,6 @@ ENABLE_EXCEPTIONS=	TRUE
 
 SLOFILES=			\
                     $(SLO)$/uiconfigurationmanager.obj          \
-                    $(SLO)$/uiconfigurationmanagerimpl.obj      \
                     $(SLO)$/moduleuiconfigurationmanager.obj    \
                     $(SLO)$/moduleuicfgsupplier.obj             \
                     $(SLO)$/windowstateconfiguration.obj        \

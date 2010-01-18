@@ -35,7 +35,7 @@
 
 #include "sqlparserclient.hxx"
 #include "typeconversionclient.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/XColumn.hpp>

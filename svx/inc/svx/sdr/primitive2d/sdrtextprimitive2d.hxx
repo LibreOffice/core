@@ -52,7 +52,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrTextPrimitive2D : public BasePrimitive2D
+        class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // The text model data; this sould later just be the OutlinerParaObject or
@@ -131,7 +131,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrContourTextPrimitive2D(
@@ -173,7 +173,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrPathTextPrimitive2D(
@@ -219,10 +219,11 @@ namespace drawinglayer
             unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
             unsigned                                mbCellText : 1;         // this is a cell text as block text
             unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
+            unsigned                                mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrBlockTextPrimitive2D(
@@ -234,7 +235,8 @@ namespace drawinglayer
                 bool bFixedCellHeight,
                 bool bUnlimitedPage,
                 bool bCellText,
-                bool bWordWrap);
+                bool bWordWrap,
+                bool bClipOnBounds);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
@@ -244,6 +246,7 @@ namespace drawinglayer
             bool getUnlimitedPage() const { return mbUnlimitedPage; }
             bool getCellText() const { return mbCellText; }
             bool getWordWrap() const { return mbWordWrap; }
+            bool getClipOnBounds() const { return mbClipOnBounds; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -274,7 +277,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrStretchTextPrimitive2D(
