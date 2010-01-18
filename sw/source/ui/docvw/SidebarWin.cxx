@@ -134,6 +134,11 @@ SwSidebarWin::~SwSidebarWin()
         delete mpOutlinerView;
     }
 
+    if (mpSidebarTxtControl)
+    {
+        delete mpSidebarTxtControl;
+    }
+
     if (mpOutliner)
     {
         delete mpOutliner;
@@ -149,11 +154,6 @@ SwSidebarWin::~SwSidebarWin()
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
         delete mpMetadataDate;
-    }
-
-    if (mpSidebarTxtControl)
-    {
-        delete mpSidebarTxtControl;
     }
 
     if (mpVScrollbar)
