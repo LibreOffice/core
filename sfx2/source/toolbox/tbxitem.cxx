@@ -219,11 +219,13 @@ struct SfxToolBoxControl_Impl
     Window*                 mpPopupWindow;
     Reference< XUIElement > mxUIElement;
     ULONG                   mnAsyncEndPopupModeEvent;
+    ULONG                   mnAsyncDeleteWindowEvent;
     EndPopupModeData        maEndPopupModeData;
     Link                    maPopupModeEndHdl;
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
     DECL_LINK( AsyncEndPopupModeHdl, void* );
+    DECL_STATIC_LINK( SfxToolBoxControl_Impl, AsyncDeleteWindowHdl, Window* );
 
     ~SfxToolBoxControl_Impl();
 };
@@ -252,6 +254,13 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
                 {
                     delete mpPopupWindow;
                     mpPopupWindow = 0;
+                }
+                break;
+            case VCLEVENT_WINDOW_CLOSE:
+                if( pWindow == mpFloatingWindow )
+                {
+                    Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), (void*)mpFloatingWindow );
+                    mpFloatingWindow = 0;
                 }
                 break;
             case VCLEVENT_WINDOW_ENDPOPUPMODE:
@@ -293,21 +302,27 @@ IMPL_LINK( SfxToolBoxControl_Impl, AsyncEndPopupModeHdl, void*, EMPTYARG )
             pFloat->PopupModeEnd();
         else
         {
+            Window *pTemp = mpPopupWindow;
             maPopupModeEndHdl.Call(0);
 
             if( !maEndPopupModeData.mbTearoff )
             {
-                SystemWindow* pSystemWindow = dynamic_cast< SystemWindow* >( mpPopupWindow );
+                SystemWindow* pSystemWindow = dynamic_cast< SystemWindow* >( pTemp );
 
                 if( pSystemWindow )
                     pSystemWindow->Close();
 
-                Window *pTmp = mpPopupWindow;
+                Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), (void*)pTemp );
                 mpPopupWindow = 0;
-                delete pTmp;
             }
         }
     }
+    return 0;
+}
+
+IMPL_STATIC_LINK( SfxToolBoxControl_Impl, AsyncDeleteWindowHdl, Window*, pWindow )
+{
+    delete pWindow;
     return 0;
 }
 
