@@ -1356,3 +1356,36 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, USHORT nStyle )
 
     return aRect;
 }
+
+// -----------------------------------------------------------------------
+
+void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical )
+{
+    Point aStart( rStart ), aStop( rStop );
+    const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
+
+    mpOutDev->Push( PUSH_LINECOLOR );
+    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+        mpOutDev->SetLineColor( Color( COL_BLACK ) );
+    else
+        mpOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
+
+    mpOutDev->DrawLine( aStart, aStop );
+    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    {
+        mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
+        if( bVertical )
+        {
+            aStart.X()++;
+            aStop.X()++;
+        }
+        else
+        {
+            aStart.Y()++;
+            aStop.Y()++;
+        }
+        mpOutDev->DrawLine( aStart, aStop );
+    }
+    mpOutDev->Pop();
+}
+

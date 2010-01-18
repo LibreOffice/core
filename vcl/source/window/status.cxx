@@ -65,13 +65,15 @@ public:
 
     VirtualDevice*      mpVirDev;
     long                mnItemBorderWidth;
-    BOOL                mbTopBorder:1;
+    bool                mbTopBorder:1;
+    bool                mbDrawItemFrames:1;
 };
 
 StatusBar::ImplData::ImplData()
 {
     mpVirDev = NULL;
-    mbTopBorder = FALSE;
+    mbTopBorder = false;
+    mbDrawItemFrames = false;
     mnItemBorderWidth = 0;
 }
 
@@ -355,9 +357,7 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
 {
     Rectangle       aRect;
     ImplStatusItem* pItem;
-
     pItem = mpItemList->GetObject( nPos );
-
     if ( pItem )
     {
         if ( pItem->mbVisible )
@@ -372,6 +372,25 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
     }
 
     return aRect;
+}
+
+// -----------------------------------------------------------------------
+
+USHORT StatusBar::ImplGetFirstVisiblePos() const
+{
+    ImplStatusItem* pItem;
+
+    for( USHORT nPos = 0; nPos < mpItemList->Count(); nPos++ )
+    {
+        pItem = mpItemList->GetObject( nPos );
+        if ( pItem )
+        {
+            if ( pItem->mbVisible )
+                return nPos;
+        }
+    }
+
+    return ~0;
 }
 
 // -----------------------------------------------------------------------
@@ -475,17 +494,36 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         SetClipRegion();
 
     // Frame ausgeben
-    if ( bDrawFrame && !(pItem->mnBits & SIB_FLAT) )
+    if ( bDrawFrame )
     {
-        USHORT nStyle;
+        if( mpImplData->mbDrawItemFrames )
+        {
+            if( !(pItem->mnBits & SIB_FLAT) )
+            {
+                USHORT nStyle;
 
-        if ( pItem->mnBits & SIB_IN )
-            nStyle = FRAME_DRAW_IN;
-        else
-            nStyle = FRAME_DRAW_OUT;
+                if ( pItem->mnBits & SIB_IN )
+                    nStyle = FRAME_DRAW_IN;
+                else
+                    nStyle = FRAME_DRAW_OUT;
 
-        DecorationView aDecoView( this );
-        aDecoView.DrawFrame( aRect, nStyle );
+                DecorationView aDecoView( this );
+                aDecoView.DrawFrame( aRect, nStyle );
+            }
+        }
+        else if( nPos != ImplGetFirstVisiblePos() )
+        {
+            // draw separator
+            Point aFrom( aRect.TopLeft() );
+            aFrom.X()--;
+            aFrom.Y()++;
+            Point aTo( aRect.BottomLeft() );
+            aTo.X()--;
+            aTo.Y()--;
+
+            DecorationView aDecoView( this );
+            aDecoView.DrawSeparator( aFrom, aTo );
+        }
     }
 
     if ( !ImplIsRecordLayout() )
@@ -693,8 +731,6 @@ void StatusBar::ImplCalcProgressRect()
     }
     if( ! bNativeOK )
         maPrgsTxtPos.Y()    = mnTextY;
-
-
 }
 
 // -----------------------------------------------------------------------
@@ -1699,7 +1735,8 @@ Size StatusBar::CalcWindowSizePixel() const
         }
     }
 
-    if( pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
+    if( mpImplData->mbDrawItemFrames &&
+        pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
     {
         ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
         Region aBound, aContent;

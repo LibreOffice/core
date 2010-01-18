@@ -36,6 +36,7 @@
 #include <vcl/symbol.hxx>
 
 class Rectangle;
+class Point;
 class Color;
 class OutputDevice;
 
@@ -106,6 +107,7 @@ public:
                                             USHORT nStyle = FRAME_HIGHLIGHT_OUT );
     Rectangle           DrawFrame( const Rectangle& rRect, USHORT nStyle = FRAME_DRAW_OUT );
     Rectangle           DrawButton( const Rectangle& rRect, USHORT nStyle );
+    void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
 };
 
 #endif // _SV_DECOVIEW_HXX
