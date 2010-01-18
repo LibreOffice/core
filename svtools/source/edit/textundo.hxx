@@ -30,7 +30,7 @@
 #ifndef _TEXTUNDO_HXX
 #define _TEXTUNDO_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 class TextEngine;
 

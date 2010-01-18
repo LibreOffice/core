@@ -38,16 +38,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#if defined(IRIX)
-#include <ctime>
-#endif
 #include <sys/time.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
 
-#if defined(SOLARIS) || defined(IRIX)
+#if defined(SOLARIS)
 #include <sal/alloca.h>
 #include <osl/module.h>
 #endif
@@ -898,7 +895,7 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties

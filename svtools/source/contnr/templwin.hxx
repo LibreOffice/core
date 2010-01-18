@@ -38,7 +38,7 @@
 #include "fileview.hxx"
 #include "ivctrl.hxx"
 #include <svtools/svmedit2.hxx>
-#include <svtools/restrictedpaths.hxx>
+#include <svl/restrictedpaths.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 

@@ -80,3 +80,56 @@ BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
     }
     return bProcessed;
 }
+
+VclEventListeners2::VclEventListeners2()
+{
+}
+
+VclEventListeners2::~VclEventListeners2()
+{
+}
+
+void VclEventListeners2::addListener( const Link& i_rLink )
+{
+    // ensure uniqueness
+    for( std::list< Link >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    {
+        if( *it == i_rLink )
+            return;
+    }
+    m_aListeners.push_back( i_rLink );
+}
+
+void VclEventListeners2::removeListener( const Link& i_rLink )
+{
+    size_t n = m_aIterators.size();
+    for( size_t i = 0; i < n; i++ )
+    {
+        if( m_aIterators[i].m_aIt != m_aListeners.end() && *m_aIterators[i].m_aIt == i_rLink )
+        {
+            m_aIterators[i].m_bWasInvalidated = true;
+            ++m_aIterators[i].m_aIt;
+        }
+    }
+    m_aListeners.remove( i_rLink );
+}
+
+void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
+{
+    vcl::DeletionListener aDel( this );
+
+    m_aIterators.push_back( ListenerIt() );
+    size_t nIndex = m_aIterators.size() - 1;
+    m_aIterators[ nIndex ].m_aIt = m_aListeners.begin();
+    while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )
+    {
+        m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );
+        if( m_aIterators[ nIndex ].m_bWasInvalidated )
+            // check if the current element was removed and the iterator increased in the meantime
+            m_aIterators[ nIndex ].m_bWasInvalidated = false;
+        else
+            ++m_aIterators[ nIndex ].m_aIt;
+    }
+    m_aIterators.pop_back();
+}
+
