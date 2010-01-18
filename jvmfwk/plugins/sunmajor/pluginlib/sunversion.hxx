@@ -92,7 +92,6 @@ protected:
 
     PreRelease m_preRelease;
 public:
-    SunVersion();
     SunVersion(const char * szVer);
     SunVersion(const rtl::OUString& usVer);
     ~SunVersion();
