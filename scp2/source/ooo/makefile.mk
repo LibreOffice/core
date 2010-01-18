@@ -297,7 +297,6 @@ PARFILES +=                        \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
-        mergemodules_ooo.par       \
         vc_redist.par              \
         windowscustomaction_ooo.par
 .ENDIF

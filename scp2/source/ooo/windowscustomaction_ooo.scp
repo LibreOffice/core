@@ -394,7 +394,7 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
-	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
+	Assignment2 = ("InstallExecuteSequence", "VersionNT < 600", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Full_Isofficerunning
@@ -403,7 +403,7 @@ WindowsCustomAction gid_Customaction_Full_Isofficerunning
 	Source = "shlxtmsi.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "RunningOffice");
+	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 Or Not PATCH", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
@@ -412,7 +412,7 @@ WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
 	Source = "lngpckinsthlp.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+	Assignment1 = ("InstallExecuteSequence", "PATCH And VersionNT < 600", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_CheckPatchList
