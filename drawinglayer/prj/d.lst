@@ -39,6 +39,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\shadowprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\shadowprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\structuretagprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\structuretagprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\textenumsprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textenumsprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\texteffectprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\texteffectprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\textlayoutdevice.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textlayoutdevice.hxx
 ..\inc\drawinglayer\primitive2d\textprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textprimitive2d.hxx
@@ -98,6 +99,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\attribute
 ..\inc\drawinglayer\attribute\fillattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillattribute.hxx
 ..\inc\drawinglayer\attribute\fillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillbitmapattribute.hxx
+..\inc\drawinglayer\attribute\fontattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fontattribute.hxx
 ..\inc\drawinglayer\attribute\materialattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\materialattribute3d.hxx
 ..\inc\drawinglayer\attribute\sdrallattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrallattribute3d.hxx
 ..\inc\drawinglayer\attribute\sdrattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrattribute.hxx
