@@ -220,7 +220,7 @@ void XMLIndexTOCContext::StartElement(
                 //    index
 
                 // preliminaries
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                 OUString sMarker(RTL_CONSTASCII_USTRINGPARAM(" "));
 #else
                 OUString sMarker(RTL_CONSTASCII_USTRINGPARAM("Y"));

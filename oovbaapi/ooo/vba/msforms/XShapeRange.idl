@@ -44,9 +44,25 @@
 
 module ooo {  module vba { module msforms {
 
+interface XLineFormat;
+interface XFillFormat;
 interface XShapeRange
 {
     interface ooo::vba::XCollection;
+
+    [attribute] double Height;
+    [attribute] double Width;
+    [attribute] double Left;
+    [attribute] double Top;
+    [attribute, readonly] XLineFormat Line;
+    [attribute, readonly] XFillFormat Fill;
+    [attribute] boolean LockAspectRatio;
+    [attribute] boolean LockAnchor;
+    [attribute] long RelativeHorizontalPosition;
+    [attribute] long RelativeVerticalPosition;
+
+    any TextFrame();
+    any WrapFormat();
     void Select();
     XShape Group();
     void IncrementRotation( [in] double Increment );

@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

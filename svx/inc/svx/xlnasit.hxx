@@ -32,7 +32,7 @@
 #define _SVX_XLNASIT_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

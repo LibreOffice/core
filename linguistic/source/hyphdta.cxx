@@ -39,7 +39,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 //using namespace utl;

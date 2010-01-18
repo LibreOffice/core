@@ -31,14 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/customshapeproperties.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itemset.hxx>
+#include <svl/smplhint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

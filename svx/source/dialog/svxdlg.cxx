@@ -32,12 +32,13 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svxdlg.hxx>
-#include "cuilib.hxx"
-
-#include <osl/module.hxx>
-#include <tools/string.hxx>
 
 SvxAbstractDialogFactory* SvxAbstractDialogFactory::Create()
 {
     return (SvxAbstractDialogFactory*) VclAbstractDialogFactory::Create();
 }
+
+SvxAbstractDialogFactory::~SvxAbstractDialogFactory()
+{
+}
+

@@ -86,6 +86,8 @@ protected:
     SdrLayerID                  nLayer;
     Color                       aOldLineColor;
     sal_Int32                   nLineWidth;
+    basegfx::B2DLineJoin        maLineJoin;
+    XDash                       maDash;
 
     sal_Bool                    bMov;
     sal_Bool                    bSize;

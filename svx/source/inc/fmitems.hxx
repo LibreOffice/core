@@ -31,7 +31,7 @@
 #define _SVX_FMITEMS_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <comphelper/uno3.hxx>
 //  FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
 FORWARD_DECLARE_INTERFACE(uno,Any)
