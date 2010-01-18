@@ -1459,8 +1459,9 @@ void XclImpTextObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
                         com::sun::star::beans::PropertyValue aTextRotateAngle;
                         aTextRotateAngle.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
                         aTextRotateAngle.Value <<= fAngle;
-                        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                        rGeometryItem.SetPropertyValue( aTextRotateAngle );
+                        SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+                        aGeometryItem.SetPropertyValue( aTextRotateAngle );
+                        pObjCustomShape->SetMergedItem( aGeometryItem );
                     }
                     eWriteMode = csst::WritingMode_TB_RL;
                     switch( maTextData.maData.GetHorAlign() )
