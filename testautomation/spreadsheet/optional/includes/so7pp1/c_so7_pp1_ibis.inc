@@ -63,7 +63,7 @@ testcase tIBIS111099
         if SwitchControlDesignMode.getState(2) = 0 then 
             printlog "OK, design mode is disabled"
         else
-            warnlog "Document is opened in design mode -> #111099#"
+            warnlog "#i108315# Document is opened in design mode -> #111099#"
         end if
     else
         printlog "Form controls toolbar was not enabled."
