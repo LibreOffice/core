@@ -1104,6 +1104,7 @@ storeError OStorePageBIOS::scanNext (
 
         // Verify PageHead.
         eErrCode = aPageHead.verify (nAddr);
+        if (eErrCode != store_E_None)
             continue;
 
         // Check PageHead Magic number.
