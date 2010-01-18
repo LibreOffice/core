@@ -48,6 +48,8 @@
 #include "saldisp.hxx"
 #include "vcl/svapp.hxx"
 
+#include "cairo/cairo.h"
+
 // initialize statics
 BOOL GtkSalGraphics::bThemeChanged = TRUE;
 BOOL GtkSalGraphics::bNeedPixmapPaint = FALSE;
@@ -3459,15 +3461,22 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // preferred icon style
     gchar* pIconThemeName = NULL;
     g_object_get( gtk_settings_get_default(), "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
-    aStyleSet.SetPreferredSymbolsStyleName( OUString::createFromAscii(pIconThemeName) );
-    g_free (pIconThemeName);
+    aStyleSet.SetPreferredSymbolsStyleName( OUString::createFromAscii( pIconThemeName ) );
+    g_free( pIconThemeName );
 
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
 
-    const cairo_font_options_t *pNewOptions = 0;
-    if (GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ))
-        pNewOptions = gdk_screen_get_font_options(pScreen);
+    const cairo_font_options_t* pNewOptions = NULL;
+    if( GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ) )
+    {
+#if !GTK_CHECK_VERSION(2,8,1)
+    static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
+        (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
+    if( gdk_screen_get_font_options != NULL )
+#endif
+        pNewOptions = gdk_screen_get_font_options( pScreen );
+    }
     aStyleSet.SetCairoFontOptions( pNewOptions );
 
     // finally update the collected settings
