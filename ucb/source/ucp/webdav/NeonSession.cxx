@@ -1482,7 +1482,6 @@ void NeonSession::LOCK( const ::rtl::OUString & inPath,
         break;
     default:
         throw DAVException( DAVException::DAV_INVALID_ARG );
-        break;
     }
 
     // Set the lock timeout
