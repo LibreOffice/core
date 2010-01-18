@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------------------------------------------------
 
-String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
+String GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
