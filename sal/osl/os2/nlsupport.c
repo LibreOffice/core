@@ -411,9 +411,6 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
-#ifdef IRIX
-    char env_buf[80];
-#endif
     char locale_buf[64];
 
     /* convert rtl_Locale to locale string */
@@ -421,11 +418,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LC_ALL=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -433,11 +426,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LC_CTYPE" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LC_CTYPE=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -445,11 +434,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LANG" ) ) {
-#if defined( IRIX )
-            snprintf(env_buf, sizeof(env_buf), "LANG=%s", locale_buf);
-            env_buf[sizeof(env_buf)] = '\0';
-            putenv(env_buf);
-#elif defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( __EMX__ )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );

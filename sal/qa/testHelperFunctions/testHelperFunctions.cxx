@@ -38,7 +38,7 @@
 
 #include "stringhelper.hxx"
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // void isJaBloed()
 // {
