@@ -930,8 +930,13 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             values.push_back(s);
 // #i90847# OOo 2.x does stupid things if value-type="string";
 // fortunately string is default anyway, so we can just omit it
-//            as.push_back(std::make_pair(vt,
-//                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+// #i107502#: however, OOo 2.x only reads 4 user-defined without @value-type
+// => best backward compatibility: first 4 without @value-type, rest with
+            if (4 <= i)
+            {
+                as.push_back(std::make_pair(vt,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+            }
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
