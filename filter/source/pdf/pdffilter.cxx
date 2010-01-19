@@ -35,7 +35,7 @@
 #include "pdfexport.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <svtools/outstrm.hxx>
+#include <svl/outstrm.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
 // -------------

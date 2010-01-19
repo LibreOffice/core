@@ -103,6 +103,11 @@ public:
         @param rT    end handle of cell
     */
     virtual void endCell(const T & rT) = 0;
+
+    virtual T* getTable( )
+    {
+        return NULL;
+    };
 };
 
 template <typename T, typename PropertiesPointer>
@@ -151,16 +156,16 @@ class TableManager
     /**
        properties of the current cell
     */
-    PropertiesPointer mpCellProps;
+    vector< PropertiesPointer > mpCellProps;
 
     /**
         properties of the current row
     */
-    PropertiesPointer mpRowProps;
+    vector< PropertiesPointer > mpRowProps;
 
     /**
-       properties of the current table
-    */
+        properties of the current table: don't use them directly.
+     */
     PropertiesPointer mpTableProps;
 
     /**
@@ -168,6 +173,7 @@ class TableManager
     */
     T mCurHandle;
 
+    T* mpInnerTable;
     /**
        stack of table data
 
@@ -230,7 +236,6 @@ protected:
     /** let the derived class clear their table related data
      */
     virtual void clearData();
-
 
 public:
     TableManager();
@@ -351,7 +356,7 @@ public:
 template <typename T, typename PropertiesPointer>
 TableManager<T, PropertiesPointer>::TableManager()
 : mbRowEnd(false), mbInCell(false), mbCellEnd(false), mnTableDepthNew(0),
-  mnTableDepth(0)
+  mnTableDepth(0), mpInnerTable( NULL )
 {
 }
 
@@ -398,19 +403,30 @@ void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startLevel()
 {
+#if DEBUG
+    std::clog << "TableManager::startLevel()" << std::endl;
+#endif
     typename TableData<T, PropertiesPointer>::Pointer_t pTableData
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
     mTableDataStack.push(pTableData);
+
+    PropertiesPointer pEmptyProps;
+    cellProps( pEmptyProps );
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endLevel()
 {
+#if DEBUG
+    std::clog << "TableManager::endLevel()" << std::endl;
+#endif
     if (mpTableDataHandler.get() != NULL)
         resolveCurrentTable();
-
     mTableDataStack.pop();
+
+    if ( mpCellProps.size( ) > 0 )
+        mpCellProps.pop_back( );
 }
 
 template <typename T, typename PropertiesPointer>
@@ -426,12 +442,6 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endParagraphGroup()
 {
     sal_Int32 nTableDepthDifference = mnTableDepthNew - mnTableDepth;
-    while (nTableDepthDifference > 0)
-    {
-        startLevel();
-
-        --nTableDepthDifference;
-    }
     while (nTableDepthDifference < 0)
     {
         endLevel();
@@ -447,14 +457,23 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
     if (mbRowEnd)
     {
         endOfRowAction();
-        pTableData->endRow(mpRowProps);
-        mpRowProps.reset();
+        pTableData->endRow( mpRowProps.back( ) );
+        mpRowProps.back( ).reset();
     }
-
-    else if (mbInCell)
+    else if ( mbInCell )
     {
         if (! pTableData->isCellOpen())
-            pTableData->addCell(mCurHandle, mpCellProps);
+        {
+            if ( mpInnerTable )
+            {
+                pTableData->addCell( *mpInnerTable, mpCellProps.back( ) );
+                mpInnerTable = NULL;
+            }
+            else
+            {
+                pTableData->addCell( mCurHandle, mpCellProps.back( ) );
+            }
+        }
 
         if (mbCellEnd)
         {
@@ -462,7 +481,8 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
             pTableData->endCell(mCurHandle);
         }
     }
-    mpCellProps.reset();
+    if ( mpCellProps.size( ) > 0 )
+        mpCellProps.back().reset( );
 }
 
 template <typename T, typename PropertiesPointer>
@@ -538,10 +558,15 @@ void TableManager<T, PropertiesPointer>::utext(const sal_uInt8 * data, size_t le
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 {
-    if(mpCellProps.get())
-        mpCellProps->insert( pProps );
+    if ( mpCellProps.size( ) == mTableDataStack.size( ) )
+    {
+        if ( mpCellProps.back( ).get( ) )
+            mpCellProps.back()->insert( pProps );
+        else
+            mpCellProps.back( ) = pProps;
+    }
     else
-        mpCellProps = pProps;
+        mpCellProps.push_back( pProps );
 }
 
 template <typename T, typename PropertiesPointer>
@@ -554,19 +579,24 @@ void TableManager<T, PropertiesPointer>::cellPropsByCell
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps)
 {
-    if( mpRowProps.get() )
-        mpRowProps->insert( pProps );
+    if ( mpRowProps.size( ) == ( mTableDataStack.size( ) - 1 ) )
+    {
+        if( mpRowProps.back( ).get( ) )
+            mpRowProps.back( )->insert( pProps );
+        else
+            mpRowProps.back( ) = pProps;
+    }
     else
-        mpRowProps = pProps;
+        mpRowProps.push_back( pProps );
 }
 
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pProps)
 {
-    if( mpTableProps.get() )
-        mpTableProps->insert( pProps );
-    else
-        mpTableProps = pProps;
+    typename TableData<T, PropertiesPointer>::Pointer_t
+        pTableData = mTableDataStack.top();
+
+    pTableData->insertTableProperties( pProps );
 }
 
 template <typename T, typename PropertiesPointer>
@@ -579,7 +609,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
         unsigned int nRows = pTableData->getRowCount();
 
-        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), mpTableProps);
+        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), pTableData->getTableProperties( ) );
 
         for (unsigned int nRow = 0; nRow < nRows; ++nRow)
         {
@@ -602,8 +632,12 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
         }
 
         mpTableDataHandler->endTable();
+
+        // The inner table has to be stored only if there is something in the stack
+        // The 0 depth is the dummy table for the whole stream
+        if ( pTableData->getDepth( ) > 1 )
+            mpInnerTable = mpTableDataHandler->getTable( );
     }
-    mpTableProps.reset();
     clearData();
 }
 

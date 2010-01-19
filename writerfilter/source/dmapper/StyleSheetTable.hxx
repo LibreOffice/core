@@ -30,6 +30,8 @@
 #ifndef INCLUDED_STYLESHEETTABLE_HXX
 #define INCLUDED_STYLESHEETTABLE_HXX
 
+#include "TblStylePrHandler.hxx"
+
 #include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -40,6 +42,7 @@
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
 }}}}
+
 
 namespace writerfilter {
 namespace dmapper
@@ -72,6 +75,9 @@ struct StyleSheetEntry
     ::rtl::OUString sConvertedStyleName;
     StyleSheetEntry();
 };
+
+typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
+
 class DomainMapper;
 class WRITERFILTER_DLLPRIVATE StyleSheetTable :
         public Properties,
@@ -92,11 +98,11 @@ public:
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     void ApplyStyleSheets( FontTablePtr rFontTable );
-    const StyleSheetEntry* FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
-    const StyleSheetEntry* FindStyleSheetByStyleName(const ::rtl::OUString& rIndex);
-    const StyleSheetEntry* FindStyleSheetByConvertedStyleName(const ::rtl::OUString& rIndex);
+    const StyleSheetEntryPtr FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
+    const StyleSheetEntryPtr FindStyleSheetByStyleName(const ::rtl::OUString& rIndex);
+    const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const ::rtl::OUString& rIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
-    const StyleSheetEntry* FindParentStyleSheet(::rtl::OUString sBaseStyle);
+    const StyleSheetEntryPtr FindParentStyleSheet(::rtl::OUString sBaseStyle);
 
     ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName, bool bExtendedSearch = false );
     ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);
@@ -109,6 +115,38 @@ private:
     void applyDefaults(bool bParaProperties);
 };
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
+
+
+class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry :
+    public StyleSheetEntry
+{
+private:
+    typedef std::map<TblStyleType, PropertyMapPtr> TblStylePrs;
+
+    StyleSheetTable* m_pStyleSheet;
+    TblStylePrs m_aStyles;
+
+public:
+
+    short m_nColBandSize;
+    short m_nRowBandSize;
+
+    // Adds a new tblStylePr to the table style entry. This method
+    // fixes some possible properties conflicts, like borders ones.
+    void AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps );
+
+    // Gets all the properties
+    //     + corresponding to the mask,
+    //     + from the parent styles
+    PropertyMapPtr GetProperties( sal_Int32 nMask );
+
+    TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
+    ~TableStyleSheetEntry( );
+
+protected:
+    PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
+};
+typedef boost::shared_ptr<TableStyleSheetEntry> TableStyleSheetEntryPtr;
 
 }}
 

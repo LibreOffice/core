@@ -63,7 +63,13 @@ ZipStorage::ZipStorage(
     // create base storage object
     try
     {
-        mxStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream( rxInStream, rxFactory );
+        /*  #i105325# ::comphelper::OStorageHelper::GetStorageFromInputStream()
+            cannot be used here as it will open a storage with format type
+            'PackageFormat' that will not work with OOXML packages.
+            TODO: #i105410# switch to 'OFOPXMLFormat' and use its
+            implementation of relations handling. */
+        mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory );
     }
     catch( Exception& )
     {
@@ -79,11 +85,9 @@ ZipStorage::ZipStorage(
     // create base storage object
     try
     {
-        mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) ),
-                                                                                rxStream,
-                                                                                com::sun::star::embed::ElementModes::READWRITE
-                                                                                | com::sun::star::embed::ElementModes::TRUNCATE,
-                                                                                rxFactory );
+        using namespace ::com::sun::star::embed::ElementModes;
+        mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, READWRITE | TRUNCATE, rxFactory );
     }
     catch( Exception& )
     {

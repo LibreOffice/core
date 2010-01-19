@@ -169,6 +169,14 @@ enum FilterType
 
 // ============================================================================
 
+/** Functor for case-insensitive string comparison, usable in maps etc. */
+struct IgnoreCaseCompare
+{
+    bool                operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const;
+};
+
+// ============================================================================
+
 class WorkbookData;
 class WorkbookSettings;
 class ViewSettings;

@@ -182,7 +182,10 @@ public:
     /** Sets stream pointer to the start of the content of the specified record.
 
         The handle of the current record can be received and stored using the
-        function getRecHandle() for later usage with this function.
+        function getRecHandle() for later usage with this function. The record
+        handle is equivalent to the position of the underlying binary stream,
+        thus the function can be used to perform a hard seek to a specific
+        position, if it is sure that a record starts exactly at this position.
 
         @return  False = no record found (invalid handle passed).
      */

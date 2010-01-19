@@ -49,6 +49,7 @@ struct SheetInfoModel
 {
     ::rtl::OUString     maRelId;        /// Relation identifier for the sheet substream.
     ::rtl::OUString     maName;         /// Original name of the sheet.
+    sal_Int64           mnBiffHandle;   /// BIFF record handle of the sheet substream.
     sal_Int32           mnSheetId;      /// Sheet identifier.
     sal_Int32           mnState;        /// Visibility state.
 
@@ -88,6 +89,8 @@ public:
     sal_Int32           getWorksheetCount() const;
     /** Returns the OOX relation identifier of the specified worksheet. */
     ::rtl::OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
+    /** Returns the BIFF record handle of the associated sheet substream. */
+    sal_Int64           getBiffRecordHandle( sal_Int32 nWorksheet ) const;
 
     /** Returns the Calc index of the specified worksheet. */
     sal_Int16           getCalcSheetIndex( sal_Int32 nWorksheet ) const;
@@ -120,8 +123,7 @@ private:
     typedef RefVector< SheetInfo > SheetInfoVector;
     SheetInfoVector     maSheetInfos;
 
-    struct SheetNameCompare { bool operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const; };
-    typedef RefMap< ::rtl::OUString, SheetInfo, SheetNameCompare > SheetInfoMap;
+    typedef RefMap< ::rtl::OUString, SheetInfo, IgnoreCaseCompare > SheetInfoMap;
     SheetInfoMap        maSheetInfosByName;
 };
 
