@@ -44,8 +44,8 @@
 const int EXTRAITEMHEIGHT = 4;
 const int SEPARATOR_HEIGHT = 6;
 const int TITLE_ID = -1;
-const int BORDER_X = 3;
-const int BORDER_Y = 3;
+const int BORDER_X = 0;
+const int BORDER_Y = 0;
 
 class ToolbarMenuEntry
 {
@@ -947,25 +947,13 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                 if( bTitle )
                 {
-                    Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
-                    aRect.nLeft   += 2;
-                    aRect.nTop    += 2;
-                    aRect.nRight  -= 4;
-                    aRect.nBottom -= 4;
-
                     // fill the background
-                    Color aColor (rSettings.GetDialogColor());
-
-                    SetFillColor (aColor);
-                    SetLineColor ();
+                    Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
+                    SetFillColor(rSettings.GetDialogColor());
+                    SetLineColor();
                     DrawRect(aRect);
-
-                    // Erase the four corner pixels to make the rectangle appear rounded.
-                    SetLineColor( rSettings.GetMenuColor());
-                    DrawPixel( aRect.TopLeft());
-                    DrawPixel( Point(aRect.Right(), aRect.Top()));
-                    DrawPixel( Point(aRect.Left(), aRect.Bottom()));
-                    DrawPixel( Point(aRect.Right(), aRect.Bottom()));
+                    SetLineColor( rSettings.GetShadowColor() );
+                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
                 }
 
                 long nTextOffsetY = ((pEntry->maSize.Height()-nFontHeight)/2);
