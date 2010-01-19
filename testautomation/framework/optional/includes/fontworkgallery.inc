@@ -57,64 +57,46 @@ testcase tFontworkGalleryUpdate
         
 'i67024     -     tbo     sj     Help-IDs missing on the windows items for FontworkAlignment and FontworkCharacterSpacing
 'i66989     -     tbo     sj     Fontwork Gallery control has no Help-ID
-    '/// close all applications, exept the backingwindow, to make sure the right toolbar is used by TestTool ///'
     b = getDocumentCount
     for j = 1 to b
         printlog "closing: " + j
         hCloseDocument()
     next j
-    '/// open new application window ///'
     hNewDocument()
     sleep (5)
-    '/// if toolbar 'Drawing' is not visible, open it by View - Toolbars - Drawing ///'
     Kontext "Drawbar"
     if NOT Drawbar.exists then
         hToolbarSelect("DRAWING",true)
         printlog "opened drawing toolbar"
     endif
     if Drawbar.exists then
-        '/// Click button 'Fontwork Gallery' on toolbar 'Drawing' ///'
         FontworkGallery.click
         
         Kontext "FontworkGallery"
-        '/// the dialog 'Fontwork Gallery' has to come up ///'
         dialogtest(FontworkGallery)
-        '/// In the dialog 'Fontwork Gallery' type key <cursor right> ///'
         FontworkGallery.typeKeys("<right>", true)
-        '/// In the dialog 'Fontwork Gallery' press and release right mouse button in the middle of the dialog ///'
         FontworkGallery.mousedown(50,50)
         FontworkGallery.mouseup(50,50)
-        '/// on the dialog 'Fontwork Gallery' press button OK ///'
         FontworkGallery.OK
         
-        '/// an Fontwork object will be inserted now ///'
         sleep 5
-        '/// The toolbar 'Fontwork' has to come up///'
         Kontext "FontworkObjectbar"
         if FontworkObjectbar.exists then
-            '/// On the toolbar 'Fontwork' click the button 'Fontwork Gallery' ///'
             FontworkGallery.click
-            '/// dialog 'Fontwork Gallery' has to come up ///'
             Kontext "FontworkGallery"
             dialogtest(FontworkGallery)
-            '/// close dialog 'Fontwork Gallery' by clicking CANCEL button ///'
             FontworkGallery.cancel
         
             Kontext "FontworkObjectbar"
-            '/// On the toolbar 'Fontwork' click the button 'Fontwork Shape' ///'
             FontworkShape.click
-            '/// toolbar 'Fontwork Shape' has to come up ///'
             Kontext "FontworkShape"
-            '/// press button 'Plain Text' on toolbar 'Fontwork Shape' ///'
             PlainText.click
             
             Kontext "FontworkObjectbar"
-            '/// On the toolbar 'Fontwork' click the button 'Fontwork Same Letter Heights' ///'
             FontworkSameLetterHeights.click
             sleep 3
             
             Kontext "FontworkObjectbar"
-            '/// On the toolbar 'Fontwork' click the button 'Fontwork Alignment' ///'
             FontworkAlignment.click
             Kontext "FontworkAlignment"
             if FontworkAlignment.exists(5) then
@@ -137,27 +119,21 @@ testcase tFontworkGalleryUpdate
             endif
             
             Kontext "FontworkObjectbar"
-            '/// On the toolbar 'Fontwork' click the button 'Fontwork Character Spacing' ///'
             FontworkCharacterSpacing.click
-            '/// toolbox 'Fontwork Character Spacing' has to come up ///'
             Kontext "FontworkCharacterSpacing"
             if FontworkCharacterSpacing.exists(5) then
                 'dialogtest(FontworkCharacterSpacing)
-                '/// try to select the entry 'Custom ...' with keys, since Help Ids are missing ///'
                 FontworkCharacterSpacing.typeKeys ("<down><down><down><down><down><return>")
-                '/// dialog 'Fontwork Character Spacing' has to come up ///'
                 Kontext "FontworkCharacterSpacingCustom"
                 if FontworkCharacterSpacingCustom.exists(5) then
                     dialogtest(FontworkCharacterSpacingCustom)
                     printlog value.getText
-                    '/// close dialog 'Fontwork Character Spacing' ///'
                     FontworkCharacterSpacingCustom.close
                 else
                     printlog "dialog FontworkCharacterSpacingCustom didn't came up"
                 endif
                 Kontext "FontworkCharacterSpacing"
                 if FontworkCharacterSpacing.exists(5) then
-                    '/// close dialog 'Fontwork Character Spacing' ///'
                     FontworkCharacterSpacing.close    
                 else
                     printlog "dialog FontworkCharacterSpacing was closed in another way"

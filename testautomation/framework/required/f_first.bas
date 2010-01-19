@@ -39,7 +39,6 @@
 
 
 sub main
-
     ' Disable sleep() calls. If you encounter unexpected test interruptions
     ' you should try to outcomment this or set the value to FALSE.
     GLOBAL_USE_NEW_SLEEP = TRUE
@@ -61,13 +60,9 @@ sub main
     call tDatabaseCheck
     call tHelpRegistration
     call hStatusOut   
-    
 end sub
 
-'*******************************************************************************
-
 sub LoadIncludeFiles
-
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_ui_filters.inc"
@@ -77,8 +72,5 @@ sub LoadIncludeFiles
 
     gApplication = "WRITER"
     call GetUseFiles()
-    
 end sub
-
-'-------------------------------------------------------------------------
 

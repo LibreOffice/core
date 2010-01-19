@@ -1032,6 +1032,10 @@ testcase tDropDownLB_17
     PrintLog "- Open a word document  which includes 2 entries."
     Call hFileOpen(sTestFile)
     Call sMakeReadOnlyDocumentEditable
+
+    Kontext "EditInputList"
+    if EditInputList.Exists then EditInputList.Cancel
+
     PrintLog "- Set focus in front of first line."
     Call wTypeKeys "<MOD1 Home>"
     PrintLog "- Edit/Fields."
@@ -1085,7 +1089,9 @@ testcase tDropDownLB_17
 
     FeldbefehlBearbeitenFunktionen.Cancel
     
-    Call hCloseDocument ' <- close word document
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
     
 endcase
 

@@ -335,6 +335,13 @@ end sub
 sub FirstOfficeStart
 '/// First start-routine.
     Dim i as integer
+    ' To nail down a possible culprint on test runs, the availability of existing user settings is checked.
+    ' In some environments the deleting of the settings might fail before the test is started - this will log it:
+    if (fileExists(gOfficePath)) then
+        qaErrorLog ("QA_DEBUG: User settings directory was not deleted before test start!: '" + gOfficePath + "'")
+    else
+        printlog ("QA_DEBUG: User settings directory is unavailable before soffice is started - this is good. '" + gOfficePath + "'")
+    endif
     caselog ""                   '///+<ul><li>Stop the first default-output into the resultfile</li>
     Call hStartTheOffice         '///+<li>Start the office</li>
     ResetApplication             '///+<li>Make the first recovering without an error output.</li></ul>
@@ -921,22 +928,15 @@ sub mMakeGeneralOptionsAPI
             qaErrorLog( sFileFunction & "This build does not support online update." )
         endcatch
 
-        '///+ OOo Improvement
-	    try
-            aPropertyValue(0).Value="/org.openoffice.Office.OOoImprovement.Settings/Participation"
-            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-            xViewRoot.replaceByName( "ShowedInvitation", true )
-            xViewRoot.replaceByName( "InvitationAccepted", false )
-            xViewRoot.commitChanges()
-            if xViewRoot.hasPendingChanges() then
-	            qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
-            endif
-            xViewRoot.dispose()
-	        gOOoImprovementIsEnabled = TRUE
-	    catch
-	        QAErrorLog( "Failed to disable usage tracking feature. This might cause errors and warnings during test execution." )
-	        gOOoImprovementIsEnabled = FALSE
-	    endcatch
+        '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
+        sTempPath = gOfficeBasisPath & "share/registry/modules/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu"
+        sTempPath = ConvertPath( sTempPath )
+        
+        if ( FileExists( sTempPath ) ) then
+            gOOoImprovementIsEnabled = TRUE
+        else
+            gOOoImprovementIsEnabled = FALSE
+        endif
 	    
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")

@@ -40,7 +40,7 @@
 ' #1 tiInsertTableUsingMenu
 ' #1 tiInsertTableUsingButton
 ' #1 tiTableObjectBar
-' #1 tiInsertTableUsingToolbarbutton
+' #1 tiInsertTableUsingToolbarbuttonView
 '*
 '\******************************************************************
 
@@ -59,11 +59,11 @@ testcase tiInsertTableUsingMenu
     if (UCase(gApplication)) = "IMPRESS" then
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(13)
+        hMenuSelectNr(14)
     else
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(10)
+        hMenuSelectNr(11)
     endif
 
 
@@ -222,11 +222,11 @@ testcase tiTableObjectBar
     if (UCase(gApplication)) = "IMPRESS" then
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(13)
+        hMenuSelectNr(14)
     else
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(10)
+        hMenuSelectNr(11)
     endif
 
     Kontext "InsertTableImpress"
@@ -317,6 +317,7 @@ testcase tiTableObjectBar
         DocumentDraw.TypeKeys "<SHIFT RIGHT>"
     endif
     Kontext "TableObjectBar"
+    if TableObjectBar.NotExists(2) then ViewToolbarsTable
     ZellenVerbinden.Click
     printlog "Cells merged."
 

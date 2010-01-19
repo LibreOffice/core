@@ -49,9 +49,7 @@ sub main
     
     call hStatusIn ("XML","writer_xml_7_export.bas")
         call CreateWorkXMLExportDir ( "user\work\xml\writer\level1\" )
-        if GetDocumentCount > 0 then
-        	call hCloseDocument
-      	endif            
+        hFileCloseAll()            
         'Disabling PrettyPriting if it has been set.
         call hEnablePrettyPrinting(1)
         call sxw7_01
@@ -67,7 +65,8 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_xml1.inc"
-    use "global\tools\includes\optional\t_xml2.inc"    
+    use "global\tools\includes\optional\t_xml2.inc"  
+    use "global\tools\includes\optional\t_security_tools.inc"  
     gApplication   = "WRITER"
     Call GetUseFiles    
 end sub

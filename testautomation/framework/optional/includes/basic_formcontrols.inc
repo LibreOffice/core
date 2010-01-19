@@ -40,6 +40,9 @@
 testcase tAllControlsOnDialog( cMajor as string )
 
     printlog( "Insert all available controls into a BASIC dialog and verify that changed settings persist a save/load cycle" )
+    
+    qaerrorlog( "#i105685# - Test disabled" )
+    goto endsub
 
     dim iApplication as Integer ' numeric expression for gApplication
     dim cApplication as string  ' Name of the current application
