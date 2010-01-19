@@ -370,7 +370,7 @@ public class DocumentMetaData extends ComplexTestCase
             dur.Hours = 777;
             dur.Minutes = 666;
             dur.Seconds = 555;
-            dur.HundredthSeconds = 444;
+            dur.MilliSeconds = 444;
 
             udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE,
                 new Boolean(b));
@@ -447,7 +447,11 @@ public class DocumentMetaData extends ComplexTestCase
                     udps.getPropertyValue("Frobnicate")));
             assure ("UserDefined duration", eqDuration(dur, (Duration)
                     udps.getPropertyValue("FrobDuration")));
-            assure ("UserDefined time", eqTime(t, (Time)
+            // this is now a Duration!
+            Duration t_dur = new Duration(false, (short)0, (short)0, (short)0,
+                    t.Hours, t.Minutes, t.Seconds,
+                    (short)(10 * t.HundredthSeconds));
+            assure ("UserDefined time", eqDuration(t_dur, (Duration)
                     udps.getPropertyValue("FrobDuration2")));
             assure ("UserDefined date", eqDate(date, (Date)
                     udps.getPropertyValue("FrobEndDate")));
@@ -514,7 +518,7 @@ public class DocumentMetaData extends ComplexTestCase
         return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
             && a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
-            && a.HundredthSeconds == b.HundredthSeconds
+            && a.MilliSeconds == b.MilliSeconds
             && a.Negative == b.Negative;
     }
 

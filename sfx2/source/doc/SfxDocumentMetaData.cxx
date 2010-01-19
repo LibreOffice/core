@@ -613,7 +613,7 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
     ud.Hours   = static_cast<sal_Int16>((i_value % (24 * 3600)) / 3600);
     ud.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
     ud.Seconds = static_cast<sal_Int16>(i_value % 60);
-    ud.HundredthSeconds = 0;
+    ud.MilliSeconds = 0;
     return durationToText(ud);
 }
 
@@ -953,7 +953,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Hours   = ut.Hours;
             ud.Minutes = ut.Minutes;
             ud.Seconds = ut.Seconds;
-            ud.HundredthSeconds = ut.HundredthSeconds;
+            ud.MilliSeconds = 10 * ut.HundredthSeconds;
             values.push_back(durationToText(ud));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("time"))));

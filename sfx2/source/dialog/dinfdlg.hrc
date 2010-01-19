@@ -172,8 +172,8 @@
 #define ED_MINUTE               113
 #define FT_SECOND               114
 #define ED_SECOND               115
-#define FT_HSECOND              116
-#define ED_HSECOND              117
+#define FT_MSECOND              116
+#define ED_MSECOND              117
 #define FL_DURATION             118
 
 #endif
