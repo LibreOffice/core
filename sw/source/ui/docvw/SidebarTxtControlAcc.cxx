@@ -40,6 +40,7 @@
 #include <svx/unoedsrc.hxx>
 #include <svx/unoforou.hxx>
 #include <svx/unoviwou.hxx>
+#include <svx/unoedhlp.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/outliner.hxx>
 
@@ -52,7 +53,7 @@ namespace sw { namespace sidebarwindows {
 // for <::accessibiliy::AccessibleTextHelper> instance
 // =============================================================================
 class SidebarTextEditSource : public SvxEditSource,
-                             public SfxBroadcaster
+                              public SfxBroadcaster
 {
     public:
         SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl );
@@ -67,6 +68,7 @@ class SidebarTextEditSource : public SvxEditSource,
         virtual void UpdateData();
 
         virtual SfxBroadcaster& GetBroadcaster() const;
+        DECL_LINK( NotifyHdl, EENotify* );
 
     private:
         SidebarTxtControl& mrSidebarTxtControl;
@@ -80,10 +82,12 @@ SidebarTextEditSource::SidebarTextEditSource( SidebarTxtControl& rSidebarTxtCont
     , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), NULL )
     , mViewForwarder( *(rSidebarTxtControl.GetTextView()) )
 {
+    mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( LINK(this, SidebarTextEditSource, NotifyHdl) );
 }
 
 SidebarTextEditSource::~SidebarTextEditSource()
 {
+    mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link() );
 }
 
 SvxEditSource* SidebarTextEditSource::Clone() const
@@ -116,6 +120,22 @@ SfxBroadcaster& SidebarTextEditSource::GetBroadcaster() const
     return *( const_cast< SidebarTextEditSource* > (this) );
 }
 
+IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
+{
+    if ( pNotify )
+    {
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
+
+        if( aHint.get() )
+        {
+            Broadcast( *aHint.get() );
+        }
+    }
+
+    return 0;
+}
+
+
 // =============================================================================
 // declaration and implementation of accessible context for <SidebarTxtControl> instance
 // =============================================================================
@@ -145,6 +165,9 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
                 throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     private:
         SidebarTxtControl& mrSidebarTxtControl;
@@ -191,6 +214,27 @@ void SAL_CALL SidebarTxtControlAccessibleContext::removeEventListener (
     throw (css::uno::RuntimeException)
 {
     mpAccessibleTextHelper->RemoveEventListener(xListener);
+}
+
+void SidebarTxtControlAccessibleContext::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_WINDOW_GETFOCUS:
+        case VCLEVENT_CONTROL_GETFOCUS:
+        {
+            mpAccessibleTextHelper->SetFocus( sal_True );
+        }
+        break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VCLEVENT_CONTROL_LOSEFOCUS:
+        {
+            mpAccessibleTextHelper->SetFocus( sal_False );
+        }
+        break;
+    }
+
+    VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
 // =============================================================================
