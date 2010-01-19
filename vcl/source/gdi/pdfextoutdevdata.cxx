@@ -30,10 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/pdfextoutdevdata.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/gfxlink.hxx>
+#include "vcl/pdfextoutdevdata.hxx"
+#include "vcl/graph.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/gfxlink.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 
 
 #include <boost/shared_ptr.hpp>
@@ -433,7 +435,10 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         if ( bClippingNeeded )
                         {
                             rWriter.Push();
-                            rWriter.SetClipRegion( aVisibleOutputRect );
+                            basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+                                basegfx::B2DRectangle( aVisibleOutputRect.Left(), aVisibleOutputRect.Top(),
+                                                       aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
+                            rWriter.SetClipRegion( aRect);
                         }
                         Bitmap aMask;
                         SvMemoryStream aTmp;

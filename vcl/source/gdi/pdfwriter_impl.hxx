@@ -144,14 +144,20 @@ public:
         // if pOutPoint is set it will be updated to the emitted point
         // (in PDF map mode, that is 10th of point)
         void appendPoint( const Point& rPoint, rtl::OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = NULL ) const;
+        // appends a B2DPoint without further transformation
+        void appendPixelPoint( const basegfx::B2DPoint& rPoint, rtl::OStringBuffer& rBuffer ) const;
         // appends a rectangle
         void appendRect( const Rectangle& rRect, rtl::OStringBuffer& rBuffer ) const;
         // converts a rectangle to 10th points page space
         void convertRect( Rectangle& rRect ) const;
         // appends a polygon optionally closing it
         void appendPolygon( const Polygon& rPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
+        // appends a polygon optionally closing it
+        void appendPolygon( const basegfx::B2DPolygon& rPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
         void appendPolyPolygon( const PolyPolygon& rPolyPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
+        // appends a polypolygon optionally closing the subpaths
+        void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, rtl::OStringBuffer& rBuffer, bool bClose = true ) const;
         // converts a length (either vertical or horizontal; this
         // can be important if the source MapMode is not
         // symmetrical) to page length and appends it to the buffer
@@ -159,7 +165,7 @@ public:
         // (in PDF map mode, that is 10th of point)
         void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
         // the same for double values
-        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
+        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL, sal_Int32 nPrecision = 5 ) const;
         // appends LineInfo
         // returns false if too many dash array entry were created for
         // the implementation limits of some PDF readers
@@ -650,19 +656,20 @@ private:
     // graphics state
     struct GraphicsState
     {
-        Font            m_aFont;
-        MapMode         m_aMapMode;
-        Color           m_aLineColor;
-        Color           m_aFillColor;
-        Color           m_aTextLineColor;
-        Color           m_aOverlineColor;
-        Region          m_aClipRegion;
-        sal_Int32       m_nAntiAlias;
-        sal_Int32       m_nLayoutMode;
-        LanguageType    m_aDigitLanguage;
-        sal_Int32       m_nTransparentPercent;
-        sal_uInt16      m_nFlags;
-        sal_uInt16      m_nUpdateFlags;
+        Font                             m_aFont;
+        MapMode                          m_aMapMode;
+        Color                            m_aLineColor;
+        Color                            m_aFillColor;
+        Color                            m_aTextLineColor;
+        Color                            m_aOverlineColor;
+        basegfx::B2DPolyPolygon          m_aClipRegion;
+        bool                             m_bClipRegion;
+        sal_Int32                        m_nAntiAlias;
+        sal_Int32                        m_nLayoutMode;
+        LanguageType                     m_aDigitLanguage;
+        sal_Int32                        m_nTransparentPercent;
+        sal_uInt16                       m_nFlags;
+        sal_uInt16                       m_nUpdateFlags;
 
         static const sal_uInt16 updateFont                  = 0x0001;
         static const sal_uInt16 updateMapMode               = 0x0002;
@@ -681,6 +688,7 @@ private:
                 m_aFillColor( COL_TRANSPARENT ),
                 m_aTextLineColor( COL_TRANSPARENT ),
                 m_aOverlineColor( COL_TRANSPARENT ),
+                m_bClipRegion( false ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
                 m_aDigitLanguage( 0 ),
@@ -696,6 +704,7 @@ private:
                 m_aTextLineColor( rState.m_aTextLineColor ),
                 m_aOverlineColor( rState.m_aOverlineColor ),
                 m_aClipRegion( rState.m_aClipRegion ),
+                m_bClipRegion( rState.m_bClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
                 m_aDigitLanguage( rState.m_aDigitLanguage ),
@@ -714,6 +723,7 @@ private:
             m_aTextLineColor        = rState.m_aTextLineColor;
             m_aOverlineColor        = rState.m_aOverlineColor;
             m_aClipRegion           = rState.m_aClipRegion;
+            m_bClipRegion           = rState.m_bClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
             m_aDigitLanguage        = rState.m_aDigitLanguage;
@@ -1164,17 +1174,18 @@ public:
 
     void clearClipRegion()
     {
-        m_aGraphicsStack.front().m_aClipRegion.SetNull();
+        m_aGraphicsStack.front().m_aClipRegion.clear();
+        m_aGraphicsStack.front().m_bClipRegion = false;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
     }
 
-    void setClipRegion( const Region& rRegion );
+    void setClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void moveClipRegion( sal_Int32 nX, sal_Int32 nY );
 
     bool intersectClipRegion( const Rectangle& rRect );
 
-    bool intersectClipRegion( const Region& rRegion );
+    bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void setLayoutMode( sal_Int32 nLayoutMode )
     {

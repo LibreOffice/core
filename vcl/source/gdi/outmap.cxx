@@ -53,6 +53,7 @@
 #include <vcl/outdev.h>
 #include <vcl/salgdi.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #define USE_64BIT_INTS
@@ -1100,6 +1101,41 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
 
 // -----------------------------------------------------------------------
 
+// #i75163#
+basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMode ) const
+{
+    // #i82615#
+    ImplMapRes          aMapRes;
+    ImplThresholdRes    aThresRes;
+    ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
+
+    basegfx::B2DHomMatrix aTransform;
+
+    const double fScaleFactorX((double)mnDPIX * (double)aMapRes.mnMapScNumX / (double)aMapRes.mnMapScDenomX);
+    const double fScaleFactorY((double)mnDPIY * (double)aMapRes.mnMapScNumY / (double)aMapRes.mnMapScDenomY);
+    const double fZeroPointX(((double)aMapRes.mnMapOfsX * fScaleFactorX) + (double)mnOutOffOrigX);
+    const double fZeroPointY(((double)aMapRes.mnMapOfsY * fScaleFactorY) + (double)mnOutOffOrigY);
+
+    aTransform.set(0, 0, fScaleFactorX);
+    aTransform.set(1, 1, fScaleFactorY);
+    aTransform.set(0, 2, fZeroPointX);
+    aTransform.set(1, 2, fZeroPointY);
+
+    return aTransform;
+}
+
+// -----------------------------------------------------------------------
+
+// #i75163#
+basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation( const MapMode& rMapMode ) const
+{
+    basegfx::B2DHomMatrix aMatrix( GetViewTransformation( rMapMode ) );
+    aMatrix.invert();
+    return aMatrix;
+}
+
+// -----------------------------------------------------------------------
+
 basegfx::B2DHomMatrix OutputDevice::ImplGetDeviceTransformation() const
 {
     basegfx::B2DHomMatrix aTransformation = GetViewTransformation();
@@ -1217,6 +1253,26 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
         rPoly = LogicToPixel( rPoly );
     }
     return aPolyPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
 }
 
 // -----------------------------------------------------------------------
@@ -1405,6 +1461,28 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
 
 // -----------------------------------------------------------------------
 
+basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+                                                    const MapMode& rMapMode ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
+                                                const MapMode& rMapMode ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion,
                                    const MapMode& rMapMode ) const
 {
@@ -1552,6 +1630,26 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) con
         rPoly = PixelToLogic( rPoly );
     }
     return aPolyPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rPixelPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
 }
 
 // -----------------------------------------------------------------------
@@ -1731,6 +1829,28 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
         rPoly = PixelToLogic( rPoly, rMapMode );
     }
     return aPolyPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly,
+                                                const MapMode& rMapMode ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rPixelPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly,
+                                                    const MapMode& rMapMode ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
 }
 
 // -----------------------------------------------------------------------
@@ -2158,6 +2278,96 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
                           aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                           aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) );
     }
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPolySource,
+                                                const MapMode& rMapModeSource,
+                                                const MapMode& rMapModeDest )
+{
+    if ( rMapModeSource == rMapModeDest )
+        return rPolySource;
+
+    MapUnit eUnitSource = rMapModeSource.GetMapUnit();
+    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    ENTER2( eUnitSource, eUnitDest );
+
+    basegfx::B2DHomMatrix aTransform;
+
+    if ( rMapModeSource.mpImplMapMode->mbSimple &&
+         rMapModeDest.mpImplMapMode->mbSimple )
+    {
+        ENTER3( eUnitSource, eUnitDest );
+
+        const double fScaleFactor((double)nNumerator / (double)nDenominator);
+        aTransform.set(0, 0, fScaleFactor);
+        aTransform.set(1, 1, fScaleFactor);
+    }
+    else
+    {
+        ENTER4( rMapModeSource, rMapModeDest );
+
+        const double fScaleFactorX(  (double(aMapResSource.mnMapScNumX) *  double(aMapResDest.mnMapScDenomX))
+                                   / (double(aMapResSource.mnMapScDenomX) * double(aMapResDest.mnMapScNumX)) );
+        const double fScaleFactorY(  (double(aMapResSource.mnMapScNumY) *  double(aMapResDest.mnMapScDenomY))
+                                   / (double(aMapResSource.mnMapScDenomY) * double(aMapResDest.mnMapScNumY)) );
+        const double fZeroPointX(double(aMapResSource.mnMapOfsX) * fScaleFactorX - double(aMapResDest.mnMapOfsX));
+        const double fZeroPointY(double(aMapResSource.mnMapOfsY) * fScaleFactorY - double(aMapResDest.mnMapOfsY));
+
+        aTransform.set(0, 0, fScaleFactorX);
+        aTransform.set(1, 1, fScaleFactorY);
+        aTransform.set(0, 2, fZeroPointX);
+        aTransform.set(1, 2, fZeroPointY);
+    }
+    basegfx::B2DPolygon aPoly( rPolySource );
+    aPoly.transform( aTransform );
+    return aPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygon& rPolySource,
+                                                    const MapMode& rMapModeSource,
+                                                    const MapMode& rMapModeDest )
+{
+    if ( rMapModeSource == rMapModeDest )
+        return rPolySource;
+
+    MapUnit eUnitSource = rMapModeSource.GetMapUnit();
+    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    ENTER2( eUnitSource, eUnitDest );
+
+    basegfx::B2DHomMatrix aTransform;
+
+    if ( rMapModeSource.mpImplMapMode->mbSimple &&
+         rMapModeDest.mpImplMapMode->mbSimple )
+    {
+        ENTER3( eUnitSource, eUnitDest );
+
+        const double fScaleFactor((double)nNumerator / (double)nDenominator);
+        aTransform.set(0, 0, fScaleFactor);
+        aTransform.set(1, 1, fScaleFactor);
+    }
+    else
+    {
+        ENTER4( rMapModeSource, rMapModeDest );
+
+        const double fScaleFactorX(  (double(aMapResSource.mnMapScNumX) *  double(aMapResDest.mnMapScDenomX))
+                                   / (double(aMapResSource.mnMapScDenomX) * double(aMapResDest.mnMapScNumX)) );
+        const double fScaleFactorY(  (double(aMapResSource.mnMapScNumY) *  double(aMapResDest.mnMapScDenomY))
+                                   / (double(aMapResSource.mnMapScDenomY) * double(aMapResDest.mnMapScNumY)) );
+        const double fZeroPointX(double(aMapResSource.mnMapOfsX) * fScaleFactorX - double(aMapResDest.mnMapOfsX));
+        const double fZeroPointY(double(aMapResSource.mnMapOfsY) * fScaleFactorY - double(aMapResDest.mnMapOfsY));
+
+        aTransform.set(0, 0, fScaleFactorX);
+        aTransform.set(1, 1, fScaleFactorY);
+        aTransform.set(0, 2, fZeroPointX);
+        aTransform.set(1, 2, fZeroPointY);
+    }
+    basegfx::B2DPolyPolygon aPoly( rPolySource );
+    aPoly.transform( aTransform );
+    return aPoly;
 }
 
 // -----------------------------------------------------------------------

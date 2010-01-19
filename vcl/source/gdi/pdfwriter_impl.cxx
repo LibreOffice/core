@@ -37,6 +37,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
@@ -117,7 +119,7 @@ void doTestCode()
     aDocInfo.Title = OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF export test document" ) );
     aDocInfo.Producer = OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL" ) );
     aWriter.SetDocInfo( aDocInfo );
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.BeginStructureElement( PDFWriter::Document );
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
@@ -168,7 +170,7 @@ void doTestCode()
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     // test AddStream interface
     aWriter.AddStream( String( RTL_CONSTASCII_USTRINGPARAM( "text/plain" ) ), new PDFTestOutputStream(), true );
     // set transitional mode
@@ -210,7 +212,25 @@ void doTestCode()
     aWriter.BeginStructureElement( PDFWriter::Caption );
     aWriter.DrawText( Point( 4500, 9000 ), String( RTL_CONSTASCII_USTRINGPARAM( "Some drawing stuff inside the structure" ) ) );
     aWriter.EndStructureElement();
+
+    // test clipping
+    basegfx::B2DPolyPolygon aClip;
+    basegfx::B2DPolygon aClipPoly;
+    aClipPoly.append( basegfx::B2DPoint( 8250, 9600 ) );
+    aClipPoly.append( basegfx::B2DPoint( 16500, 11100 ) );
+    aClipPoly.append( basegfx::B2DPoint( 8250, 12600 ) );
+    aClipPoly.append( basegfx::B2DPoint( 4500, 11100 ) );
+    aClipPoly.setClosed( true );
+    //aClipPoly.flip();
+    aClip.append( aClipPoly );
+
+    aWriter.Push( PUSH_CLIPREGION | PUSH_FILLCOLOR );
+    aWriter.SetClipRegion( aClip );
     aWriter.DrawEllipse( Rectangle( Point( 4500, 9600 ), Size( 12000, 3000 ) ) );
+    aWriter.MoveClipRegion( 1000, 500 );
+    aWriter.SetFillColor( Color( COL_RED ) );
+    aWriter.DrawEllipse( Rectangle( Point( 4500, 9600 ), Size( 12000, 3000 ) ) );
+    aWriter.Pop();
     // test transparency
     // draw background
     Rectangle aTranspRect( Point( 7500, 13500 ), Size( 9000, 6000 ) );
@@ -290,7 +310,7 @@ void doTestCode()
     aLIPoly.Move( 1000, 1000 );
     aWriter.DrawPolyLine( aLIPoly, aLI );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     Wallpaper aWall( aTransMask );
     aWall.SetStyle( WALLPAPER_TILE );
@@ -314,7 +334,7 @@ void doTestCode()
     aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawRect( aPolyRect );
 
-    aWriter.NewPage();
+    aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
@@ -722,7 +742,7 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 
 
 
 // appends a double. PDF does not accept exponential format, only fixed point
-static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
+static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
 {
     bool bNeg = false;
     if( fValue < 0.0 )
@@ -1275,6 +1295,19 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     appendFixedInt( nValue, rBuffer );
 }
 
+void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const
+{
+    double fValue   = pixelToPoint(rPoint.getX());
+
+    appendDouble( fValue, rBuffer, nLog10Divisor );
+
+    rBuffer.append( ' ' );
+
+    fValue      = double(getHeight()) - pixelToPoint(rPoint.getY());
+
+    appendDouble( fValue, rBuffer, nLog10Divisor );
+}
+
 void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
@@ -1347,11 +1380,94 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
     }
 }
 
+void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
+{
+    basegfx::B2DPolygon aPoly( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                                            m_pWriter->m_aMapMode,
+                                            m_pWriter->getReferenceDevice(),
+                                            rPoly ) );
+
+    if( basegfx::tools::isRectangle( aPoly ) )
+    {
+        basegfx::B2DRange aRange( aPoly.getB2DRange() );
+        basegfx::B2DPoint aBL( aRange.getMinX(), aRange.getMaxY() );
+        appendPixelPoint( aBL, rBuffer );
+        rBuffer.append( ' ' );
+        appendMappedLength( aRange.getWidth(), rBuffer, false, NULL, nLog10Divisor );
+        rBuffer.append( ' ' );
+        appendMappedLength( aRange.getHeight(), rBuffer, true, NULL, nLog10Divisor );
+        rBuffer.append( " re\n" );
+        return;
+    }
+    sal_uInt32 nPoints = aPoly.count();
+    if( nPoints > 0 )
+    {
+        sal_uInt32 nBufLen = rBuffer.getLength();
+        basegfx::B2DPoint aLastPoint( aPoly.getB2DPoint( 0 ) );
+        appendPixelPoint( aLastPoint, rBuffer );
+        rBuffer.append( " m\n" );
+        for( sal_uInt32 i = 1; i <= nPoints; i++ )
+        {
+            if( i != nPoints || aPoly.isClosed() )
+            {
+                sal_uInt32 nCurPoint  = i % nPoints;
+                sal_uInt32 nLastPoint = i-1;
+                basegfx::B2DPoint aPoint( aPoly.getB2DPoint( nCurPoint ) );
+                if( aPoly.isNextControlPointUsed( nLastPoint ) &&
+                    aPoly.isPrevControlPointUsed( nCurPoint ) )
+                {
+                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " c" );
+                }
+                else if( aPoly.isNextControlPointUsed( nLastPoint ) )
+                {
+                    appendPixelPoint( aPoly.getNextControlPoint( nLastPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " y" );
+                }
+                else if( aPoly.isPrevControlPointUsed( nCurPoint ) )
+                {
+                    appendPixelPoint( aPoly.getPrevControlPoint( nCurPoint ), rBuffer );
+                    rBuffer.append( ' ' );
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " v" );
+                }
+                else
+                {
+                    appendPixelPoint( aPoint, rBuffer );
+                    rBuffer.append( " l" );
+                }
+                if( (rBuffer.getLength() - nBufLen) > 65 )
+                {
+                    rBuffer.append( "\n" );
+                    nBufLen = rBuffer.getLength();
+                }
+                else
+                    rBuffer.append( " " );
+            }
+        }
+        if( bClose )
+            rBuffer.append( "h\n" );
+    }
+}
+
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     USHORT nPolygons = rPolyPoly.Count();
     for( USHORT n = 0; n < nPolygons; n++ )
         appendPolygon( rPolyPoly[n], rBuffer, bClose );
+}
+
+void PDFWriterImpl::PDFPage::appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
+{
+    sal_uInt32 nPolygons = rPolyPoly.count();
+    for( sal_uInt32 n = 0; n < nPolygons; n++ )
+        appendPolygon( rPolyPoly.getB2DPolygon( n ), rBuffer, bClose );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
@@ -1373,7 +1489,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     appendFixedInt( nValue, rBuffer, 1 );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
+void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength, sal_Int32 nPrecision ) const
 {
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
@@ -1382,7 +1498,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
     if( pOutLength )
         *pOutLength = (sal_Int32)(fLength*(double)(bVertical ? aSize.Height() : aSize.Width())/1000.0);
     fLength *= pixelToPoint((double)(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
-    appendDouble( fLength, rBuffer );
+    appendDouble( fLength, rBuffer, nPrecision );
 }
 
 bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
@@ -8257,7 +8373,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
-    setClipRegion( Region() );
+    clearClipRegion();
     updateGraphicsState();
 
     m_aOutputStreams.push_front( StreamRedirect() );
@@ -10194,25 +10310,17 @@ void PDFWriterImpl::updateGraphicsState()
     {
         rNewState.m_nUpdateFlags &= ~GraphicsState::updateClipRegion;
 
-        Region& rNewClip = rNewState.m_aClipRegion;
-
-        /*  #103137# equality operator is not implemented
-        *  const as API promises but may change Region
-        *  from Polygon to rectangles. Arrrgghh !!!!
-        */
-        Region aLeft = m_aCurrentPDFState.m_aClipRegion;
-        Region aRight = rNewClip;
-        if( aLeft != aRight )
+        if( m_aCurrentPDFState.m_bClipRegion != rNewState.m_bClipRegion ||
+            ( rNewState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion != rNewState.m_aClipRegion ) )
         {
-            if( ! m_aCurrentPDFState.m_aClipRegion.IsEmpty() &&
-                ! m_aCurrentPDFState.m_aClipRegion.IsNull() )
+            if( m_aCurrentPDFState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion.count() )
             {
                 aLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
                 rNewState.m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~GraphicsState::updateClipRegion);
             }
-            if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
+            if( rNewState.m_bClipRegion && rNewState.m_aClipRegion.count() )
             {
                 // clip region is always stored in private PDF mapmode
                 MapMode aNewMapMode = rNewState.m_aMapMode;
@@ -10221,32 +10329,8 @@ void PDFWriterImpl::updateGraphicsState()
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
                 aLine.append( "q " );
-                if( rNewClip.HasPolyPolygon() )
-                {
-                    m_aPages.back().appendPolyPolygon( rNewClip.GetPolyPolygon(), aLine );
-                    aLine.append( "W* n\n" );
-                }
-                else
-                {
-                    // need to clip all rectangles
-                    RegionHandle aHandle = rNewClip.BeginEnumRects();
-                    Rectangle aRect;
-                    while( rNewClip.GetNextEnumRect( aHandle, aRect ) )
-                    {
-                        m_aPages.back().appendRect( aRect, aLine );
-                        if( aLine.getLength() > 80 )
-                        {
-                            aLine.append( "\n" );
-                            writeBuffer( aLine.getStr(), aLine.getLength() );
-                            aLine.setLength( 0 );
-                        }
-                        else
-                            aLine.append( ' ' );
-                    }
-                    rNewClip.EndEnumRects( aHandle );
-                    aLine.append( "W* n\n" );
-                }
-
+                m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
+                aLine.append( "W* n\n" );
                 rNewState.m_aMapMode = aNewMapMode;
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
@@ -10360,9 +10444,12 @@ void PDFWriterImpl::pop()
     if( ! (aState.m_nFlags & PUSH_MAPMODE) )
         setMapMode( aState.m_aMapMode );
     if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
+    {
         // do not use setClipRegion here
         // it would convert again assuming the current mapmode
         rOld.m_aClipRegion = aState.m_aClipRegion;
+        rOld.m_bClipRegion = aState.m_bClipRegion;
+    }
     if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
         setTextLineColor( aState.m_aTextLineColor );
     if( ! (aState.m_nFlags & PUSH_OVERLINECOLOR ) )
@@ -10386,45 +10473,59 @@ void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
     m_aCurrentPDFState.m_aMapMode = rMapMode;
 }
 
-void PDFWriterImpl::setClipRegion( const Region& rRegion )
+void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    basegfx::B2DPolyPolygon aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
+    m_aGraphicsStack.front().m_bClipRegion = true;
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
 }
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
-    Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+    if( m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count() )
+    {
+        Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                                   m_aMapMode,
+                                   getReferenceDevice(),
+                                   Point( nX, nY ) ) );
+        aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
                                m_aMapMode,
                                getReferenceDevice(),
-                               Point( nX, nY ) ) );
-    aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                           m_aMapMode,
-                           getReferenceDevice(),
-                           Point() );
-    m_aGraphicsStack.front().m_aClipRegion.Move( aPoint.X(), aPoint.Y() );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+                               Point() );
+        basegfx::B2DHomMatrix aMat;
+        aMat.translate( aPoint.X(), aPoint.Y() );
+        m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+    }
 }
 
 bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
 {
-    Rectangle aRect( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                  m_aMapMode,
-                                  getReferenceDevice(),
-                                  rRect ) );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
-    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRect );
+    basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+        basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
+    return intersectClipRegion( aRect );
 }
 
 
-bool PDFWriterImpl::intersectClipRegion( const Region& rRegion )
+bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    basegfx::B2DPolyPolygon aRegion( getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
-    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRegion );
+    if( m_aGraphicsStack.front().m_bClipRegion )
+    {
+        basegfx::B2DPolyPolygon aOld( basegfx::tools::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
+        aRegion = basegfx::tools::prepareForPolygonOperation( aRegion );
+        m_aGraphicsStack.front().m_aClipRegion = basegfx::tools::solvePolygonOperationAnd( aOld, aRegion );
+    }
+    else
+    {
+        m_aGraphicsStack.front().m_aClipRegion = aRegion;
+        m_aGraphicsStack.front().m_bClipRegion = true;
+    }
+    return true;
 }
 
 void PDFWriterImpl::createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )

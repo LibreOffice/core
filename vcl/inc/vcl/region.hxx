@@ -116,7 +116,11 @@ public:
 
     BOOL            HasPolyPolygon() const;
     PolyPolygon     GetPolyPolygon() const;
+    // returns an empty polypolygon in case HasPolyPolygon is FALSE
     const basegfx::B2DPolyPolygon GetB2DPolyPolygon() const;
+    // returns a PolyPolygon either copied from the set PolyPolygon region
+    // or created from the constituent rectangles
+    basegfx::B2DPolyPolygon ConvertToB2DPolyPolygon();
 
     ULONG           GetRectCount() const;
     RegionHandle    BeginEnumRects();

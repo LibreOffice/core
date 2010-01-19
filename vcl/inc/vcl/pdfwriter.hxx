@@ -50,7 +50,6 @@
 class Font;
 class Point;
 class OutputDevice;
-class Region;
 class MapMode;
 class Polygon;
 class LineInfo;
@@ -674,10 +673,10 @@ The following structure describes the permissions used in PDF security
     void                Pop();
 
     void               SetClipRegion();
-    void               SetClipRegion( const Region& rRegion );
+    void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
     void               MoveClipRegion( long nHorzMove, long nVertMove );
     void               IntersectClipRegion( const Rectangle& rRect );
-    void               IntersectClipRegion( const Region& rRegion );
+    void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void               SetAntialiasing( USHORT nMode =  0 );
 
