@@ -912,10 +912,10 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
         rBuffer.append(static_cast<sal_Int32>(rDuration.Days));
         rBuffer.append(sal_Unicode('D'));
     }
-    const sal_Int32 nHSecs(static_cast<sal_Int32>(rDuration.Seconds)
-                         + static_cast<sal_Int32>(rDuration.HundredthSeconds));
+    const sal_Int32 nMSecs(static_cast<sal_Int32>(rDuration.Seconds)
+                         + static_cast<sal_Int32>(rDuration.MilliSeconds));
     if (static_cast<sal_Int32>(rDuration.Hours) +
-        static_cast<sal_Int32>(rDuration.Minutes) + nHSecs)
+        static_cast<sal_Int32>(rDuration.Minutes) + nMSecs)
     {
         rBuffer.append(sal_Unicode('T')); // time separator
         if (rDuration.Hours)
@@ -928,20 +928,37 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
             rBuffer.append(static_cast<sal_Int32>(rDuration.Minutes));
             rBuffer.append(sal_Unicode('M'));
         }
-        if (nHSecs)
+        if (nMSecs)
         {
             // seconds must not be omitted (i.e. ".42S" is not valid)
             rBuffer.append(static_cast<sal_Int32>(rDuration.Seconds));
-            if (rDuration.HundredthSeconds)
+            if (rDuration.MilliSeconds)
             {
                 rBuffer.append(sal_Unicode('.'));
-                const sal_Int32 nHundredthSeconds(
-                        rDuration.HundredthSeconds % 100);
-                if (nHundredthSeconds < 10)
+                const sal_Int32 nMilliSeconds(rDuration.MilliSeconds % 1000);
+                if (nMilliSeconds < 100)
                 {
                     rBuffer.append(sal_Unicode('0'));
                 }
-                rBuffer.append(nHundredthSeconds);
+                if (nMilliSeconds < 10)
+                {
+                    rBuffer.append(sal_Unicode('0'));
+                }
+                if (0 == (nMilliSeconds % 10))
+                {
+                    if (0 == (nMilliSeconds % 100))
+                    {
+                        rBuffer.append(nMilliSeconds / 100);
+                    }
+                    else
+                    {
+                        rBuffer.append(nMilliSeconds / 10);
+                    }
+                }
+                else
+                {
+                    rBuffer.append(nMilliSeconds);
+                }
             }
             rBuffer.append(sal_Unicode('S'));
         }
@@ -1068,7 +1085,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
     sal_Int32 nHours(0);
     sal_Int32 nMinutes(0);
     sal_Int32 nSeconds(0);
-    sal_Int32 nHundredthSeconds(0);
+    sal_Int32 nMilliSeconds(0);
 
     bTimePart = readDurationT(string, nPos);
     bSuccess = (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
@@ -1122,29 +1139,38 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     nTemp = -1;
                     const sal_Int32 nStart(nPos);
                     bSuccess =
-                        (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
+                        (R_NOTHING != readUnsignedNumber(string, nPos, nTemp));
                     if ((nPos < string.getLength()) && bSuccess)
                     {
-                        if (sal_Unicode('S') == string[nPos])
+                        if (-1 != nTemp)
                         {
-                            ++nPos;
-                            if (-1 != nTemp)
+                            nTemp = -1;
+                            const sal_Int32 nDigits = nPos - nStart;
+                            OSL_ENSURE(nDigits > 0, "bad code monkey");
+                            const sal_Unicode cZero('0');
+                            nMilliSeconds = 100 * (string[nStart] - cZero);
+                            if (nDigits >= 2)
                             {
-                                nTemp = -1;
-                                const sal_Int32 nDigits = nPos - nStart;
-                                OSL_ENSURE(nDigits > 0, "bad code monkey");
-                                nHundredthSeconds = 10 *
-                                    (string[nStart] - sal_Unicode('0'));
-                                if (nDigits >= 2)
+                                nMilliSeconds += 10 *
+                                    (string[nStart+1] - cZero);
+                                if (nDigits >= 3)
                                 {
-                                    nHundredthSeconds +=
-                                        (string[nStart+1] - sal_Unicode('0'));
+                                    nMilliSeconds += (string[nStart+2] - cZero);
                                 }
+                            }
+
+                            if (sal_Unicode('S') == string[nPos])
+                            {
+                                ++nPos;
                             }
                             else
                             {
                                 bSuccess = false;
                             }
+                        }
+                        else
+                        {
+                            bSuccess = false;
                         }
                     }
                 }
@@ -1181,14 +1207,14 @@ bool Converter::convertDuration(util::Duration& rDuration,
 
     if (bSuccess)
     {
-        rDuration.Negative  = bIsNegativeDuration;
-        rDuration.Years     = static_cast<sal_Int16>(nYears);
-        rDuration.Months    = static_cast<sal_Int16>(nMonths);
-        rDuration.Days      = static_cast<sal_Int16>(nDays);
-        rDuration.Hours     = static_cast<sal_Int16>(nHours);
-        rDuration.Minutes   = static_cast<sal_Int16>(nMinutes);
-        rDuration.Seconds   = static_cast<sal_Int16>(nSeconds);
-        rDuration.HundredthSeconds = static_cast<sal_Int16>(nHundredthSeconds);
+        rDuration.Negative      = bIsNegativeDuration;
+        rDuration.Years         = static_cast<sal_Int16>(nYears);
+        rDuration.Months        = static_cast<sal_Int16>(nMonths);
+        rDuration.Days          = static_cast<sal_Int16>(nDays);
+        rDuration.Hours         = static_cast<sal_Int16>(nHours);
+        rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
+        rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
+        rDuration.MilliSeconds  = static_cast<sal_Int16>(nMilliSeconds);
     }
 
     return bSuccess;
@@ -1201,24 +1227,26 @@ struct Test {
         return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
             && a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
-            && a.HundredthSeconds == b.HundredthSeconds
+            && a.MilliSeconds == b.MilliSeconds
             && a.Negative == b.Negative;
     }
-    static void doTest(util::Duration const & rid, const char * pis)
+    static void doTest(util::Duration const & rid, char const*const pis,
+            char const*const i_pos = 0)
     {
-        bool bSuccess(false);
-        ::rtl::OUStringBuffer buf;
-        Converter::convertDuration(buf, rid);
-        ::rtl::OUString os(buf.makeStringAndClear());
-        OSL_TRACE(::rtl::OUStringToOString(os.getStr(), RTL_TEXTENCODING_UTF8));
-        OSL_ASSERT(os.equalsAscii(pis));
+        char const*const pos((i_pos) ? i_pos : pis);
         util::Duration od;
-        bSuccess = Converter::convertDuration(od, os);
-        OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dH",
+        ::rtl::OUString is(::rtl::OUString::createFromAscii(pis));
+        bool bSuccess = Converter::convertDuration(od, is);
+        OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dm",
             od.Negative, od.Years, od.Months, od.Days,
-            od.Hours, od.Minutes, od.Seconds, od.HundredthSeconds);
+            od.Hours, od.Minutes, od.Seconds, od.MilliSeconds);
         OSL_ASSERT(bSuccess);
         OSL_ASSERT(eqDuration(rid, od));
+        ::rtl::OUStringBuffer buf;
+        Converter::convertDuration(buf, od);
+        OSL_TRACE(
+            ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8));
+        OSL_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
     }
     static void doTestF(const char * pis)
     {
@@ -1227,7 +1255,7 @@ struct Test {
                 ::rtl::OUString::createFromAscii(pis));
         OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dH",
             od.Negative, od.Years, od.Months, od.Days,
-            od.Hours, od.Minutes, od.Seconds, od.HundredthSeconds);
+            od.Hours, od.Minutes, od.Seconds, od.MilliSeconds);
         OSL_ASSERT(!bSuccess);
     }
     Test() {
@@ -1238,24 +1266,27 @@ struct Test {
         doTest( util::Duration(false, 0, 0, 0, 52, 0, 0, 0), "PT52H" );
         doTest( util::Duration(false, 0, 0, 0, 0, 717, 0, 0), "PT717M" );
         doTest( util::Duration(false, 0, 0, 0, 0, 0, 121, 0), "PT121S" );
-        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 19), "PT0.19S" );
-        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 9), "PT0.09S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 190), "PT0.19S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 90), "PT0.09S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 9), "PT0.009S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 9, 999),
+                "PT9.999999999999999999999999999999S", "PT9.999S" );
         doTest( util::Duration(true , 0, 0, 9999, 0, 0, 0, 0), "-P9999D" );
-        doTest( util::Duration(true , 7, 6, 5, 4, 3, 2, 1),
+        doTest( util::Duration(true , 7, 6, 5, 4, 3, 2, 10),
                 "-P7Y6M5DT4H3M2.01S" );
         doTest( util::Duration(false, 0, 6, 0, 0, 3, 0, 0), "P6MT3M" );
         doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 0), "P0D" );
-        doTestF("1Y1M");
-        doTestF("P-1Y1M");
-        doTestF("P1M1Y");
-        doTestF("PT1Y");
-        doTestF("P1Y1M1M");
-        doTestF("P1YT1MT1M");
-        doTestF("P1YT");
-        doTestF("P99999999999Y");
-        doTestF("PT.1S");
-        doTestF("PT5M.134S");
-        doTestF("PT1.S");
+        doTestF("1Y1M");        // invalid: no ^P
+        doTestF("P-1Y1M");      // invalid: - after P
+        doTestF("P1M1Y");       // invalid: Y after M
+        doTestF("PT1Y");        // invalid: Y after T
+        doTestF("P1Y1M1M");     // invalid: M twice, no T
+        doTestF("P1YT1MT1M");   // invalid: T twice
+        doTestF("P1YT");        // invalid: T but no H,M,S
+        doTestF("P99999999999Y");   // cannot parse so many Ys
+        doTestF("PT.1S");       // invalid: no 0 preceding .
+        doTestF("PT5M.134S");   // invalid: no 0 preceding .
+        doTestF("PT1.S");       // invalid: no digit following .
         OSL_TRACE("\nSAX CONVERTER TEST END\n");
     }
 };
