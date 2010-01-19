@@ -31,9 +31,9 @@
 #ifndef SC_SCPATATR_HXX
 #define SC_SCPATATR_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
-#include <vcl/fontcvt.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/fontcvt.hxx>
 #include <svx/svxenum.hxx>
 #include "scdllapi.h"
 

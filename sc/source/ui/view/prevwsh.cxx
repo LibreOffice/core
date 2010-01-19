@@ -49,8 +49,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
@@ -705,7 +705,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet, RID_SVXDLG_ZOOM);
+                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZOOMBTN_OPTIMAL );

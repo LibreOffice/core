@@ -32,7 +32,7 @@
 #define SC_EXCRECDS_HXX
 
 #include <tools/solar.h>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/string.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/color.hxx>
@@ -204,18 +204,6 @@ public:
 class ExcEof : public ExcRecord
 {
 private:
-public:
-    virtual UINT16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
-};
-
-
-//----------------------------------------------------- class ExcFngroupcount -
-
-class ExcFngroupcount : public ExcRecord
-{
-private:
-    virtual void            SaveCont( XclExpStream& rStrm );
 public:
     virtual UINT16          GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;

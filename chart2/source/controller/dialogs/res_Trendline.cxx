@@ -262,7 +262,7 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void TrendlineResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aFLType.GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && m_aFLType.GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     if( m_bNoneAvailable )
         m_aFINone.SetImage( SELECT_IMAGE( BMP_REGRESSION_NONE ));

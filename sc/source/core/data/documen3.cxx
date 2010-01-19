@@ -39,8 +39,8 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -1734,11 +1734,8 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    USHORT d,m,y;
-
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
     *pDocOptions = rOpt;
-    rOpt.GetDate( d,m,y );
 
     xPoolHelper->SetFormTableOpt(rOpt);
 }

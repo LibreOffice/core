@@ -48,8 +48,8 @@
 #include <vcl/sound.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 
 #include <list>
 
@@ -3177,6 +3177,9 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
 
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
+
     if (bColumn)
     {
         rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
@@ -3232,6 +3235,9 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
     else
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
+
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
 
     if (bColumn)
     {

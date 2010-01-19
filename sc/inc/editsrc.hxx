@@ -33,7 +33,7 @@
 
 #include "address.hxx"
 #include <svx/unoedsrc.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <memory>
 

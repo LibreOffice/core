@@ -33,7 +33,7 @@
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>

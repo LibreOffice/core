@@ -39,7 +39,7 @@
 #include <vcl/vclenum.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/frmdir.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "fapihelper.hxx"
 
 class XclRoot;
@@ -247,6 +247,8 @@ const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value fo
 const sal_uInt16 EXC_ID_STYLEEXT            = 0x0892;
 
 const sal_uInt8 EXC_STYLEEXT_BUILTIN        = 0x01;
+const sal_uInt8 EXC_STYLEEXT_HIDDEN         = 0x02;
+const sal_uInt8 EXC_STYLEEXT_CUSTOM         = 0x04;
 
 // Structs and classes ========================================================
 

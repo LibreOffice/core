@@ -33,8 +33,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XOLEObjects.hpp>
 
-#include "vbacollectionimpl.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
+#include "excelvbahelper.hxx"
 
 typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
 

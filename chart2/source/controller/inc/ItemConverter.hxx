@@ -31,8 +31,8 @@
 #define CHART_ITEMCONVERTER_HXX
 
 #include <unotools/eventlisteneradapter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 // for pair

@@ -37,7 +37,7 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
 #include "MultipleItemConverter.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/chart2/XTitled.hpp>

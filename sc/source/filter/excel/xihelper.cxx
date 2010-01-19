@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xihelper.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/editobj.hxx>
 #include <tools/urlobj.hxx>
 #include "scitems.hxx"

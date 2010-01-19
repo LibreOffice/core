@@ -47,9 +47,9 @@
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/broadcast.hxx>
-#include <svtools/listeneriter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 
 #include "column.hxx"

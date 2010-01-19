@@ -43,7 +43,7 @@
 #include <svx/udlnitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
 

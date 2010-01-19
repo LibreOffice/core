@@ -2159,7 +2159,9 @@ void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
 void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const
 {
     namespace cssd = ::com::sun::star::drawing;
-    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
+
+//    #i104057# do not assert this, written by broken external generators
+//    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
 
     sal_Int32 nRotationY = 0;
     sal_Int32 nRotationX = 0;
