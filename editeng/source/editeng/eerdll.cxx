@@ -228,7 +228,7 @@ EditResId::EditResId( USHORT nId ):
 EditDLL::EditDLL()
 {
     pGlobalData = new GlobalEditData;
-    ByteString aResMgrName( "svx" );
+    ByteString aResMgrName( "editeng" );
     pResMgr = ResMgr::CreateResMgr(
         aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 }

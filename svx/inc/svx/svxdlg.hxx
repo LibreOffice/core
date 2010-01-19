@@ -339,7 +339,7 @@ class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, 
 public:
     static SvxAbstractDialogFactory* Create();
 
-    // define dtor as this will create typeinfo in svx library
+    // define dtor as this will create typeinfo and in svx library and export vtable
     virtual                             ~SvxAbstractDialogFactory();
 
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,

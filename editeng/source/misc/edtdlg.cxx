@@ -35,5 +35,9 @@
 
 EditAbstractDialogFactory* EditAbstractDialogFactory::Create()
 {
-    return (EditAbstractDialogFactory*) VclAbstractDialogFactory::Create();
+    return dynamic_cast <EditAbstractDialogFactory*>( VclAbstractDialogFactory::Create() );
+}
+
+EditAbstractDialogFactory::~EditAbstractDialogFactory()
+{
 }

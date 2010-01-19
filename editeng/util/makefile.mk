@@ -87,6 +87,8 @@ DEFLIB1NAME=$(TARGET)
 
 # Resource files
 SRSFILELIST=\
+        $(SRS)$/editeng.srs \
+        $(SRS)$/outliner.srs \
         $(SRS)$/misc.srs \
         $(SRS)$/items.srs
 

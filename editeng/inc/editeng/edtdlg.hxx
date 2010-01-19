@@ -94,9 +94,10 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual String  GetCurrentSuggestion( ) const =0;
 };
 
-class EDITENG_DLLPUBLIC EditAbstractDialogFactory
+class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
+                                        virtual ~EditAbstractDialogFactory();   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
     virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                                 const String &rWord, sal_Int16 nLanguage ) = 0;

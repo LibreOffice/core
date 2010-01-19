@@ -115,9 +115,10 @@ public:
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
-class SFX2_DLLPUBLIC SfxAbstractDialogFactory : public VclAbstractDialogFactory
+class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
+                                        virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
     virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const String& rParameter ) = 0;
