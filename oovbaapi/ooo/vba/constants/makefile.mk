@@ -55,7 +55,6 @@ MYIDLFILES=$(foreach,i,$(MYTMPIDLFILES) $(MY_GEN_IDL_PATH)$/$(i))
 MYURDFILES=$(foreach,i,$(MYIDLFILES) $(MY_GEN_UCR_PATH)$/$(i:b).urd)
 MYDBTARGET=$(OUT)$/ucr/constants.db
 .ENDIF
-.ENDIF
 
 .INCLUDE :  target.mk
 
@@ -68,4 +67,5 @@ $(MY_GEN_UCR_PATH)$/%.urd: $(MY_GEN_IDL_PATH)$/%.idl
 $(MYDBTARGET) : $(MYURDFILES)  $(MYIDLFILES)
     $(REGMERGE) $(OUT)$/ucr/constants.db /UCR @$(mktmp $(MYURDFILES))
 
+.ENDIF
 .ENDIF

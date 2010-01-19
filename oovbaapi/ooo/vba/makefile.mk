@@ -41,13 +41,12 @@ PACKAGE=ooo$/vba
 .IF "$(ENABLE_VBA)"!="YES"
 dummy:
         @echo "not building vba..."
-.ENDIF
+.ELSE
 
 # ------------------------------------------------------------------------
 .IF "$(L10N_framework)"=""
 IDLFILES=\
     XErrObject.idl \
-    XGlobals.idl \
     XCollection.idl\
     XVBAToOOEventDescGen.idl\
     XPropValue.idl\
@@ -57,8 +56,23 @@ IDLFILES=\
     XCommandBarControls.idl\
     XCommandBar.idl\
     XCommandBars.idl\
-    Globals.idl\
+    XCommandBarPopup.idl\
+    XCommandBarButton.idl\
+    XControlProvider.idl\
+    ControlProvider.idl\
+    XApplicationBase.idl\
+    XWindowBase.idl\
+    XDocumentBase.idl\
+    XDocumentsBase.idl\
+    XGlobalsBase.idl\
+    XDocumentProperty.idl\
+    XDocumentProperties.idl\
+    XFontBase.idl\
+    XDialogsBase.idl\
+    XDialogBase.idl\
+    XPageSetupBase.idl  \
 
 # ------------------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk
+.ENDIF

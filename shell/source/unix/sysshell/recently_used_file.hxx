@@ -54,9 +54,6 @@ public:
     void truncate(off_t length = 0);
 
     //----------------------------
-    void flush();
-
-    //----------------------------
     size_t read(
         char* buffer,
         size_t size) const;

@@ -75,7 +75,8 @@ namespace drawinglayer
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute* pStroke,
             bool bCellText,
-            bool bWordWrap);
+            bool bWordWrap,
+            bool bClipOnBounds);
 
         Primitive2DSequence createEmbeddedShadowPrimitive(
             const Primitive2DSequence& rContent,

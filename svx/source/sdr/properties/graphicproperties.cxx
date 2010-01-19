@@ -31,8 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/graphicproperties.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
 #include <svx/svddef.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/svdograf.hxx>

@@ -49,7 +49,7 @@
 #ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <svx/dialogs.hrc>

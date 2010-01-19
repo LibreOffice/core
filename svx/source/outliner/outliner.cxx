@@ -34,7 +34,7 @@
 #include <outl_pch.hxx>
 
 #include <math.h>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 #define _OUTLINER_CXX
 #include <svx/outliner.hxx>
@@ -46,8 +46,8 @@
 #include <editstat.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/editobj.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/metric.hxx>
 #include <svx/numitem.hxx>
 #include <svx/adjitem.hxx>
@@ -57,7 +57,7 @@
 #include <goodies/grfmgr.hxx>
 #include <svx/svxfont.hxx>
 #include <svx/brshitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 // #101498# calculate if it's RTL or not
 #include <unicode/ubidi.h>
@@ -1867,6 +1867,20 @@ IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
     return 0;
 }
 
+static bool isSameNumbering( const SvxNumberFormat& rN1, const SvxNumberFormat& rN2 )
+{
+    if( rN1.GetNumberingType() != rN2.GetNumberingType() )
+        return false;
+
+    if( rN1.GetNumStr(1) != rN2.GetNumStr(1) )
+        return false;
+
+    if( (rN1.GetPrefix() != rN2.GetPrefix()) || (rN1.GetSuffix() != rN2.GetSuffix()) )
+        return false;
+
+    return true;
+}
+
 sal_uInt16 Outliner::ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pParaFmt )
 {
     sal_uInt16 nNumber = pParaFmt->GetStart() - 1;
@@ -1879,8 +1893,8 @@ sal_uInt16 Outliner::ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pPar
         pPara = pParaList->GetParagraph( nPara );
         const sal_Int16 nDepth = pPara->GetDepth();
 
-        // ignore paragraphs that are below our paragraph
-        if( nDepth > nParaDepth )
+        // ignore paragraphs that are below our paragraph or have no numbering
+        if( (nDepth > nParaDepth) || (nDepth == -1) )
             continue;
 
         // stop on paragraphs that are above our paragraph
@@ -1888,8 +1902,13 @@ sal_uInt16 Outliner::ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pPar
             break;
 
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
-        if( pFmt == 0 || (*pFmt != *pParaFmt) )
-            break; // change in number format, stop here
+
+        if( pFmt == 0 )
+            continue; // ignore paragraphs without bullets
+
+        // check if numbering is the same
+        if( !isSameNumbering( *pFmt, *pParaFmt ) )
+            break;
 
         const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
 

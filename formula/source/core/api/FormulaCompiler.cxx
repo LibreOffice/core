@@ -35,7 +35,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
@@ -1183,10 +1183,10 @@ void FormulaCompiler::RangeLine()
 
 //---------------------------------------------------------------------------
 
-void FormulaCompiler::UnionLine()
+void FormulaCompiler::IntersectionLine()
 {
     RangeLine();
-    while (pToken->GetOpCode() == ocUnion)
+    while (pToken->GetOpCode() == ocIntersect)
     {
         FormulaTokenRef p = pToken;
         NextToken();
@@ -1197,14 +1197,14 @@ void FormulaCompiler::UnionLine()
 
 //---------------------------------------------------------------------------
 
-void FormulaCompiler::IntersectionLine()
+void FormulaCompiler::UnionLine()
 {
-    UnionLine();
-    while (pToken->GetOpCode() == ocIntersect)
+    IntersectionLine();
+    while (pToken->GetOpCode() == ocUnion)
     {
         FormulaTokenRef p = pToken;
         NextToken();
-        UnionLine();
+        IntersectionLine();
         PutCode(p);
     }
 }
@@ -1224,7 +1224,7 @@ void FormulaCompiler::UnaryLine()
         PutCode( p );
     }
     else
-        IntersectionLine();
+        UnionLine();
 }
 
 //---------------------------------------------------------------------------

@@ -201,9 +201,9 @@ public:
 //TL:TODO: remove those functions or make them inline
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenator >    SvxGetHyphenator();
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();

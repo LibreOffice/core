@@ -34,9 +34,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <tools/zcodec.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -80,16 +80,15 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/cachestr.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localfilehelper.hxx>
@@ -100,7 +99,6 @@
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <shell/systemshell.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -831,7 +829,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( aUrl.GetProtocol() == INET_PROT_FILE )
                 {
                     const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
-                    SystemShell::AddToRecentDocumentList(
+                    Application::AddToRecentDocumentList(
                         aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
                         (pOrgFilter) ? pOrgFilter->GetMimeType() : String() );
                 }
@@ -1873,7 +1871,19 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
         {
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             ::rtl::OUString aBackupURL = rTargetMedium.GetBackup_Impl();
-            if ( aBackupURL.getLength() )
+            if ( !aBackupURL.getLength() )
+            {
+                // the backup could not be created, try to disconnect the storage and close the source SfxMedium
+                // in this case the optimization is not possible, connect storage to a temporary file
+                rTargetMedium.ResetError();
+                xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
+                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                rSrcMedium.Close();
+
+                // now try to create the backup
+                rTargetMedium.GetBackup_Impl();
+            }
+            else
             {
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage

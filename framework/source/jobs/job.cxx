@@ -51,7 +51,6 @@
 //  includes of other projects
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/uieventslogger.hxx>
 
 //________________________________
 //  namespace
@@ -238,7 +237,6 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     // Otherwhise we might die by ref count ...
     css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
-    if ( ::comphelper::UiEventsLogger::isEnabled() )
     try
     {
         // create the job

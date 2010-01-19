@@ -36,7 +36,7 @@
 #include <editstat.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 DBG_NAME(SdrOutliner)
 /*************************************************************************

@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

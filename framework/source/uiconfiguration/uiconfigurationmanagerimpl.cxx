@@ -148,12 +148,12 @@ void UIConfigurationManagerImpl::impl_fillSequenceWithElementTypeInfo( UIElement
     while ( pUserIter != rUserElements.end() )
     {
         sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
-        if ( !m_bUseDefault && nIndex > RESOURCEURL_PREFIX_SIZE )
+        if ( nIndex > RESOURCEURL_PREFIX_SIZE )
         {
             // Performance: Retrieve user interface name only for custom user interface elements.
             // It's only used by them!
             UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
-            if ( pDataSettings && ( !m_bUseDefault || !pDataSettings->bDefault) )
+            if ( pDataSettings && ( m_bUseDefault || !pDataSettings->bDefault ))
             {
                 // Retrieve user interface name from XPropertySet interface
                 rtl::OUString aUIName;
@@ -1268,7 +1268,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
         if ( m_bDisposed )
             throw DisposedException();
 
-        bool           bInsertData( m_bUseDefault );
+        bool           bInsertData( false );
         UIElementData aUIElementData;
         UIElementData* pDataSettings = impl_findUIElementData( NewResourceURL, nElementType );
         if ( !m_bUseDefault )
@@ -1281,7 +1281,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
                 bInsertData   = true;
             }
         }
-        if ( !pDataSettings )
+        if ( !pDataSettings || !m_bUseDefault )
         {
             aUIElementData.bDefault     = false;
             if ( !m_bUseDefault )

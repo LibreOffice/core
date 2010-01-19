@@ -38,7 +38,6 @@
 #include <vector>
 #include <list>
 #include <hash_map>
-#include <memory>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -78,7 +77,6 @@
 
 namespace framework
 {
-    class UIConfigurationManagerImpl;
     class ModuleUIConfigurationManager :   public com::sun::star::lang::XTypeProvider                       ,
                                            public com::sun::star::lang::XServiceInfo                        ,
                                            public com::sun::star::lang::XComponent                          ,
@@ -87,6 +85,7 @@ namespace framework
                                            public ::com::sun::star::ui::XUIConfigurationManager       ,
                                            public ::com::sun::star::ui::XModuleUIConfigurationManager ,
                                            public ::com::sun::star::ui::XUIConfigurationPersistence   ,
+                                           private ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                            public ::cppu::OWeakObject
     {
         public:
@@ -135,7 +134,94 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() throw (::com::sun::star::uno::RuntimeException);
 
         private:
-            ::std::auto_ptr<UIConfigurationManagerImpl> m_pImpl;
+            // private data types
+            enum Layer
+            {
+                LAYER_DEFAULT,
+                LAYER_USERDEFINED,
+                LAYER_COUNT
+            };
+
+            enum NotifyOp
+            {
+                NotifyOp_Remove,
+                NotifyOp_Insert,
+                NotifyOp_Replace
+            };
+
+            struct UIElementInfo
+            {
+                UIElementInfo( const rtl::OUString& rResourceURL, const rtl::OUString& rUIName ) :
+                    aResourceURL( rResourceURL), aUIName( rUIName ) {}
+                rtl::OUString   aResourceURL;
+                rtl::OUString   aUIName;
+            };
+
+            struct UIElementData
+            {
+                UIElementData() : bModified( false ), bDefault( true ), bDefaultNode( true ) {};
+
+                rtl::OUString aResourceURL;
+                rtl::OUString aName;
+                bool          bModified;        // has been changed since last storing
+                bool          bDefault;         // default settings
+                bool          bDefaultNode;     // this is a default layer element data
+                com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > xSettings;
+            };
+
+            struct UIElementType;
+            friend struct UIElementType;
+            typedef ::std::hash_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
+
+            struct UIElementType
+            {
+                UIElementType() : bModified( false ),
+                                  bLoaded( false ),
+                                  bDefaultLayer( false ),
+                                  nElementType( ::com::sun::star::ui::UIElementType::UNKNOWN ) {}
+
+
+                bool                                                              bModified;
+                bool                                                              bLoaded;
+                bool                                                              bDefaultLayer;
+                sal_Int16                                                         nElementType;
+                UIElementDataHashMap                                              aElementsHashMap;
+                com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage;
+            };
+
+            typedef ::std::vector< UIElementType > UIElementTypesVector;
+            typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+            typedef ::std::hash_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
+
+            // private methods
+            void            impl_Initialize();
+            void            implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
+            void            impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType );
+            void            impl_preloadUIElementTypeList( Layer eLayer, sal_Int16 nElementType );
+            UIElementData*  impl_findUIElementData( const rtl::OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
+            void            impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData );
+            void            impl_storeElementTypeData( com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage, UIElementType& rElementType, bool bResetModifyState = true );
+            void            impl_resetElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
+            void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
+
+            UIElementTypesVector                                                            m_aUIElements[LAYER_COUNT];
+            PresetHandler*                                                                  m_pStorageHandler[::com::sun::star::ui::UIElementType::COUNT];
+            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xDefaultConfigStorage;
+            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
+            bool                                                                            m_bReadOnly;
+            bool                                                                            m_bInitialized;
+            bool                                                                            m_bModified;
+            bool                                                                            m_bConfigRead;
+            bool                                                                            m_bDisposed;
+            rtl::OUString                                                                   m_aXMLPostfix;
+            rtl::OUString                                                                   m_aPropUIName;
+            rtl::OUString                                                                   m_aPropResourceURL;
+            rtl::OUString                                                                   m_aModuleIdentifier;
+            rtl::OUString                                                                   m_aModuleShortName;
+            com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
+            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+            ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
+            com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xModuleImageManager;
    };
 }
 

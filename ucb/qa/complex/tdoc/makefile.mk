@@ -40,7 +40,7 @@ PACKAGE = complex.tdoc
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES = CheckContentProvider.java \
             CheckTransientDocumentsContent.java \
             CheckTransientDocumentsContentProvider.java \
