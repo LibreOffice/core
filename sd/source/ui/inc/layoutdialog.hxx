@@ -54,7 +54,8 @@ protected:
     DECL_LINK( SelectHdl, void * );
 
 private:
-    ValueSet* mpLayoutSet;
+    boost::scoped_ptr< ValueSet > mpLayoutSet1;
+    boost::scoped_ptr< ValueSet > mpLayoutSet2;
     ViewShellBase& mrBase;
 };
 
