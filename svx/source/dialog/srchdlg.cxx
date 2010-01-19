@@ -74,7 +74,7 @@
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include <editeng/brshitem.hxx>
-
+#include <tools/resary.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 
 #include <sfx2/layout-pre.hxx>
@@ -82,6 +82,7 @@
 using namespace com::sun::star::i18n;
 using namespace com::sun::star;
 using namespace comphelper;
+
 // -----------------------------------------------------------------------
 
 #define REMEMBER_SIZE       10
@@ -2338,6 +2339,8 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
         default: ;//prevent warning
     }
 
+    ResStringArray aAttrNames( SVX_RES( RID_ATTR_NAMES ) );
+
     for ( USHORT i = 0; i < pList->Count(); ++i )
     {
         const SearchAttrItem& rItem = pList->GetObject(i);
@@ -2353,13 +2356,16 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
                                     eMapUnit, aStr );
             rStr += aStr;
         }
-        else
+        else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
         {
             //Sonderbehandlung fuer Zeichenhintergrund
-            USHORT nId = rItem.nSlot == SID_ATTR_BRUSH_CHAR ?
-                                RID_SVXITEMS_BRUSH_CHAR :
-                                    rItem.nSlot - SID_SVX_START + RID_ATTR_BEGIN;
-            rStr += SVX_RESSTR( nId );
+            rStr += SVX_RESSTR( RID_SVXITEMS_BRUSH_CHAR );
+        }
+        else
+        {
+            sal_uInt32 nId  = aAttrNames.FindIndex( rItem.nSlot );
+            if ( RESARRAY_INDEX_NOTFOUND != nId )
+                rStr += aAttrNames.GetString( nId );
         }
     }
     return rStr;

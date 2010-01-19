@@ -32,10 +32,7 @@
 
 // include ------------------------------------------------------------------
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-
-#endif
 
 // Extras -------------------------------------------------------------------
 #define RID_SVXITEMS_EXTRAS_CHARCOLOR       (RID_SVXITEMS_START +  2)
@@ -110,106 +107,6 @@
 #define RID_SVXITEMS_CHARSET_SYSTEM         (RID_SVXITEMS_START + 154)
 #define RID_SVXITEMS_CHARSET_SYMBOL         (RID_SVXITEMS_START + 155)
 
-// type names of slots; needed for attribute list on search & replace dialogue
-#define RID_ATTR_BEGIN                      (RID_SVXITEMS_START + 250)
-#define RID_ATTR_ZOOM                       (RID_ATTR_BEGIN + 0)
-#define RID_ATTR_BRUSH                      (RID_ATTR_BEGIN + 1)
-#define RID_ATTR_TABSTOP                    (RID_ATTR_BEGIN + 2)
-#define RID_ATTR_TABSTOP_DEFAULTS           (RID_ATTR_BEGIN + 3)
-#define RID_ATTR_TABSTOP_POS                (RID_ATTR_BEGIN + 4)
-#define RID_ATTR_TABSTOP_OFFSET             (RID_ATTR_BEGIN + 5)
-#define RID_ATTR_CHAR                       (RID_ATTR_BEGIN + 6)
-#define RID_ATTR_CHAR_FONT                  (RID_ATTR_BEGIN + 7)
-#define RID_ATTR_CHAR_POSTURE               (RID_ATTR_BEGIN + 8)
-#define RID_ATTR_CHAR_WEIGHT                (RID_ATTR_BEGIN + 9)
-#define RID_ATTR_CHAR_SHADOWED              (RID_ATTR_BEGIN + 10)
-#define RID_ATTR_CHAR_WORDLINEMODE          (RID_ATTR_BEGIN + 11)
-#define RID_ATTR_CHAR_CONTOUR               (RID_ATTR_BEGIN + 12)
-#define RID_ATTR_CHAR_STRIKEOUT             (RID_ATTR_BEGIN + 13)
-#define RID_ATTR_CHAR_UNDERLINE             (RID_ATTR_BEGIN + 14)
-#define RID_ATTR_CHAR_FONTHEIGHT            (RID_ATTR_BEGIN + 15)
-#define RID_ATTR_CHAR_PROPSIZE              (RID_ATTR_BEGIN + 16)
-#define RID_ATTR_CHAR_COLOR                 (RID_ATTR_BEGIN + 17)
-#define RID_ATTR_CHAR_KERNING               (RID_ATTR_BEGIN + 18)
-#define RID_ATTR_CHAR_CASEMAP               (RID_ATTR_BEGIN + 19)
-#define RID_ATTR_CHAR_LANGUAGE              (RID_ATTR_BEGIN + 20)
-#define RID_ATTR_CHAR_ESCAPEMENT            (RID_ATTR_BEGIN + 21)
-#define RID_ATTR_CHAR_FONTLIST              (RID_ATTR_BEGIN + 22)
-#define RID_ATTR_BORDER_INNER               (RID_ATTR_BEGIN + 23)
-#define RID_ATTR_BORDER_OUTER               (RID_ATTR_BEGIN + 24)
-#define RID_ATTR_BORDER_SHADOW              (RID_ATTR_BEGIN + 25)
-#define RID_ATTR_PARA                       (RID_ATTR_BEGIN + 26)
-#define RID_ATTR_PARA_ADJUST                (RID_ATTR_BEGIN + 27)
-#define RID_ATTR_PARA_ADJUST_LEFT           (RID_ATTR_BEGIN + 28)
-#define RID_ATTR_PARA_ADJUST_RIGHT          (RID_ATTR_BEGIN + 29)
-#define RID_ATTR_PARA_ADJUST_CENTER         (RID_ATTR_BEGIN + 30)
-#define RID_ATTR_PARA_ADJUST_BLOCK          (RID_ATTR_BEGIN + 31)
-#define RID_ATTR_PARA_ADJUST_BLOCKLINE      (RID_ATTR_BEGIN + 32)
-#define RID_ATTR_PARA_LINESPACE             (RID_ATTR_BEGIN + 33)
-#define RID_ATTR_PARA_LINESPACE_10          (RID_ATTR_BEGIN + 34)
-#define RID_ATTR_PARA_LINESPACE_15          (RID_ATTR_BEGIN + 35)
-#define RID_ATTR_PARA_LINESPACE_20          (RID_ATTR_BEGIN + 36)
-#define RID_ATTR_PARA_PAGEBREAK             (RID_ATTR_BEGIN + 37)
-#define RID_ATTR_PARA_HYPHENZONE            (RID_ATTR_BEGIN + 38)
-#define RID_ATTR_PARA_SPLIT                 (RID_ATTR_BEGIN + 39)
-#define RID_ATTR_PARA_WIDOWS                (RID_ATTR_BEGIN + 40)
-#define RID_ATTR_PARA_ORPHANS               (RID_ATTR_BEGIN + 41)
-#define RID_ATTR_PARA_ULSPACE               (RID_ATTR_BEGIN + 42)
-#define RID_ATTR_PARA_LRSPACE               (RID_ATTR_BEGIN + 43)
-#define RID_ATTR_POSTIT_AUTHOR              (RID_ATTR_BEGIN + 44)
-#define RID_ATTR_POSTIT_DATE                (RID_ATTR_BEGIN + 45)
-#define RID_ATTR_POSTIT_TEXT                (RID_ATTR_BEGIN + 46)
-#define RID_ATTR_SEARCH                     (RID_ATTR_BEGIN + 47)
-#define RID_ATTR_LRSPACE                    (RID_ATTR_BEGIN + 48)
-#define RID_ATTR_ULSPACE                    (RID_ATTR_BEGIN + 49)
-#define RID_ATTR_PAGE                       (RID_ATTR_BEGIN + 50)
-#define RID_ATTR_PAGE_SIZE                  (RID_ATTR_BEGIN + 51)
-#define RID_ATTR_PAGE_MAXSIZE               (RID_ATTR_BEGIN + 52)
-#define RID_ATTR_PAGE_PAPERTRAY             (RID_ATTR_BEGIN + 53)
-#define RID_ATTR_PAGE_PAPERBIN              (RID_ATTR_BEGIN + 54)
-#define RID_ATTR_PAGE_APP                   (RID_ATTR_BEGIN + 55)
-#define RID_ATTR_PAGE_EXT1                  (RID_ATTR_BEGIN + 56)
-#define RID_ATTR_PAGE_EXT2                  (RID_ATTR_BEGIN + 57)
-#define RID_ATTR_PAGE_HEADERSET             (RID_ATTR_BEGIN + 58)
-#define RID_ATTR_PAGE_FOOTERSET             (RID_ATTR_BEGIN + 59)
-#define RID_ATTR_PAGE_ON                    (RID_ATTR_BEGIN + 60)
-#define RID_ATTR_PAGE_DYNAMIC               (RID_ATTR_BEGIN + 61)
-#define RID_ATTR_PAGE_SHARED                (RID_ATTR_BEGIN + 62)
-#define RID_ATTR_PAGE_BSP                   (RID_ATTR_BEGIN + 63)
-#define RID_ATTR_CHAR_MAPTYPE               (RID_ATTR_BEGIN + 64)
-#define RID_ATTR_PARA_MODEL                 (RID_ATTR_BEGIN + 65)
-#define RID_ATTR_PARA_KEEP                  (RID_ATTR_BEGIN + 66)
-#define RID_ATTR_CHAR_BLINK                 (RID_ATTR_BEGIN + 67)
-#define RID_ATTR_CHAR_CHARSETCOLOR          (RID_ATTR_BEGIN + 68)
-#define RID_ATTR_CHAR_OVERLINE              (RID_ATTR_BEGIN + 69)
-
-#define RID_ATTR_FLASH                      (RID_ATTR_BEGIN + 406)
-#define RID_ATTR_PARA_REGISTER              (RID_ATTR_BEGIN + 413)
-#define RID_ATTR_BRUSH_CHAR                 (RID_ATTR_BEGIN + 591)
-
-#define RID_ATTR_CHAR_CJK_FONT              (RID_ATTR_BEGIN + 887)
-#define RID_ATTR_CHAR_CJK_FONTHEIGHT        (RID_ATTR_BEGIN + 888)
-#define RID_ATTR_CHAR_CJK_LANGUAGE          (RID_ATTR_BEGIN + 889)
-#define RID_ATTR_CHAR_CJK_POSTURE           (RID_ATTR_BEGIN + 890)
-#define RID_ATTR_CHAR_CJK_WEIGHT            (RID_ATTR_BEGIN + 891)
-#define RID_ATTR_CHAR_CTL_FONT              (RID_ATTR_BEGIN + 892)
-#define RID_ATTR_CHAR_CTL_FONTHEIGHT        (RID_ATTR_BEGIN + 893)
-#define RID_ATTR_CHAR_CTL_LANGUAGE          (RID_ATTR_BEGIN + 894)
-#define RID_ATTR_CHAR_CTL_POSTURE           (RID_ATTR_BEGIN + 895)
-#define RID_ATTR_CHAR_CTL_WEIGHT            (RID_ATTR_BEGIN + 896)
-#define RID_ATTR_CHAR_TWO_LINES             (RID_ATTR_BEGIN + 897)
-
-#define RID_ATTR_CHAR_EMPHASISMARK          (RID_ATTR_BEGIN + 899)
-
-#define RID_ATTR_PARA_SCRIPTSPACE           (RID_ATTR_BEGIN + 901)
-#define RID_ATTR_PARA_HANGPUNCTUATION       (RID_ATTR_BEGIN + 902)
-#define RID_ATTR_PARA_FORBIDDEN_RULES       (RID_ATTR_BEGIN + 903)
-#define RID_ATTR_CHAR_ROTATED               (RID_ATTR_BEGIN + 910)
-#define RID_ATTR_CHAR_SCALEWIDTH            (RID_ATTR_BEGIN + 911)
-#define RID_ATTR_CHAR_RELIEF                (RID_ATTR_BEGIN + 920)
-#define RID_PARA_VERTALIGN                  (RID_ATTR_BEGIN + 925)
-
-
 // enum SvxCellHorJustify
 #define RID_SVXITEMS_HORJUST_STANDARD       (RID_SVXITEMS_START + 400)
 #define RID_SVXITEMS_HORJUST_LEFT           (RID_SVXITEMS_START + 401)
@@ -265,11 +162,12 @@
 #define RID_SVXITEMS_PATTERN_COLOR          (RID_SVXITEMS_START + 525)
 
 #define RID_SVXITEMS_BRUSH_CHAR             (RID_SVXITEMS_START + 527)
+#define RID_ATTR_NAMES                      (RID_SVXITEMS_START + 528)
 
 // Ueberlaufpruefung --------------------------------------------------------
 
 // Resource-Id's
-#define ACT_RID_SVXITEMS_END    RID_SVXITEMS_BRUSH_CHAR
+#define ACT_RID_SVXITEMS_END    RID_ATTR_NAMES
 #if ACT_RID_SVXITEMS_END > RID_SVXITEMS_END
 #error Resource-Ueberlauf in #line, #file
 #endif
