@@ -112,7 +112,7 @@ namespace
     void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
     {
         // known implementation, access directly
-        switch(rCandidate.getPrimitiveID())
+        switch(rCandidate.getPrimitive2DID())
         {
             // add and accept animated primitives directly, no need to decompose
             case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D :
