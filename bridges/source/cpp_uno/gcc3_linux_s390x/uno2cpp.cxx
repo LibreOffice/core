@@ -92,7 +92,6 @@ void MapReturn(long r2, double f0, typelib_TypeClass eTypeClass, sal_uInt64* pRe
 
 #define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
     { \
-        float tmp = *reinterpret_cast<float *>( pSV ); \
         if ( nr < s390x::MAX_SSE_REGS ) \
         { \
                 pFPR[nr++] = *reinterpret_cast<float *>( pSV ); \
@@ -423,7 +422,6 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
             = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {

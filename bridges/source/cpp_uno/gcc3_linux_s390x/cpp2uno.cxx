@@ -491,7 +491,7 @@ static typelib_TypeClass cpp_mediate(
 long privateSnippetExecutor(long r2, long r3, long r4, long r5, long r6, long firstonstack)
 {
     register long r0 asm("r0");
-    sal_uInt32 nOffsetAndIndex = r0;
+    sal_uInt64 nOffsetAndIndex = r0;
 
     long sp = (long)&firstonstack;
 
