@@ -46,10 +46,6 @@ testcase tBasicDocuments
 
     const CFN = "tBasicDocuments::"
 
-    '///<H1>Documents in BASIC organizers</H1>
-    '///<i>Compare the names of the documents listed in various treelists
-    '///+ in Basic Organizer and Basic Object Organizer (Manage...)</i>
-    '///<ul>
 
     dim brc as boolean
     dim sFileWriter as string
@@ -65,30 +61,24 @@ testcase tBasicDocuments
     ' in the Macro Organizer
     const DOC_NAME = "basic"
     
-    '///+<li>Set the Macro Security Level to &quot;Medium&quot;</li>
     printlog( "" )
     iSecLevel = hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_MEDIUM )
     
-    '///+<li>Create one initial document</li>
     hInitSingleDoc()
     
-    '///+<li>Write identifier string to the document</li>
     kontext "DocumentWriter"
     DocumentWriter.typeKeys( "tBasicDocuments - initial document - discard after test" )
 
-    '///+<li>Create a writer document containing a macro, name it basic.odt</li>
     gApplication = "WRITER"
     printlog( "" )
     brc = hCreateBasicWorkFiles()
     sFileWriter = hGetBasicWorkFile( "current" )
 
-    '///+<li>Create a calc document containing a macro, name it basic.ods</li>
     gApplication = "CALC"
     printlog( "" )
     brc = hCreateBasicWorkFiles()
     sFileCalc = hGetBasicWorkFile( "current" )
 
-    '///+<li>Reload the files we just created</li>
     printlog( "" )
     brc = hFileOpen( sFileWriter )
     brc = hAllowMacroExecution()
@@ -101,38 +91,30 @@ testcase tBasicDocuments
         warnlog( "Missing Macro execution dialog. Please check the file/security settings" )
     endif
 
-    '///+<li>Go to Tools/Macro->Basic Macros</li>
     printlog( "" )
     brc = hOpenBasicOrganizerFromDoc()
 
-    '///+<li>Verify that the treelist contains five items</li>
     hGetVisibleNodeNames( MakroAus , cNodeListA() )
     
-    '///+<li>Verify the names of the docs: Untitled, basic(odt), basic(ods)</li>
     printlog( "" )
     iHitCount = hCountMatchesInList( cNodeListA() , DOC_NAME )
     if ( iHitCount <> 2 ) then
         warnlog( "There should be two documents with the name " & DOC_NAME & "listed." )
     endif
     
-    '///+<li>Click the <Manage...> button</li>
     verwalten.click()
     
-    '///+<li>Switch to the modules-Tab (should be open by default)</li>
     printlog( "" )
     brc = hSelectBasicObjectOrganizerTab( 1 )
     ListAllDelete( cNodeListB() )
     hGetVisibleNodeNames( ModulListe , cNodeListB() )
     
-    '///+<li>Verify that we have two files with the same name in the list</li>
     printlog( "" )
     iHitCount = hCountMatchesInList( cNodeListA() , DOC_NAME )
     if ( iHitCount <> 2 ) then
         warnlog( "There should be two documents with the name " & DOC_NAME & "listed." )
     endif
 
-    '///+<li>Switch to the Dialogs-Tab (the second one)</li>
-    '///+<li>Verify that the treelist contains five items</li>
     printlog( "" )
     brc = hSelectBasicObjectOrganizerTab( 2 )
     ListAllDelete( cNodeListB() )
@@ -142,43 +124,33 @@ testcase tBasicDocuments
         hListPrint( cNodeListB() , "List of objects found in treelist" )
     endif     
     
-    '///+<li>Verify that we have two files with the same name in the list</li>
     printlog( "" )
     iHitCount = hCountMatchesInList( cNodeListB() , DOC_NAME )
     if ( iHitCount <> 2 ) then
         warnlog( "There should be two documents with the name " & DOC_NAME & "listed." )
     endif
 
-    '///+<li>Switch to Libraries Tab and look at the entries in the listbox</li>
-    '///+<li>Verify that we have two files with the same name in the list</li>
     printlog( "" )
     brc = hSelectBasicObjectOrganizerTab( 3 )
     brc = hTestLibraryListBox( cNodeListA() )
     
-    '///+<li>Close the Basic Object Organizer</li>
     printlog( "" )
     printlog( CFN & "Closing dialogs..." )
     TabBibliotheken.cancel()
     
-    '///+<li>Close the Macro Organizer</li>
     Kontext "Makro"
     Makro.cancel()
 
-    '///+<li>Close the two documents we worked with</li>
     brc = hDestroyDocument()
     brc = hDestroyDocument()
     
-    '///+<li>Delete the two workfiles</li>
     brc = hDeleteFile( sFileWriter )
     brc = hDeleteFile( sFileCalc )
     
-    '///+<li>Reset the Macro security level</li>
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
     
-    '///+<li>Close the initial document</li>
     hDestroyDocument()
     
-    '///</ul>
 
 endcase
 
@@ -188,22 +160,6 @@ function hTestLibraryListBox( cNodeList() ) as boolean
 
     const CFN = "hTestLibraryListBox::"
 
-    '///<h3>Compare library-Listbox with Macro-Organizer listbox</h3>
-    '///<i>Part of: tBasicDocuments</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>List of items found in Basic Macro Organizer Treelist (MakroAus)</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if all items are identical</li>
-    '///+<li>FALSE on any other error</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
     
 
     dim iEntry as integer
@@ -213,7 +169,6 @@ function hTestLibraryListBox( cNodeList() ) as boolean
     
     brc = true
     
-    '///+<li>Check that the number of objects is ok</li>
     if ( bibliothek.getItemCount() <> IDOCS ) then
         warnlog( CFN & "Incorrect number of items in listbox" )
         printlog( CFN & "Expected: " & bibliothek.getItemCount() )
@@ -221,7 +176,6 @@ function hTestLibraryListBox( cNodeList() ) as boolean
         brc = false
     endif
         
-    '///+<li>Compare objects 3 -5 (1+2 always differ)</li>
     for iEntry = 3 to IDOCS
     
         Bibliothek.select( iEntry )
@@ -238,6 +192,5 @@ function hTestLibraryListBox( cNodeList() ) as boolean
         
     next iEntry
     
-    '///</ul>
     
 end function

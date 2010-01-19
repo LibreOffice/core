@@ -41,15 +41,11 @@
 testcase tOOoUserData
    Dim lsSave ( 20 ) as String
 
-'///short test if 'StarOffice / User data' is saved in configuration
-'///Start the test again, and you do not get the error. If you get the warning again, you have to check this.</FONT>
 
-'///open a new document
    hInitSingleDoc()
    ToolsOptions
    hToolsOptions ( "StarOffice", "UserData" )
 
-'///save old data
  printlog " - save old data"
    lsSave ( 1  ) = Firma.GetText
    lsSave ( 2  ) = VorName.GetText
@@ -75,7 +71,6 @@ testcase tOOoUserData
    if Apartmentnummer.IsVisible then lsSave ( 18 ) = Apartmentnummer.GetText
    if iSprache = 07 then lsSave ( 19 ) = NameDesVaters.GetText
 
-'///change all data
  printlog " - change data"
    Firma.SetText    "Company name"
    VorName.SetText  "First name"
@@ -101,24 +96,22 @@ testcase tOOoUserData
    if Apartmentnummer.IsVisible then Apartmentnummer.SetText "Appart number"
    if iSprache = 07 then NameDesVaters.SetText "Farthers name"
 
-'///close the options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-'///close the document
+
    hCloseDocument
 
-'///exit / restart StarOffice
   printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///open options 'StarOffice' / 'Userdata'
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "StarOffice", "UserData" )
 
-'///check changes
    if Firma.GetText    <> "Company name"   then Warnlog "Company => changes not saved"
    if VorName.GetText  <> "First name"     then Warnlog "First name => changes not saved"
    if ZuName.GetText   <> "Last name"      then Warnlog "Last name => changes not saved"
@@ -147,7 +140,6 @@ testcase tOOoUserData
       if NameDesVaters.GetText <> "Farthers name"   then Warnlog "Farthers name => changes not saved"
    end if
 
-'///reset to saved data
  printlog " - reset to saved data"
 
    Firma.SetText    lsSave ( 1  )
@@ -174,18 +166,18 @@ testcase tOOoUserData
    if Apartmentnummer.IsVisible then Apartmentnummer.SetText lsSave ( 18 )
    if iSprache = 07 then NameDesVaters.SetText lsSave ( 19 )
 
-'///close the options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-'///open options 'StarOffice' / 'Userdata'
+
  printlog " - check data"
 
    ToolsOptions
    hToolsOptions ( "StarOffice", "UserData" )
 
-'///check data
    if Firma.GetText    <> lsSave ( 1 )  then Warnlog "Company => changes not saved"
    if VorName.GetText  <> lsSave ( 2 )  then Warnlog "First name => changes not saved"
    if ZuName.GetText   <> lsSave ( 3 )  then Warnlog "Last name => changes not saved"
@@ -214,10 +206,12 @@ testcase tOOoUserData
       if NameDesVaters.GetText <> lsSave ( 19 ) then Warnlog "Farthers name => changes not saved"
    end if
 
-'///close the options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
+
 
 endcase
 

@@ -76,6 +76,8 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_ui_filters.inc"
+    use "global/tools/includes/optional/t_listfuncs.inc"
+    use "global/tools/includes/optional/t_security_tools.inc"
     Call GetUseFiles
     gApplication = "WRITER"
 end sub

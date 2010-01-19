@@ -43,16 +43,11 @@ testcase tOOoGeneral
    dim lsSave (4) as String
    dim lbSave (3) as Boolean
 
-  '///short test if 'StarOffice / General' is saved in configuration
-   '///<ul>
-   '///<li>open a new document</li>
    hNewDocument
 
-   '///<li>open options 'StarOffice' / 'General'</li>
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
 
-   '///<li>save old data</li>
    printlog " - save old data"
    lsSave ( 1 ) = Zweistellig.GetText
    lbSave ( 1 ) = Aktivieren.IsChecked
@@ -63,7 +58,6 @@ testcase tOOoGeneral
    lbSave ( 3 ) = DruckenStatus.IsChecked
    lsSave ( 3 ) = StyleSheet.GetSelText
 
-   '///<li>invert/change data</li>
    printlog " - invert/change data"
    Zweistellig.SetText "1950"
    Zuruecksetzen.Click
@@ -73,24 +67,22 @@ testcase tOOoGeneral
    If lbSave ( 3 ) = TRUE then DruckenStatus.Uncheck else DruckenStatus.Check
    StyleSheet.Select 3
 
-   '///<li>close options-dialog with OK</li>
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-   '///<li>close document</li>
+
    hCloseDocument
 
-   '///<li>exit/restart StarOffice</li>
    printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-   '///<li>open options 'StarOffice' / 'General'</li>
    printlog " - check data"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
 
-   '///<li>check data</li>
    if Zweistellig.GetText <> "1950" then Warnlog "Year ( 2 digits ) => changes not saved: '" + Zweistellig.GetText +"' #i29810"
    if Aktivieren.IsChecked <> TRUE then Warnlog "Enable HelpAgent => changes not saved"
    Zuruecksetzen.Click
@@ -99,17 +91,17 @@ testcase tOOoGeneral
    end if
    If DruckenStatus.IsChecked = lbSave ( 3 ) then Warnlog "Printing sets 'Document modified' status => changes not saved!"
 
-   '///<li>make 2. changes</li>
    printlog " - 2. change data"
    Zweistellig.SetText "1800"
    DruckenStatus.UnCheck
 
-   '///<li>close options-dialog with OK</li>
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-   '/// Check Issue i52248 Modify flag is set after printing though option is not set ///'
+
    'It's a little tricky to reproduce.
    if gPlatgroup = "unx" then
        hNewDocument()
@@ -157,17 +149,14 @@ testcase tOOoGeneral
        hCloseDocument
    endif
    
-   '///<li>open options 'StarOffice' / 'General'</li>
    printlog " - check data"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
 
-   '///<li>check data</li>
    if Zweistellig.GetText <> "1800" then Warnlog "Year ( 2 digits ) => changes not saved : '" + Zweistellig.GetText +"'"
    If DruckenStatus.IsChecked <> FALSE then Warnlog "Printing sets 'Document modified' status => changes not saved!"
    if StyleSheet.GetSelIndex <> 3 then Warnlog "Style sheet for StarOffice Help => changes not saved!"
 
-   '///<li>reset to saved data</li>
    printlog " - reset to saved data"
    Zweistellig.SetText lsSave ( 1 )
    Aktivieren.Check
@@ -179,16 +168,15 @@ testcase tOOoGeneral
    If lbSave(3)= TRUE then DruckenStatus.Check else DruckenStatus.UnCheck
    StyleSheet.Select lsSave(3)
 
-   '///<li>close options-dialog with OK</li>
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-   '///<li>open options 'StarOffice' / 'General'</li>
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
 
-   '///<li>check data</li>
    printlog " - check the reset data"
    if Zweistellig.GetText <> lsSave ( 1 ) then Warnlog "Year ( 2 digits ) => changes not saved"
    if Aktivieren.IsChecked <> lbSave (1) then Warnlog "Enable HelpAgent => changes not saved"
@@ -201,12 +189,12 @@ testcase tOOoGeneral
    If DruckenStatus.IsChecked <> lbSave(3) then Warnlog "Printing sets 'Document modified' status => changes not saved!"
    if StyleSheet.GetSelText <> lsSave (3) then Warnlog "Style sheet for StarOffice Help => changes not saved!"
 
-   '///<li>close options-dialog with OK</li>
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
-   Sleep (3)
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
-   '///</ul>
 
 endcase
 

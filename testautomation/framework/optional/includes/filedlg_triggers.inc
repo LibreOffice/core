@@ -39,34 +39,21 @@
 
 testcase tDialogTriggers
 
-    '///<h1>Alternative ways to open file-dialogs / slot availablilty</h1>
 
-    '///<u><pre>Synopsis</pre></u>Test that some slots for the file-save, file-save-as 
-    '///+ and file-open dialogs are not available in special situations, using accelerators.<br>
-    '///<u><pre>Specification document</pre></u>No specification provided<br>
-    '///<u><pre>Files used</pre></u>framework/tools/input/accelerators.txt<br>framework/tools/inc/t_accels.inc<br>
-    '///<u><pre>Test case specification</pre></u>
-    '///<ul>
     
     dim cAcceleratorFileOpen as string
     dim cAcceleratorFileSave as string
     dim cAcceleratorFileSaveAs as string
     
-    '///+<li>Make sure we are on the backing window</li>
     do while ( getDocumentCount > 0 ) 
         call hCloseDocument()
     loop
     
-    '///+<li>Get the accelerators from reference file for FileOpen, FileSave
-    '///+ and FileSaveAs</li>
     cAcceleratorFileOpen   = hGetAccel( "FileOpen" )
     cAcceleratorFileSave   = hGetAccel( "FileSave" )
     cAcceleratorFileSaveAs = hGetAccel( "FileSaveAs" )
 
 
-    '///+<li>Actions on backing window</li>
-    '///<ul>
-    '///+<li>Test case 1: FileOpen should be possible from backing window (accelerator)</li>
     printlog( "Test case 1: FileOpen should be possible from backing window (accelerator)" )
 
     kontext "DocumentBackground"
@@ -87,7 +74,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 2: File Save should not work from backing window (accelerator)</li>
     printlog( "Test case 2: File Save should not work from backing window (accelerator)" )
 
     kontext "DocumentBackground"
@@ -108,7 +94,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 3: File Save As should not work from backing window (accelerator)</li>
     printlog( "Test case 3: File Save As should not work from backing window (accelerator)" )
     
     kontext "DocumentBackground"
@@ -128,7 +113,6 @@ testcase tDialogTriggers
     endif
     
     
-    '///+<li>Test case 4: FileOpen should be possible from backing window (slot)</li>
     printlog( "Test case 4: FileOpen should be possible from backing window (slot)" )
 
     kontext "DocumentBackground"
@@ -149,7 +133,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 5: File Save should not work from backing window (slot)</li>
     printlog( "Test case 5: File Save should not work from backing window (slot)" )
 
     kontext "DocumentBackground"
@@ -175,7 +158,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 6: File Save As should not work from backing window (slot)</li>
     printlog( "Test case 6: File Save As should not work from backing window (slot)" )
     
     kontext "DocumentBackground"
@@ -199,19 +181,14 @@ testcase tDialogTriggers
         warnlog( "Backing window not found" )
     endif
     
-    '///</ul>
     
 
 
-    '///+<li>Actions on unmodified documents (Writer)</li>
-    '///<ul>
     
     gApplication = "WRITER"
     
-    '///+<li>Open a new writer document</li>
     call hNewDocument()
     
-    '///+<li>Test case 7: File Save should not work from unmodified documents (accelerator)</li>
     printlog( "Test case 7: File Save should not work from unmodified documents (accelerator)" )
 
     kontext "DocumentWriter"
@@ -232,7 +209,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 8: File Save As should work from unmodified documents (accelerator)</li>
     printlog( "Test case 8: File Save As should work from unmodified documents (accelerator)" )
 
     kontext "DocumentWriter"
@@ -252,7 +228,6 @@ testcase tDialogTriggers
     endif
 
 
-    '///+<li>Test case 9: File Save should not work from unmodified documents (slot)</li>
     printlog( "Test case 9: File Save should not work from unmodified documents (slot)" )
 
     kontext "DocumentWriter"
@@ -277,7 +252,6 @@ testcase tDialogTriggers
     
     
     
-    '///+<li>Test case 10: File Save As should work from unmodified documents (slot)</li>
     printlog( "Test case 10: File Save As should work from unmodified documents (slot)" )
 
     kontext "DocumentWriter"
@@ -300,10 +274,7 @@ testcase tDialogTriggers
         warnlog( "Writer document not not found" )
     endif
     
-    '///+<li>Close the document</li>
     call hCloseDocument()
-    '///</ul>
-    '///</ul>
 
 endcase
 

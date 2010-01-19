@@ -699,43 +699,65 @@ testcase tToolsOptionsImprovementProgram
 
     printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
 
-    dim cLogFile as string
-    cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
-    cLogFile = convertpath( cLogFile )
-
-    if ( hDeleteFile( cLogFile ) ) then
-        printlog( "Test environment is clean, no logfile present (anymore)" )
+    if (gOOO AND NOT gOOoImprovementIsEnabled) then
+        'In StarOffice this test should always work - but on OOo contributet builds the function is not available - only on OOo builds provided by Sun Microsystems
+        qaErrorlog ("This build does not participate in the OOo Improvement Program - test exit")
+        goto endsub
     endif
 
-    ToolsOptions
-    hToolsOptions( "StarOffice", "Improvement" )
-    printlog( "Improvement Program tabpage" )
+    dim cLogFile as string
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
+        
+    dim bImportDialogHasBeenDisplayed as boolean : bImportDialogHasBeenDisplayed = false
 
-    call DialogTest( TabOOoImprovement )
+    if ( hDeleteFile( cLogFile ) ) then
+    
+        printlog( "Test environment is clean, no logfile present (anymore)" )
 
-    ParticipateNo.check()
-    ParticipateYes.check()
+        ToolsOptions
+        hToolsOptions( "StarOffice", "Improvement" )
+        printlog( "Improvement Program tabpage" )
 
-    if ( ShowData.isEnabled() ) then
+        call DialogTest( TabOOoImprovement )
 
-        ShowData.click()
+        ParticipateNo.check()
+        ParticipateYes.check()
 
-        Kontext "TextImport"
-        if ( TextImport.exists( 1 ) ) then
-            printlog( "Text import dialog" )
+        if ( ShowData.isEnabled() ) then
 
-            call DialogTest( TextImport )
-            TextImport.cancel()
+            ShowData.click()
+
+            ' Two different IDs for practically the same dialog: FilterAuswahl and TextImport.
+            ' It depends on the application which one comes up. We just handle them both.
+            Kontext "FilterAuswahl"
+            if ( FilterAuswahl.exists( 1 ) ) then
+                printlog( "FilterAuswahl present" )
+                call DialogTest( FilterAuswahl )
+                FilterAuswahl.cancel()
+                bImportDialogHasBeenDisplayed = true
+            endif
+            
+            kontext "TextImport"
+            if ( TextImport.exists() ) then
+                printlog( "Text Import dialog present" )
+                call DialogTest( TextImport )
+                TextImport.cancel()
+                bImportDialogHasBeenDisplayed = true
+            endif
         else
-            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            printlog( "Show data is disabled" )
         endif
 
+        ' Weird messages may appear in any order. We warn about anything
         Kontext "Active"
         if ( Active.exists( 1 ) ) then
             printlog( "Messagebox: " & Active.getText() )
             Active.ok()
         else
-            warnlog( "No warning for missing file: " & cLogFile )
+            if ( NOT bImportDialogHasBeenDisplayed ) then
+                qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            endif
         endif
 
         Kontext "Active"
@@ -743,12 +765,16 @@ testcase tToolsOptionsImprovementProgram
             warnlog( "#97342# Second message for missing " & cLogFile )
             Active.ok()
         endif
-    else
-        printlog( "Show data is disabled" )
-    endif
 
-    Kontext "OptionenDlg"
-    OptionenDlg.cancel()
+        Kontext "OptionenDlg"
+        OptionenDlg.cancel()
+        
+    else
+        ' hDeleteFile() returns FALSE if the file is still present for some weird reason
+        ' We should warn about this because the test breaks at a later point then.
+        warnlog( "Logfile present, it could not be deleted. Please check path and accessrights" )
+        printlog( "Path: " & cLogFile )
+    endif
 
 endcase
 

@@ -39,9 +39,8 @@
 
 testcase tUpdtOptionItems
 
-    '///<h3>Verify that the applications appear in tools/option</h3>
-    '///<ul>
-    
+    printlog( "Verify that all applications are listed in tools/options" )
+        
     const DOCTYPES = 7
     dim iDocType as integer
     dim cDocType as string
@@ -57,22 +56,16 @@ testcase tUpdtOptionItems
         iAppCount( 6 ) = 8 ' masterdoc
         iAppCount( 7 ) = 8 ' html
         
-    '///+<li>Step through all main applications and do</li>
-    '///<ul>
     for iDocType = 1 to DOCTYPES
     
-        '///<li>Create a new document</li>
         printlog( "" )
         printlog( hNumericDocType( iDocType ) )
         hCreateDocument()
         
-        '///+<li>Open Tools/Options</li>
         ToolsOptions
         
-        '///+<li>Retrieve the number of listed applications from the applications list</li>
         kontext "ExtrasOptionenDlg"
         
-        '///+<li>Collapse all nodes</li>      
         iAppItems = Optionsliste.getItemCount()
         Optionsliste.typeKeys( "<HOME>" )
         for iNodes = 1 to iAppItems
@@ -80,8 +73,6 @@ testcase tUpdtOptionItems
             Optionsliste.typeKeys( "<DOWN>" )
         next iNodes
         
-        
-        '///+<li>Verify that the number is correct</li>
         iAppItems = Optionsliste.getItemCount()
         if ( iAppItems <> iAppCount( iDocType ) ) then
             warnlog( "#i68068# The number of top nodes in Tools/Options is incorrect." )
@@ -91,15 +82,10 @@ testcase tUpdtOptionItems
             printlog( "The number of top nodes is correct." )
         endif
         
-        '///+<li>Close Tools/Options</li>
         ExtrasOptionenDlg.cancel()
-        
-        '///+<li>Close the document</li>
         hDestroyDocument()
         
     next iDocType
-    '///</ul>
-    '///</ul>
 
 endcase
 

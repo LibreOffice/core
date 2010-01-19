@@ -175,7 +175,7 @@ testcase tExtensibleHelp
             kontext "HelpContent"
             HelpContent.typeKeys( "<MOD1 HOME>" )
             HelpContent.typeKeys( "<SHIFT RIGHT>" , len( cHead ) )
-            EditCopy
+            hUseAsyncSlot( "EditCopy" )
             cLine = GetClipBoardText
             
             '///+<li>Compare the config string with the header</li>

@@ -39,22 +39,16 @@
 
 testcase tBasicSharedModules
 
-    '///<h3>Access modules below OpenOffice.org macros</h3>
-    '///Covers issues #i74058, #i74120 and  #i74372
     
     dim iObjectPosition as integer
     dim iLibraryCount as integer
 
     const EXPECTED_LIBRARY_COUNT = 12
     
-    '///<ul>
-    '///+<li>Open a document to work on</li>
     hInitSingleDoc()
     
-    '///+<li>Open the basic organizer</li>
     ToolsMacro_uno
     
-    '///+<li>Select one of the internal macros</li>
     Kontext "Makro"
     iObjectPosition = hSelectNodeByName( MakroAus , "Depot" )
     if ( iObjectPosition = 0 ) then
@@ -62,19 +56,15 @@ testcase tBasicSharedModules
         goto endsub
     endif
     
-    '///+<li>Jump to the last node</li>
     hSelectTheLastNode( MakroAus )
     printlog( "Current node (Last node): " & MakroAus.getSelText() )
     
-    '///+<li>Select the next node (should be one of the modules below Depot)</li>
     hSelectNode( MakroAus, iObjectPosition+1 )
     printlog( "Current node (Depot/..): " & MakroAus.getSelText() 
     
-    '///+<li>Click &quot;Edit...&quot;</li>
     Kontext "Makro"
     Bearbeiten.click()
     
-    '///+<li>Check that we are on the BASIC-IDE</li>
     Kontext "MacroBar"
     if ( MacroBar.exists( 2 ) ) then
         printlog( "Macro Bar is open." )
@@ -82,12 +72,10 @@ testcase tBasicSharedModules
         warnlog( "MacroBar is not open but we should be on the Basic IDE" )
     endif
     
-    '///+<li>Use the Library listbox (Jump to top)</li>
     Kontext "MacroBar"
     Library.typeKeys( "<HOME>" )
     printlog( "Top entry = " & Library.getSelText() )
     
-    '///+<li>Get the number of items from the Library control</li>
     iLibraryCount = Library.getItemCount()
     printlog( "There are " & iLibraryCount & " items in the list" )
     
@@ -95,17 +83,13 @@ testcase tBasicSharedModules
         warnlog( "The number of items in the library-list is incorrect (should be 12): " & iLibraryCount )
     endif
     
-    '///+<li>Use the Library listbox (Jump to bottom)</li>
     Kontext "MacroBar"
     Library.select( iLibraryCount )
     printlog( "Last entry = " & Library.getSelText() )   
     
-    '///+<li>Close the Basic-IDE</li>
     hCloseBasicIDE()
     
-    '///+<li>Close the document</li>
     hDestroyDocument()
-    '///</ul>
     
     
 endcase
