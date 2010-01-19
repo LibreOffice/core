@@ -259,8 +259,9 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
             case VCLEVENT_WINDOW_CLOSE:
                 if( pWindow == mpFloatingWindow )
                 {
-                    Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), (void*)mpFloatingWindow );
+                    void* pTemp = (void*)mpFloatingWindow;
                     mpFloatingWindow = 0;
+                    Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), pTemp );
                 }
                 break;
             case VCLEVENT_WINDOW_ENDPOPUPMODE:
@@ -312,8 +313,8 @@ IMPL_LINK( SfxToolBoxControl_Impl, AsyncEndPopupModeHdl, void*, EMPTYARG )
                 if( pSystemWindow )
                     pSystemWindow->Close();
 
-                Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), (void*)pTemp );
                 mpPopupWindow = 0;
+                Application::PostUserEvent( STATIC_LINK( this, SfxToolBoxControl_Impl, AsyncDeleteWindowHdl ), (void*)pTemp );
             }
         }
     }
