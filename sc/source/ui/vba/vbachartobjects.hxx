@@ -36,8 +36,8 @@
 #include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include"vbacollectionimpl.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
+#include "excelvbahelper.hxx"
 #include <hash_map>
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;

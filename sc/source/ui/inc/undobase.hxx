@@ -31,7 +31,7 @@
 #ifndef SC_UNDOBASE_HXX
 #define SC_UNDOBASE_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "global.hxx"
 #include "address.hxx"
 

@@ -47,9 +47,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/rcid.h>
@@ -67,7 +67,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "global.hxx"

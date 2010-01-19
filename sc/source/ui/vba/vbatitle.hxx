@@ -30,14 +30,15 @@
 #ifndef SC_VBA_TITLE_HXX
 #define SC_VBA_TITLE_HXX
 
-#include "vbahelperinterface.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include "excelvbahelper.hxx"
 #include "vbainterior.hxx"
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XTitle.hpp>
+#include <ooo/vba/excel/XCharacters.hpp>
 #include <basic/sberrors.hxx>
 #include <memory>
 

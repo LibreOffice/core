@@ -66,8 +66,8 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/algitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include "docsh.hxx"
 #include "markdata.hxx"
 #include "stlpool.hxx"

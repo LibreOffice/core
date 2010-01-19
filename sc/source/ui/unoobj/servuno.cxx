@@ -65,55 +65,71 @@ using namespace ::com::sun::star;
 
 
 //------------------------------------------------------------------------
+//
+struct ProvNamesId_Type
+{
+    const char *    pName;
+    sal_uInt16      nType;
+};
 
-static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
-    {
-        "com.sun.star.sheet.Spreadsheet",           // SC_SERVICE_SHEET
-        "com.sun.star.text.TextField.URL",          // SC_SERVICE_URLFIELD
-        "com.sun.star.text.TextField.PageNumber",   // SC_SERVICE_PAGEFIELD
-        "com.sun.star.text.TextField.PageCount",    // SC_SERVICE_PAGESFIELD
-        "com.sun.star.text.TextField.Date",         // SC_SERVICE_DATEFIELD
-        "com.sun.star.text.TextField.Time",         // SC_SERVICE_TIMEFIELD
-        "com.sun.star.text.TextField.DocumentTitle",// SC_SERVICE_TITLEFIELD
-        "com.sun.star.text.TextField.FileName",     // SC_SERVICE_FILEFIELD
-        "com.sun.star.text.TextField.SheetName",    // SC_SERVICE_SHEETFIELD
-        "com.sun.star.style.CellStyle",             // SC_SERVICE_CELLSTYLE
-        "com.sun.star.style.PageStyle",             // SC_SERVICE_PAGESTYLE
-        "com.sun.star.sheet.TableAutoFormat",       // SC_SERVICE_AUTOFORMAT
-        "com.sun.star.sheet.SheetCellRanges",       // SC_SERVICE_CELLRANGES
-        "com.sun.star.drawing.GradientTable",       // SC_SERVICE_GRADTAB
-        "com.sun.star.drawing.HatchTable",          // SC_SERVICE_HATCHTAB
-        "com.sun.star.drawing.BitmapTable",         // SC_SERVICE_BITMAPTAB
-        "com.sun.star.drawing.TransparencyGradientTable",   // SC_SERVICE_TRGRADTAB
-        "com.sun.star.drawing.MarkerTable",         // SC_SERVICE_MARKERTAB
-        "com.sun.star.drawing.DashTable",           // SC_SERVICE_DASHTAB
-        "com.sun.star.text.NumberingRules",         // SC_SERVICE_NUMRULES
-        "com.sun.star.sheet.Defaults",              // SC_SERVICE_DOCDEFLTS
-        "com.sun.star.drawing.Defaults",            // SC_SERVICE_DRAWDEFLTS
-        "com.sun.star.comp.SpreadsheetSettings",    // SC_SERVICE_DOCSPRSETT
-        "com.sun.star.document.Settings",           // SC_SERVICE_DOCCONF
-        "com.sun.star.image.ImageMapRectangleObject",// SC_SERVICE_IMAP_RECT
-        "com.sun.star.image.ImageMapCircleObject",  // SC_SERVICE_IMAP_CIRC
-        "com.sun.star.image.ImageMapPolygonObject", // SC_SERVICE_IMAP_POLY
+static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+{
+    { "com.sun.star.sheet.Spreadsheet",                 SC_SERVICE_SHEET },
+    { "com.sun.star.text.TextField.URL",                SC_SERVICE_URLFIELD },
+    { "com.sun.star.text.TextField.PageNumber",         SC_SERVICE_PAGEFIELD },
+    { "com.sun.star.text.TextField.PageCount",          SC_SERVICE_PAGESFIELD },
+    { "com.sun.star.text.TextField.Date",               SC_SERVICE_DATEFIELD },
+    { "com.sun.star.text.TextField.Time",               SC_SERVICE_TIMEFIELD },
+    { "com.sun.star.text.TextField.DocumentTitle",      SC_SERVICE_TITLEFIELD },
+    { "com.sun.star.text.TextField.FileName",           SC_SERVICE_FILEFIELD },
+    { "com.sun.star.text.TextField.SheetName",          SC_SERVICE_SHEETFIELD },
+    { "com.sun.star.style.CellStyle",                   SC_SERVICE_CELLSTYLE },
+    { "com.sun.star.style.PageStyle",                   SC_SERVICE_PAGESTYLE },
+    { "com.sun.star.sheet.TableAutoFormat",             SC_SERVICE_AUTOFORMAT },
+    { "com.sun.star.sheet.SheetCellRanges",             SC_SERVICE_CELLRANGES },
+    { "com.sun.star.drawing.GradientTable",             SC_SERVICE_GRADTAB },
+    { "com.sun.star.drawing.HatchTable",                SC_SERVICE_HATCHTAB },
+    { "com.sun.star.drawing.BitmapTable",               SC_SERVICE_BITMAPTAB },
+    { "com.sun.star.drawing.TransparencyGradientTable", SC_SERVICE_TRGRADTAB },
+    { "com.sun.star.drawing.MarkerTable",               SC_SERVICE_MARKERTAB },
+    { "com.sun.star.drawing.DashTable",                 SC_SERVICE_DASHTAB },
+    { "com.sun.star.text.NumberingRules",               SC_SERVICE_NUMRULES },
+    { "com.sun.star.sheet.Defaults",                    SC_SERVICE_DOCDEFLTS },
+    { "com.sun.star.drawing.Defaults",                  SC_SERVICE_DRAWDEFLTS },
+    { "com.sun.star.comp.SpreadsheetSettings",          SC_SERVICE_DOCSPRSETT },
+    { "com.sun.star.document.Settings",                 SC_SERVICE_DOCCONF },
+    { "com.sun.star.image.ImageMapRectangleObject",     SC_SERVICE_IMAP_RECT },
+    { "com.sun.star.image.ImageMapCircleObject",        SC_SERVICE_IMAP_CIRC },
+    { "com.sun.star.image.ImageMapPolygonObject",       SC_SERVICE_IMAP_POLY },
 
         // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-        "com.sun.star.document.ExportGraphicObjectResolver",    // SC_SERVICE_EXPORT_GOR
-        "com.sun.star.document.ImportGraphicObjectResolver",    // SC_SERVICE_IMPORT_GOR
-        "com.sun.star.document.ExportEmbeddedObjectResolver",   // SC_SERVICE_EXPORT_EOR
-        "com.sun.star.document.ImportEmbeddedObjectResolver",   // SC_SERVICE_IMPORT_EOR
+    { "com.sun.star.document.ExportGraphicObjectResolver",  SC_SERVICE_EXPORT_GOR },
+    { "com.sun.star.document.ImportGraphicObjectResolver",  SC_SERVICE_IMPORT_GOR },
+    { "com.sun.star.document.ExportEmbeddedObjectResolver", SC_SERVICE_EXPORT_EOR },
+    { "com.sun.star.document.ImportEmbeddedObjectResolver", SC_SERVICE_IMPORT_EOR },
 
-        SC_SERVICENAME_VALBIND,                    // SC_SERVICE_VALBIND
-        SC_SERVICENAME_LISTCELLBIND,               // SC_SERVICE_LISTCELLBIND
-        SC_SERVICENAME_LISTSOURCE,                 // SC_SERVICE_LISTSOURCE
-        SC_SERVICENAME_CELLADDRESS,                // SC_SERVICE_CELLADDRESS
-        SC_SERVICENAME_RANGEADDRESS,                // SC_SERVICE_RANGEADDRESS
+    { SC_SERVICENAME_VALBIND,               SC_SERVICE_VALBIND },
+    { SC_SERVICENAME_LISTCELLBIND,          SC_SERVICE_LISTCELLBIND },
+    { SC_SERVICENAME_LISTSOURCE,            SC_SERVICE_LISTSOURCE },
+    { SC_SERVICENAME_CELLADDRESS,           SC_SERVICE_CELLADDRESS },
+    { SC_SERVICENAME_RANGEADDRESS,          SC_SERVICE_RANGEADDRESS },
 
-        "com.sun.star.sheet.DocumentSettings",      // SC_SERVICE_SHEETDOCSET
+    { "com.sun.star.sheet.DocumentSettings",SC_SERVICE_SHEETDOCSET },
 
-        SC_SERVICENAME_CHDATAPROV,                  // SC_SERVICE_CHDATAPROV
-        SC_SERVICENAME_FORMULAPARS,                 // SC_SERVICE_FORMULAPARS
-        SC_SERVICENAME_OPCODEMAPPER                 // SC_SERVICE_OPCODEMAPPER
-    };
+    { SC_SERVICENAME_CHDATAPROV,            SC_SERVICE_CHDATAPROV },
+    { SC_SERVICENAME_FORMULAPARS,           SC_SERVICE_FORMULAPARS },
+    { SC_SERVICENAME_OPCODEMAPPER,          SC_SERVICE_OPCODEMAPPER },
+
+    // case-correct versions of the service names (#i102468#)
+    { "com.sun.star.text.textfield.URL",                SC_SERVICE_URLFIELD },
+    { "com.sun.star.text.textfield.PageNumber",         SC_SERVICE_PAGEFIELD },
+    { "com.sun.star.text.textfield.PageCount",          SC_SERVICE_PAGESFIELD },
+    { "com.sun.star.text.textfield.Date",               SC_SERVICE_DATEFIELD },
+    { "com.sun.star.text.textfield.Time",               SC_SERVICE_TIMEFIELD },
+    { "com.sun.star.text.textfield.DocumentTitle",      SC_SERVICE_TITLEFIELD },
+    { "com.sun.star.text.textfield.FileName",           SC_SERVICE_FILEFIELD },
+    { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD },
+};
 
 //
 //  old service names that were in 567 still work in createInstance,
@@ -186,11 +202,17 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
 {
     if (rServiceName.Len())
     {
-        USHORT i;
-        for (i=0; i<SC_SERVICE_COUNT; i++)
-            if (rServiceName.EqualsAscii( aProvNames[i] ))
-                return i;
+        const sal_uInt16 nEntries =
+            sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+        for (sal_uInt16 i = 0; i < nEntries; i++)
+        {
+            if (rServiceName.EqualsAscii( aProvNamesId[i].pName ))
+            {
+                return aProvNamesId[i].nType;
+            }
+        }
 
+        USHORT i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
             DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
@@ -369,10 +391,13 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
 uno::Sequence<rtl::OUString> ScServiceProvider::GetAllServiceNames()
 {
-    uno::Sequence<rtl::OUString> aRet(SC_SERVICE_COUNT);
+    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    uno::Sequence<rtl::OUString> aRet(nEntries);
     rtl::OUString* pArray = aRet.getArray();
-    for (sal_uInt16 i = 0; i < SC_SERVICE_COUNT; i++)
-        pArray[i] = rtl::OUString::createFromAscii( aProvNames[i] );
+    for (sal_uInt16 i = 0; i < nEntries; i++)
+    {
+        pArray[i] = rtl::OUString::createFromAscii( aProvNamesId[i].pName );
+    }
     return aRet;
 }
 

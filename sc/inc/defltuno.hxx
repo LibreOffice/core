@@ -31,12 +31,12 @@
 #ifndef SC_DEFLTUNO_HXX
 #define SC_DEFLTUNO_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 class ScDocShell;
 

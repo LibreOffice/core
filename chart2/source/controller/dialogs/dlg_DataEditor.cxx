@@ -43,10 +43,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <vcl/edit.hxx>
 
@@ -104,7 +104,7 @@ DataEditor::DataEditor(
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes
-    aMiscOptions.AddListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, DataEditor, MiscHdl ) );
     m_aTbxData.SetOutStyle( nStyle );
 
     // set good window width
@@ -132,7 +132,7 @@ DataEditor::~DataEditor()
     notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
-    aMiscOptions.RemoveListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
     OSL_TRACE( "DataEditor: DTOR" );
 }
@@ -358,7 +358,7 @@ bool DataEditor::ApplyChangesToModel()
 // sets the correct toolbar icons depending on the current mode (e.g. high contrast)
 void DataEditor::ApplyImageList()
 {
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     ImageList& rImgLst = bIsHighContrast
         ? m_aToolboxImageListHighContrast

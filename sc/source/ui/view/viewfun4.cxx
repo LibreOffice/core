@@ -54,9 +54,9 @@
 #include <sfx2/fcontnr.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 

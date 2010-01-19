@@ -36,8 +36,8 @@
 // INCLUDE ---------------------------------------------------------------
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svtools/smplhint.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svxids.hrc>

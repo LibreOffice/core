@@ -32,7 +32,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 
 #ifndef _LSTBOX_HXX //autogen

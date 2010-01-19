@@ -542,6 +542,14 @@ void Chart2Positioner::glueState()
         meGlue = GLUETYPE_COLS;
         return;
     }
+    // #i103540# prevent invalid vector size
+    if ((nC <= 0) || (nR <= 0))
+    {
+        invalidateGlue();
+        mnStartCol = 0;
+        mnStartRow = 0;
+        return;
+    }
     sal_uInt32 nCR = static_cast<sal_uInt32>(nC*nR);
 
     const sal_uInt8 nHole = 0;

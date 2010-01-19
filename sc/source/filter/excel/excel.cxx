@@ -43,7 +43,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include "scitems.hxx"
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include "filter.hxx"
 #include "document.hxx"
 #include "xistream.hxx"

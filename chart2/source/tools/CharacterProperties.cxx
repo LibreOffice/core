@@ -58,7 +58,7 @@
 
 // header for struct SvtLinguConfig
 #ifndef _SVTOOLS_LINGUCFG_HXX_
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #endif
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>

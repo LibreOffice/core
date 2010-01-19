@@ -377,7 +377,10 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
 //----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::RefInputDone( BOOL bForced )
 {
-    if (pRefEdit && (bForced || !pRefBtn))
+    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+    //if (pRefEdit && (bForced || !pRefBtn))
+    if ( CanInputDone( bForced ) )//if (pRefEdit && (bForced || !pRefBtn))
+    //-->Modified by PengYunQuan for Validity Cell Range Picker
     {
         if (bAccInserted)           // Accelerator wieder abschalten
         {
@@ -677,23 +680,33 @@ void lcl_HideAllReferences()
 }
 
 //============================================================================
-//  class ScAnyRefDlg
+//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
+//  class ScRefHandler
 //----------------------------------------------------------------------------
 
-ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                          Window* pParent, USHORT nResId)
-    :   SfxModelessDialog ( pB, pCW, pParent, ScResId( nResId ) ),
+ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
+                          Window* pParent, USHORT nResId*/, bool bBindRef )
+    :   //SfxModelessDialog ( pB, pCW, pParent, ScResId( nResId ) ),
+        m_rWindow( rWindow ),
+        m_bInRefMode( false ),
         m_aHelper(this,pB),
         pMyBindings( pB ),
         pActiveWin(NULL)
 {
-    m_aHelper.SetWindow(this);
-    if(GetHelpId()==0)              //Hack, da im SfxModelessDialog die HelpId
-        SetHelpId(GetUniqueId());   //fuer einen ModelessDialog entfernt und
+    m_aHelper.SetWindow(/*this*/&m_rWindow);
+    if(m_rWindow.GetHelpId()==0)                //Hack, da im SfxModelessDialog die HelpId
+        m_rWindow.SetHelpId(m_rWindow.GetUniqueId());   //fuer einen ModelessDialog entfernt und
                                     //in eine UniqueId gewandelt wird, machen
                                     //wir das an dieser Stelle rueckgaengig.
     aTimer.SetTimeout(200);
-    aTimer.SetTimeoutHdl(LINK( this, ScAnyRefDlg, UpdateFocusHdl));
+    aTimer.SetTimeoutHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
+
+    if( bBindRef ) EnterRefMode();
+}
+
+bool ScRefHandler::EnterRefMode()
+{
+    if( m_bInRefMode ) return false;
 
     SC_MOD()->InputEnterHandler();
 //    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
@@ -740,15 +753,25 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     m_aHelper.SetDispatcherLock( TRUE );
     //@Test
     //SFX_APPWINDOW->Disable(TRUE);   //@BugID 54702
+
+    return m_bInRefMode = true;
 }
 
 //----------------------------------------------------------------------------
 
-ScAnyRefDlg::~ScAnyRefDlg()
+ScRefHandler::~ScRefHandler()
 {
+    LeaveRefMode();
+}
+
+bool ScRefHandler::LeaveRefMode()
+{
+    if( !m_bInRefMode ) return false;
+
     lcl_HideAllReferences();
 
-    SetModalInputMode(FALSE);
+    if( Dialog *pDlg = dynamic_cast<Dialog*>( static_cast<Window*>(*this) ) )
+        pDlg->SetModalInputMode(FALSE);
     SetDispatcherLock( FALSE );         //! here and in DoClose ?
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
@@ -757,20 +780,23 @@ ScAnyRefDlg::~ScAnyRefDlg()
 
     //SFX_APPWINDOW->Enable(TRUE,TRUE);
     lcl_InvalidateWindows();
+
+    m_bInRefMode = false;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-SfxBindings& ScAnyRefDlg::GetBindings()
-{
-    //! SfxModelessDialog should allow access to pBindings pointer
-
-    return *pMyBindings;
-}
+//SfxBindings& ScRefHandler::GetBindings()
+//{
+//  //! SfxModelessDialog should allow access to pBindings pointer
+//
+//  return *pMyBindings;
+//}
 
 //----------------------------------------------------------------------------
 
-void ScAnyRefDlg::SwitchToDocument()
+void ScRefHandler::SwitchToDocument()
 {
     ScTabViewShell* pCurrent = ScTabViewShell::GetActiveViewShell();
     if (pCurrent)
@@ -800,7 +826,7 @@ void ScAnyRefDlg::SwitchToDocument()
 
 //----------------------------------------------------------------------------
 
-BOOL ScAnyRefDlg::IsDocAllowed(SfxObjectShell* pDocSh) const    // pDocSh may be 0
+BOOL ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
     //  default: allow only same document (overridden in function dialog)
     String aCmpName;
@@ -813,41 +839,41 @@ BOOL ScAnyRefDlg::IsDocAllowed(SfxObjectShell* pDocSh) const    // pDocSh may be
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScAnyRefDlg::IsRefInputMode() const
+BOOL __EXPORT ScRefHandler::IsRefInputMode() const
 {
-    return IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
+    return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
+BOOL __EXPORT ScRefHandler::DoClose( USHORT nId )
 {
     m_aHelper.DoClose(nId);
     return TRUE;
 }
 
-void ScAnyRefDlg::SetDispatcherLock( BOOL bLock )
+void ScRefHandler::SetDispatcherLock( BOOL bLock )
 {
     m_aHelper.SetDispatcherLock( bLock );
 }
 
 //----------------------------------------------------------------------------
 
-void ScAnyRefDlg::ViewShellChanged(ScTabViewShell*  pScViewShell )
+void ScRefHandler::ViewShellChanged(ScTabViewShell*  pScViewShell )
 {
     m_aHelper.ViewShellChanged(pScViewShell);
 }
 
 //----------------------------------------------------------------------------
 
-void ScAnyRefDlg::AddRefEntry()
+void ScRefHandler::AddRefEntry()
 {
     //  wenn nicht ueberladen, gibt es keine Mehrfach-Referenzen
 }
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScAnyRefDlg::IsTableLocked() const
+BOOL __EXPORT ScRefHandler::IsTableLocked() const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
 
@@ -861,48 +887,99 @@ BOOL __EXPORT ScAnyRefDlg::IsTableLocked() const
 //
 //----------------------------------------------------------------------------
 
-void ScAnyRefDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     m_aHelper.RefInputStart( pEdit, pButton );
 }
 
 
-void ScAnyRefDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
-long ScAnyRefDlg::PreNotify( NotifyEvent& rNEvt )
-{
-    USHORT nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_GETFOCUS)
-    {
-        pActiveWin=rNEvt.GetWindow();
-    }
-    return SfxModelessDialog::PreNotify(rNEvt);
+
+//The two following function is commentted out by PengYunQuan for Validity Cell Range Picker
+//long ScAnyRefDlg::PreNotify( NotifyEvent& rNEvt )
+//{
+//  USHORT nSwitch=rNEvt.GetType();
+//  if(nSwitch==EVENT_GETFOCUS)
+//  {
+//      pActiveWin=rNEvt.GetWindow();
+//  }
+//  return SfxModelessDialog::PreNotify(rNEvt);
+//}
+//
+//void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
+//{
+//  SfxModelessDialog::StateChanged( nStateChange );
+//
+//  if(nStateChange == STATE_CHANGE_VISIBLE)
+//  {
+//      if(IsVisible())
+//      {
+//          m_aHelper.enableInput( FALSE );
+//          m_aHelper.EnableSpreadsheets();
+//          m_aHelper.SetDispatcherLock( TRUE );
+//          aTimer.Start();
+//      }
+//      else
+//      {
+//          m_aHelper.enableInput( TRUE );
+//          m_aHelper.SetDispatcherLock( FALSE );           //! here and in DoClose ?
+//      }
+//  }
+//}
+
+#if defined( _MSC_VER )
+#define INTRODUCE_TEMPLATE
+#else
+#define INTRODUCE_TEMPLATE  template <>
+#endif
+
+#define IMPL_TWINDOW_PRENOTIFY( TWindow,bBindRef )  \
+INTRODUCE_TEMPLATE long ScRefHdlrImplBase<TWindow,bBindRef>::PreNotify( NotifyEvent& rNEvt )\
+{\
+    if( bBindRef || m_bInRefMode )\
+    {\
+        USHORT nSwitch=rNEvt.GetType();\
+        if(nSwitch==EVENT_GETFOCUS)\
+        {\
+            pActiveWin=rNEvt.GetWindow();\
+        }\
+    }\
+    return TWindow::PreNotify(rNEvt);\
 }
 
-void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
-{
-    SfxModelessDialog::StateChanged( nStateChange );
-
-    if(nStateChange == STATE_CHANGE_VISIBLE)
-    {
-        if(IsVisible())
-        {
-            m_aHelper.enableInput( FALSE );
-            m_aHelper.EnableSpreadsheets();
-            m_aHelper.SetDispatcherLock( TRUE );
-            aTimer.Start();
-        }
-        else
-        {
-            m_aHelper.enableInput( TRUE );
-            m_aHelper.SetDispatcherLock( FALSE );           //! here and in DoClose ?
-        }
-    }
+#define IMPL_TWINDOW_STATECHANGED( TWindow,bBindRef )   \
+INTRODUCE_TEMPLATE void ScRefHdlrImplBase<TWindow,bBindRef>::StateChanged( StateChangedType nStateChange )\
+{\
+    TWindow::StateChanged( nStateChange );\
+\
+    if( !bBindRef && !m_bInRefMode ) return;\
+    \
+    if(nStateChange == STATE_CHANGE_VISIBLE)\
+    {\
+        if(m_rWindow.IsVisible())\
+        {\
+            m_aHelper.enableInput( FALSE );\
+            m_aHelper.EnableSpreadsheets();\
+            m_aHelper.SetDispatcherLock( TRUE );\
+            aTimer.Start();\
+        }\
+        else\
+        {\
+            m_aHelper.enableInput( TRUE );\
+            m_aHelper.SetDispatcherLock( FALSE );           /*//! here and in DoClose ?*/\
+        }\
+    }\
 }
 
-IMPL_LINK( ScAnyRefDlg, UpdateFocusHdl, Timer*, EMPTYARG )
+IMPL_TWINDOW_PRENOTIFY( SfxModelessDialog, true )
+IMPL_TWINDOW_PRENOTIFY( SfxTabDialog, false )
+IMPL_TWINDOW_STATECHANGED( SfxModelessDialog, true )
+IMPL_TWINDOW_STATECHANGED( SfxTabDialog, false )
+
+IMPL_LINK( ScRefHandler, UpdateFocusHdl, Timer*, EMPTYARG )
 {
     if (pActiveWin)
     {
@@ -911,27 +988,27 @@ IMPL_LINK( ScAnyRefDlg, UpdateFocusHdl, Timer*, EMPTYARG )
     return 0;
 }
 // -----------------------------------------------------------------------------
-bool ScAnyRefDlg::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
+bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
 {
     return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
 }
 // -----------------------------------------------------------------------------
-void ScAnyRefDlg::HideReference( BOOL bDoneRefMode )
+void ScRefHandler::HideReference( BOOL bDoneRefMode )
 {
     m_aHelper.HideReference( bDoneRefMode );
 }
 // -----------------------------------------------------------------------------
-void ScAnyRefDlg::ShowReference( const XubString& rStr )
+void ScRefHandler::ShowReference( const XubString& rStr )
 {
     m_aHelper.ShowReference( rStr );
 }
 // -----------------------------------------------------------------------------
-void ScAnyRefDlg::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     m_aHelper.ReleaseFocus( pEdit,pButton );
 }
 //----------------------------------------------------------------------------
-void ScAnyRefDlg::RefInputDone( BOOL bForced )
+void ScRefHandler::RefInputDone( BOOL bForced )
 {
     m_aHelper.RefInputDone( bForced );
 }
