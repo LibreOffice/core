@@ -32,15 +32,16 @@
 #define OOX_OLE_AXCONTROL_HXX
 
 #include <memory>
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include "oox/helper/binarystreambase.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
 } } }
 
-namespace oox { class PropertyMap; }
+namespace oox {
+    class BinaryInputStream;
+    class PropertyMap;
+}
 
 namespace oox {
 namespace ole {
@@ -58,7 +59,9 @@ public:
     /** Derived classes set specific OOXML properties at the model structure. */
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     /** Derived classes set binary data (picture, mouse icon) at the model structure. */
-    virtual void        importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq );
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
+    /** Derived classes import a form control model from the passed input stream. */
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
 
     /** Derived classes return the UNO service name used to construct the control component. */
     virtual ::rtl::OUString getServiceName() const = 0;
@@ -81,6 +84,7 @@ public:
     explicit            AxFontDataModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -100,7 +104,8 @@ public:
 
     virtual ::rtl::OUString getServiceName() const;
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq );
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -122,6 +127,7 @@ public:
 
     virtual ::rtl::OUString getServiceName() const;
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -143,7 +149,8 @@ public:
 
     virtual ::rtl::OUString getServiceName() const;
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq );
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -166,7 +173,8 @@ public:
     explicit            AxMorphDataModel();
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, const StreamDataSequence& rDataSeq );
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 protected:
@@ -266,6 +274,7 @@ public:
 
     virtual ::rtl::OUString getServiceName() const;
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -289,6 +298,7 @@ public:
 
     virtual ::rtl::OUString getServiceName() const;
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( AxControlHelper& rHelper, PropertyMap& rPropMap ) const;
 
 private:
@@ -317,6 +327,13 @@ public:
     /** Creates and returns the internal control model according to the passed
         MS class identifier. */
     AxControlModelBase* createModel( const ::rtl::OUString& rClassId );
+    /** Imports a form control model from the passed input stream. */
+    void                importBinaryModel( BinaryInputStream& rInStrm );
+
+    /** Returns the internal control model. */
+    inline const AxControlModelBase* getModel() const { return mxModel.get(); }
+    /** Returns the MS class identifier used to create the internal control model. */
+    inline const ::rtl::OUString& getClassId() const { return maClassId; }
 
     /** Creates and returns the UNO form component object for this control and
         inserts it into the form wrapped by the passed helper. */
@@ -325,7 +342,8 @@ public:
 
 private:
     ::std::auto_ptr< AxControlModelBase > mxModel;
-    ::rtl::OUString     maName;
+    ::rtl::OUString     maClassId;          /// Class identifier of the control model.
+    ::rtl::OUString     maName;             /// Name of the control.
 };
 
 // ============================================================================

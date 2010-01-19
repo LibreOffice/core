@@ -1030,18 +1030,20 @@ void ExternalLinkBuffer::importExternalName( BiffInputStream& rStrm )
 
 void ExternalLinkBuffer::importExternSheet8( BiffInputStream& rStrm )
 {
-    OSL_ENSURE( getBiff() == BIFF8, "ExternalLinkBuffer::importExternSheet - wrong BIFF version" );
-    OSL_ENSURE( maRefSheets.empty(), "ExternalLinkBuffer::importExternSheet - multiple EXTERNSHEET records" );
-    maRefSheets.clear();
+    OSL_ENSURE( getBiff() == BIFF8, "ExternalLinkBuffer::importExternSheet8 - wrong BIFF version" );
+
     sal_uInt16 nRefCount;
     rStrm >> nRefCount;
-    maRefSheets.reserve( nRefCount );
-    for( sal_uInt16 nRefId = 0; !rStrm.isEof() && (nRefId < nRefCount); ++nRefId )
-    {
-        RefSheetsModel aRefSheets;
-        aRefSheets.readBiff8Data( rStrm );
-        maRefSheets.push_back( aRefSheets );
-    }
+    OSL_ENSURE( static_cast< sal_Int64 >( nRefCount * 6 ) == rStrm.getRemaining(), "ExternalLinkBuffer::importExternSheet8 - invalid count" );
+    nRefCount = static_cast< sal_uInt16 >( ::std::min< sal_Int64 >( nRefCount, rStrm.getRemaining() / 6 ) );
+
+    /*  #i104057# A weird external XLS generator writes multiple EXTERNSHEET
+        records instead of only one as expected. Surprisingly, Excel seems to
+        insert the entries of the second record before the entries of the first
+        record. */
+    maRefSheets.insert( maRefSheets.begin(), nRefCount, RefSheetsModel() );
+    for( RefSheetsModelVec::iterator aIt = maRefSheets.begin(); !rStrm.isEof() && (nRefCount > 0); --nRefCount )
+        aIt->readBiff8Data( rStrm );
 }
 
 Sequence< ExternalLinkInfo > ExternalLinkBuffer::getLinkInfos() const

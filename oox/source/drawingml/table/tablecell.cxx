@@ -84,8 +84,8 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
         aBorderLine.Color = aColor.getColor( rFilterBase );
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) );
-        aBorderLine.InnerLineWidth = 0;
+        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
+        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.LineDistance = 0;
     }
 
