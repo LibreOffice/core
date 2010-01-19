@@ -118,12 +118,13 @@ bool comp_date( const SwPostItItem* a, const SwPostItItem* b)
 // if two notes are at the same position, sort by logical node position
 bool comp_pos(const SwSidebarItem *a, const SwSidebarItem *b)
 {
-    return (a->mPos.Bottom() == b->mPos.Bottom()) ?
-            ( ((a->mPos.Left() == b->mPos.Left()) && (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) ) ?
-                *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
-                *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
-                : a->mPos.Left() < b->mPos.Left() )
-            : a->mPos.Bottom() < b->mPos.Bottom();
+    return (a->maLayoutInfo.mPosition.Bottom() == b->maLayoutInfo.mPosition.Bottom())
+            ? ( ( (a->maLayoutInfo.mPosition.Left() == b->maLayoutInfo.mPosition.Left()) &&
+                  (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) )
+                ? *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
+                    *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
+                : a->maLayoutInfo.mPosition.Left() < b->maLayoutInfo.mPosition.Left() )
+            : a->maLayoutInfo.mPosition.Bottom() < b->maLayoutInfo.mPosition.Bottom();
 }
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
@@ -487,22 +488,18 @@ bool SwPostItMgr::CalcRects()
             }
 
             //save old rect and visible state
-            SwRect aOldRect(pItem->mPos);
+            SwRect aOldRect(pItem->maLayoutInfo.mPosition);
             SwPostItHelper::SwLayoutStatus eOldStatus = pItem->mLayoutStatus;
             std::vector< SwLayoutInfo > aInfo;
              SwPosition aPosition = pItem->GetPosition();
             pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
             if( aInfo.size() )
             {
-                    SwLayoutInfo& rInfo = aInfo[0];
-                    pItem->mPos = rInfo.mPosition;
-                    pItem->mPagePos = rInfo.mPageFrame;
-                    pItem->mFramePos = rInfo.mPagePrtArea;
-                    pItem->meSidebarPosition = rInfo.meSidebarPosition;
-                    pItem->mnPageNumber = rInfo.mnPageNumber;
-                    pItem->mRedlineAuthor = rInfo.mRedlineAuthor;
+                pItem->maLayoutInfo = aInfo[0];
             }
-            bChange = bChange || (pItem->mPos != aOldRect) || (eOldStatus != pItem->mLayoutStatus);
+            bChange = bChange ||
+                      ( pItem->maLayoutInfo.mPosition != aOldRect ) ||
+                      ( eOldStatus != pItem->mLayoutStatus );
         }
 
         // show notes in right order in navigator
@@ -530,7 +527,7 @@ bool SwPostItMgr::CalcRects()
                 }
             }
 
-            const unsigned long aPageNum = pItem->mnPageNumber;
+            const unsigned long aPageNum = pItem->maLayoutInfo.mnPageNumber;
             if (aPageNum > mPages.size())
             {
                 const unsigned long nNumberOfPages = mPages.size();
@@ -538,8 +535,8 @@ bool SwPostItMgr::CalcRects()
                     mPages.push_back( new SwPostItPageItem());
             }
             mPages[aPageNum-1]->mList->push_back(pItem);
-            mPages[aPageNum-1]->mPageRect = pItem->mPagePos;
-            mPages[aPageNum-1]->eSidebarPosition = pItem->meSidebarPosition;
+            mPages[aPageNum-1]->mPageRect = pItem->maLayoutInfo.mPageFrame;
+            mPages[aPageNum-1]->eSidebarPosition = pItem->maLayoutInfo.meSidebarPosition;
         }
 
         if (!bChange && mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
@@ -637,19 +634,25 @@ void SwPostItMgr::LayoutPostIts()
                             // x value for notes positioning
                             mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
                             //bending point
-                            mlPageEnd = mpWrtShell->getIDocumentSettingAccess()->get( IDocumentSettingAccess::BROWSE_MODE) ? pItem->mFramePos.Left() : mPages[n]->mPageRect.Left() + 350;
+                            mlPageEnd =
+                                mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
+                                ? pItem->maLayoutInfo.mPagePrtArea.Left()
+                                : mPages[n]->mPageRect.Left() + 350;
                         }
                         else if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
                         {
                             // x value for notes positioning
                             mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
                             //bending point
-                            mlPageEnd = mpWrtShell->getIDocumentSettingAccess()->get( IDocumentSettingAccess::BROWSE_MODE) ? pItem->mFramePos.Right() : mPages[n]->mPageRect.Right() - 350;
+                            mlPageEnd =
+                                mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
+                                ? pItem->maLayoutInfo.mPagePrtArea.Right() :
+                                mPages[n]->mPageRect.Right() - 350;
                         }
 
                         if (pItem->bShow)
                         {
-                            long Y = mpEditWin->LogicToPixel( Point(0,pItem->mPos.Bottom())).Y();
+                            long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
                             long aPostItHeight = 0;
                             if (!pPostIt)
                             {
@@ -669,7 +672,9 @@ void SwPostItMgr::LayoutPostIts()
                                 }
                             }
 
-                            pPostIt->SetChangeTracking(pItem->mLayoutStatus,GetColorAnkor(pItem->mRedlineAuthor));
+                            pPostIt->SetChangeTracking(
+                                pItem->mLayoutStatus,
+                                GetColorAnkor(pItem->maLayoutInfo.mRedlineAuthor));
                             pPostIt->SetSidebarPosition(mPages[n]->eSidebarPosition);
                             pPostIt->SetFollow(pPostIt->CalcFollow());
                             aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
@@ -680,7 +685,7 @@ void SwPostItMgr::LayoutPostIts()
                                                           Y - GetInitialAnchorDistance(),
                                                           GetNoteWidth() ,
                                                           aPostItHeight,
-                                                          pItem->mPos,
+                                                          pItem->maLayoutInfo.mPosition,
                                                           mlPageEnd );
 
                             if (pItem->bFocus)
@@ -1362,7 +1367,7 @@ void SwPostItMgr::Sort(const short aType)
     }
 }
 
-SwSidebarWin* SwPostItMgr::GetPostIt(SfxBroadcaster* pBroadcaster) const
+SwSidebarWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
@@ -1372,27 +1377,7 @@ SwSidebarWin* SwPostItMgr::GetPostIt(SfxBroadcaster* pBroadcaster) const
     return NULL;
 }
 
-sw::annotation::SwAnnotationWin* SwPostItMgr::GetPostIt(SwPostItField* pFld) const
-{
-    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-    {
-        if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld() == pFld) )
-            return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt);
-    }
-    return NULL;
-}
-
-SwSidebarWin* SwPostItMgr::GetPostIt( const SfxBroadcaster* pBroadcaster) const
-{
-    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-    {
-        if ( (*i)->GetBroadCaster() == pBroadcaster)
-            return (*i)->pPostIt;
-    }
-    return NULL;
-}
-
-sw::annotation::SwAnnotationWin* SwPostItMgr::GetPostIt(const SwPostItField* pFld) const
+sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItField* pFld) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
@@ -1505,12 +1490,13 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
             {
                 // reset old one if still alive
                 // TODO: does not work properly if mouse and cursor was set
-                sw::annotation::SwAnnotationWin* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
+                sw::annotation::SwAnnotationWin* pOldPostIt =
+                                    GetAnnotationWin(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                     pOldPostIt->SetViewState(VS_NORMAL);
             }
             //set new one, if it is not currently edited
-            sw::annotation::SwAnnotationWin* pNewPostIt = GetPostIt(pFld);
+            sw::annotation::SwAnnotationWin* pNewPostIt = GetAnnotationWin(pFld);
             if (pNewPostIt && pNewPostIt->Shadow() && (pNewPostIt->Shadow()->GetShadowState() != SS_EDIT))
             {
                 pNewPostIt->SetViewState(VS_VIEW);
@@ -1536,7 +1522,7 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
             if (!mShadowState.bCursor && !mShadowState.bMouse)
             {
                 // reset old one if still alive
-                sw::annotation::SwAnnotationWin* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
+                sw::annotation::SwAnnotationWin* pOldPostIt = GetAnnotationWin(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                 {
                     pOldPostIt->SetViewState(VS_NORMAL);
@@ -1900,7 +1886,7 @@ sal_uInt16 SwPostItMgr::FinishSearchReplace(const ::com::sun::star::util::Search
 sal_uInt16 SwPostItMgr::SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
 {
     sal_uInt16 aResult = 0;
-    SwSidebarWin* pWin = GetPostIt(&pFld);
+    SwSidebarWin* pWin = GetSidebarWin(&pFld);
     if (pWin)
     {
         ESelection aOldSelection = pWin->GetOutlinerView()->GetSelection();

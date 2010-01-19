@@ -188,7 +188,14 @@ class SwPostItMgr: public SfxListener
             sal_Int32           GetSpaceBetween() const;
         void            SetReadOnlyState();
                     DECL_LINK( CalcHdl, void*);
-    protected:
+
+        sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
+        sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pFld) const;
+
+        void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
+        void RemoveItem( SfxBroadcaster* pBroadcast );
+
+        void Sort(const short aType);
 
     public:
             SwPostItMgr(SwView* aDoc);
@@ -198,8 +205,6 @@ class SwPostItMgr: public SfxListener
             const_iterator begin()  const { return mvPostItFlds.begin(); }
             const_iterator end()    const { return mvPostItFlds.end();  }
 
-            void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
-            void RemoveItem( SfxBroadcaster* pBroadcast );
             void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
             void LayoutPostIts();
@@ -219,8 +224,6 @@ class SwPostItMgr: public SfxListener
             void PrepareView(bool bIgnoreCount = false);
 
             void CorrectPositions();
-
-            void Sort(const short aType);
 
             void SetLayout() { mbLayout = true; };
             void Delete(String aAuthor);
@@ -255,11 +258,6 @@ class SwPostItMgr: public SfxListener
 
             sal_Int32 GetMinimumSizeWithMeta() const;
             sal_Int32 GetSidebarScrollerHeight() const;
-
-            sw::sidebarwindows::SwSidebarWin* GetPostIt(const SfxBroadcaster* pBroadcaster) const;
-            sw::sidebarwindows::SwSidebarWin* GetPostIt(SfxBroadcaster* pBroadcaster) const;
-            sw::annotation::SwAnnotationWin* GetPostIt(const SwPostItField* pFld) const;
-            sw::annotation::SwAnnotationWin* GetPostIt(SwPostItField* pFld) const;
 
             void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
 

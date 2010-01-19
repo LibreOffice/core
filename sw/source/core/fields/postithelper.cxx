@@ -71,6 +71,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
             {
                 SwLayoutInfo aInfo;
                 pTxtFrm->GetCharRect( aInfo.mPosition, rPos, 0 );
+                aInfo.mpAssociatedFrm = pTxtFrm;
                 aInfo.mPageFrame = pPage->Frm();
                 aInfo.mPagePrtArea = pPage->Prt();
                 aInfo.mPagePrtArea.Pos() += aInfo.mPageFrame.Pos();

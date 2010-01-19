@@ -54,12 +54,23 @@ typedef sal_Int64 SwPostItBits;
 
 struct SwLayoutInfo
 {
+    SwFrm* mpAssociatedFrm;
     SwRect mPosition;
     SwRect mPageFrame;
     SwRect mPagePrtArea;
     unsigned long mnPageNumber;
     sw::sidebarwindows::SidebarPosition meSidebarPosition;
     USHORT mRedlineAuthor;
+
+    SwLayoutInfo()
+        : mpAssociatedFrm(0)
+        , mPosition()
+        , mPageFrame()
+        , mPagePrtArea()
+        , mnPageNumber(1)
+        , meSidebarPosition(sw::sidebarwindows::SIDEBAR_NONE)
+        , mRedlineAuthor(0)
+    {}
 };
 
 namespace SwPostItHelper
@@ -82,22 +93,17 @@ public:
     sw::sidebarwindows::SwSidebarWin* pPostIt;
     bool bShow;
     bool bFocus;
-    sw::sidebarwindows::SidebarPosition meSidebarPosition;
-    SwRect mPos;
-    SwRect mFramePos;
-    SwRect mPagePos;
-    unsigned long mnPageNumber;
+
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
-    USHORT mRedlineAuthor;
+    SwLayoutInfo maLayoutInfo;
+
     SwSidebarItem( const bool aShow,
                    const bool aFocus)
-        : pPostIt(0),
-        bShow(aShow),
-        bFocus(aFocus),
-        meSidebarPosition(sw::sidebarwindows::SIDEBAR_NONE),
-        mnPageNumber(1),
-        mLayoutStatus( SwPostItHelper::INVISIBLE ),
-        mRedlineAuthor(0)
+        : pPostIt(0)
+        , bShow(aShow)
+        , bFocus(aFocus)
+        , mLayoutStatus( SwPostItHelper::INVISIBLE )
+        , maLayoutInfo()
     {}
     virtual ~SwSidebarItem(){}
     virtual SwPosition GetPosition() = 0;
