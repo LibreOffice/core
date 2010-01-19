@@ -30,18 +30,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
+#include "connpooloptions.hxx"
 #include "dbregisterednamesconfig.hxx"
+#include "dbregistersettings.hxx"
+#include "svx/svxids.hrc"
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
+#include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
-#include <comphelper/extract.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <svl/eitem.hxx>
-#include <comphelper/processfactory.hxx>
-#include <unotools/pathoptions.hxx>
-#include "dbregistersettings.hxx"
-#include "connpooloptions.hxx"
 
 //........................................................................
 namespace svx
@@ -50,135 +51,91 @@ namespace svx
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
-
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbRegisteredNamesNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
-        return s_sNodeName;
-    }
-
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbNameNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Name");
-        return s_sNodeName;
-    }
-
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbLocationNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
-        return s_sNodeName;
-    }
 
     //====================================================================
     //= DbRegisteredNamesConfig
     //====================================================================
     //--------------------------------------------------------------------
-    void DbRegisteredNamesConfig::GetOptions(SfxItemSet& _rFillItems)
+    void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
-        // the config node where all pooling relevant info are stored under
-        OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+        DatabaseRegistrations aSettings;
 
-        TNameLocationMap aSettings;
-
-        // then look for which of them settings are stored in the configuration
-        Sequence< ::rtl::OUString > aDriverKeys = aDbRegisteredNamesRoot.getNodeNames();
-        const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
-        for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
+        try
         {
-            // the name of the driver in this round
-            OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(*pDriverKeys);
-            ::rtl::OUString sName, sLocation;
-            aThisDriverSettings.getNodeValue(getDbNameNodeName()) >>= sName;
-            aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sLocation;
-            sLocation = SvtPathOptions().SubstituteVariable(sLocation);
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XDatabaseRegistrations > xRegistrations(
+                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
-            aSettings.insert(TNameLocationMap::value_type(sName,sLocation));
+            Sequence< ::rtl::OUString > aRegistrationNames( xRegistrations->getRegistrationNames() );
+            const ::rtl::OUString* pRegistrationName = aRegistrationNames.getConstArray();
+            const ::rtl::OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
+            for ( ; pRegistrationName != pRegistrationNamesEnd; ++pRegistrationName )
+            {
+                ::rtl::OUString sLocation( xRegistrations->getDatabaseLocation( *pRegistrationName ) );
+                aSettings[ *pRegistrationName ] =
+                    DatabaseRegistration( sLocation, xRegistrations->isDatabaseRegistrationReadOnly( *pRegistrationName ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
-        _rFillItems.Put(DatabaseMapItem(SID_SB_DB_REGISTER, aSettings));
+        _rFillItems.Put( DatabaseMapItem( SID_SB_DB_REGISTER, aSettings ) );
     }
 
     //--------------------------------------------------------------------
     void DbRegisteredNamesConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
-        // the config node where all pooling relevant info are stored under
-        OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
-
-        if (!aDbRegisteredNamesRoot.isValid())
-            // already asserted by the OConfigurationTreeRoot
+        // the settings for the single drivers
+        SFX_ITEMSET_GET( _rSourceItems, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
+        if ( !pRegistrations )
             return;
 
-        sal_Bool bNeedCommit = sal_False;
-
-
-        // the settings for the single drivers
-        SFX_ITEMSET_GET( _rSourceItems, pDriverSettings, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
-        if (pDriverSettings)
+        try
         {
-            Reference< XNameAccess > xDatabaseContext = Reference< XNameAccess >(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext"))), UNO_QUERY);
-            Reference< XNamingService> xNamingService(xDatabaseContext,UNO_QUERY);
-            ::rtl::OUString sName, sLocation;
-            OConfigurationNode aThisDriverSettings;
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XDatabaseRegistrations > xRegistrations(
+                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
-            const TNameLocationMap& rNewSettings = pDriverSettings->getSettings();
-            TNameLocationMap::const_iterator aEnd = rNewSettings.end();
-            for (   TNameLocationMap::const_iterator aLoop = rNewSettings.begin();
-                    aLoop != aEnd;
-                    ++aLoop
+            const DatabaseRegistrations& rNewRegistrations = pRegistrations->getRegistrations();
+            for (   DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();
+                    reg != rNewRegistrations.end();
+                    ++reg
                 )
             {
-                // need the name as ::rtl::OUString
-                sName = aLoop->first;
+                const ::rtl::OUString sName = reg->first;
+                const ::rtl::OUString sLocation = reg->second.sLocation;
 
-                // the sub-node for this driver
-                if (aDbRegisteredNamesRoot.hasByName(sName))
+                if ( xRegistrations->hasRegisteredDatabase( sName ) )
                 {
-                    aThisDriverSettings = aDbRegisteredNamesRoot.openNode(sName);
-                    // set the values
-                    aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(sName));
-                    aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(aLoop->second));
-                    bNeedCommit = sal_True;
+                    if ( !xRegistrations->isDatabaseRegistrationReadOnly( sName ) )
+                        xRegistrations->changeDatabaseLocation( sName, sLocation );
+                    else
+                    {
+                        OSL_ENSURE( xRegistrations->getDatabaseLocation( sName ) == sLocation,
+                            "DbRegisteredNamesConfig::SetOptions: somebody changed a read-only registration. How unrespectful." );
+                    }
                 }
                 else
-                {
-                    try
-                    {
-                        xNamingService->registerObject(sName,Reference< ::com::sun::star::uno::XInterface >(xDatabaseContext->getByName(aLoop->second),UNO_QUERY));
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-                }
+                    xRegistrations->registerDatabaseLocation( sName, sLocation );
             }
-            if (bNeedCommit)
-                aDbRegisteredNamesRoot.commit();
 
-            // delete unused entry
-            Sequence< ::rtl::OUString > aDriverKeys = xDatabaseContext->getElementNames();
-            const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
-            const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
-            for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
+            // delete unused entries
+            Sequence< ::rtl::OUString > aRegistrationNames = xRegistrations->getRegistrationNames();
+            const ::rtl::OUString* pRegistrationName = aRegistrationNames.getConstArray();
+            const ::rtl::OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
+            for ( ; pRegistrationName != pRegistrationNamesEnd; ++pRegistrationName )
             {
-                if ( rNewSettings.find(*pDriverKeys) == rNewSettings.end() )
-                {
-                    try
-                    {
-                        xNamingService->revokeObject(*pDriverKeys);
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-                }
+                if ( rNewRegistrations.find( *pRegistrationName ) == rNewRegistrations.end() )
+                    xRegistrations->revokeDatabaseLocation( *pRegistrationName );
             }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

@@ -812,14 +812,14 @@ testcase tInsertGraphic_40
         if Active.GetRT = 304 then
             Active.Ok
             QAErrorLog "No Default-Printer!"
-            Kontext "DruckenDlg"
+            Kontext "Printing"
             Sleep 1
-            DruckenDlg.Cancel
+            Printing.Cancel
         end if
     else
-        Kontext "DruckenDlg"
+        Kontext "Printing"
         Sleep 1
-        DruckenDlg.OK
+        Printing.OK
         Sleep 5
     end if
     

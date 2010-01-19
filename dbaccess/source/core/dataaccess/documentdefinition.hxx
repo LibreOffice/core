@@ -92,7 +92,6 @@ class ODocumentDefinition
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >        m_xDesktop;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
 
     OInterceptor*                                                                       m_pInterceptor;
@@ -163,8 +162,16 @@ public:
     sal_Bool saveAs();
     void closeObject();
     sal_Bool isModified();
-    void fillReportData(::osl::ClearableMutexGuard & _aGuard);
     inline sal_Bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
+
+    static void fillReportData(
+                    const ::comphelper::ComponentContext& _rContext,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& _rxComponent,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActiveConnection
+                );
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+        getConnection() const { return m_xLastKnownConnection; }
 
     /** prepares closing the document component
 
@@ -192,12 +199,10 @@ public:
 
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
-        @param _bOpenedInDesignMode
-            determines whether the embedded object has been opened for designing it or for data display
     */
-    void impl_onActivateEmbeddedObject();
+    void impl_onActivateEmbeddedObject_nothrow();
 
-    /** initializes a newly created view/controller which is displaying our embedded object
+    /** initializes a newly created view/controller of a form which is displaying our embedded object
 
         Has only to be called if the respective embedded object has been loaded for design (and
         not for data entry)
@@ -205,12 +210,15 @@ private:
         @param  _rxController
             the controller which belongs to the XModel of our (active) embedded object
     */
-    void impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
+    static void impl_initFormEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
 
     /** removes the given frame from the desktop's frame collection
         @raises ::com::sun::star::uno::RuntimeException
     */
-    void impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+    static void impl_removeFrameFromDesktop_throw(
+                    const ::comphelper::ComponentContext& _rContxt,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+                );
 
     /** opens the UI for this sub document
     */
@@ -310,10 +318,12 @@ private:
     void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
     void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
     void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
-    void onCommandOpenSomething( const ::com::sun::star::uno::Any& _rArgument, const bool _bActivate,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment,
-            ::com::sun::star::uno::Any& _out_rComponent,
-            ::osl::ClearableMutexGuard & _aClearableGuard);
+    ::com::sun::star::uno::Any
+        onCommandOpenSomething(
+            const ::com::sun::star::uno::Any& _rArgument,
+            const bool _bActivate,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment
+        );
 };
 
 //........................................................................

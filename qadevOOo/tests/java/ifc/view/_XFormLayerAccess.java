@@ -31,7 +31,7 @@
 package ifc.view;
 
 import com.sun.star.form.XForm;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import lib.MultiMethodTest;
 
 import com.sun.star.view.XFormLayerAccess;

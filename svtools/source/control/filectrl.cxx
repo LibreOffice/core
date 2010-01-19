@@ -78,6 +78,9 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
         maButton.SetStyle( (maButton.GetStyle()|WB_NOTABSTOP)&(~WB_TABSTOP) );
     }
 
+    const WinBits nAlignmentStyle = ( WB_TOP | WB_VCENTER | WB_BOTTOM );
+    maEdit.SetStyle( ( maEdit.GetStyle() & ~nAlignmentStyle ) | ( nStyle & nAlignmentStyle ) );
+
     if ( !(nStyle & WB_NOGROUP) )
         nStyle |= WB_GROUP;
 

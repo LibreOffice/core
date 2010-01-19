@@ -81,6 +81,7 @@ public:
 protected:
     ODataSettings_Base();
     ODataSettings_Base(const ODataSettings_Base& _rSource);
+    ~ODataSettings_Base();
 };
 //==========================================================================
 //= ODataSettings - a base class which implements the property handling

@@ -48,6 +48,7 @@ namespace connectivity
         java_lang_Boolean( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         java_lang_Boolean( sal_Bool _par0 );
+        static jclass st_getMyClass();
     };
 }
 

@@ -478,10 +478,12 @@ void ImplQPrinter::EndQueuePrint()
         DBG_ASSERT( mpPrinter, "no SalPrinter in ImplQPrinter" );
         if( mpPrinter )
         {
+            #if 0
             mpPrinter->StartJob( mbPrintFile ? &maPrintFile : NULL,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
                                  this );
+            #endif
             EndJob();
             mpParent->ImplEndPrint();
         }

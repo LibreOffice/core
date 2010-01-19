@@ -359,27 +359,40 @@ BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 
 // -----------------------------------------------------------------------
 
-void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
+void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
 {
-    switch( eRefDevMode )
+    sal_Int32 nDPIX = 600, nDPIY = 600;
+    switch( i_eRefDevMode )
     {
     case REFDEV_NONE:
     default:
         DBG_ASSERT( FALSE, "VDev::SetRefDev illegal argument!" );
-        // fall through
+        break;
     case REFDEV_MODE06:
-        mnDPIX = mnDPIY = 600;
+        nDPIX = nDPIY = 600;
         break;
     case REFDEV_MODE48:
-        mnDPIX = mnDPIY = 4800;
+        nDPIX = nDPIY = 4800;
         break;
     case REFDEV_MODE_MSO1:
-        mnDPIX = mnDPIY = 6*1440;
+        nDPIX = nDPIY = 6*1440;
         break;
     case REFDEV_MODE_PDF1:
-        mnDPIX = mnDPIY = 720;
+        nDPIX = nDPIY = 720;
         break;
     }
+    ImplSetReferenceDevice( i_eRefDevMode, nDPIX, nDPIY );
+}
+
+void VirtualDevice::SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
+{
+    ImplSetReferenceDevice( REFDEV_CUSTOM, i_nDPIX, i_nDPIY );
+}
+
+void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
+{
+    mnDPIX = i_nDPIX;
+    mnDPIY = i_nDPIY;
 
     EnableOutput( FALSE );  // prevent output on reference device
     mbScreenComp = FALSE;
@@ -391,7 +404,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
     // avoid adjusting font lists when already in refdev mode
     BYTE nOldRefDevMode = meRefDevMode;
     BYTE nOldCompatFlag = (BYTE)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
-    meRefDevMode = (BYTE)(eRefDevMode | nOldCompatFlag);
+    meRefDevMode = (BYTE)(i_eRefDevMode | nOldCompatFlag);
     if( (nOldRefDevMode ^ nOldCompatFlag) != REFDEV_NONE )
         return;
 

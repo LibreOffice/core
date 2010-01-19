@@ -801,7 +801,9 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
             aData << aBmp;
 
-            Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
+            const Sequence < sal_Int8 > aBuffer(
+                static_cast< const sal_Int8* >(aData.GetData()),
+                aData.GetEndOfData() );
 
             aAny <<= aBuffer;
         }

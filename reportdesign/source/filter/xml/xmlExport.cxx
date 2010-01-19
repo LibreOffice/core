@@ -293,6 +293,16 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
+    // RDFa: needed for content and header/footer styles
+    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+    }
+    // GRDDL: to convert RDFa and meta.xml to RDF
+    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
+    }
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );

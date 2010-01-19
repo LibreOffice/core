@@ -46,6 +46,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
@@ -169,15 +170,33 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 
 void StartGrammarChecking( SwDoc &rDoc )
 {
-    uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
-    if ( xGCIterator.is() )
+    // check for a visible view
+    bool bVisible = false;
+    const SwDocShell *pDocShell = rDoc.GetDocShell();
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    while (pFrame && !bVisible)
     {
-        uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
-        uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+        if (pFrame->IsVisible())
+            bVisible = true;
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+    }
 
-        // start automatic background checking if not active already
-        if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
-            xGCIterator->startProofreading( xDoc, xFPIP );
+    //!! only documents with visible views need to be checked
+    //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
+    //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
+    //!! a uno reference to them)
+    if (bVisible)
+    {
+        uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
+        if ( xGCIterator.is() )
+        {
+            uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+
+            // start automatic background checking if not active already
+            if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
+                xGCIterator->startProofreading( xDoc, xFPIP );
+        }
     }
 }
 

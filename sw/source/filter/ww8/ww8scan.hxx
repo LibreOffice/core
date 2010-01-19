@@ -295,6 +295,8 @@ private:
         machen wir uns hiermit einen PLC:
     */
     void GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN );
+
+    void MakeFailedPLCF();
 public:
     WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
         WW8_CP nStartPos = -1 );

@@ -32,6 +32,7 @@ package complex.dbaccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.uno.UnoRuntime;
+import connectivity.tools.CRMDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +45,7 @@ public abstract class CRMBasedTestCase extends TestCase
     {
         try
         {
-            m_database = new CRMDatabase( getORB() );
+            m_database = new CRMDatabase( getORB(), false );
         }
         catch ( Exception e )
         {
@@ -67,7 +68,7 @@ public abstract class CRMBasedTestCase extends TestCase
         try
         {
             if ( m_database != null )
-                m_database.close();
+                m_database.saveAndClose();
         }
         catch ( Exception ex )
         {
@@ -80,9 +81,6 @@ public abstract class CRMBasedTestCase extends TestCase
      */
     protected final XSingleSelectQueryComposer createQueryComposer() throws com.sun.star.uno.Exception
     {
-        final XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-            XMultiServiceFactory.class, m_database.getConnection() );
-        return (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
-            XSingleSelectQueryComposer.class, connectionFactory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
+        return m_database.getConnection().createSingleSelectQueryComposer();
     }
 }

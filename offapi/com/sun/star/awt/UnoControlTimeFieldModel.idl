@@ -42,6 +42,9 @@
 #include <com/sun/star/util/Color.idl>
 #endif
 
+#ifndef __com_sun_star_style_VerticalAlignment_idl__
+#include <com/sun/star/style/VerticalAlignment.idl>
+#endif
 
 //=============================================================================
 
@@ -254,6 +257,14 @@ published service UnoControlTimeFieldModel
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OpenOffice.org 3.3
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================

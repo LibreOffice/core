@@ -50,10 +50,12 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -200,6 +202,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
+        typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
         sal_Bool                                                                               m_bDisposed : 1,
                                                                                                m_bIsHiContrast : 1,
                                                                                                m_bSmallSymbols : 1,
@@ -225,10 +228,14 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                 m_xImageOrientationListener;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >                m_xUICfgMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >                m_xDocUICfgMgr;
+
         CommandToInfoMap                                                                       m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
         sal_Int16                                                                              m_nSymbolsStyle;
+        MenuDescriptionMap m_aMenuMap;
 };
 
 }

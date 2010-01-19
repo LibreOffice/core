@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#ifndef _SV_IMPPRN_HXX
+#if 0
 #define _SV_IMPPRN_HXX
 
 #include <vcl/print.hxx>
@@ -107,7 +107,6 @@ public:
     /**
     used by pull implementation to emit the next page
     */
-    using Printer::PrintPage;
     void        PrintPage( unsigned int nPage );
     /**
     used by pull implementation to get the number of physical pages

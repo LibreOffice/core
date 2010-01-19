@@ -61,6 +61,7 @@ OBJFILES = \
 
 EXCEPTIONSFILES = \
     $(OBJ)$/app.obj \
+    $(OBJ)$/printer.obj     \
     $(OBJ)$/process.obj
 
 .IF "$(GUI)" == "WNT"

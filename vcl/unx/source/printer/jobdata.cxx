@@ -64,6 +64,28 @@ JobData& JobData::operator=(const JobData& rRight)
     return *this;
 }
 
+void JobData::setCollate( bool bCollate )
+{
+    const PPDParser* pParser = m_aContext.getParser();
+    if( pParser )
+    {
+        const PPDKey* pKey = pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+        if( pKey )
+        {
+            const PPDValue* pVal = NULL;
+            if( bCollate )
+                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) );
+            else
+            {
+                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "False" ) ) );
+                if( ! pVal )
+                    pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+            }
+            m_aContext.setValue( pKey, pVal );
+        }
+    }
+}
+
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
 {
     // consistency checks

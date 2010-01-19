@@ -114,6 +114,7 @@ pl \
 ps \
 pt \
 pt-BR \
+ro \
 ru \
 rw \
 sat \

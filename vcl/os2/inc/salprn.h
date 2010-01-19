@@ -83,7 +83,6 @@ public:
     virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData );
 };
 
 // ------------------
@@ -136,7 +135,9 @@ public:
     virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData );
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

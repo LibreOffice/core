@@ -192,7 +192,8 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
     m_aSize.Height = rBM.GetSizePixel().Height();
     SvMemoryStream aStream;
     rBM.Write( aStream, FALSE, TRUE );
-    m_aBM = Sequence<sal_Int8>((const sal_Int8*)aStream.GetData(), aStream.GetSize() );
+    m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
+                aStream.GetEndOfData());
 }
 
 BmpTransporter::~BmpTransporter()

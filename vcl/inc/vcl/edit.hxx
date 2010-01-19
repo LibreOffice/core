@@ -120,6 +120,7 @@ private:
     SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
+    SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
 

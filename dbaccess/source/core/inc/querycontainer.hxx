@@ -180,7 +180,7 @@ namespace dbaccess
             );
 
         DECLARE_XINTERFACE( )
-    // ::com::sun::star::lang::XServiceInfo
+        DECLARE_XTYPEPROVIDER( )
         DECLARE_SERVICE_INFO();
 
     // ::com::sun::star::container::XContainerListener

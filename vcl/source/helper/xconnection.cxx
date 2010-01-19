@@ -30,16 +30,38 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
-#include <vcl/xconnection.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/salinst.hxx>
+
+#include "svsys.h"
+#include "vcl/xconnection.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/salinst.hxx"
+#include "vcl/svapp.hxx"
+
+namespace vcl
+{
+    class SolarMutexReleaser
+    {
+        ULONG mnReleased;
+    public:
+        SolarMutexReleaser()
+        {
+            mnReleased = Application::ReleaseSolarMutex();
+        }
+
+        ~SolarMutexReleaser()
+        {
+            if( mnReleased )
+                Application::AcquireSolarMutex( mnReleased );
+        }
+    };
+}
 
 using namespace rtl;
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
+
 
 DisplayConnection::DisplayConnection()
 {
@@ -108,6 +130,8 @@ Any SAL_CALL DisplayConnection::getIdentifier() throw()
 
 void DisplayConnection::dispatchDowningEvent()
 {
+    SolarMutexReleaser aRel;
+
     MutexGuard aGuard( m_aMutex );
     Any aEvent;
     std::list< Reference< XEventHandler > > aLocalList( m_aHandlers );
@@ -117,6 +141,8 @@ void DisplayConnection::dispatchDowningEvent()
 
 bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
 {
+    SolarMutexReleaser aRel;
+
     DisplayConnection* This = (DisplayConnection*)pThis;
     MutexGuard aGuard( This->m_aMutex );
 
@@ -131,6 +157,8 @@ bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
 
 bool DisplayConnection::dispatchErrorEvent( void* pThis, void* pData, int nBytes )
 {
+    SolarMutexReleaser aRel;
+
     DisplayConnection* This = (DisplayConnection*)pThis;
     MutexGuard aGuard( This->m_aMutex );
 

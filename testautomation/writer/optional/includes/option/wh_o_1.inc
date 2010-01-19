@@ -50,7 +50,7 @@ end sub
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLContent
 
-    Dim irgendwas(17) as boolean
+    Dim bCheckboxStatus(17) as boolean
 
     printlog "tToolsOptionsHTMLContent datei erstellen zum laden"
     '/// uses "input\\writer\\optional\\options\\options1.sxw"  ///
@@ -63,23 +63,21 @@ testcase tToolsOptionsHTMLContent
     ToolsOptions
     Call hToolsOptions ("HTML","View")
 
-    irgendwas(1) = GrafikenUndObjekte.IsChecked
-    irgendwas(2) = Tabellen.IsChecked
-    irgendwas(3) = Zeichnungen.IsChecked
-    irgendwas(4) = Feldnamen.IsChecked
-    irgendwas(5) = Notizen.IsChecked
+    bCheckboxStatus(1) = GrafikenUndObjekte.IsChecked
+    bCheckboxStatus(3) = Zeichnungen.IsChecked
+    bCheckboxStatus(4) = Feldnamen.IsChecked
+    bCheckboxStatus(5) = Notizen.IsChecked
 
-    'irgendwas(9) = Felder.IsChecked
+    'bCheckboxStatus(9) = Felder.IsChecked
 
     printlog ("'/// - all states inverting ///")
 
-    if irgendwas(1) Then GrafikenUndObjekte.UnCheck Else GrafikenUndObjekte.Check
-    if irgendwas(2) Then Tabellen.UnCheck Else Tabellen.Check
-    if irgendwas(3) Then Zeichnungen.UnCheck Else Zeichnungen.Check
-    if irgendwas(4) Then Feldnamen.UnCheck Else Feldnamen.Check
-    if irgendwas(5) Then Notizen.UnCheck Else Notizen.Check
+    if bCheckboxStatus(1) Then GrafikenUndObjekte.UnCheck Else GrafikenUndObjekte.Check
+    if bCheckboxStatus(3) Then Zeichnungen.UnCheck Else Zeichnungen.Check
+    if bCheckboxStatus(4) Then Feldnamen.UnCheck Else Feldnamen.Check
+    if bCheckboxStatus(5) Then Notizen.UnCheck Else Notizen.Check
     
-    'if irgendwas(9) Then Felder.UnCheck Else Felder.Check
+    'if bCheckboxStatus(9) Then Felder.UnCheck Else Felder.Check
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -92,16 +90,14 @@ testcase tToolsOptionsHTMLContent
     ToolsOptions
     Call hToolsOptions ( "HTML","View" )
     
-    if ( irgendwas(1) = GrafikenUndObjekte.IsChecked ) Then WarnLog "GrafikenUndObjekte state changed"
-    if ( irgendwas(2) = Tabellen.IsChecked  ) Then WarnLog "Tabellen state changed"
-    if ( irgendwas(3) = Zeichnungen.IsChecked  ) Then WarnLog "Zeichnungen state changed"
-    if ( irgendwas(4) = Feldnamen.IsChecked  ) Then  WarnLog "Feldnamen state changed"
-    if ( irgendwas(5) = Notizen.IsChecked  ) Then  WarnLog "Notizen state changed"
+    if ( bCheckboxStatus(1) = GrafikenUndObjekte.IsChecked ) Then WarnLog "Grafiken state changed"
+    if ( bCheckboxStatus(3) = Zeichnungen.IsChecked  ) Then WarnLog "Zeichnungen state changed"
+    if ( bCheckboxStatus(4) = Feldnamen.IsChecked  ) Then  WarnLog "Feldnamen state changed"
+    if ( bCheckboxStatus(5) = Notizen.IsChecked  ) Then  WarnLog "Notizen state changed"
     
     printlog ("'/// - all UnCheck -> o ///")
     
     GrafikenUndObjekte.UnCheck
-    Tabellen.UnCheck
     Zeichnungen.UnCheck
     Feldnamen.UnCheck
     Notizen.UnCheck
@@ -115,15 +111,13 @@ testcase tToolsOptionsHTMLContent
     ToolsOptions
     hToolsOptions ( "HTML","View" )
     
-    if GrafikenUndObjekte.IsChecked Then WarnLog "GrafikenUndObjekte x"
-    if Tabellen.IsChecked Then WarnLog "Tabellen x"
+    if GrafikenUndObjekte.IsChecked Then WarnLog "Grafiken x"
     if Zeichnungen.IsChecked Then WarnLog "Zeichnungen x"
     if Feldnamen.IsChecked Then  WarnLog "Feldnamen x"
     if Notizen.IsChecked Then  WarnLog "Notizen x"
     
     Printlog ("'/// - all Check -> x ///")
     GrafikenUndObjekte.Check
-    Tabellen.Check
     Zeichnungen.Check
     Feldnamen.Check
     Notizen.Check
@@ -135,18 +129,16 @@ testcase tToolsOptionsHTMLContent
     ToolsOptions
     Call hToolsOptions ( "HTML","View" )
     
-    if true <> GrafikenUndObjekte.IsChecked Then WarnLog "GrafikenUndObjekte o"
-    if True <> Tabellen.IsChecked Then WarnLog "Tabellen o"
+    if true <> GrafikenUndObjekte.IsChecked Then WarnLog "Grafiken o"
     if True <> Zeichnungen.IsChecked Then WarnLog "Zeichnungen o"
     if True <> Feldnamen.IsChecked Then  WarnLog "Feldnamen o"
     if True <> Notizen.IsChecked Then  WarnLog "Notizen o"
     
     printlog ("'/// - restore states ///")    
-    if ( irgendwas(1) = TRUE ) Then  GrafikenUndObjekte.Check Else GrafikenUndObjekte.UnCheck
-    if ( irgendwas(2) = TRUE ) Then  Tabellen.Check Else Tabellen.UnCheck
-    if ( irgendwas(3) = TRUE ) Then  Zeichnungen.Check Else Zeichnungen.UnCheck
-    if ( irgendwas(4) = TRUE ) Then  Feldnamen.Check Else Feldnamen.UnCheck
-    if ( irgendwas(5) = TRUE ) Then  Notizen.Check Else Notizen.UnCheck
+    if ( bCheckboxStatus(1) = TRUE ) Then  GrafikenUndObjekte.Check Else GrafikenUndObjekte.UnCheck
+    if ( bCheckboxStatus(3) = TRUE ) Then  Zeichnungen.Check Else Zeichnungen.UnCheck
+    if ( bCheckboxStatus(4) = TRUE ) Then  Feldnamen.Check Else Feldnamen.UnCheck
+    if ( bCheckboxStatus(5) = TRUE ) Then  Notizen.Check Else Notizen.UnCheck
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -158,7 +150,7 @@ endcase
 
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLLayout
-    Dim irgendwas(11) as boolean
+    Dim bCheckboxStatus(11) as boolean
     Dim iMasseinheit(3) as integer
     Dim iTemp(3) as integer
     '///Open "writer\\optional\\input\\options\\options1.sxw ///
@@ -169,15 +161,15 @@ testcase tToolsOptionsHTMLLayout
     ToolsOptions
     Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     
-    irgendwas(1) = Hilfslinien.IsChecked
-    irgendwas(2) = FarbigeHandles.IsChecked
-    irgendwas(3) = GrosseHandles.IsChecked
-    irgendwas(4) = HorizontaleBildlaufleiste.IsChecked
-    irgendwas(5) = VertikaleBildlaufleiste.IsChecked
-    irgendwas(10) = Lineal.IsChecked
-    irgendwas(6) = HorizontalesLineal.IsChecked
-    irgendwas(7) = VertikalesLineal.IsChecked
-    irgendwas(8) = WeichesScrollen.IsChecked
+    bCheckboxStatus(1) = Hilfslinien.IsChecked
+    bCheckboxStatus(2) = FarbigeHandles.IsChecked
+    bCheckboxStatus(3) = GrosseHandles.IsChecked
+    bCheckboxStatus(4) = HorizontaleBildlaufleiste.IsChecked
+    bCheckboxStatus(5) = VertikaleBildlaufleiste.IsChecked
+    bCheckboxStatus(10) = Lineal.IsChecked
+    bCheckboxStatus(6) = HorizontalesLineal.IsChecked
+    bCheckboxStatus(7) = VertikalesLineal.IsChecked
+    bCheckboxStatus(8) = WeichesScrollen.IsChecked
     
     iMasseinheit(2) = HorizontalesLinealMasseinheit.GetSelIndex
     iMasseinheit(3) = VertikalesLinealMasseinheit.GetSelIndex
@@ -185,17 +177,17 @@ testcase tToolsOptionsHTMLLayout
     printlog ("'/// - all states inverting ///")
     
     'this one has 2 places:  ViewTextBoundaries
-    if irgendwas(1) Then Hilfslinien.UnCheck               Else Hilfslinien.Check
-    if irgendwas(2) Then FarbigeHandles.UnCheck            Else FarbigeHandles.Check
-    if irgendwas(3) Then GrosseHandles.UnCheck             Else GrosseHandles.Check
+    if bCheckboxStatus(1) Then Hilfslinien.UnCheck               Else Hilfslinien.Check
+    if bCheckboxStatus(2) Then FarbigeHandles.UnCheck            Else FarbigeHandles.Check
+    if bCheckboxStatus(3) Then GrosseHandles.UnCheck             Else GrosseHandles.Check
     
     'this one has 2 places:   ViewRuler
-    if irgendwas(4) Then HorizontaleBildlaufleiste.UnCheck Else HorizontaleBildlaufleiste.Check
-    if irgendwas(5) Then VertikaleBildlaufleiste.UnCheck   Else VertikaleBildlaufleiste.Check
-    if irgendwas(10) then Lineal.UnCheck  Else Lineal.Check ' has to be checked to enable Horizontal and Vertical Ruler
+    if bCheckboxStatus(4) Then HorizontaleBildlaufleiste.UnCheck Else HorizontaleBildlaufleiste.Check
+    if bCheckboxStatus(5) Then VertikaleBildlaufleiste.UnCheck   Else VertikaleBildlaufleiste.Check
+    if bCheckboxStatus(10) then Lineal.UnCheck  Else Lineal.Check ' has to be checked to enable Horizontal and Vertical Ruler
     if Lineal.IsChecked then
-        if irgendwas(6) Then HorizontalesLineal.UnCheck        Else HorizontalesLineal.Check
-        if irgendwas(7) Then VertikalesLineal.UnCheck          Else VertikalesLineal.Check
+        if bCheckboxStatus(6) Then HorizontalesLineal.UnCheck        Else HorizontalesLineal.Check
+        if bCheckboxStatus(7) Then VertikalesLineal.UnCheck          Else VertikalesLineal.Check
         if ( HorizontalesLinealMasseinheit.GetItemCount <> iMasseinheit(2) ) Then HorizontalesLinealMasseinheit.Select (HorizontalesLinealMasseinheit.GetItemCount) Else HorizontalesLinealMasseinheit.Select (1)
         if ( VertikalesLinealMasseinheit.GetItemCount <> iMasseinheit(3) ) Then VertikalesLinealMasseinheit.Select (VertikalesLinealMasseinheit.GetItemCount) Else VertikalesLinealMasseinheit.Select (1)
         iTemp(2) = HorizontalesLinealMasseinheit.GetSelIndex
@@ -203,13 +195,13 @@ testcase tToolsOptionsHTMLLayout
         '/// if Asian Language enabled there has to be a checkbox 'Right-aligned' for 'Vertical-Ruler' ///
         if gAsianSup = True and VertikalesLineal.IsChecked = True then
             if RechtsAusgerichtet.IsVisible = True then
-                if irgendwas(9) Then RechtsAusgerichtet.Uncheck  Else RechtsAusgerichtet.Check
+                if bCheckboxStatus(9) Then RechtsAusgerichtet.Uncheck  Else RechtsAusgerichtet.Check
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
             end if
         end if
     end if
-    if irgendwas(8) Then WeichesScrollen.UnCheck           Else WeichesScrollen.Check
+    if bCheckboxStatus(8) Then WeichesScrollen.UnCheck           Else WeichesScrollen.Check
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -222,22 +214,22 @@ testcase tToolsOptionsHTMLLayout
     ToolsOptions
     Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     
-    if ( irgendwas(1) = Hilfslinien.IsChecked               ) Then WarnLog "Hilfslinien state changed"
-    if ( irgendwas(2) = FarbigeHandles.IsChecked            ) Then WarnLog "FarbigeHandles state changed"
-    if ( irgendwas(3) = GrosseHandles.IsChecked             ) Then WarnLog "GrosseHandles state changed"
-    if ( irgendwas(4) = HorizontaleBildlaufleiste.IsChecked ) Then WarnLog "HorizontaleBildlaufleiste state changed"
-    if ( irgendwas(5) = VertikaleBildlaufleiste.IsChecked   ) Then WarnLog "VertikaleBildlaufleiste state changed"
-    if ( irgendwas(8) = WeichesScrollen.IsChecked          ) Then WarnLog "WeichesScrollen state changed"
-    if ( irgendwas(10) = Lineal.IsChecked ) Then
+    if ( bCheckboxStatus(1) = Hilfslinien.IsChecked               ) Then WarnLog "Hilfslinien state changed"
+    if ( bCheckboxStatus(2) = FarbigeHandles.IsChecked            ) Then WarnLog "FarbigeHandles state changed"
+    if ( bCheckboxStatus(3) = GrosseHandles.IsChecked             ) Then WarnLog "GrosseHandles state changed"
+    if ( bCheckboxStatus(4) = HorizontaleBildlaufleiste.IsChecked ) Then WarnLog "HorizontaleBildlaufleiste state changed"
+    if ( bCheckboxStatus(5) = VertikaleBildlaufleiste.IsChecked   ) Then WarnLog "VertikaleBildlaufleiste state changed"
+    if ( bCheckboxStatus(8) = WeichesScrollen.IsChecked          ) Then WarnLog "WeichesScrollen state changed"
+    if ( bCheckboxStatus(10) = Lineal.IsChecked ) Then
         WarnLog "Ruler state changed"
-        if ( irgendwas(6) = HorizontalesLineal.IsChecked        ) Then WarnLog "HorizontalesLineal state changed"
-        if ( irgendwas(7) = VertikalesLineal.IsChecked         ) Then WarnLog "VertikalesLineal state changed"
+        if ( bCheckboxStatus(6) = HorizontalesLineal.IsChecked        ) Then WarnLog "HorizontalesLineal state changed"
+        if ( bCheckboxStatus(7) = VertikalesLineal.IsChecked         ) Then WarnLog "VertikalesLineal state changed"
         if ( HorizontalesLinealMasseinheit.GetSelIndex <> iTemp(2) ) Then WarnLog "HorizontalesLinealMasseinheit state changed"
         if ( VertikalesLinealMasseinheit.GetSelIndex <> iTemp(3) ) Then WarnLog "VertikalesLinealMasseinheit   state changed"
     
         if gAsianSup = True and VertikalesLineal.IsChecked = True then
             if RechtsAusgerichtet.IsVisible = True then
-                if irgendwas(9) = RechtsAusgerichtet.IsChecked then WarnLog "Right-aligned state changed"
+                if bCheckboxStatus(9) = RechtsAusgerichtet.IsChecked then WarnLog "Right-aligned state changed"
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
             end if
@@ -381,19 +373,19 @@ testcase tToolsOptionsHTMLLayout
     ToolsOptions
     Call hToolsOptions ( "HTML" , "VIEW" )
     
-    if ( irgendwas(1) =  TRUE ) Then  Hilfslinien.Check               Else Hilfslinien.UnCheck
-    if ( irgendwas(2) =  TRUE ) Then  FarbigeHandles.Check            Else FarbigeHandles.UnCheck
-    if ( irgendwas(3) =  TRUE ) Then  GrosseHandles.Check             Else GrosseHandles.UnCheck
+    if ( bCheckboxStatus(1) =  TRUE ) Then  Hilfslinien.Check               Else Hilfslinien.UnCheck
+    if ( bCheckboxStatus(2) =  TRUE ) Then  FarbigeHandles.Check            Else FarbigeHandles.UnCheck
+    if ( bCheckboxStatus(3) =  TRUE ) Then  GrosseHandles.Check             Else GrosseHandles.UnCheck
     
-    if ( irgendwas(4) =  TRUE ) Then  HorizontaleBildlaufleiste.Check Else HorizontaleBildlaufleiste.UnCheck
-    if ( irgendwas(5) =  TRUE ) Then  VertikaleBildlaufleiste.Check   Else VertikaleBildlaufleiste.UnCheck
+    if ( bCheckboxStatus(4) =  TRUE ) Then  HorizontaleBildlaufleiste.Check Else HorizontaleBildlaufleiste.UnCheck
+    if ( bCheckboxStatus(5) =  TRUE ) Then  VertikaleBildlaufleiste.Check   Else VertikaleBildlaufleiste.UnCheck
     Lineal.Check
-    if ( irgendwas(6) =  TRUE ) Then  HorizontalesLineal.Check        Else HorizontalesLineal.UnCheck
-    if ( irgendwas(7) = TRUE ) Then  VertikalesLineal.Check          Else VertikalesLineal.UnCheck
+    if ( bCheckboxStatus(6) =  TRUE ) Then  HorizontalesLineal.Check        Else HorizontalesLineal.UnCheck
+    if ( bCheckboxStatus(7) = TRUE ) Then  VertikalesLineal.Check          Else VertikalesLineal.UnCheck
     HorizontalesLinealMasseinheit.Select (iMasseinheit(2))
     VertikalesLinealMasseinheit.Select (iMasseinheit(3))
     
-    if ( irgendwas(8) = TRUE ) Then  WeichesScrollen.Check           Else WeichesScrollen.UnCheck
+    if ( bCheckboxStatus(8) = TRUE ) Then  WeichesScrollen.Check           Else WeichesScrollen.UnCheck
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -406,7 +398,7 @@ endcase
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLGrid
 
-    Dim irgendwas(3) as boolean
+    Dim bCheckboxStatus(3) as boolean
     Dim sMetricField(4) as string      ' MetricField
     Dim sTempMetricField(4) as string
         
@@ -422,9 +414,9 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'///TabRaster all UnCheck ! ///")
     
-    irgendwas(1) = FangrasterBenutzen.IsChecked
-    irgendwas(2) = RasterSichtbar.IsChecked
-    irgendwas(3) = AchsenSynchronisieren.IsChecked
+    bCheckboxStatus(1) = FangrasterBenutzen.IsChecked
+    bCheckboxStatus(2) = RasterSichtbar.IsChecked
+    bCheckboxStatus(3) = AchsenSynchronisieren.IsChecked
     
     sMetricField(1) = RasterAufloesungXAchse.GetText
     sMetricField(2) = RasterAufloesungYAchse.GetText
@@ -433,9 +425,9 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - all states inverting ///")
     
-    if irgendwas(1) Then FangrasterBenutzen.UnCheck    Else FangrasterBenutzen.Check
-    if irgendwas(2) Then RasterSichtbar.UnCheck        Else RasterSichtbar.Check
-    '      if irgendwas(3) Then AchsenSynchronisieren.UnCheck Else AchsenSynchronisieren.Check
+    if bCheckboxStatus(1) Then FangrasterBenutzen.UnCheck    Else FangrasterBenutzen.Check
+    if bCheckboxStatus(2) Then RasterSichtbar.UnCheck        Else RasterSichtbar.Check
+    '      if bCheckboxStatus(3) Then AchsenSynchronisieren.UnCheck Else AchsenSynchronisieren.Check
     '   this CheckBox interacts with the MetricBoxes:
     AchsenSynchronisieren.UnCheck
     
@@ -467,8 +459,8 @@ testcase tToolsOptionsHTMLGrid
     ToolsOptions
     Call hToolsOptions ( "HTML","Grid" )
     
-    if (irgendwas(1) = FangrasterBenutzen.IsChecked    ) Then WarnLog "FangrasterBenutzen state changed BugID: 82944 "
-    if (irgendwas(2) = RasterSichtbar.IsChecked        ) Then WarnLog "RasterSichtbar state changed"
+    if (bCheckboxStatus(1) = FangrasterBenutzen.IsChecked    ) Then WarnLog "FangrasterBenutzen state changed BugID: 82944 "
+    if (bCheckboxStatus(2) = RasterSichtbar.IsChecked        ) Then WarnLog "RasterSichtbar state changed"
     if ( AchsenSynchronisieren.IsChecked = TRUE ) Then WarnLog "AchsenSynchronisieren state changed"
     if ( RasterAufloesungXAchse.GetText <>   sTempMetricField(1) ) Then WarnLog "RasterAufloesungXAchse state changed"
     if ( RasterAufloesungYAchse.GetText <>   sTempMetricField(2) ) Then WarnLog "RasterAufloesungYAchse state changed"
@@ -638,9 +630,9 @@ testcase tToolsOptionsHTMLGrid
     ToolsOptions
     Call hToolsOptions ( "HTML","Grid" )
     
-    if ( irgendwas(1) =  TRUE ) Then FangrasterBenutzen.Check    Else FangrasterBenutzen.UnCheck
-    if ( irgendwas(2) =  TRUE ) Then RasterSichtbar.Check        Else RasterSichtbar.UnCheck
-    if ( irgendwas(3) =  TRUE ) Then AchsenSynchronisieren.Check Else AchsenSynchronisieren.UnCheck
+    if ( bCheckboxStatus(1) =  TRUE ) Then FangrasterBenutzen.Check    Else FangrasterBenutzen.UnCheck
+    if ( bCheckboxStatus(2) =  TRUE ) Then RasterSichtbar.Check        Else RasterSichtbar.UnCheck
+    if ( bCheckboxStatus(3) =  TRUE ) Then AchsenSynchronisieren.Check Else AchsenSynchronisieren.UnCheck
     RasterAufloesungXAchse.SetText   (sMetricField(1))
     RasterAufloesungYAchse.SetText   (sMetricField(2))
     RasterUnterteilungXAchse.SetText (sMetricField(3))

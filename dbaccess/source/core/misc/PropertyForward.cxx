@@ -30,140 +30,146 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_PROPERTYSETFORWARD_HXX
+
 #include "PropertyForward.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
+
+#include <comphelper/property.hxx>
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbcx;
+    using namespace ::com::sun::star::lang;
 
-DBG_NAME(OPropertyForward)
-OPropertyForward::OPropertyForward(const Reference< XPropertySet>& _xSource
-                                ,const Reference< XNameAccess>& _xDestContainer
-                                ,const ::rtl::OUString& _sName
-                                ,const ::std::vector< ::rtl::OUString>& _aPropertyList)
-                                : m_xSource(_xSource)
-                                , m_xDestContainer(_xDestContainer)
-                                , m_sName(_sName)
-                                , m_bInInsert(sal_False)
-{
-    DBG_CTOR(OPropertyForward,NULL);
-    OSL_ENSURE(_xDestContainer.is(),"OPropertyForward::OPropertyForward: destination should be valid!");
-    OSL_ENSURE(m_xSource.is(),"OPropertyForward::OPropertyForward: source must be valid!");
-    osl_incrementInterlockedCount(&m_refCount);
-    try
+    DBG_NAME(OPropertyForward)
+
+    //------------------------------------------------------------------------
+    OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
+            const ::rtl::OUString& _sName, const ::std::vector< ::rtl::OUString>& _aPropertyList )
+        :m_xSource( _xSource, UNO_SET_THROW )
+        ,m_xDestContainer( _xDestContainer, UNO_SET_THROW )
+        ,m_sName( _sName )
+        ,m_bInInsert( sal_False )
     {
-        if ( _aPropertyList.empty() )
-            _xSource->addPropertyChangeListener(::rtl::OUString(), this);
-        else
+        DBG_CTOR(OPropertyForward,NULL);
+
+        osl_incrementInterlockedCount(&m_refCount);
+        try
         {
-            ::std::vector< ::rtl::OUString>::const_iterator aIter = _aPropertyList.begin();
-            ::std::vector< ::rtl::OUString>::const_iterator aEnd = _aPropertyList.end();
-            for (; aIter != aEnd ; ++aIter )
-                _xSource->addPropertyChangeListener(*aIter, this);
-        }
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(sal_False, "OPropertyForward::OPropertyForward: caught an exception!");
-    }
-    osl_decrementInterlockedCount(&m_refCount);
-}
-// -----------------------------------------------------------------------------
-OPropertyForward::~OPropertyForward()
-{
-    DBG_DTOR(OPropertyForward,NULL);
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( m_xDestContainer.is() )
-    {
-        if ( m_xDestContainer->hasByName(m_sName) )
-        {
-            m_xDest.set(m_xDestContainer->getByName(m_sName),UNO_QUERY);
-        }
-        else
-        {
-            Reference<XDataDescriptorFactory> xFactory(m_xDestContainer,UNO_QUERY);
-            if ( xFactory.is() )
+            if ( _aPropertyList.empty() )
+                _xSource->addPropertyChangeListener( ::rtl::OUString(), this );
+            else
             {
-                m_xDest = xFactory->createDataDescriptor();
-                if ( m_xDest.is() )
-                {
-                    ::comphelper::copyProperties(m_xSource,m_xDest);
-                    m_bInInsert = sal_True;
-                    Reference<XAppend> xAppend(m_xDestContainer,UNO_QUERY);
-                    if ( xAppend.is() )
-                        xAppend->appendByDescriptor(m_xDest);
-                    m_bInInsert = sal_False;
-                }
+                ::std::vector< ::rtl::OUString >::const_iterator aIter = _aPropertyList.begin();
+                ::std::vector< ::rtl::OUString >::const_iterator aEnd = _aPropertyList.end();
+                for (; aIter != aEnd ; ++aIter )
+                    _xSource->addPropertyChangeListener( *aIter, this );
             }
         }
-        if ( m_xDest.is() )
-            m_xDestInfo = m_xDest->getPropertySetInfo();
-    }
-
-    if ( m_xDestInfo.is() && m_xDestInfo->hasPropertyByName(evt.PropertyName) )
-    {
-        m_xDest->setPropertyValue(evt.PropertyName,evt.NewValue);
-    }
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( m_xSource.is() )
-    {
-        m_xSource->removePropertyChangeListener(::rtl::OUString(), this);
-        m_xSource = NULL;
-    }
-    m_xDestContainer = NULL;
-    m_xDestInfo = NULL;
-    m_xDest = NULL;
-}
-// -----------------------------------------------------------------------------
-void OPropertyForward::setDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( !m_bInInsert )
-    {
-        OSL_ENSURE( !m_xDest.is(),"Definition object is already set!");
-
-        m_xDest = _xDest;
-        if ( m_xDest.is() )
+        catch( const Exception& )
         {
-            m_xDestInfo = m_xDest->getPropertySetInfo();
-            ::comphelper::copyProperties(m_xDest,m_xSource);
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        osl_decrementInterlockedCount( &m_refCount );
+    }
+
+    // -----------------------------------------------------------------------------
+    OPropertyForward::~OPropertyForward()
+    {
+        DBG_DTOR(OPropertyForward,NULL);
+    }
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_xDestContainer.is() )
+            throw DisposedException( ::rtl::OUString(), *this );
+
+        try
+        {
+            if ( !m_xDest.is() )
+            {
+                if ( m_xDestContainer->hasByName( m_sName ) )
+                {
+                    m_xDest.set( m_xDestContainer->getByName( m_sName ), UNO_QUERY_THROW );
+                }
+                else
+                {
+                    Reference< XDataDescriptorFactory > xFactory( m_xDestContainer, UNO_QUERY_THROW );
+                    m_xDest.set( xFactory->createDataDescriptor(), UNO_SET_THROW );
+
+                    ::comphelper::copyProperties( m_xSource, m_xDest );
+
+                    m_bInInsert = sal_True;
+                    Reference< XAppend > xAppend( m_xDestContainer, UNO_QUERY_THROW );
+                    xAppend->appendByDescriptor( m_xDest );
+                    m_bInInsert = sal_False;
+                }
+
+                m_xDestInfo.set( m_xDest->getPropertySetInfo(), UNO_SET_THROW );
+            }
+
+            if ( m_xDestInfo->hasPropertyByName( evt.PropertyName ) )
+            {
+                m_xDest->setPropertyValue( evt.PropertyName, evt.NewValue );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
-}
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        if ( !m_xSource.is() )
+            throw DisposedException( ::rtl::OUString(), *this );
+
+        m_xSource->removePropertyChangeListener( ::rtl::OUString(), this );
+        m_xSource = NULL;
+        m_xDestContainer = NULL;
+        m_xDestInfo = NULL;
+        m_xDest = NULL;
+    }
+
+    // -----------------------------------------------------------------------------
+    void OPropertyForward::setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( m_bInInsert )
+            return;
+
+        OSL_ENSURE( !m_xDest.is(), "OPropertyForward::setDefinition: definition object is already set!" );
+        try
+        {
+            m_xDest.set( _xDest, UNO_SET_THROW );
+            m_xDestInfo.set( m_xDest->getPropertySetInfo(), UNO_SET_THROW );
+            ::comphelper::copyProperties( m_xDest, m_xSource );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

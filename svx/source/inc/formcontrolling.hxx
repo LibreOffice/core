@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: formcontrolling.hxx,v $
- * $Revision: 1.7 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,7 +28,7 @@
 #ifndef SVX_FORMCONTROLLING_HXX
 #define SVX_FORMCONTROLLING_HXX
 
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
@@ -117,7 +114,7 @@ namespace svx
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        /** constructs the instance from a <type scope="com::sun::star::form">XFormController<type> instance
+        /** constructs the instance from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
 
             @param _rxORB
                 a multi service factory for creating various needed components
@@ -131,7 +128,7 @@ namespace svx
         */
         ControllerFeatures(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
@@ -163,7 +160,7 @@ namespace svx
         /** assign to a controller
         */
         void assign(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController
         );
 
         /** assign to a controller
@@ -206,7 +203,7 @@ namespace svx
         ::com::sun::star::uno::Any      m_aOperationError;
 
     public:
-        /** constructs the helper from a <type scope="com::sun::star::form">XFormController<type> instance
+        /** constructs the helper from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
 
             @param _rContext
                 the context the component lives in
@@ -218,7 +215,7 @@ namespace svx
         */
         FormControllerHelper(
             const ::comphelper::ComponentContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 

@@ -219,8 +219,10 @@ SalInstance *CreateSalInstance()
 
     if( !(pUsePlugin && *pUsePlugin) )
         pInst = check_headless_plugin();
+    else
+        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
 
-    if( ! pInst && !(pUsePlugin && *pUsePlugin) )
+    if( ! pInst )
         pInst = autodetect_plugin();
 
     // fallback to gen

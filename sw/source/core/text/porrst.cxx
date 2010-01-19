@@ -219,6 +219,7 @@ SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
                rInf.GetTxtFrm()->Prt().Right();
     aPos.Y() = rInf.GetTxtFrm()->Frm().Top() +
                rInf.GetTxtFrm()->Prt().Bottom();
+    SetWhichPor( POR_ARROW );
 }
 
 void SwArrowPortion::Paint( const SwTxtPaintInfo &rInf ) const

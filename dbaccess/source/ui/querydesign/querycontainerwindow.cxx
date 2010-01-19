@@ -229,16 +229,17 @@ namespace dbaui
 
             Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
+            OSL_ENSURE(m_xBeamer.is(),"No frame created!");
+            m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
 
             // notify layout manager to not create internal toolbars
             Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
             try
             {
                 const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-                Reference < XPropertySet > xLMPropSet;
+                Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
 
-                Any a = xPropSet->getPropertyValue( aLayoutManager );
-                if ( a >>= xLMPropSet )
+                if ( xLMPropSet.is() )
                 {
                     const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
                     xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
@@ -248,8 +249,6 @@ namespace dbaui
             {
             }
 
-            OSL_ENSURE(m_xBeamer.is(),"No frame created!");
-            m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
             m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
 
             // append our frame

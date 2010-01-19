@@ -59,7 +59,7 @@ public:
     ~SwNoTxtFrm();
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint(const SwRect& ) const;
+    virtual void Paint(const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual BOOL GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
     BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,

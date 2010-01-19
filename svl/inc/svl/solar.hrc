@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solar.hrc,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,6 +168,9 @@
 
 #define HID_START                   32768
 
+#define HID_VCL_START               (HID_START+100)
+#define HID_VCL_END                 (HID_START+150)
+
 #define HID_SVTOOLS_START           (HID_START+200)
 #define HID_SVTOOLS_END             (HID_START+299)
 
@@ -207,8 +207,10 @@
 #define HID_GOODIES_START           (HID_LIB_START+2100)
 #define HID_GOODIES_END             (HID_LIB_START+2199)
 
+#if 0 // currently unused range
 #define HID_SCHEDULE_START          (HID_LIB_START+2200)
 #define HID_SCHEDULE_END            (HID_LIB_START+3399)
+#endif
 
 #define HID_CHANNEL_START           (HID_LIB_START+3400)
 #define HID_CHANNEL_END             (HID_LIB_START+3499)
@@ -299,7 +301,6 @@
 
 #define HID_EXTENSIONS_START        (HID_OBJ_START+2281)
 #define HID_EXTENSIONS_END          (HID_OBJ_START+2800)
-
 
 #endif
 

@@ -39,10 +39,8 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XDataSource;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,11 +55,10 @@ public class DataSource
     {
         m_orb = _orb;
 
-        final XNameAccess dbContext = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
-                _orb.createInstance("com.sun.star.sdb.DatabaseContext"));
+        final XNameAccess dbContext = UnoRuntime.queryInterface(
+            XNameAccess.class, _orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
 
-        m_dataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class,
-                dbContext.getByName(_registeredName));
+        m_dataSource = UnoRuntime.queryInterface( XDataSource.class, dbContext.getByName( _registeredName ) );
     }
 
     public DataSource(final XMultiServiceFactory _orb,final XDataSource _dataSource)
@@ -86,13 +83,11 @@ public class DataSource
      */
     public void createQuery(final String _name, final String _sqlCommand, final boolean _escapeProcessing) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
-        final XSingleServiceFactory queryDefsFac = (XSingleServiceFactory) UnoRuntime.queryInterface(
-                XSingleServiceFactory.class, getQueryDefinitions());
+        final XSingleServiceFactory queryDefsFac = UnoRuntime.queryInterface( XSingleServiceFactory.class, getQueryDefinitions() );
         XPropertySet queryDef = null;
         try
         {
-            queryDef = (XPropertySet) UnoRuntime.queryInterface(
-                    XPropertySet.class, queryDefsFac.createInstance());
+            queryDef = UnoRuntime.queryInterface( XPropertySet.class, queryDefsFac.createInstance() );
             queryDef.setPropertyValue("Command", _sqlCommand);
             queryDef.setPropertyValue("EscapeProcessing", Boolean.valueOf(_escapeProcessing));
         }
@@ -101,8 +96,7 @@ public class DataSource
             e.printStackTrace(System.err);
         }
 
-        final XNameContainer queryDefsContainer = (XNameContainer) UnoRuntime.queryInterface(
-                XNameContainer.class, getQueryDefinitions());
+        final XNameContainer queryDefsContainer = UnoRuntime.queryInterface( XNameContainer.class, getQueryDefinitions() );
         queryDefsContainer.insertByName(_name, queryDef);
     }
 
@@ -113,8 +107,7 @@ public class DataSource
         final XNameAccess allDefs = getQueryDefinitions();
         try
         {
-            return new QueryDefinition(
-                    (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, allDefs.getByName(_name)));
+            return new QueryDefinition( UnoRuntime.queryInterface( XPropertySet.class, allDefs.getByName( _name) ) );
         }
         catch (WrappedTargetException e)
         {
@@ -126,23 +119,9 @@ public class DataSource
      */
     public XNameAccess getQueryDefinitions()
     {
-        final XQueryDefinitionsSupplier suppQueries = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(
+        final XQueryDefinitionsSupplier suppQueries = UnoRuntime.queryInterface(
                 XQueryDefinitionsSupplier.class, m_dataSource);
         return suppQueries.getQueryDefinitions();
-    }
-
-    /** refreshs the table container of a given connection
-     *
-     *  This is usually necessary if you created tables by directly executing SQL statements,
-     *  bypassing the SDBCX layer.
-     */
-    public void refreshTables(final com.sun.star.sdbc.XConnection _connection)
-    {
-        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
-                XTablesSupplier.class, _connection);
-        final XRefreshable refreshTables = (XRefreshable) UnoRuntime.queryInterface(
-                XRefreshable.class, suppTables.getTables());
-        refreshTables.refresh();
     }
 
     /** returns the name of the data source
@@ -157,8 +136,7 @@ public class DataSource
         String name = null;
         try
         {
-            final XPropertySet dataSourceProps = (XPropertySet) UnoRuntime.queryInterface(
-                    XPropertySet.class, m_dataSource);
+            final XPropertySet dataSourceProps = UnoRuntime.queryInterface( XPropertySet.class, m_dataSource );
             name = (String) dataSourceProps.getPropertyValue("Name");
         }
         catch (Exception ex)

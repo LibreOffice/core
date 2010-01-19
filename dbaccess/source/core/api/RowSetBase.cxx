@@ -469,18 +469,16 @@ Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) thro
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBlob" );
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getBlob", *m_pMySelf );
-    return NULL;
+    return Reference< XBlob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getClob" );
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getClob", *m_pMySelf );
-    return NULL;
+    return Reference< XClob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)

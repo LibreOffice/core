@@ -34,8 +34,8 @@
 #ifndef __com_sun_star_form_runtime_XFormOperations_idl__
 #include <com/sun/star/form/runtime/XFormOperations.idl>
 #endif
-#ifndef __com_sun_star_form_XFormController_idl__
-#include <com/sun/star/form/XFormController.idl>
+#ifndef __com_sun_star_form_runtime_XFormController_idl__
+#include <com/sun/star/form/runtime/XFormController.idl>
 #endif
 #ifndef __com_sun_star_form_XForm_idl__
 #include <com/sun/star/form/XForm.idl>

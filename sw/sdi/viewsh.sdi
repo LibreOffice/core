@@ -226,10 +226,6 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    FN_PREVIEW_PRINT_OPTIONS //status()
-    [
-        ExecMethod = Execute ;
-    ]
     FN_PRINT_PAGEPREVIEW // status()
     [
         ExecMethod = Execute ;

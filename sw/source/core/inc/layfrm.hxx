@@ -108,7 +108,7 @@ public:
     SwLayoutFrm( SwFrmFmt* );
     ~SwLayoutFrm();
 
-    virtual void Paint( const SwRect& ) const;
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     const SwFrm *Lower() const { return pLower; }
           SwFrm *Lower()       { return pLower; }
     const SwCntntFrm *ContainsCntnt() const;

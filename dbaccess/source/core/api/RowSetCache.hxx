@@ -225,6 +225,7 @@ namespace dbaccess
         void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
         void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x );
         void updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale );
+        void updateNull(sal_Int32 columnIndex);
 
     // ::com::sun::star::sdbc::XResultSet
         sal_Bool next(  );

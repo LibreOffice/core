@@ -1820,7 +1820,9 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
             SvMemoryStream aDestStrm( 65535, 65535 );
 
             ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, sal_False );
-            uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+            const uno::Sequence<sal_Int8> aSeq(
+                static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                aDestStrm.GetEndOfData());
             rValue <<= aSeq;
         }
         break;

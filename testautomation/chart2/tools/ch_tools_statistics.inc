@@ -88,7 +88,7 @@ function fInvokeTrendlinesDialog() as INTEGER
     
     '/// Lookup if call was successful
 	Kontext
-	active.SetPage "TabTrendLineType"
+	active.SetPage (TabTrendLineType)
     Kontext "TabTrendLineType"
     if TabTrendLineType.exists(2) then
         printlog ">> Trend lines dialog is visible now."

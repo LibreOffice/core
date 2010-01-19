@@ -183,6 +183,7 @@ public:
 
     // Doc rausreichen aber VORSICHT
     inline SwDoc*                   GetDoc() { return pDoc; }
+    inline const SwDoc*             GetDoc() const { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();

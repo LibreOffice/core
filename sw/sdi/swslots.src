@@ -902,10 +902,6 @@ SfxSlotInfo FN_PREV_WORD_SEL
 {
     Slotname [ en-US ] = "Select to Begin of Word";
 };
-SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
-{
-    Slotname [ en-US ] = "Print options page view";
-};
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
     Slotname [ en-US ] = "Preview Zoom";
@@ -916,7 +912,7 @@ SfxSlotInfo FN_PRINT_LAYOUT
 };
 SfxSlotInfo FN_PRINT_PAGEPREVIEW
 {
-    Slotname [ en-US ] = "Print page view";
+    Slotname [ en-US ] = "Print document";
 };
 SfxSlotInfo FN_MAILMERGE_WIZARD
 {

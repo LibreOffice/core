@@ -315,7 +315,9 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                     }
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    const uno::Sequence<sal_Int8> aSeq(
+                        static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                        aDestStrm.GetEndOfData());
                     rValue <<= aSeq;
                 }
             }

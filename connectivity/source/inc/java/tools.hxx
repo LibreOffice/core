@@ -41,6 +41,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -85,6 +86,9 @@ namespace connectivity
             <TRUE/> if an exception is occured
     */
     sal_Bool isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear);
+
+    jobject createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
+    jobject createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
 }
 
 #endif // _CONNECTIVITY_JAVA_TOOLS_HXX_

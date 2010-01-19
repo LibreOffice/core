@@ -917,7 +917,6 @@ sub wOptionsUndo ( sOption$ )
         WeichesScrollen.Uncheck
         ' Display
         GrafikenUndObjekte.Check
-        Tabellen.Check
         Zeichnungen.Check
         Feldname.Uncheck
         Notizen.Check
@@ -981,20 +980,17 @@ sub wOptionsUndo ( sOption$ )
         Call hToolsOptions("WRITER","Print")
         ' Contents
         Grafiken.Check
-        Tabellen.Check
-        Zeichnungen.Check
         Kontrollfelder.Check
         Hintergrund.Check
         SchwarzDrucken.Uncheck
         ' Pages
         LinkeSeiten.Check
         RechteSeiten.Check
-        Umgekehrt.Uncheck
         Prospekt.Uncheck
         ' Notes
         Keine.Check
         ' Other
-        EinzelneDruckauftraege.Uncheck
+        LeereSeitenDrucken.Check
         AusDruckereinstellung.Uncheck
         Fax.SetNoSelection
     end if

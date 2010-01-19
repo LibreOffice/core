@@ -167,8 +167,7 @@ public:
    ~StgTmpStrm();
     BOOL Copy( StgTmpStrm& );
     void SetSize( ULONG );
-    using SvMemoryStream::GetSize;
-    ULONG GetSize();
+    ULONG GetSize() const;
 };
 
 #endif

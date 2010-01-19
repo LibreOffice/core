@@ -706,7 +706,7 @@ OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
             if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName))
                 xColumnDefintion.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
 
-            pReturn = new OTableColumnWrapper(xProp,xColumnDefintion);
+            pReturn = new OTableColumnWrapper( xProp, xColumnDefintion, false );
         }
     }
     return pReturn;
@@ -734,8 +734,8 @@ Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
     if(m_xTable.is())
         xNames.set(m_xTable->getColumns(),UNO_QUERY);
     Reference< XPropertySet > xRet;
-    if(xNames.is())
-        xRet = new OTableColumnDescriptorWrapper(xNames->createDataDescriptor());
+    if ( xNames.is() )
+        xRet = new OTableColumnDescriptorWrapper( xNames->createDataDescriptor(), false, true );
     return xRet;
 }
 // -----------------------------------------------------------------------------

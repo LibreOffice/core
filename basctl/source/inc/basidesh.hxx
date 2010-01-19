@@ -199,7 +199,9 @@ public:
 
     SfxUndoManager*     GetUndoManager();
 
-    virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+
+    // virtual USHORT           Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( BOOL bCreate );
     virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual String          GetSelectionText( BOOL bCompleteWords );

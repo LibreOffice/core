@@ -88,6 +88,9 @@ namespace utl
         /// dtor
         ~OConfigurationNode() {}
 
+        /// returns the local name of the node
+        ::rtl::OUString     getLocalName() const;
+
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
         */

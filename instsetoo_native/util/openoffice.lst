@@ -89,9 +89,9 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -153,9 +153,9 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -224,9 +224,9 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-			STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -267,9 +267,9 @@ URE
             DONTUSESTARTMENUFOLDER 1
             SERVICESPROJEKT 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			PACKAGEMAP package_names_ext.txt
         }
@@ -312,9 +312,9 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
         }
         active 1
         compression 5
@@ -361,9 +361,9 @@ OpenOffice_Dev_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
         }
         active 1
         compression 5
@@ -424,9 +424,9 @@ BrOffice
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -492,9 +492,9 @@ BrOffice_wJRE
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
@@ -566,9 +566,9 @@ BrOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
+            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
+            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}

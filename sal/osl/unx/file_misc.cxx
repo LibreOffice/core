@@ -1013,6 +1013,15 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
+    /* HACK: because memory mapping fails on various
+       platforms if the size of the source file is  0 byte */
+    if (0 == nSourceSize)
+    {
+        close(SourceFileFD);
+        close(DestFileFD);
+        return 0;
+    }
+
     // read and lseek are used to check the possibility to access the data
     // not a nice solution, but it allows to avoid a crash in case it is an opened samba file
     // generally, reading of one byte should not affect the performance
@@ -1032,15 +1041,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         nRet=errno;
         close(SourceFileFD);
         return nRet;
-    }
-
-    /* HACK: because memory mapping fails on various
-       platforms if the size of the source file is  0 byte */
-    if (0 == nSourceSize)
-    {
-        close(SourceFileFD);
-        close(DestFileFD);
-        return 0;
     }
 
     size_t nWritten = 0;

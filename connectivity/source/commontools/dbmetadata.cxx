@@ -257,6 +257,27 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsPrimaryKeys() const
+    {
+        lcl_checkConnected( *m_pImpl );
+
+        bool doesSupportPrimaryKeys = false;
+        try
+        {
+            Any setting;
+            if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
+                ||  !( setting >>= doesSupportPrimaryKeys )
+                )
+                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return doesSupportPrimaryKeys;
+    }
+
+    //--------------------------------------------------------------------
     const ::rtl::OUString&  DatabaseMetaData::getIdentifierQuoteString() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );

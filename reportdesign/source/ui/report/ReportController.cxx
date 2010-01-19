@@ -1731,7 +1731,9 @@ void OReportController::impl_initialize( )
                     m_xReportDefinition->setCommand(aNames[0]);
                     m_xReportDefinition->setCommandType(sdb::CommandType::TABLE);
                 }
-            }
+            } // if ( !sHierarchicalDocumentName.getLength() && getConnection().is() )
+
+            m_aVisualAreaSize = m_xReportDefinition->getVisualAreaSize(0);
 
         } // if ( m_xReportDefinition.is() )
 

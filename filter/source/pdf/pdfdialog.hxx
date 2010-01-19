@@ -54,8 +54,6 @@ class PDFDialog : public PDFDialog_Base,
                   public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
 {
 private:
-
-    ResMgr*                     mpResMgr;
     Sequence< PropertyValue >   maMediaDescriptor;
     Sequence< PropertyValue >   maFilterData;
     Reference< XComponent >     mxSrcDoc;

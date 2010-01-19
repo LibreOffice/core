@@ -75,6 +75,7 @@ class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
 class ScRangeList;
+class ScPrintUIOptions;
 class ScSheetSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
@@ -98,6 +99,7 @@ private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
     ScPrintFuncCache*       pPrintFuncCache;
+    ScPrintUIOptions*       pPrinterOptions;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> xNumberAgg;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawGradTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawHatchTab;
@@ -110,7 +112,8 @@ private:
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
-                                                ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
+                                                const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
+                                                ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
 
     rtl::OUString           maBuildId;

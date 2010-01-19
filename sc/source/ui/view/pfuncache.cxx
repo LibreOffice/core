@@ -75,7 +75,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
-            ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange );
+            ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
             nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
         }
@@ -113,7 +113,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
     {
         if ( rMark.GetTableSelect( nTab ) )
         {
-            ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange );
+            ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
             aFunc.SetRenderFlag( TRUE );
 
             long nDisplayStart = GetDisplayStart( nTab );

@@ -164,6 +164,7 @@ public:
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( long nAngle10 );
+    void            Clip( const Rectangle& );
     /* get the bound rect of the contained actions
      * caveats:
      * - clip actions will limit the contained actions,

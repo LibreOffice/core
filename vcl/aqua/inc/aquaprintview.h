@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aquaprintview.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,19 +35,35 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
-class ImplQPrinter;
+#include "vcl/print.hxx"
+
 class AquaSalInfoPrinter;
+
+struct PrintAccessoryViewState
+{
+    bool        bNeedRestart;
+    sal_Int32   nLastPage;
+
+    PrintAccessoryViewState()
+    : bNeedRestart( false ), nLastPage( 0 ) {}
+};
 
 @interface AquaPrintView : NSView
 {
-    ImplQPrinter*       mpQPrinter;
-    AquaSalInfoPrinter* mpInfoPrinter;
+    vcl::PrinterController*     mpController;
+    AquaSalInfoPrinter*         mpInfoPrinter;
 }
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
+-(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
 -(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;
 -(void)drawRect: (NSRect)rect;
+@end
+
+@interface AquaPrintAccessoryView : NSObject
+{
+}
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState;
 @end
 
 

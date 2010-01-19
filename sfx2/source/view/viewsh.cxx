@@ -1261,7 +1261,7 @@ SfxViewShell::SfxViewShell
 {
     DBG_CTOR(SfxViewShell, 0);
 
-    pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
+    //pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
     pImp->pController = 0;
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
@@ -1322,7 +1322,7 @@ SfxViewShell::~SfxViewShell()
         DELETEZ( pImp->pAccExec );
     }
 
-    DELETEZ( pImp->pPrinterCommandQueue );
+    //DELETEZ( pImp->pPrinterCommandQueue );
     DELETEZ( pImp );
     DELETEZ( pIPClientList );
 }
@@ -1578,7 +1578,7 @@ SfxViewShell* SfxViewShell::GetFirst
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
                         return pShell;
                     break;
                 }
@@ -1620,7 +1620,7 @@ SfxViewShell* SfxViewShell::GetNext
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
                         return pShell;
                     break;
                 }
@@ -2211,12 +2211,25 @@ BOOL SfxViewShell::HasMouseClickListeners_Impl()
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
 {
     pImp->aPrintOpts = rOpts;
-     GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
+//  GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
 BOOL SfxViewShell::Escape()
 {
     return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
+}
+
+Reference< view::XRenderable > SfxViewShell::GetRenderable()
+{
+    Reference< view::XRenderable >xRender;
+    SfxObjectShell* pObj = GetObjectShell();
+    if( pObj )
+    {
+        Reference< frame::XModel > xModel( pObj->GetModel() );
+        if( xModel.is() )
+        xRender = Reference< view::XRenderable >( xModel, UNO_QUERY );
+    }
+    return xRender;
 }
 
 void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, BOOL bAdd )

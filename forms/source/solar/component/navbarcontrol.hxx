@@ -31,14 +31,18 @@
 #ifndef FORMS_NAVBARCONTROL_HXX
 #define FORMS_NAVBARCONTROL_HXX
 
+#include "formnavigation.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+/** === end UNO includes === **/
+
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/wintypes.hxx>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include "formnavigation.hxx"
 
 //.........................................................................
 namespace frm
@@ -111,11 +115,13 @@ namespace frm
         static ONavigationBarPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             Window* _pParentWindow,
-            WinBits _nStyle
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel
         );
 
     protected:
-        ONavigationBarPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        ONavigationBarPeer(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+        );
         ~ONavigationBarPeer();
 
     public:
@@ -144,12 +150,12 @@ namespace frm
 
         // OFormNavigationHelper overriables
         virtual void    interceptorsChanged( );
-        virtual void    featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled );
+        virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled );
         virtual void    allFeatureStatesChanged( );
-        virtual void    getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds );
+        virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds );
 
         // IFeatureDispatcher overriables
-        virtual bool    isEnabled( sal_Int32 _nFeatureId ) const;
+        virtual bool    isEnabled( sal_Int16 _nFeatureId ) const;
     };
 
 //.........................................................................

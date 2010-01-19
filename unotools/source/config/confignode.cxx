@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XStringEscape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/extract.hxx>
 #include <rtl/string.hxx>
 #if OSL_DEBUG_LEVEL > 0
@@ -139,6 +140,22 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
+    ::rtl::OUString OConfigurationNode::getLocalName() const
+    {
+        ::rtl::OUString sLocalName;
+        try
+        {
+            Reference< XNamed > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
+            sLocalName = xNamed->getName();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sLocalName;
+    }
+
+    //------------------------------------------------------------------------
     ::rtl::OUString OConfigurationNode::normalizeName(const ::rtl::OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         ::rtl::OUString sName(_rName);
@@ -155,13 +172,9 @@ namespace utl
                     else
                         sName = xEscaper->unescapeString(sName);
                 }
-                catch(IllegalArgumentException&)
-                {
-                    OSL_ENSURE(sal_False, "OConfigurationNode::normalizeName: illegal argument (caught an exception saying so)!");
-                }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(sal_False, "OConfigurationNode::normalizeName: caught an exception!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }

@@ -44,7 +44,7 @@ void SwFrm::Format( const SwBorderAttrs * )
     ASSERT( FALSE, "Format() der Basisklasse gerufen." );
 }
 
-void SwFrm::Paint(const SwRect &) const
+void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
 {
     ASSERT( FALSE, "Paint() der Basisklasse gerufen." );
 }

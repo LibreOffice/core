@@ -39,7 +39,7 @@
 // - Duplex Mode -
 // ---------------
 
-enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_ON };
+enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_LONGEDGE, DUPLEX_SHORTEDGE };
 
 // ---------------
 // - Orientation -
@@ -93,5 +93,6 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 #define PRINTER_CAPABILITIES_FAX                ((USHORT)8)
 #define PRINTER_CAPABILITIES_PDF                ((USHORT)9)
 #define PRINTER_CAPABILITIES_EXTERNALDIALOG     ((USHORT)10)
+#define PRINTER_CAPABILITIES_SETDUPLEX          ((USHORT)11)
 
 #endif  // _SV_PRNTYPES_HXX

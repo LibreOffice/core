@@ -206,7 +206,18 @@
         Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
         TabStop = TRUE ;                                                            \
         HelpId = HID_DSADMIN_ESCAPE_DATETIME;                                       \
-        Text [ en-US ] = "Use ODBC conformant date/time literals";            \
+        Text [ en-US ] = "Use ODBC conformant date/time literals";                  \
+    };
+
+
+#define AUTO_PRIMARY_KEY_SUPPORT(AUTO_Y)                                            \
+    CheckBox CB_PRIMARY_KEY_SUPPORT                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 12 , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_PRIMARY_KEY_SUPPORT;                                   \
+        Text [ en-US ] = "Supports primary keys";                                   \
     };
 
 
@@ -321,8 +332,9 @@ TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
     AUTO_DOSLINEENDS(          11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_CHECKREQUIRED(        12*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 11*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_IGNORECURRENCY(       13*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 12*CHECKBOX_HEIGHT + RELATED_CONTROLS )
-    AUTO_ESCAPE_DATETIME(       14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS )
-    AUTO_BOOLEANCOMPARISON(    15*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 13*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_ESCAPE_DATETIME(      14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_PRIMARY_KEY_SUPPORT(  15*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(    16*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
 };
 
 //-------------------------------------------------------------------------

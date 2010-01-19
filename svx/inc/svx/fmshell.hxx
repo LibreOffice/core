@@ -58,7 +58,9 @@ class SdrUnoObj;
 
 namespace com { namespace sun { namespace star { namespace form {
     class XForm;
-    class XFormController;
+    namespace runtime {
+        class XFormController;
+    }
 } } } }
 
 //========================================================================
@@ -147,7 +149,7 @@ public:
         const OutputDevice& _rDevice,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _out_rxControl
     ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController(
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
         const SdrView& _rView,
         const OutputDevice& _rDevice

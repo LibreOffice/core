@@ -63,7 +63,6 @@ LIB1OBJFILES= \
     $(SLO)$/fmtextcontrolshell.obj \
     $(SLO)$/ParseContext.obj			\
     $(SLO)$/typeconversionclient.obj    \
-    $(SLO)$/confirmdelete.obj      \
     $(SLO)$/dbtoolsclient.obj      \
     $(SLO)$/sqlparserclient.obj      \
     $(SLO)$/dataaccessdescriptor.obj      \
@@ -73,7 +72,7 @@ LIB1OBJFILES= \
     $(SLO)$/navigatortree.obj      \
     $(SLO)$/navigatortreemodel.obj      \
     $(SLO)$/fmexpl.obj      \
-    $(SLO)$/fmctrler.obj    \
+    $(SLO)$/formcontroller.obj    \
     $(SLO)$/fmpgeimp.obj	\
     $(SLO)$/fmvwimp.obj     \
     $(SLO)$/fmdpage.obj		\
@@ -89,14 +88,16 @@ LIB1OBJFILES= \
     $(SLO)$/fmview.obj		\
     $(SLO)$/sdbdatacolumn.obj \
     $(SLO)$/formcontrolling.obj \
-    $(SLO)$/fmdispatch.obj  \
+    $(SLO)$/formfeaturedispatcher.obj  \
+    $(SLO)$/formdispatchinterceptor.obj  \
     $(SLO)$/datanavi.obj \
     $(SLO)$/xfm_addcondition.obj \
     $(SLO)$/datalistener.obj \
     $(SLO)$/fmscriptingenv.obj \
     $(SLO)$/stringlistresource.obj \
     $(SLO)$/delayedevent.obj \
-    $(SLO)$/formcontrolfactory.obj
+    $(SLO)$/formcontrolfactory.obj \
+    $(SLO)$/legacyformcontroller.obj
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \

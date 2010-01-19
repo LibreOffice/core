@@ -34,6 +34,7 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
 import complexlib.ComplexTestCase;
+import connectivity.tools.CRMDatabase;
 import connectivity.tools.HsqlDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +67,7 @@ public class DataSource extends ComplexTestCase
         {
             if (m_database == null)
             {
-                final CRMDatabase database = new CRMDatabase(getFactory());
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }

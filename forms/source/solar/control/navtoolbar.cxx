@@ -30,39 +30,41 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
+
 #include "navtoolbar.hxx"
 #include "frm_resource.hxx"
-#ifndef _FRM_RESOURCE_HRC_
-#include "frm_resource.hrc"
-#endif
-#include <vcl/fixed.hxx>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <sfx2/msgpool.hxx>
-#include <sfx2/imgmgr.hxx>
 #include "featuredispatcher.hxx"
+#include "frm_resource.hrc"
+#include "commandimageprovider.hxx"
+#include "commanddescriptionprovider.hxx"
+
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/form/runtime/FormFeature.hpp>
+
+#include <sfx2/imgmgr.hxx>
+#include <vcl/fixed.hxx>
 
 #include <memory>
 
-#define LID_RECORD_LABEL    1
-#define LID_RECORD_FILLER   2
+#define LID_RECORD_LABEL    1000
+#define LID_RECORD_FILLER   1001
 
 //.........................................................................
 namespace frm
 {
 //.........................................................................
 
+    using ::com::sun::star::uno::makeAny;
+    namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
+
     //=====================================================================
     //.....................................................................
     namespace
     {
-        static bool isSfxSlot( sal_Int32 _nFeatureId )
+        static bool isArtificialItem( sal_Int16 _nFeatureId )
         {
-            // everything we use in this class is an SFX-slot - except the LID_* ids
-            return ( _nFeatureId != LID_RECORD_LABEL )
-                && ( _nFeatureId != LID_RECORD_FILLER );
+            return ( _nFeatureId == LID_RECORD_LABEL )
+                || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
         static String getLabelString( USHORT _nResId )
@@ -71,6 +73,38 @@ namespace frm
             sLabel += String( FRM_RES_STRING( _nResId ) );
             sLabel += String::CreateFromAscii( " " );
             return sLabel;
+        }
+
+        ::rtl::OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
+        {
+            const sal_Char* pAsciiCommandName = NULL;
+            switch ( _nFormFeature )
+            {
+                case FormFeature::MoveAbsolute          : pAsciiCommandName = "AbsoluteRecord";     break;
+                case FormFeature::TotalRecords          : pAsciiCommandName = "RecTotal";           break;
+                case FormFeature::MoveToFirst           : pAsciiCommandName = "FirstRecord";        break;
+                case FormFeature::MoveToPrevious        : pAsciiCommandName = "PrevRecord";         break;
+                case FormFeature::MoveToNext            : pAsciiCommandName = "NextRecord";         break;
+                case FormFeature::MoveToLast            : pAsciiCommandName = "LastRecord";         break;
+                case FormFeature::SaveRecordChanges     : pAsciiCommandName = "RecSave";            break;
+                case FormFeature::UndoRecordChanges     : pAsciiCommandName = "RecUndo";            break;
+                case FormFeature::MoveToInsertRow       : pAsciiCommandName = "NewRecord";          break;
+                case FormFeature::DeleteRecord          : pAsciiCommandName = "DeleteRecord";       break;
+                case FormFeature::ReloadForm            : pAsciiCommandName = "Refresh";            break;
+                case FormFeature::RefreshCurrentControl : pAsciiCommandName = "RefreshFormControl"; break;
+                case FormFeature::SortAscending         : pAsciiCommandName = "Sortup";             break;
+                case FormFeature::SortDescending        : pAsciiCommandName = "SortDown";           break;
+                case FormFeature::InteractiveSort       : pAsciiCommandName = "OrderCrit";          break;
+                case FormFeature::AutoFilter            : pAsciiCommandName = "AutoFilter";         break;
+                case FormFeature::InteractiveFilter     : pAsciiCommandName = "FilterCrit";         break;
+                case FormFeature::ToggleApplyFilter     : pAsciiCommandName = "FormFiltered";       break;
+                case FormFeature::RemoveFilterAndSort   : pAsciiCommandName = "RemoveFilterSort";   break;
+            }
+            if ( pAsciiCommandName != NULL )
+                return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + ::rtl::OUString::createFromAscii( pAsciiCommandName );
+
+            OSL_ENSURE( false, "lcl_getCommandURL: unknown FormFeature!" );
+            return ::rtl::OUString();
         }
     }
 
@@ -119,9 +153,12 @@ namespace frm
     //=====================================================================
     DBG_NAME( NavigationToolBar )
     //---------------------------------------------------------------------
-    NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle )
+    NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
+            const PCommandDescriptionProvider& _pDescriptionProvider )
         :Window( _pParent, _nStyle )
         ,m_pDispatcher( NULL )
+        ,m_pImageProvider( _pImageProvider )
+        ,m_pDescriptionProvider( _pDescriptionProvider )
         ,m_eImageSize( eSmall )
         ,m_pToolbar( NULL )
     {
@@ -150,7 +187,7 @@ namespace frm
 
         m_pToolbar->setDispatcher( _pDispatcher );
 
-        RecordPositionInput* pPositionWindow = static_cast< RecordPositionInput* >( m_pToolbar->GetItemWindow( SID_FM_RECORD_ABSOLUTE ) );
+        RecordPositionInput* pPositionWindow = static_cast< RecordPositionInput* >( m_pToolbar->GetItemWindow( FormFeature::MoveAbsolute ) );
         OSL_ENSURE( pPositionWindow, "NavigationToolBar::setDispatcher: can't forward the dispatcher to the position window!" );
         if ( pPositionWindow )
             pPositionWindow->setDispatcher( _pDispatcher );
@@ -179,15 +216,15 @@ namespace frm
     {
         m_pToolbar->EnableItem( _nItemId, _bEnabled );
 
-        if ( _nItemId == SID_FM_RECORD_ABSOLUTE )
+        if ( _nItemId == FormFeature::MoveAbsolute )
             m_pToolbar->EnableItem( LID_RECORD_LABEL, _bEnabled );
 
-        if ( _nItemId == SID_FM_RECORD_TOTAL )
+        if ( _nItemId == FormFeature::TotalRecords )
             m_pToolbar->EnableItem( LID_RECORD_FILLER, _bEnabled );
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::enableFeature( sal_Int32 _nFeatureId, bool _bEnabled )
+    void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::enableFeature: invalid id!" );
@@ -196,7 +233,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::checkFeature( sal_Int32 _nFeatureId, bool _bEnabled )
+    void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
@@ -205,7 +242,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::setFeatureText( sal_Int32 _nFeatureId, const ::rtl::OUString& _rText )
+    void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
@@ -228,71 +265,67 @@ namespace frm
         // items. We could duplicate all the information here in our lib
         // (such as the item text and the image), but why should we?
 
-        struct SlotDescription
+        struct FeatureDescription
         {
             USHORT      nId;
             bool        bRepeat;
             bool        bItemWindow;
-        } aSupportedSlots[] =
+        } aSupportedFeatures[] =
         {
-            { LID_RECORD_LABEL,             false, true },
-            { SID_FM_RECORD_ABSOLUTE,       false, true },
-            { LID_RECORD_FILLER,            false, true },
-            { SID_FM_RECORD_TOTAL,          false, true },
-
-            { SID_FM_RECORD_FIRST,          true,  false },
-            { SID_FM_RECORD_PREV,           true,  false },
-            { SID_FM_RECORD_NEXT,           true,  false },
-            { SID_FM_RECORD_LAST,           true,  false },
+            { LID_RECORD_LABEL,                     false, true },
+            { FormFeature::MoveAbsolute,            false, true },
+            { LID_RECORD_FILLER,                    false, true },
+            { FormFeature::TotalRecords,            false, true },
+            { FormFeature::MoveToFirst,             true,  false },
+            { FormFeature::MoveToPrevious,          true,  false },
+            { FormFeature::MoveToNext,              true,  false },
+            { FormFeature::MoveToLast,              true,  false },
+            { FormFeature::MoveToInsertRow,         false, false },
             { 0, false, false },
-            { SID_FM_RECORD_SAVE,           false, false },
-            { SID_FM_RECORD_UNDO,           false, false },
-            { SID_FM_RECORD_NEW,            false, false },
-            { SID_FM_RECORD_DELETE,         false, false },
-            { SID_FM_REFRESH,               false, false },
-            { SID_FM_REFRESH_FORM_CONTROL,  false, false },
+            { FormFeature::SaveRecordChanges,       false, false },
+            { FormFeature::UndoRecordChanges,       false, false },
+            { FormFeature::DeleteRecord,            false, false },
+            { FormFeature::ReloadForm,              false, false },
+            { FormFeature::RefreshCurrentControl,   false, false },
             { 0, false, false },
-            { SID_FM_SORTUP,                false, false },
-            { SID_FM_SORTDOWN,              false, false },
-            { SID_FM_ORDERCRIT,             false, false },
-            { SID_FM_AUTOFILTER,            false, false },
-            { SID_FM_FILTERCRIT,            false, false },
-            { SID_FM_FORM_FILTERED,         false, false },
-            { SID_FM_REMOVE_FILTER_SORT,    false, false },
+            { FormFeature::SortAscending,           false, false },
+            { FormFeature::SortDescending,          false, false },
+            { FormFeature::InteractiveSort,         false, false },
+            { FormFeature::AutoFilter,              false, false },
+            { FormFeature::InteractiveFilter,       false, false },
+            { FormFeature::ToggleApplyFilter,       false, false },
+            { FormFeature::RemoveFilterAndSort,     false, false },
         };
 
-        size_t nSupportedSlots = sizeof( aSupportedSlots ) / sizeof( aSupportedSlots[0] );
-        SlotDescription* pSupportedSlots = aSupportedSlots;
-        SlotDescription* pSupportedSlotsEnd = aSupportedSlots + nSupportedSlots;
-        for ( ; pSupportedSlots < pSupportedSlotsEnd; ++pSupportedSlots )
+        size_t nSupportedFeatures = sizeof( aSupportedFeatures ) / sizeof( aSupportedFeatures[0] );
+        FeatureDescription* pSupportedFeatures = aSupportedFeatures;
+        FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + nSupportedFeatures;
+        for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
         {
-            if ( pSupportedSlots->nId )
+            if ( pSupportedFeatures->nId )
             {   // it's _not_ a separator
 
-                // the text(s) of the item
-                String sItemText;
-                String sItemHelpText;
-
-                // TODO/CLEANUP: this code does nothing(!) nowadays
-                //SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
-                //sItemText = rSlotPool.GetSlotName( pSupportedSlots->nId, &sItemHelpText );
-
                 // insert the entry
-                m_pToolbar->InsertItem( pSupportedSlots->nId, sItemText, pSupportedSlots->bRepeat ? TIB_REPEAT : 0 );
-                m_pToolbar->SetQuickHelpText( pSupportedSlots->nId, sItemHelpText );
-                if ( isSfxSlot( pSupportedSlots->nId ) )
-                    m_pToolbar->SetHelpId( pSupportedSlots->nId, pSupportedSlots->nId );
+                m_pToolbar->InsertItem( pSupportedFeatures->nId, String(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
+                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, String() );  // TODO
 
+                if ( !isArtificialItem( pSupportedFeatures->nId ) )
+                {
+                    ::rtl::OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
+                    m_pToolbar->SetItemCommand( pSupportedFeatures->nId, sCommandURL );
+                    if ( m_pDescriptionProvider )
+                        m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, m_pDescriptionProvider->getCommandDescription( sCommandURL ) );
+                }
 
-                if ( pSupportedSlots->bItemWindow )
+                if ( pSupportedFeatures->bItemWindow )
                 {
                     Window* pItemWindow = NULL;
-                    if ( SID_FM_RECORD_ABSOLUTE == pSupportedSlots->nId )
+                    if ( FormFeature::MoveAbsolute == pSupportedFeatures->nId )
                     {
                         pItemWindow = new RecordPositionInput( m_pToolbar );
                         static_cast< RecordPositionInput* >( pItemWindow )->setDispatcher( m_pDispatcher );
                     }
-                    else if ( LID_RECORD_FILLER == pSupportedSlots->nId )
+                    else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_CENTER | WB_VCENTER );
                         pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
@@ -305,7 +338,7 @@ namespace frm
                     }
                     m_aChildWins.push_back( pItemWindow );
 
-                    switch ( pSupportedSlots->nId )
+                    switch ( pSupportedFeatures->nId )
                     {
                     case LID_RECORD_LABEL:
                         pItemWindow->SetText( getLabelString( RID_STR_LABEL_RECORD ) );
@@ -316,7 +349,7 @@ namespace frm
                         break;
                     }
 
-                    m_pToolbar->SetItemWindow( pSupportedSlots->nId, pItemWindow );
+                    m_pToolbar->SetItemWindow( pSupportedFeatures->nId, pItemWindow );
                 }
             }
             else
@@ -327,25 +360,66 @@ namespace frm
 
         forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
 
-        // the image of the item
-        ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-        pImageManager->SetImagesForceSize( *m_pToolbar, FALSE, m_eImageSize == eLarge );
+        implUpdateImages();
+    }
+
+    //---------------------------------------------------------------------
+    void NavigationToolBar::implUpdateImages()
+    {
+        OSL_ENSURE( m_pImageProvider, "NavigationToolBar::implUpdateImages: no image provider => no images!" );
+        if ( !m_pImageProvider )
+            return;
+
+        const bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+        const USHORT nItemCount = m_pToolbar->GetItemCount();
+
+        // collect the FormFeatures in the toolbar
+        typedef ::std::vector< sal_Int16 >  FormFeatures;
+        FormFeatures aFormFeatures;
+        aFormFeatures.reserve( nItemCount );
+
+        for ( USHORT i=0; i<nItemCount; ++i )
+        {
+            USHORT nId = m_pToolbar->GetItemId( i );
+            if ( ( TOOLBOXITEM_BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
+                aFormFeatures.push_back( nId );
+        }
+
+        // translate them into command URLs
+        CommandURLs aCommandURLs( aFormFeatures.size() );
+        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
+                formFeature != aFormFeatures.end();
+                ++formFeature
+            )
+        {
+            aCommandURLs[ formFeature - aFormFeatures.begin() ] = lcl_getCommandURL( *formFeature );
+        }
+
+        // retrieve the images for the command URLs
+        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge, bIsHighContrast );
+
+        // and set them at the toolbar
+        CommandImages::const_iterator commandImage = aCommandImages.begin();
+        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
+                formFeature != aFormFeatures.end();
+                ++formFeature, ++commandImage
+            )
+        {
+            m_pToolbar->SetItemImage( *formFeature, *commandImage );
+        }
 
         // parts of our layout is dependent on the size of our icons
         Resize();
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::implSetImageSize( ImageSize _eSize, bool _bForce )
+    void NavigationToolBar::implSetImageSize( ImageSize _eSize )
     {
-        if ( ( _eSize != m_eImageSize ) || _bForce )
+        if ( _eSize != m_eImageSize )
         {
             m_eImageSize = _eSize;
-            ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-            pImageManager->SetImagesForceSize( *m_pToolbar, GetSettings().GetStyleSettings().GetHighContrastMode(), m_eImageSize == eLarge );
-
-            // parts of our layout is dependent on the size of our icons
-            Resize();
+            implUpdateImages();
         }
     }
 
@@ -365,7 +439,7 @@ namespace frm
         case ePosition:
         {
             static const USHORT aPositionIds[] = {
-                LID_RECORD_LABEL, SID_FM_RECORD_ABSOLUTE, LID_RECORD_FILLER, SID_FM_RECORD_TOTAL, 0
+                LID_RECORD_LABEL, FormFeature::MoveAbsolute, LID_RECORD_FILLER, FormFeature::TotalRecords, 0
             };
             pGroupIds = aPositionIds;
         }
@@ -373,7 +447,7 @@ namespace frm
         case eNavigation:
         {
             static const USHORT aNavigationIds[] = {
-                SID_FM_RECORD_FIRST, SID_FM_RECORD_PREV, SID_FM_RECORD_NEXT, SID_FM_RECORD_LAST, 0
+                FormFeature::MoveToFirst, FormFeature::MoveToPrevious, FormFeature::MoveToNext, FormFeature::MoveToLast, FormFeature::MoveToInsertRow, 0
             };
             pGroupIds = aNavigationIds;
         }
@@ -381,7 +455,7 @@ namespace frm
         case eRecordActions:
         {
             static const USHORT aActionIds[] = {
-                SID_FM_RECORD_SAVE, SID_FM_RECORD_UNDO, SID_FM_RECORD_NEW, SID_FM_RECORD_DELETE, SID_FM_REFRESH, SID_FM_REFRESH_FORM_CONTROL, 0
+                FormFeature::SaveRecordChanges, FormFeature::UndoRecordChanges, FormFeature::DeleteRecord, FormFeature::ReloadForm, FormFeature::RefreshCurrentControl, 0
             };
             pGroupIds = aActionIds;
         }
@@ -389,7 +463,7 @@ namespace frm
         case eFilterSort:
         {
             static const USHORT aFilterSortIds[] = {
-                SID_FM_SORTUP, SID_FM_SORTDOWN, SID_FM_ORDERCRIT, SID_FM_AUTOFILTER, SID_FM_FILTERCRIT, SID_FM_FORM_FILTERED, SID_FM_REMOVE_FILTER_SORT, 0
+                FormFeature::SortAscending, FormFeature::SortDescending, FormFeature::InteractiveSort, FormFeature::AutoFilter, FormFeature::InteractiveFilter, FormFeature::ToggleApplyFilter, FormFeature::RemoveFilterAndSort, 0
             };
             pGroupIds = aFilterSortIds;
         }
@@ -410,9 +484,9 @@ namespace frm
         switch ( _eGroup )
         {
         case ePosition      : nIndicatorItem = LID_RECORD_LABEL;    break;
-        case eNavigation    : nIndicatorItem = SID_FM_RECORD_FIRST; break;
-        case eRecordActions : nIndicatorItem = SID_FM_RECORD_SAVE;  break;
-        case eFilterSort    : nIndicatorItem = SID_FM_SORTUP;       break;
+        case eNavigation    : nIndicatorItem = FormFeature::MoveToFirst; break;
+        case eRecordActions : nIndicatorItem = FormFeature::SaveRecordChanges;  break;
+        case eFilterSort    : nIndicatorItem = FormFeature::SortAscending;       break;
         default:
             OSL_ENSURE( sal_False, "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
         }
@@ -477,7 +551,7 @@ namespace frm
         // the contrast of the background color may have changed, so force
         // the images to be rebuild (high contrast requires a possibly different
         // image set)
-        implSetImageSize( m_eImageSize, true );
+        implUpdateImages();
     }
 
     //---------------------------------------------------------------------
@@ -490,7 +564,7 @@ namespace frm
         // the contrast of the background color may have changed, so force
         // the images to be rebuild (high contrast requires a possibly different
         // image set)
-        implSetImageSize( m_eImageSize, true );
+        implUpdateImages();
     }
 
     //---------------------------------------------------------------------
@@ -579,11 +653,11 @@ namespace frm
             sItemText = getLabelString( RID_STR_LABEL_OF );
             break;
 
-        case SID_FM_RECORD_ABSOLUTE:
+        case FormFeature::MoveAbsolute:
             sItemText = String::CreateFromAscii( "12345678" );
             break;
 
-        case SID_FM_RECORD_TOTAL:
+        case FormFeature::TotalRecords:
             sItemText = String::CreateFromAscii( "123456" );
             break;
         }
@@ -638,7 +712,7 @@ namespace frm
                 return;
 
             if ( m_pDispatcher )
-                m_pDispatcher->dispatchWithArgument( SID_FM_RECORD_ABSOLUTE, "Position", ::com::sun::star::uno::makeAny( (sal_Int32)nRecord ) );
+                m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( (sal_Int32)nRecord ) );
 
             SaveValue();
         }

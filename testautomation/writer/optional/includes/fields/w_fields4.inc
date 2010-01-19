@@ -782,15 +782,15 @@ testcase tDocInformationPrinted
 	   	if Active.GetRT = 304 then
 			Active.Ok
 			QAErrorLog "No Default-Printer! The testcase isn't tested !"
-			Kontext "DruckenDlg"
+			Kontext "Printing"
 			Sleep 1
-			DruckenDlg.Cancel
+			Printing.Cancel
 			goto NoTest
 	   end if
 	else
-	   Kontext "DruckenDlg"
+	   Kontext "Printing"
 	   Sleep 1
-	   DruckenDlg.OK
+	   Printing.OK
 		kontext "active"
 		if active.exists(5) then
 			QaErrorLog "Error Printing..."

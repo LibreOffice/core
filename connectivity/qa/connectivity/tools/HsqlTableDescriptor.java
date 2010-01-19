@@ -33,11 +33,11 @@ package connectivity.tools;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.ColumnValue;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
+import connectivity.tools.sdb.Connection;
 
 /** is a very simply descriptor of a HSQL table, to be used with a HsqlDatabase.createTable method
  */
@@ -67,12 +67,10 @@ public class HsqlTableDescriptor
         return m_columns;
     }
 
-    public XPropertySet createSdbcxDescriptor( XConnection _forConnection )
+    public XPropertySet createSdbcxDescriptor( Connection _forConnection )
     {
-        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
-            XTablesSupplier.class, _forConnection );
-        XDataDescriptorFactory tableDescFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(
-            XDataDescriptorFactory.class, suppTables.getTables() );
+        XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, _forConnection.getXConnection() );
+        XDataDescriptorFactory tableDescFac = UnoRuntime.queryInterface( XDataDescriptorFactory.class, suppTables.getTables() );
         XPropertySet tableDesc = tableDescFac.createDataDescriptor();
 
         try
@@ -81,12 +79,10 @@ public class HsqlTableDescriptor
         }
         catch ( Exception e ) { e.printStackTrace( System.err ); }
 
-        XColumnsSupplier suppDescCols = (XColumnsSupplier)UnoRuntime.queryInterface(
-            XColumnsSupplier.class, tableDesc );
+        XColumnsSupplier suppDescCols = UnoRuntime.queryInterface( XColumnsSupplier.class, tableDesc );
 
         XNameAccess descColumns = suppDescCols.getColumns();
-        XDataDescriptorFactory columnDescFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(
-            XDataDescriptorFactory.class, descColumns );
+        XDataDescriptorFactory columnDescFac = UnoRuntime.queryInterface( XDataDescriptorFactory.class, descColumns );
 
         HsqlColumnDescriptor[] myColumns = getColumns();
         for ( int i = 0; i < myColumns.length; ++i )

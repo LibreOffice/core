@@ -96,6 +96,10 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
     sName += GetColumnName();
 }
 //------------------------------------------------------------------------------
+SwDBFieldType::~SwDBFieldType()
+{
+}
+//------------------------------------------------------------------------------
 
 SwFieldType* SwDBFieldType::Copy() const
 {

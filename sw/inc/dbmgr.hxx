@@ -184,7 +184,7 @@ struct SwMergeDescriptor
         rDescriptor(rDesc),
         bSendAsHTML( sal_True ),
         bSendAsAttachment( sal_False ),
-        bPrintAsync( sal_True ),
+        bPrintAsync( sal_False ),
         bCreateSingleFile( sal_False ),
         pMailMergeConfigItem(0)
         {}
@@ -252,12 +252,6 @@ public:
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew( const SwMergeDescriptor& rMergeDesc );
     BOOL            Merge(SwWrtShell* pSh);
-    // Mischen von Datensaetzen in Felder, dann drucken
-    BOOL            MergePrint( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
-    // printing parts of a merge result document
-    BOOL            MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
 
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }

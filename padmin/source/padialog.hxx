@@ -83,7 +83,6 @@ namespace padmin {
         String                              m_aDefPrt;
         String                              m_aRenameStr;
 
-        Printer*                            m_pPrinter;
         ::psp::PrinterInfoManager&          m_rPIManager;
         ::std::list< ::rtl::OUString >      m_aPrinters;
 
@@ -94,7 +93,6 @@ namespace padmin {
         DECL_LINK( ClickBtnHdl, PushButton* );
         DECL_LINK( DoubleClickHdl, ListBox* );
         DECL_LINK( SelectHdl, ListBox* );
-        DECL_LINK( EndPrintHdl, void* );
         DECL_LINK( DelPressedHdl, ListBox* );
 
         PADialog( Window*,  BOOL );

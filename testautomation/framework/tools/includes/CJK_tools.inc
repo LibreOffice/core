@@ -37,10 +37,6 @@
 '*
 '\***********************************************************************
 
-
-'******************************************************************************
-' This function will check Asina Language Support on/off based on the parameter
-'******************************************************************************
 function CheckAsianLanguageSupport( sSupport as String )  as String
 
     ToolsOptions
@@ -67,11 +63,8 @@ function CheckAsianLanguageSupport( sSupport as String )  as String
     
 end function
 
+'******************************************************************************'
 
-
-'***************************************************************
-' Start up Navigator , and set focus to the correct position
-'**************************************************************
 function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
     Dim j as Integer
     
@@ -117,28 +110,8 @@ function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
     sleep 1
 end function
 
+'******************************************************************************'
 
-'******************
-'Close Navigator
-'******************
-function fCloseNavigator
-    '/// This function  will close Navigator dialogure
-    
-    Kontext
-    Kontext "Navigator"
-    if ( Navigator.exists() ) then
-        Navigator.Close()
-        printlog( "Closed navigator" )
-    else
-        printlog( "Navigator not open." )
-    endif
-    
-end function
-
-
-'****************************************************************************
-' This routine will return the Country name based on CountryID
-'*****************************************************************************
 function fGetCountryName( CountryID as Integer ) as String
     
     select case iSprache

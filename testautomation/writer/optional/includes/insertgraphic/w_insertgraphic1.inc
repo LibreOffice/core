@@ -455,39 +455,34 @@ endcase
 
 testcase tInsertGraphic_8
 
-  Dim iFileType      as Integer
-  Dim iFileNumber as Integer
-
-    iFileType = 1  'filter (Format <All>)
-
-    if gPlatGroup = "unx" then
-        iFileNumber = 4  '4 graphic files. (directory hidden on Unix)
-    else
-        iFileNumber = 5  '4 graphic files and 1 directory.
-    end if
-
-  PrintLog "- Test preselect Filter (Format <All>)"
- '/// Test preselect Filter (Format <All>)
-
-  Call hNewDocument
-
-  '/// Insert a Graphic , Insert/Graphics/From file
-   InsertGraphicsFromFile
-
-  '/// Select filter (Format <All>)
-   Kontext "GrafikEinfuegenDlg"
-    Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
-    Sleep 1
-    Oeffnen.Click
-
-    Dateityp.Select iFileType
-    Sleep 1
-
-  '/// Check if Filter (Format <All>) works well
-    if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter (Format <All>) does NOT work well"
-   GrafikEinfuegenDlg.Cancel
-
-  Call hCloseDocument
+	Dim iFileType      as Integer
+	Dim iFileNumber as Integer
+	
+	iFileType = 1  'filter (Format <All>)	
+	iFileNumber = 4
+	
+	PrintLog "- Test preselect Filter (Format <All>)"
+	'/// Test preselect Filter (Format <All>)
+	
+	Call hNewDocument
+	
+	'/// Insert a Graphic , Insert/Graphics/From file
+	InsertGraphicsFromFile
+	
+	'/// Select filter (Format <All>)
+	Kontext "GrafikEinfuegenDlg"
+	Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
+	Sleep 1
+	Oeffnen.Click
+	
+	Dateityp.Select iFileType
+	Sleep 1
+	
+	'/// Check if Filter (Format <All>) works well
+	if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter (Format <All>) does NOT work well"
+	GrafikEinfuegenDlg.Cancel
+	
+	Call hCloseDocument
 
 endcase
 
@@ -495,39 +490,34 @@ endcase
 
 testcase tInsertGraphic_9
 
-  Dim iFileType      as Integer
-  Dim iFileNumber as Integer
-
-    iFileType   = 2  'another filter except for (Format <All>) -- bmp
-
-    if gPlatGroup = "unx" then
-      iFileNumber = 1
-    else
-      iFileNumber = 2  'the first is the .svn-directory
-    end if
-
-  PrintLog "- Test preselect Filter excepte for (Format <All>)"
- '/// Test preselect Filter excepte for (Format <All>)
-
-  Call hNewDocument
-
-  '/// Insert a Graphic , Insert/Graphics/From file
-   InsertGraphicsFromFile
-
-  '/// Select filter 'BMP'
-   Kontext "GrafikEinfuegenDlg"
-    Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
-    Sleep 1
-    Oeffnen.Click
-
-    Dateityp.Select iFileType
-    Sleep 1
-
-  '/// Check if Filter BMP works well
-    if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter BMP does NOT work well"
-   GrafikEinfuegenDlg.Cancel
-
-  Call hCloseDocument
+	Dim iFileType      as Integer
+	Dim iFileNumber as Integer
+	
+	iFileType   = 2  'another filter except for (Format <All>) -- bmp	
+	iFileNumber = 1
+	
+	PrintLog "- Test preselect Filter excepte for (Format <All>)"
+	'/// Test preselect Filter excepte for (Format <All>)
+	
+	Call hNewDocument
+	
+	'/// Insert a Graphic , Insert/Graphics/From file
+	InsertGraphicsFromFile
+	
+	'/// Select filter 'BMP'
+	Kontext "GrafikEinfuegenDlg"
+	Dateiname.Settext (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic") )
+	Sleep 1
+	Oeffnen.Click
+	
+	Dateityp.Select iFileType
+	Sleep 1
+	
+	'/// Check if Filter BMP works well
+	if DateiAuswahl.GetItemCount <> iFileNumber then Warnlog "Filter BMP does NOT work well"
+	GrafikEinfuegenDlg.Cancel
+	
+	Call hCloseDocument
 
 endcase
 

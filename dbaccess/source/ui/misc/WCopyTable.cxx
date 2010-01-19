@@ -63,6 +63,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbmetadata.hxx>
 
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -631,6 +632,22 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     // no views if we're copying to a different database
     if ( !lcl_sameConnection_throw( _xSourceConnection, m_xDestConnection ) )
         bAllowViews = false;
+
+    if ( m_bInterConnectionCopy )
+    {
+        Reference< XDatabaseMetaData > xSrcMeta = _xSourceConnection->getMetaData();
+        ::rtl::OUString sCatalog;
+        ::rtl::OUString sSchema;
+        ::rtl::OUString sTable;
+        ::dbtools::qualifiedNameComponents( xSrcMeta,
+                                            m_sName,
+                                            sCatalog,
+                                            sSchema,
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
+
+        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,sal_False,::dbtools::eInTableDefinitions);
+    }
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowUseHeaderLine();
@@ -1381,23 +1398,12 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 // -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxConnection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsPrimaryKey" );
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsPrimaryKey: invalid connection!" );
+    if ( !_rxConnection.is() )
+        return false;
 
-    bool bSupports( false );
-    if ( _rxConnection.is() )
-    {
-        try
-        {
-            Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-            bSupports = xMetaData->supportsCoreSQLGrammar();
-        }
-        catch(const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-    return bSupports;
+    ::dbtools::DatabaseMetaData aMetaData( _rxConnection );
+    return aMetaData.supportsPrimaryKeys();
 }
 
 // -----------------------------------------------------------------------------
@@ -1589,6 +1595,10 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
                 break;
             case DataType::VARCHAR:
                 if ( supportsType(DataType::LONGVARCHAR,nDefaultType) )
+                    break;
+                break;
+            case DataType::LONGVARCHAR:
+                if ( supportsType(DataType::CLOB,nDefaultType) )
                     break;
                 break;
             default:

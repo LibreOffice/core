@@ -49,7 +49,7 @@ namespace frm
             @param _nFeatureId
                 the id of the feature to dispatch
         */
-        virtual void    dispatch( sal_Int32 _nFeatureId ) const = 0;
+        virtual void    dispatch( sal_Int16 _nFeatureId ) const = 0;
 
         /** dispatches a feature, with an additional named parameter
 
@@ -63,14 +63,14 @@ namespace frm
                 the value of the parameter of the dispatch call
         */
         virtual void dispatchWithArgument(
-                sal_Int32 _nFeatureId,
+                sal_Int16 _nFeatureId,
                 const sal_Char* _pParamName,
                 const ::com::sun::star::uno::Any& _rParamValue
              ) const = 0;
 
         /** checks whether a given feature is enabled
         */
-        virtual bool    isEnabled( sal_Int32 _nFeatureId ) const = 0;
+        virtual bool    isEnabled( sal_Int16 _nFeatureId ) const = 0;
 
         /** returns the boolean state of a feature
 
@@ -81,7 +81,7 @@ namespace frm
             This method allows retrieving status information about features which have an additional
             boolean information associated with it.
         */
-        virtual bool    getBooleanState( sal_Int32 _nFeatureId ) const = 0;
+        virtual bool    getBooleanState( sal_Int16 _nFeatureId ) const = 0;
 
         /** returns the string state of a feature
 
@@ -92,7 +92,7 @@ namespace frm
             This method allows retrieving status information about features which have an additional
             string information associated with it.
         */
-        virtual ::rtl::OUString getStringState( sal_Int32 _nFeatureId ) const = 0;
+        virtual ::rtl::OUString getStringState( sal_Int16 _nFeatureId ) const = 0;
 
         /** returns the integer state of a feature
 
@@ -103,7 +103,7 @@ namespace frm
             This method allows retrieving status information about features which have an additional
             integer information associated with it.
         */
-        virtual sal_Int32       getIntegerState( sal_Int32 _nFeatureId ) const = 0;
+        virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const = 0;
     };
 
 //.........................................................................

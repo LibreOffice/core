@@ -600,7 +600,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect ) const
+void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
 {
     ResetRepaint();
 

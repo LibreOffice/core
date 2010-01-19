@@ -237,6 +237,12 @@ sal_Bool ORowSetImportExport::insertNewRow()
                     case DataType::VARBINARY:
                         aValue <<= m_xRow->getBytes(*aIter);
                         break;
+                    case DataType::BLOB:
+                        aValue <<= m_xRow->getBlob(*aIter);
+                        break;
+                    case DataType::CLOB:
+                        aValue <<= m_xRow->getClob(*aIter);
+                        break;
                     default:
                         OSL_ENSURE(0,"Unknown type");
                 }

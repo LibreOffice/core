@@ -218,5 +218,58 @@ sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
 
     return bRet;
 }
-
-
+// -----------------------------------------------------------------------------
+jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
+{
+    SDBThreadAttach t;
+    if( !t.pEnv || !x.is() )
+        return NULL;
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
+    jclass clazz = java_lang_Object::findMyClass("java/io/ByteArrayInputStream");
+    static jmethodID mID(NULL);
+    if  ( !mID )
+    {
+        static const char * cSignature = "([B)V";
+        mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
+        OSL_ENSURE( mID, cSignature );
+        if  ( !mID )
+            throw SQLException();
+    } // if  ( !_inout_MethodID )
+    jbyteArray pByteArray = t.pEnv->NewByteArray(length);
+    Sequence< sal_Int8 > aData;
+    x->readBytes(aData,length);
+    jboolean p = sal_False;
+    rtl_copyMemory(t.pEnv->GetByteArrayElements(pByteArray,&p),aData.getArray(),aData.getLength());
+    jobject out = t.pEnv->NewObject( clazz, mID,pByteArray);
+    t.pEnv->DeleteLocalRef((jbyteArray)pByteArray);
+    return out;
+}
+// -----------------------------------------------------------------------------
+jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
+{
+    SDBThreadAttach t;
+    if( !t.pEnv || !x.is() )
+        return NULL;
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
+    jclass clazz = java_lang_Object::findMyClass("java/io/CharArrayReader");
+    static jmethodID mID(NULL);
+    if  ( !mID )
+    {
+        static const char * cSignature = "([C)V";
+        mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
+        OSL_ENSURE( mID, cSignature );
+        if  ( !mID )
+            throw SQLException();
+    } // if  ( !_inout_MethodID )
+    jcharArray pCharArray = t.pEnv->NewCharArray(length);
+    Sequence< sal_Int8 > aData;
+    x->readBytes(aData,length);
+    jboolean p = sal_False;
+    rtl_copyMemory(t.pEnv->GetCharArrayElements(pCharArray,&p),aData.getArray(),aData.getLength());
+    jobject out = t.pEnv->NewObject( clazz, mID,pCharArray);
+    t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
+    return out;
+}
+// -----------------------------------------------------------------------------

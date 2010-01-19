@@ -225,6 +225,10 @@ namespace connectivity
             as,
             op_column_commalist,
             table_primary_as_range_column,
+            datetime_primary,
+            concatenation,
+            char_factor,
+            bit_value_fct,
             rule_count,             // letzter_wert
             UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };

@@ -64,6 +64,12 @@ UINT16 IMapObject::nActualTextEncoding = (UINT16) RTL_TEXTENCODING_DONTKNOW;
 #pragma optimize ( "", off )
 #endif
 
+IMapObject::IMapObject()
+    : bActive( false )
+    , nReadVersion( 0 )
+{
+}
+
 IMapObject::IMapObject( const String& rURL, const String& rAltText, const String& rDesc,
                         const String& rTarget, const String& rName, BOOL bURLActive )
 : aURL( rURL )
@@ -72,6 +78,7 @@ IMapObject::IMapObject( const String& rURL, const String& rAltText, const String
 , aTarget( rTarget )
 , aName( rName )
 , bActive( bURLActive )
+, nReadVersion( 0 )
 {
 }
 

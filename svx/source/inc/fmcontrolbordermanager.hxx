@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmcontrolbordermanager.hxx,v $
- * $Revision: 1.6 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -132,7 +129,7 @@ namespace svxform
     //====================================================================
     /** manages the dynamic border color for form controls
 
-        Used by the <type>FmXFormController</type>, this class manages the dynamic changes in the
+        Used by the <type>FormController</type>, this class manages the dynamic changes in the
         border color of form controls. For this a set of events have to be forwarded to the manager
         instance, which then will switch the border color depending on the mouse and focus status
         of the controls.

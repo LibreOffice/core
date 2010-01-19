@@ -74,6 +74,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <connectivity/BlobHelper.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
@@ -713,7 +714,18 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
 // XRowUpdate
 void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,ORowSetValue());
+    ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
+
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    checkUpdateConditions(columnIndex);
+    checkUpdateIterator();
+
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
+    m_pCache->updateNull(columnIndex);
+    // we have to notify all listeners
+    ((*m_aCurrentRow)->get())[columnIndex].setNull();
+    firePropertyChange(columnIndex-1 ,aOldValue);
+    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
@@ -785,25 +797,23 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    ::connectivity::ORowSetValue aOldValue;
-    if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
-    {
-        m_pCache->updateBinaryStream(columnIndex,x,length);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
-    }
-    else
+
+    //if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
+    //{
+ //       ::connectivity::ORowSetValue aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
+    //  m_pCache->updateBinaryStream(columnIndex,x,length);
+    //  ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
+ //       ((*m_aCurrentRow)->get())[columnIndex].setTypeKind(DataType::BLOB);
+ //       firePropertyChange(columnIndex-1 ,aOldValue);
+    //    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
+    //}
+    //else
     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
             x->readBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = aSeq;
     }
-
-    firePropertyChange(columnIndex-1 ,aOldValue);
-    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -1380,14 +1390,19 @@ Reference< XRef > SAL_CALL ORowSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQ
     return Reference< XRef >();
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XBlob >();
+    if ( m_pCache && isInsertRow() )
+    {
+        checkCache();
+        return new ::connectivity::BlobHelper(((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
+    }
+    return ORowSetBase::getBlob(columnIndex);
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XClob >();
+    return Reference< XClob >(getInsertValue(columnIndex).makeAny(),UNO_QUERY);
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
@@ -2737,7 +2752,8 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             m_aDataColumns.push_back(pColumn);
 
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-            sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+            sal_Int32 nFormatKey = 0;
+            xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT) >>= nFormatKey;
             if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
                 nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));

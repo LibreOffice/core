@@ -422,7 +422,7 @@ namespace dbaccess
     //==================================================================
     typedef ::cppu::WeakImplHelper1 <   css::lang::XEventListener
                                     >   LifetimeCoupler_Base;
-    /** helper class which couples the lifetime of a component to the lifetim
+    /** helper class which couples the lifetime of a component to the lifetime
         of another component
 
         Instances of this class are constructed with two components. The first is
@@ -617,13 +617,12 @@ void SAL_CALL ODocumentDefinition::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     closeObject();
     ::comphelper::disposeComponent(m_xListener);
-    if ( m_bRemoveListener && m_xDesktop.is() )
+    if ( m_bRemoveListener )
     {
         Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
         if ( xCloseable.is() )
             xCloseable->removeCloseListener(this);
     }
-    m_xDesktop = NULL;
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_TYPEPROVIDER3(ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base);
@@ -690,17 +689,15 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XFrame >& _rxFrame )
+void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const ::comphelper::ComponentContext& _rContxt, const Reference< XFrame >& _rxFrame )
 {
-    if ( !m_xDesktop.is() )
-        m_xDesktop.set( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
-
-    Reference< XFrames > xFrames( m_xDesktop->getFrames(), UNO_QUERY_THROW );
+    Reference< XFramesSupplier > xDesktop( _rContxt.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+    Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_QUERY_THROW );
     xFrames->remove( _rxFrame );
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_onActivateEmbeddedObject()
+void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
 {
     try
     {
@@ -712,26 +709,23 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject()
         if ( !m_xListener.is() )
             // it's the first time the embedded object has been activated
             // create an OEmbedObjectHolder
-            m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
+            m_xListener = new OEmbedObjectHolder( m_xEmbeddedObject, this );
 
-        Reference< XFrame > xFrame( xController->getFrame() );
-        if ( xFrame.is() )
-        {
-            // raise the window to top (especially necessary if this is not the first activation)
-            Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
-            xTopWindow->toFront();
+        // raise the window to top (especially necessary if this is not the first activation)
+        Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
+        Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+        xTopWindow->toFront();
 
-            // remove the frame from the desktop's frame collection because we need full control of it.
-            impl_removeFrameFromDesktop_throw( xFrame );
-        }
+        // remove the frame from the desktop's frame collection because we need full control of it.
+        impl_removeFrameFromDesktop_throw( m_aContext, xFrame );
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
         // opened
         LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
 
         // init the edit view
-        if ( m_bOpenInDesign )
-            impl_initObjectEditView( xController );
+        if ( m_bForm && m_bOpenInDesign )
+            impl_initFormEditView( xController );
     }
     catch( const RuntimeException& )
     {
@@ -833,12 +827,8 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_initObjectEditView( const Reference< XController >& _rxController )
+void ODocumentDefinition::impl_initFormEditView( const Reference< XController >& _rxController )
 {
-    if ( !m_bForm )
-        // currently, only forms need to be initialized
-        return;
-
     try
     {
         Reference< XViewSettingsSupplier > xSettingsSupplier( _rxController, UNO_QUERY_THROW );
@@ -872,10 +862,10 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, const bool _bActivate,
-    const Reference< XCommandEnvironment >& _rxEnvironment, Any& _out_rComponent, ::osl::ClearableMutexGuard & _aGuard )
+Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, const bool _bActivate,
+        const Reference< XCommandEnvironment >& _rxEnvironment )
 {
-    OExecuteImpl aExecuteGuard(m_bInExecute);
+    OExecuteImpl aExecuteGuard( m_bInExecute );
 
     Reference< XConnection > xConnection;
     sal_Int32 nOpenMode = OpenMode::DOCUMENT;
@@ -885,7 +875,9 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
     ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->getResource() );
-    aDocumentArgs.put( "InteractionHandler", aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+    Reference< XInteractionHandler > xHandler( aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+    if ( xHandler.is() )
+        aDocumentArgs.put( "InteractionHandler", xHandler );
 
     ::boost::optional< sal_Int16 > aDocumentMacroMode;
 
@@ -999,7 +991,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     OSL_ENSURE( m_pImpl->m_aProps.sPersistentName.getLength(),
         "ODocumentDefinition::onCommandOpenSomething: no persistent name - cannot load!" );
     if ( !m_pImpl->m_aProps.sPersistentName.getLength() )
-        return;
+        return Any();
 
     // embedded objects themself do not support the hidden flag. We implement support for
     // it by changing the STATE to RUNNING only, instead of ACTIVE.
@@ -1009,7 +1001,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     loadEmbeddedObject( xConnection, Sequence< sal_Int8 >(), aDocumentArgs.getPropertyValues(), false, !m_bOpenInDesign );
     OSL_ENSURE( m_xEmbeddedObject.is(), "ODocumentDefinition::onCommandOpenSomething: what's this?" );
     if ( !m_xEmbeddedObject.is() )
-        return;
+        return Any();
 
     Reference< XModel > xModel( getComponent(), UNO_QUERY );
     Reference< report::XReportDefinition > xReportDefinition(xModel,UNO_QUERY);
@@ -1035,158 +1027,169 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         xReportEngine->setReportDefinition(xReportDefinition);
         xReportEngine->setActiveConnection(m_xLastKnownConnection);
         if ( bOpenHidden )
-            _out_rComponent <<= xReportEngine->createDocumentModel( );
-        else
-            _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
-        return;
+            return makeAny( xReportEngine->createDocumentModel() );
+        return makeAny( xReportEngine->createDocumentAlive( NULL ) );
     }
 
     if ( _bActivate && !bOpenHidden )
     {
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-        impl_onActivateEmbeddedObject();
+        ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
     }
 
-    // LLA: Alle fillReportData() calls prÅfen, sollte es welche geben, die danach noch viel machen
-    // LLA: sollten wir einen _aGuard Pointer Åbergeben, sonst erstmal als Referenz
-    fillReportData(_aGuard);
-    _out_rComponent <<= xModel;
+    if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign )
+        ODocumentDefinition::fillReportData( m_aContext, getComponent(), xConnection );
+
+    return makeAny( xModel );
 }
 
 // -----------------------------------------------------------------------------
 Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
-    ::osl::ClearableMutexGuard aGuard(m_aMutex);
-    if ( !m_bInExecute )
+
+    sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
+    sal_Bool bOpenInDesign = aCommand.Name.equalsAscii( "openDesign" );
+    sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
+    if ( bOpen || bOpenInDesign || bOpenForMail )
     {
-        sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
-        sal_Bool bOpenInDesign = aCommand.Name.equalsAscii( "openDesign" );
-        sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
-        if ( bOpen || bOpenInDesign || bOpenForMail )
+        // opening the document involves a lot of VCL code, which is not thread-safe, but needs the SolarMutex locked.
+        // Unfortunately, the DocumentDefinition, as well as the EmbeddedObject implementation, calls into VCL-dependent
+        // components *without* releasing the own mutex, which is a guaranteed recipe for deadlocks.
+        // We have control over this implementation here, and in modifying it to release the own mutex before calling into
+        // the VCL-dependent components is not too difficult (was there, seen it).
+        // However, we do /not/ have control over the EmbeddedObject implementation, and from a first look, it seems as
+        // making it release the own mutex before calling SolarMutex-code is ... difficult, at least.
+        // So, to be on the same side, we lock the SolarMutex here. Yes, it sucks.
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::ClearableMutexGuard aGuard(m_aMutex);
+        if ( m_bInExecute )
+            return aRet;
+
+        bool bActivateObject = true;
+        if ( bOpenForMail )
         {
-            bool bActivateObject = true;
-            if ( bOpenForMail )
+            OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
+            bActivateObject = false;
+        }
+
+        // if the object is already opened, do nothing
+        // #i89509# / 2008-05-22 / frank.schoenheit@sun.com
+        if ( m_xEmbeddedObject.is() )
+        {
+            sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
+            bool bIsActive = ( nCurrentState == EmbedStates::ACTIVE );
+
+            // exception: new-style reports always create a new document when "open" is executed
+            Reference< report::XReportDefinition > xReportDefinition( getComponent(), UNO_QUERY );
+            bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
+
+            if ( bIsActive && !bIsAliveNewStyleReport )
             {
-                OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
-                bActivateObject = false;
+                ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
+                return makeAny( getComponent() );
             }
-
-            // if the object is already opened, do nothing
-            // #i89509# / 2008-05-22 / frank.schoenheit@sun.com
-            if ( m_xEmbeddedObject.is() )
-            {
-                sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
-                bool bIsActive = ( nCurrentState == EmbedStates::ACTIVE );
-
-                // exception: new-style reports always create a new document when "open" is executed
-                Reference< report::XReportDefinition > xReportDefinition( getComponent(), UNO_QUERY );
-                bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
-
-                if ( bIsActive && !bIsAliveNewStyleReport )
-                {
-                    impl_onActivateEmbeddedObject();
-                    return makeAny( getComponent() );
-                }
-            }
-
-            // m_bOpenInDesign = bOpenInDesign;
-            // onCommandOpenSomething( aCommand.Argument, !bOpenForMail, Environment, aRet, aGuard );
-
-            m_bOpenInDesign = bOpenInDesign || bOpenForMail;
-            onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment, aRet, aGuard );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
-        {
-            Sequence<Any> aIni;
-            aCommand.Argument >>= aIni;
-            if ( aIni.getLength() != 2 )
-            {
-                OSL_ENSURE( sal_False, "Wrong argument type!" );
-                ucbhelper::cancelCommandExecution(
-                    makeAny( IllegalArgumentException(
-                                        rtl::OUString(),
-                                        static_cast< cppu::OWeakObject * >( this ),
-                                        -1 ) ),
-                    Environment );
-                // Unreachable
-            }
-            Reference< XStorage> xDest(aIni[0],UNO_QUERY);
-            ::rtl::OUString sPersistentName;
-            aIni[1] >>= sPersistentName;
-            Reference< XStorage> xStorage = getContainerStorage();
-            // -----------------------------------------------------------------------------
-            xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
-            /*loadEmbeddedObject( true );
-            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-            if ( xPersist.is() )
-            {
-                xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
-                xPersist->storeOwn();
-                m_xEmbeddedObject->changeState(EmbedStates::LOADED);
-            }
-            else
-                throw CommandAbortedException();*/
-        }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
-        {
-            onCommandPreview(aRet);
-        }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
-        {
-            Sequence<Any> aIni;
-            aCommand.Argument >>= aIni;
-            if ( aIni.getLength() > 0 && aIni.getLength() < 2 )
-            {
-                OSL_ENSURE( sal_False, "Wrong argument type!" );
-                ucbhelper::cancelCommandExecution(
-                    makeAny( IllegalArgumentException(
-                                        rtl::OUString(),
-                                        static_cast< cppu::OWeakObject * >( this ),
-                                        -1 ) ),
-                    Environment );
-                // Unreachable
-            }
-            ::rtl::OUString sURL;
-            aIni[0] >>= sURL;
-            onCommandInsert( sURL, Environment );
-        }
-        else if (   aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) )   // compatibility
-                ||  aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getDocumentInfo" ) )
-                )
-        {
-            onCommandGetDocumentProperties( aRet );
-        }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
-        {
-            //////////////////////////////////////////////////////////////////
-            // delete
-            //////////////////////////////////////////////////////////////////
-            closeObject();
-            Reference< XStorage> xStorage = getContainerStorage();
-            if ( xStorage.is() )
-                xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
 
-            dispose();
+        m_bOpenInDesign = bOpenInDesign || bOpenForMail;
+        return onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment );
+    }
 
-        }
-        else if (   ( aCommand.Name.compareToAscii( "storeOwn" ) == 0 ) // compatibility
-                ||  ( aCommand.Name.compareToAscii( "store" ) == 0 )
-                )
+    ::osl::ClearableMutexGuard aGuard(m_aMutex);
+    if ( m_bInExecute )
+        return aRet;
+
+    if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
+    {
+        Sequence<Any> aIni;
+        aCommand.Argument >>= aIni;
+        if ( aIni.getLength() != 2 )
         {
-            impl_store_throw();
+            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            ucbhelper::cancelCommandExecution(
+                makeAny( IllegalArgumentException(
+                                    rtl::OUString(),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
         }
-        else if (   ( aCommand.Name.compareToAscii( "shutdown" ) == 0 ) // compatibility
-                ||  ( aCommand.Name.compareToAscii( "close" ) == 0 )
-                )
+        Reference< XStorage> xDest(aIni[0],UNO_QUERY);
+        ::rtl::OUString sPersistentName;
+        aIni[1] >>= sPersistentName;
+        Reference< XStorage> xStorage = getContainerStorage();
+        // -----------------------------------------------------------------------------
+        xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
+        /*loadEmbeddedObject( true );
+        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+        if ( xPersist.is() )
         {
-            aRet <<= impl_close_throw();
+            xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
+            xPersist->storeOwn();
+            m_xEmbeddedObject->changeState(EmbedStates::LOADED);
         }
         else
-        {
-            aRet = OContentHelper::execute(aCommand,CommandId,Environment);
-        }
+            throw CommandAbortedException();*/
     }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
+    {
+        onCommandPreview(aRet);
+    }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    {
+        Sequence<Any> aIni;
+        aCommand.Argument >>= aIni;
+        if ( !aIni.getLength() )
+        {
+            OSL_ENSURE( sal_False, "Wrong argument count!" );
+            ucbhelper::cancelCommandExecution(
+                makeAny( IllegalArgumentException(
+                                    rtl::OUString(),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+        ::rtl::OUString sURL;
+        aIni[0] >>= sURL;
+        onCommandInsert( sURL, Environment );
+    }
+    else if (   aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) )   // compatibility
+            ||  aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getDocumentInfo" ) )
+            )
+    {
+        onCommandGetDocumentProperties( aRet );
+    }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    {
+        //////////////////////////////////////////////////////////////////
+        // delete
+        //////////////////////////////////////////////////////////////////
+        closeObject();
+        Reference< XStorage> xStorage = getContainerStorage();
+        if ( xStorage.is() )
+            xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
+
+        dispose();
+
+    }
+    else if (   ( aCommand.Name.compareToAscii( "storeOwn" ) == 0 ) // compatibility
+            ||  ( aCommand.Name.compareToAscii( "store" ) == 0 )
+            )
+    {
+        impl_store_throw();
+    }
+    else if (   ( aCommand.Name.compareToAscii( "shutdown" ) == 0 ) // compatibility
+            ||  ( aCommand.Name.compareToAscii( "close" ) == 0 )
+            )
+    {
+        aRet <<= impl_close_throw();
+    }
+    else
+    {
+        aRet = OContentHelper::execute(aCommand,CommandId,Environment);
+    }
+
     return aRet;
 }
 // -----------------------------------------------------------------------------
@@ -1607,9 +1610,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
     if ( !xParentFrame.is() )
     { // i87957 we need a parent frame
-        if ( !m_xDesktop.is() )
-            m_xDesktop.set( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
-        xParentFrame.set(m_xDesktop,uno::UNO_QUERY);
+        Reference< XComponentLoader > xDesktop( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+        xParentFrame.set( xDesktop, UNO_QUERY );
         if ( xParentFrame.is() )
         {
             Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
@@ -1918,10 +1920,8 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     {
         // no XDatabaseDocumentUI -> just execute the respective command
         m_bOpenInDesign = _bForEditing;
-        Any aComponent;
-        onCommandOpenSomething( Any(), true, NULL, aComponent, aGuard );
-        Reference< XComponent > xComponent;
-        OSL_VERIFY( aComponent >>= xComponent );
+        Reference< XComponent > xComponent( onCommandOpenSomething( Any(), true, NULL ), UNO_QUERY );
+        OSL_ENSURE( xComponent.is(), "ODocumentDefinition::impl_openUI_nolck_throw: opening the thingie failed." );
         return xComponent;
     }
 
@@ -2122,26 +2122,29 @@ bool ODocumentDefinition::prepareClose()
     return true;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::fillReportData(::osl::ClearableMutexGuard & _aGuard)
+void ODocumentDefinition::fillReportData( const ::comphelper::ComponentContext& _rContext,
+                                               const Reference< util::XCloseable >& _rxComponent,
+                                               const Reference< XConnection >& _rxActiveConnection )
 {
-    if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
-    {
-        Sequence<Any> aArgs(2);
-        PropertyValue aValue;
-        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocument"));
-        aValue.Value <<= getComponent();
-        aArgs[0] <<= aValue;
-           aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
-           aValue.Value <<= m_xLastKnownConnection;
-           aArgs[1] <<= aValue;
+    Sequence< Any > aArgs(2);
+    PropertyValue aValue;
+    aValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextDocument" ) );
+    aValue.Value <<= _rxComponent;
+    aArgs[0] <<= aValue;
+       aValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) );
+       aValue.Value <<= _rxActiveConnection;
+       aArgs[1] <<= aValue;
 
-        Reference< XJobExecutor > xExecuteable( m_aContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY );
-        if ( xExecuteable.is() )
-        {
-            _aGuard.clear();
-            xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
+    try
+    {
+        Reference< XJobExecutor > xExecuteable(
+            _rContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY_THROW );
+        xExecuteable->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fill" ) ) );
     }
-}
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::updateDocumentTitle()

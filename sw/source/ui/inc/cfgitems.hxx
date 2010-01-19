@@ -155,15 +155,15 @@ public:
 
 
     BOOL   IsPrintProspect() const      { return bPrintProspect; }
-    BOOL   IsPrintProspect_RTL() const      { return bPrintProspect_RTL; }
+    BOOL   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
     void   SetPrintProspect(BOOL bFlag ){ bPrintProspect = bFlag; }
-    void   SetPrintProspect_RTL(BOOL bFlag ){ bPrintProspect_RTL = bFlag; }
+    void   SetPrintProspectRTL(BOOL bFlag ){ bPrintProspectRTL = bFlag; }
     BOOL IsPrintGraphic () const { return bPrintGraphic; }
     BOOL IsPrintTable () const { return bPrintTable; }
     BOOL IsPrintDraw () const { return bPrintDraw; }
     BOOL IsPrintControl () const { return bPrintControl; }
-    BOOL IsPrintLeftPage () const { return bPrintLeftPage; }
-    BOOL IsPrintRightPage() const { return bPrintRightPage; }
+    BOOL IsPrintLeftPage () const { return bPrintLeftPages; }
+    BOOL IsPrintRightPage() const { return bPrintRightPages; }
     BOOL IsPrintReverse  () const { return bPrintReverse; }
     BOOL IsPaperFromSetup() const { return bPaperFromSetup; }
     BOOL IsPrintEmptyPages() const { return bPrintEmptyPages; }

@@ -546,14 +546,17 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     // TabPage einh"angen
     pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
-    pPage->Reset( *pOptions );
-    SetHelpId( pPage->GetHelpId() );
-    pPage->Show();
+    if( pPage )
+    {
+        pPage->Reset( *pOptions );
+        SetHelpId( pPage->GetHelpId() );
+        pPage->Show();
+    }
 
     // Dialoggr"o\se bestimmen
     Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-    Size aOutSz( pPage->GetSizePixel() );
+    Size aOutSz( pPage ? pPage->GetSizePixel() : Size() );
     aOutSz.Height() += 6;
     long nWidth = aBtnSz.Width();
     nWidth += a6Sz.Width();
@@ -589,6 +592,9 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 
 short SfxPrintOptionsDialog::Execute()
 {
+    if( ! pPage )
+        return RET_CANCEL;
+
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK )
         pPage->FillItemSet( *pOptions );

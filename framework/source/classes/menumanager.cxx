@@ -171,6 +171,12 @@ MenuManager::MenuManager(
     for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = FillItemCommand(aItemCommand,pMenu, i );
+        bool bShowMenuImages( m_bShowMenuImages );
+        MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
+        // overwrite the default?
+        if ( nBits )
+            bShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+
 
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
@@ -217,7 +223,7 @@ MenuManager::MenuManager(
                             aQueryLabelItemIdVector.push_back( nItemId );
 #endif
                         // Set image for the addon popup menu item
-                        if ( m_bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
+                        if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                             if ( !!aImage )
@@ -249,7 +255,7 @@ MenuManager::MenuManager(
                     aQueryLabelItemIdVector.push_back( nItemId );
 #endif
 
-                if ( m_bShowMenuImages && !pMenu->GetItemImage( nItemId ))
+                if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                     if ( !!aImage )
@@ -274,7 +280,7 @@ MenuManager::MenuManager(
                     aQueryLabelItemIdVector.push_back( nItemId );
 #endif
 
-                if ( m_bShowMenuImages && !pMenu->GetItemImage( nItemId ))
+                if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                     if ( !!aImage )
@@ -283,7 +289,7 @@ MenuManager::MenuManager(
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                if ( m_bShowMenuImages )
+                if ( bShowMenuImages )
                 {
                     if ( AddonMenuManager::IsAddonMenuId( nItemId ))
                     {
@@ -1131,7 +1137,13 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
         USHORT nId = _pMenu->GetItemId( nPos );
         if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
-            if ( bShowMenuImages )
+            bool bTmpShowMenuImages( bShowMenuImages );
+            MenuItemBits nBits =  _pMenu->GetItemBits( nId );
+            // overwrite the default?
+            if ( nBits )
+                bTmpShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+
+            if ( bTmpShowMenuImages )
             {
                 sal_Bool        bImageSet = sal_False;
                 ::rtl::OUString aImageId;

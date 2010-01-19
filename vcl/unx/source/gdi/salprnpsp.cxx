@@ -177,6 +177,32 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pJobSetup->mnPaperBin = 0;
     }
 
+    // copy duplex
+    pKey = NULL;
+    pValue = NULL;
+
+    pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
+    if( rData.m_pParser )
+        pKey = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+    if( pKey )
+        pValue = rData.m_aContext.getValue( pKey );
+    if( pKey && pValue )
+    {
+        if( pValue->m_aOption.EqualsIgnoreCaseAscii( "None" ) ||
+            pValue->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
+           )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_OFF;
+        }
+        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexNoTumble" ) )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_LONGEDGE;
+        }
+        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexTumble" ) )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_SHORTEDGE;
+        }
+    }
 
     // copy the whole context
     if( pJobSetup->mpDriverData )
@@ -525,34 +551,6 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-DuplexMode PspSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pJobSetup )
-{
-    DuplexMode aRet = DUPLEX_UNKNOWN;
-    PrinterInfo aInfo( PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName ) );
-    if ( pJobSetup->mpDriverData )
-        JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
-    if( aInfo.m_pParser )
-    {
-        const PPDKey * pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
-        if( pKey )
-        {
-            const PPDValue* pVal = aInfo.m_aContext.getValue( pKey );
-            if( pVal && (
-                pVal->m_aOption.EqualsIgnoreCaseAscii( "None" )          ||
-                pVal->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
-                ) )
-            {
-                aRet = DUPLEX_OFF;
-            }
-            else
-                aRet = DUPLEX_ON;
-        }
-    }
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
 int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
@@ -727,6 +725,37 @@ BOOL PspSalInfoPrinter::SetData(
         if( nSetDataFlags & SAL_JOBSET_ORIENTATION )
             aData.m_eOrientation = pJobSetup->meOrientation == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
 
+        // merge duplex if necessary
+        if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
+        {
+            pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+            if( pKey )
+            {
+                pValue = NULL;
+                switch( pJobSetup->meDuplexMode )
+                {
+                case DUPLEX_OFF:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+                    if( pValue == NULL )
+                        pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "SimplexNoTumble" ) ) );
+                    break;
+                case DUPLEX_SHORTEDGE:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexTumble" ) ) );
+                    break;
+                case DUPLEX_LONGEDGE:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexNoTumble" ) ) );
+                    break;
+                case DUPLEX_UNKNOWN:
+                default:
+                    pValue = 0;
+                    break;
+                }
+                if( ! pValue )
+                    pValue = pKey->getDefaultValue();
+                aData.m_aContext.setValue( pKey, pValue );
+            }
+        }
+
         m_aJobData = aData;
         copyJobDataToJobSetup( pJobSetup, aData );
         return TRUE;
@@ -828,8 +857,21 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
         case PRINTER_CAPABILITIES_COPIES:
             return 0xffff;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
-            return 0;
+        {
+            // see if the PPD contains a value to set Collate to True
+            JobData aData;
+            JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
+
+            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) ) : NULL;
+            const PPDValue* pVal = pKey ? pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) ) : NULL;
+
+            // PPDs don't mention the number of possible collated copies.
+            // so let's guess as many as we want ?
+            return pVal ? 0xffff : 0;
+        }
         case PRINTER_CAPABILITIES_SETORIENTATION:
+            return 1;
+        case PRINTER_CAPABILITIES_SETDUPLEX:
             return 1;
         case PRINTER_CAPABILITIES_SETPAPERBIN:
             return 1;
@@ -860,6 +902,7 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
    m_bSwallowFaxNo( false ),
    m_pGraphics( NULL ),
    m_nCopies( 1 ),
+   m_bCollate( false ),
    m_pInfoPrinter( pInfoPrinter )
 {
 }
@@ -885,7 +928,9 @@ BOOL PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    ULONG nCopies, BOOL /*bCollate*/,
+    ULONG nCopies,
+    bool bCollate,
+    bool bDirect,
     ImplJobSetup* pJobSetup )
 {
     vcl_sal::PrinterUpdate::jobStarted();
@@ -894,13 +939,17 @@ BOOL PspSalPrinter::StartJob(
     m_bPdf      = false;
     m_aFileName = pFileName ? *pFileName : String();
     m_aTmpFile  = String();
-    m_nCopies       = nCopies;
+    m_nCopies   = nCopies;
+    m_bCollate  = bCollate;
 
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     if( m_nCopies > 1 )
+    {
         // in case user did not do anything (m_nCopies=1)
         // take the default from jobsetup
         m_aJobData.m_nCopies = m_nCopies;
+        m_aJobData.setCollate( bCollate );
+    }
 
     // check wether this printer is configured as fax
     int nMode = 0;
@@ -943,15 +992,6 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.Init( m_aJobData );
 
-    bool bIsQuickJob = false;
-    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
-    if( quick_it != pJobSetup->maValueMap.end() )
-    {
-        if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-            bIsQuickJob = true;
-    }
-
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
     std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
@@ -964,7 +1004,7 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
-    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bIsQuickJob ) ? TRUE : FALSE;
+    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1010,9 +1050,12 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
     m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
     m_pGraphics->SetLayout( 0 );
     if( m_nCopies > 1 )
+    {
         // in case user did not do anything (m_nCopies=1)
         // take the default from jobsetup
         m_aJobData.m_nCopies = m_nCopies;
+        m_aJobData.setCollate( m_nCopies > 1 && m_bCollate );
+    }
 
     m_aPrintJob.StartPage( m_aJobData );
     m_aPrinterGfx.Init( m_aPrintJob );

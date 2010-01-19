@@ -215,6 +215,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
             pDrView->setHideOle(!bDrawOle);
             pDrView->setHideChart(!bDrawChart);
             pDrView->setHideDraw(!bDrawDraw);
+            pDrView->setHideFormControl(!bDrawDraw);
         }
 
         if(SC_UPDATE_CHANGED == eMode)

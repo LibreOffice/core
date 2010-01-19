@@ -80,6 +80,11 @@ namespace connectivity
                 const ::rtl::OUString& _sDriverClassPath,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rSystemProperties
             );
+        /** load driver class path from system configuration.
+            @param  _sDriverClass
+                The driver class name to look for in the configuration.
+        */
+        ::rtl::OUString impl_getJavaDriverClassPath_nothrow(const ::rtl::OUString& _sDriverClass);
 
     protected:
     // statische Daten fuer die Klasse

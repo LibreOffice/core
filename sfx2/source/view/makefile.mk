@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,6 @@ SLOFILES =	\
         $(SLO)$/frmload.obj \
         $(SLO)$/frame.obj \
         $(SLO)$/printer.obj \
-        $(SLO)$/prnmon.obj \
         $(SLO)$/viewprn.obj \
         $(SLO)$/viewfac.obj \
         $(SLO)$/orgmgr.obj \

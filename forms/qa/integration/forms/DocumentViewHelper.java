@@ -39,7 +39,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.form.FormComponentType;
 import com.sun.star.form.XForm;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -190,10 +190,9 @@ public class DocumentViewHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the form controller for a given logical form
      */
-    public XFormController getFormController( XPropertySet _form )
+    public XFormController getFormController( Object _form )
     {
-        XFormLayerAccess formLayerAccess = (XFormLayerAccess)query( XFormLayerAccess.class );
-        return formLayerAccess.getFormController( (XForm)UnoRuntime.queryInterface( XForm.class, _form ) );
+        return getFormController( UnoRuntime.queryInterface( XForm.class, _form ));
     }
 
     /* ------------------------------------------------------------------ */

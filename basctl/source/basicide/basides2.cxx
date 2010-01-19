@@ -38,8 +38,7 @@
 
 #include <ide_pch.hxx>
 #include <basic/sbx.hxx>
-
-#define _SOLAR__PRIVATE 1
+#include "basicrenderable.hxx"
 
 #include <com/sun/star/frame/XTitle.hpp>
 
@@ -85,6 +84,12 @@ IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
 }
 */
 
+Reference< view::XRenderable > BasicIDEShell::GetRenderable()
+{
+    return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
+}
+
+#if 0
 USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
 {
     if ( pCurWin )
@@ -98,6 +103,7 @@ USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, Print
     }
     return 0;
 }
+#endif
 
 BOOL BasicIDEShell::HasSelection( BOOL /* bText */ ) const
 {

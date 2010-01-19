@@ -85,6 +85,7 @@ class MenuConfiguration
             ::rtl::OUString aTargetFrame;
             ::rtl::OUString aImageId;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
+                        sal_Int16 nStyle;
         };
 
         MenuConfiguration(

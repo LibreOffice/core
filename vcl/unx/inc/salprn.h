@@ -63,7 +63,6 @@ public:
     virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData );
 };
 
 class PspSalPrinter : public SalPrinter
@@ -80,6 +79,7 @@ public:
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
     ULONG                   m_nCopies;
+    bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
     PspSalPrinter( SalInfoPrinter* );
@@ -90,7 +90,9 @@ public:
     virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData );
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

@@ -57,9 +57,8 @@
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/langitem.hxx>
-// --> OD 2005-02-28 #i43427#
 #include <svx/opaqitem.hxx>
-// <--
+#include <svx/charhiddenitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
@@ -989,7 +988,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                 SfxItemState eState = SFX_ITEM_DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET)
+                if (eState != SFX_ITEM_SET && rReader.pCollA != NULL)
                     pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
             }
 
@@ -1630,7 +1629,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
+    pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_HIDDEN);
 
     return 0;
 }
@@ -2163,7 +2164,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = maFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
             eSrcCharSet = pCollA[nCharFmt].GetCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl))
             eSrcCharSet = pCollA[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
@@ -2221,10 +2222,13 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-            eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-            eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        if (pCollA != NULL)
+        {
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+                eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
+            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+                eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        }
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
             /*

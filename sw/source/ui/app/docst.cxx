@@ -42,6 +42,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
+#include <sfx2/printer.hxx>
 #include <svl/macitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svl/stritem.hxx>

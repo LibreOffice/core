@@ -180,12 +180,12 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 #JSC: i have removed the doc rdb because all type information is already in the
 #     types.rdb, even the service and singleton type info. IDL docu isn't checked.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    $(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
+    $(COMMAND_ECHO)$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
         && echo > $(REGISTRYCHECKFLAG)
 
 #JSC: new target to prepare some UNO type statistics, the ouput will be later used
 #     for versioning of UNO cli type libraries
 $(UNOTYPE_STATISTICS) : $(REGISTRYCHECKFLAG)
-    $(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" "$(REGVIEWTOOL)" > $@
+    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" "$(REGVIEWTOOL)" > $@
 
 .INCLUDE :  target.mk

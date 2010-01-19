@@ -33,7 +33,7 @@
   <node oor:name="FontFormatList">
     <node oor:name="Id1" oor:op="replace">
       <prop oor:name="Name">
-        <value>StarSymbol</value>
+        <value>OpenSymbol</value>
       </prop>
       <prop oor:name="CharSet">
         <value>-1</value>
@@ -53,10 +53,10 @@
     </node>
     <node oor:name="Id2" oor:op="replace">
       <prop oor:name="Name">
-        <value>Times New Roman</value>
+        <value>OpenSymbol</value>
       </prop>
       <prop oor:name="CharSet">
-        <value>0</value>
+        <value>-1</value>
       </prop>
       <prop oor:name="Family">
         <value>0</value>
@@ -75,7 +75,7 @@
   <node oor:name="SymbolList">
     <node oor:name="alpha" oor:op="replace">
       <prop oor:name="Char">
-        <value>57527</value>
+        <value>945</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -84,12 +84,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ALPHA" oor:op="replace">
       <prop oor:name="Char">
-        <value>65</value>
+        <value>913</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -103,7 +103,7 @@
     </node>
     <node oor:name="beta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57528</value>
+        <value>946</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -112,12 +112,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="BETA" oor:op="replace">
       <prop oor:name="Char">
-        <value>66</value>
+        <value>914</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -131,7 +131,7 @@
     </node>
     <node oor:name="gamma" oor:op="replace">
       <prop oor:name="Char">
-        <value>57529</value>
+        <value>947</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -140,12 +140,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="GAMMA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57516</value>
+        <value>915</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -154,12 +154,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="delta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57530</value>
+        <value>948</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -168,12 +168,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="DELTA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57517</value>
+        <value>916</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -182,12 +182,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="epsilon" oor:op="replace">
       <prop oor:name="Char">
-        <value>57531</value>
+        <value>1013</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -196,12 +196,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="EPSILON" oor:op="replace">
       <prop oor:name="Char">
-        <value>69</value>
+        <value>917</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -215,7 +215,7 @@
     </node>
     <node oor:name="zeta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57532</value>
+        <value>950</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -224,12 +224,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ZETA" oor:op="replace">
       <prop oor:name="Char">
-        <value>90</value>
+        <value>918</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -243,7 +243,7 @@
     </node>
     <node oor:name="eta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57533</value>
+        <value>951</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -252,12 +252,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ETA" oor:op="replace">
       <prop oor:name="Char">
-        <value>72</value>
+        <value>919</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -271,7 +271,7 @@
     </node>
     <node oor:name="theta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57534</value>
+        <value>952</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -280,12 +280,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="THETA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57518</value>
+        <value>920</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -294,12 +294,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="iota" oor:op="replace">
       <prop oor:name="Char">
-        <value>57535</value>
+        <value>953</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -308,12 +308,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="IOTA" oor:op="replace">
       <prop oor:name="Char">
-        <value>73</value>
+        <value>921</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -327,7 +327,7 @@
     </node>
     <node oor:name="kappa" oor:op="replace">
       <prop oor:name="Char">
-        <value>57536</value>
+        <value>954</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -336,12 +336,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="KAPPA" oor:op="replace">
       <prop oor:name="Char">
-        <value>75</value>
+        <value>922</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -355,7 +355,7 @@
     </node>
     <node oor:name="lambda" oor:op="replace">
       <prop oor:name="Char">
-        <value>57537</value>
+        <value>955</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -364,12 +364,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="LAMBDA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57519</value>
+        <value>923</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -378,12 +378,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="mu" oor:op="replace">
       <prop oor:name="Char">
-        <value>57538</value>
+        <value>956</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -392,12 +392,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="MU" oor:op="replace">
       <prop oor:name="Char">
-        <value>77</value>
+        <value>924</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -411,7 +411,7 @@
     </node>
     <node oor:name="nu" oor:op="replace">
       <prop oor:name="Char">
-        <value>57539</value>
+        <value>957</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -420,12 +420,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="NU" oor:op="replace">
       <prop oor:name="Char">
-        <value>78</value>
+        <value>925</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -439,7 +439,7 @@
     </node>
     <node oor:name="xi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57540</value>
+        <value>958</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -448,12 +448,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="XI" oor:op="replace">
       <prop oor:name="Char">
-        <value>57520</value>
+        <value>926</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -462,12 +462,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="omicron" oor:op="replace">
       <prop oor:name="Char">
-        <value>57541</value>
+        <value>959</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -476,12 +476,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="OMICRON" oor:op="replace">
       <prop oor:name="Char">
-        <value>79</value>
+        <value>927</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -495,7 +495,7 @@
     </node>
     <node oor:name="pi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57542</value>
+        <value>960</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -504,12 +504,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PI" oor:op="replace">
       <prop oor:name="Char">
-        <value>57521</value>
+        <value>928</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -518,12 +518,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="rho" oor:op="replace">
       <prop oor:name="Char">
-        <value>57543</value>
+        <value>961</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -532,12 +532,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="RHO" oor:op="replace">
       <prop oor:name="Char">
-        <value>80</value>
+        <value>929</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -551,7 +551,7 @@
     </node>
     <node oor:name="sigma" oor:op="replace">
       <prop oor:name="Char">
-        <value>57544</value>
+        <value>963</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -560,12 +560,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="SIGMA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57522</value>
+        <value>931</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -574,12 +574,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="tau" oor:op="replace">
       <prop oor:name="Char">
-        <value>57545</value>
+        <value>964</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -588,12 +588,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="TAU" oor:op="replace">
       <prop oor:name="Char">
-        <value>84</value>
+        <value>932</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -607,7 +607,7 @@
     </node>
     <node oor:name="upsilon" oor:op="replace">
       <prop oor:name="Char">
-        <value>57546</value>
+        <value>965</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -616,12 +616,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="UPSILON" oor:op="replace">
       <prop oor:name="Char">
-        <value>57523</value>
+        <value>933</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -630,12 +630,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="phi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57547</value>
+        <value>981</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -644,12 +644,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PHI" oor:op="replace">
       <prop oor:name="Char">
-        <value>57524</value>
+        <value>934</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -658,12 +658,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="chi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57548</value>
+        <value>967</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -672,12 +672,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="CHI" oor:op="replace">
       <prop oor:name="Char">
-        <value>88</value>
+        <value>935</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -691,7 +691,7 @@
     </node>
     <node oor:name="psi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57549</value>
+        <value>968</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -700,12 +700,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PSI" oor:op="replace">
       <prop oor:name="Char">
-        <value>57525</value>
+        <value>936</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -714,12 +714,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="omega" oor:op="replace">
       <prop oor:name="Char">
-        <value>57550</value>
+        <value>969</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -728,12 +728,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="OMEGA" oor:op="replace">
       <prop oor:name="Char">
-        <value>57526</value>
+        <value>937</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -742,12 +742,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varepsilon" oor:op="replace">
       <prop oor:name="Char">
-        <value>57551</value>
+        <value>949</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -756,12 +756,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="vartheta" oor:op="replace">
       <prop oor:name="Char">
-        <value>57552</value>
+        <value>977</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -770,12 +770,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varpi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57553</value>
+        <value>982</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -784,7 +784,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varrho" oor:op="replace">
@@ -798,12 +798,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varsigma" oor:op="replace">
       <prop oor:name="Char">
-        <value>57555</value>
+        <value>962</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -812,12 +812,12 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varphi" oor:op="replace">
       <prop oor:name="Char">
-        <value>57556</value>
+        <value>966</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -826,7 +826,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="element" oor:op="replace">
@@ -915,7 +915,7 @@
     </node>
     <node oor:name="tendto" oor:op="replace">
       <prop oor:name="Char">
-        <value>57484</value>
+        <value>8594</value>
       </prop>
       <prop oor:name="Set">
         <value>Special</value>
@@ -985,7 +985,7 @@
     </node>
     <node oor:name="perthousand" oor:op="replace">
       <prop oor:name="Char">
-        <value>57472</value>
+        <value>8240</value>
       </prop>
       <prop oor:name="Set">
         <value>Special</value>

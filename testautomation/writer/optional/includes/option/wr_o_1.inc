@@ -441,18 +441,16 @@ testcase tToolsOptionsWriterView5
     Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
-    option_value(2) = Tabellen.IsChecked
-    option_value(3) = Zeichnungen.IsChecked
-    option_value(4) = Feldname.IsChecked
-    option_value(5) = Notizen.IsChecked
+    option_value(2) = Zeichnungen.IsChecked
+    option_value(3) = Feldname.IsChecked
+    option_value(4) = Notizen.IsChecked
 
     printlog ("'/// - all states inverting ///")
 
     if option_value(1) then GrafikenUndObjekte.UnCheck else GrafikenUndObjekte.Check
-    if option_value(2) then Tabellen.UnCheck else Tabellen.Check
-    if option_value(3) then Zeichnungen.UnCheck else Zeichnungen.Check
-    if option_value(4) then Feldname.UnCheck else Feldname.Check
-    if option_value(5) then Notizen.UnCheck else Notizen.Check
+    if option_value(2) then Zeichnungen.UnCheck else Zeichnungen.Check
+    if option_value(3) then Feldname.UnCheck else Feldname.Check
+    if option_value(4) then Notizen.UnCheck else Notizen.Check
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -465,11 +463,10 @@ testcase tToolsOptionsWriterView5
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "VIEW" )
 
-    if ( option_value(1) = GrafikenUndObjekte.IsChecked ) then WarnLog "GrafikenUndObjekte state changed"
-    if ( option_value(2) = Tabellen.IsChecked  ) then WarnLog "Tabellen state changed"
-    if ( option_value(3) = Zeichnungen.IsChecked  ) then WarnLog "Zeichnungen state changed"
-    if ( option_value(4) = Feldname.IsChecked  ) then  WarnLog "Feldname state changed"
-    if ( option_value(5) = Notizen.IsChecked  ) then  WarnLog "Notizen state changed"
+    if ( option_value(1) = GrafikenUndObjekte.IsChecked ) then WarnLog "Graphics and objects state changed"
+    if ( option_value(2) = Zeichnungen.IsChecked  ) then WarnLog "Zeichnungen state changed"
+    if ( option_value(3) = Feldname.IsChecked  ) then  WarnLog "Feldname state changed"
+    if ( option_value(4) = Notizen.IsChecked  ) then  WarnLog "Notizen state changed"
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -499,15 +496,13 @@ testcase tToolsOptionsWriterView6
     Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
-    option_value(2) = Tabellen.IsChecked
-    option_value(3) = Zeichnungen.IsChecked
-    option_value(4) = Feldname.IsChecked
-    option_value(5) = Notizen.IsChecked
+    option_value(2) = Zeichnungen.IsChecked
+    option_value(3) = Feldname.IsChecked
+    option_value(4) = Notizen.IsChecked
 
     printlog ("'/// - all states unchecked ///")
 
     GrafikenUndObjekte.UnCheck
-    Tabellen.UnCheck
     Zeichnungen.UnCheck
     Feldname.UnCheck
     Notizen.UnCheck
@@ -523,18 +518,16 @@ testcase tToolsOptionsWriterView6
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "VIEW" )
 
-    if GrafikenUndObjekte.IsChecked then WarnLog "GrafikenUndObjekte x"
-    if Tabellen.IsChecked then WarnLog "Tabellen x"
+    if GrafikenUndObjekte.IsChecked then WarnLog "Graphics and objects x"
     if Zeichnungen.IsChecked then WarnLog "Zeichnungen x"
     if Feldname.IsChecked then  WarnLog "Feldname x"
     if Notizen.IsChecked then  WarnLog "Notizen x"
     
     printlog ("'/// - restore states ///")
     if ( option_value(1) = TRUE ) Then  GrafikenUndObjekte.Check Else GrafikenUndObjekte.UnCheck
-    if ( option_value(2) = TRUE ) Then  Tabellen.Check Else Tabellen.UnCheck
-    if ( option_value(3) = TRUE ) Then  Zeichnungen.Check Else Zeichnungen.UnCheck
-    if ( option_value(4) = TRUE ) Then  Feldname.Check Else Feldname.UnCheck
-    if ( option_value(5) = TRUE ) Then  Notizen.Check Else Notizen.UnCheck
+    if ( option_value(2) = TRUE ) Then  Zeichnungen.Check Else Zeichnungen.UnCheck
+    if ( option_value(3) = TRUE ) Then  Feldname.Check Else Feldname.UnCheck
+    if ( option_value(4) = TRUE ) Then  Notizen.Check Else Notizen.UnCheck
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -564,15 +557,13 @@ testcase tToolsOptionsWriterView7
     Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
-    option_value(2) = Tabellen.IsChecked
-    option_value(3) = Zeichnungen.IsChecked
-    option_value(4) = Feldname.IsChecked
-    option_value(5) = Notizen.IsChecked
+    option_value(2) = Zeichnungen.IsChecked
+    option_value(3) = Feldname.IsChecked
+    option_value(4) = Notizen.IsChecked
 
     printlog ("'/// - all Check -> x ///")
 
     GrafikenUndObjekte.Check
-    Tabellen.Check
     Zeichnungen.Check
     Feldname.Check
     Notizen.Check
@@ -588,8 +579,7 @@ testcase tToolsOptionsWriterView7
     ToolsOptions
     hToolsOptions ( "WRITER" , "VIEW" )
 
-    if true <> GrafikenUndObjekte.IsChecked then WarnLog "GrafikenUndObjekte o"
-    if true <> Tabellen.IsChecked then WarnLog "Tabellen."
+    if true <> GrafikenUndObjekte.IsChecked then WarnLog "Graphics and objects o"
     if true <> Zeichnungen.IsChecked then WarnLog "Zeichnungen o"
     if true <> Feldname.IsChecked then  WarnLog "Feldname o"
     if true <> Notizen.IsChecked then  WarnLog "Notizen o"

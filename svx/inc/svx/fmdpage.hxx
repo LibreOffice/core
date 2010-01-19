@@ -31,11 +31,6 @@
 #define _SVX_FMDPAGE_HXX
 
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XImageProducerSupplier.hpp>
-#include <com/sun/star/form/XFormController.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/form/XFormControllerListener.hpp>
 #include <svx/unopage.hxx>
 #include <comphelper/uno3.hxx>
 #include "svx/svxdllapi.h"

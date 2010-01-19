@@ -61,7 +61,6 @@ sub M_001_
    Call tmFileVersions
    Call tmExportAsPDF
    Call tmFileProperties
-   Call tmFilePrint
   Call tmFilePrinterSetting
    Call tmFilePassword
 end sub
@@ -378,27 +377,6 @@ testcase tmFileVersions
    '/// close application ///'
    Call hCloseDocument
    if app.Dir (Datei) <> "" then app.kill Datei
-endcase
-
-testcase tmFilePrint
-'/// open application ///'
-   Call hNewDocument
-   sleep 3
-   '/// File->Print ///'
-   FilePrint
-   kontext
-   if active.exists(2) then
-       active.ok
-       qaerrorlog "There is no printer available - please install one on your system!"
-   endif
-   sleep 2
-   Kontext "DruckenDlg"
-   Call DialogTest (DruckenDlg)
-   '/// cancel dialog 'Print' ///'
-   DruckenDlg.Cancel
-   sleep 2
-'/// close application ///'
-   Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
