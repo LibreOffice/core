@@ -1955,4 +1955,3 @@ SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Wind
 {
     return new SvxInsRowColDlg( pParent, bCol, nHelpId );
 }
-

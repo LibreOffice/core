@@ -596,7 +596,6 @@ private:
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
-
 public:
     virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId );
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId );
