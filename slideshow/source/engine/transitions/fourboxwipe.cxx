@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "fourboxwipe.hxx"
 
 
@@ -45,13 +46,15 @@ namespace internal {
 {
     ::basegfx::B2DHomMatrix aTransform;
     const double d = ::basegfx::pruneScaleValue( t / 2.0 );
-    if (m_cornersOut) {
-        aTransform.translate( -0.5, -0.5 );
-        aTransform.scale( d, d );
-        aTransform.translate( -0.25, -0.25 );
-    } else {
-        aTransform.scale( d, d );
-        aTransform.translate( -0.5, -0.5 );
+    if (m_cornersOut)
+    {
+        aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
+        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(d, d, -0.25, -0.25)
+            * aTransform;
+    }
+    else
+    {
+        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(d, d, -0.5, -0.5);
     }
 
     // top left:
@@ -76,8 +79,7 @@ namespace internal {
     square4.flip(); // flip direction
     res.append( square4 );
 
-    aTransform.identity();
-    aTransform.translate( 0.5, 0.5 );
+    aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5);
     res.transform( aTransform );
     return res;
 }

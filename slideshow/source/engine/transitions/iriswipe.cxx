@@ -33,6 +33,7 @@
 
 #include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "iriswipe.hxx"
 
 
@@ -41,11 +42,10 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon IrisWipe::operator () ( double t )
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.translate( -0.5, -0.5 );
     const double d = ::basegfx::pruneScaleValue(t);
-    aTransform.scale( d, d );
-    aTransform.translate( 0.5, 0.5 );
+    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5));
+    aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(d, d, 0.5, 0.5) * aTransform;
+
     ::basegfx::B2DPolyPolygon res( m_unitRect );
     res.transform( aTransform );
     return res;
