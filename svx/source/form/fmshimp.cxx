@@ -1579,22 +1579,25 @@ void FmXFormShell::ExecuteSearch()
         return;
 
     // filter out the forms which do not contain valid controls at all
-    FmFormArray::reverse_iterator form = m_aSearchForms.rbegin();
-    ::std::vector< String >::reverse_iterator contextName = aContextNames.rbegin();
-    sal_Int32 i = m_aSearchForms.size();
-    for (   ;
-            form != m_aSearchForms.rend();
-            ++form, ++contextName, --i
-        )
     {
-        FmSearchContext aTestContext;
-        aTestContext.nContext = static_cast< sal_Int16 >( i-1 );
-        sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
-        if ( nValidControls == 0 )
+        FmFormArray aValidForms;
+        ::std::vector< String > aValidContexts;
+        FmFormArray::const_iterator form = m_aSearchForms.begin();
+        ::std::vector< String >::const_iterator contextName = aContextNames.begin();
+        for ( ; form != m_aSearchForms.end(); ++form, ++contextName )
         {
-            m_aSearchForms.erase( form.base() - 1 );
-            aContextNames.erase( contextName.base() - 1 );
+            FmSearchContext aTestContext;
+            aTestContext.nContext = static_cast< sal_Int16 >( form - m_aSearchForms.begin() );
+            sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
+            if ( nValidControls > 0 )
+            {
+                aValidForms.push_back( *form );
+                aValidContexts.push_back( *contextName );
+            }
         }
+
+        m_aSearchForms.swap( aValidForms );
+        aContextNames.swap( aValidContexts );
     }
 
     if (m_aSearchForms.size() == 0)
@@ -1606,7 +1609,7 @@ void FmXFormShell::ExecuteSearch()
     // jetzt brauche ich noch einen 'initial context'
     sal_Int16 nInitialContext = 0;
     Reference< XForm> xActiveForm( getActiveForm());
-    for (i=0; i<(sal_Int32)m_aSearchForms.size(); ++i)
+    for ( size_t i=0; i<(sal_Int32)m_aSearchForms.size(); ++i )
     {
         if (m_aSearchForms.at(i) == xActiveForm)
         {
@@ -2373,6 +2376,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObject );
     Reference< XControlModel > xControlModel( pFormObject ? pFormObject->GetUnoControlModel() : Reference< XControlModel >() );
     DBG_ASSERT( xControlModel.is(), "FmXFormShell::OnFoundData: invalid control!" );
+    if ( !xControlModel.is() )
+        return 0;
 
     // disable the permanent cursor for the last grid we found a record
     if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
@@ -2390,7 +2395,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
-        Reference< XControl> xControl( GetControlFromModel(xControlModel));
+        Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
         Reference< XGrid> xGrid(xControl, UNO_QUERY);
         DBG_ASSERT(xGrid.is(), "FmXFormShell::OnFoundData : ungueltiges Control !");
         // wenn eine der Asserts anschlaegt, habe ich beim Aufbauen von m_arrSearchedControls wohl was falsch gemacht
@@ -2402,7 +2407,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( sal_Int32( COL_LIGHTRED ) ) );
         m_xLastGridFound = xControlModel;
 
-        xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
+        if ( xGrid.is() )
+            xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
     }
 
     // als der Cursor neu positioniert wurde, habe ich (in positioned) meine Formularleisten-Slots invalidiert, aber das greift
@@ -2510,7 +2516,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
         // ... nach der ControlSource-Eigenschaft fragen
         SearchableControlIterator iter( xCurrentFormComponent );
-        Reference< XControl> xControlBehindModel;
+        Reference< XControl> xControl;
             // das Control, das als Model xControlModel hat
             // (das folgende while kann mehrmals durchlaufen werden, ohne dass das Control sich aendert, dann muss
             // ich nicht jedesmal neu suchen)
@@ -2522,10 +2528,12 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
             if ( sControlSource.getLength() == 0 )
             {   // das aktuelle Element hat keine ControlSource, also ist es ein GridControl (das ist das einzige, was
                 // der SearchableControlIterator noch zulaesst)
-                xControlBehindModel = GetControlFromModel(xControlModel);
-                DBG_ASSERT(xControlBehindModel.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                xControl = impl_getControl( xControlModel, *pFormObject );
+                DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
 
-                Reference< XGridPeer> xGridPeer(xControlBehindModel->getPeer(), UNO_QUERY);
+                Reference< XGridPeer> xGridPeer;
+                if ( xControl.is() )
+                    xGridPeer.set( xControl->getPeer(), UNO_QUERY );
                 do
                 {
                     if (!xGridPeer.is())
@@ -2579,13 +2587,13 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                 if (sControlSource.getLength() && xValidFormFields->hasByName(sControlSource))
                 {
                     // jetzt brauche ich das Control zum SdrObject
-                    if (!xControlBehindModel.is())
+                    if (!xControl.is())
                     {
-                        xControlBehindModel = GetControlFromModel(xControlModel);
-                        DBG_ASSERT(xControlBehindModel.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                        xControl = impl_getControl( xControlModel, *pFormObject );
+                        DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
                     }
 
-                    if (IsSearchableControl(xControlBehindModel))
+                    if (IsSearchableControl(xControl))
                     {   // alle Tests ueberstanden -> in die Liste mit aufnehmen
                         strFieldList += sControlSource.getStr();
                         strFieldList += ';';
@@ -2601,7 +2609,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
 
                         // und fuer die formatierte Suche ...
-                        pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControlBehindModel, UNO_QUERY));
+                        pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
                     }
                 }
             }
@@ -2975,24 +2983,48 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 }
 
 //------------------------------------------------------------------------------
-Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControlModel>& xModel)
+Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlModel >& i_rxModel, const FmFormObj& i_rKnownFormObj )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetControlFromModel" );
     if ( impl_checkDisposed() )
         return NULL;
 
-    Reference< XControlContainer> xControlContainer( getControlContainerForView() );
-
-    Sequence< Reference< XControl> > seqControls( xControlContainer->getControls() );
-    Reference< XControl>* pControls = seqControls.getArray();
-    // ... die ich dann durchsuchen kann
-    for (int i=0; i<seqControls.getLength(); ++i)
+    Reference< XControl > xControl;
+    try
     {
-        Reference< XControlModel> xSearchLoopModel( pControls[i]->getModel());
-        if ((XControlModel*)xSearchLoopModel.get() == (XControlModel*)xModel.get())
-            return pControls[i];
+        Reference< XControlContainer> xControlContainer( getControlContainerForView(), UNO_SET_THROW );
+
+        Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
+        const Reference< XControl >* pControls = seqControls.getArray();
+        // ... die ich dann durchsuchen kann
+        for (sal_Int32 i=0; i<seqControls.getLength(); ++i)
+        {
+            xControl.set( pControls[i], UNO_SET_THROW );
+            Reference< XControlModel > xCurrentModel( xControl->getModel() );
+            if ( xCurrentModel == i_rxModel )
+                break;
+            xControl.clear();
+        }
+
+        if ( !xControl.is() )
+        {
+            // fallabck (some controls might not have been created, yet, since they were never visible so far)
+            Reference< XControl > xContainerControl( xControlContainer, UNO_QUERY_THROW );
+            const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerControl->getPeer() );
+            ENSURE_OR_THROW( pContainerWindow, "unexpected control container implementation" );
+
+            const SdrView* pSdrView = m_pShell ? m_pShell->GetFormView() : NULL;
+            ENSURE_OR_THROW( pSdrView, "no current view" );
+
+            xControl.set( i_rKnownFormObj.GetUnoControl( *pSdrView, *pContainerWindow ), UNO_QUERY_THROW );
+        }
     }
-    return Reference< XControl>(NULL);
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    OSL_ENSURE( xControl.is(), "FmXFormShell::impl_getControl: no control found!" );
+    return xControl;
 }
 
 //------------------------------------------------------------------------------
