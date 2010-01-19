@@ -72,6 +72,7 @@ public:
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
+                                        virtual ~VclAbstractDialogFactory();    // needed for export of vtable
     static VclAbstractDialogFactory*    Create();
     // nDialogId was previously a ResId without ResMgr; the ResourceId is now
     // an implementation detail of the factory

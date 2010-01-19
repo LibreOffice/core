@@ -61,3 +61,7 @@ VclAbstractDialog::~VclAbstractDialog()
 VclAbstractDialog2::~VclAbstractDialog2()
 {
 }
+
+VclAbstractDialogFactory::~VclAbstractDialogFactory()
+{
+}
