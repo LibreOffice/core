@@ -233,17 +233,16 @@ struct SvxThesaurusDialog_Impl
 {
     FixedText       aWordText;
     ListBox         aWordLB;
-    FixedText       aReplaceText;
-    Edit            aReplaceEdit;
+    MenuButton      aLangMBtn;
     FixedText       m_aAlternativesText;
     boost::shared_ptr< ThesaurusAlternativesCtrl_Impl > m_pAlternativesCT;
+    FixedText       aReplaceText;
+    Edit            aReplaceEdit;
+    PushButton      aLookUpBtn;
     FixedLine       aFL;
-
+    HelpButton      aHelpBtn;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
-    PushButton      aLookUpBtn;
-    MenuButton      aLangMBtn;
-    HelpButton      aHelpBtn;
 
     String          aErrStr;
 
@@ -251,7 +250,7 @@ struct SvxThesaurusDialog_Impl
     OUString        aLookUpText;
     LanguageType    nLookUpLanguage;
 
-    SfxErrorContext*    pErrContext;    // ErrorContext, w"ahrend der Dialog oben ist
+    SfxErrorContext*    pErrContext;    // error context while dfalog is opened
 
 
     SvxThesaurusDialog_Impl( Window* pParent );
@@ -262,16 +261,16 @@ struct SvxThesaurusDialog_Impl
 SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( Window* pParent ) :
     aWordText       ( pParent, SVX_RES( FT_WORD ) ),
     aWordLB         ( pParent, SVX_RES( LB_WORD ) ),
-    aReplaceText    ( pParent, SVX_RES( FT_REPL ) ),
-    aReplaceEdit    ( pParent, SVX_RES( ED_REPL ) ),
+    aLangMBtn       ( pParent, SVX_RES( MB_LANGUAGE ) ),
     m_aAlternativesText  ( pParent, SVX_RES( FT_THES_ALTERNATIVES ) ),
     m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( pParent ) ),
+    aReplaceText    ( pParent, SVX_RES( FT_REPL ) ),
+    aReplaceEdit    ( pParent, SVX_RES( ED_REPL ) ),
+    aLookUpBtn      ( pParent, SVX_RES( BTN_LOOKUP ) ),
     aFL             ( pParent, SVX_RES( FL_VAR ) ),
+    aHelpBtn        ( pParent, SVX_RES( BTN_THES_HELP ) ),
     aOkBtn          ( pParent, SVX_RES( BTN_THES_OK ) ),
     aCancelBtn      ( pParent, SVX_RES( BTN_THES_CANCEL ) ),
-    aLookUpBtn      ( pParent, SVX_RES( BTN_LOOKUP ) ),
-    aLangMBtn       ( pParent, SVX_RES( MB_LANGUAGE ) ),
-    aHelpBtn        ( pParent, SVX_RES( BTN_THES_HELP ) ),
     aErrStr         (          SVX_RES( STR_ERR_WORDNOTFOUND ) ),
     xThesaurus      ( NULL ),
     aLookUpText     (),
@@ -308,9 +307,9 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
     FreeResource();
 
+    m_pImpl->aWordLB.SetSelectHdl( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
     m_pImpl->aLangMBtn.SetSelectHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
     m_pImpl->aLookUpBtn.SetClickHdl( LINK( this, SvxThesaurusDialog, LookUpHdl_Impl ) );
-    m_pImpl->aWordLB.SetSelectHdl( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
     m_pImpl->m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog, AlternativesSelectHdl_Impl ));
     m_pImpl->m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
 
@@ -491,6 +490,7 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
 
     m_pImpl->aWordLB.SelectEntry( aText );
     m_pImpl->aReplaceEdit.SetText( String() );
+    m_pImpl->m_pAlternativesCT->GrabFocus();
 
     return 0;
 }
@@ -499,11 +499,14 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
 
 IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ListBox *, pBox )
 {
-    String aStr( pBox->GetSelectEntry() );
-    GetReplaceEditString( aStr );
-    m_pImpl->aReplaceEdit.SetText( aStr );
+    if (!m_pImpl->aWordLB.IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
+    {
+        String aStr( pBox->GetSelectEntry() );
+        GetReplaceEditString( aStr );
+        m_pImpl->aReplaceEdit.SetText( aStr );
 
-    LookUpHdl_Impl( &m_pImpl->aCancelBtn );
+        LookUpHdl_Impl( &m_pImpl->aCancelBtn );
+    }
 
     return 0;
 }
