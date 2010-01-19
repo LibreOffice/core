@@ -38,8 +38,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/debug.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _SVSTOR_HXX
@@ -247,7 +247,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
         return uno::Reference< uno::XInterface >(
             SvxCreateNumRule( (SdrModel*)NULL ), uno::UNO_QUERY );
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
+    if (   (0 == aServiceSpecifier.reverseCompareToAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime")))
+        || (0 == aServiceSpecifier.reverseCompareToAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime")))
+       )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }

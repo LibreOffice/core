@@ -45,20 +45,15 @@ module ooo {  module vba {  module excel {
 //=============================================================================
 
 
-interface XPageSetup
+interface XPageSetup : com::sun::star::uno::XInterface
 {
 
-    interface ::ooo::vba::XHelperInterface;
+//  interface ::ooo::vba::XHelperInterface;
 
     //Attributes
     [attribute] string PrintArea;
-    [attribute] double TopMargin;
-    [attribute] double BottomMargin;
-    [attribute] double RightMargin;
-    [attribute] double LeftMargin;
     [attribute] double HeaderMargin;
     [attribute] double FooterMargin;
-    [attribute] long Orientation;
     [attribute] any FitToPagesTall;
     [attribute] any FitToPagesWide;
     [attribute] any Zoom;

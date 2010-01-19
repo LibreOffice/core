@@ -33,7 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewsh.hxx>
@@ -50,7 +50,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 
 #include <dlgutil.hxx>
@@ -65,7 +65,7 @@
 
 #include <gallery.hxx>
 #define GALLERY_THEME "3D"
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 #include <svx/float3d.hxx>
 #include "float3d.hrc"

@@ -38,7 +38,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 
 #include <xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
@@ -52,7 +52,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
 #include <sfx2/evntconf.hxx>

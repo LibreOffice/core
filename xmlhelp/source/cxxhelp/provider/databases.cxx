@@ -40,7 +40,6 @@
 #include <rtl/memory.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/miscopt.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
 #include <string.h>
@@ -52,6 +51,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -137,6 +137,18 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     return aRetURL;
 }
 
+
+// Hold Packages to improve performance (#i106100)
+// The PackageManager implementation seems to completely throw away all cached data
+// as soon as the last reference to a XPackage dies. Maybe this should be changed.
+struct ImplPackageSequenceHolder
+{
+    Sequence< Reference< deployment::XPackage > >   m_aUserPackagesSeq;
+    Sequence< Reference< deployment::XPackage > >   m_aSharedPackagesSeq;
+};
+
+static ImplPackageSequenceHolder* GpPackageSequenceHolder = NULL;
+
 Databases::Databases( sal_Bool showBasic,
                       const rtl::OUString& instPath,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
@@ -187,6 +199,7 @@ Databases::Databases( sal_Bool showBasic,
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
         m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
+    GpPackageSequenceHolder = new ImplPackageSequenceHolder();
 }
 
 Databases::~Databases()
@@ -235,6 +248,7 @@ Databases::~Databases()
         }
     }
 
+    delete GpPackageSequenceHolder;
 }
 
 static bool impl_getZipFile(
@@ -265,41 +279,70 @@ static bool impl_getZipFile(
 
 rtl::OString Databases::getImagesZipFileURL()
 {
-    sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
-    if ( !m_aImagesZipFileURL.getLength() || ( m_nSymbolsStyle != nSymbolsStyle ) )
+    //sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
+    sal_Int16 nSymbolsStyle = 0;
+    try
     {
-        m_nSymbolsStyle = nSymbolsStyle;
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+            m_xSMgr ->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
 
-        rtl::OUString aImageZip;
-        rtl::OUString aSymbolsStyleName = SvtMiscOptions().GetCurrentSymbolsStyleName();
-        bool bFound = false;
+        // set root path
+        uno::Sequence < uno::Any > lParams(1);
+        beans::PropertyValue                       aParam ;
+        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+        aParam.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Office.Common");
+        lParams[0] = uno::makeAny(aParam);
 
-        if ( aSymbolsStyleName.getLength() != 0 )
+        // open it
+        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    lParams) );
+
+        bool bChanged = false;
+        uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
+        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolSet"));
+        if ( (aResult >>= nSymbolsStyle) && m_nSymbolsStyle != nSymbolsStyle )
         {
-            rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
-            aZipName += aSymbolsStyleName;
-            aZipName += rtl::OUString::createFromAscii( ".zip" );
-
-            bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            m_nSymbolsStyle = nSymbolsStyle;
+            bChanged = true;
         }
 
-        if ( ! bFound )
-            bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+        if ( !m_aImagesZipFileURL.getLength() || bChanged )
+        {
+            rtl::OUString aImageZip, aSymbolsStyleName;
+            aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolStyle"));
+            aResult >>= aSymbolsStyleName;
 
-        if ( ! bFound )
-            aImageZip = rtl::OUString();
+            bool bFound = false;
+            if ( aSymbolsStyleName.getLength() != 0 )
+            {
+                rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
+                aZipName += aSymbolsStyleName;
+                aZipName += rtl::OUString::createFromAscii( ".zip" );
 
-        m_aImagesZipFileURL = rtl::OUStringToOString(
-                    rtl::Uri::encode(
-                        aImageZip,
-                        rtl_UriCharClassPchar,
-                        rtl_UriEncodeIgnoreEscapes,
-                        RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+                bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            }
+
+            if ( ! bFound )
+                bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+
+            if ( ! bFound )
+                aImageZip = rtl::OUString();
+
+            m_aImagesZipFileURL = rtl::OUStringToOString(
+                        rtl::Uri::encode(
+                            aImageZip,
+                            rtl_UriCharClassPchar,
+                            rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+        }
+    }
+    catch ( NoSuchElementException const & )
+    {
     }
 
     return m_aImagesZipFileURL;
 }
-
 
 void Databases::replaceName( rtl::OUString& oustring ) const
 {
@@ -1527,6 +1570,8 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        if( GpPackageSequenceHolder != NULL )
+            GpPackageSequenceHolder->m_aUserPackagesSeq = m_aUserPackagesSeq;
 
         m_bUserPackagesLoaded = true;
     }
@@ -1557,6 +1602,8 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
             thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        if( GpPackageSequenceHolder != NULL )
+            GpPackageSequenceHolder->m_aSharedPackagesSeq = m_aSharedPackagesSeq;
 
         m_bSharedPackagesLoaded = true;
     }

@@ -43,7 +43,7 @@
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svditer.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>

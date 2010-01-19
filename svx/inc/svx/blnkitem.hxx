@@ -32,8 +32,8 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif

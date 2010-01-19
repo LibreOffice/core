@@ -61,6 +61,7 @@ interface XControl
     [attribute] double  Left;
     [attribute] double  Top;
     [attribute] string Name;
+    [attribute] string ControlTipText;
 };
 
 //=============================================================================

@@ -38,7 +38,7 @@
 #include <vcl/scrbar.hxx>
 #include <svtools/wizardmachine.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
 
 namespace desktop

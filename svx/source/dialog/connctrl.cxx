@@ -374,7 +374,7 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 void SvxXConnectionPreview::SetStyles()
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
 

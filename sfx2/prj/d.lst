@@ -3,8 +3,6 @@ mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\inc%_EXT%\sfx2
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\inc\sfxslots.ilb %_DEST%\inc%_EXT%\sfxslots.ilb
-..\%__SRC%\inc\sfxslots.ilb* %_DEST%\inc%_EXT%\sfxslots.ilb*
 ..\%__SRC%\lib\sfx.lib %_DEST%\lib%_EXT%\sfx.lib
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
@@ -26,6 +24,8 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\inc\sfx2\dllapi.h %_DEST%\inc%_EXT%\sfx2\dllapi.h
 
+..\sdi\sfx.sdi %_DEST%\inc%_EXT%\sfx2\sfx.sdi
+..\sdi\sfxitems.sdi %_DEST%\inc%_EXT%\sfx2\sfxitems.sdi
 ..\inc\sfx2\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
 ..\inc\sfx2\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
 ..\inc\sfx2\bindings.hxx %_DEST%\inc%_EXT%\sfx2\bindings.hxx

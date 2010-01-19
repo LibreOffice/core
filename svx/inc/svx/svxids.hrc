@@ -31,8 +31,8 @@
 #define _SVX_SVXIDS_HRC
 // include ------------------------------------------------------------------
 
-#include <svtools/memberid.hrc>
-#include <svtools/solar.hrc>
+#include <svl/memberid.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 
@@ -147,7 +147,7 @@
 // --------------------------------------------------------------------------
 // Resource-Id's ? (obsolete??? at least the one beginning with SID???)
 // --------------------------------------------------------------------------
-
+/*
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
 #define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
@@ -196,8 +196,9 @@
 #define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
 #define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
+*/
+
 #define SID_ATTR_PARENTWINDOW           (RID_OFA_START + 255)
-#define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
 
 // --------------------------------------------------------------------------
 // Event-Id's Block 1
@@ -1351,7 +1352,6 @@
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
-#define SID_INSERT_POSTIT                               (SID_SVX_START+1093)
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
 #define SID_NEXT_POSTIT                                 (SID_SVX_START+1095)
 #define SID_PREVIOUS_POSTIT                             (SID_SVX_START+1096)
@@ -1359,9 +1359,10 @@
 #define SID_SHOW_POSTIT                                 (SID_SVX_START+1098)
 #define SID_REPLYTO_POSTIT                              (SID_SVX_START+1099)
 #define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
+#define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               SID_DELETEALLBYAUTHOR_POSTIT + 1
+#define SID_SVX_FIRSTFREE                               SID_INSERT_POSTIT + 1
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

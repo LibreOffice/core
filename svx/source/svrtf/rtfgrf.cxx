@@ -40,11 +40,11 @@
 #include <svtools/rtftoken.h>
 #include <svtools/filter.hxx>
 
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "svxrtf.hxx"
 
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #undef DEBUG_JP
 #endif
 
