@@ -71,6 +71,10 @@ CXX+= /NMttInlines
 CXX+= /NMttNoLines
 .ENDIF
 
+.IF "$(VERBOSE)" != "TRUE"
+NOLOGO*=-nologo
+.ENDIF
+
 # Flags for COMEX == 11
 
 # disable "warning C4675: resolved overload was found by argument-dependent
@@ -223,7 +227,9 @@ CDEFS+=-DWINVER=0x0500 -D_WIN32_IE=0x0500
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
-LINK=link $(NOLOGO) /MACHINE:IX86
+LINK=link /MACHINE:IX86
+    # do *not* add $(NOLOGO) to LINK or LINKFLAGS. Strangely, the wntmsci12 linker links fine then, but exits with
+    # a return value 1, which makes dmake think it failed
 LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
@@ -330,6 +336,9 @@ RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
 RCLINKFLAGS=
 RCSETVERSION=
+
+MT=mt.exe
+MTFLAGS=$(NOLOGO)
 
 
 DLLPOSTFIX=mi

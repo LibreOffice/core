@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -172,7 +172,7 @@ NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
 NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
 .IF "$(GUI)$(COM)"=="WNTGCC"
-XMLSECLIB-MS=-lxmlsec1-mscrypto-1
+XMLSECLIB-MS=-lxmlsec1-mscrypto
 MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(CRYPT32LIB) $(ADVAPI32LIB)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BROOKERLIB=-lbrooker$(DLLPOSTFIX)
@@ -187,6 +187,7 @@ SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
 BASICLIB=-lsb$(DLLPOSTFIX)
+VBAHELPERLIB=-lvbahelper$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -220,12 +221,14 @@ JPEG3RDLIB=-ljpeg
 .ELSE
 JPEG3RDLIB=-ljpeglib
 .ENDIF
-.IF "$(SYSTEM_NEON)" == "YES" || "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(SYSTEM_NEON)" == "YES"
+NEON3RDLIB=-lneon
+.ELIF "$(GUI)$(COM)"=="WNTGCC"
 NEON3RDLIB=-lneon
 .ELIF "$(OS)" == "MACOSX"
-NEON3RDLIB=$(SOLARLIBDIR)/libneon.a
+NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
 .ELSE
-NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
+NEON3RDLIB=-lneon
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
@@ -240,7 +243,7 @@ SFXDEBUGLIB=
 FWELIB=-lfwe$(DLLPOSTFIX)
 FWILIB=-lfwi$(DLLPOSTFIX)
 SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
-SVXMSFILTERLIB=-lsvxmsfilter$(DLLPOSTFIX)
+MSFILTERLIB=-lmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
@@ -262,17 +265,17 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-SYSSHELLLIB=-lsysshell
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
+TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(ZLIB3RDLIB) $(LIBXML2LIB)
+XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
@@ -423,9 +426,11 @@ SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
+VBAHELPERLIB=vbahelper.lib
 TKTLIB=tkt.lib
+SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
-SVXMSFILTERLIB=isvxmsfilter.lib
+MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
@@ -439,7 +444,7 @@ EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
-NEON3RDLIB=neon.lib
+NEON3RDLIB=ineon.lib
 BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
@@ -472,10 +477,10 @@ SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
-SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+TESTSHL2LIB = testshl2.lib
+XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
 .ELSE

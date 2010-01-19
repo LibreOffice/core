@@ -1219,7 +1219,7 @@ sub register_child_with_eis
     };
 
     if ( $@ ) {
-        carp("ERROR: create_child_wortkspace(): EIS database transaction failed. Reason:\n$@\n");
+        carp("ERROR: create_child_workspace(): EIS database transaction failed. Reason:\n$@\n");
         return undef;
     }
     # set EIS_ID directly, since $self->eis_id() is not
@@ -1828,6 +1828,7 @@ sub set_scm_in_eis
     my $self     = shift;
     my $scm_name = shift;
 
+    $scm_name = Eis::to_string($scm_name);
     # check if child workspace is valid
     my $id = $self->eis_id();
     if ( !$id ) {

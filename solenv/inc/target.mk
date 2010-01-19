@@ -55,9 +55,6 @@ target_empty=warn_target_empty
 INCEXT*=.
 INCPRE*=.
 INCPOST*=.
-.IF "$(PRE)"!=""
-ENVINCPRE+=-I$(PRE)/inc
-.ENDIF			# "$(PRE)"!=""
 .IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 UNOINCLUDES=$(SOLARINCDIR)/offuh
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
@@ -66,9 +63,9 @@ SOLARINC+=$(JDKINCS)
 INCLUDE:=
 .EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
@@ -1259,9 +1256,6 @@ CPPUMAKERFLAGS*=-L
 .IF "$(UNOTYPES)" != ""
 # makeing all in one
 .DIRCACHE=no
-.IF "$(ENVINCPRE)"!=""
-MKDEPFLAGS+=-I:$(ENVINCPRE)
-.ENDIF			# "$(ENVINCPRE))"!=""
 .IF "$(OBJFILES)"!=""
 $(OBJFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(OBJFILES)"!=""
@@ -1292,13 +1286,13 @@ $(UNOUCRTARGET) : $(UNOUCRHEADER)
 # keep that one to rebuild single misses
 $(UNOUCRHEADER):
     @noop
-    
+
 $(UNOUCRTARGET) : $(UNOUCRDEP)
 .IF "$(XML2MK_FILES)"!=""
     @@-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)/$(i).mk)
 .ENDIF			# "$(XML2MK_FILES)"!=""
     @@-$(MKDIRHIER) $(UNOUCROUT)
-    $(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
+    $(COMMAND_ECHO)$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
 .ENDIF			# "$(UNOTYPES)" != ""
 
 .IF "$(COMP1RDBTARGETN)"!=""
@@ -1377,36 +1371,38 @@ $(JAVATARGET) : $(GENJAVAFILES)
 
 .IF "$(HXXCOPYFILES)" != ""
 $(HXXCOPYTARGET):	$(HXXCOPYFILES)
-    $(COPY) $(COPYUPDATE) $(HXXCOPYFILES) $(INCCOM) $(CHECKCOPYURESULT)
+    $(COMMAND_ECHO)$(COPY) $(COPYUPDATE) $(HXXCOPYFILES) $(INCCOM) $(CHECKCOPYURESULT)
 .ENDIF
 
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
-    @echo Making $@
+    @echo "Making:   " $@
     @@-$(RM) -f $@
     @tr -d "\015" < $(@:f) > $@
 
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(WITH_LANG)"!=""
-.IF "$(LOCALIZATION_FOUND)"==""
 .IF "$(LOCALIZESDF)"!=""
+
+# dummy target to keep the build happy if not even the .zip exists. localization tools deal with not existing
+# localize.sdf themself
+"$(LOCALIZESDF)%":
+    @echo $(LOCALIZESDF)
+    @@-$(MKDIRHIER) $(@:d)
+    $(TOUCH) $@
+
+.IF "$(LOCALIZATION_FOUND)"==""
+.IF "$(LOCALSDFFILE)"!=""
 "$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)/$(PRJNAME)_$(TARGET)
-    @@$(IFNOTEXIST) $(LOCALIZESDF) $(THEN) unzip -o -d $(COMMONMISC)/$(PRJNAME)_$(TARGET) $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip $(FI)
-    @@-cp -r $(COMMONMISC)/$(PRJNAME)_$(TARGET)/* $(COMMONMISC)/$(PRJNAME)
-    @@-$(RM) -rf $(COMMONMISC)/$(PRJNAME)_$(TARGET)
-.ENDIF			# "$(LOCALIZESDF)"!=""
+    @-unzip -o -d $(COMMONMISC)/$(PRJNAME) $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip $(subst,$(COMMONMISC)/$(PRJNAME)/, $@)
+    @@$(TOUCH) $@
+.ENDIF			# "$(LOCALSDFFILE)"!=""
 .ENDIF			# "$(LOCALIZATION_FOUND)"==""
-.ENDIF			# "$(WITH_LANG)"!=""
-
-.IF "$(LOCALIZESDF)"!=""
-"$(LOCALIZESDF)%" :
-    echo $(LOCALIZESDF)
-    @@-$(MKDIRHIER) $(@:d)
-    @$(TOUCH) $(LOCALIZESDF)
 .ENDIF			# "$(LOCALIZESDF)"!=""
+.ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(EXTUPDATEINFO_NAME)"!=""
 $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
@@ -1415,38 +1411,37 @@ $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
 
 makedoc:
         @@-mkdir $(OUT)/ucrdoc
-        $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)/ucrdoc/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
-#		-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P../$(PRJNAME)/$(IDLPACKAGE) -OH$(PRJ)/../unodoc $(DOCIDLFILES) $(IDLFILES)
+        $(COMMAND_ECHO)$(IDLC) $(VERBOSITY) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)/ucrdoc/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 
 .IF "$(LOCALDBTARGET)"!=""
 $(LOCALDBTARGET) : $(URDFILES) $(DEPIDLFILES)
-    $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)/ucr/$(IDLPACKAGE) $(all_outdated_idl))
-    -$(RM) $@
-    $(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
+    $(COMMAND_ECHO)$(IDLC) $(VERBOSITY) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)/ucr/$(IDLPACKAGE) $(all_outdated_idl))
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
 .ENDIF
 
 .IF "$(LOCALDOCDBTARGET)"!=""
 $(LOCALDOCDBTARGET) : $(URDDOCFILES) $(DEPIDLFILES)
-    $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)/ucrdoc/$(IDLPACKAGE) $(all_outdated_idl))
-    -$(RM) $@
-    $(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
+    $(COMMAND_ECHO)$(IDLC) $(VERBOSITY) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)/ucrdoc/$(IDLPACKAGE) $(all_outdated_idl))
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
 .ENDIF
 
 .IF "$(UNOIDLDBTARGET)"!=""
 $(UNOIDLDBTARGET) : $(UNOIDLDBFILES) $(UNOIDLDBREGS)
-    -$(RM) $@
-    $(REGMERGE) $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
 .IF "$(LOCALREGDB)"!=""
-    $(REGMERGE) $(LOCALREGDB) / $@
+    $(COMMAND_ECHO)$(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBTARGET)"!=""
 
 .IF "$(UNOIDLDBDOCTARGET)"!=""
 $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
-    -$(RM) $@
-    $(REGMERGE) $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
 .IF "$(LOCALREGDB)"!=""
-    $(REGMERGE) $(LOCALREGDB) / $@
+    $(COMMAND_ECHO)$(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBDOCTARGET)"!=""
 
@@ -1512,10 +1507,10 @@ $(TARGETDEPS) : $(LOCALIZE_ME_DEST)
 
 .IF "$(WITH_LANG)"==""
 $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME)
-    -$(RM) $(INCCOM)/$(TARGET)_lastrun.mk
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    $(COPY) $(@:b:+"_tmpl")$(@:e) $@
+    $(COMMAND_ECHO)-$(RM) $(INCCOM)/$(TARGET)_lastrun.mk
+    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(COPY) $(@:b:+"_tmpl")$(@:e) $@
 
 .ELSE			# "$(WITH_LANG)"==""
 #  LASTRUN_MERGED
@@ -1526,10 +1521,10 @@ $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) $(LOCALIZESDF)
 $(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) $(LOCALIZESDF) 
     echo LASTRUN_MERGED:=TRUE > $(INCCOM)/$(TARGET)_lastrun.mk
 .ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m $(LOCALIZESDF) -l all
-    $(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
+    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
 .ENDIF			# "$(WITH_LANG)"==""
 .ENDIF          # "$(LOCALIZE_ME_DEST)"!=""
@@ -1558,10 +1553,9 @@ $(MISC)/$(TARGET)_%.done : %.xrb
 
 .IF "$(COMMONPRJHIDOTHERTARGET)"!=""
 $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
-        @echo ------------------------------
-        @echo Making: $@
+        @echo "Making:   " $@
         @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
-        $(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
+        $(COMMAND_ECHO)$(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
         @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF	    
 
@@ -1707,7 +1701,7 @@ ZIPDEPPHONY=.PHONY
 .ENDIF
 
 last_target:
-    @echo -------------
+    $(NULL)
 
 $(MISC)/$(TARGET)genjava.mk: 	$(IDLFILES)
 
@@ -1730,14 +1724,22 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .IF "$(NOOPT_FLAG)" == ""
 
 $(NOOPTTARGET):
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- NOOPTFILES ---
+.ENDIF
     @dmake $(MFLAGS) $(MAKEFILE) nopt=true $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- NOOPTFILES OVER ---
+.ENDIF
 
 $(NOOPTFILES):
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- NOOPT ---
+.ENDIF
     @dmake $(MFLAGS) $(MAKEFILE) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $@
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- NOOPT OVER ---
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -1750,14 +1752,22 @@ $(NOOPTFILES):
 .IF "$(EXCEPTIONSNOOPT_FLAG)" == ""
 
 $(EXCEPTIONSNOOPTTARGET):
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- EXCEPTIONSNOOPTFILES ---
+.ENDIF
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- EXCEPTIONSNOOPTFILES OVER ---
+.ENDIF
 
 $(EXCEPTIONSNOOPTFILES):
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- EXCEPTIONSNOOPT ---
+.ENDIF
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $@
+.IF "$(VERBOSE)" == "TRUE"
     @echo --- EXCEPTIONSNOOPT OVER ---
+.ENDIF
 
 
 .ENDIF
@@ -1895,7 +1905,7 @@ killsrs:
 
 killres:
 .IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
-    $(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
+    @(COMMAND_ECHO)$(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
     @echo resource files removed!
 .ELSE			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
     @echo no resource files defined!
@@ -1903,20 +1913,20 @@ killres:
 
 killdef:
 .IF "$(DEFTARGETN)" != ""
-    $(RM) $(DEFTARGETN)
+    @(COMMAND_ECHO)$(RM) $(DEFTARGETN)
 .ENDIF
     @echo deffiles weg!
 
 killlib:
 .IF "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
-    $(RM) $(LIB1TARGETN) $(LIB2TARGETN) $(LIB3TARGETN) $(LIB4TARGETN) $(LIB5TARGETN) $(LIB6TARGETN) $(LIB7TARGETN) $(LIB8TARGETN) $(LIB9TARGETN)
+    @(COMMAND_ECHO)$(RM) $(LIB1TARGETN) $(LIB2TARGETN) $(LIB3TARGETN) $(LIB4TARGETN) $(LIB5TARGETN) $(LIB6TARGETN) $(LIB7TARGETN) $(LIB8TARGETN) $(LIB9TARGETN)
 .IF "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
-    $(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
+    @(COMMAND_ECHO)$(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
 .ENDIF			# "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
     @echo lib/archive files removed!
 .ENDIF			# "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
 .IF "$(SLOTARGET)$(OBJTARGET)"!=""
-    $(RM) $(SLOTARGET) $(OBJTARGET)
+    @(COMMAND_ECHO)$(RM) $(SLOTARGET) $(OBJTARGET)
     @echo default lib files removed!
 .ENDIF			# "$(SLOTARGET)$(OBJTARGET)"!=""
     @echo done!
@@ -1963,9 +1973,13 @@ ZIPALLTARGET: \
         $(ZIP9TARGETN)
 .ELSE
 ZIPALLTARGET:
-    @echo ---
+.IF "$(VERBOSE)" != "FALSE"
+    @echo ---------------------------------------
+.ENDIF
     @echo nothing to zip for activated languages!
-    @echo ---
+.IF "$(VERBOSE)" != "FALSE"
+    @echo ---------------------------------------
+.ENDIF
 .ENDIF
 
 
@@ -2015,14 +2029,13 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 
 #new hid.lst trigger with GEN_HID2=TRUE
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
-    @echo Making $@ :
-    @echo ---------------
+    @echo "Making:   " $@
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
-    $(TYPE) $(SOLARCOMMONBINDIR)/hid/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
+    $(COMMAND_ECHO)$(TYPE) $(SOLARCOMMONBINDIR)/hid/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
     @-$(RENAME) $@.$(ROUT).tmp $@
     @-mkdir $(@:d)hid
-    $(PERL) $(SOLARENV)/bin/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv $(FI)
     @-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv
 

@@ -35,8 +35,7 @@
 
 .IF "$(HIDSID$(TNR)PARTICLE)"!=""
 $(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @-$(RM) $@.$(ROUT).tmp $@
     @$(TYPE) $(MISC)/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
     @-$(RM) $@
@@ -45,10 +44,10 @@ $(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
 
 .IF "$(SDI$(TNR)TARGET)"!=""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @-$(RM) $@
-    $(SVIDL) @$(mktmp \
+    $(COMMAND_ECHO)$(SVIDL) @$(mktmp \
+    $(VERBOSITY) \
     -fs$(INCCOMX)/$(SDI$(TNR)NAME).hxx	\
     -fd$(INCCOMX)/$(SDI$(TNR)NAME).ilb	\
     -fm$(MISC)/$(SDI$(TNR)NAME).don	\

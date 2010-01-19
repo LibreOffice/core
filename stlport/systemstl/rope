@@ -33,9 +33,11 @@
 
 #include <functional>
 #include <numeric>
-#include <ext/rope>
 
 #ifdef GCC
+
+#include <ext/rope>
+
 namespace std
 {
 	using __gnu_cxx::rope;
