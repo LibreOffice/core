@@ -91,6 +91,7 @@ Global gAccessibility as Boolean    '///+ gAccessibility => If an accessibility 
 Global gProductName as string        '///+ gProductName => Name of the product (StarOffice, OpenOffice.org, ...)
 Global gMacroSecurityLevel as integer'///+ gMacroSecurityLevel => Macro Security Level (0: Low ... 3: Very High) 
 Global gOfficeVersion as string     '///+ gOfficeVersion => The version number of the office like 3.1, 9.0 ...
+Global gAutoUpdate as boolean     '///+ gAutoUpdate => if office is able to request update streams
 
 '/// - global OLE-objectnames
 global gOLEWriter as String         '///+ gOLEWriter       => OLE-object-name for Writer
