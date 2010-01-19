@@ -32,7 +32,7 @@
 #include "precompiled_basctl.hxx"
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>
 #include <ide_pch.hxx>
@@ -40,7 +40,7 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/sound.hxx>
 #include <svtools/xtextedt.hxx>
@@ -62,7 +62,7 @@
 //#ifndef _SFX_HELP_HXX //autogen
 //#include <sfx2/sfxhelp.hxx>
 //#endif
-#include <svtools/sourceviewconfig.hxx>
+#include <unotools/sourceviewconfig.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
@@ -172,7 +172,7 @@ EditorWindow::EditorWindow( Window* pParent ) :
     pModulWindow = 0;
     pEditView = 0;
     pEditEngine = 0;
-    pSourceViewConfig = new svt::SourceViewConfig;
+    pSourceViewConfig = new utl::SourceViewConfig;
     bHighlightning = FALSE;
     pProgress = 0;
     nCurTextWidth = 0;
@@ -181,15 +181,14 @@ EditorWindow::EditorWindow( Window* pParent ) :
     SetPointer( Pointer( POINTER_TEXT ) );
 
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
-
-    StartListening( *pSourceViewConfig );
+    pSourceViewConfig->AddListener(this);
 }
 
 
 
 __EXPORT EditorWindow::~EditorWindow()
 {
-    EndListening( *pSourceViewConfig );
+    pSourceViewConfig->RemoveListener(this);
     delete pSourceViewConfig;
 
     aSyntaxIdleTimer.Stop();
@@ -662,7 +661,7 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
     }
 }
 
-void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
     {
@@ -718,10 +717,11 @@ void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
     }
-    else if ( &rBC == pSourceViewConfig )
-    {
-        ImplSetFont();
-    }
+}
+
+void EditorWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+{
+    ImplSetFont();
 }
 
 void EditorWindow::SetScrollBarRanges()
@@ -944,6 +944,7 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     pModulWindow = 0;
     nCurYOffset = 0;
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
+    m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
     nMarkerPos = MARKER_NOMARKER;
 
     // nCurYOffset merken und nicht von EditEngine holen.
@@ -1161,6 +1162,7 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
             != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
         {
             setBackgroundColor(aColor);
+            m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
             Invalidate();
         }
     }
@@ -1169,7 +1171,6 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 void BreakPointWindow::setBackgroundColor(Color aColor)
 {
     SetBackground(Wallpaper(aColor));
-    m_bHighContrastMode = aColor.IsDark();
 }
 
 

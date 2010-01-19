@@ -72,6 +72,8 @@
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <accessibility/extended/AccessibleGridControl.hxx>
+#include <svtools/accessibletable.hxx>
 
 #include <floatingwindowaccessible.hxx>
 
@@ -94,6 +96,7 @@ inline bool hasFloatingChild(Window *pWindow)
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
     using namespace ::svt;
+    using namespace ::svt::table;
 
     //================================================================
     //= IAccessibleFactory
@@ -148,6 +151,12 @@ inline bool hasFloatingChild(Window *pWindow)
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const;
+
+        virtual IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                IAccessibleTable& _rTable
             ) const;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -409,6 +418,13 @@ inline bool hasFloatingChild(Window *pWindow)
         const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox ) const
     {
         return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
+    }
+
+    //--------------------------------------------------------------------
+    IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
+        const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
+    {
+        return new AccessibleGridControlAccess( _rxParent, _rTable );
     }
 
     //--------------------------------------------------------------------

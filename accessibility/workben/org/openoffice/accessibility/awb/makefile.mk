@@ -68,7 +68,7 @@ USE_JAVAVER:=TRUE
 .INCLUDE :  settings.mk
 
 .IF "$(JAVAVER:s/.//)" >= "140" 
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
+JARFILES = jurt.jar unoil.jar ridl.jar 
 
 .INCLUDE : makefile.common
 

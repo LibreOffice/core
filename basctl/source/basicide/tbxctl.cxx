@@ -42,7 +42,7 @@
 #include <tbxctl.hrc>
 #include <idetemp.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -186,7 +186,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
-                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
                 ToolBox& rBox = GetToolBox();
                 rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;

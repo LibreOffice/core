@@ -1025,6 +1025,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             hr = CreateFrameOldWay( mOffWin,
                             di.prcBounds->right - di.prcBounds->left,
                             di.prcBounds->bottom - di.prcBounds->top );
+
             if( !SUCCEEDED( hr ) )
             {
                 // if the frame can not be opened do not try any more
@@ -1038,6 +1039,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
         {
             hr = LoadURLToFrame();
             mbLoad = FALSE;
+
             if( !SUCCEEDED( hr ) )
             {
                 // if the document can not be opened do not try any more

@@ -107,7 +107,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
         try
         {
-            String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             FaxWizardDialogImpl lw = new FaxWizardDialogImpl(xLocMSF);
             lw.startWizard(xLocMSF, null);

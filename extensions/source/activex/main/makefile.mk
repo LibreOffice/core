@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -49,6 +49,10 @@ LIBTARGET=NO
 USE_DEFFILE=YES
 UWINAPILIB=
 
+.IF "$(BUILD_X64)"!=""
+USE_DEFFILE_X64=TRUE
+.ENDIF
+
 INCPRE+=$(foreach,i,$(ATL_INCLUDE) -I$(i)) \
     -I$(MISC) \
 
@@ -58,9 +62,6 @@ INCPRE+=$(foreach,i,$(ATL_INCLUDE) -I$(i)) \
 .IF "$(PRODUCT)"!=""
 RC+=-DPRODUCT
 .ENDIF
-.IF "$(USE_STLP_DEBUG)"!=""
-CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 RCFILES=\
         $(TARGET).rc
@@ -86,11 +87,7 @@ SHL1STDLIBS=\
 
 .IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)" > "001300000000"
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -110,9 +107,51 @@ SHL1RES=$(RES)$/$(TARGET).res
 
 .ENDIF
 
+.IF "$(BUILD_X64)"!=""
+# -------------------- x64 -----------------------
+
+CDEFS_X64+:=$(foreach,i,$(CDEFS) $(subst,-D_X86_=1,  $i))
+LIBTARGET_X64=NO
+USE_DEFFILE_X64=YES
+UWINAPILIB_X64=
+
+SLOFILES_X64= \
+    $(SLO_X64)$/so_activex.obj \
+    $(SLO_X64)$/SOActiveX.obj \
+    $(SLO_X64)$/SOComWindowPeer.obj \
+    $(SLO_X64)$/SODispatchInterceptor.obj \
+    $(SLO_X64)$/SOActionsApproval.obj \
+    $(SLO_X64)$/StdAfx2.obj
+
+SHL1TARGET_X64=$(TARGET)
+
+SHL1STDLIBS_X64+=\
+    $(UUIDLIB_X64) \
+    $(ADVAPI32LIB_X64) \
+    $(OLE32LIB_X64) \
+    $(OLEAUT32LIB_X64) \
+    $(GDI32LIB_X64) \
+    $(URLMONLIB_X64) \
+    $(SHLWAPILIB_X64) \
+    $(KERNEL32LIB_X64) \
+    $(USER32LIB_X64) \
+    $(MSVCRT_X64) \
+    $(MSVCPRT_X64) \
+    $(OLDNAMESLIB_X64)
+
+SHL1OBJS_X64=$(SLOFILES_X64)
+SHL1DEF_X64=$(TARGET).def
+
+SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
+
+.ENDIF # "$(BUILD_X64)"!=""
+
 # --- Targets ----------------------------------
 
+.INCLUDE : set_wntx64.mk
+VERSIONOBJ_X64=
 .INCLUDE : target.mk
+.INCLUDE : tg_wntx64.mk
 
 $(MISC)$/envsettings.h : makefile.mk
     -$(RM) $@

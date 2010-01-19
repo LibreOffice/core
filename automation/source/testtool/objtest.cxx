@@ -58,7 +58,7 @@ using namespace com::sun::star::devtools;
 #include <vcl/svapp.hxx>
 #endif
 #include <svtools/stringtransfer.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 //#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
 //#endif
@@ -495,8 +495,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
-#elif defined IRIX
-    abGP.Append( "06" );
 #elif defined HPUX
     abGP.Append( "07" );
 #elif defined FREEBSD
@@ -521,6 +519,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "20" );  // Linux ia64
 #elif defined LINUX && defined S390
     abGP.Append( "21" );  // Linux S390
+#elif defined LINUX && defined HPPA
+    abGP.Append( "22" );  // Linux PA-RISC
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif

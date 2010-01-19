@@ -41,8 +41,8 @@
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -54,6 +54,7 @@
 
 #include <list>
 #include <set>
+#include <string.h>
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0

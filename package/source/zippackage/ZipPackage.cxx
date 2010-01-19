@@ -135,25 +135,6 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
     return ( aSystemPath.getLength() != 0 );
 }
 
-class PostinitializationGuard
-{
-    uno::Reference< io::XInputStream > m_xTempStream;
-
-    ZipPackage&                        m_rZipPackage;
-
-public:
-    PostinitializationGuard( const uno::Reference< io::XInputStream >& xTempStream,
-                             ZipPackage& rZipPackage )
-    : m_xTempStream( xTempStream )
-    , m_rZipPackage( rZipPackage )
-    {}
-
-    virtual ~PostinitializationGuard()
-    {
-        m_rZipPackage.ConnectTo( m_xTempStream );
-    }
-};
-
 }
 
 //===========================================================================
@@ -201,6 +182,7 @@ ZipPackage::ZipPackage (const uno::Reference < XMultiServiceFactory > &xNewFacto
 : m_aMutexHolder( new SotMutexHolder )
 , m_bHasEncryptedEntries ( sal_False )
 , m_bHasNonEncryptedEntries ( sal_False )
+, m_bInconsistent ( sal_False )
 , m_bUseManifest ( sal_True )
 , m_bForceRecovery ( sal_False )
 , m_bMediaTypeFallbackUsed ( sal_False )
@@ -426,20 +408,23 @@ void ZipPackage::parseManifest()
             m_xRootFolder->removeByName( sMimetype );
         }
 
+        m_bInconsistent = m_pRootFolder->LookForUnexpectedODF12Streams( ::rtl::OUString() );
+
         sal_Bool bODF12AndOlder = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
-        if ( !m_bForceRecovery && bODF12AndOlder && m_pRootFolder->LookForUnexpectedODF12Streams( ::rtl::OUString() ) )
+        if ( !m_bForceRecovery && bODF12AndOlder && m_bInconsistent )
         {
-            // this is an ODF1.2 document that contains streams not referred in the manifest.xml
+            // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
+            // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
+            // should be checked later
             throw ZipIOException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "there are streams not referred in manifest.xml\n" ) ),
                 uno::Reference< uno::XInterface >() );
         }
 
+        // in case it is a correct ODF1.2 document, the version must be set
+        // and the META-INF folder is reserved for package format
         if ( bODF12AndOlder )
-        {
-            // it is ODF1.2 or later, let the META-INF folder be unavailable for user
             m_xRootFolder->removeByName( sMeta );
-        }
     }
 }
 
@@ -1366,8 +1351,18 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         uno::Reference< io::XSeekable > xTempSeek( xTempInStream, uno::UNO_QUERY_THROW );
 
-        // switch to the new temporary stream only after the transfer
-        PostinitializationGuard aPostInitGuard( xTempInStream, *this );
+        try
+        {
+            xTempSeek->seek( 0 );
+        }
+        catch( uno::Exception& r )
+        {
+            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Temporary file should be seekable!" ) ),
+                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+        }
+
+        // connect to the temporary stream
+        ConnectTo( xTempInStream );
 
         if ( m_eMode == e_IMode_XStream )
         {
@@ -1377,8 +1372,6 @@ void SAL_CALL ZipPackage::commitChanges()
             // preparation for copy step
             try
             {
-                xTempSeek->seek( 0 );
-
                 xOutputStream = m_xStream->getOutputStream();
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
                 if ( !xTruncate.is() )
@@ -1633,6 +1626,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") )
       ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasNonEncryptedEntries") )
+      ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsInconsistent") )
       ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaTypeFallbackUsed") ) )
         throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
@@ -1669,6 +1663,11 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasNonEncryptedEntries" ) ) )
     {
         aAny <<= m_bHasNonEncryptedEntries;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "IsInconsistent" ) ) )
+    {
+        aAny <<= m_bInconsistent;
         return aAny;
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "UseManifest" ) ) )

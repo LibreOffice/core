@@ -1,4 +1,4 @@
-ac  accessibility	:    l10n tools jurt offuh unoil vcl jvmaccess cppu sal toolkit svtools NULL
+ac  accessibility	:    l10n tools jurt offuh unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools NULL
 ac	accessibility                                         	usr1	-	all	ac_mkout NULL
 ac	accessibility\inc                                      	nmake	-	all	ac_inc NULL
 ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	w	ac_ooja ac_inc NULL
@@ -14,4 +14,5 @@ ac accessibility\workben\org\openoffice\accessibility\misc          nmake   -   
 ac accessibility\workben\org\openoffice\accessibility\awb\canvas    nmake   -   all ac_awb_canvas ac_awb_tree NULL
 ac accessibility\workben\org\openoffice\accessibility\awb\tree      nmake   -   all ac_awb_tree ac_awb_misc NULL
 ac accessibility\workben\org\openoffice\accessibility\awb\view      nmake   -   all ac_awb_view ac_awb_view_text NULL
-ac accessibility\workben\org\openoffice\accessibility\awb\view\text nmake   -   all ac_awb_view_text NULL
+# dependency on ac_awb_misc to avoid concurrent creation of java_ver.mk
+ac accessibility\workben\org\openoffice\accessibility\awb\view\text nmake   -   all ac_awb_view_text ac_awb_misc NULL

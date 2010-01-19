@@ -32,17 +32,13 @@
 #include "precompiled_extensions.hxx"
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "bibliography.hrc"
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>
