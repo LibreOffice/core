@@ -42,7 +42,6 @@
 
 sal_Char __READONLY_DATA sHash[]                = "#";
 sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
-sal_Char __READONLY_DATA sPortalFileScheme[]    = "vnd.sun.star.wfs://";
 sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
 sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
@@ -173,8 +172,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
     // get data from standard-fields
     aStrURL = GetCurrentURL();
 
-    if( aStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
-        aStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
+    if( aStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
          aStrURL=aEmptyStr;
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
@@ -215,8 +213,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
         GetParent() );
     String aOldURL( GetCurrentURL() );
-    if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) ||
-        aOldURL.EqualsIgnoreCaseAscii( sPortalFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
+    if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
     {
         aDlg.SetDisplayDirectory( aOldURL );
     }
@@ -253,15 +250,13 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickTargetHdl_Impl, void *, EMPTYARG )
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
          maStrURL == aEmptyStr                        ||
          maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
-         maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) ||
          maStrURL.SearchAscii( sHash ) == 0 )
     {
         mpMarkWnd->SetError( LERR_NOERROR );
 
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
-             maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
+        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
@@ -308,8 +303,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
     {
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
-             maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
+        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
