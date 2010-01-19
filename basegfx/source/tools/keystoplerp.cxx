@@ -28,6 +28,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
+
 #include "basegfx/tools/keystoplerp.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
