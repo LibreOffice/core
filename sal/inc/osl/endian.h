@@ -118,20 +118,6 @@ extern "C" {
 #   include <machine/param.h>
 #endif
 
-#ifdef IRIX
-#   include <sys/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
-#   undef _PDP_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#   undef _LITTLE_ENDIAN
-#   undef _PDP_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#   undef _LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
-#   endif
-#endif
-
 #ifdef _WIN16
 #   define  _LITTLE_ENDIAN
 #endif
@@ -166,8 +152,7 @@ extern "C" {
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)   && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)   && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(IRIX)   && \
-    !defined(MACOSX) && !defined(FREEBSD)
+    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD)
 #   error "Target platform not specified !"
 #endif
 

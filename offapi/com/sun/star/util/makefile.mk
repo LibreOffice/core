@@ -53,6 +53,7 @@ IDLFILES=\
     DateTime.idl\
     DateTimeRange.idl\
     DiskFullException.idl\
+    Duration.idl\
     ElementChange.idl \
     Endianness.idl \
     FileIOException.idl\
