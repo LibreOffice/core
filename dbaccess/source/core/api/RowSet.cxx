@@ -1775,7 +1775,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache );
+            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
                 m_nPrivileges = Privilege::SELECT;
