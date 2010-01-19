@@ -49,6 +49,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // =======================================================================
 //
@@ -153,7 +154,8 @@ void ImplAddMissingBands (
     // We still have to cover two cases:
     // 1. The region does not yet contain any bands.
     // 2. The intervall nTop->nBottom extends past the bottom most band.
-    if (nCurrentTop < nBottom && (pBand==NULL || nBottom>pBand->mnYBottom))
+    if (nCurrentTop <= nBottom
+        && (pBand==NULL || nBottom>pBand->mnYBottom))
     {
         // When there is no previous band then the new one will be the
         // first.  Otherwise the new band is inserted behind the last band.
@@ -232,8 +234,9 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
             ImplRegionBand* pTopBand = pBand;
             // If necessary split the band at nTop so that nTop is contained
             // in the lower band.
-            if (   // Prevent the current band from becoming 0 pixel high
-                pBand->mnYTop<nTop
+            if (pBand!=NULL
+                   // Prevent the current band from becoming 0 pixel high
+                && pBand->mnYTop<nTop
                    // this allows the lowest pixel of the band to be split off
                 && pBand->mnYBottom>=nTop
                    // do not split a band that is just one pixel high
@@ -248,8 +251,9 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
                 pBand = pBand->mpNextBand;
             // The lowest band may have to be split at nBottom so that
             // nBottom itself remains in the upper band.
-            if (   // allow the current band becoming 1 pixel high
-                pBand->mnYTop<=nBottom
+            if (pBand!=NULL
+                   // allow the current band becoming 1 pixel high
+                && pBand->mnYTop<=nBottom
                    // prevent splitting off a band that is 0 pixel high
                 && pBand->mnYBottom>nBottom
                    // do not split a band that is just one pixel high
@@ -1300,9 +1304,7 @@ void Region::Move( long nHorzMove, long nVertMove )
         mpImplRegion->mpPolyPoly->Move( nHorzMove, nVertMove );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate( nHorzMove, nVertMove );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
     }
     else
     {
@@ -1343,9 +1345,7 @@ void Region::Scale( double fScaleX, double fScaleY )
         mpImplRegion->mpPolyPoly->Scale( fScaleX, fScaleY );
     else if( mpImplRegion->mpB2DPolyPoly )
     {
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.scale( fScaleX, fScaleY );
-        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+        mpImplRegion->mpB2DPolyPoly->transform(basegfx::tools::createScaleB2DHomMatrix(fScaleX, fScaleY));
     }
     else
     {
@@ -2456,6 +2456,14 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                     }
                 }
 
+                if( rIStrm.IsEof() )
+                {
+                    DBG_ERROR( "premature end of region stream" );
+                    delete rRegion.mpImplRegion;
+                    rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
+                    return rIStrm;
+                }
+
                 // get next header
                 rIStrm >> nTmp16;
             }
@@ -2534,7 +2542,13 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         rOStrm << bHasPolyPolygon;
 
         if( bHasPolyPolygon )
-            rOStrm << rRegion.GetPolyPolygon();
+        {
+            // #i105373#
+            PolyPolygon aNoCurvePolyPolygon;
+            rRegion.GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+            rOStrm << aNoCurvePolyPolygon;
+        }
     }
 
     return rOStrm;

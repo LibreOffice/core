@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 
 Bitmap BMP_HELP_AGENT_IMAGE

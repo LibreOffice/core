@@ -143,6 +143,7 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
     virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
 

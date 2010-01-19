@@ -88,18 +88,6 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 
 // ------------------------------------------------------------------------
 
-void ImplWritePoly( SvStream& rOStm, const Polygon& rPoly )
-{
-    INT32 nSize = rPoly.GetSize();
-
-    rOStm << nSize;
-
-    for( INT32 i = 0; i < nSize; i++ )
-        rOStm << rPoly[ (USHORT) i ];
-}
-
-// ------------------------------------------------------------------------
-
 void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
 {
     Polygon aPoly;
@@ -131,13 +119,17 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 
     for( n = 0; n < nPoly; n++ )
     {
-        const Polygon&  rPoly = rPolyPoly[ n ];
-        const USHORT    nSize = rPoly.GetSize();
+        // #i102224# Here the evtl. curved nature of Polygon was
+        // ignored (for all those Years). Adapted to at least write
+        // a polygon representing the curve as good as possible
+         Polygon aSimplePoly;
+         rPolyPoly[n].AdaptiveSubdivide(aSimplePoly);
+         const USHORT nSize(aSimplePoly.GetSize());
 
         rOStm << (INT32) nSize;
 
         for( USHORT j = 0; j < nSize; j++ )
-            rOStm << rPoly[ j ];
+            rOStm << aSimplePoly[ j ];
     }
 }
 
@@ -378,6 +370,128 @@ void ImplSkipActions( SvStream& rIStm, ULONG nSkipCount )
     }
 }
 
+// ------------------------------------------------------------------------
+
+bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPolyPolygon, bool bOnlyWhenCurve)
+{
+    const sal_uInt16 nPolygonCount(rPolyPolygon.Count());
+
+    if(nPolygonCount)
+    {
+        sal_uInt32 nAllPolygonCount(0);
+        sal_uInt32 nAllPointCount(0);
+        sal_uInt32 nAllFlagCount(0);
+        sal_uInt16 a(0);
+
+        for(a = 0; a < nPolygonCount; a++)
+        {
+            const Polygon& rCandidate = rPolyPolygon.GetObject(a);
+            const sal_uInt16 nPointCount(rCandidate.GetSize());
+
+            if(nPointCount)
+            {
+                nAllPolygonCount++;
+                nAllPointCount += nPointCount;
+
+                if(rCandidate.HasFlags())
+                {
+                    nAllFlagCount += nPointCount;
+                }
+            }
+        }
+
+        if((bOnlyWhenCurve && nAllFlagCount) || (!bOnlyWhenCurve && nAllPointCount))
+        {
+            rOStm << (INT16) GDI_EXTENDEDPOLYGON_ACTION;
+
+            const sal_Int32 nActionSize(
+                4 +                         // Action size
+                2 +                         // PolygonCount
+                (nAllPolygonCount * 2) +    // Points per polygon
+                (nAllPointCount << 3) +     // Points themselves
+                nAllPolygonCount +          // Bool if (when poly has points) it has flags, too
+                nAllFlagCount);             // Flags themselves
+
+            rOStm << nActionSize;
+            rOStm << (sal_uInt16)nAllPolygonCount;
+
+            for(a = 0; a < nPolygonCount; a++)
+            {
+                const Polygon& rCandidate = rPolyPolygon.GetObject(a);
+                const sal_uInt16 nPointCount(rCandidate.GetSize());
+
+                if(nPointCount)
+                {
+                    rOStm << nPointCount;
+
+                    for(sal_uInt16 b(0); b < nPointCount; b++)
+                    {
+                        rOStm << rCandidate[b];
+                    }
+
+                    if(rCandidate.HasFlags())
+                    {
+                        rOStm << (BYTE)true;
+
+                        for(sal_uInt16 c(0); c < nPointCount; c++)
+                        {
+                            rOStm << (BYTE)rCandidate.GetFlags(c);
+                        }
+                    }
+                    else
+                    {
+                        rOStm << (BYTE)false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ------------------------------------------------------------------------
+
+void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
+{
+    rPolyPoly.Clear();
+    sal_uInt16 nPolygonCount(0);
+    rIStm >> nPolygonCount;
+
+    for(sal_uInt16 a(0); a < nPolygonCount; a++)
+    {
+        sal_uInt16 nPointCount(0);
+        rIStm >> nPointCount;
+        Polygon aCandidate(nPointCount);
+
+        if(nPointCount)
+        {
+            for(sal_uInt16 b(0); b < nPointCount; b++)
+            {
+                rIStm >> aCandidate[b];
+            }
+
+            BYTE bHasFlags(false);
+            rIStm >> bHasFlags;
+
+            if(bHasFlags)
+            {
+                BYTE aPolyFlags(0);
+
+                for(sal_uInt16 c(0); c < nPointCount; c++)
+                {
+                    rIStm >> aPolyFlags;
+                    aCandidate.SetFlags(c, (PolyFlags)aPolyFlags);
+                }
+            }
+        }
+
+        rPolyPoly.Insert(aCandidate);
+    }
+}
+
 // ----------------
 // - SVMConverter -
 // ----------------
@@ -450,6 +564,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
+        sal_uInt32 nLastPolygonAction(0);
 
         for( INT32 i = 0L; i < nActions; i++ )
         {
@@ -480,6 +595,99 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     rIStm >> aPt >> aPt1;
                     rMtf.AddAction( new MetaLineAction( aPt, aPt1, aLineInfo ) );
+                }
+                break;
+
+                case (GDI_LINEJOIN_ACTION) :
+                {
+                    INT16 nLineJoin(0);
+                    rIStm >> nLineJoin;
+                    aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
+                }
+                break;
+
+                case (GDI_LINEDASHDOT_ACTION) :
+                {
+                    INT16 a(0);
+                    INT32 b(0);
+
+                    rIStm >> a; aLineInfo.SetDashCount(a);
+                    rIStm >> b; aLineInfo.SetDashLen(b);
+                    rIStm >> a; aLineInfo.SetDotCount(a);
+                    rIStm >> b; aLineInfo.SetDotLen(b);
+                    rIStm >> b; aLineInfo.SetDistance(b);
+
+                    if(((aLineInfo.GetDashCount() && aLineInfo.GetDashLen())
+                        || (aLineInfo.GetDotCount() && aLineInfo.GetDotLen()))
+                        && aLineInfo.GetDistance())
+                    {
+                        aLineInfo.SetStyle(LINE_DASH);
+                    }
+                }
+                break;
+
+                case (GDI_EXTENDEDPOLYGON_ACTION) :
+                {
+                    // read the PolyPolygon in every case
+                    PolyPolygon aInputPolyPolygon;
+                    ImplReadExtendedPolyPolygonAction(rIStm, aInputPolyPolygon);
+
+                    // now check if it can be set somewhere
+                    if(nLastPolygonAction < rMtf.GetActionCount())
+                    {
+                        MetaPolyLineAction* pPolyLineAction = dynamic_cast< MetaPolyLineAction* >(rMtf.GetAction(nLastPolygonAction));
+
+                        if(pPolyLineAction)
+                        {
+                            // replace MetaPolyLineAction when we have a single polygon. Do not rely on the
+                            // same point count; the originally written GDI_POLYLINE_ACTION may have been
+                            // Subdivided for better quality for older usages
+                            if(1 == aInputPolyPolygon.Count())
+                            {
+                                rMtf.ReplaceAction(
+                                    new MetaPolyLineAction(
+                                        aInputPolyPolygon.GetObject(0),
+                                        pPolyLineAction->GetLineInfo()),
+                                    nLastPolygonAction);
+                                pPolyLineAction->Delete();
+                            }
+                        }
+                        else
+                        {
+                            MetaPolyPolygonAction* pPolyPolygonAction = dynamic_cast< MetaPolyPolygonAction* >(rMtf.GetAction(nLastPolygonAction));
+
+                            if(pPolyPolygonAction)
+                            {
+                                // replace MetaPolyPolygonAction when we have a curved polygon. Do rely on the
+                                // same sub-polygon count
+                                if(pPolyPolygonAction->GetPolyPolygon().Count() == aInputPolyPolygon.Count())
+                                {
+                                    rMtf.ReplaceAction(
+                                        new MetaPolyPolygonAction(
+                                            aInputPolyPolygon),
+                                        nLastPolygonAction);
+                                    pPolyPolygonAction->Delete();
+                                }
+                            }
+                            else
+                            {
+                                MetaPolygonAction* pPolygonAction = dynamic_cast< MetaPolygonAction* >(rMtf.GetAction(nLastPolygonAction));
+
+                                if(pPolygonAction)
+                                {
+                                    // replace MetaPolygonAction
+                                    if(1 == aInputPolyPolygon.Count())
+                                    {
+                                        rMtf.ReplaceAction(
+                                            new MetaPolygonAction(
+                                                aInputPolyPolygon.GetObject(0)),
+                                            nLastPolygonAction);
+                                        pPolygonAction->Delete();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
 
@@ -573,6 +781,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_POLYLINE_ACTION ):
                 {
                     ImplReadPoly( rIStm, aActionPoly );
+                    nLastPolygonAction = rMtf.GetActionCount();
 
                     if( bFatLine )
                         rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
@@ -594,7 +803,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
                     }
                     else
+                    {
+                        nLastPolygonAction = rMtf.GetActionCount();
                         rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
+                    }
                 }
                 break;
 
@@ -615,7 +827,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             rMtf.AddAction( new MetaPolyLineAction( aPolyPoly[ nPoly ], aLineInfo ) );
                     }
                     else
+                    {
+                        nLastPolygonAction = rMtf.GetActionCount();
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                    }
                 }
                 break;
 
@@ -1247,12 +1462,32 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaLineAction* pAct = (MetaLineAction*) pAction;
                 const LineInfo& rInfo = pAct->GetLineInfo();
-                const BOOL      bFatLine = ( !rInfo.IsDefault() && ( LINE_NONE != rInfo.GetStyle() ) );
+                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
                 {
                     ImplWritePushAction( rOStm );
                     ImplWriteLineColor( rOStm, rLineCol, 1, rInfo.GetWidth() );
+
+                    if(bLineJoin)
+                    {
+                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
+                        rOStm << (INT32) 6;
+                        rOStm << (INT16) rInfo.GetLineJoin();
+                    }
+
+                    if(bLineDashDot)
+                    {
+                        rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
+                        rOStm << (INT32) 4 + 16;
+                        rOStm << (INT16)rInfo.GetDashCount();
+                        rOStm << (INT32)rInfo.GetDashLen();
+                        rOStm << (INT16)rInfo.GetDotCount();
+                        rOStm << (INT32)rInfo.GetDotLen();
+                        rOStm << (INT32)rInfo.GetDistance();
+                    }
                 }
 
                 rOStm << (INT16) GDI_LINE_ACTION;
@@ -1265,6 +1500,16 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 {
                     ImplWritePopAction( rOStm );
                     nCount += 3;
+
+                    if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
+
+                    if(bLineDashDot)
+                    {
+                        nCount += 1;
+                    }
                 }
             }
             break;
@@ -1345,23 +1590,47 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 for( USHORT n = 0; n < nPoints; n++ )
                     rOStm << aChordPoly[ n ];
-
                 nCount++;
             }
             break;
 
             case( META_POLYLINE_ACTION ):
             {
+                // #i102224#
                 MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
-                const Polygon&      rPoly = pAct->GetPolygon();
-                const LineInfo&     rInfo = pAct->GetLineInfo();
-                const USHORT        nPoints = rPoly.GetSize();
-                const BOOL          bFatLine = ( !rInfo.IsDefault() && ( LINE_NONE != rInfo.GetStyle() ) );
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
+                 Polygon aSimplePoly;
+                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
+                const LineInfo& rInfo = pAct->GetLineInfo();
+                 const USHORT nPoints(aSimplePoly.GetSize());
+                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
                 {
                     ImplWritePushAction( rOStm );
                     ImplWriteLineColor( rOStm, rLineCol, 1, rInfo.GetWidth() );
+
+                    if(bLineJoin)
+                    {
+                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
+                        rOStm << (INT32) 6;
+                        rOStm << (INT16) rInfo.GetLineJoin();
+                    }
+                }
+
+                if(bLineDashDot)
+                {
+                    rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
+                    rOStm << (INT32) 4 + 16;
+                    rOStm << (INT16)rInfo.GetDashCount();
+                    rOStm << (INT32)rInfo.GetDashLen();
+                    rOStm << (INT16)rInfo.GetDotCount();
+                    rOStm << (INT32)rInfo.GetDotLen();
+                    rOStm << (INT32)rInfo.GetDistance();
                 }
 
                 rOStm << (INT16) GDI_POLYLINE_ACTION;
@@ -1369,32 +1638,60 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (INT32) nPoints;
 
                 for( USHORT n = 0; n < nPoints; n++ )
-                    rOStm << rPoly[ n ];
+                {
+                    rOStm << aSimplePoly[ n ];
+                }
 
                 nCount++;
+
+                const PolyPolygon aPolyPolygon(pAct->GetPolygon());
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
+                {
+                    nCount++;
+                }
 
                 if( bFatLine )
                 {
                     ImplWritePopAction( rOStm );
                     nCount += 3;
+
+                    if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
+                }
+
+                if(bLineDashDot)
+                {
+                    nCount += 1;
                 }
             }
             break;
 
             case( META_POLYGON_ACTION ):
             {
-                MetaPolygonAction*  pAct = (MetaPolygonAction*) pAction;
-                const Polygon&      rPoly = pAct->GetPolygon();
-                const USHORT        nPoints = rPoly.GetSize();
+                MetaPolygonAction* pAct = (MetaPolygonAction*)pAction;
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
+                 Polygon aSimplePoly;
+                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
+                const USHORT nPoints(aSimplePoly.GetSize());
 
                 rOStm << (INT16) GDI_POLYGON_ACTION;
                 rOStm << (INT32) ( 8 + ( nPoints << 3 ) );
                 rOStm << (INT32) nPoints;
 
                 for( USHORT n = 0; n < nPoints; n++ )
-                    rOStm << rPoly[ n ];
+                    rOStm << aSimplePoly[ n ];
 
                 nCount++;
+
+                const PolyPolygon aPolyPolygon(pAct->GetPolygon());
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
+                {
+                    nCount++;
+                }
             }
             break;
 
@@ -1403,6 +1700,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaPolyPolygonAction* pAct = (MetaPolyPolygonAction*) pAction;
                 ImplWritePolyPolyAction( rOStm, pAct->GetPolyPolygon() );
                 nCount++;
+
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, pAct->GetPolyPolygon(), true))
+                {
+                    nCount++;
+                }
             }
             break;
 

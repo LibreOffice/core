@@ -48,6 +48,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
@@ -93,9 +94,7 @@ namespace cppcanvas
                                    NULL,
                                    &rState.fontRotation );
 
-                ::basegfx::B2DHomMatrix aLocalTransformation;
-
-                aLocalTransformation.rotate( rState.fontRotation );
+                basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createRotateB2DHomMatrix(rState.fontRotation));
                 aLocalTransformation.translate( rStartPoint.getX(),
                                                 rStartPoint.getY() );
                 ::canvas::tools::appendToRenderState( o_rRenderState,

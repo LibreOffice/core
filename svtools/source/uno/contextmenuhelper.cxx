@@ -611,7 +611,7 @@ ContextMenuHelper::completeMenuProperties(
     // menu correctly.
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
-    bool  bIsHiContrast( rSettings.GetMenuColor().IsDark() );
+    bool  bIsHiContrast( rSettings.GetHighContrastMode() );
 
     if ( pMenu )
     {

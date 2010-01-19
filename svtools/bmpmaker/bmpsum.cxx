@@ -45,7 +45,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngread.hxx>
 
-#include "svtools/solar.hrc"
+#include "svl/solar.hrc"
 
 #define EXIT_NOERROR        0x00000000
 #define EXIT_INVALIDFILE    0x00000001
