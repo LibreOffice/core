@@ -1609,7 +1609,7 @@ void FmXFormShell::ExecuteSearch()
     // jetzt brauche ich noch einen 'initial context'
     sal_Int16 nInitialContext = 0;
     Reference< XForm> xActiveForm( getActiveForm());
-    for ( size_t i=0; i<(sal_Int32)m_aSearchForms.size(); ++i )
+    for ( size_t i=0; i<m_aSearchForms.size(); ++i )
     {
         if (m_aSearchForms.at(i) == xActiveForm)
         {
