@@ -202,6 +202,7 @@ static sal_Bool InitSignal()
     int i;
     struct sigaction act;
     struct sigaction oact;
+    sigset_t unset;
 
     if (is_soffice_Impl())
     {
@@ -281,6 +282,16 @@ static sal_Bool InitSignal()
                         Signals[i].Handler = SIG_DFL;
             }
         }
+    }
+
+    /* Clear signal mask inherited from parent process (on Mac OS X, upon a
+       crash soffice re-execs itself from within the signal handler, so the
+       second soffice would have the guilty signal blocked and would freeze upon
+       encountering a similar crash again): */
+    if (sigemptyset(&unset) < 0 ||
+        pthread_sigmask(SIG_SETMASK, &unset, NULL) < 0)
+    {
+        OSL_TRACE("sigemptyset or pthread_sigmask failed");
     }
 
     return sal_True;
