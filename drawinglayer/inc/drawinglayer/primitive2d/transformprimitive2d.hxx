@@ -45,26 +45,47 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TransformPrimitive2D class
+
+            This is one of the basic grouping primitives and it provides
+            embedding a sequence of primitives (a geometry) into a
+            transformation. All renderers have to handle this, usually by
+            building a current transformation stack (linear combination)
+            and applying this to all to-be-rendered geometry. If not handling
+            this, the output will be mostly wrong since this primitive is
+            widely used.
+
+            It does transform by embedding an existing geometry into a
+            transformation as Child-content. This allows re-usage of the
+            refcounted Uno-Api primitives and their existung, buffered
+            decompositions.
+
+            It could e.g. be used to show a single object geometry in 1000
+            different, transformed states without the need to create those
+            thousand primitive contents.
+         */
         class TransformPrimitive2D : public GroupPrimitive2D
         {
         private:
+            // the transformation to apply to the child geometry
             basegfx::B2DHomMatrix                   maTransformation;
 
         public:
+            /// constructor
             TransformPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransformation,
                 const Primitive2DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

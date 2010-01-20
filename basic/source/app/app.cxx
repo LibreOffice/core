@@ -80,7 +80,7 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 
 #include <ucbhelper/content.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace comphelper;
 using namespace cppu;

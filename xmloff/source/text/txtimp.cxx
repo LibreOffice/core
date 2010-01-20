@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1508,8 +1508,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     return sStyleName;
 }
 
-// --> OD 2006-10-12 #i69629#
-// adjustments to reflect change of internal data structure <mpOutlineStylesCandidates>
 void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
@@ -1560,9 +1558,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
     }
     // else: we already had a style name, so we let it pass.
 }
-// <--
 
-// --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
                                                     const OUString& rStyleName )
 {
@@ -1572,29 +1568,18 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
     {
         if( !mpOutlineStylesCandidates )
         {
-#ifdef IRIX
-            /* GCC 2 bug when member function is called as part of an array
-             * initialiser
-             */
-            sal_Int8 count = xChapterNumbering->getCount();
-            mpOutlineStylesCandidates = new ::std::vector<OUString>[count];
-#else
             mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
-#endif
         }
         mpOutlineStylesCandidates[nOutlineLevel-1].push_back( rStyleName );
     }
 }
-// <--
 
-// --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
     if ( ( mpOutlineStylesCandidates != NULL || bSetEmptyLevels ) &&
          xChapterNumbering.is() &&
          !IsInsertMode() )
     {
-        // --> OD 2007-12-19 #152540#
         bool bChooseLastOne( false );
         {
             if ( GetXMLImport().IsTextDocInOOoFileFormat() )
@@ -1607,15 +1592,12 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                 sal_Int32 nBuild( 0 );
                 if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
                 {
-                    // --> OD 2008-03-19 #i86058#
                     // check explicitly on certain versions
                     bChooseLastOne = ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
                                      ( nUPD == 680 && nBuild <= 9073 ); // OOo 2.0 - OOo 2.0.4
-                    // <--
                 }
             }
         }
-        // <--
 
         OUString sOutlineStyleName;
         {
@@ -1624,8 +1606,15 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
             xChapterNumRule->getPropertyValue(sName) >>= sOutlineStyleName;
         }
 
-        OUString sEmpty;
-        sal_Int32 nCount = xChapterNumbering->getCount();
+        const sal_Int32 nCount = xChapterNumbering->getCount();
+        // --> OD 2009-11-13 #i106218#
+        // First collect all paragraph styles choosen for assignment to each
+        // list level of the outline style, then perform the intrinsic assignment.
+        // Reason: The assignment of a certain paragraph style to a list level
+        //         of the outline style causes side effects on the children
+        //         paragraph styles in Writer.
+        ::std::vector<OUString> sChosenStyles(nCount);
+        // <--
         for( sal_Int32 i=0; i < nCount; ++i )
         {
             if ( bSetEmptyLevels ||
@@ -1634,17 +1623,12 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
             {
                 // determine, which candidate is one to be assigned to the list
                 // level of the outline style
-                OUString sChoosenStyle( sEmpty );
                 if ( mpOutlineStylesCandidates &&
                      !mpOutlineStylesCandidates[i].empty() )
                 {
-                    // --> OD 2007-12-19 #152540#
                     if ( bChooseLastOne )
-                    // <--
                     {
-                        // --> OD 2006-11-06 #i71249# - take last added one
-                        sChoosenStyle = mpOutlineStylesCandidates[i].back();
-                        // <--
+                        sChosenStyles[i] = mpOutlineStylesCandidates[i].back();
                     }
                     else
                     {
@@ -1655,24 +1639,32 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                                                     sNumberingStyleName,
                                                     sOutlineStyleName ) )
                             {
-                                sChoosenStyle = mpOutlineStylesCandidates[i][j];
+                                sChosenStyles[i] = mpOutlineStylesCandidates[i][j];
                                 break;
                             }
                         }
                     }
                 }
-
-                Sequence < PropertyValue > aProps( 1 );
-                PropertyValue *pProps = aProps.getArray();
-                pProps->Name = sHeadingStyleName;
-                pProps->Value <<= sChoosenStyle;
-
+            }
+        }
+        // --> OD 2009-11-13 #i106218#
+        Sequence < PropertyValue > aProps( 1 );
+        PropertyValue *pProps = aProps.getArray();
+        pProps->Name = sHeadingStyleName;
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            // --> OD 2009-12-11 #i107610#
+            if ( bSetEmptyLevels ||
+                 sChosenStyles[i].getLength() > 0 )
+            // <--
+            {
+                pProps->Value <<= sChosenStyles[i];
                 xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
             }
         }
+        // <--
     }
 }
-// <--
 
 void XMLTextImportHelper::SetHyperlink(
     SvXMLImport& rImport,

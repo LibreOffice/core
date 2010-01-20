@@ -41,7 +41,7 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #ifndef GCC
 #endif
 

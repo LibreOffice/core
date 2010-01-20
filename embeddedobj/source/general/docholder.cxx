@@ -83,6 +83,7 @@
 #include <rtl/process.h>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 #include "docholder.hxx"
 #include "commonembobj.hxx"
@@ -1025,20 +1026,14 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
         if ( xDoc.is() )
         {
             // load new document in to the frame
-            uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY );
-            if( !xComponentLoader.is() )
-                throw uno::RuntimeException();
+            uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY_THROW );
 
-            uno::Sequence< beans::PropertyValue > aArgs( bInPlace ? 3 : 2 );
-            aArgs[0].Name = ::rtl::OUString::createFromAscii( "Model" );
-            aArgs[0].Value <<= m_xComponent;
-            aArgs[1].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
-            aArgs[1].Value <<= m_bReadOnly;
+            ::comphelper::NamedValueCollection aArgs;
+            aArgs.put( "Model", m_xComponent );
+            aArgs.put( "ReadOnly", m_bReadOnly );
+            //aArgs.put( "Hidden", sal_True );
             if ( bInPlace )
-            {
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "PluginMode" );
-                aArgs[2].Value <<= sal_Int16(1);
-            }
+                aArgs.put( "PluginMode", sal_Int16(1) );
             ::rtl::OUString sUrl;
             uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
             if (    xServiceInfo.is()
@@ -1055,7 +1050,7 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             xComponentLoader->loadComponentFromURL( sUrl,
                                                         rtl::OUString::createFromAscii( "_self" ),
                                                         0,
-                                                        aArgs );
+                                                        aArgs.getPropertyValues() );
 
             return sal_True;
         }

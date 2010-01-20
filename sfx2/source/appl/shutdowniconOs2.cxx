@@ -29,9 +29,9 @@
  ************************************************************************/
 
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 
 #include "shutdownicon.hxx"
 #include <comphelper/processfactory.hxx>

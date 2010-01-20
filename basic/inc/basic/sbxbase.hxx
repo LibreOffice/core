@@ -33,7 +33,7 @@
 
 #include <i18npool/lang.h>
 #include "tools/list.hxx"
-#include "svtools/svarray.hxx"
+#include "svl/svarray.hxx"
 #include <basic/sbxdef.hxx>
 
 class SbxFactory;

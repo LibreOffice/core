@@ -31,7 +31,7 @@
 #ifndef _SYMTBL_HXX
 #define _SYMTBL_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbdef.hxx>
