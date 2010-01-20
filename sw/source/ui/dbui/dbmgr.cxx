@@ -3239,9 +3239,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
             else
             {
-                SwDoc* pNewDoc = rSourceView.GetDocShell()->GetDoc()->CreateCopy();
-                xWorkDocSh = new SwDocShell( pNewDoc, SFX_CREATE_MODE_STANDARD );
-                xWorkDocSh->DoInitNew();
+                xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
             }
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, sal_True )->GetViewShell() );
@@ -3364,8 +3362,9 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         pTargetShell->SttDoc();
         //
     }
-    catch( Exception& )
+    catch( Exception& rEx)
     {
+        (void)rEx;
         DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);
