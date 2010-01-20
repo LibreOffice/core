@@ -1592,6 +1592,26 @@ static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xIn
     }
 }
 
+static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xInput, sal_Int32 nBytesToSkip )
+{
+    // skipBytes in zip stream is implemented as reading.
+    // For now, split into several calls to avoid allocating a large buffer.
+    // Later, skipBytes should be changed.
+
+    const sal_Int32 nMaxSize = 32*1024;
+
+    if ( nBytesToSkip > 0 )
+    {
+        sal_Int32 nRemaining = nBytesToSkip;
+        while ( nRemaining > 0 )
+        {
+            sal_Int32 nSkip = std::min( nRemaining, nMaxSize );
+            xInput->skipBytes( nSkip );
+            nRemaining -= nSkip;
+        }
+    }
+}
+
 void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd )
 {
     uno::Reference<xml::sax::XDocumentHandler> xHandler = GetDocHandler();
