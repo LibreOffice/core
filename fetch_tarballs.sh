@@ -50,40 +50,67 @@ if [ -z "$1" ]; then
     exit
 fi
 
-# TDOD: check for wget and md5sum
+# check for wget and md5sum
+wget=
+md5sum=
 
+for i in wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget; do
+    eval "$i --version" > /dev/null 2>&1
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        wget=$i
+        echo found wget $wget
+        break 2
+    fi
+done
+
+if [ -z "$wget" ]; then
+    echo "ERROR: no wget found!"
+    exit
+fi
+
+for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum; do
+    eval "$i --version" > /dev/null 2>&1
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        md5sum=$i
+        echo found md5sum: $md5sum
+        break 2
+    fi
+done
+
+if [ -z "$md5sum" ]; then
+    echo "ERROR: no md5sum: found!"
+    exit
+fi
+
+start_dir=`pwd`
 for i in `cat $1` ; do
 #   echo $i
-    if [ "$i" != "${i#http}" ]; then
+    if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
         tarurl=$i
-    # check for comment
+    # TODO: check for comment
     else
         if [ "$tarurl" != "" ]; then
             cd $TARFILE_LOCATION
-            wget -N -nv -c $tarurl/$i
+            $wget -nv -N $tarurl/$i
             wret=$?
             if [ $wret -ne 0 ]; then
                 failed="$failed $i"
                 wret=0
             fi
             if [ -f $i ]; then
-                sum=`md5sum $i | sed "s/ [ *].*//"`
+                sum=`$md5sum $i | sed "s/ [ *].*//"`
                 sum2=`echo $i | sed "s/-.*//"`
                 if [ "$sum" != "$sum2" ]; then
                     echo checksum failure for $i
                     failed="$failed $i"
                 fi
             fi
-            cd - > /dev/null
+            cd $start_dir
         fi
     fi
 done
-
-#pushd $TARFILE_LOCATION > /dev/null
-#for i in * ; do
-#           wget --spider -nv -c $tarurl/$i
-#done
-#popd > /dev/null
 
 if [ ! -z "$failed" ]; then
     echo $failed | sed "s/ /\n/g" | sed "s/^/ERROR: failed to download: /"
