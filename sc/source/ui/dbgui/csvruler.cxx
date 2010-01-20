@@ -77,7 +77,8 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
         sSplits = String( sFixedWidthLists );
 
         // String ends with a semi-colon so there is no 'int' after the last one.
-        for(int i=0;i<sSplits.GetTokenCount()-1;i++ )
+        xub_StrLen n = sSplits.GetTokenCount() - 1;
+        for (xub_StrLen i = 0; i < n; ++i)
             aSplits.Insert( sSplits.GetToken(i).ToInt32() );
     }
 }
