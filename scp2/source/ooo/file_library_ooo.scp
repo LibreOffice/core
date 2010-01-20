@@ -36,6 +36,13 @@ File gid_File_Lib_Accessbridge
     Name = "java_uno_accessbridge.dll";
 End
 #endif
+#if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
+STD_UNO_LIB_FILE( gid_File_Lib_Adabas, adabas)
+#endif
+
+#if defined(WNT)
+STD_UNO_LIB_FILE( gid_File_Lib_Ado, ado)
+#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Basctl, basctl)
 
