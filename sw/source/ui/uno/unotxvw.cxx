@@ -1364,7 +1364,9 @@ void SwXTextViewCursor::gotoRange(
 
         SwUnoInternalPaM rDestPam(*m_pView->GetDocShell()->GetDoc());
         if (!::sw::XTextRangeToSwPaM(rDestPam, xRange))
-            throw IllegalArgumentException();
+        {
+            throw uno::RuntimeException();
+        }
 
         ShellModes  eSelMode = m_pView->GetShellMode();
         SwWrtShell& rSh = m_pView->GetWrtShell();

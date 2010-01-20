@@ -1160,10 +1160,11 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
 
     // if it's a text then create a temporary cursor there and re-use
     // the pCursor variable
-    if(pText)
+    // #i108489#: Reference in outside scope to keep cursor alive
+    uno::Reference< text::XTextCursor > xTextCursor;
+    if (pText)
     {
-        const uno::Reference< text::XTextCursor > xTextCursor =
-            pText->CreateCursor();
+        xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(sal_True);
         const uno::Reference<lang::XUnoTunnel> xCrsrTunnel(
                 xTextCursor, uno::UNO_QUERY);
