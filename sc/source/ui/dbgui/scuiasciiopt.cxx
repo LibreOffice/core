@@ -384,7 +384,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
 
     if( nCharSet >= 0 )
-        aLbCharSet.SelectEntryPos( nCharSet );
+        aLbCharSet.SelectEntryPos( static_cast<USHORT>(nCharSet) );
 
     SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
@@ -425,7 +425,9 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
     if (mbFileImport)
         save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
                          aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
-                         aRbFixed.IsChecked(), aNfRow.GetValue(), aLbCharSet.GetSelectEntryPos(),
+                         aRbFixed.IsChecked(),
+                         static_cast<sal_Int32>(aNfRow.GetValue()),
+                         static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
                          static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
     delete[] mpRowPosArray;
 }
