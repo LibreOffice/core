@@ -40,28 +40,18 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include "general.hxx"
 #include "sections.hrc"
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"
-#ifndef _BIB_FMPROP_HRC
 #include "bibprop.hrc"
-#endif
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "bibmod.hxx"
-#ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
-#endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "bibliography.hrc"
 #include <tools/debug.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
@@ -69,9 +59,7 @@
 #include <vcl/mnemonic.hxx>
 #include <algorithm>
 #include <functional>
-#ifndef _VECTOR_
 #include <vector>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

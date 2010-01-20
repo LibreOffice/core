@@ -435,6 +435,11 @@ namespace frm
             // allowed to leave
             throw;
         }
+        catch( const WrappedTargetException& e )
+        {
+            // allowed to leave
+            throw;
+        }
         catch( const Exception& e )
         {
             OSL_ENSURE( sal_False, "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );

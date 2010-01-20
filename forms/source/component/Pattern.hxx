@@ -81,6 +81,7 @@ protected:
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
+    virtual void            resetNoBroadcast();
 
 protected:
     DECLARE_XCLONEABLE();

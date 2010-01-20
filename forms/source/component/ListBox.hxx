@@ -157,6 +157,7 @@ protected:
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
+    virtual void            resetNoBroadcast();
 
     virtual ::com::sun::star::uno::Any
                             getCurrentFormComponentValue() const;

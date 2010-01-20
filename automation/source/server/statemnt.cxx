@@ -85,7 +85,7 @@
 #include <vcl/wintypes.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
@@ -102,14 +102,14 @@
 //#include <vcl/drag.hxx>
 #endif
 #include <tools/fsys.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
 #include <basic/dispdefs.hxx>
 #include <vos/socket.hxx>
-#include <svtools/pickerhistory.hxx>
+#include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <sot/storage.hxx>
@@ -4288,7 +4288,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 
                 Edit *pMyEd = new Edit(pDlg,WB_CENTER | WB_BORDER );
                 pMyEd->SetSizePixel(Size(100,30));
-                pDlg->SetText(CUniString("Schließen"));
+                pDlg->SetText(UniString("Schließen", RTL_TEXTENCODING_ISO_8859_1));
                 pDlg->Show();
                 pMyEd->Show();
                 ULONG nTime = Time().GetTime();
