@@ -41,7 +41,6 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <cppuhelper/compbase7.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -62,7 +61,7 @@ namespace dxcanvas
 {
     typedef ::cppu::WeakComponentImplHelper6< ::com::sun::star::rendering::XCanvas,
                                                ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                              ::com::sun::star::lang::XMultiServiceFactory,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    GraphicDeviceBase1_Base;
@@ -119,7 +118,7 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::rendering::XBitmapCanvas,
                                                ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                              ::com::sun::star::lang::XMultiServiceFactory,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    GraphicDeviceBase2_Base;
