@@ -433,6 +433,14 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = ();
 End
 
+RegistryItem gid_Regitem_sxm_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
 // new odf file extension
 
 RegistryItem gid_Regitem_Odf_PersistentHandler
@@ -498,7 +506,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odf
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Math_Bin;
     Name = "application/vnd.oasis.opendocument.formula";
     Value = "opendocument.MathDocument.1";
     Styles = ();
@@ -530,6 +538,14 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Defaulticon
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "opendocument.MathDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,14";
+End
+
+RegistryItem gid_Regitem_odf_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Insertable
@@ -667,4 +683,19 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Smat
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "Path";
     Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odf";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxm
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxm";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
 End

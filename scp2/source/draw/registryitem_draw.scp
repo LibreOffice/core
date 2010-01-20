@@ -473,6 +473,14 @@ RegistryItem gid_Regitem_Std_Contenttype
     Value = "application/vnd.sun.xml.draw.template";
 End
 
+RegistryItem gid_Regitem_std_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawTemplate.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
 RegistryItem gid_Regitem_Sxd_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -531,6 +539,14 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Name = ".sxd";
     Value = "soffice.StarDrawDocument.6";
     Styles = ();
+End
+
+RegistryItem gid_Regitem_sxd_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 
 // new odg file extension 
@@ -598,7 +614,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odg
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "application/vnd.oasis.opendocument.graphics";
     Value = "opendocument.DrawDocument.1";
     Styles = ();
@@ -638,6 +654,14 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "opendocument.DrawDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,5";
+End
+
+RegistryItem gid_Regitem_odg_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell
@@ -783,6 +807,14 @@ RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,6";
 End
 
+RegistryItem gid_Regitem_otg_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawTemplate.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DrawTemplate.1\shell";
@@ -894,4 +926,33 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sdra
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "Path";
     Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odg";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_otg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.otg";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxd";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_std
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.std";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
 End
