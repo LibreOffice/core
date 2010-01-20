@@ -425,7 +425,6 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, false, false, false },
         { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
           false, false, false, true, false },
-//        { "", "", 0, true, false, false, false, true, true, true, false },
         { "", "", 0, false, false, false, false, false, false, false, false },
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
           true } };
