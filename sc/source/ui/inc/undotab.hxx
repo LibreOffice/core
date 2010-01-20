@@ -249,10 +249,10 @@ public:
 virtual String  GetComment() const;
 
 private:
+    ScUndoSetTabBgColorInfoList* aUndoSetTabBgColorInfoList;
     SCTAB   nTab;
     Color   aOldTabBgColor;
     Color   aNewTabBgColor;
-    ScUndoSetTabBgColorInfoList* aUndoSetTabBgColorInfoList;
     BOOL    bIsMultipleUndo;
 
     void DoChange( SCTAB nTab, const Color& rTabBgColor ) const;
