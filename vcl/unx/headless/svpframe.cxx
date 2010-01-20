@@ -85,6 +85,33 @@ SvpSalFrame::~SvpSalFrame()
          (*it)->SetParent( m_pParent );
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
+
+    if( s_pFocusFrame == this )
+    {
+        s_pFocusFrame = NULL;
+        // call directly here, else an event for a destroyed frame would be dispatched
+        CallCallback( SALEVENT_LOSEFOCUS, NULL );
+        // if the handler has not set a new focus frame
+        // pass focus to another frame, preferably a document style window
+        if( s_pFocusFrame == NULL )
+        {
+            const std::list< SalFrame* >& rFrames( m_pInstance->getFrames() );
+            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+            {
+                SvpSalFrame* pFrame = static_cast<const SvpSalFrame*>(*it);
+                if( pFrame->m_bVisible        &&
+                    pFrame->m_pParent == NULL &&
+                    (pFrame->m_nStyle & (SAL_FRAME_STYLE_MOVEABLE |
+                                         SAL_FRAME_STYLE_SIZEABLE |
+                                         SAL_FRAME_STYLE_CLOSEABLE) ) != 0
+                    )
+                {
+                    pFrame->GetFocus();
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void SvpSalFrame::GetFocus()
