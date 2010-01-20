@@ -40,7 +40,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/resid.hxx>
 #include "tabbgcolordlg.hxx"
 #include "scresid.hxx"
