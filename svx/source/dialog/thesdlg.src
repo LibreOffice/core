@@ -116,8 +116,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     OkButton BTN_THES_OK
     {
-        Pos = MAP_APPFONT ( 70 , 210 ) ;
-        Size = MAP_APPFONT ( 79 , 14 ) ;
+        Pos = MAP_APPFONT ( 89 , 210 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
     };

@@ -67,6 +67,8 @@ class SVX_DLLPUBLIC SvxThesaurusDialog : public SvxStandardDialog
     DECL_LINK( WordSelectHdl_Impl, ListBox * );
     DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
+
+    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox * );
 #endif
 
     SVX_DLLPRIVATE virtual void     Apply();

@@ -405,17 +405,18 @@ sal_uInt16 SvxThesaurusDialog::GetLanguage() const
 
 bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 {
+    lang::Locale aLocale( SvxCreateLocale( m_pImpl->nLookUpLanguage ) );
+    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
+            m_pImpl->aLookUpText, aLocale, uno::Sequence< beans::PropertyValue >() );
+    const sal_Int32 nMeanings = aMeanings.getLength();
+    const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
+
     // clear old user data of control before creating new ones via AddEntry below
     m_pImpl->m_pAlternativesCT->ClearUserData();
 
     m_pImpl->m_pAlternativesCT->Clear();
     m_pImpl->m_pAlternativesCT->SetUpdateMode( FALSE );
 
-    lang::Locale aLocale( SvxCreateLocale( m_pImpl->nLookUpLanguage ) );
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
-            m_pImpl->aLookUpText, aLocale, uno::Sequence< beans::PropertyValue >() );
-    const sal_Int32 nMeanings = aMeanings.getLength();
-    const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
     for (sal_Int32 i = 0;  i < nMeanings;  ++i)
     {
         OUString rMeaningTxt = pMeanings[i]->getMeaning();
@@ -467,14 +468,16 @@ IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, MenuButton *, pBtn )
         if (m_pImpl->xThesaurus->hasLocale( SvxCreateLocale( nLang ) ))
             m_pImpl->nLookUpLanguage = nLang;
         SetWindowTitle( nLang );
-        UpdateAlternativesBox_Impl();
+        bool bWordFound = UpdateAlternativesBox_Impl();
+        if (!bWordFound)
+            InfoBox( this, m_pImpl->aErrStr ).Execute();
     }
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
+IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, EMPTYARG /*pBtn*/ )
 {
     String aText( m_pImpl->aReplaceEdit.GetText() );
 
@@ -490,6 +493,7 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
 
     m_pImpl->aWordLB.SelectEntry( aText );
     m_pImpl->aReplaceEdit.SetText( String() );
+    m_pImpl->aOkBtn.Enable( FALSE );
     m_pImpl->m_pAlternativesCT->GrabFocus();
 
     return 0;
@@ -504,8 +508,9 @@ IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ListBox *, pBox )
         String aStr( pBox->GetSelectEntry() );
         GetReplaceEditString( aStr );
         m_pImpl->aReplaceEdit.SetText( aStr );
+        m_pImpl->aOkBtn.Enable( aStr.Len() > 0 );
 
-        LookUpHdl_Impl( &m_pImpl->aCancelBtn );
+        LookUpHdl_Impl( NULL );
     }
 
     return 0;
@@ -519,9 +524,14 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pB
     if (pEntry)
     {
         AlternativesUserData_Impl * pData = (AlternativesUserData_Impl *) pEntry->GetUserData();
-        String aStr( pData->GetText() );
-        GetReplaceEditString( aStr );
+        String aStr;
+        if (!pData->IsHeader())
+        {
+            aStr = pData->GetText();
+            GetReplaceEditString( aStr );
+        }
         m_pImpl->aReplaceEdit.SetText( aStr );
+        m_pImpl->aOkBtn.Enable( aStr.Len() > 0 );
     }
     return 0;
 }
@@ -534,12 +544,29 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
     if (pEntry)
     {
         AlternativesUserData_Impl * pData = (AlternativesUserData_Impl *) pEntry->GetUserData();
-        String aStr( pData->GetText() );
-        GetReplaceEditString( aStr );
+        String aStr;
+        if (!pData->IsHeader())
+        {
+            aStr = pData->GetText();
+            GetReplaceEditString( aStr );
+        }
         m_pImpl->aReplaceEdit.SetText( aStr );
-        LookUpHdl_Impl( &m_pImpl->aCancelBtn );
+        m_pImpl->aOkBtn.Enable( aStr.Len() > 0 );
+
+        if (aStr.Len() > 0)
+            LookUpHdl_Impl( NULL );
     }
+
+    //! workaround to set the selection since calling SelectEntryPos within
+    //! the double click handler does not work
+    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox );
     return 0;
 }
 
 
+IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
+{
+    if (pBox && pBox->GetEntryCount() > 0)
+        pBox->SelectEntryPos( 0 );
+    return 0;
+}
