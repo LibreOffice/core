@@ -82,11 +82,11 @@ namespace dbaccess
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
                             const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            SelectColumnsMetaData& _rColumnNames /* out */);
+                            SelectColumnsMetaData& _rColumnAssignments /* out */);
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            SelectColumnsMetaData& _rColumnNames /* out */);
+                            SelectColumnsMetaData& _rColumnAssignments /* out */);
 
     typedef ::std::pair<ORowSetRow,sal_Int32> OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
