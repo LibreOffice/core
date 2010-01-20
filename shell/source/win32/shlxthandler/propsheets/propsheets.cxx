@@ -51,6 +51,24 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <strsafe.h>
+
+//----------------------------------------------------------
+#ifdef DEBUG
+inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
+{
+    CHAR    buffer[1024];
+    va_list args;
+
+    va_start( args, pFormat );
+    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
+    OutputDebugStringA( buffer );
+}
+#else
+static inline void OutputDebugStringFormat( LPCSTR, ... )
+{
+}
+#endif
 
 
 /*---------------------------------------------
@@ -70,6 +88,7 @@
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
 {
+    OutputDebugStringFormat("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedIncrement(&g_DllRefCnt);
 }
 
@@ -79,6 +98,7 @@ CPropertySheet::CPropertySheet(long RefCnt) :
 
 CPropertySheet::~CPropertySheet()
 {
+    OutputDebugStringFormat("CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedDecrement(&g_DllRefCnt);
 }
 
@@ -116,6 +136,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 {
+    OutputDebugStringFormat("CPropertySheet::AddRef [%d]", m_RefCnt );
     return InterlockedIncrement(&m_RefCnt);
 }
 
@@ -125,6 +146,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 {
+    OutputDebugStringFormat("CPropertySheet::Release [%d]", m_RefCnt );
     long refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == refcnt)
@@ -177,42 +199,51 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
+    // Get OS version (we don't need the summary page on Windows Vista or later)
+    OSVERSIONINFO sInfoOS;
+
+    ZeroMemory( &sInfoOS, sizeof(OSVERSIONINFO) );
+    sInfoOS.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
+    GetVersionEx( &sInfoOS );
+    bool bIsVistaOrLater = (sInfoOS.dwMajorVersion >= 6);
+
+    std::wstring proppage_header;
 
     PROPSHEETPAGE psp;
-
-    // add the summary property page
-
     ZeroMemory(&psp, sizeof(PROPSHEETPAGEA));
 
-    std::wstring proppage_header = GetResString(IDS_PROPPAGE_SUMMARY_TITLE);
-
+    // add the summary property page
     psp.dwSize      = sizeof(PROPSHEETPAGE);
     psp.dwFlags     = PSP_DEFAULT | PSP_USETITLE | PSP_USECALLBACK;
     psp.hInstance   = GetModuleHandle(MODULE_NAME);
-    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_SUMMARY);
-    psp.pszTitle    = proppage_header.c_str();
-    psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);
     psp.lParam      = reinterpret_cast<LPARAM>(this);
     psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACK>(CPropertySheet::PropPageSummaryCallback);
 
-    HPROPSHEETPAGE hPage = CreatePropertySheetPage(&psp);
+    HPROPSHEETPAGE hPage = NULL;
 
-    // keep this instance alive
-    // will be released when the
-    // the page is about to be
-    // destroyed in the callback
-    // function
-
-    if (hPage)
+    if ( !bIsVistaOrLater )
     {
-        if (lpfnAddPage(hPage, lParam))
-            AddRef();
-        else
-            DestroyPropertySheetPage(hPage);
+        proppage_header = GetResString(IDS_PROPPAGE_SUMMARY_TITLE);
+
+        psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_SUMMARY);
+        psp.pszTitle    = proppage_header.c_str();
+        psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);
+
+        hPage = CreatePropertySheetPage(&psp);
+
+        // keep this instance alive, will be released when the
+        // the page is about to be destroyed in the callback function
+
+        if (hPage)
+        {
+            if (lpfnAddPage(hPage, lParam))
+                AddRef();
+            else
+                DestroyPropertySheetPage(hPage);
+        }
     }
 
     // add the statistics property page
-
     proppage_header = GetResString(IDS_PROPPAGE_STATISTICS_TITLE);
 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_STATISTICS);

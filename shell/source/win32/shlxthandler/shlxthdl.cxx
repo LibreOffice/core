@@ -392,7 +392,8 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     if ((rclsid != CLSID_INFOTIP_HANDLER) &&
         (rclsid != CLSID_COLUMN_HANDLER) &&
         (rclsid != CLSID_PROPERTYSHEET_HANDLER) &&
-        (rclsid != CLSID_THUMBVIEWER_HANDLER))
+        (rclsid != CLSID_THUMBVIEWER_HANDLER) &&
+        (rclsid != CLSID_PROPERTY_HANDLER))
         return CLASS_E_CLASSNOTAVAILABLE;
 
     if ((riid != IID_IUnknown) && (riid != IID_IClassFactory))

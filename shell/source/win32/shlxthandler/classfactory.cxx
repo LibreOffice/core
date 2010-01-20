@@ -35,6 +35,7 @@
 #include "internal/infotips.hxx"
 #include "internal/propsheets.hxx"
 #include "internal/columninfo.hxx"
+#include "internal/propertyhdl.hxx"
 #ifdef __MINGW32__
 #include <algorithm>
 using ::std::max;
@@ -136,6 +137,9 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
+
+    else if (CLSID_PROPERTY_HANDLER == m_Clsid)
+        pUnk = static_cast<IPropertyStore*>(new CPropertyHdl());
 
     POST_CONDITION(pUnk != 0, "Could not create COM object");
 

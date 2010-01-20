@@ -58,7 +58,9 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/shlxthdl.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
-    $(SLO)$/thumbviewer.obj
+    $(SLO)$/thumbviewer.obj\
+    $(SLO)$/propertyhdl.obj\
+    $(SLO)$/stream_helper.obj\
 
 SHL1TARGET=$(TARGET)
 
@@ -79,7 +81,9 @@ SHL1STDLIBS+=\
     $(SHELL32LIB)\
     $(KERNEL32LIB)\
     $(GDI32LIB)\
-    $(GDIPLUSLIB)
+    $(GDIPLUSLIB)\
+    $(SHLWAPILIB)\
+    propsys.lib
 
 SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
