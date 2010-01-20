@@ -169,14 +169,6 @@ OUT2INC= \
     stlport$/SC5$/*.SUNWCCh
 .ENDIF
 
-.IF "$(OS)"=="IRIX"
-TARFILE_NAME=STLport-4.5
-PATCH_FILES=STLport-4.5.patch
-BUILD_ACTION=gmake
-BUILD_FLAGS=-f gcc-3.0.mak
-BUILD_FLAGS+= -j$(MAXPROCESS)
-.ENDIF
-
 OUTDIR2INC= \
     stlport
 

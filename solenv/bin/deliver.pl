@@ -100,7 +100,6 @@ $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
 
 $opt_force          = 0;            # option force copy
-$opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
 $opt_silent         = 0;            # be silent, only report errors
@@ -402,7 +401,6 @@ sub parse_options
     my $dontdeletecommon = 0;
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/      and $opt_force  = 1  and next;
-        $arg =~ /^-minor$/      and $opt_minor  = 1  and next;
         $arg =~ /^-check$/      and $opt_check  = 1  and $opt_verbose = 1 and next;
         $arg =~ /^-quiet$/      and $opt_silent = 1  and next;
         $arg =~ /^-verbose$/    and $opt_verbose = 1 and next;
@@ -484,14 +482,8 @@ sub init_globals
     }
 
     $ext = "";
-    if ( ($opt_minor || $updminor) && !$dest ) {
-        if ( $updminor ) {
-            $ext = "$updminorext";
-        }
-        else {
-            print_error("can't determine UPDMINOR", 0);
-            exit(3);
-        }
+    if ( ($updminor) && !$dest ) {
+        $ext = "$updminorext";
     }
 
     # Do we have common trees?
@@ -560,7 +552,7 @@ sub get_base
     }
 
     if ( $#field == -1 ) {
-        print_error("can't determine module");
+        print_error("can't find d.lst");
         exit(2);
     }
     else {
@@ -669,6 +661,7 @@ sub glob_line
         my @file_list = glob($from);
 
         foreach $file ( @file_list ) {
+            next if ( -d $file); # we only copy files, not directories
             my ($fname, $dir) = fileparse($file);
             my $copy = ($replace) ? $to_dir . $fname : $to . '/' . $fname;
             push(@globbed_files, [$file, $copy]);
@@ -1124,7 +1117,7 @@ sub push_on_ziplist
     return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
     if ( $file =~ s#^\Q$dest\E/##o ) {
-        if ( $opt_minor ){
+        if ( $updminor ){
             # strip minor from path
             my $ext = "%_EXT%";
             $ext = expand_macros($ext);
@@ -1132,7 +1125,7 @@ sub push_on_ziplist
         }
         push(@zip_list, $file);
     } elsif ( $file =~ s#^\Q$common_dest\E/##o ) {
-        if ( $opt_minor ){
+        if ( $updminor ){
             # strip minor from path
             my $ext = "%_EXT%";
             $ext = expand_macros($ext);
@@ -1530,23 +1523,22 @@ sub cleanup_and_die
 sub usage
 {
     my $exit_code = shift;
-    print STDERR "Usage:\ndeliver [OPTION]... [DESTINATION-PATH]\n";
+    print STDERR "Usage:\ndeliver [OPTIONS] [DESTINATION-PATH]\n";
     print STDERR "Options:\n";
     print STDERR "  -check       just print what would happen, no actual copying of files\n";
     print STDERR "  -checkdlst   be verbose about (possible) d.lst bugs\n";
     print STDERR "  -delete      delete files (undeliver), use with care\n";
     print STDERR "  -deloutput   remove the output tree after copying\n";
-    print STDERR "  -force       copy even if not newer\n";
     print STDERR "  -dontdeletecommon do not delete common files (for -delete option)\n";
+    print STDERR "  -force       copy even if not newer\n";
     print STDERR "  -help        print this message\n";
     if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
         print STDERR "  -link        hard link files into the solver to save disk space\n";
     }
-    print STDERR "  -minor       deliver into minor (milestone)\n";
     print STDERR "  -quiet       be quiet, only report errors\n";
     print STDERR "  -verbose     be verbose\n";
     print STDERR "  -zip         additionally create zip files of delivered content\n";
-    print STDERR "Option '-zip' and a destination-path are mutually exclusive.\n";
+    print STDERR "Options '-zip' and a destination-path are mutually exclusive.\n";
     print STDERR "Options '-check' and '-quiet' are mutually exclusive.\n";
     exit($exit_code);
 }
