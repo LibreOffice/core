@@ -216,6 +216,8 @@ sub get_config_file {
 };
 
 sub get_hg_root {
+    my $self = shift;
+    return $self->{USER_SOURCE_ROOT} if (defined $self->{USER_SOURCE_ROOT});
     my $hg_root;
     if (open(COMMAND, "hg root 2>&1 |")) {
         foreach (<COMMAND>) {
@@ -236,12 +238,7 @@ sub get_hg_root {
 sub read_config_file {
     my $self = shift;
     if (!$self->{SOURCE_CONFIG_FILE}) {
-        my $repository_root;
-        if (defined $self->{USER_SOURCE_ROOT}) {
-            $repository_root = $self->{USER_SOURCE_ROOT};
-        } else {
-            $repository_root = get_hg_root();
-        };
+        my $repository_root = get_hg_root($self);
         ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
         return;
     };
@@ -281,7 +278,7 @@ sub read_config_file {
         close SOURCE_CONFIG_FILE;
         if (!scalar keys %{$self->{REPOSITORIES}}) {
             # Fallback - default repository is the directory where is our module...
-            my $hg_root = get_hg_root();
+            my $hg_root = get_hg_root($self);
             ${$self->{REPOSITORIES}}{File::Basename::basename($hg_root)} = $hg_root;
         };
     } else {
