@@ -390,7 +390,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL SvxThesaurusDi
 // -----------------------------------------------------------------------
 
 String SvxThesaurusDialog::GetWord()
-{ 
+{
     return m_pImpl->aReplaceEdit.GetText();
 }
 
@@ -566,7 +566,9 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
 
 IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
 {
+    (void) pThis;
     if (pBox && pBox->GetEntryCount() > 0)
         pBox->SelectEntryPos( 0 );
     return 0;
 }
+
