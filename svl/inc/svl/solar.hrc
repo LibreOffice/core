@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solar.hrc,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,6 +161,9 @@
 #define HID_HELP_BUTTON             0
 
 #define HID_START                   32768
+
+#define HID_VCL_START               (HID_START+100)
+#define HID_VCL_END                 (HID_START+150)
 
 #define HID_SVTOOLS_START           (HID_START+200)
 #define HID_SVTOOLS_END             (HID_START+299)

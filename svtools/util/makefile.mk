@@ -113,6 +113,7 @@ SHL1STDLIBS+= \
         $(VCLLIB)			\
         $(SVLLIB)			\
         $(SOTLIB)			\
+        $(BASEGFXLIB)		\
         $(UNOTOOLSLIB)		\
         $(TOOLSLIB)			\
         $(I18NISOLANGLIB)   \

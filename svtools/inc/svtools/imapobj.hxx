@@ -96,7 +96,7 @@ public:
 
     static rtl_TextEncoding nActualTextEncoding;
 
-                        IMapObject() {};
+                        IMapObject();
                         IMapObject( const String& rURL,
                                     const String& rAltText,
                                     const String& rDesc,
