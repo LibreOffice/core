@@ -59,7 +59,7 @@ std::type_info const & getSimpleReferenceObjectTypeInfo()
 
 }
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/mutex.hxx"
 #include "salhelper/condition.hxx"
 #include "salhelper/dynload.hxx"
