@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +87,7 @@ class Timer;
 class AutoTimer;
 class Help;
 class ImageList;
+class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
@@ -259,6 +260,10 @@ struct ImplSVCtrlData
     ImageList*              mpSplitVPinImgList; // ImageList for Vertikale SplitWindows (PIN's)
     ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
     ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
+    Image*                  mpDisclosurePlus;
+    Image*                  mpDisclosurePlusHC;
+    Image*                  mpDisclosureMinus;
+    Image*                  mpDisclosureMinusHC;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     USHORT                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     USHORT                  mnRadioStyle;       // Radio-Style for ImageList-Update
@@ -367,6 +372,7 @@ void        ImplDeInitSVData();
 void        ImplDestroySVData();
 Window*     ImplGetDefaultWindow();
 VCL_DLLPUBLIC ResMgr*     ImplGetResMgr();
+VCL_DLLPUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 
