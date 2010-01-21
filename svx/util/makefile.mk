@@ -40,10 +40,6 @@ GEN_HID_OTHER=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
 HELPIDFILES=    ..$/inc$/helpid.hrc

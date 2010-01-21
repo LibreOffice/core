@@ -133,14 +133,8 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
         Graphic aGraphic;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
-            GraphicType eOldGraphicType = pGrafObj->GetGraphicType();  // kein Hereinswappen
-            const sal_Bool bIsChanged = pModel->IsChanged();
-
-            pGrafObj->SetGraphic( aGraphic );
-            if( GRAPHIC_NONE != eOldGraphicType )
-                pGrafObj->SetChanged();
-            else
-                pModel->SetChanged( bIsChanged );
+               pGrafObj->NbcSetGraphic( aGraphic );
+            pGrafObj->ActionChanged();
         }
         else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
@@ -302,11 +296,16 @@ const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SetGraphic( const Graphic& rGrf )
+void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
     pGraphic->SetUserData();
     mbIsPreview = sal_False;
+}
+
+void SdrGrafObj::SetGraphic( const Graphic& rGrf )
+{
+    NbcSetGraphic(rGrf);
     SetChanged();
     BroadcastObjectChange();
 }
@@ -681,7 +680,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 
     const SdrGrafObj& rGraf = (SdrGrafObj&) rObj;
 
-    pGraphic->SetGraphic( rGraf.GetGraphic() );
+    pGraphic->SetGraphic( rGraf.GetGraphic(), &rGraf.GetGraphicObject() );
     aCropRect = rGraf.aCropRect;
     aFileName = rGraf.aFileName;
     aFilterName = rGraf.aFilterName;

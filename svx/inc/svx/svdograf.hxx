@@ -144,6 +144,7 @@ public:
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
 
+    void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
 

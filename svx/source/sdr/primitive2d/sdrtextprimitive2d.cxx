@@ -109,7 +109,7 @@ namespace drawinglayer
         SdrTextPrimitive2D::SdrTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mrSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(rOutlinerParaObject),
             mxLastVisualizingPage(),
@@ -132,7 +132,7 @@ namespace drawinglayer
 
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
 
@@ -157,7 +157,7 @@ namespace drawinglayer
             sal_Int16 nCurrentlyValidPageNumber(0);
             sal_Int16 nCurrentlyValidPageCount(0);
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 bool bDoDelete(false);
 
@@ -211,11 +211,11 @@ namespace drawinglayer
 
                 if(bDoDelete)
                 {
-                    const_cast< SdrTextPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
                 {
@@ -245,7 +245,7 @@ namespace drawinglayer
             }
 
             // call parent
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -256,7 +256,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrContourTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
@@ -309,7 +309,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrPathTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
@@ -365,7 +365,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrBlockTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
@@ -442,7 +442,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrStretchTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
