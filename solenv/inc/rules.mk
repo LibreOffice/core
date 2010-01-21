@@ -32,7 +32,7 @@
 MKFILENAME:=RULES.MK
 
 $(OBJ)/%.obj : %.cxx
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
@@ -56,7 +56,7 @@ $(OBJ)/%.obj : %.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.cpp
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cpp
@@ -78,7 +78,7 @@ $(OBJ)/%.obj : %.cpp
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.cc
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cc
@@ -159,7 +159,7 @@ $(SLO)/precompiled_ex.% .PHONY:
 .ENDIF			# "$(ENABLE_PCH)"!=""
 
 $(SLO)/%.obj : %.cxx
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(ENABLE_PCH)"!="" && ( "$(BUILD_SPECIAL)"!="TRUE" )
 # just a helper var	
     @noop $(assign used_exc_switches=$(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)))
@@ -198,7 +198,7 @@ $(SLO)/%.obj : %.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.cpp
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(PWD)/$*.cpp
@@ -224,7 +224,7 @@ $(SLO)/%.obj : %.cpp
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cxx
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cxx
@@ -249,7 +249,7 @@ $(SLO)/%.obj : $(MISC)/%.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cc
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cc
@@ -266,7 +266,7 @@ $(SLO)/%.obj : $(MISC)/%.cc
 .ENDIF
 
 $(OBJ)/%.obj : $(MISC)/%.cxx
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) -E  $(CFLAGSINCXX)$(MISC)/$*.cxx
@@ -291,7 +291,7 @@ $(OBJ)/%.obj : $(MISC)/%.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.c
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $*.c
@@ -321,7 +321,7 @@ $(OBJ)/%.obj : %.c
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : $(MISC)/%.c
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(MISC)/$*.c
@@ -343,7 +343,7 @@ $(OBJ)/%.obj : $(MISC)/%.c
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.c
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.c
@@ -366,7 +366,7 @@ $(SLO)/%.obj : $(MISC)/%.c
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.c
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $*.c
@@ -389,7 +389,7 @@ $(SLO)/%.obj : %.c
 
 # Objective-C files
 $(OBJ)/%.obj : %.m
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(objc) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $*.m
@@ -404,7 +404,7 @@ $(OBJ)/%.obj : %.m
 
 # Objective-C files
 $(OBJ)/%.obj : $(MISC)/%.m
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objc) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(MISC)/$*.m
@@ -415,7 +415,7 @@ $(OBJ)/%.obj : $(MISC)/%.m
 
 # Objective-C files
 $(SLO)/%.obj : $(MISC)/%.m
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objc) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.m
@@ -426,7 +426,7 @@ $(SLO)/%.obj : $(MISC)/%.m
 
 # Objective-C files
 $(SLO)/%.obj : %.m
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objc) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $*.m
@@ -442,7 +442,7 @@ not_existing/o_%.dpcc : %.c;@noop $(assign all_local_obj+:=$<)
 
 # Objective-C++ files
 $(OBJ)/%.obj : %.mm
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
     $(COMMAND_ECHO)$(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $*.mm
@@ -461,7 +461,7 @@ $(OBJ)/%.obj : %.mm
 
 # Objective-C++ files
 $(OBJ)/%.obj : $(MISC)/%.mm
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(MISC)/$*.mm
@@ -476,7 +476,7 @@ $(OBJ)/%.obj : $(MISC)/%.mm
 
 # Objective-C++ files
 $(SLO)/%.obj : $(MISC)/%.mm
-    @echo Compiling: $(PRJNAME)/$(INPATH)/misc/$(<:f)
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(INPATH)/misc/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.mm
@@ -491,7 +491,7 @@ $(SLO)/%.obj : $(MISC)/%.mm
 
 # Objective-C++ files
 $(SLO)/%.obj : %.mm
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+    @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $*.mm
@@ -639,7 +639,7 @@ $(MISC)/%.dpj :
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.asm
-       @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+       @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
        $(COMMAND_ECHO)$(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)/$*.obj $*.asm
@@ -666,7 +666,7 @@ $(SLO)/%.obj : %.asm
 .ENDIF
 
 $(OBJ)/%.obj : %.asm
-       @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
+       @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
        $(COMMAND_ECHO)$(ASM) $(AFLAGS) -D$(COM) /Fo$(OBJ)/$*.obj $*.asm
