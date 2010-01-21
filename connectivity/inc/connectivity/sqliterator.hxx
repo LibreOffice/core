@@ -279,6 +279,9 @@ namespace connectivity
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
         sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
+
+        // tries to find the correct type of the function
+        sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
     private:
         /** traverses the list of table names, and filles _rTables
         */
