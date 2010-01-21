@@ -308,7 +308,7 @@ public class FormWizard extends WizardDialog
     }
 
     // @Override
-    public void finishWizard()
+    public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSTORE_PAGE)) || (ncurStep == SOSTORE_PAGE))
@@ -326,6 +326,7 @@ public class FormWizard extends WizardDialog
                     {
                         bcreateForm = true;
                         xDialog.endExecute();
+                        return true;
                     }
                 }
             }
@@ -335,6 +336,7 @@ public class FormWizard extends WizardDialog
                 showMessageBox("WarningBox", com.sun.star.awt.VclWindowPeerAttribute.OK, smessage);
             }
         }
+        return false;
     }
 
     // @Override
