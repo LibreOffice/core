@@ -837,6 +837,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.maCollateSingleJobsBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maPagesBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
@@ -1028,6 +1029,11 @@ int PrintDialog::getCopyCount()
 bool PrintDialog::isCollate()
 {
     return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : FALSE;
+}
+
+bool PrintDialog::isSingleJobs()
+{
+    return maOptionsPage.maCollateSingleJobsBox.IsChecked();
 }
 
 static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId = -1, const rtl::OUString& i_rPropName = rtl::OUString() )
@@ -2445,6 +2451,11 @@ void PrintProgressDialog::tick()
 {
     if( mnCur < mnMax )
         setProgress( ++mnCur );
+}
+
+void PrintProgressDialog::reset()
+{
+    setProgress( 0 );
 }
 
 void PrintProgressDialog::Paint( const Rectangle& )
