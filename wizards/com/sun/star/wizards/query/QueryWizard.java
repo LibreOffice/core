@@ -292,17 +292,16 @@ public class QueryWizard extends WizardDialog
         }
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSUMMARY_PAGE)) || (ncurStep == SOSUMMARY_PAGE))
+        if  (   ( ncurStep == SOSUMMARY_PAGE )
+            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
+            )
         {
             components = CurFinalizer.finish();
-            if ( components == null )
-            {
-                setControlProperty("btnWizardFinish", "Enabled", false);
-            }
         }
+        return ( components != null );
     }
 
     protected void enterStep(int nOldStep, int nNewStep)

@@ -32,7 +32,7 @@
 #define INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/textdata.hxx>
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>

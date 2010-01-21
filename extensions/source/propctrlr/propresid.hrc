@@ -31,7 +31,7 @@
 #ifndef EXTENSIONS_PROPRESID_HRC
 #define EXTENSIONS_PROPRESID_HRC
 
-// TODO: create a new resource range in <svtools/solar.hrc>
+// TODO: create a new resource range in <svl/solar.hrc>
 
 #define RID_PROPCONTROLLER_START        1000
     // arbitrary at the moment
@@ -45,6 +45,7 @@
 #define RID_STR_PROPPAGE_DEFAULT            ( RID_PROPCONTROLLER_START +  1 )
 #define RID_STR_PROPPAGE_DATA               ( RID_PROPCONTROLLER_START +  2 )
 #define RID_STR_HELP_SECTION_LABEL          ( RID_PROPCONTROLLER_START +  3 )
-#define RID_EMBED_IMAGE_PLACEHOLDER          ( RID_PROPCONTROLLER_START +  5 )
+#define RID_EMBED_IMAGE_PLACEHOLDER         ( RID_PROPCONTROLLER_START +  4 )
+#define RID_STR_TEXT_FORMAT                 ( RID_PROPCONTROLLER_START +  5 )
 
 #endif // EXTENSIONS_PROPRESID_HRC

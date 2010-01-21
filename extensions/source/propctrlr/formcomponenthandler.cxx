@@ -33,6 +33,7 @@
 
 #include "controltype.hxx"
 #include "propctrlr.hrc"
+#include "extensio.hrc"
 #include "fontdialog.hxx"
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"
@@ -89,14 +90,14 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/colrdlg.hxx>
-#include <svtools/filenotation.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/numuno.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/filenotation.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/numuno.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/numinf.hxx>
 #include <svx/svxdlg.hxx>
@@ -2538,17 +2539,38 @@ namespace pcr
         Reference< XQueriesSupplier > xSupplyQueries( m_xRowSetConnection, UNO_QUERY );
         Reference< XNameAccess > xQueryNames;
         if ( xSupplyQueries.is() )
+        {
             xQueryNames = xSupplyQueries->getQueries();
-        DBG_ASSERT( xQueryNames.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: no way to obtain the queries of the connection!" );
-        if ( !xQueryNames.is() )
+            impl_fillQueryNames_throw(xQueryNames,_out_rNames);
+        }
+    }
+    //------------------------------------------------------------------------
+    void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,::std::vector< ::rtl::OUString >& _out_rNames,const ::rtl::OUString& _sName ) const
+    {
+        DBG_ASSERT( _xQueryNames.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: no way to obtain the queries of the connection!" );
+        if ( !_xQueryNames.is() )
             return;
 
-        Sequence< ::rtl::OUString> aQueryNames = xQueryNames->getElementNames();
+        Sequence< ::rtl::OUString> aQueryNames = _xQueryNames->getElementNames();
         sal_uInt32 nCount = aQueryNames.getLength();
         const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
+        sal_Bool bAdd = _sName.getLength();
 
         for ( sal_uInt32 i=0; i<nCount; i++, ++pQueryNames )
-            _out_rNames.push_back( *pQueryNames );
+        {
+            ::rtl::OUStringBuffer sTemp;
+            if ( bAdd )
+            {
+                sTemp.append(_sName);
+                sTemp.appendAscii("/");
+            }
+            sTemp.append(*pQueryNames);
+            Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(*pQueryNames),UNO_QUERY);
+            if ( xSubQueries.is() )
+                impl_fillQueryNames_throw(xSubQueries,_out_rNames,sTemp.makeStringAndClear());
+            else
+                _out_rNames.push_back( sTemp.makeStringAndClear() );
+        }
     }
 
     //------------------------------------------------------------------------
@@ -2710,7 +2732,7 @@ namespace pcr
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
             double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);
-            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO );
+            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, String( PcrRes( RID_STR_TEXT_FORMAT ) ), SID_ATTR_NUMBERFORMAT_INFO );
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
