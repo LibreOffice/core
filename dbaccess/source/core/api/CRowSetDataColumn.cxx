@@ -75,11 +75,13 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const ::rtl::OUString& _rDescription,
                                       const ORowSetCacheIterator& _rColumnValue)
-    : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
+    :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aColumnValue(_rColumnValue)
     ,m_aDescription(_rDescription)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
+    OColumnSettings::registerProperties( *this );
+    registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, ::getCppuType( &m_aDescription ) );
 }
 // -------------------------------------------------------------------------
 ORowSetDataColumn::~ORowSetDataColumn()
@@ -91,39 +93,38 @@ ORowSetDataColumn::~ORowSetDataColumn()
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(31)
-        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
-        DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
-        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
-        DECL_PROP1(DESCRIPTION,             ::rtl::OUString,    READONLY);
-        DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
-        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
-        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
-        DECL_PROP1_BOOL(ISCASESENSITIVE,                        READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                             READONLY);
-        DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
-        DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
-        DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
-        DECL_PROP1_BOOL(ISROWVERSION,                           READONLY);
-        DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);
-        DECL_PROP1_BOOL(ISSIGNED,                               READONLY);
-        DECL_PROP1_BOOL(ISWRITABLE,                             READONLY);
-        DECL_PROP1(LABEL,                   ::rtl::OUString,    READONLY);
-        DECL_PROP1(NAME,                    ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,               sal_Int32,          READONLY);
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(SCALE,                   sal_Int32,          READONLY);
-        DECL_PROP1(SCHEMANAME,              ::rtl::OUString,    READONLY);
-        DECL_PROP1(SERVICENAME,             ::rtl::OUString,    READONLY);
-        DECL_PROP1(TABLENAME,               ::rtl::OUString,    READONLY);
-        DECL_PROP1(TYPE,                    sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(VALUE,                   Any,                BOUND);
-        DECL_PROP1(WIDTH,                   sal_Int32,          MAYBEVOID);
-    END_PROPERTY_HELPER();
+    const sal_Int32 nDerivedProperties = 21;
+    Sequence< Property> aDerivedProperties( nDerivedProperties );
+    Property* pDesc = aDerivedProperties.getArray();
+    sal_Int32 nPos = 0;
+
+    DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
+    DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
+    DECL_PROP1_BOOL( ISAUTOINCREMENT,                           READONLY );
+    DECL_PROP1_BOOL( ISCASESENSITIVE,                           READONLY );
+    DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
+    DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
+    DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
+    DECL_PROP1_BOOL( ISREADONLY,                                READONLY );
+    DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );
+    DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
+    DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
+    DECL_PROP1_BOOL( ISWRITABLE,                                READONLY );
+    DECL_PROP1( LABEL,                      ::rtl::OUString,    READONLY );
+    DECL_PROP1( PRECISION,                  sal_Int32,          READONLY );
+    DECL_PROP1( SCALE,                      sal_Int32,          READONLY );
+    DECL_PROP1( SCHEMANAME,                 ::rtl::OUString,    READONLY );
+    DECL_PROP1( SERVICENAME,                ::rtl::OUString,    READONLY );
+    DECL_PROP1( TABLENAME,                  ::rtl::OUString,    READONLY );
+    DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
+    DECL_PROP1( TYPENAME,                   ::rtl::OUString,    READONLY );
+    DECL_PROP1( VALUE,                      Any,                BOUND );
+    OSL_ENSURE( nPos == nDerivedProperties, "ORowSetDataColumn::createArrayHelper: inconsistency!" );
+
+    Sequence< Property > aRegisteredProperties;
+    describeProperties( aRegisteredProperties );
+
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDerivedProperties, aRegisteredProperties ), sal_False );
 }
 
 // cppu::OPropertySetHelper
@@ -135,57 +136,33 @@ ORowSetDataColumn::~ORowSetDataColumn()
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    switch(nHandle)
+    if ( PROPERTY_ID_VALUE == nHandle )
     {
-        case PROPERTY_ID_DESCRIPTION:
-            rValue <<= m_aDescription;
-            break;
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            OColumnSettings::getFastPropertyValue( rValue, nHandle );
-            break;
-        case PROPERTY_ID_VALUE:
-            if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
-            {
-                ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
-                ::osl::MutexGuard aGuard( *pMutex );
+        if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
+        {
+            ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
+            ::osl::MutexGuard aGuard( *pMutex );
 #if OSL_DEBUG_LEVEL > 0
-                ORowSetRow aRow = *m_aColumnValue;
+            ORowSetRow aRow = *m_aColumnValue;
 #endif
-                OSL_ENSURE((sal_Int32)aRow->get().size() > m_nPos,"Pos is greater than size of vector");
-                rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
-            }
-            break;
-        default:
-            ODataColumn::getFastPropertyValue(rValue,nHandle);
+            OSL_ENSURE((sal_Int32)aRow->get().size() > m_nPos,"Pos is greater than size of vector");
+            rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
+        }
     }
+    else
+        ODataColumn::getFastPropertyValue( rValue, nHandle );
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )throw (Exception)
 {
-    switch(nHandle)
+    if ( PROPERTY_ID_VALUE == nHandle )
     {
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-            break;
-        case PROPERTY_ID_VALUE:
-            updateObject(rValue);
-            break;
-        default:
-            ODataColumn::setFastPropertyValue_NoBroadcast(nHandle,rValue );
+        updateObject(rValue);
+    }
+    else
+    {
+        ODataColumn::setFastPropertyValue_NoBroadcast( nHandle,rValue );
     }
 }
 // -------------------------------------------------------------------------
@@ -195,27 +172,14 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
                                                             const Any& rValue ) throw (IllegalArgumentException)
 {
     sal_Bool bModified = sal_False;
-    switch(nHandle)
+    if ( PROPERTY_ID_VALUE == nHandle )
     {
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-            break;
-        case PROPERTY_ID_VALUE:
-            rConvertedValue = rValue;
-            getFastPropertyValue(rOldValue, PROPERTY_ID_VALUE);
-            bModified = !::comphelper::compare(rConvertedValue, rOldValue);
-            break;
-        default:
-            bModified = ODataColumn::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
-
+        rConvertedValue = rValue;
+        getFastPropertyValue(rOldValue, PROPERTY_ID_VALUE);
+        bModified = rConvertedValue != rOldValue;
     }
+    else
+        bModified = ODataColumn::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 
     return bModified;
 }
