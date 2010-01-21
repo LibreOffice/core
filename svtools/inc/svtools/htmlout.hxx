@@ -34,7 +34,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <rtl/textenc.h>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 class Color;
 class ImageMap;

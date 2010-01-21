@@ -61,6 +61,13 @@ void SalFrame::Flush( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
+void SalFrame::SetRepresentedURL( const rtl::OUString& )
+{
+    // currently this is Mac only functionality
+}
+
+// -----------------------------------------------------------------------
+
 SalInstance::~SalInstance()
 {
 }
@@ -90,8 +97,8 @@ SalPrinter::~SalPrinter()
 {
 }
 
-BOOL SalPrinter::StartJob( const String*, const String&,
-                           ImplJobSetup*, ImplQPrinter* )
+BOOL SalPrinter::StartJob( const String*, const String&, const String&,
+                           ImplJobSetup*, vcl::PrinterController& )
 {
     return FALSE;
 }

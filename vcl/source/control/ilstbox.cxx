@@ -1873,6 +1873,8 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
             USHORT nDrawStyle = ImplGetTextStyle();
             if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
+            if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_DRAW_DISABLED) )
+                nDrawStyle |= TEXT_DRAW_DISABLE;
 
             DrawText( aTextRect, aStr, nDrawStyle, pVector, pDisplayText );
         }

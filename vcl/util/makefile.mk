@@ -31,6 +31,7 @@ PRJNAME=vcl
 TARGET=vcl
 TARGETTYPE=GUI
 USE_DEFFILE=TRUE
+GEN_HID_OTHER=TRUE
 
 .IF "$(SNDFILE_LIBS)"!=""
 SNDFILELIB=$(SNDFILE_LIBS)
@@ -73,7 +74,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/fixed.hxx       \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/font.hxx        \
-            $(INC)$/vcl$/fontcvt.hxx     \
             $(INC)$/vcl$/floatwin.hxx    \
             $(INC)$/vcl$/graph.hxx       \
             $(INC)$/vcl$/group.hxx       \

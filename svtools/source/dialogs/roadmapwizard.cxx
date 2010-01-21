@@ -32,7 +32,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <svtools/roadmapwizard.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include "roadmap.hxx"
 #include <tools/debug.hxx>

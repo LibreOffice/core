@@ -441,7 +441,7 @@ void PrinterInfoManager::initialize()
                         *  porters: please append your platform to the Solaris
                         *  case if your platform has SystemV printing per default.
                         */
-                        #if defined SOLARIS || defined(IRIX)
+                        #if defined SOLARIS
                         aValue = "lp";
                         #else
                         aValue = "lpr";

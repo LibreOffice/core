@@ -50,6 +50,7 @@
 #include "basegfx/polygon/b2dpolygonclipper.hxx"
 #include "basegfx/polygon/b2dlinegeometry.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 
 #include <vector>
@@ -1567,6 +1568,9 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
         // the used basegfx::tools::createAreaGeometry is simply too
         // expensive with very big polygons; fallback to caller (who
         // should use ImplLineConverter normally)
+        // AW: ImplLineConverter had to be removed since it does not even
+        // know LineJoins, so the fallback will now prepare the line geometry
+        // the same way.
         return false;
     }
     const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
@@ -1579,9 +1583,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
     {
         // prepare for createAreaGeometry() with anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getX() / rLineWidth.getY() );
-        aPolygon.transform( aAnisoMatrix );
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
     }
 
     // special handling for hairlines to improve the drawing performance
@@ -1603,9 +1605,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {
         // postprocess createAreaGeometry() for anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getY() / rLineWidth.getX() );
-        aPolygon.transform( aAnisoMatrix );
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
     }
 
     // temporarily adjust brush color to pen color
@@ -1793,7 +1793,7 @@ void splitIntersectingSegments( LSVector& rLSVector)
 
     // prepare the result vector
     // try to avoid reallocations by guessing a reasonable result size
-    rLSVector.reserve( aYMinQueue.size() * 1.5);
+    rLSVector.reserve( aYMinQueue.size() * 3/2 );
 
     // find all intersections
     CutPointSet aCutPointSet;

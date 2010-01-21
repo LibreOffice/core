@@ -149,34 +149,53 @@ static const rtl::OUString& get_desktop_environment()
     return aRet;
 }
 
-static const char* autodetect_plugin()
+static SalInstance* autodetect_plugin()
 {
+    static const char* pKDEFallbackList[] =
+    {
+        "kde4", "kde", "gtk", "gen", 0
+    };
+
+    static const char* pStandardFallbackList[] =
+    {
+        "gtk", "gen", 0
+    };
+
+    static const char* pHeadlessFallbackList[] =
+    {
+        "svp", 0
+    };
+
     const rtl::OUString& desktop( get_desktop_environment() );
-    const char * pRet = "gen";
+    const char ** pList = pStandardFallbackList;
+    int nListEntry = 0;
 
     // no server at all: dummy plugin
     if ( desktop.equalsAscii( desktop_strings[DESKTOP_NONE] ) )
-        pRet = "svp";
+        pList = pHeadlessFallbackList;
     else if ( desktop.equalsAscii( desktop_strings[DESKTOP_GNOME] ) )
-        pRet = "gtk";
+        pList = pStandardFallbackList;
     else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE] ) )
-        pRet = "kde";
-    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE4] ) )
-        pRet = "kde4";
-    else
     {
-        // #i95296# use the much nicer looking gtk plugin
-        // on desktops that set gtk variables (e.g. XFCE)
-        static const char* pEnv = getenv( "GTK2_RC_FILES" );
-        if( pEnv && *pEnv ) // check for existance and non emptiness
-            pRet = "gtk";
+        pList = pKDEFallbackList;
+        nListEntry = 1;
+    }
+    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE4] ) )
+        pList = pKDEFallbackList;
+
+    SalInstance* pInst = NULL;
+    while( pList[nListEntry] && pInst == NULL )
+    {
+        rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) );
+        pInst = tryInstance( aTry );
+        #if OSL_DEBUG_LEVEL > 1
+        if( pInst )
+            std::fprintf( stderr, "plugin autodetection: %s\n", pList[nListEntry] );
+        #endif
+        nListEntry++;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "plugin autodetection: %s\n", pRet );
-#endif
-
-    return pRet;
+    return pInst;
 }
 
 static SalInstance* check_headless_plugin()
@@ -200,12 +219,11 @@ SalInstance *CreateSalInstance()
 
     if( !(pUsePlugin && *pUsePlugin) )
         pInst = check_headless_plugin();
-
-    if( ! pInst && !(pUsePlugin && *pUsePlugin) )
-        pUsePlugin = autodetect_plugin();
-
-    if( ! pInst && pUsePlugin && *pUsePlugin )
+    else
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
+
+    if( ! pInst )
+        pInst = autodetect_plugin();
 
     // fallback to gen
     if( ! pInst )
