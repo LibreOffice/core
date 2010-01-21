@@ -661,6 +661,9 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
+#ifndef ENABLE_PRESENTER_EXTRA_UI
+    (void)xPagesSupplier;
+#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );
