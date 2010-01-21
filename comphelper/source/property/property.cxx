@@ -42,7 +42,7 @@
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/thread.h>
     #include <com/sun/star/lang/XServiceInfo.hpp>
-    #include <typeinfo.h>
+    #include <typeinfo>
 #endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

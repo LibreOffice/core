@@ -37,7 +37,8 @@ enum SalSessionEventType
 {
     Interaction,
     SaveRequest,
-    ShutdownCancel
+    ShutdownCancel,
+    Quit
 };
 
 struct SalSessionEvent
@@ -75,6 +76,13 @@ struct SalSessionShutdownCancelEvent : public SalSessionEvent
 {
     SalSessionShutdownCancelEvent()
             : SalSessionEvent( ShutdownCancel )
+    {}
+};
+
+struct SalSessionQuitEvent : public SalSessionEvent
+{
+    SalSessionQuitEvent()
+            : SalSessionEvent( Quit )
     {}
 };
 

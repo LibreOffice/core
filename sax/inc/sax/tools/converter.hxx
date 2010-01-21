@@ -31,10 +31,12 @@
 #ifndef _SAX_CONVERTER_HXX
 #define _SAX_CONVERTER_HXX
 
-#include <sal/types.h>
 #include "sax/dllapi.h"
-#include <com/sun/star/util/Date.hpp>
+
+#include <sal/types.h>
+
 #include <com/sun/star/util/MeasureUnit.hpp>
+
 
 namespace rtl
 {
@@ -43,8 +45,12 @@ class OUStringBuffer;
 }
 
 namespace com { namespace sun { namespace star {
-    namespace util { struct DateTime; }
-}}}
+    namespace util {
+        struct Date;
+        struct DateTime;
+        struct Duration;
+    }
+} } }
 
 namespace sax {
 
@@ -138,30 +144,42 @@ public:
     /** convert string to double number (using ::rtl::math) with unit conversion */
     static bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Int16 nTargetUnit );
 
-    /** convert double to ISO Time String */
-    static void convertTime( ::rtl::OUStringBuffer& rBuffer,
-                                const double& fTime);
+    /** convert double to ISO "duration" string; negative durations allowed */
+    static void convertDuration(::rtl::OUStringBuffer& rBuffer,
+                                const double fTime);
 
-    /** convert util::DateTime to ISO Time String */
-    static void convertTime( ::rtl::OUStringBuffer& rBuffer,
-                                const ::com::sun::star::util::DateTime& rDateTime );
+    /** convert util::Duration to ISO "duration" string */
+    static void convertDuration(::rtl::OUStringBuffer& rBuffer,
+                        const ::com::sun::star::util::Duration& rDuration);
 
-    /** convert ISO Time String to double */
-    static bool convertTime( double& fTime,
+    /** convert ISO "duration" string to double; negative durations allowed */
+    static bool convertDuration(double & rfTime,
                                 const ::rtl::OUString& rString);
 
-    /** convert ISO Time String to util::DateTime */
-    static bool convertTime( ::com::sun::star::util::DateTime& rDateTime,
-                                 const ::rtl::OUString& rString );
+    /** convert ISO "duration" string to util::Duration */
+    static bool convertDuration(::com::sun::star::util::Duration& rDuration,
+                        const ::rtl::OUString& rString);
 
-    /** convert util::DateTime to ISO Date String */
+    /** convert util::Date to ISO "date" string */
+    static void convertDate( ::rtl::OUStringBuffer& rBuffer,
+                    const com::sun::star::util::Date& rDate );
+
+    /** convert util::DateTime to ISO "date" or "dateTime" string */
     static void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const com::sun::star::util::DateTime& rDateTime,
                                    bool bAddTimeIf0AM = false );
 
-    /** convert ISO Date String to util::DateTime */
+    /** convert ISO "date" or "dateTime" string to util::DateTime */
     static bool convertDateTime( com::sun::star::util::DateTime& rDateTime,
                                  const ::rtl::OUString& rString );
+
+    /** convert ISO "date" or "dateTime" string to util::DateTime or
+        util::Date */
+    static bool convertDateOrDateTime(
+                    com::sun::star::util::Date & rDate,
+                    com::sun::star::util::DateTime & rDateTime,
+                    bool & rbDateTime,
+                    const ::rtl::OUString & rString );
 
     /** gets the position of the first comma after npos in the string
         rStr. Commas inside '"' pairs are not matched */

@@ -79,8 +79,8 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "rtl/logfile.hxx"
-
-#include "vcl/fontcfg.hxx"
+#include <unotools/syslocaleoptions.hxx>
+#include "unotools/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
 
@@ -444,6 +444,26 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpSplitVArwImgList;
         pSVData->maCtrlData.mpSplitVArwImgList = NULL;
     }
+    if ( pSVData->maCtrlData.mpDisclosurePlus )
+    {
+        delete pSVData->maCtrlData.mpDisclosurePlus;
+        pSVData->maCtrlData.mpDisclosurePlus = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosurePlusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosurePlusHC;
+        pSVData->maCtrlData.mpDisclosurePlusHC = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosureMinus )
+    {
+        delete pSVData->maCtrlData.mpDisclosureMinus;
+        pSVData->maCtrlData.mpDisclosureMinus = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosureMinusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosureMinusHC;
+        pSVData->maCtrlData.mpDisclosureMinusHC = NULL;
+    }
     if ( pSVData->mpDefaultWin )
     {
         delete pSVData->mpDefaultWin;
@@ -467,6 +487,12 @@ void DeInitVCL()
 
     if ( pSVData->maAppData.mpSettings )
     {
+        if ( pSVData->maAppData.mpCfgListener )
+        {
+            pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
+            delete pSVData->maAppData.mpCfgListener;
+        }
+
         delete pSVData->maAppData.mpSettings;
         pSVData->maAppData.mpSettings = NULL;
     }
