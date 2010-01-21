@@ -1303,6 +1303,18 @@ SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
             ++aIndex;
     }
 
+    SwNode * pNode = &aIndex.GetNode();
+    while (pNode->IsEndNode())
+    {
+        SwNode * pStartNode = pNode->StartOfSectionNode();
+        SwNodeIndex aStartIndex(*pStartNode);
+        aNewStart = aStartIndex;
+        aNewEnd = aIndex;
+
+        ++aIndex;
+        pNode = &aIndex.GetNode();
+    }
+
     return SwNodeRange(aNewStart, aNewEnd);
 }
 
