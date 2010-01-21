@@ -95,6 +95,7 @@ SHL1STDLIBS=\
     $(SALLIB)					\
     $(JVMACCESSLIB)				\
     $(DBTOOLSLIB)				\
+    $(UNOTOOLSLIB)				\
     $(JVMFWKLIB)				\
     $(COMPHELPERLIB)
 

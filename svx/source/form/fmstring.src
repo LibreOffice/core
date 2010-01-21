@@ -130,7 +130,7 @@ String RID_STR_DELETECONFIRM_RECORDS
 };
 String RID_STR_DELETECONFIRM
 {
-    Text [ en-US ] = "If you click Yes, you won't be able to undo this operation!\nDo you want to continue anyway?";
+    Text [ en-US ] = "If you click Yes, you won't be able to undo this operation.\nDo you want to continue anyway?";
 };
 
 String RID_ERR_NO_ELEMENT
