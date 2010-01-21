@@ -158,6 +158,24 @@ class TableManager
          true when at the end of a cell
          */
         bool mbCellEnd;
+
+        /**
+         Reset to initial state at beginning of row.
+         */
+        void resetCellSpecifics()
+        {
+            mbRowEnd = false;
+            mbInCell = false;
+            mbCellEnd = false;
+        }
+
+        /**
+         Constructor
+         */
+        TableManagerState()
+        : mbRowEnd(false), mbInCell(false), mbCellEnd(false)
+        {
+        }
     };
 
     /**
@@ -165,7 +183,6 @@ class TableManager
      */
     T mCurHandle;
 
-    ::std::stack<TableManagerState> mStateStack;
     TableManagerState mState;
 
 protected:
@@ -583,7 +600,6 @@ void TableManager<T, PropertiesPointer>::startLevel()
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
     mTableDataStack.push(pTableData);
-    mStateStack.push(mState);
 }
 
 template <typename T, typename PropertiesPointer>
@@ -593,8 +609,6 @@ void TableManager<T, PropertiesPointer>::endLevel()
         resolveCurrentTable();
 
     mTableDataStack.pop();
-    mState = mStateStack.top();
-    mStateStack.pop();
 
 #ifdef DEBUG_TABLE
     if (mpTableLogger.get() != NULL)
@@ -609,9 +623,7 @@ void TableManager<T, PropertiesPointer>::endLevel()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startParagraphGroup()
 {
-    setRowEnd(false);
-    setInCell(false);
-    setCellEnd(false);
+    mState.resetCellSpecifics();
     mnTableDepthNew = 0;
 }
 
