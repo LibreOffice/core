@@ -54,6 +54,14 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:AddField" oor:op="replace">
+              <prop oor:name="Label" oor:type="xs:string">
+                <value xml:lang="en-US">~Add Field</value>
+              </prop>
+              <prop oor:name="Properties" oor:type="xs:int">
+                <value>1</value>
+              </prop>
+            </node>
             <node oor:name=".uno:ConditionalFormatting" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Conditional Formatting...</value>
