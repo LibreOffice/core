@@ -205,6 +205,11 @@ sub get_module_paths {
             croak("Cannot read $_ repository content");
         };
     };
+    my @false_actives = ();
+    foreach (keys %{$self->{ACTIVATED_MODULES}}) {
+        push(@false_actives, $_) if (!defined  ${$self->{MODULE_PATHS}}{$_});
+    };
+    croak("Error!! Activated module(s): @false_actives\nnot found in the active repositories!! Please check your " . $self->{SOURCE_CONFIG_FILE} . "\n") if (scalar @false_actives);
     croak("No modules found!") if (!scalar keys %{$self->{MODULE_PATHS}});
 };
 
