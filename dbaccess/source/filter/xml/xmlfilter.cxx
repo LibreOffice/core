@@ -124,7 +124,7 @@
 #include <vos/mutex.hxx>
 #endif
 #include <svtools/sfxecode.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif

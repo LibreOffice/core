@@ -59,12 +59,12 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/logindlg.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
 #include <typelib/typedescription.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
@@ -356,6 +356,11 @@ void ODbDataSourceAdministrationHelper::clearPassword()
 // -----------------------------------------------------------------------------
 Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
 {
+    return getDriver(getConnectionURL());
+}
+// -----------------------------------------------------------------------------
+Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::OUString& _sURL)
+{
     // get the global DriverManager
     Reference< XDriverAccess > xDriverManager;
     String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
@@ -376,11 +381,11 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
 
 
-    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(getConnectionURL());
+    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
     if (!xDriver.is())
     {
         sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", getConnectionURL());
+        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
     }

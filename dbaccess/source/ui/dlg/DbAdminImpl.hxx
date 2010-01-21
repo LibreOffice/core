@@ -59,12 +59,12 @@
 #include "dsntypes.hxx"
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class Window;
 //.........................................................................
@@ -140,6 +140,7 @@ namespace dbaui
         /** return the corresponding driver for the selected URL
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const ::rtl::OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */

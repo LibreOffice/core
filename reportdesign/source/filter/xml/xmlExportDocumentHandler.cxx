@@ -41,7 +41,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>

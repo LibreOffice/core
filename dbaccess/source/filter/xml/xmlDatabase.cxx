@@ -30,45 +30,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_XMLDATABASE_HXX
 #include "xmlDatabase.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef DBA_XMLDATASOURCE_HXX
 #include "xmlDataSource.hxx"
-#endif
-#ifndef DBA_XMLDOCUMENTS_HXX
 #include "xmlDocuments.hxx"
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
+#include <connectivity/dbtools.hxx>
 
 namespace dbaxml
 {
@@ -111,25 +86,46 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
         case XML_TOK_FORMS:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference<XFormDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
-                if ( xSup.is() )
-                    pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getFormDocuments(),SERVICE_NAME_FORM_COLLECTION,SERVICE_SDB_DOCUMENTDEFINITION);
+                Any aValue;
+                ::rtl::OUString sService;
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"FormSupplier",aValue);
+                aValue >>= sService;
+                if ( !sService.getLength() )
+                {
+                    Reference<XFormDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
+                    if ( xSup.is() )
+                        pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getFormDocuments(),SERVICE_NAME_FORM_COLLECTION,SERVICE_SDB_DOCUMENTDEFINITION);
+                }
             }
             break;
         case XML_TOK_REPORTS:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference<XReportDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
-                if ( xSup.is() )
-                    pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getReportDocuments(),SERVICE_NAME_REPORT_COLLECTION,SERVICE_SDB_DOCUMENTDEFINITION);
+                Any aValue;
+                ::rtl::OUString sService;
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"ReportSupplier",aValue);
+                aValue >>= sService;
+                if ( !sService.getLength() )
+                {
+                    Reference<XReportDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
+                    if ( xSup.is() )
+                        pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getReportDocuments(),SERVICE_NAME_REPORT_COLLECTION,SERVICE_SDB_DOCUMENTDEFINITION);
+                }
             }
             break;
         case XML_TOK_QUERIES:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference<XQueryDefinitionsSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
-                if ( xSup.is() )
-                    pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getQueryDefinitions(),SERVICE_NAME_QUERY_COLLECTION);
+                Any aValue;
+                ::rtl::OUString sService;
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitionSupplier",aValue);
+                aValue >>= sService;
+                if ( !sService.getLength() )
+                {
+                    Reference<XQueryDefinitionsSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
+                    if ( xSup.is() )
+                        pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getQueryDefinitions(),SERVICE_NAME_QUERY_COLLECTION);
+                }
             }
             break;
         case XML_TOK_TABLES:

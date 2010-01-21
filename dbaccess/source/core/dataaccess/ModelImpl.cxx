@@ -1183,6 +1183,17 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
 
+        // known services to handle database tasks
+        AsciiPropertyValue( "TableAlterationServiceName", makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "TableRenameServiceName",     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ViewAlterationServiceName",  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ViewSupportServiceName",     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "CommandDefinitionSupplier",  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "FormSupplier",               makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ReportSupplier",             makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "IndexAlterationServiceName", makeAny( ::rtl::OUString() ) ),
+
         AsciiPropertyValue()
     };
     return aKnownSettings;
