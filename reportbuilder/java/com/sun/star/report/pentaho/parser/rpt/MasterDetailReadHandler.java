@@ -71,7 +71,7 @@ public class MasterDetailReadHandler extends ElementReadHandler
         if (parseMasterDetail)
         {
             final String master = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "master");
-            if (master != null && master.length() > 0 )
+            if (master != null && master.length() > 0)
             {
                 final String detail = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "detail");
                 element.addMasterDetailFields(master, detail);

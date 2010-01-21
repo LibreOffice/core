@@ -50,6 +50,7 @@ public interface ReportEngine
     /**
      * Open points: How to define scheduling?
      *
+     * @param definition
      * @return the report job definition for the job description.
      * @throws JobDefinitionException
      */

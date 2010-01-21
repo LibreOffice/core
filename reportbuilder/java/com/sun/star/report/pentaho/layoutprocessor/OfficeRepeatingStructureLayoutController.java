@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import org.jfree.report.flow.layoutprocessor.LayoutController;
@@ -41,8 +39,8 @@ import org.jfree.report.flow.layoutprocessor.LayoutController;
  */
 public interface OfficeRepeatingStructureLayoutController extends LayoutController
 {
-  public boolean isNormalFlowProcessing();
 
-  public VariablesCollection getVariablesCollection();
+    public boolean isNormalFlowProcessing();
 
+    public VariablesCollection getVariablesCollection();
 }

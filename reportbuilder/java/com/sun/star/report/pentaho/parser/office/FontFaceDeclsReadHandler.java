@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.office;
 
 import java.util.ArrayList;
@@ -53,67 +51,66 @@ import org.xml.sax.SAXException;
  */
 public class FontFaceDeclsReadHandler extends ElementReadHandler
 {
-  private final FontFaceDeclsSection fontFaceDecls;
-  private final List fontFaceReadHandlers;
 
-  public FontFaceDeclsReadHandler(final FontFaceDeclsSection fontFaceDecls)
-  {
-    this.fontFaceDecls = fontFaceDecls;
-    this.fontFaceReadHandlers = new ArrayList();
-  }
+    private final FontFaceDeclsSection fontFaceDecls;
+    private final List fontFaceReadHandlers;
 
-  public FontFaceDeclsSection getFontFaceDecls()
-  {
-    return fontFaceDecls;
-  }
-
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (!OfficeNamespaces.STYLE_NS.equals(uri) )
+    public FontFaceDeclsReadHandler(final FontFaceDeclsSection fontFaceDecls)
     {
-      return null;
+        this.fontFaceDecls = fontFaceDecls;
+        this.fontFaceReadHandlers = new ArrayList();
     }
 
-    if ("font-face".equals(tagName))
+    public FontFaceDeclsSection getFontFaceDecls()
     {
-      final FontFaceReadHandler frh = new FontFaceReadHandler();
-      fontFaceReadHandlers.add(frh);
-      return frh;
+        return fontFaceDecls;
     }
-    return null;
-  }
 
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    for (int i = 0; i < fontFaceReadHandlers.size(); i++)
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      final FontFaceReadHandler handler = (FontFaceReadHandler) fontFaceReadHandlers.get(i);
-      fontFaceDecls.addFontFace((FontFaceElement) handler.getElement());
+        if (!OfficeNamespaces.STYLE_NS.equals(uri))
+        {
+            return null;
+        }
+
+        if ("font-face".equals(tagName))
+        {
+            final FontFaceReadHandler frh = new FontFaceReadHandler();
+            fontFaceReadHandlers.add(frh);
+            return frh;
+        }
+        return null;
     }
-  }
 
-  public Element getElement()
-  {
-    return fontFaceDecls;
-  }
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
+    {
+        for (int i = 0; i < fontFaceReadHandlers.size(); i++)
+        {
+            final FontFaceReadHandler handler = (FontFaceReadHandler) fontFaceReadHandlers.get(i);
+            fontFaceDecls.addFontFace((FontFaceElement) handler.getElement());
+        }
+    }
 
+    public Element getElement()
+    {
+        return fontFaceDecls;
+    }
 }

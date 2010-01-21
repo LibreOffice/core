@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,12 +35,11 @@ import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
 
 public class TextUnderlineWordMode extends OneOfConstantsMapper
 {
-  public TextUnderlineWordMode ()
-  {
-    super(TextStyleKeys.TEXT_UNDERLINE_MODE);
-    addMapping("continuous", TextDecorationMode.CONTINUOUS);
-    addMapping("skip-white-space", TextDecorationMode.SKIP_WHITE_SPACE);
-  }
 
-
+    public TextUnderlineWordMode()
+    {
+        super(TextStyleKeys.TEXT_UNDERLINE_MODE);
+        addMapping("continuous", TextDecorationMode.CONTINUOUS);
+        addMapping("skip-white-space", TextDecorationMode.SKIP_WHITE_SPACE);
+    }
 }
