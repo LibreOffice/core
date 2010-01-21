@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -42,84 +42,20 @@ TARGET=so_cppunit
 
 TARFILE_NAME=cppunit-1.8.0
 
-MOVED_FILES=\
- include$/cppunit$/result$/SynchronizedObject.h \
- include$/cppunit$/result$/TestListener.h \
- include$/cppunit$/result$/TestResultCollector.h \
- include$/cppunit$/result$/TestResult.h \
- include$/cppunit$/result$/TestSucessListener.h \
- include$/cppunit$/result$/TextTestResult.h \
- include$/cppunit$/portability$/config-bcb5.h \
- include$/cppunit$/portability$/config-msvc6.h \
- src$/result$/SynchronizedObject.cpp \
- src$/result$/TestResultCollector.cpp \
- src$/result$/TestResult.cpp \
- src$/result$/TestSucessListener.cpp \
- src$/result$/TextTestResult.cpp
-
 ADDITIONAL_FILES=\
- $(MOVED_FILES) \
- include$/cppunit$/additionalfunc.hxx \
- include$/cppunit$/autoregister$/callbackfunc_fktptr.h  \
- include$/cppunit$/autoregister$/callbackstructure.h \
- include$/cppunit$/autoregister$/htestresult.h \
- include$/cppunit$/autoregister$/registerfunc.h \
- include$/cppunit$/autoregister$/registertestfunction.h \
- include$/cppunit$/autoregister$/testfunc.h \
- include$/cppunit$/checkboom.hxx \
- include$/cppunit$/cmdlinebits.hxx \
- include$/cppunit$/externcallbackfunc.hxx \
- include$/cppunit$/joblist.hxx \
- include$/cppunit$/nocopy.hxx \
- include$/cppunit$/portability$/config-auto.h \
- include$/cppunit$/result$/callbackfunc.h \
- include$/cppunit$/result$/emacsTestResult.hxx \
- include$/cppunit$/result$/log.hxx \
- include$/cppunit$/result$/optionhelper.hxx \
- include$/cppunit$/result$/outputter.hxx \
- include$/cppunit$/result$/testshlTestResult.h \
- include$/cppunit$/signaltest.h \
- include$/cppunit$/simpleheader.hxx \
- include$/cppunit$/stringhelper.hxx \
- include$/cppunit$/taghelper.hxx \
+ include$/cppunit$/config-auto.h \
  include$/cppunit$/tagvalues.hxx \
- include$/testshl$/autoregisterhelper.hxx \
- include$/testshl$/dynamicregister.hxx \
- include$/testshl$/filehelper.hxx \
- include$/testshl$/getopt.hxx \
- include$/testshl$/log.hxx \
- include$/testshl$/tresstatewrapper.h \
- include$/testshl$/tresstatewrapper.hxx \
- include$/testshl$/versionhelper.hxx \
- include$/testshl$/winstuff.hxx \
- include$/makefile.mk \
+ include$/cppunit$/callbackfunc_fktptr.h \
+ include$/cppunit$/externcallbackfunc.hxx \
  makefile.mk \
  src$/makefile.mk \
- src$/cppunit$/cmdlinebits.cxx \
- src$/cppunit$/joblist.cxx \
- src$/cppunit$/makefile.mk \
- src$/cppunit$/registertestfunction.cxx \
- src$/cppunit$/signaltest.cxx \
- src$/cppunit$/t_print.cxx \
- src$/cppunit$/tresregister.cxx \
- src$/cppunit$/tresstatewrapper.cxx \
- src$/result$/emacsTestResult.cxx \
- src$/result$/log.cxx \
- src$/result$/makefile.mk \
- src$/result$/optionhelper.cxx \
- src$/result$/outputter.cxx \
- src$/result$/signal.cxx \
- src$/result$/signal.hxx \
- src$/result$/testshlTestResult.cxx \
- src$/result$/treswrapper.cxx \
- src$/win32$/makefile.mk \
- src$/win32$/winstuff.cxx
+ src$/cppunit$/makefile.mk
 
 PATCH_FILES=cppunit-1.8.0-r1.patch
 
 # CONFIGURE_DIR=
 # CONFIGURE_ACTION=
-# 
+#
 # BUILD_DIR=
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
