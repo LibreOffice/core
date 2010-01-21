@@ -46,9 +46,9 @@
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"
 
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/msgbox.hxx>
 

@@ -35,7 +35,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
 

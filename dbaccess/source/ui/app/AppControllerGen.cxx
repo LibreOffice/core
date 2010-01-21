@@ -545,7 +545,7 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
 //
 //  String sTitle = String(ModuleRes(STR_APP_TITLE));
 //  sName = sName + sTitle;
-//#ifndef PRODUCT
+//#ifdef DBG_UTIL
 //    ::rtl::OUString aDefault;
 //  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
 //    sName += utl::Bootstrap::getBuildIdData( aDefault );

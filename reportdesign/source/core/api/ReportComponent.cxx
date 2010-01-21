@@ -44,8 +44,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/unolingu.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
 
 // =============================================================================
