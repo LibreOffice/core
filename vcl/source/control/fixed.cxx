@@ -1044,6 +1044,14 @@ void FixedImage::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
+Size FixedImage::GetOptimalSize( WindowSizeType ) const
+{
+    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
+    return pImage->GetSizePixel();
+}
+
+// -----------------------------------------------------------------------
+
 void FixedImage::UserDraw( const UserDrawEvent& )
 {
 }
