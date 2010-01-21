@@ -42,6 +42,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,10 +54,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PagePreviewPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval;
-            Primitive2DSequence aContent(getChildren());
+            Primitive2DSequence aContent(getPageContent());
 
             if(aContent.hasElements()
                 && basegfx::fTools::more(getContentWidth(), 0.0)
@@ -112,9 +113,9 @@ namespace drawinglayer
                         }
 
                         // add the missing object transformation aspects
-                        aPageTrans.shearX(fShearX);
-                        aPageTrans.rotate(fRotate);
-                        aPageTrans.translate(aTranslate.getX(), aTranslate.getY());
+                        const basegfx::B2DHomMatrix aCombined(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                            fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                        aPageTrans = aCombined * aPageTrans;
                     }
                     else
                     {
@@ -139,10 +140,11 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,
-            const Primitive2DSequence& rChildren,
+            const Primitive2DSequence& rPageContent,
             bool bKeepAspectRatio)
-        :   GroupPrimitive2D(rChildren),
+        :   BufferedDecompositionPrimitive2D(),
             mxDrawPage(rxDrawPage),
+            maPageContent(rPageContent),
             maTransform(rTransform),
             mfContentWidth(fContentWidth),
             mfContentHeight(fContentHeight),
@@ -152,11 +154,12 @@ namespace drawinglayer
 
         bool PagePreviewPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(GroupPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const PagePreviewPrimitive2D& rCompare = static_cast< const PagePreviewPrimitive2D& >(rPrimitive);
 
                 return (getXDrawPage() == rCompare.getXDrawPage()
+                    && getPageContent() == rCompare.getPageContent()
                     && getTransform() == rCompare.getTransform()
                     && getContentWidth() == rCompare.getContentWidth()
                     && getContentHeight() == rCompare.getContentHeight()

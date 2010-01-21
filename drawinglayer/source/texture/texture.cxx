@@ -39,6 +39,7 @@
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -596,9 +597,8 @@ namespace drawinglayer
                 basegfx::B2DPoint aCenter(0.5, 0.5);
                 aCenter *= maTextureTransform;
 
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+                maTextureTransform = basegfx::tools::createRotateAroundPoint(aCenter, fAngle)
+                    * maTextureTransform;
             }
 
             // add object translate

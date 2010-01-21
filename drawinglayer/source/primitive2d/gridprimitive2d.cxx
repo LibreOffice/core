@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GridPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -65,10 +66,8 @@ namespace drawinglayer
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // create grid matrix which transforms from scaled logic to view
-                basegfx::B2DHomMatrix aRST;
-                aRST.shearX(fShearX);
-                aRST.rotate(fRotate);
-                aRST.translate(aTranslate.getX(), aTranslate.getY());
+                basegfx::B2DHomMatrix aRST(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
                 aRST *= rViewInformation.getObjectToViewTransformation();
 
                 // get step widths
@@ -248,7 +247,7 @@ namespace drawinglayer
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mfWidth(fWidth),
             mfHeight(fHeight),
@@ -265,7 +264,7 @@ namespace drawinglayer
 
         bool GridPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
 
@@ -299,16 +298,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< GridPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
@@ -316,7 +315,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
