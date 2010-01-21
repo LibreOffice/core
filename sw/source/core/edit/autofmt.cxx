@@ -1892,8 +1892,13 @@ void SwAutoFormat::BuildHeadLine( USHORT nLvl )
         // dann lasse doch mal das AutoCorrect auf den akt. TextNode los
 void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 {
+    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    long aSvxFlags = pATst->GetFlags( );
+    bool bReplaceQuote = ( aSvxFlags & ChgQuotes ) > 0;
+    bool bReplaceSglQuote = ( aSvxFlags & ChgSglQuotes ) > 0;
+
     if( aFlags.bAFmtByInput ||
-        (!aFlags.bAutoCorrect && !aFlags.bReplaceQuote &&
+        (!aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&
         !aFlags.bCptlSttSntnc && !aFlags.bCptlSttWrd &&
         !aFlags.bChgOrdinalNumber &&
         !aFlags.bChgToEnEmDash && !aFlags.bSetINetAttr &&
@@ -1915,7 +1920,6 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
 
     SwAutoCorrDoc aACorrDoc( *pEditShell, aDelPam );
-    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
     SwTxtFrmInfo aFInfo( 0 );
 
@@ -1931,8 +1935,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
         if( nPos == pTxt->Len() )
             break;      // das wars
 
-        if( aFlags.bReplaceQuote &&
-            ( '\"' == cChar || '\'' == cChar ) &&
+        if( ( ( bReplaceQuote && '\"' == cChar ) ||
+              ( bReplaceSglQuote && '\'' == cChar ) ) &&
             ( !nPos || ' ' == pTxt->GetChar( nPos-1 ) ) )
         {
             // --------------------------------------
@@ -1985,7 +1989,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             {
             case '\"':
             case '\'':
-                if( aFlags.bReplaceQuote )
+                if( ( cChar == '\"' && bReplaceQuote ) || ( cChar == '\'' && bReplaceSglQuote ) )
                 {
                     // --------------------------------------
                     // beachte: Sonderfall Symbolfonts !!!
@@ -2070,6 +2074,18 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     }
                 }
                 break;
+            case '/':
+                if ( aFlags.bAddNonBrkSpace )
+                {
+                    LanguageType eLang = (bGetLanguage && pAktTxtNd)
+                                           ? pAktTxtNd->GetLang( nSttPos )
+                                           : LANGUAGE_SYSTEM;
+
+                    SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE );
+                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) )
+                        --nPos;
+                }
+                break;
 
             case '.':
             case '!':
@@ -2078,7 +2094,6 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     bFirstSent = TRUE;
 //alle Wortrenner loesen die Autokorrektur aus!
 //              break;
-
             default:
 //alle Wortrenner loesen die Autokorrektur aus!
 //          case ' ':
@@ -2127,15 +2142,18 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                            ? pAktTxtNd->GetLang( nSttPos )
                                            : LANGUAGE_SYSTEM;
 
+            if ( aFlags.bAddNonBrkSpace )
+            {
+                SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE );
+                pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang );
+            }
+
             if( ( aFlags.bChgOrdinalNumber &&
                     SetRedlineTxt( STR_AUTOFMTREDL_ORDINAL ) &&
                     pATst->FnChgOrdinalNumber( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bChgToEnEmDash &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DASH ) &&
                     pATst->FnChgToEnEmDash( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
-                ( aFlags.bAddNonBrkSpace &&
-                    SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE ) &&
-                    pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bSetINetAttr &&
                     ( nPos == pTxt->Len() || IsSpace( pTxt->GetChar( nPos )) ) &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DETECT_URL ) &&
