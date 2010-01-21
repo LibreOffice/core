@@ -148,9 +148,10 @@ namespace dbtools
             sal_Int32 nType = DataType::OTHER;
             _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= nType;
 
-            if  (   ( DataType::CHAR == nType )
-                ||  ( DataType::VARCHAR == nType )
+            if  (   ( DataType::CHAR        == nType )
+                ||  ( DataType::VARCHAR     == nType )
                 ||  ( DataType::LONGVARCHAR == nType )
+                ||  ( DataType::CLOB        == nType )
                 )
             {   // yes -> force a quoted text and try again
                 ::rtl::OUString sQuoted( _rStatement );
