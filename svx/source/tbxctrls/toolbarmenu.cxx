@@ -41,8 +41,8 @@
 
 #include "svx/toolbarmenu.hxx"
 
-const int EXTRAITEMHEIGHT = 4;
-const int SEPARATOR_HEIGHT = 6;
+const int EXTRAITEMHEIGHT = 0; // 4;
+const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;
 const int BORDER_X = 0;
 const int BORDER_Y = 0;
@@ -404,11 +404,8 @@ Size ToolbarMenu::implCalcSize()
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
 
                 nMaxTextWidth = Max( aControlSize.Width(), nMaxTextWidth );
-                pEntry->maSize.Height() = Max( aControlSize.Height(), pEntry->maSize.Height() );
+                pEntry->maSize.Height() = Max( aControlSize.Height(), pEntry->maSize.Height() ) + 1;
             }
-
-            pEntry->maSize.Height() += EXTRAITEMHEIGHT;
-
             aSz.Height() += pEntry->maSize.Height();
         }
         else
@@ -551,25 +548,21 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
         {
             if(nEntry == nHighlightEntry)
             {
-                SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-
-                Rectangle aRect( Point( nX, nY ), Size( aSz.Width()-(BORDER_X<<1), p->maSize.Height() ) );
-/*
-                if( p->mnBits & MIB_POPUPSELECT )
+                if( (p->mpControl == NULL) || (p->mbHasText) )
                 {
-                    long nFontHeight = GetTextHeight();
-                    aRect.Right() -= nFontHeight + nFontHeight/4;
-                }
-                DrawRect( aRect );
-*/
+                    Rectangle aRect( Point( nX, nY ), Size( aSz.Width()-(BORDER_X<<1), p->maSize.Height() ) );
+                    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+                    SetLineColor();
+                    DrawRect( aRect );
 
-                if( bHighlight && ((p->mpControl == NULL) || (p->mbHasText)) )
-                {
-                    aRect.nLeft += 1;
-                    aRect.nTop += 1;
-                    aRect.nBottom -= 1;
-                    aRect.nRight -= 1;
-                    DrawSelectionBackground( aRect, true, false, TRUE, TRUE );
+                    if( bHighlight )
+                    {
+                        aRect.nLeft += 1;
+                        aRect.nTop += 1;
+                        aRect.nBottom -= 1;
+                        aRect.nRight -= 1;
+                        DrawSelectionBackground( aRect, true, false, TRUE, TRUE );
+                    }
                 }
 
                 implPaint( p, bHighlight );
@@ -632,27 +625,31 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
         for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
         {
             ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
-            if( pEntry && (pEntry->mnEntryId != TITLE_ID) )
+            if( pEntry )
             {
                 long nOldY = nY;
                 nY += pEntry->maSize.Height();
-                if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) )
+
+                if( pEntry->mnEntryId != TITLE_ID )
                 {
-                    if( bMBDown )
+                    if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) )
                     {
-                        if( nEntry != mnHighlightedEntry )
+                        if( bMBDown )
                         {
-                            implChangeHighlightEntry( nEntry );
+                            if( nEntry != mnHighlightedEntry )
+                            {
+                                implChangeHighlightEntry( nEntry );
+                            }
                         }
-                    }
-                    else
-                    {
-                        if ( nEntry != mnHighlightedEntry )
+                        else
                         {
-                            implChangeHighlightEntry( nEntry );
+                            if ( nEntry != mnHighlightedEntry )
+                            {
+                                implChangeHighlightEntry( nEntry );
+                            }
                         }
+                        bHighlighted = true;
                     }
-                    bHighlighted = true;
                 }
             }
             else
@@ -671,20 +668,18 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
 
 void ToolbarMenu::implChangeHighlightEntry( int nEntry )
 {
-/*
     if( mnHighlightedEntry != -1 )
     {
         implHighlightEntry( mnHighlightedEntry, false );
     }
-*/
+
     mnHighlightedEntry = nEntry;
-    Invalidate();
- /*
+//    Invalidate();
+
     if( mnHighlightedEntry != -1 )
     {
         implHighlightEntry( mnHighlightedEntry, true );
     }
- */
 }
 
 ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
@@ -864,28 +859,6 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-/*
-void ToolbarMenu::implDrawBorder()
-{
-    SetFillColor();
-    SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
-    Point aPt;
-    Rectangle aRect( aPt, GetOutputSizePixel() );
-
-    Region oldClipRgn( GetClipRegion( ) );
-    Region aClipRgn( aRect );
-    Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
-    if( !aItemClipRect.IsEmpty() )
-    {
-        aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
-        aClipRgn.Exclude( aItemClipRect );
-        SetClipRegion( aClipRgn );
-    }
-    DrawRect( aRect );
-    SetClipRegion( oldClipRgn );
-}
-*/
-
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 {
     const long nFontHeight = GetTextHeight();
@@ -895,7 +868,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     const Size aOutSz( GetOutputSizePixel() );
-//    const long nMaxY = aOutSz.Height();
 
     Point aTopLeft( BORDER_X, BORDER_Y ), aTmpPos;
 
@@ -922,7 +894,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
             if( pThisOnly == NULL  )
             {
                 aTmpPos.Y() = aPos.Y() + ((SEPARATOR_HEIGHT-2)/2);
-                aTmpPos.X() = aPos.X() + 2;
 
                 SetLineColor( rSettings.GetShadowColor() );
                 DrawLine( aTmpPos, Point( aOutSz.Width() - 3, aTmpPos.Y() ) );
@@ -945,13 +916,20 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 else
                     SetTextColor( rSettings.GetMenuTextColor() );
 
+                Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
                 if( bTitle )
                 {
                     // fill the background
-                    Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
                     SetFillColor(rSettings.GetDialogColor());
                     SetLineColor();
                     DrawRect(aRect);
+                    SetLineColor( rSettings.GetLightColor() );
+                    DrawLine( aRect.TopLeft(), aRect.TopRight() );
+                    SetLineColor( rSettings.GetShadowColor() );
+                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                }
+                else if( pEntry->mpControl )
+                {
                     SetLineColor( rSettings.GetShadowColor() );
                     DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
                 }
@@ -976,6 +954,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                     DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.Len(), nStyle );
                 }
+
                 // CheckMark
                 if( pEntry->mbChecked )
                 {
@@ -1025,7 +1004,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
 void ToolbarMenu::Paint( const Rectangle& )
 {
-//    implDrawBorder();
     implPaint();
 
     if( mnHighlightedEntry != -1 )

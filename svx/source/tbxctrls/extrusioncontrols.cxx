@@ -126,7 +126,7 @@ void ExtrusionDirectionWindow::implInit()
     mpDirectionSet->SetOutputSizePixel( Size( 72, 72 ) );
 
     /*mpMenu->*/appendEntry( 2, mpDirectionSet );
-    /*mpMenu->*/appendSeparator();
+    /*mpMenu->appendSeparator()*/;
     /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
     /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
 
@@ -143,9 +143,6 @@ void ExtrusionDirectionWindow::implInit()
 
 void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    AddStatusListener( msExtrusionDirection );
-    AddStatusListener( msExtrusionProjection );
-
     ToolbarMenu::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
@@ -215,7 +212,7 @@ void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bE
 
 void SAL_CALL ExtrusionDirectionWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msExtrusionDirection ) )
+    if( Event.FeatureURL.Main.equals( msExtrusionDirection ) )
     {
         if( !Event.IsEnabled )
         {
@@ -228,7 +225,7 @@ void SAL_CALL ExtrusionDirectionWindow::statusChanged( const ::com::sun::star::f
                 implSetDirection( nValue, true );
         }
     }
-    else if( Event.FeatureURL.Path.equals( msExtrusionProjection ) )
+    else if( Event.FeatureURL.Main.equals( msExtrusionProjection ) )
     {
         if( !Event.IsEnabled )
         {
@@ -512,7 +509,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
 void SAL_CALL ExtrusionDepthWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msExtrusionDepth ) )
+    if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
     {
         if( !Event.IsEnabled )
         {
@@ -525,7 +522,7 @@ void SAL_CALL ExtrusionDepthWindow::statusChanged( const ::com::sun::star::frame
                 implSetDepth( fValue, true );
         }
     }
-    else if( Event.FeatureURL.Path.equals( msMetricUnit ) )
+    else if( Event.FeatureURL.Main.equals( msMetricUnit ) )
     {
         if( Event.IsEnabled )
         {
@@ -765,7 +762,7 @@ void ExtrusionLightingWindow::implInit()
     mpLightingSet->SetOutputSizePixel( Size( 72, 72 ) );
 
     /*mpMenu->*/appendEntry( 3, mpLightingSet );
-    /*mpMenu->*/appendSeparator();
+    /*mpMenu->appendSeparator();*/
     /*mpMenu->*/appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
     /*mpMenu->*/appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
     /*mpMenu->*/appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
@@ -841,7 +838,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 
 void SAL_CALL ExtrusionLightingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msExtrusionLightingIntensity ) )
+    if( Event.FeatureURL.Main.equals( msExtrusionLightingIntensity ) )
     {
         if( !Event.IsEnabled )
         {
@@ -854,7 +851,7 @@ void SAL_CALL ExtrusionLightingWindow::statusChanged( const ::com::sun::star::fr
                 implSetIntensity( nValue, true );
         }
     }
-    else if( Event.FeatureURL.Path.equals( msExtrusionLightingDirection ) )
+    else if( Event.FeatureURL.Main.equals( msExtrusionLightingDirection ) )
     {
         if( !Event.IsEnabled )
         {
@@ -1088,7 +1085,7 @@ void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 
 void SAL_CALL ExtrusionSurfaceWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msExtrusionSurface ) )
+    if( Event.FeatureURL.Main.equals( msExtrusionSurface ) )
     {
         if( !Event.IsEnabled )
         {

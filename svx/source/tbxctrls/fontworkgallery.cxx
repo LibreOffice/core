@@ -404,7 +404,7 @@ void FontWorkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 
 void SAL_CALL FontWorkAlignmentWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msFontworkAlignment ) )
+    if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
     {
         if( !Event.IsEnabled )
         {
@@ -611,7 +611,7 @@ void FontWorkCharacterSpacingWindow::implSetKernCharacterPairs( sal_Bool, bool b
 
 void SAL_CALL FontWorkCharacterSpacingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    if( Event.FeatureURL.Path.equals( msFontworkCharacterSpacing ) )
+    if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
     {
         if( !Event.IsEnabled )
         {
@@ -624,7 +624,7 @@ void SAL_CALL FontWorkCharacterSpacingWindow::statusChanged( const ::com::sun::s
                 implSetCharacterSpacing( nValue, true );
         }
     }
-    else if( Event.FeatureURL.Path.equals( msFontworkKernCharacterPairs ) )
+    else if( Event.FeatureURL.Main.equals( msFontworkKernCharacterPairs ) )
     {
         if( !Event.IsEnabled )
         {
