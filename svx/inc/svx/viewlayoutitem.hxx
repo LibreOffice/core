@@ -30,7 +30,7 @@
 #ifndef _SVX_VIEWLAYOUTITEM_HXX
 #define _SVX_VIEWLAYOUTITEM_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif

@@ -32,9 +32,9 @@
 #define _DLLMGR_HXX
 
 #define _SVSTDARR_BYTESTRINGSSORT
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #ifndef _SVSTDARR_HXX //autogen
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 // !!! nur zum debuggen fuer infoboxes !!!

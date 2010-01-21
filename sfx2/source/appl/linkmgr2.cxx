@@ -47,7 +47,7 @@
 
 #define _SVSTDARR_STRINGSDTOR
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 
 namespace sfx2

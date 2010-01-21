@@ -45,23 +45,32 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** ModifiedColorPrimitive3D class
+
+            This primitive is a grouping primitive and allows to define
+            how the colors of it's child content shall be modified for
+            visualisation. Please see the ModifiedColorPrimitive2D
+            description for more info.
+         */
         class ModifiedColorPrimitive3D : public GroupPrimitive3D
         {
         private:
+            /// The ColorModifier to use
             basegfx::BColorModifier                 maColorModifier;
 
         public:
+            /// constructor
             ModifiedColorPrimitive3D(
                 const Primitive3DSequence& rChildren,
                 const basegfx::BColorModifier& rColorModifier);
 
-            // get data
+            /// data read access
             const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

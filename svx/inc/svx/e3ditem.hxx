@@ -31,7 +31,7 @@
 #ifndef _SVXE3DITEM_HXX
 #define _SVXE3DITEM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include "svx/svxdllapi.h"
 

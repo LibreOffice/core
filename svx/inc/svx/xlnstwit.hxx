@@ -31,7 +31,7 @@
 #ifndef _SVX_XLNSTWIT_HXX
 #define _SVX_XLNSTWIT_HXX
 
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include "svx/svxdllapi.h"
 
 #define LINE_START_WIDTH_DEFAULT        (200)

@@ -35,7 +35,7 @@
 #include "fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmurl.hxx"
@@ -71,7 +71,7 @@
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <comphelper/extract.hxx>
@@ -81,9 +81,9 @@
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <tools/multisel.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
@@ -894,7 +894,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, RID_SVX_DLG_SHOWGRIDCOLUMNS);
+                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();

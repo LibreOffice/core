@@ -38,8 +38,8 @@
 #include "svx/dialmgr.hxx"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
+#include "svx/fmtools.hxx"
 #include "fmurl.hxx"
-#include "fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/FocusChangeReason.hpp>

@@ -111,7 +111,6 @@ namespace sdr { namespace contact {
 
         // visibility check
         virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const;
-
         /// to be called when any aspect of the control which requires view updates changed
         void impl_onControlChangedOrModified();
 

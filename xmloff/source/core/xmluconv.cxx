@@ -50,7 +50,7 @@
 #endif
 
 #include <tools/time.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 // #110680#
 //#ifndef _COMPHELPER_PROCESSFACTORY_HXX_

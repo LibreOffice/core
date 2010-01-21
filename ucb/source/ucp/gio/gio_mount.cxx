@@ -68,7 +68,7 @@ static void ooo_mount_operation_class_init (OOoMountOperationClass *klass)
 using namespace com::sun::star;
 
 static void ooo_mount_operation_ask_password (GMountOperation *op,
-    const char *message, const char *default_user,
+    const char * /*message*/, const char *default_user,
     const char *default_domain, GAskPasswordFlags flags)
 {
     uno::Reference< task::XInteractionHandler > xIH;

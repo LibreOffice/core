@@ -58,7 +58,7 @@
 //#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
 //#endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>
@@ -593,7 +593,7 @@ public:
                                         sal_uInt16 nIdx2 = INDEX_IGNORE,
                                         sal_uInt16 nIdx3 = INDEX_IGNORE);
 
-    virtual sal_Bool            Print( Printer &rPrt,
+    sal_Bool                    Print( Printer &rPrt,
                                        sal_uInt16 nIdx1,
                                        sal_uInt16 nIdx2 = INDEX_IGNORE,
                                        sal_uInt16 nIdx3 = INDEX_IGNORE,

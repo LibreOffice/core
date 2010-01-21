@@ -44,14 +44,12 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 /** === end UNO includes === **/
 
-#include <svtools/syslocale.hxx>
-
+//#include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
-
 #include <i18npool/mslangid.hxx>
-
 #include <comphelper/numbers.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <unotools/sharedunocomponent.hxx>
 
 //........................................................................
 namespace dbtools
@@ -62,6 +60,7 @@ namespace dbtools
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
@@ -116,21 +115,7 @@ namespace dbtools
         //................................................................
         void lcl_clear_nothrow( FormattedColumnValue_Data& _rData )
         {
-            if ( _rData.m_xFormatter.is() )
-            {
-                try
-                {
-                    Reference< XComponent > xFormatterComp( _rData.m_xFormatter, UNO_QUERY );
-                    if ( xFormatterComp.is() )
-                        xFormatterComp->dispose();
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-                _rData.m_xFormatter.clear();
-            }
-
+            _rData.m_xFormatter.clear();
             _rData.m_nFormatKey = 0;
             _rData.m_nFieldType = DataType::OTHER;
             _rData.m_nKeyType = NumberFormat::UNDEFINED;
@@ -141,21 +126,24 @@ namespace dbtools
         }
 
         //................................................................
-        void lcl_initColumnDataValue_nothrow( const ::comphelper::ComponentContext& _rContext, FormattedColumnValue_Data& _rData,
-            const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
+        void lcl_initColumnDataValue_nothrow( FormattedColumnValue_Data& _rData,
+            const Reference< XNumberFormatter >& i_rNumberFormatter, const Reference< XPropertySet >& _rxColumn )
         {
             lcl_clear_nothrow( _rData );
 
-            OSL_PRECOND( _rxRowSet.is(), "lcl_initColumnDataValue_nothrow: no row set!" );
-            OSL_PRECOND( _rxColumn.is(), "lcl_initColumnDataValue_nothrow: no column!" );
-            if ( !_rxRowSet.is() || !_rxColumn.is() )
+            OSL_PRECOND( i_rNumberFormatter.is(), "lcl_initColumnDataValue_nothrow: no number formats -> no formatted values!" );
+            if ( !i_rNumberFormatter.is() )
                 return;
 
             try
             {
+                Reference< XNumberFormatsSupplier > xNumberFormatsSupp( i_rNumberFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
+
+                // remember the column
                 _rData.m_xColumn.set( _rxColumn, UNO_QUERY_THROW );
                 _rData.m_xColumnUpdate.set( _rxColumn, UNO_QUERY );
 
+                // determine the field type, and whether it's a numeric field
                 OSL_VERIFY( _rxColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) >>= _rData.m_nFieldType );
 
                 switch ( _rData.m_nFieldType )
@@ -180,10 +168,6 @@ namespace dbtools
                         break;
                 }
 
-                // get the number formats supplier of the connection of the form
-                Reference< XConnection > xConnection( getConnection( _rxRowSet ), UNO_QUERY_THROW );
-                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_False, _rContext.getLegacyServiceFactory() ), UNO_QUERY_THROW );
-
                 // get the format key of our bound field
                 Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_QUERY_THROW );
                 bool bHaveFieldFormat = false;
@@ -197,23 +181,49 @@ namespace dbtools
                     // fall back to a format key as indicated by the field type
                     Locale aSystemLocale;
                     MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage(), aSystemLocale );
-                    Reference< XNumberFormatTypes > xNumTypes( xSupplier->getNumberFormats(), UNO_QUERY_THROW );
+                    Reference< XNumberFormatTypes > xNumTypes( xNumberFormatsSupp->getNumberFormats(), UNO_QUERY_THROW );
                     _rData.m_nFormatKey = getDefaultNumberFormat( _rxColumn, xNumTypes, aSystemLocale );
                 }
 
                 // some more formatter settings
-                _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xSupplier->getNumberFormats(), _rData.m_nFormatKey );
-                Reference< XPropertySet > xFormatSettings( xSupplier->getNumberFormatSettings(), UNO_QUERY_THROW );
+                _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
+                Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
                 OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "NullDate" ) ) >>= _rData.m_aNullDate );
 
-                // create a formatter working with the connection's number format supplier
-                _rData.m_xFormatter.set( _rContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
-                _rData.m_xFormatter->attachNumberFormatsSupplier( xSupplier );
+                // remember the formatter
+                _rData.m_xFormatter = i_rNumberFormatter;
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
+        }
+
+        //................................................................
+        void lcl_initColumnDataValue_nothrow( const ::comphelper::ComponentContext& i_rContext, FormattedColumnValue_Data& i_rData,
+            const Reference< XRowSet >& i_rRowSet, const Reference< XPropertySet >& i_rColumn )
+        {
+            OSL_PRECOND( i_rRowSet.is(), "lcl_initColumnDataValue_nothrow: no row set!" );
+            if ( !i_rRowSet.is() )
+                return;
+
+            Reference< XNumberFormatter > xNumberFormatter;
+            try
+            {
+                // get the number formats supplier of the connection of the form
+                Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_QUERY_THROW );
+                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext.getLegacyServiceFactory() ), UNO_SET_THROW );
+
+                // create a number formatter for it
+                xNumberFormatter.set( i_rContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
+                xNumberFormatter->attachNumberFormatsSupplier( xSupplier );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            lcl_initColumnDataValue_nothrow( i_rData, xNumberFormatter, i_rColumn );
         }
     }
 
@@ -221,11 +231,19 @@ namespace dbtools
     //= FormattedColumnValue
     //====================================================================
     //--------------------------------------------------------------------
-    FormattedColumnValue::FormattedColumnValue( const ::comphelper::ComponentContext& _rContext,
-            const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
+    FormattedColumnValue::FormattedColumnValue( const ::comphelper::ComponentContext& i_rContext,
+            const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
         :m_pData( new FormattedColumnValue_Data )
     {
-        lcl_initColumnDataValue_nothrow( _rContext, *m_pData, _rxRowSet, _rxColumn );
+        lcl_initColumnDataValue_nothrow( i_rContext, *m_pData, _rxRowSet, i_rColumn );
+    }
+
+    //--------------------------------------------------------------------
+    FormattedColumnValue::FormattedColumnValue( const Reference< XNumberFormatter >& i_rNumberFormatter,
+            const Reference< XPropertySet >& _rxColumn )
+        :m_pData( new FormattedColumnValue_Data )
+    {
+        lcl_initColumnDataValue_nothrow( *m_pData, i_rNumberFormatter, _rxColumn );
     }
 
     //--------------------------------------------------------------------

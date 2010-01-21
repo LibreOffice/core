@@ -42,8 +42,8 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <vcl/timer.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 
 class BasicFrame;
 #include <basic/mybasic.hxx>

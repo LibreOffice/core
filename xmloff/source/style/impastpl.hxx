@@ -33,7 +33,7 @@
 
 #include <sal/types.h>
 #include <tools/list.hxx>
-#include <svtools/cntnrsrt.hxx>
+#include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>

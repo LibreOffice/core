@@ -33,7 +33,7 @@
 
 // include ---------------------------------------------------------------
 #include <sfx2/viewsh.hxx>      // SfxViewShell
-#include <sfx2/printer.hxx>     // SfxPrinter
+#include <sfx2/printer.hxx>     // Printer
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
@@ -50,7 +50,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svtools/colorcfg.hxx>
 

@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCustomShapePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCustomShapePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval(getSubPrimitives());
 
@@ -92,21 +92,21 @@ namespace drawinglayer
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
-            bool bForceTextClipToTextRange,
-            bool b3DShape)
-        :   BasePrimitive2D(),
+            bool b3DShape,
+            bool bForceTextClipToTextRange)
+        :   BufferedDecompositionPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
-            mbForceTextClipToTextRange(bForceTextClipToTextRange),
-            mb3DShape(b3DShape)
+            mb3DShape(b3DShape),
+            mbForceTextClipToTextRange(bForceTextClipToTextRange)
         {
         }
 
         bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
 
@@ -114,8 +114,8 @@ namespace drawinglayer
                     && getSubPrimitives() == rCompare.getSubPrimitives()
                     && getTextBox() == rCompare.getTextBox()
                     && getWordWrap() == rCompare.getWordWrap()
-                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange()
-                    && get3DShape() == rCompare.get3DShape());
+                    && get3DShape() == rCompare.get3DShape()
+                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
             }
 
             return false;

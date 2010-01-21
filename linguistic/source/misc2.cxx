@@ -35,7 +35,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/localedatawrapper.hxx>

@@ -31,7 +31,7 @@
 #ifndef _SVX_XFTADIT_HXX
 #define _SVX_XFTADIT_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************
