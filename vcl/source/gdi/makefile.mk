@@ -57,6 +57,8 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
+                    $(SLO)$/print3.obj		\
+                    $(SLO)$/oldprintadaptor.obj		\
                     $(SLO)$/configsettings.obj 	\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/image.obj		\
@@ -72,7 +74,6 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
-                    $(SLO)$/impprn.obj \
                     $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj \
                     $(SLO)$/textlayout.obj   \
@@ -117,6 +118,7 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
             $(SLO)$/salnativewidgets-none.obj
+
 
 # --- Targets ------------------------------------------------------
 

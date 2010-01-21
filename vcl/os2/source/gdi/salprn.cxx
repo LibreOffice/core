@@ -1559,7 +1559,9 @@ Os2SalPrinter::~Os2SalPrinter()
 BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString& rAppName,
-                           ULONG nCopies, BOOL bCollate,
+                           ULONG nCopies,
+                           bool bCollate,
+                           bool bDirect,
                            ImplJobSetup* pSetupData )
 {
     DEVOPENSTRUC    aDevOpenStruc;
@@ -1831,9 +1833,4 @@ int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     printf("Os2SalInfoPrinter::GetLandscapeAngle\n");
     return 0;
 }
-DuplexMode Os2SalInfoPrinter::GetDuplexMode( const ImplJobSetup* pSetupData )
-{
-    DuplexMode nRet = DUPLEX_UNKNOWN;
-    printf("Os2SalInfoPrinter::GetDuplexMode\n");
-    return nRet;
-}
+
