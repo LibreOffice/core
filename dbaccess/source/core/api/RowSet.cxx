@@ -2652,8 +2652,8 @@ void ORowSet::checkUpdateIterator()
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
     checkCache();
-    if ( columnIndex <= 0 || sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_INDEX ), SQL_INVALID_DESCRIPTOR_INDEX, *this );
+    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_GENERAL_ERROR, *this );
 
     if ( rowDeleted() )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_INVALID_CURSOR_POSITION, *this );
@@ -2661,8 +2661,8 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
     if ( m_aCurrentRow.isNull() )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_CURSOR_STATE ), SQL_INVALID_CURSOR_STATE, *this );
 
-    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_GENERAL_ERROR, *this );
+    if ( columnIndex <= 0 || sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_INDEX ), SQL_INVALID_DESCRIPTOR_INDEX, *this );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
