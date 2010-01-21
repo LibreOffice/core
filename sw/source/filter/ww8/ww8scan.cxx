@@ -2281,22 +2281,48 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
 
 void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF )
 {
+    bool failure = false;
+
     // Pointer auf Pos-Array
     pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
 
     sal_Size nOldPos = pSt->Tell();
 
     pSt->Seek( nFilePos );
-    pSt->Read( pPLCF_PosArray, nPLCF );
+    failure = pSt->GetError();
+
+    if (!failure)
+    {
+        pSt->Read( pPLCF_PosArray, nPLCF );
+        failure = pSt->GetError();
+    }
+
+    if (!failure)
+    {
 #ifdef OSL_BIGENDIAN
-    for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
-    nIdx = 0;
+        for( nIdx = 0; nIdx <= nIMax; nIdx++ )
+            pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
+        nIdx = 0;
 #endif // OSL_BIGENDIAN
-    // Pointer auf Inhalts-Array
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+        // Pointer auf Inhalts-Array
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+    }
 
     pSt->Seek( nOldPos );
+
+    ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
+
+    if (failure)
+        MakeFailedPLCF();
+}
+
+void WW8PLCF::MakeFailedPLCF()
+{
+    nIMax = 0;
+    delete[] pPLCF_PosArray;
+    pPLCF_PosArray = new INT32[2];
+    pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 }
 
 void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
@@ -2359,13 +2385,7 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
     ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
 
     if (failure)
-    {
-        nIMax = 0;
-        delete[] pPLCF_PosArray;
-        pPLCF_PosArray = new INT32[2];
-        pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
-        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
-    }
+        MakeFailedPLCF();
 }
 
 bool WW8PLCF::SeekPos(WW8_CP nPos)
@@ -4390,15 +4410,16 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pBkm = &aD[1];
         pEdn = &aD[2];
         pFtn = &aD[3];
+        pAnd = &aD[4];
 
-
-        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[4] : 0;
+        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
         //pPcdA index == pPcd index + 1
-        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[5] : 0;
-        pChp = &aD[6];
-        pAnd = &aD[7];
+        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
+
+        pChp = &aD[7];
         pPap = &aD[8];
         pSep = &aD[9];
+
         pSep->pPLCFx = pBase->pSepPLCF;
         pFtn->pPLCFx = pBase->pFtnPLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
@@ -6240,8 +6261,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     rSt.Seek( rFib.fcSttbfffn );
 
+    INT32 nFFn = rFib.lcbSttbfffn - 2;
+
     // allocate Font Array
-    BYTE* pA   = new BYTE[ rFib.lcbSttbfffn - 2 ];
+    BYTE* pA   = new BYTE[ nFFn ];
+    memset(pA, 0, nFFn);
     WW8_FFN* p = (WW8_FFN*)pA;
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
@@ -6258,13 +6282,13 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    rSt.Read( pA, rFib.lcbSttbfffn - 2 );
+    nFFn = rSt.Read( pA, nFFn );
 
     if( eVersion < ww::eWW8 )
     {
         // try to figure out how many fonts are defined here
         nMax = 0;
-        long nLeft = rFib.lcbSttbfffn - 2;
+        long nLeft = nFFn;
         for(;;)
         {
             short nNextSiz;

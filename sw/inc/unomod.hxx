@@ -45,7 +45,7 @@
 
 class SwView;
 class SwViewOption;
-struct SwPrintData;
+class SwPrintData;
 class SwDoc;
 
 /******************************************************************************

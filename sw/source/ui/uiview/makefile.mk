@@ -54,6 +54,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/uivwimp.obj \
         $(SLO)$/view.obj \
         $(SLO)$/view2.obj \
+        $(SLO)$/viewprt.obj \
         $(SLO)$/viewling.obj \
         $(SLO)$/viewmdi.obj \
 
