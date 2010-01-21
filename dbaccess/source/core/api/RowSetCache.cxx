@@ -1282,11 +1282,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
 
-    if ( !moveToBookmark(aBookmark) )
-    {
-        m_bRowCountFinal = sal_False;
-        afterLast();
-    }
+    moveToBookmark(aBookmark);
 
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
