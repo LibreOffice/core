@@ -42,6 +42,7 @@
 #include "ContainerMediator.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "querycomposer.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -601,13 +602,25 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     return xComposer;
 }
 // -----------------------------------------------------------------------------
+void OConnection::impl_fillTableFilter()
+{
+    Reference<XPropertySet> xProp(getParent(),UNO_QUERY);
+    if ( xProp.is() )
+    {
+        xProp->getPropertyValue(PROPERTY_TABLEFILTER)       >>= m_aTableFilter;
+        xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER)   >>= m_aTableTypeFilter;
+    }
+}
+
+// -----------------------------------------------------------------------------
 void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::refresh" );
     if ( _rToBeRefreshed == Reference< XNameAccess >(m_pTables) )
     {
-        if (!m_pTables->isInitialized())
+        if (m_pTables && !m_pTables->isInitialized())
         {
+            impl_fillTableFilter();
             // check if our "master connection" can supply tables
             getMasterTables();
 
@@ -623,8 +636,9 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     }
     else if ( _rToBeRefreshed == Reference< XNameAccess >(m_pViews) )
     {
-        if (!m_pViews->isInitialized())
+        if (m_pViews && !m_pViews->isInitialized())
         {
+            impl_fillTableFilter();
             // check if our "master connection" can supply tables
             Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
@@ -715,6 +729,28 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     {
         xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );
         m_aComposers.push_back(WeakReferenceHelper(xRet));
+    }
+    else
+    {
+        Reference<XInterface> xDs = dbaccess::getDataSource(*this);
+        Any aValue;
+        if ( dbtools::getDataSourceSetting(xDs,_sServiceSpecifier,aValue) )
+        {
+            ::rtl::OUString sSupportService;
+            aValue >>= sSupportService;
+            if ( sSupportService.getLength() )
+            {
+                TSupportServices::iterator aFind = m_aSupportServices.find(sSupportService);
+                if ( aFind == m_aSupportServices.end())
+                {
+                    Sequence<Any> aArgs(1);
+                    Reference<XConnection> xMy(this);
+                    aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),makeAny(xMy));
+                    aFind = m_aSupportServices.insert(TSupportServices::value_type(sSupportService,m_aContext.createComponentWithArguments(sSupportService,aArgs))).first;
+                }
+                return aFind->second;
+            }
+        }
     }
     return Reference< XInterface >(xRet,UNO_QUERY);
 }

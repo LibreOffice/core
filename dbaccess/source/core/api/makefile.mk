@@ -74,6 +74,7 @@ SLOFILES=	\
         $(SLO)$/SingleSelectQueryComposer.obj	\
         $(SLO)$/HelperCollections.obj			\
         $(SLO)$/datasettings.obj                \
+        $(SLO)$/View.obj						\
         $(SLO)$/columnsettings.obj
 
 # --- Targets ----------------------------------

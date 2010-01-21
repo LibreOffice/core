@@ -105,6 +105,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         sal_Int32 nLen = sValue.getLength();
                         if ( nLen )
                         {
+
                             const static ::rtl::OUString s_sChanged(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
                             sal_Int32 nPos = sValue.indexOf(s_sChanged);
                             if ( nPos == -1 )
@@ -112,7 +113,15 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             else
                             {
                                 nPos = s_sChanged.getLength();
-                                --nLen;
+                                static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                                static ::rtl::OUString s_sSingleQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
+                                sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
+                                while ( nIndex > -1 )
+                                {
+                                    sValue = sValue.replaceAt(nIndex,2,s_sSingleQuote);
+                                    nIndex = sValue.indexOf(s_sQuote,nIndex+2);
+                                }
+                                nLen = sValue.getLength() - 1;
                             }
                             sValue = sValue.copy(nPos,nLen-nPos-1);
                             const ORptFilter::TGroupFunctionMap& aFunctions = _rImport.getFunctions();
@@ -140,10 +149,12 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     nGroupOn = report::GroupOn::YEAR;
                                 else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
                                 {
-                                    if ( sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("\4",2) )
-                                        nGroupOn = report::GroupOn::QUARTAL;
-                                    else
-                                        nGroupOn = report::GroupOn::MONTH;
+                                    nGroupOn = report::GroupOn::MONTH;
+                                }
+                                else if ( sCompleteFormula.matchAsciiL("rpt:INT((MONTH",sizeof("rpt:INT((MONTH"),0)
+                                       && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",sizeof("-1)/3)+1")) )
+                                {
+                                    nGroupOn = report::GroupOn::QUARTAL;
                                 }
                                 else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:WEEK")))
                                     nGroupOn = report::GroupOn::WEEK;

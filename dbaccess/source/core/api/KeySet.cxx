@@ -621,8 +621,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
-
-
     if(m_bUpdated)
     {
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((_rInsertRow->get())[0].getAny()));
@@ -1171,8 +1169,9 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
-    sal_Bool bOK = m_xSet->next(); (void)bOK;
-    OSL_ENSURE(bOK,"No rows!");
+    sal_Bool bOK = m_xSet->next();
+    if ( !bOK )
+        m_aKeyIter = m_aKeyMap.end();
     m_xRow.set(m_xSet,UNO_QUERY);
     OSL_ENSURE(m_xRow.is(),"No row form statement!");
 }

@@ -444,7 +444,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
             return aKnowPrefixes[i].eType;
     }
 
-    DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
 }
 // -----------------------------------------------------------------------------

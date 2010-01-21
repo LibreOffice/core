@@ -1712,7 +1712,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             {
                 // a native statement can't be filtered or sorted
                 const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
+                if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || !m_xParser.is() )
                     break;
 
                 Reference< XPropertySet >  xCurrentField = getBoundField();
@@ -1731,7 +1731,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             break;
 
             case ID_BROWSER_FILTERCRIT:
-                if ( m_bCannotSelectUnfiltered )
+                if ( m_bCannotSelectUnfiltered && m_xParser.is() )
                 {
                     aReturn.bEnabled = sal_True;
                     break;
@@ -1740,7 +1740,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_ORDERCRIT:
                 {
                     const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-                    if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
+                    if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || !m_xParser.is() )
                         break;
 
                     aReturn.bEnabled =  getRowSet().is()

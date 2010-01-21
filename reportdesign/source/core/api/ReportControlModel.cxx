@@ -152,14 +152,6 @@ void OReportControlModel::checkIndex(sal_Int32 _nIndex)
         throw lang::IndexOutOfBoundsException();
 }
 // -----------------------------------------------------------------------------
-void OReportControlModel::dispose()
-{
-    m_aFormatConditions.clear();
-    lang::EventObject aDisposeEvent( m_pOwner );
-    aContainerListeners.disposeAndClear( aDisposeEvent );
-    m_aFormatConditions.clear();
-}
-// -----------------------------------------------------------------------------
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)
 {
     return (_rType == ::getCppuType((const uno::Reference< beans::XPropertyState>* )0) || _rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet>* )0));

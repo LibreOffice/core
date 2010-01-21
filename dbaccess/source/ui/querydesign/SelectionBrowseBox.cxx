@@ -757,11 +757,22 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         bool bInternational = ( nPass % 2 ) == 0;
 
         ::rtl::OUString sSql;
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
         if ( bQuote )
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
             sSql += _sFieldName;
+
+        if  ( _pEntry->isAggreateFunction() )
+        {
+            DBG_ASSERT(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+            ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
+            aTmpStr2.appendAscii("(");
+            aTmpStr2.append(sSql);
+            aTmpStr2.appendAscii(")");
+            sSql = aTmpStr2.makeStringAndClear();
+        }
+
+        sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
         if ( sFieldAlias.getLength() )
         { // always quote the alias name there canbe no function in it
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
@@ -890,78 +901,56 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         OSL_ENSURE(0,"Unsupported function inserted!");
 
                 }
-                else if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
-                            SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)   ||
-                            SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                            // a calculation has been found ( can be calc and function )
-                {
-                    // append the whole text as field name
-                    // so we first clear the function field
-                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-                    sal_Bool bQuote = sal_True;
-                    sal_Int32 nDataType = DataType::DOUBLE;
-                    OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
-                    if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-                    {
-                        if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                            pFunctionName = pFunctionName->getChild(0);
-
-                        if ( pFunctionName )
-                        {
-                            ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-                            if ( !sFunctionName.getLength() )
-                                sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
-
-                            nDataType = OSQLParser::getFunctionReturnType(
-                                                sFunctionName
-                                                ,&rController.getParser().getContext());
-                            aSelEntry->SetDataType(nDataType);
-                        }
-                    }
-
-
-                    // now parse the whole statement
-                    sal_uInt32 nFunCount = pColumnRef->count();
-                    ::rtl::OUString sParameters;
-                    for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
-
-                    ::rtl::OUString aSelectionAlias = aSelEntry->GetAlias();
-                    aSelEntry->SetAlias(::rtl::OUString());
-
-                    sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
-                    aSelEntry->SetFunctionType(nNewFunctionType);
-
-
-                    aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-
-                    aSelEntry->SetTabWindow(NULL);
-
-                    aSelEntry->SetField(sParameters);
-                    notifyTableFieldChanged(aSelectionAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
-                }
                 else
                 {
+                    // so we first clear the function field
                     clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-
-                    ::rtl::OUString aColumns;
-                    pColumnRef->parseNodeToStr( aColumns,
+                    ::rtl::OUString sFunction;
+                    pColumnRef->parseNodeToStr( sFunction,
                                                 xConnection,
                                                 &rController.getParser().getContext(),
                                                 sal_True,
-                                                sal_True);
-                    // get the type out of the funtion name
-                    sal_Int32 nDataType = DataType::DOUBLE;
-                    aSelEntry->SetDataType(nDataType);
-                    aSelEntry->SetField(aColumns);
-                    aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-                    aSelEntry->SetTabWindow(NULL);
-                    aSelEntry->SetAlias(::rtl::OUString());
-                    aSelEntry->SetFieldAlias(sColumnAlias);
-                    aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
+                                                sal_True); // quote is to true because we need quoted elements inside the function
 
+                    getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
+
+                    if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
+                        SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
+                        SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                            // a calculation has been found ( can be calc and function )
+                    {
+                        // now parse the whole statement
+                        sal_uInt32 nFunCount = pColumnRef->count();
+                        ::rtl::OUString sParameters;
+                        for(sal_uInt32 function = 0; function < nFunCount; ++function)
+                            pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, sal_True );
+
+                        sOldAlias = aSelEntry->GetAlias();
+                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
+                        aSelEntry->SetFunctionType(nNewFunctionType);
+                        aSelEntry->SetField(sParameters);
+                    }
+                    else
+                    {
+                        aSelEntry->SetFieldAlias(sColumnAlias);
+                        if ( SQL_ISRULE(pColumnRef,set_fct_spec) )
+                            aSelEntry->SetFunctionType(/*FKT_NUMERIC | */FKT_OTHER);
+                        else
+                        {
+                            if ( SQL_ISRULEOR2(pColumnRef,num_value_exp,term) || SQL_ISRULE(pColumnRef,factor) )
+                                aSelEntry->SetDataType(DataType::DOUBLE);
+                            else if ( SQL_ISRULE(pColumnRef,value_exp) )
+                                aSelEntry->SetDataType(DataType::TIMESTAMP);
+                            else
+                                aSelEntry->SetDataType(DataType::VARCHAR);
+                            aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
+                        }
+                    }
+
+                    aSelEntry->SetAlias(::rtl::OUString());
                     notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
                 }
+
             }
             if ( i > 0 && InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).isEmpty() ) // may we have to append more than one field
             { // the field could not be isnerted
@@ -1807,25 +1796,23 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
             pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
             pEntry->GetFunction() == rInfo->GetFunction())
         {
-            /*sal_uInt32 nPos = aIter - rFields.begin();
-            bAppend = _nCurrentPos > nPos && (rInfo->IsGroupBy() != pEntry->IsGroupBy());
-            if ( bAppend )
-                aIter = rFields.end();
-            else*/
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
             {
-                if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                {
-                    pEntry->SetGroupBy(sal_False);
-                    aIter = rFields.end();
-                }
-                else
+                pEntry->SetGroupBy(sal_False);
+                aIter = rFields.end();
+                break;
+            }
+            else
+            {
+                if ( !pEntry->IsGroupBy() && !pEntry->HasCriteria() ) // here we have a where condition which is no having clause
                 {
                     pEntry->SetGroupBy(rInfo->IsGroupBy());
                     if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                         pEntry->SetVisible(sal_True);
+                    break;
                 }
             }
-            break;
+
         }
     }
 
@@ -1887,13 +1874,14 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
             pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
-            pEntry->GetFunction() == rInfo->GetFunction())
+            pEntry->GetFunction() == rInfo->GetFunction() &&
+            pEntry->IsGroupBy() == rInfo->IsGroupBy() )
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
                 pEntry->SetGroupBy(sal_False);
             else
             {
-                pEntry->SetGroupBy(rInfo->IsGroupBy());
+//              pEntry->SetGroupBy(rInfo->IsGroupBy());
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
@@ -2890,7 +2878,7 @@ bool OSelectionBrowseBox::HasFieldByAliasName(const ::rtl::OUString& rFieldName,
     {
         if ( (*aIter)->GetFieldAlias() == rFieldName )
         {
-            rInfo = *aIter;
+            rInfo.getBody() = (*aIter).getBody();
             break;
         }
     }
