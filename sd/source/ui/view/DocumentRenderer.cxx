@@ -49,8 +49,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/editstat.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdopage.hxx>
