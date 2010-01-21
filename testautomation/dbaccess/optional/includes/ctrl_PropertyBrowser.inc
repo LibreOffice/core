@@ -409,6 +409,7 @@ testcase tForms
         '/// set encoding to Multipart
         printlog "set encoding to Multipart"
         Encoding.select 2
+        sleep(1)
         '/// check if the SubmitMethod get enabled
         printlog "check if the SubmitMethod get enabled"        
         if SubmitMethod.isEnabled then
@@ -417,6 +418,7 @@ testcase tForms
         '/// set encoding to URL
         printlog "set encoding to URL"        
         Encoding.select 1
+        sleep(1)
         '/// check if the SubmitMethod get disabled
         printlog "check if the SubmitMethod get disabled"        
         if NOT SubmitMethod.isEnabled then

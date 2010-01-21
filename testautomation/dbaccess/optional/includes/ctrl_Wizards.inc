@@ -96,7 +96,8 @@ testcase tGroupBoxWithDatasource
    	 '/// set the datasource TT
      printlog "set the datasource TT"
      DataSource.setText(sDSName)
-	 DataSource.TypeKeys "<RETURN>" , true
+     DataSource.TypeKeys "<RETURN>" , true
+     sleep(1)
      '/// insert password 'testtool' into login dialog
      printlog "insert password 'testtool' into login dialog"
      Kontext "LoginDialog"
