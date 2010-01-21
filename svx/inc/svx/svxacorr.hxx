@@ -385,6 +385,8 @@ public:
 // (used to avoid occasional 'collisions' with (Thai) input-sequence-checking)
     static sal_Bool     IsAutoCorrectChar( sal_Unicode cChar );
 
+    sal_Bool NeedsHardspaceAutocorr( sal_Unicode cChar );
+
     CharClass& GetCharClass( LanguageType eLang )
     {
         if( !pCharClass || eLang != eCharClassLang )

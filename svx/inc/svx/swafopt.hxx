@@ -52,7 +52,6 @@ struct SVX_DLLPUBLIC SvxSwAutoFmtFlags
 
     BYTE nRightMargin;
 
-    BOOL bReplaceQuote : 1;
     BOOL bAutoCorrect : 1;
     BOOL bCptlSttSntnc : 1;
     BOOL bCptlSttWrd : 1;

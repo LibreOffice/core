@@ -44,7 +44,6 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
                         RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),
                     Size( 0, 14 ) )
 {
-    bReplaceQuote =
     bAutoCorrect =
     bCptlSttSntnc =
     bCptlSttWrd =
@@ -104,7 +103,6 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
 SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFlags )
 {
     bAutoCorrect = rAFFlags.bAutoCorrect;
-    bReplaceQuote = rAFFlags.bReplaceQuote;
     bCptlSttSntnc = rAFFlags.bCptlSttSntnc;
     bCptlSttWrd = rAFFlags.bCptlSttWrd;
     bChkFontAttr = rAFFlags.bChkFontAttr;

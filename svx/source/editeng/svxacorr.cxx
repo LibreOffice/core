@@ -336,7 +336,13 @@ sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == ' '  || cChar == '\'' || cChar == '\"' ||
             cChar == '*'  || cChar == '_'  ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
-            cChar == ':'  || cChar == '?' || cChar == '!';
+            cChar == ':'  || cChar == '?' || cChar == '!' || cChar == '/';
+}
+
+sal_Bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
+{
+    return cChar == ';' || cChar == ':'  || cChar == '?' || cChar == '!' ||
+        cChar == '/' /*case for the urls exception*/;
 }
 
 /* -----------------19.11.98 10:15-------------------
@@ -708,6 +714,17 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                         rDoc.Insert( nPos, CHAR_HARDBLANK );
                     bRet = true;
                 }
+            }
+        }
+        else if ( cChar == '/' )
+        {
+            // Remove the hardspace right before to avoid formatting URLs
+            sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+            sal_Unicode cMaybeSpaceChar = rTxt.GetChar( nEndPos - 2 );
+            if ( cPrevChar == ':' && cMaybeSpaceChar == CHAR_HARDBLANK )
+            {
+                rDoc.Delete( nEndPos - 2, nEndPos - 1 );
+                bRet = true;
             }
         }
     }
@@ -1226,6 +1243,13 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 rDoc.Insert( nInsPos, cChar );
             else
                 rDoc.Replace( nInsPos, cChar );
+
+            // Hardspaces autocorrection
+            if ( NeedsHardspaceAutocorr( cChar ) && IsAutoCorrFlag( AddNonBrkSpace ) &&
+                FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos, FALSE ) ) )
+            {
+                nRet = AddNonBrkSpace;
+            }
         }
 
         if( !nInsPos )
@@ -1322,8 +1346,6 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
-            ( IsAutoCorrFlag( nRet = AddNonBrkSpace ) &&
-                FnAddNonBrkSpace( rDoc, rTxt, nCapLttrPos, nInsPos - 1, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
                 FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )

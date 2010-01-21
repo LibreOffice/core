@@ -4436,17 +4436,6 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ReplaceQuote" oor:type="xs:boolean">
-						<!-- OldPath: Writer/AutoFormat/Options -->
-						<!-- OldLocation: Soffice.cfg -->
-						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace Standard Quotes... -->
-						<info>
-							<author>OS</author>
-							<desc>Specifies if standard quotes are replaced with custom quotes.</desc>
-							<label>Replace standard quotes with custom quotes</label>
-						</info>
-						<value>true</value>
-					</prop>
 					<prop oor:name="CombineParagraphs" oor:type="xs:boolean">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
