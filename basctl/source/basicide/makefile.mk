@@ -51,7 +51,8 @@ CDEFS+=-DBASICDEBUG
 
 # --- Allgemein ----------------------------------------------------------
 
-EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
+EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
+                $(SLO)$/scriptdocument.obj  \
                 $(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
                 $(SLO)$/basides2.obj	\
@@ -84,7 +85,7 @@ SLOFILES =  $(EXCEPTIONSFILES) \
             $(SLO)$/objdlg.obj	\
 
 SRS1NAME=$(TARGET)
-SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
+SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src basicprint.src
 
 .INCLUDE :  target.mk
 
