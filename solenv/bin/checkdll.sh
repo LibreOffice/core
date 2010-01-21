@@ -60,16 +60,6 @@ if [ -x $checkdll ]; then
         *) DYLD_LIBRARY_PATH=$libpath;;
         esac
         export DYLD_LIBRARY_PATH;;
-    IRIX) case "${LD_LIBRARYN32_PATH+X}" in
-        X) LD_LIBRARYN32_PATH=$libpath:$LD_LIBRARYN32_PATH;;
-        *) LD_LIBRARYN32_PATH=$libpath;;
-    esac
-        export LD_LIBRARYN32_PATH;;
-    IRIX64) case "${LD_LIBRARYN32_PATH+X}" in
-        X) LD_LIBRARYN32_PATH=$libpath:$LD_LIBRARYN32_PATH;;
-        *) LD_LIBRARYN32_PATH=$libpath;;
-    esac
-        export LD_LIBRARYN32_PATH;;
     *)  case "${LD_LIBRARY_PATH+X}" in
         X) LD_LIBRARY_PATH=$libpath:$LD_LIBRARY_PATH;;
         *) LD_LIBRARY_PATH=$libpath;;
