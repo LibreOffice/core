@@ -33,11 +33,19 @@
 #include "precompiled_sw.hxx"
 
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
+
 #include <hintids.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/resary.hxx>
+#include <tools/debug.hxx>
+#include <rtl/ustring.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
 
-// #include <tools/intn.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
@@ -45,6 +53,16 @@
 #include <editeng/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
+
+#include <unotools/moduleoptions.hxx>
+#include <svl/languageoptions.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/view/XRenderable.hpp>
+
+#include <unotxdoc.hxx>
+
+#include <docsh.hxx>
 #include <unotools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -54,14 +72,15 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
 #include <viewimp.hxx>      // Imp->SetFirstVisPageInvalid()
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <docufld.hxx>      // PostItFld /-Type
 #include <docfld.hxx>       // _SetGetExpFld
+#include <docufld.hxx>      // PostItFld /-Type
 #include <shellres.hxx>
 #include <viewopt.hxx>
 #include <swprtopt.hxx>     // SwPrtOptions
@@ -76,10 +95,17 @@
 #include <txtfrm.hxx>       // MinPrtLine
 #include <viscrs.hxx>       // SwShellCrsr
 #include <fmtpdsc.hxx>      // SwFmtPageDesc
+#include <globals.hrc>
 
 #define JOBSET_ERR_DEFAULT          0
 #define JOBSET_ERR_ERROR            1
 #define JOBSET_ERR_ISSTARTET        2
+
+
+extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
+
+
+using namespace ::com::sun::star;
 
 //--------------------------------------------------------------------
 //Klasse zum Puffern von Paints
@@ -98,19 +124,6 @@ public:
 };
 
 SwQueuedPaint *SwPaintQueue::pQueue = 0;
-
-//Klasse zum Speichern einiger Druckereinstellungen
-class SwPrtOptSave
-{
-    Printer *pPrt;
-    Size aSize;
-    Paper ePaper;
-    Orientation eOrientation;
-    USHORT nPaperBin;
-public:
-    SwPrtOptSave( Printer *pPrinter );
-    ~SwPrtOptSave();
-};
 
 // saves some settings from the draw view
 class SwDrawViewSave
@@ -201,6 +214,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
+/*****************************************************************************/
 
 const XubString& SwPrtOptions::MakeNextJobName()
 {
@@ -214,6 +228,486 @@ const XubString& SwPrtOptions::MakeNextJobName()
     return sJobName += XubString::CreateFromInt32( ++nJobNo );
 }
 
+/*****************************************************************************/
+
+SwRenderData::SwRenderData()
+{
+    m_pPostItFields   = 0;
+    m_pPostItDoc      = 0;
+    m_pPostItShell    = 0;
+
+    m_pViewOptionAdjust = 0;
+    m_pPrtOptions       = 0;
+}
+
+
+SwRenderData::~SwRenderData()
+{
+    delete m_pViewOptionAdjust;     m_pViewOptionAdjust = 0;
+    delete m_pPrtOptions;           m_pPrtOptions = 0;
+    DBG_ASSERT( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
+    DBG_ASSERT( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
+    DBG_ASSERT( !m_pPostItFields, " should already have been deleted" );
+}
+
+
+void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
+{
+    DBG_ASSERT( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
+    m_pPostItFields = new _SetGetExpFlds;
+    lcl_GetPostIts( pDoc, m_pPostItFields );
+    m_pPostItDoc    = new SwDoc;
+
+    //!! Disable spell and grammar checking in the temporary document.
+    //!! Otherwise the grammar checker might process it and crash if we later on
+    //!! simply delete this document while he is still at it.
+    SwViewOption  aViewOpt( *pViewOpt );
+    aViewOpt.SetOnlineSpell( FALSE );
+
+    m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
+}
+
+
+void SwRenderData::DeletePostItData()
+{
+    if (HasPostItData())
+    {
+        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
+        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+        delete m_pPostItFields;
+        m_pPostItDoc    = 0;
+        m_pPostItShell  = 0;
+        m_pPostItFields = 0;
+    }
+}
+
+
+void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions )
+{
+    if (m_pViewOptionAdjust)
+    {
+        DBG_ASSERT( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
+    }
+    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
+}
+
+
+void SwRenderData::ViewOptionAdjust( const SwPrtOptions *pPrtOptions )
+{
+    m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
+}
+
+
+void SwRenderData::ViewOptionAdjustStop()
+{
+    if (m_pViewOptionAdjust)
+    {
+        delete m_pViewOptionAdjust;
+        m_pViewOptionAdjust = 0;
+    }
+}
+
+
+void SwRenderData::MakeSwPrtOptions(
+    SwPrtOptions &rOptions,
+    const SwDocShell *pDocShell,
+    const SwPrintUIOptions *pOpt,
+    const SwRenderData *pData,
+    bool bIsPDFExport )
+{
+    if (!pDocShell || !pOpt || !pData)
+        return;
+
+    // get default print options
+    const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
+    BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    rOptions.MakeOptions( bWeb );
+
+    // get print options to use from provided properties
+    rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
+    rOptions.bPrintTable            = pOpt->IsPrintTables();
+    rOptions.bPrintDraw             = pOpt->IsPrintDrawings();
+    rOptions.bPrintControl          = pOpt->IsPrintFormControls();
+    rOptions.bPrintLeftPages        = pOpt->IsPrintLeftPages();
+    rOptions.bPrintRightPages       = pOpt->IsPrintRightPages();
+    rOptions.bPrintPageBackground   = pOpt->IsPrintPageBackground();
+    rOptions.bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
+    // bUpdateFieldsInPrinting  <-- not set here; mail merge only
+    rOptions.bPaperFromSetup        = pOpt->IsPaperFromSetup();
+    rOptions.bPrintReverse          = pOpt->IsPrintReverse();
+    rOptions.bPrintProspect         = pOpt->IsPrintProspect();
+    rOptions.bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
+    // bPrintSingleJobs         <-- not set here; mail merge and or configuration
+    // bModified                <-- not set here; mail merge only
+    rOptions.bPrintBlackFont        = pOpt->IsPrintWithBlackTextColor();
+    rOptions.bPrintHiddenText       = pOpt->IsPrintHiddenText();
+    rOptions.bPrintTextPlaceholder  = pOpt->IsPrintTextPlaceholders();
+    rOptions.nPrintPostIts          = pOpt->GetPrintPostItsType();
+
+    //! needs to be set after MakeOptions since the assignment operation in that
+    //! function will destroy the pointers
+    rOptions.SetPrintUIOptions( pOpt );
+    rOptions.SetRenderData( pData );
+
+    // rOptions.aMulti is not used anymore in the XRenderable API
+    // Thus we set it to a dummy value here.
+    rOptions.aMulti = MultiSelection( Range( 1, 1 ) );
+
+    //! Note: Since for PDF export of (multi-)selection a temporary
+    //! document is created that contains only the selects parts,
+    //! and thus that document is to printed in whole the,
+    //! rOptions.bPrintSelection parameter will be false.
+    if (bIsPDFExport)
+        rOptions.bPrintSelection = FALSE;
+}
+
+
+/*****************************************************************************/
+
+SwPrintUIOptions::SwPrintUIOptions(
+    bool bWeb,
+    bool bSwSrcView,
+    bool bHasSelection,
+    bool bHasPostIts,
+    const SwPrintData &rDefaultPrintData ) :
+    m_pLast( NULL ),
+    m_rDefaultPrintData( rDefaultPrintData )
+{
+    ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
+
+    DBG_ASSERT( aLocalizedStrings.Count() >= 44, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 44 ) // bad resource ?
+        return;
+
+    // printing HTML sources does not have any valid UI options.
+    // Its just the source code that gets printed ...
+    if (bSwSrcView)
+    {
+        m_aUIProperties.realloc( 0 );
+        return;
+    }
+
+    // check if CTL is enabled
+    SvtLanguageOptions aLangOpt;
+    bool bCTL = aLangOpt.IsCTLFontEnabled();
+
+    // create sequence of print UI options
+    // (5 options are not available for Writer-Web)
+    const int nCTLOpts = bCTL ? 1 : 0;
+    const int nNumProps = nCTLOpts + (bWeb ? 14 : 20);
+    m_aUIProperties.realloc( nNumProps );
+    int nIdx = 0;
+
+    // create "writer" section (new tab page in dialog)
+    SvtModuleOptions aModOpt;
+    String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
+    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                    aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+
+    // create sub section for Contents
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
+
+    // create a bool option for background
+    bool bDefaultVal = rDefaultPrintData.IsPrintPageBackground();
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
+                                                  aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPageBackground" ) ),
+                                                  bDefaultVal );
+
+    // create a bool option for pictures/graphics AND OLE and drawing objects as well
+    bDefaultVal = rDefaultPrintData.IsPrintGraphic() || rDefaultPrintData.IsPrintDraw();
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                  aLocalizedStrings.GetString( 5 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPicturesAndObjects" ) ),
+                                                  bDefaultVal );
+    if (!bWeb)
+    {
+        // create a bool option for hidden text
+        bDefaultVal = rDefaultPrintData.IsPrintHiddenText();
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
+                                                  aLocalizedStrings.GetString( 7 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintHiddenText" ) ),
+                                                  bDefaultVal );
+
+        // create a bool option for place holder
+        bDefaultVal = rDefaultPrintData.IsPrintTextPlaceholder();
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 8 ),
+                                                  aLocalizedStrings.GetString( 9 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTextPlaceholder" ) ),
+                                                  bDefaultVal );
+    }
+
+    // create a bool option for controls
+    bDefaultVal = rDefaultPrintData.IsPrintControl();
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
+                                                  aLocalizedStrings.GetString( 11 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
+                                                  bDefaultVal );
+
+    // create sub section for Color
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 12 ), rtl::OUString() );
+
+    // create a bool option for printing text with black font color
+    bDefaultVal = rDefaultPrintData.IsPrintBlackFont();
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
+                                                  aLocalizedStrings.GetString( 14 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlackFonts" ) ),
+                                                  bDefaultVal );
+
+    if (!bWeb)
+    {
+        // create subgroup for misc options
+        m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 15 ) ), rtl::OUString() );
+
+        // create a bool option for printing automatically inserted blank pages
+        bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 16 ),
+                                                       aLocalizedStrings.GetString( 17 ),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
+                                                       bDefaultVal );
+    }
+
+    // create a bool option for paper tray
+    bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
+    vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
+    aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 18 ),
+                                                   aLocalizedStrings.GetString( 19 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
+                                                   bDefaultVal,
+                                                   aPaperTrayOpt
+                                                   );
+
+    // print range selection
+    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.mbInternalOnly = sal_True;
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 37 ) ),
+                                                           rtl::OUString(),
+                                                           aPrintRangeOpt
+                                                           );
+
+    // create a choice for the content to create
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    uno::Sequence< rtl::OUString > aChoices( bHasSelection ? 3 : 2 );
+    uno::Sequence< rtl::OUString > aHelpText( bHasSelection ? 3 : 2 );
+    aChoices[0] = aLocalizedStrings.GetString( 38 );
+    aHelpText[0] = aLocalizedStrings.GetString( 39 );
+    aChoices[1] = aLocalizedStrings.GetString( 40 );
+    aHelpText[1] = aLocalizedStrings.GetString( 41 );
+    if (bHasSelection)
+    {
+        aChoices[2] = aLocalizedStrings.GetString( 42 );
+        aHelpText[2] = aLocalizedStrings.GetString( 43 );
+    }
+    m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
+                                                         aHelpText,
+                                                         aPrintRangeName,
+                                                         aChoices,
+                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */);
+    // create a an Edit dependent on "Pages" selected
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
+    m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
+                                                       rtl::OUString(),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                       rtl::OUString(),
+                                                       aPageRangeOpt
+                                                       );
+    // print content selection
+    vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
+    aContentsOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) );
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 20 ) ),
+                                                           rtl::OUString(),
+                                                           aContentsOpt
+                                                           );
+    // create a list box for notes content
+    const sal_Int16 nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
+    aChoices.realloc( 4 );
+    aChoices[0] = aLocalizedStrings.GetString( 21 );
+    aChoices[1] = aLocalizedStrings.GetString( 22 );
+    aChoices[2] = aLocalizedStrings.GetString( 23 );
+    aChoices[3] = aLocalizedStrings.GetString( 24 );
+    aHelpText.realloc( 2 );
+    aHelpText[0] = aLocalizedStrings.GetString( 25 );
+    aHelpText[1] = aLocalizedStrings.GetString( 25 );
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 0, sal_False );
+    aAnnotOpt.mbEnabled = bHasPostIts;
+    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
+                                                    aHelpText,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
+                                                    aChoices,
+                                                    nPrintPostIts,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                    aAnnotOpt
+                                                    );
+
+    // create subsection for Page settings
+    vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
+    aPageSetOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+
+    if (!bWeb)
+    {
+        m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 27 ) ),
+                                                               rtl::OUString(),
+                                                               aPageSetOpt
+                                                               );
+        uno::Sequence< rtl::OUString > aRLChoices( 3 );
+        aRLChoices[0] = aLocalizedStrings.GetString( 28 );
+        aRLChoices[1] = aLocalizedStrings.GetString( 29 );
+        aRLChoices[2] = aLocalizedStrings.GetString( 30 );
+        uno::Sequence< rtl::OUString > aRLHelp( 1 );
+        aRLHelp[0] = aLocalizedStrings.GetString( 31 );
+        // create a choice option for all/left/right pages
+        // 0 : all pages (left & right)
+        // 1 : left pages
+        // 2 : right pages
+        DBG_ASSERT( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
+                "unexpected value combination" );
+        sal_Int16 nPagesChoice = 0;
+        if (rDefaultPrintData.IsPrintLeftPage() && !rDefaultPrintData.IsPrintRightPage())
+            nPagesChoice = 1;
+        else if (!rDefaultPrintData.IsPrintLeftPage() && rDefaultPrintData.IsPrintRightPage())
+            nPagesChoice = 2;
+        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 32 ),
+                                                   aRLHelp,
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftRightPages" ) ),
+                                                   aRLChoices,
+                                                   nPagesChoice,
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
+                                                   );
+    }
+
+    // create a bool option for brochure
+    bDefaultVal = rDefaultPrintData.IsPrintProspect();
+    rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 33 ),
+                                                   aLocalizedStrings.GetString( 34 ),
+                                                   aBrochurePropertyName,
+                                                   bDefaultVal,
+                                                   aPageSetOpt
+                                                   );
+
+    if (bCTL)
+    {
+        // create a bool option for brochure RTL dependent on brochure
+        uno::Sequence< rtl::OUString > aBRTLChoices( 2 );
+        aBRTLChoices[0] = aLocalizedStrings.GetString( 35 );
+        aBRTLChoices[1] = aLocalizedStrings.GetString( 36 );
+        vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
+        aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+        // RTL brochure choices
+        //      0 : left-to-right
+        //      1 : right-to-left
+        const sal_Int16 nBRTLChoice = rDefaultPrintData.IsPrintProspectRTL() ? 1 : 0;
+        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
+                                                               uno::Sequence< rtl::OUString >(),
+                                                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
+                                                               aBRTLChoices,
+                                                               nBRTLChoice,
+                                                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                               aBrochureRTLOpt
+                                                               );
+    }
+
+
+    DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+}
+
+
+SwPrintUIOptions::~SwPrintUIOptions()
+{
+}
+
+bool SwPrintUIOptions::IsPrintLeftPages() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+
+    // 0: left and right pages
+    // 1: left pages only
+    // 2: right pages only
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
+    bool bRes = nLRPages == 0 || nLRPages == 1;
+    bRes = getBoolValue( "PrintLeftPages", bRes /* <- default value if property is not found */ );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintRightPages() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
+    bool bRes = nLRPages == 0 || nLRPages == 2;
+    bRes = getBoolValue( "PrintRightPages", bRes /* <- default value if property is not found */ );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
+{
+    // take care of different property names for the option.
+
+    bool bRes = bIsPDFExport ?
+            !getBoolValue( "IsSkipEmptyPages", sal_True ) :
+            getBoolValue( "PrintEmptyPages", sal_True );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintTables() const
+{
+    // take care of different property names currently in use for this option.
+    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+
+//    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+//    bRes = getBoolValue( "PrintTables", bRes );
+//    return bRes;
+    // for now it was decided that tables should always be printed
+    return true;
+}
+
+bool SwPrintUIOptions::IsPrintGraphics() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
+    bRes = getBoolValue( "PrintGraphics", bRes );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintDrawings() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
+
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
+    bRes = getBoolValue( "PrintDrawings", bRes );
+    return bRes;
+}
+
+bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
+{
+    bool bChanged = processProperties( i_rNewProp );
+
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    uno::Any aVal( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    aVal >>= xRenderDevice;
+
+    OutputDevice* pOut = 0;
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+    }
+    bChanged = bChanged || (pOut != m_pLast);
+    if( pOut )
+        m_pLast = pOut;
+
+    return bChanged;
+}
+
+
 /******************************************************************************
  *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
  *  Beschreibung:
@@ -221,333 +715,51 @@ const XubString& SwPrtOptions::MakeNextJobName()
  *  Aenderung   :
  ******************************************************************************/
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
 {
     ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
 
-    if (!bPDFExport)
-        aPt += pSh->aPrtOffst;
+    // calculate an offset for the rectangle of the n-th page to
+    // move the start point of the output operation to a position
+    // such that in the output device all pages will be painted
+    // at the same position
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-    OutputDevice *pOut = bPDFExport ?
-                         pSh->GetOut() :
-                         pSh->getIDocumentDeviceAccess()->getPrinter( false );
+    OutputDevice *pOut = pSh->GetOut();
 
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
     pOut->SetMapMode( aMapMode );
 }
 
-/******************************************************************************
- *  Methode     :   struct _PostItFld : public _SetGetExpFld
- *  Beschreibung:   Update an das PostItFeld
- *  Erstellt    :   OK 07.11.94 10:18
- *  Aenderung   :
- ******************************************************************************/
-struct _PostItFld : public _SetGetExpFld
-{
-    _PostItFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
-                    const SwIndex* pIdx = 0 )
-        : _SetGetExpFld( rNdIdx, pFld, pIdx ) {}
+/******************************************************************************/
 
-    USHORT GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
-                        USHORT& rVirtPgNo, USHORT& rLineNo );
-    SwPostItField* GetPostIt() const
-        { return (SwPostItField*) GetFld()->GetFld().GetFld(); }
-};
-
-
-
-USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
-                                USHORT& rVirtPgNo, USHORT& rLineNo )
-{
-    //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
-    //einer Layout-Instanz repraesentiert wird, steht die Frage im Raum,
-    //ob das PostIt nur ein- oder n-mal gedruck werden soll.
-    //Wahrscheinlich nur einmal, als Seitennummer soll hier keine Zufaellige
-    //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
-    //Bereichs ermittelt werden.
-    rVirtPgNo = 0;
-    USHORT nPos = GetCntnt();
-    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
-            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
-    {
-        if( pFrm->GetOfst() > nPos ||
-            (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
-            continue;
-        USHORT nPgNo = pFrm->GetPhyPageNum();
-        BOOL bRight = pFrm->OnRightPage();
-        if( rMulti.IsSelected( nPgNo ) &&
-            ( (bRight && bRgt) || (!bRight && bLft) ) )
-        {
-            rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
-                      pFrm->GetAllLines() - pFrm->GetThisLines());
-            rVirtPgNo = pFrm->GetVirtPageNum();
-            return nPgNo;
-        }
-    }
-    return 0;
-}
-
-/******************************************************************************
- *  Methode     :   void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:20
- *  Aenderung   :
- ******************************************************************************/
-
-
-void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst )
-{
-    SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
-    ASSERT( pFldType, "kein PostItType ? ");
-
-    if( pFldType->GetDepends() )
-    {
-        // Modify-Object gefunden, trage alle Felder ins Array ein
-        SwClientIter aIter( *pFldType );
-        SwClient* pLast;
-        const SwTxtFld* pTxtFld;
-
-        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
-            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
-                pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
-            {
-                SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
-                _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
-                rSrtLst.Insert( pNew );
-            }
-    }
-}
-
-/******************************************************************************
- *  Methode     :   void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:20
- *  Aenderung   :
- ******************************************************************************/
-
-
-void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItField* pField,
-                           USHORT nPageNo, USHORT nLineNo )
-{
-    static char __READONLY_DATA sTmp[] = " : ";
-
-    ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
-
-    String aStr(    ViewShell::GetShellRes()->aPostItPage   );
-    aStr.AppendAscii(sTmp);
-
-    aStr += XubString::CreateFromInt32( nPageNo );
-    aStr += ' ';
-    if( nLineNo )
-    {
-        aStr += ViewShell::GetShellRes()->aPostItLine;
-        aStr.AppendAscii(sTmp);
-        aStr += XubString::CreateFromInt32( nLineNo );
-        aStr += ' ';
-    }
-    aStr += ViewShell::GetShellRes()->aPostItAuthor;
-    aStr.AppendAscii(sTmp);
-    aStr += pField->GetPar1();
-    aStr += ' ';
-    aStr += SvtSysLocale().GetLocaleData().getDate( pField->GetDate() );
-    pIDCO->InsertString( aPam, aStr );
-
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-    aStr = pField->GetPar2();
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
-    // Bei Windows und Co alle CR rausschmeissen
-    aStr.EraseAllChars( '\r' );
-#endif
-    pIDCO->InsertString( aPam, aStr );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-}
-
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostIts( ViewShell* pPrtShell )
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:21
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
-
-
-void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
-                        BOOL& rStartJob, int& rJobStartError, BOOL bReverse)
-{
-    // Formatieren und Ausdrucken
-    pPrtShell->CalcLayout();
-
-    SfxPrinter* pPrn = pPrtShell->getIDocumentDeviceAccess()->getPrinter( false );
-
-    //Das Druckdokument ist ein default Dokument, mithin arbeitet es auf der
-    //StandardSeite.
-    SwFrm *pPage = pPrtShell->GetLayout()->Lower();
-
-    SwPrtOptSave aPrtSave( pPrn );
-
-    pPrn->SetOrientation( ORIENTATION_PORTRAIT );
-    pPrn->SetPaperBin( pPage->GetAttrSet()->GetPaperBin().GetValue() );
-
-    if( !rStartJob &&  JOBSET_ERR_DEFAULT == rJobStartError &&
-        rJobName.Len() )
-    {
-        if( !pPrn->IsJobActive() )
-        {
-            rStartJob = pPrn->StartJob( rJobName );
-            if( !rStartJob )
-            {
-                rJobStartError = JOBSET_ERR_ERROR;
-                return;
-            }
-        }
-        pPrtShell->InitPrt( pPrn );
-        rJobStartError = JOBSET_ERR_ISSTARTET;
-    }
-
-    // Wir koennen auch rueckwaerts:
-    if ( bReverse )
-        pPage = pPrtShell->GetLayout()->GetLastPage();
-
-    while( pPage )
-    {
-        //Mag der Anwender noch?, Abbruch erst in Prt()
-        GetpApp()->Reschedule();
-        ::SetSwVisArea( pPrtShell, pPage->Frm() );
-        pPrn->StartPage();
-        pPage->GetUpper()->Paint( pPage->Frm() );
-//      SFX_APP()->SpoilDemoOutput( *pPrtShell->GetOut(), pPage->Frm().SVRect());
-        SwPaintQueue::Repaint();
-        pPrn->EndPage();
-        pPage = bReverse ? pPage->GetPrev() : pPage->GetNext();
-    }
-}
-
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:21
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
-
-
-void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
-            _SetGetExpFlds& rPostItFields, MultiSelection &rMulti,
-            const XubString& rJobName, BOOL& rStartJob, int& rJobStartError,
-            BOOL bRgt, BOOL bLft, BOOL bRev )
-{
-    USHORT nPostIts = rPostItFields.Count();
-    if( !nPostIts )
-        // Keine Arbeit
-        return;
-
-    SET_CURR_SHELL( pPrtShell );
-
-    SwDoc* pPrtDoc = pPrtShell->GetDoc();
-
-    // Dokument leeren und ans Dokumentende gehen
-    SwPaM aPam( pPrtDoc->GetNodes().GetEndOfContent() );
-    aPam.Move( fnMoveBackward, fnGoDoc );
-    aPam.SetMark();
-    aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->DeleteRange( aPam );
-
-    for( USHORT i = 0, nVirtPg, nLineNo; i < nPostIts; ++i )
-    {
-        _PostItFld& rPostIt = (_PostItFld&)*rPostItFields[ i ];
-        if( rPostIt.GetPageNo( rMulti, bRgt, bLft, nVirtPg, nLineNo ) )
-            lcl_FormatPostIt( pPrtShell->GetDoc(), aPam,
-                           rPostIt.GetPostIt(), nVirtPg, nLineNo );
-    }
-
-    lcl_PrintPostIts( pPrtShell, rJobName, rStartJob, rJobStartError, bRev );
-}
-
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostItsEndPage( ViewShell* pPrtShell, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:22
- *  Aenderung   :
- ******************************************************************************/
-
-
-void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
-            _SetGetExpFlds& rPostItFields, USHORT nPageNo, MultiSelection &rMulti,
-            const XubString& rJobName, BOOL& rStartJob, int& rJobStartError,
-            BOOL bRgt, BOOL bLft, BOOL bRev )
-{
-    USHORT nPostIts = rPostItFields.Count();
-    if( !nPostIts )
-        // Keine Arbeit
-        return;
-
-    SET_CURR_SHELL( pPrtShell );
-
-    USHORT i = 0, nVirtPg, nLineNo;
-    while( ( i < nPostIts ) &&
-           ( nPageNo != ((_PostItFld&)*rPostItFields[ i ]).
-                                GetPageNo( rMulti,bRgt, bLft, nVirtPg, nLineNo )))
-        ++i;
-    if(i == nPostIts)
-        // Nix zu drucken
-        return;
-
-    SwDoc* pPrtDoc = pPrtShell->GetDoc();
-
-    // Dokument leeren und ans Dokumentende gehen
-    SwPaM aPam( pPrtDoc->GetNodes().GetEndOfContent() );
-    aPam.Move( fnMoveBackward, fnGoDoc );
-    aPam.SetMark();
-    aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->DeleteRange( aPam );
-
-    while( i < nPostIts )
-    {
-        _PostItFld& rPostIt = (_PostItFld&)*rPostItFields[ i ];
-        if( nPageNo == rPostIt.GetPageNo( rMulti, bRgt, bLft, nVirtPg, nLineNo ) )
-            lcl_FormatPostIt( pPrtShell->GetDoc(), aPam,
-                                rPostIt.GetPostIt(), nVirtPg, nLineNo );
-        ++i;
-    }
-    lcl_PrintPostIts( pPrtShell, rJobName, rStartJob, rJobStartError, bRev );
-}
-
-/******************************************************************************
- *  Methode     :   void ViewShell::InitPrt( SfxPrinter *pNew, OutputDevice *pPDFOut )
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:22
- *  Aenderung   :
- ******************************************************************************/
-
-void ViewShell::InitPrt( SfxPrinter *pPrt, OutputDevice *pPDFOut )
+void ViewShell::InitPrt( OutputDevice *pOutDev )
 {
     //Fuer den Printer merken wir uns einen negativen Offset, der
     //genau dem Offset de OutputSize entspricht. Das ist notwendig,
     //weil unser Ursprung der linken ober Ecke der physikalischen
     //Seite ist, die Ausgaben (SV) aber den Outputoffset als Urstprung
     //betrachten.
-    OutputDevice *pTmpDev = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
-    if ( pTmpDev )
+    if ( pOutDev )
     {
-        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
+        aPrtOffst = Point();
 
-        aPrtOffst += pTmpDev->GetMapMode().GetOrigin();
-        MapMode aMapMode( pTmpDev->GetMapMode() );
+        aPrtOffst += pOutDev->GetMapMode().GetOrigin();
+        MapMode aMapMode( pOutDev->GetMapMode() );
         aMapMode.SetMapUnit( MAP_TWIP );
-        pTmpDev->SetMapMode( aMapMode );
-        pTmpDev->SetLineColor();
-        pTmpDev->SetFillColor();
+        pOutDev->SetMapMode( aMapMode );
+        pOutDev->SetLineColor();
+        pOutDev->SetFillColor();
     }
     else
         aPrtOffst.X() = aPrtOffst.Y() = 0;
 
     if ( !pWin )
-        pOut = pTmpDev;    //Oder was sonst?
+        pOut = pOutDev;    //Oder was sonst?
 }
 
 /******************************************************************************
@@ -638,14 +850,6 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     }
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::CalcPagesForPrint( short nMax, BOOL ...
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 15:33
- *  Aenderung   :   MA 07. Jun. 95
- ******************************************************************************/
-
-
 
 void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
     const XubString *pStr, ULONG nAct, ULONG nCnt, ULONG nOffs, ULONG nPageNo )
@@ -674,50 +878,19 @@ void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
 
 
 
-void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
-    const XubString* pStr, ULONG nMergeAct, ULONG nMergeCnt )
+void ViewShell::CalcPagesForPrint( USHORT nMax )
 {
     SET_CURR_SHELL( this );
 
-    //Seitenweise durchformatieren, by the way kann die Statusleiste
-    //angetriggert werden, damit der Anwender sieht worauf er wartet.
-    //Damit der Vorgang moeglichst transparent gestaltet werden kann
-    //Versuchen wir mal eine Schaetzung.
-    SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter( false );
-    BOOL bPrtJob = pPrt ? pPrt->IsJobActive() : FALSE;
     SwRootFrm* pLayout = GetLayout();
-    ULONG nStatMax = pLayout->GetPageNum();
+    // ULONG nStatMax = pLayout->GetPageNum();
 
     const SwFrm *pPage = pLayout->Lower();
     SwLayAction aAction( pLayout, Imp() );
 
-    if( pProgress )
-    {
-        // HACK, damit die Anzeige sich nicht verschluckt.
-        const XubString aTmp( SW_RES( STR_STATSTR_FORMAT ) );
-        pProgress->SetText( aTmp );
-        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0, 1 );
-        pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-        aAction.SetProgress(pProgress);
-    }
-
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
-        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
-            break;
-
-        if( pProgress )
-        {
-            //HACK, damit die Anzeige sich nicht verschluckt.
-            if ( i > nStatMax ) nStatMax = i;
-            lcl_SetState( *pProgress, i, nStatMax, pStr, nMergeAct, nMergeCnt, 0, i );
-            pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-        }
-
-        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
-            break;
-
         pPage->Calc();
         SwRect aOldVis( VisArea() );
         aVisArea = pPage->Frm();
@@ -731,33 +904,22 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
 
         aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
-        SwPaintQueue::Repaint();
-
-        if ( pProgress )
-            pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+//       SwPaintQueue::Repaint();
     }
-
-    if (pProgress)
-        aAction.SetProgress( NULL );
-
     pLayout->EndAllAction();
 }
 
 /******************************************************************************/
 
-SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellRef)
+SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
+    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
-
-    // Der Drucker wird uebernommen
-    if (pPrt)
-        pPrtDoc->setPrinter( pPrt, true, true );
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
@@ -849,6 +1011,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     }
     return pPrtDoc;
 }
+
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
@@ -856,7 +1019,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
 //    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
+//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -958,75 +1121,40 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     return pPrtDoc;
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions,
- *                                       SfxProgress* pProgress,
- *                                       OutputDevice* pPDFOut )
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 15:33
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
 
-
-BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
-                     OutputDevice* pPDFOut )
+sal_Bool ViewShell::PrintOrPDFExport(
+    OutputDevice *pOutDev,
+    const SwPrtOptions &rPrintData,
+    sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ASSERT( pPDFOut || pProgress, "Printing without progress bar!" )
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Immer die Druckroutinen in viewpg.cxx (PrintProspect) mitpflegen!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    BOOL bStartJob = FALSE;
+    const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
+#endif
+    if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
+        return sal_False;
 
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rOptions.bPrintSelection parameter will be false.
-    BOOL bSelection = rOptions.bPrintSelection;
-
-    MultiSelection aMulti( rOptions.aMulti );
-
-    if ( !aMulti.GetSelectCount() )
-        return bStartJob;
-
-    Range aPages( aMulti.FirstSelected(), aMulti.LastSelected() );
-    if ( aPages.Max() > USHRT_MAX )
-        aPages.Max() = USHRT_MAX;
-
-    ASSERT( aPages.Min() > 0,
-            "Seite 0 Drucken?" );
-    ASSERT( aPages.Min() <= aPages.Max(),
-            "MinSeite groesser MaxSeite." );
-
-    SfxPrinter* pPrt = 0;   //!! will be 0 for PDF export !!
-    if (pPDFOut)
-        pPDFOut->Push();
-    else
-    {
-        // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-        pPrt = getIDocumentDeviceAccess()->getPrinter( false );
-        if( !pPrt || !pPrt->GetName().Len() )
-        {
-            ASSERT( FALSE, "Drucken ohne Drucker?" );
-            return bStartJob;
-        }
-
-        if( !rOptions.GetJobName().Len() && !pPrt->IsJobActive() )
-            return bStartJob;
-    }
-
-    // Einstellungen am Drucker merken
-    SwPrtOptSave aPrtSave( pPrt );
-
-    OutputDevice *pPrtOrPDFOut = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
+    // save settings of OutputDevice (should be done always since the
+    // output device is now provided by a call from outside the Writer)
+    pOutDev->Push();
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
-    SwDoc *pPrtDoc;
+    SwDoc *pOutDevDoc;
 
     //!! muss warum auch immer hier in diesem scope existieren !!
     //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
     SfxObjectShellRef aDocShellRef;
+
+    //! Note: Since for PDF export of (multi-)selection a temporary
+    //! document is created that contains only the selects parts,
+    //! and thus that document is to printed in whole the,
+    //! rPrintData.bPrintSelection parameter will be false.
+    BOOL bSelection = rPrintData.bPrintSelection;
 
     // PDF export for (multi-)selection has already generated a temporary document
     // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
@@ -1036,443 +1164,100 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     // to be created that often here in the 'then' part.
     if ( bSelection )
     {
-        pPrtDoc = CreatePrtDoc( pPrt, aDocShellRef );
+        pOutDevDoc = CreatePrtDoc( aDocShellRef );
 
         // eine ViewShell darauf
-        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
-        pShell = new ViewShell( *pPrtDoc, 0, pOpt, pTmpDev );
-        pPrtDoc->SetRefForDocShell( 0 );
+        pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pOutDev );
+        pOutDevDoc->SetRefForDocShell( 0 );
     }
     else
     {
-        pPrtDoc = GetDoc();
-        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
-        pShell = new ViewShell( *this, 0, pTmpDev );
+        pOutDevDoc = GetDoc();
+        pShell = new ViewShell( *this, 0, pOutDev );
+    }
+
+    SdrView *pDrawView = pShell->GetDrawView();
+    if (pDrawView)
+    {
+        pDrawView->SetBufferedOutputAllowed( false );
+        pDrawView->SetBufferedOverlayAllowed( false );
     }
 
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
         //Shell zurueckgesetzt wird.
 
-    SET_CURR_SHELL( pShell );
+        SET_CURR_SHELL( pShell );
 
-    if ( pProgress )
-    {
-        Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
-        ((SfxPrintProgress *)pProgress)->SetCancelHdl(aLnk);
-    }
+        //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
+        if( pOpt->IsReadonly() )
+            pShell->pOpt->SetReadonly( TRUE );
 
-    //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
-    if( pOpt->IsReadonly() )
-        pShell->pOpt->SetReadonly( TRUE );
+        // save options at draw view:
+        SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
 
-    // save options at draw view:
-    SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
+        pShell->PrepareForPrint( rPrintData );
 
-    pShell->PrepareForPrint( rOptions );
-
-    XubString* pStr = 0;
-    ULONG nMergeAct = rOptions.nMergeAct, nMergeCnt = rOptions.nMergeCnt;
-    if ( pProgress )
-    {
-        if( nMergeAct )
+        const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
+#if OSL_DEBUG_LEVEL > 1
+        DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
+#endif
+        const SwPageFrm *pStPage = 0;
+        if (nPage > 0)  // a 'regular' page, not one from the post-it document
         {
-            pStr = new SW_RESSTR(STR_STATSTR_LETTER);
-            *pStr += ' ';
-            *pStr += XubString::CreateFromInt64( nMergeAct );
-            if( nMergeCnt )
-            {
-                *pStr += '/';
-                *pStr += XubString::CreateFromInt64( nMergeCnt );
-            }
+            const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
+            SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
+            DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+            if (aIt == rFrms.end())
+                return sal_False;
+            pStPage = aIt->second;
         }
-        else
+        else    // a page from the post-its document ...
         {
-            ++nMergeAct;
+            DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
+            pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
         }
-    }
+        DBG_ASSERT( pStPage, "failed to get start page" );
 
-    // Seiten fuers Drucken formatieren
-    pShell->CalcPagesForPrint( (USHORT)aPages.Max(), pProgress, pStr,
-                                nMergeAct, nMergeCnt );
+        //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
 
-    // Some field types, can require a valid layout
-    // (expression fields in tables). For these we do an UpdateFlds
-    // here after calculation of the pages.
-    // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
-    //                            the fields during pdf export.
-    // #i56195# prevent update of fields (for mail merge)
-    if ( !pPDFOut && rOptions.bUpdateFieldsInPrinting )
-    // <--
-        pShell->UpdateFlds(TRUE);
+        ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
+                rPrintData.GetRenderData().m_pPostItShell : pShell;
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
-    if( !pShell->Imp()->IsStopPrt() &&
-        ( pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
-    {
-        BOOL bStop = FALSE;
-        int nJobStartError = JOBSET_ERR_DEFAULT;
-
-        USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
-
-        USHORT nPrintCount = 1;
-        XubString sJobName( rOptions.GetJobName() );
-
-        for ( USHORT nCnt = 0; !bStop && nCnt < nCopyCnt; nCnt++ )
+        //  wenn wir einen Umschlag drucken wird ein Offset beachtet
+        if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
         {
-            const SwPageFrm *pStPage  = (SwPageFrm*)pShell->GetLayout()->Lower();
-            const SwFrm     *pEndPage = pStPage;
-
-            USHORT nFirstPageNo = 0;
-            USHORT nLastPageNo  = 0;
-            USHORT nPageNo      = 1;
-
-            if (pPrt)
-            {
-                if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
-                    ( bStartJob || rOptions.bJobStartet ) )
-                {
-                    pPrt->EndJob();
-                    bStartJob = FALSE;
-                    rOptions.bJobStartet = TRUE;
-
-                    // Reschedule statt Yield, da Yield keine Events abarbeitet
-                    // und es sonst eine Endlosschleife gibt.
-                    while( pPrt->IsPrinting() && pProgress )
-                            pProgress->Reschedule();
-
-                    sJobName = rOptions.MakeNextJobName();
-                    nJobStartError = JOBSET_ERR_DEFAULT;
-                }
-            }
-
-            for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
-            {
-                if( i < (USHORT)aPages.Min() )
-                {
-                    if( !pStPage->GetNext() )
-                        break;
-                    pStPage = (SwPageFrm*)pStPage->GetNext();
-                    pEndPage= pStPage;
-                }
-                else if( i == (USHORT)aPages.Min() )
-                {
-                    nFirstPageNo = i;
-                    nLastPageNo = nFirstPageNo;
-                    if( !pStPage->GetNext() || (i == (USHORT)aPages.Max()) )
-                        break;
-                    pEndPage = pStPage->GetNext();
-                }
-                else if( i > (USHORT)aPages.Min() )
-                {
-                    nLastPageNo = i;
-                    if( !pEndPage->GetNext() || (i == (USHORT)aPages.Max()) )
-                        break;
-                    pEndPage = pEndPage->GetNext();
-                }
-            }
-
-            if( !nFirstPageNo )
-            {
-                bStop = TRUE;
-                break;
-            }
-
-// HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
-// geschaffen werden, alle Seiten von Seite x an zu deselektieren.
-// Z.B. durch SetTotalRange ....
-
-//          aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
-            MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
-            long nTmpIdx = aMulti.FirstSelected();
-            static long nEndOfSelection = SFX_ENDOFSELECTION;
-            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
-            {
-                aTmpMulti.Select( nTmpIdx );
-                nTmpIdx = aMulti.NextSelected();
-            }
-            aMulti = aTmpMulti;
-// Ende des HACKs
-
-            const USHORT nSelCount = USHORT(aMulti.GetSelectCount()
-                            /* * nCopyCnt*/);
-
-            if ( pProgress )
-            {
-                pProgress->SetText( SW_RESSTR(STR_STATSTR_PRINT) );
-                lcl_SetState( *pProgress, 1, nSelCount, pStr,
-                              nMergeAct, nMergeCnt, nSelCount, 1 );
-            }
-
-            if ( rOptions.bPrintReverse )
-            {
-                const SwFrm *pTmp = pStPage;
-                pStPage  = (SwPageFrm*)pEndPage;
-                pEndPage = pTmp;
-                nPageNo  = nLastPageNo;
-            }
-            else
-                nPageNo = nFirstPageNo;
-
-            // PostitListe holen
-            _SetGetExpFlds aPostItFields;
-            SwDoc*     pPostItDoc   = 0;
-            ViewShell* pPostItShell = 0;
-            if( rOptions.nPrintPostIts != POSTITS_NONE )
-            {
-                lcl_GetPostIts( pDoc, aPostItFields );
-                pPostItDoc   = new SwDoc;
-                if (pPrt)
-                    pPostItDoc->setPrinter( pPrt, true, true );
-                pPostItShell = new ViewShell( *pPostItDoc, 0,
-                                               pShell->GetViewOptions() );
-                // Wenn PostIts am Dokumentenende gedruckt werden sollen,
-                // die Druckreihenfolge allerdings umgekehrt ist, dann hier
-                if ( ( rOptions.nPrintPostIts == POSTITS_ENDDOC ) &&
-                        rOptions.bPrintReverse )
-                        lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields,
-                        aMulti, sJobName, bStartJob, nJobStartError,
-                        rOptions.bPrintRightPage, rOptions.bPrintLeftPage, TRUE );
-
-            }
-
-            // aOldMapMode wird fuer das Drucken von Umschlaegen gebraucht.
-            MapMode aOldMapMode;
-
-            const SwPageDesc *pLastPageDesc = NULL;
-            BOOL bSetOrient   = FALSE;
-            BOOL bSetPaperSz  = FALSE;
-            BOOL bSetPaperBin = FALSE;
-            BOOL bSetPrt      = FALSE;
-            if (pPrt)
-            {
-                bSetOrient      = pPrt->HasSupport( SUPPORT_SET_ORIENTATION );
-                bSetPaperSz     = pPrt->HasSupport( SUPPORT_SET_PAPERSIZE );
-                bSetPaperBin    =  !rOptions.bPaperFromSetup &&
-                                    pPrt->HasSupport( SUPPORT_SET_PAPERBIN );
-                bSetPrt = bSetOrient || bSetPaperSz || bSetPaperBin;
-            }
-
-            if ( rOptions.nPrintPostIts != POSTITS_ONLY )
-            {
-                // --> FME 2005-01-05 #110536# This valiable is used to track
-                // the number of pages which actually have been printed.
-                // If nPagesPrinted is odd, we have to send an additional
-                // empty page to the printer if we are currently in collation
-                // and duplex mode and there are still some more copies of the
-                // document to print.
-                USHORT nPagesPrinted = 0;
-                // <--
-
-                while( pStPage && !bStop )
-                {
-                    // Mag der Anwender noch ?
-                    if ( pProgress )
-                        pProgress->Reschedule();
-
-                    if (pPrt)
-                    {
-                        if (    JOBSET_ERR_ERROR == nJobStartError ||
-                             ( !pPrt->IsJobActive() && ( !sJobName.Len() || bStartJob ) ) ||
-                                pShell->Imp()->IsStopPrt() )
-                        {
-                            bStop = TRUE;
-                            break;
-                        }
-                    }
-
-                    ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
-
-                    //  wenn wir einen Umschlag drucken wird ein Offset beachtet
-                    if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                    {
-                        aOldMapMode = pPrtOrPDFOut->GetMapMode();
-                        Point aNewOrigin = pPrtOrPDFOut->GetMapMode().GetOrigin();
-                        aNewOrigin += rOptions.aOffset;
-                        MapMode aTmp( pPrtOrPDFOut->GetMapMode() );
-                        aTmp.SetOrigin( aNewOrigin );
-                        pPrtOrPDFOut->SetMapMode( aTmp );
-                    }
-
-                    const BOOL bRightPg = pStPage->OnRightPage();
-                    if( aMulti.IsSelected( nPageNo ) &&
-                        ( (bRightPg && rOptions.bPrintRightPage) ||
-                            (!bRightPg && rOptions.bPrintLeftPage) ) )
-                    {
-                        if ( bSetPrt )
-                        {
-                            // check for empty page
-                            const SwPageFrm& rFormatPage = pStPage->GetFormatPage();
-
-                            if ( pLastPageDesc != rFormatPage.GetPageDesc() )
-                            {
-                                pLastPageDesc = rFormatPage.GetPageDesc();
-
-                                const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
-
-                                if( bSetPaperBin )      // Schacht einstellen.
-                                    pPrt->SetPaperBin( rFormatPage.GetFmt()->
-                                                       GetPaperBin().GetValue() );
-
-                                if (bSetOrient )
-                                 {
-                                        // Orientation einstellen: Breiter als Hoch
-                                        //  -> Landscape, sonst -> Portrait.
-                                        if( bLandScp )
-                                            pPrt->SetOrientation(ORIENTATION_LANDSCAPE);
-                                        else
-                                            pPrt->SetOrientation(ORIENTATION_PORTRAIT);
-                                 }
-
-                                 if (bSetPaperSz )
-                                 {
-                                    Size aSize = pStPage->Frm().SSize();
-                                    if ( bLandScp && bSetOrient )
-                                    {
-                                            // landscape is always interpreted as a rotation by 90 degrees !
-                                            // this leads to non WYSIWIG but at least it prints!
-                                            // #i21775#
-                                            long nWidth = aSize.Width();
-                                            aSize.Width() = aSize.Height();
-                                            aSize.Height() = nWidth;
-                                    }
-                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
-                                    if ( PAPER_USER == ePaper )
-                                            pPrt->SetPaperSizeUser( aSize );
-                                    else
-                                            pPrt->SetPaper( ePaper );
-                                 }
-                            }
-                        }
-
-                        // Wenn PostIts nach Seite gedruckt werden sollen,
-                        // jedoch Reverse eingestellt ist ...
-                        if( rOptions.bPrintReverse &&
-                            rOptions.nPrintPostIts == POSTITS_ENDPAGE )
-                                lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPageNo, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                                    rOptions.bPrintReverse );
-
-                        if ( pProgress )
-                            lcl_SetState( *pProgress, nPrintCount++, nSelCount,
-                                          pStr, nMergeAct, nMergeCnt,
-                                          nSelCount, nPageNo );
-
-                        if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
-                            && sJobName.Len() )
-                        {
-                            if( pPrt && !pPrt->IsJobActive() )
-                            {
-                                bStartJob = pPrt->StartJob( sJobName );
-                                if( !bStartJob )
-                                {
-                                    nJobStartError = JOBSET_ERR_ERROR;
-                                    continue;
-                                }
-                            }
-
-                            pShell->InitPrt( pPrt, pPDFOut );
-
-                            ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
-                            nJobStartError = JOBSET_ERR_ISSTARTET;
-                        }
-                        // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
-                        if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
-                        // <--
-                        {
-                            if (pPrt)
-                                pPrt->StartPage();
-
-                            pStPage->GetUpper()->Paint( pStPage->Frm() );
-                            ++nPagesPrinted;
-
-                            if (pPrt)
-                                pPrt->EndPage();
-                        }
-                        SwPaintQueue::Repaint();
-
-                        // Wenn PostIts nach Seite gedruckt werden sollen ...
-                        if( (!rOptions.bPrintReverse) &&
-                            rOptions.nPrintPostIts == POSTITS_ENDPAGE )
-                                lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPageNo, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                                    rOptions.bPrintReverse );
-                    }
-
-                    // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
-                    // zuruecksetzen.
-                    if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                        pPrtOrPDFOut->SetMapMode( aOldMapMode );
-
-                    if ( pStPage == pEndPage )
-                    {
-                        // --> FME 2005-01-05 #110536# Print emtpy page if
-                        // we are have an odd page count in collation/duplex
-                        // mode and there are still some copies to print:
-                        if ( pPrt && ( 1 == ( nPagesPrinted % 2 ) ) &&
-                             DUPLEX_ON == pPrt->GetDuplexMode() &&
-                             nCnt + 1 < nCopyCnt )
-                        {
-                            pPrt->StartPage();
-                            pPrt->EndPage();
-                        }
-                        // <--
-
-                        pStPage = 0;
-                    }
-                    else if ( rOptions.bPrintReverse )
-                    {
-                        --nPageNo;
-                        pStPage = (SwPageFrm*)pStPage->GetPrev();
-                    }
-                    else
-                    {   ++nPageNo;
-                        pStPage = (SwPageFrm*)pStPage->GetNext();
-                    }
-                }
-                if ( bStop )
-                    break;
-            }
-
-            // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
-            if( ((rOptions.nPrintPostIts == POSTITS_ENDDOC) && !rOptions.bPrintReverse)
-                || (rOptions.nPrintPostIts == POSTITS_ONLY) )
-                    lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields, aMulti,
-                        sJobName, bStartJob, nJobStartError,
-                        rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                        rOptions.bPrintReverse );
-
-            if( pPostItShell )
-            {
-                pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-                delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
-            }
-
-            if( bStartJob )
-                rOptions.bJobStartet = TRUE;
+            Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
+            aNewOrigin += rPrintData.aOffset;
+            MapMode aTmp( pOutDev->GetMapMode() );
+            aTmp.SetOrigin( aNewOrigin );
+            pOutDev->SetMapMode( aTmp );
         }
 
-    }
-    delete pStr;
+        pShell->InitPrt( pOutDev );
 
+        pViewSh2 = nPage == 0 ? /* post-it page? */
+                rPrintData.GetRenderData().m_pPostItShell : pShell;
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );
+
+        pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
+
+        SwPaintQueue::Repaint();
     }  //Zus. Scope wg. CurShell!
 
     delete pShell;
 
     if (bSelection )
     {
-         // damit das Dokument nicht den Drucker mit ins Grab nimmt
-        pPrtDoc->setPrinter( 0, false, false );
-
-        if ( !pPrtDoc->release() )
-            delete pPrtDoc;
+        if ( !pOutDevDoc->release() )
+            delete pOutDevDoc;
     }
 
-    // restore settings of OutputDevicef
-    if (pPDFOut)
-        pPDFOut->Pop();
+    // restore settings of OutputDevice (should be done always now since the
+    // output device is now provided by a call from outside the Writer)
+    pOutDev->Pop();
 
-    return bStartJob;
+    return sal_True;
 }
 
 /******************************************************************************
@@ -1484,7 +1269,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 
 
 
-void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
+void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
 {
   //Wir brauchen eine Shell fuer das Drucken. Entweder hat das Doc schon
@@ -1562,52 +1347,6 @@ BOOL ViewShell::IsAnyFieldInDoc() const
 
 
 /******************************************************************************
- *  Klasse      :   SwPrtOptSave
- *  Erstellt    :   AMA 12.07.95
- *  Aenderung   :   AMA 12.07.95
- *  Holt sich im Ctor folgende Einstellungen des Druckers, die im Dtor dann
- *  wieder im Drucker gesetzt werden (falls sie sich ueberhaupt geaendert haben)
- *  - PaperBin - Orientation - PaperSize -
- ******************************************************************************/
-
-
-
-SwPrtOptSave::SwPrtOptSave( Printer *pPrinter )
-    : pPrt( pPrinter )
-{
-    if ( pPrt )
-    {
-        ePaper = pPrt->GetPaper();
-        if ( PAPER_USER == ePaper )
-            aSize = pPrt->GetPaperSize();
-        eOrientation = pPrt->GetOrientation();
-        nPaperBin = pPrt->GetPaperBin();
-
-    }
-}
-
-
-
-SwPrtOptSave::~SwPrtOptSave()
-{
-    if ( pPrt )
-    {
-        if ( PAPER_USER == ePaper )
-        {
-            if( pPrt->GetPaperSize() != aSize )
-                pPrt->SetPaperSizeUser( aSize );
-        }
-        else if ( pPrt->GetPaper() != ePaper )
-            pPrt->SetPaper( ePaper );
-        if ( pPrt->GetOrientation() != eOrientation)
-            pPrt->SetOrientation( eOrientation );
-        if ( pPrt->GetPaperBin() != nPaperBin )
-            pPrt->SetPaperBin( nPaperBin );
-    }
-}
-
-
-/******************************************************************************
  *  SwDrawViewSave
  *
  *  Saves some settings at the draw view
@@ -1633,7 +1372,7 @@ SwDrawViewSave::~SwDrawViewSave()
 
 
 // OD 09.01.2003 #i6467# - method also called for page preview
-void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
+void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     // Viewoptions fuer den Drucker setzen
     pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );

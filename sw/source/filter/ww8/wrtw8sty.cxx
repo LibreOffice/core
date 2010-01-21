@@ -72,6 +72,7 @@
 #include <fmtline.hxx>
 #include <swtable.hxx>
 #include <msfilter.hxx>
+#include <swmodule.hxx>
 
 #include <writerfilter/doctok/sprmids.hxx>
 
@@ -1856,11 +1857,46 @@ void WW8_WrPlcFtnEdn::Append( WW8_CP nCp, const SwFmtFtn& rFtn )
     aCntnt.Insert( p, aCntnt.Count() );
 }
 
-void WW8_WrPlcPostIt::Append( WW8_CP nCp, const SwPostItField& rPostIt )
+WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
+{
+    mpRichText = pPostIt->GetTextObject();
+    if (!mpRichText)
+        msSimpleText = pPostIt->GetTxt();
+    msOwner = pPostIt->GetPar1();
+    maDateTime = DateTime(pPostIt->GetDate(), pPostIt->GetTime());
+}
+
+WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline) : mpRichText(0)
+{
+    msSimpleText = pRedline->GetComment();
+    msOwner = SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor());
+    maDateTime = pRedline->GetTimeStamp();
+}
+
+void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
     aCps.Insert( nCp, aCps.Count() );
-    void* p = (void*)&rPostIt;
+    WW8_Annotation* p = new WW8_Annotation(pPostIt);
     aCntnt.Insert( p, aCntnt.Count() );
+}
+
+void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwRedlineData *pRedline )
+{
+    maProcessedRedlines.insert(pRedline);
+    aCps.Insert( nCp, aCps.Count() );
+    WW8_Annotation* p = new WW8_Annotation(pRedline);
+    aCntnt.Insert( p, aCntnt.Count() );
+}
+
+bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
+{
+    return maProcessedRedlines.find(pRedline) == maProcessedRedlines.end();
+}
+
+WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
+{
+    for( USHORT n=0; n < aCntnt.Count(); n++ )
+        delete (WW8_Annotation*)aCntnt[n];
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
@@ -1882,13 +1918,13 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                 // Anfaenge fuer PlcfAtnTxt
                 pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
-                const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
                 rWrt.WritePostItBegin();
-                if (const OutlinerParaObject* pOutliner = rPFld.GetTextObject())
-                    rWrt.WriteOutliner(*pOutliner, nTTyp);
+                const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                if (rAtn.mpRichText)
+                    rWrt.WriteOutliner(*rAtn.mpRichText, nTTyp);
                 else
                 {
-                    String sTxt(rPFld.GetTxt());
+                    String sTxt(rAtn.msSimpleText);
                     sTxt.SearchAndReplaceAll(0x0A, 0x0B);
                     rWrt.WriteStringAsPara( sTxt );
                 }
@@ -2015,8 +2051,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, BYTE nTTyp,
                 // then write first the GrpXstAtnOwners
                 for ( i = 0; i < nLen; ++i )
                 {
-                    const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
-                    aStrArr.push_back(rPFld.GetPar1());
+                    const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                    aStrArr.push_back(rAtn.msOwner);
                 }
 
                 //sort and remove duplicates
@@ -2054,10 +2090,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, BYTE nTTyp,
                 {
                     for( i = 0; i < nLen; ++i )
                     {
-                        const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
+                        const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
 
-                        sal_uInt32 nDTTM =
-                            sw::ms::DateTime2DTTM(DateTime(rPFld.GetDate(),rPFld.GetTime()));
+                        sal_uInt32 nDTTM = sw::ms::DateTime2DTTM(rAtn.maDateTime);
 
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, nDTTM );
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
@@ -2137,12 +2172,12 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, BYTE nTTyp,
         {
             for ( i = 0; i < nLen; ++i )
             {
-                const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
+                const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
 
                 //aStrArr is sorted
                 myiter aIter = ::std::lower_bound(aStrArr.begin(),
-                        aStrArr.end(), rPFld.GetPar1());
-                ASSERT(aIter != aStrArr.end() && *aIter == rPFld.GetPar1(),
+                        aStrArr.end(), rAtn.msOwner);
+                ASSERT(aIter != aStrArr.end() && *aIter == rAtn.msOwner,
                         "Impossible");
                 sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
                 String sAuthor(*aIter);

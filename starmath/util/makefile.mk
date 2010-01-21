@@ -66,6 +66,7 @@ SHL1STDLIBS= \
             $(TKLIB) \
             $(VCLLIB) \
             $(SVLLIB)	\
+            $(I18NPAPERLIB)     \
             $(SOTLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \

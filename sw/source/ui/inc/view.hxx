@@ -89,7 +89,7 @@ class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
-struct SwPrintData;
+class SwPrintData;
 class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;
@@ -427,8 +427,6 @@ public:
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
                                         USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
-                                     BOOL bSilent, BOOL bIsAPI );
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
@@ -635,10 +633,6 @@ public:
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
-    // get print options (SwPrtOptions)
-    static void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
-
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();
 
@@ -695,3 +689,4 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                     BOOL bPreview);
 
 #endif
+

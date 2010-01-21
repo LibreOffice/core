@@ -19,7 +19,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="5627"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintPagePreView" toolbar:helpid="21253"/>
- <toolbar:toolbaritem xlink:href=".uno:PreviewPrintOptions" toolbar:helpid="20250"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="5325"/>
 </toolbar:toolbar>
