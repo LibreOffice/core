@@ -69,12 +69,12 @@ namespace dxcanvas
         bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
                                  const ::canvas::ParametricPolyPolygon::Values& rValues,
                                  const std::vector< Gdiplus::Color >&           rColors,
-                                 const std::vector< REAL >&                     rStops,
+                                 const std::vector< Gdiplus::REAL >&            rStops,
                                  const GraphicsPathSharedPtr&                   rFillPath,
                                  const rendering::Texture&                      texture )
         {
-            // setup a linear gradient with two colors
-            // ---------------------------------------
+            // setup a linear gradient with given colors
+            // -----------------------------------------
 
             Gdiplus::LinearGradientBrush aBrush(
                 Gdiplus::PointF(0.0f,
@@ -164,7 +164,7 @@ namespace dxcanvas
                 return false;
             }
 
-            Gdiplus::SolidBrush aBackgroundBrush2( rColor2 );
+            Gdiplus::SolidBrush aBackgroundBrush2( rColors.back() );
             rGraphics->FillPath( &aBackgroundBrush2, &aSolidFillPath );
 
             // generate clip polygon from the extended parallelogram
@@ -200,9 +200,18 @@ namespace dxcanvas
             return true;
         }
 
+        int numColorSteps( const Gdiplus::Color& rColor1, const Gdiplus::Color& rColor2 )
+        {
+            return ::std::max(
+                labs( rColor1.GetRed() - rColor2.GetRed() ),
+                ::std::max(
+                    labs( rColor1.GetGreen() - rColor2.GetGreen() ),
+                    labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
+        }
+
         bool fillPolygonalGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                                     const std::vector< Gdiplus::Color >&           rColors,
-                                    const std::vector< REAL >&                     rStops,
+                                    const std::vector< Gdiplus::REAL >&            rStops,
                                     GraphicsSharedPtr&                             rGraphics,
                                     const GraphicsPathSharedPtr&                   rPath,
                                     const rendering::Texture&                      texture )
@@ -292,7 +301,7 @@ namespace dxcanvas
                             nGradientSize / nStripSize,
                             nColorSteps ) ) );
 
-                Gdiplus::SolidBrush     aFillBrush( rColor1 );
+                Gdiplus::SolidBrush     aFillBrush( rColors[0] );
                 Gdiplus::Matrix         aGDIScaleMatrix;
                 ::basegfx::B2DHomMatrix aScaleMatrix;
 
@@ -428,7 +437,7 @@ namespace dxcanvas
 
         bool fillGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                            const std::vector< Gdiplus::Color >&           rColors,
-                           const std::vector< REAL >&                     rStops,
+                           const std::vector< Gdiplus::REAL >&            rStops,
                            GraphicsSharedPtr&                             rGraphics,
                            const GraphicsPathSharedPtr&                   rPath,
                            const rendering::Texture&                      texture )
@@ -582,7 +591,7 @@ namespace dxcanvas
                                    boost::bind(
                                        &tools::sequenceToArgb,
                                        _1));
-                    std::vector< REAL > aStops;
+                    std::vector< Gdiplus::REAL > aStops;
                     comphelper::sequenceToContainer(aStops,rValues.maStops);
 
                     // TODO(E1): Return value
