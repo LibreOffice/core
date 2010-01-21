@@ -98,7 +98,7 @@ SvpSalFrame::~SvpSalFrame()
             const std::list< SalFrame* >& rFrames( m_pInstance->getFrames() );
             for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
-                SvpSalFrame* pFrame = static_cast<const SvpSalFrame*>(*it);
+                SvpSalFrame* pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
                 if( pFrame->m_bVisible        &&
                     pFrame->m_pParent == NULL &&
                     (pFrame->m_nStyle & (SAL_FRAME_STYLE_MOVEABLE |
