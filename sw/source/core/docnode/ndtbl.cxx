@@ -1269,10 +1269,71 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     return pNdTbl;
 }
 
+SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
+{
+    SwNodeIndex aNewStart = rRange.aStart;
+    SwNodeIndex aNewEnd = rRange.aEnd;
+
+    SwNodeIndex aEndIndex = rRange.aEnd;
+    SwNodeIndex aIndex = rRange.aStart;
+
+    while (aIndex < aEndIndex)
+    {
+        SwNode& rNode = aIndex.GetNode();
+
+        if (rNode.IsStartNode())
+        {
+            // advance aIndex to the end node of this start node
+            SwNode * pEndNode = rNode.EndOfSectionNode();
+            aIndex = *pEndNode;
+
+            if (aIndex > aNewEnd)
+                aNewEnd = aIndex;
+        }
+        else if (rNode.IsEndNode())
+        {
+            SwNode * pStartNode = rNode.StartOfSectionNode();
+            SwNodeIndex aStartIndex = *pStartNode;
+
+            if (aStartIndex < aNewStart)
+                aNewStart = aStartIndex;
+        }
+
+        if (aIndex < aEndIndex)
+            ++aIndex;
+    }
+
+    return SwNodeRange(aNewStart, aNewEnd);
+}
+
+SwNodes::TableRanges_t SwNodes::ExpandTableRanges
+(const SwNodes::TableRanges_t & rTableRanges)
+{
+    TableRanges_t aResult;
+
+    TableRanges_t::const_iterator aRowEndIter = rTableRanges.end();
+    for (TableRanges_t::const_iterator aRowIter = rTableRanges.begin();
+         aRowIter != aRowEndIter; ++aRowIter)
+    {
+        NodeRanges_t aRowRanges;
+        NodeRanges_t::const_iterator aCellEndIter = aRowIter->end();
+        for (NodeRanges_t::const_iterator aCellIter = aRowIter->begin();
+             aCellIter != aCellEndIter; ++aCellIter)
+        {
+            SwNodeRange aRange = ExpandRangeForTableBox(*aCellIter);
+            aRowRanges.push_back(aRange);
+        }
+
+        aResult.push_back(aRowRanges);
+    }
+
+    return aResult;
+}
+
 /*-- 18.05.2006 08:23:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
                                     SwTableBoxFmt* pBoxFmt,
