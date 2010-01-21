@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -44,15 +44,13 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:FileBase by codegen.pl 
+# auto generated Target:FileBase by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_String_Utils.obj \
     $(SLO)$/rtl_OString.obj
 
 SHL1TARGET= rtl_OString
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -65,15 +63,13 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:FileBase by codegen.pl 
+# auto generated Target:FileBase by codegen.pl
 SHL2OBJS=  \
     $(SLO)$/rtl_String_Utils.obj \
     $(SLO)$/rtl_OUString.obj
 
 SHL2TARGET= rtl_OUString
-SHL2STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 # SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
@@ -86,22 +82,13 @@ SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:FileBase by codegen.pl 
+# auto generated Target:FileBase by codegen.pl
 SHL3OBJS=  \
     $(SLO)$/rtl_String_Utils.obj \
     $(SLO)$/rtl_OUStringBuffer.obj
 
 SHL3TARGET= rtl_OUStringBuffer
-SHL3STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
-
-# .IF "$(GUI)" == "WNT"
-# SHL3STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-# .ENDIF
-# .IF "$(GUI)" == "UNX"
-# SHL3STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-# .ENDIF
+SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL3IMPLIB= i$(SHL3TARGET)
 # SHL3DEF=    $(MISC)$/$(SHL3TARGET).def
@@ -115,12 +102,10 @@ SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # BEGIN ----------------------------------------------------------------
 SHL4OBJS=  \
-    $(SLO)$/rtl_old_teststrbuf.obj 
+    $(SLO)$/rtl_old_teststrbuf.obj
 
 SHL4TARGET= rtl_old_teststrbuf
-SHL4STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL4STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL4IMPLIB= i$(SHL4TARGET)
 DEF4NAME    =$(SHL4TARGET)
@@ -130,12 +115,10 @@ SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # BEGIN ----------------------------------------------------------------
 SHL5OBJS=  \
-    $(SLO)$/rtl_old_testowstring.obj 
+    $(SLO)$/rtl_old_testowstring.obj
 
 SHL5TARGET= rtl_old_testowstring
-SHL5STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL5IMPLIB= i$(SHL5TARGET)
 DEF5NAME    =$(SHL5TARGET)
@@ -145,12 +128,10 @@ SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # BEGIN ----------------------------------------------------------------
 SHL6OBJS=  \
-    $(SLO)$/rtl_old_testostring.obj 
+    $(SLO)$/rtl_old_testostring.obj
 
 SHL6TARGET= rtl_old_testostring
-SHL6STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL6IMPLIB= i$(SHL6TARGET)
 DEF6NAME    =$(SHL6TARGET)

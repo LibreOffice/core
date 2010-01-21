@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # --- test dll ------------------------------------------------------
 SHL1TARGET     = Module_DLL
 SHL1OBJS       = $(SLO)$/osl_Module_DLL.obj
-SHL1STDLIBS    = $(SALLIB) 
+SHL1STDLIBS    = $(SALLIB)
 SHL1IMPLIB     = i$(SHL1TARGET)
 SHL1DEF        = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME       = $(SHL1TARGET)
@@ -59,21 +59,16 @@ SHL1VERSIONMAP = export_dll.map
 SHL2OBJS=  $(SLO)$/osl_Module.obj
 
 SHL2TARGET= osl_Module
-SHL2STDLIBS=   $(SALLIB) 
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib 
 SHL2STDLIBS+=i$(SHL2TARGET).lib
 .ENDIF
-.IF "$(GUI)" == "OS2"
-SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib 
-.ENDIF
 .IF "$(GUI)" == "UNX"
-SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 APP3STDLIBS+=-l$(SHL2TARGET)
 .ENDIF
 
-SHL2DEPN= $(SHL1OBJS) 
+SHL2DEPN= $(SHL1OBJS)
 SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 

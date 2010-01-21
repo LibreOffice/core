@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: PrintOptions.idl,v $
- * $Revision: 1.11 $
+ * $RCSfile: PaperFormat.idl,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_PrintOptions_idl__
-#define __com_sun_star_view_PrintOptions_idl__
+#ifndef __com_sun_star_view_DuplexMode_idl__
+#define __com_sun_star_view_DuplexMode_idl__
 
 
 //=============================================================================
@@ -37,61 +37,29 @@ module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-/** describes the options for print jobs.
-
-    <p>These options are only valid for a single print job. They do not
-    change layout or formatting of the document.
+/** These constants specify available duplex modes
  */
-published service PrintOptions
+constants DuplexMode
 {
     //-------------------------------------------------------------------------
-    /** specifies the number of copies to print.
+    /** specifies an unknown duplex mode.
      */
-    [property] short CopyCount;
+    const short UNKNOWN = 0;
 
     //-------------------------------------------------------------------------
-    /** if set, specifies the name of a file to print to.
+    /** specifies that there is no duplex mode enabled
      */
-    [property] string FileName;
+    const short OFF = 1;
 
     //-------------------------------------------------------------------------
-    /** advises the printer to collate the pages of the copies.
+    /** specifies a long edge duplex mode
      */
-    [property] boolean Collate;
+    const short LONGEDGE = 2;
 
     //-------------------------------------------------------------------------
-    /** advises the printer to sort the pages of the copies.
-
-        @deprecated
-            Use <member>Collate</member> instead.
+    /** specifies a short edge duplex mode
      */
-    [property] boolean Sort;
-
-    //-------------------------------------------------------------------------
-    /** specifies which pages to print.
-
-        <p>This range is given as at the user interface. For example: "1-4;10"
-        to print the pages 1 to 4 and 10. </p>
-     */
-    [property] string Pages;
-
-    //-------------------------------------------------------------------------
-    /** if set to TRUE, the corresponding <type>XPrintable</type>.print() request will
-        be executed synchronous.
-
-            <p>Default is the asynchronous print mode.</p>
-
-        @attention  Using of this property with TRUE as value is highly reommended.
-                Otherwhise following actions (as e.g. closing the corresponding model) can fail.
-     */
-    [optional, property] boolean Wait;
-
-    //-------------------------------------------------------------------------
-    /** determines the duplex mode for the print job.
-
-        @see <type>DuplexMode</type> for more information about supported values
-     */
-    [optional, property] short DuplexMode;
+    const short SHORTEDGE = 3;
 };
 
 //=============================================================================
