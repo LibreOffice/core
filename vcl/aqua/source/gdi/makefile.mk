@@ -53,7 +53,6 @@ dummy:
 
 SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salcolorutils.obj     \
-            $(SLO)$/salpixmaputils.obj    \
             $(SLO)$/salgdiutils.obj       \
             $(SLO)$/salnativewidgets.obj  \
             $(SLO)$/salatsuifontutils.obj \
