@@ -112,16 +112,15 @@ static snewfoil_value_info v_standard[] =
 
 // -----------------------------------------------------------------------
 
-static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo, const bool bHighContrast )
+static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo, const bool bHighContrast, const bool bInsertPage )
 {
+    USHORT nResOffset = bInsertPage ? (BMP_LAYOUT_ADDEMPTY_57X71) - (BMP_LAYOUT_EMPTY_57X71) : 0;
+
     Size aLayoutItemSize;
     for( ; pInfo->mnBmpResId; pInfo++ )
     {
-//      if( !bVerticalEnabled && (pInfo->meWritingMode == WritingMode_TB_RL) )
-//          continue;
-
         String aText( SdResId( pInfo->mnStrResId ) );
-        BitmapEx aBmp( SdResId( bHighContrast ? pInfo->mnHCBmpResId : pInfo->mnBmpResId ) );
+        BitmapEx aBmp( SdResId( (bHighContrast ? pInfo->mnHCBmpResId : pInfo->mnBmpResId) + nResOffset ) );
         aBmp.Expand( 3, 3, 0, TRUE );
         pValue->InsertItem( static_cast<USHORT>(pInfo->maAutoLayout)+1, aBmp, aText );
 
@@ -136,17 +135,18 @@ static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo, co
 // -----------------------------------------------------------------------
 
 
-SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent )
+SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent, const bool bInsertPage )
 : ToolbarMenu(rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, SdResId( DLG_LAYOUTDIALOG ) /*WB_CLIPCHILDREN|WB_DIALOGCONTROL|WB_SYSTEMWINDOW|WB_MOVEABLE|WB_SIZEABLE|WB_CLOSEABLE*/)
 , mrBase(rBase)
+, mbInsertPage( bInsertPage )
+, mpLayoutSet1( 0 )
+, mpLayoutSet2( 0 )
+, msAssignLayout( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" ) )
 {
-//  FreeResource();
+    String aTitle1( SdResId( STR_HORIZONTAL_LAYOUTS ) );
+    String aTitle2( SdResId( STR_VERTICAL_LAYOUTS ) );
 
-    String sResetSlideLayout( SdResId( STR_RESET_LAYOUT ) );
-
-    //SetStyle( 2 );
-
-//  SetHelpId( HID_POPUP_LAYOUT );
+    FreeResource();
 
     const Color aMenuColor( GetSettings().GetStyleSettings().GetMenuColor() );
     const Color aMenuBarColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
@@ -157,12 +157,9 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
-//  mpToolbarMenu.reset( new ToolbarMenu( this, WB_CLIPCHILDREN ) );
-//  mpToolbarMenu->SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
-    /* mpToolbarMenu->*/ SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+    SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
 
-
-    mpLayoutSet1.reset( new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT ) );
+    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 //  mpLayoutSet1->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
     mpLayoutSet1->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
@@ -170,50 +167,52 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
     mpLayoutSet1->EnableFullItemMode( FALSE );
     mpLayoutSet1->SetColor( GetControlBackground() );
 
-    fillLayoutValueSet( mpLayoutSet1.get(), &standard[0], bHighContrast );
+    fillLayoutValueSet( mpLayoutSet1, &standard[0], bHighContrast, bInsertPage );
 
-    mpLayoutSet2.reset( new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT ) );
-//  mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
+    if( bVerticalEnabled )
+        appendEntry( -1, aTitle1 );
+    appendEntry( 0, mpLayoutSet1 );
 
-    mpLayoutSet2->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
-    mpLayoutSet2->SetColCount( 4 );
-    mpLayoutSet2->EnableFullItemMode( FALSE );
-    mpLayoutSet2->SetColor( GetControlBackground() );
+    if( bVerticalEnabled )
+    {
+        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    //  mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-    fillLayoutValueSet( mpLayoutSet2.get(), &v_standard[0], bHighContrast );
+        mpLayoutSet2->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
+        mpLayoutSet2->SetColCount( 4 );
+        mpLayoutSet2->EnableFullItemMode( FALSE );
+        mpLayoutSet2->SetColor( GetControlBackground() );
 
-    String aTitle( SdResId( STR_UNDO_MODIFY_PAGE ) );
-    SetText( aTitle );
-    /*mpToolbarMenu->*/appendEntry( -1, aTitle );
-    /*mpToolbarMenu->*/appendEntry( 0, mpLayoutSet1.get() );
+        fillLayoutValueSet( mpLayoutSet2, &v_standard[0], bHighContrast, bInsertPage );
 
-    String aTitle2( RTL_CONSTASCII_USTRINGPARAM( "Horizontal Layouts" ) );
-    appendEntry( -1, aTitle2 );
-    appendEntry( 1, mpLayoutSet2.get() );
+        appendEntry( -1, aTitle2 );
+        appendEntry( 1, mpLayoutSet2 );
+    }
 
-    /*mpToolbarMenu->*/appendSeparator();
+    //appendSeparator();
 
+    OUString sSlotStr;
+    Image aSlotImage;
     Reference< XFrame > xFrame( GetFrame(), UNO_QUERY );
     if( xFrame.is() )
     {
-        Image aImg( ::GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Undo") ), FALSE, FALSE ) );
-        /*mpToolbarMenu->*/appendEntry( 2, sResetSlideLayout, aImg);
+        if( bInsertPage )
+            sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
+        else
+            sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
+        aSlotImage = ::GetImage( xFrame, sSlotStr, FALSE, FALSE );
     }
+
+    String sSlotTitle;
+    if( bInsertPage )
+        sSlotTitle = mrBase.RetrieveLabelFromCommand( sSlotStr );
     else
-    {
-        /*mpToolbarMenu->*/appendEntry( 2, sResetSlideLayout);
-    }
+        sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
+    appendEntry( 2, sSlotTitle, aSlotImage);
 
-/*
-    Size aSize( mpToolbarMenu->getMenuSize() );
-    mpToolbarMenu->SetPosSizePixel( Point( 1,1 ), aSize );
-
-    aSize.Width() += 2;
-    aSize.Height() += 2;
-*/
     SetOutputSizePixel( getMenuSize() );
 
-//  mpToolbarMenu->Show();
+    AddStatusListener( msAssignLayout );
 }
 
 // -----------------------------------------------------------------------
@@ -266,28 +265,38 @@ IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
 
     if( mrBase.GetMainViewShell().get() && mrBase.GetMainViewShell()->GetViewFrame() )
     {
-        if( pControl == mpLayoutSet1.get() )
+        if( pControl == mpLayoutSet1 )
         {
             AutoLayout eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectItemId()-1);
 
             const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
+            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(mbInsertPage ? SID_INSERTPAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
         }
-        else if( pControl == mpLayoutSet2.get() )
+        else if( pControl == mpLayoutSet2 )
         {
             AutoLayout eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectItemId()-1);
 
             const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
+            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(mbInsertPage ? SID_INSERTPAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
         }
         else
         {
             // reset autolayout
-            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON);
+            mrBase.GetMainViewShell()->GetViewFrame()->GetBindings().GetDispatcher()->Execute( mbInsertPage ? SID_DUPLICATE_PAGE : SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON);
         }
     }
 
     return 0;
+}
+
+void SAL_CALL SdLayoutDialogContent::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
+{
+    if( Event.FeatureURL.Main.equals( msAssignLayout ) )
+    {
+        sal_Int32 nLayout = 0;
+        Event.State >>= nLayout;
+        OSL_TRACE("SdLayoutDialogContent::statusChanged(%ld)", nLayout );
+    }
 }
 
 } // end of namespace sd

@@ -218,4 +218,5 @@ void SdDLL::RegisterControllers()
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 
     SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
+    SdLayoutControl::RegisterControl( SID_INSERTPAGE, pMod );
 }

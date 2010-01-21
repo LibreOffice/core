@@ -29,3 +29,6 @@
  ************************************************************************/
 
 #define DLG_LAYOUTDIALOG 1347
+
+#define STR_HORIZONTAL_LAYOUTS 1
+#define STR_VERTICAL_LAYOUTS 2

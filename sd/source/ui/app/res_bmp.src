@@ -34,7 +34,7 @@
 #include "res_bmp.hrc"
 
 // preview bitmaps for layouts
-Bitmap BMP_ADDEMPTY_57X71
+Bitmap BMP_LAYOUT_ADDEMPTY_57X71
 {
     File = "layout_addempty_57x71.png";
 };
@@ -309,7 +309,14 @@ Bitmap BMP_PLACEHOLDER_TABLE_57X71_H
 {
     File = "placeholder_table_57x71_h.png";
 };
-
+Bitmap BMP_FOILN_01
+{
+    File = "foiln01.bmp" ;
+};
+Bitmap BMP_FOILN_01_H
+{
+    File = "foiln01_h.bmp" ;
+};
 Bitmap BMP_PAGE
 {
     File = "page.bmp" ;

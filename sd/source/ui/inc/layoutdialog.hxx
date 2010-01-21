@@ -47,16 +47,19 @@ class ViewShellBase;
 class SdLayoutDialogContent : public ToolbarMenu
 {
 public:
-    SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent);
+    SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pParent, const bool bInsertPage );
     virtual ~SdLayoutDialogContent();
 
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 protected:
     DECL_LINK( SelectHdl, void * );
 
 private:
-    boost::scoped_ptr< ValueSet > mpLayoutSet1;
-    boost::scoped_ptr< ValueSet > mpLayoutSet2;
     ViewShellBase& mrBase;
+    bool mbInsertPage;
+    ValueSet* mpLayoutSet1;
+    ValueSet* mpLayoutSet2;
+    const rtl::OUString msAssignLayout;
 };
 
 

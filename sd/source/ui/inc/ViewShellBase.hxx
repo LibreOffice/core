@@ -31,6 +31,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 #include "ViewShell.hxx"
 
 #include "glob.hxx"

@@ -39,6 +39,17 @@ DockingWindow DLG_LAYOUTDIALOG
     Moveable = TRUE ;
     Closeable = TRUE ;
     Zoomable = TRUE ;
+    Dockable = TRUE;
 
-    Text [ en-US ] = "Slide Layout" ;
+    Text [ en-US ] = "Slide Layouts" ;
+
+    String STR_HORIZONTAL_LAYOUTS
+    {
+        Text [ en-US ] = "Horizontal" ;
+    };
+
+    String STR_VERTICAL_LAYOUTS
+    {
+        Text [ en-US ] = "Vertical" ;
+    };
 };

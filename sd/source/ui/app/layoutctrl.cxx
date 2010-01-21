@@ -72,7 +72,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdLayoutControl, SfxVoidItem );
 SdLayoutControl::SdLayoutControl( USHORT _nSlotId, USHORT _nId, ToolBox& rTbx )
 : SfxToolBoxControl( _nSlotId, _nId, rTbx )
 {
-    rTbx.SetItemBits( _nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( _nId ) );
+    if( SID_INSERTPAGE != _nSlotId )
+        rTbx.SetItemBits( _nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( _nId ) );
+
     rTbx.Invalidate();
 }
 
@@ -86,7 +88,7 @@ SdLayoutControl::~SdLayoutControl()
 
 void SdLayoutControl::Select( BOOL bMod1 )
 {
-    (void)bMod1;
+    SfxToolBoxControl::Select( bMod1 );
 }
 
 // -----------------------------------------------------------------------
@@ -113,50 +115,9 @@ SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
     sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( SfxViewFrame::Current() );
     if( pViewShellBase )
     {
-        pWin = pWin = new sd::SdLayoutDialogContent( *pViewShellBase, &rTbx );
-//          pWin->StartPopupMode( &rTbx, TRUE );
+        pWin = pWin = new sd::SdLayoutDialogContent( *pViewShellBase, &rTbx, GetSlotId() == SID_INSERTPAGE );
         if( pWin )
-        {
             StartPopupMode( pWin );
-/*
-            pWin->EnableDocking(true);
-            Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
-
-            pWin->AddEventListener( LINK( this, SdLayoutControl, WindowEventListener ) );
-*/
-        }
      }
-
-//    SetPopupWindow( pWin );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdLayoutControl, WindowEventListener, VclSimpleEvent*, pEvent )
-{
-    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >( pEvent );
-    if ( pWindowEvent && pWindowEvent->GetWindow() )
-    {
-        Window* pWindow = pWindowEvent->GetWindow();
-        switch( pWindowEvent->GetId() )
-        {
-        case VCLEVENT_WINDOW_ENDPOPUPMODE:
-            {
-                EndPopupModeData *pData = static_cast<EndPopupModeData*>(pWindowEvent->GetData());
-                if( pData && pData->mbTearoff );
-                {
-                    pWindow->SetPosPixel( Point( pData->maFloatingPos.X(), pData->maFloatingPos.Y() ) );
-                    pWindow->Show();
-                }
-            }
-            // fall through!
-        case VCLEVENT_WINDOW_CLOSE:
-        case VCLEVENT_OBJECT_DYING:
-            pWindow->RemoveEventListener( LINK( this, SdLayoutControl, WindowEventListener ) );
-//          static_cast<SfxPopupWindow*>(pWindow)->PopupModeEnd();
-            break;
-        }
-    }
     return 0;
 }
