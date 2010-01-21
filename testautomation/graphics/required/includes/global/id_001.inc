@@ -41,7 +41,6 @@
 ' #1 tiFileVersion (sFileIn as string)
 ' #1 tiFilePassword
 ' #1 tiFileTemplates
-' #1 tiFilePrint
 ' #1 tmFileNewFromTemplate
 ' #1 tmFileOpen
 ' #1 tmFileClose
@@ -534,38 +533,6 @@ end if
    WaitSlot (1000)
    Call hCloseDocument
 endcase 'tiFileTemplates
-
-'-------------------------------------------------------------------------------
-
-testcase tiFilePrint
-   Call hNewDocument
-printlog " open application"
-printlog " File->Print"
-   FilePrint
-   WaitSlot (1000)
-   kontext
-   if active.exists(5) then
-       active.ok
-       qaerrorlog "There is no printer available - please install one on your system!"
-   end if
-   WaitSlot (2000)
-   Kontext "DruckenDlg"
-       Call DialogTest (DruckenDlg)
-        printlog " click 'options'"
-       WaitSlot (2000)
-       Zusaetze.Click
-
-       Kontext "DruckerZusaetzeDraw"
-       Call DialogTest (DruckerZusaetzeDraw)
-       DruckerZusaetzeDraw.Cancel
-        printlog " close options dialog with 'cancel'"
-       Kontext "DruckenDlg"
-       printlog " close print dialog with 'cancel'"
-       DruckenDlg.Cancel
-       WaitSlot (2000)
-printlog " close application"
-   Call hCloseDocument
-endcase 'tiFilePrint
 
 '-------------------------------------------------------------------------------
 

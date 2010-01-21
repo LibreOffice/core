@@ -199,18 +199,22 @@ function hSelectHelpTab( cTab as string ) as boolean
     select case cTabName
     case "content"       : TabControl.setPage( ContentPage )
                            if ( SearchContent.isVisible() ) then
+                               call DialogTest( ContentPage )
                                brc = true
                            endif
     case "index"         : TabControl.setPage( IndexPage )
                            if ( SearchIndex.isVisible() ) then
+                               call DialogTest( IndexPage )
                                brc = true
                            endif
     case "find"          : TabControl.setPage( FindPage )
                            if ( SearchFind.isVisible() ) then
+                               call DialogTest( FindPage )
                                brc = true
                            endif
     case "bookmarks"     : TabControl.setPage( BookmarksPage )
                            if ( Bookmarks.isVisible() ) then
+                               call DialogTest( BookmarksPage )
                                brc = true
                            endif
     case else 
