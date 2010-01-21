@@ -1164,6 +1164,7 @@ sub get_sis_time_string
     my $day = (localtime())[3];
     my $month = (localtime())[4];
     my $year = 1900 + (localtime())[5];
+    $month++;
 
     if ( $second < 10 ) { $second = "0" . $second; }
     if ( $minute < 10 ) { $minute = "0" . $minute; }
