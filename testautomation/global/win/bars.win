@@ -591,7 +591,6 @@ EigenschaftenControls SID_SHOW_BROWSER
 EigenschaftenObjekt .uno:FrameDialog
 GanzNachHinten .uno:SendToBack
 GanzNachVorn .uno:BringToFront
-GrafikBearbeiten SID_SIM_START
 Hintergrundfarbe .uno:BackgroundColor
 Hintergrundmuster SID_BACKGROUND_PATTERN
 HorizontalSpiegeln FN_FLIP_HORZ_GRAFIC
@@ -671,7 +670,6 @@ Flaechenstil SID_ATTR_FILL_STYLE
 Gamma .uno:GrafGamma
 GanzNachHinten SID_FRAME_TO_BOTTOM
 GanzNachVorn SID_FRAME_TO_TOP
-GrafikBearbeiten SID_SIM_START
 GrafikEigenschaften FN_FORMAT_GRAFIC_DLG
 Grafikmodus .uno:GrafMode
 Gruenanteil .uno:GrafGreen
