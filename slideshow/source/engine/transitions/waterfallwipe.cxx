@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "waterfallwipe.hxx"
 #include "transitiontools.hxx"
 
@@ -67,9 +68,7 @@ WaterfallWipe::WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis )
 ::basegfx::B2DPolyPolygon WaterfallWipe::operator () ( double t )
 {
     ::basegfx::B2DPolygon poly( m_waterfall );
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.translate( 0.0, ::basegfx::pruneScaleValue( 2.0 * t ) );
-    poly.transform( aTransform );
+    poly.transform(basegfx::tools::createTranslateB2DHomMatrix(0.0, ::basegfx::pruneScaleValue(2.0 * t)));
     poly.setB2DPoint( 0, ::basegfx::B2DPoint( 0.0, -1.0 ) );
     poly.setB2DPoint( poly.count()-1, ::basegfx::B2DPoint( 1.0, -1.0 ) );
 

@@ -120,8 +120,6 @@ using namespace ::com::sun::star;
 
 extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel );
 
-///////////////////////////////////////////////////////////////////////
-
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
 {
@@ -1514,7 +1512,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     sal_Bool bExportNotesPages = sal_False;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+        if( rxOptions[ nProperty ].Name.equalsAscii( "ExportNotesPages" ) )
             rxOptions[ nProperty].Value >>= bExportNotesPages;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;

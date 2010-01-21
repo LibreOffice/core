@@ -36,6 +36,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -196,9 +197,8 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
         SdrPathObj* pPathObj = mxTag->getPathObj();
         if( pPathObj )
         {
-            basegfx::B2DHomMatrix aTrans;
             const Point aRef( DragStat().Ref1() );
-            aTrans.translate(-aRef.X(), -aRef.Y());
+            basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
             aTrans.scale(double(aXFact), double(aYFact));
             aTrans.translate(aRef.X(), aRef.Y());
             basegfx::B2DPolyPolygon aDragPoly(pPathObj->GetPathPoly());
@@ -966,8 +966,8 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
         ::com::sun::star::awt::Point aPos( mxOrigin->getPosition() );
         if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
         {
-            ::basegfx::B2DHomMatrix aTransform;
-            aTransform.translate( aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y );
+            const basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
             mxPolyPoly.transform( aTransform );
             mpPathObj->SetPathPoly( mxPolyPoly );
             maOriginPos = aPos;
