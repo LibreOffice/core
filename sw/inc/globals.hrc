@@ -54,6 +54,7 @@
 #define STR_DOC_STAT                (RC_GLOBALS_BEGIN + 10)
 
 #define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
+#define STR_PRINTOPTUI              (RC_GLOBALS_BEGIN + 15)
 
 //EventStrings
 

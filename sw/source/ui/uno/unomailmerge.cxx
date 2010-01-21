@@ -725,6 +725,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         // when mail merge is called as command line macro
         aMergeDesc.bPrintAsync = sal_False;
         aMergeDesc.aPrintOptions = aPrintSettings;
+        aMergeDesc.bCreateSingleFile = true;
     }
     else /* FILE and MAIL*/
     {
