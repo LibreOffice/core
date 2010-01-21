@@ -85,31 +85,22 @@
 #include <vcl/wintypes.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
 #include <tools/time.hxx>
 #include <svtools/stringtransfer.hxx>
-#ifndef _PRINT_HXX //autogen
-#include <vcl/print.hxx>
-#endif
-#ifndef _PRNDLG_HXX //autogen
-#include <vcl/prndlg.hxx>
-#endif
 #include <tools/stream.hxx>
-#ifndef _SV_DRAG_HXX //autogen
-//#include <vcl/drag.hxx>
-#endif
 #include <tools/fsys.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
 #include <basic/dispdefs.hxx>
 #include <vos/socket.hxx>
-#include <svtools/pickerhistory.hxx>
+#include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <sot/storage.hxx>
@@ -4820,37 +4811,49 @@ BOOL StatementControl::Execute()
                             }
                             break;
                         case M_GetPage:
-                            pRet->GenReturn ( RET_Value, aUId, static_cast<comm_ULONG>(((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetSmartUniqueOrHelpId().GetNum())); //GetNum() ULONG != comm_ULONG on 64bit
+                            pRet->GenReturn ( RET_Value, aUId, ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetSmartUniqueOrHelpId().GetText());
                             break;
                         case M_SetPage :
                             {       // Wegen lokaler Variablen
                                 TabControl *pTControl = ((TabControl*)pControl);
                                 USHORT nActive = pTControl->GetCurPageId();
                                 USHORT i,anz;
-                                ULONG nID = 0;
+                                SmartId aID;
+                                SmartId aWantedID;
+                                if ( (nParams & PARAM_ULONG_1) )
+                                {
+                                    aWantedID = SmartId( nLNr1 );
+                                }
+                                else if ( (nParams & PARAM_STR_1) )
+                                {
+                                    aWantedID = SmartId( aString1 );
+                                }
+                                else
+                                    ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
+
                                 i = pTControl->GetPagePos( pTControl->GetCurPageId() );
-                                for ( anz=0 ; anz < pTControl->GetPageCount() && nID != nLNr1 ; anz++ )
+                                for ( anz=0 ; anz < pTControl->GetPageCount() && !aID.Matches( aWantedID ) ; anz++ )
                                 {
                                     pTControl->SelectTabPage( pTControl->GetPageId(i) );
                                     /*if (pTControl->GetCurPageId())
                                         pTControl->DeactivatePage();
                                     pTControl->SetCurPageId( pTControl->GetPageId(i) );
                                     pTControl->ActivatePage();*/
-                                    nID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetSmartUniqueOrHelpId().GetNum();
+                                    aID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetSmartUniqueOrHelpId();
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
                                         i = 0;
                                     if ( !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) || !MaybeDoTypeKeysDelay( pTControl ) )   // 3 Mal aufrufen
                                         break;
                                 }
-                                if ( nID != nLNr1 )
+                                if ( !aID.Matches( aWantedID ) )
                                 {
                                     pTControl->SelectTabPage( nActive );
                                     /*if (pTControl->GetCurPageId())
                                         pTControl->DeactivatePage();
                                     pTControl->SetCurPageId( nActive );
                                     pTControl->ActivatePage();*/
-                                    ReportError( SmartId( nLNr1 ), GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
+                                    ReportError( aWantedID, GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
                                 }
                             }
                             break;

@@ -55,7 +55,7 @@
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
 #include <i18npool/mslangid.hxx>
 #ifndef _SV_BUTTON_HXX

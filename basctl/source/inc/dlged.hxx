@@ -38,8 +38,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/hint.hxx>
+#include <svl/brdcst.hxx>
 
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
@@ -101,6 +101,8 @@ class DlgEditor: public SfxBroadcaster
 private:
     DECL_LINK( PaintTimeout, Timer * );
     DECL_LINK( MarkTimeout, Timer * );
+
+    void Print( Printer* pPrinter, const String& rTitle );
 
 protected:
     ScrollBar*          pHScroll;
@@ -199,7 +201,8 @@ public:
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
-    void            PrintData( Printer*, const String& rTitle );    // not working yet
+    sal_Int32       countPages( Printer* pPrinter );
+    void            printPage( sal_Int32 nPage, Printer* pPrinter, const String& );
 
     bool            AdjustPageSize();
 
