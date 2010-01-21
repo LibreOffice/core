@@ -39,13 +39,13 @@
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include "svtools/svstdarr.hxx"
+#include "svl/svstdarr.hxx"
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // using ----------------------------------------------------------------
 

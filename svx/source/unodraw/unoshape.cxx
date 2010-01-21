@@ -38,7 +38,7 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <vcl/svapp.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <svtools/fltcall.hxx>
 #include <vos/mutex.hxx>
 #include <svx/unotext.hxx>
@@ -98,6 +98,7 @@
 #include "unomaster.hxx"
 #include <svx/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <vector>
 
@@ -680,7 +681,9 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     {
         SvMemoryStream aDestStrm( 65535, 65535 );
         ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+        const uno::Sequence<sal_Int8> aSeq(
+            static_cast< const sal_Int8* >(aDestStrm.GetData()),
+            aDestStrm.GetEndOfData());
         aAny.setValue( &aSeq, ::getCppuType((const uno::Sequence< sal_Int8 >*)0) );
     }
     else
@@ -2516,10 +2519,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
-
-                            basegfx::B2DHomMatrix aMatrix;
-                            aMatrix.translate( aPoint.X(), aPoint.Y() );
-                            aNewPolyPolygon.transform( aMatrix );
+                            aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aPoint.X(), aPoint.Y()));
                         }
                         pEdgeObj->SetEdgeTrackPath( aNewPolyPolygon );
                         return true;
@@ -2952,10 +2952,7 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     if( mpModel->IsWriter() )
                     {
                         Point aPoint( mpObj->GetAnchorPos() );
-
-                        basegfx::B2DHomMatrix aMatrix;
-                        aMatrix.translate( -aPoint.X(), -aPoint.Y() );
-                        aPolyPoly.transform( aMatrix );
+                        aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
                     }
                     drawing::PolyPolygonBezierCoords aRetval;
                     SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
@@ -3127,7 +3124,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     }
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    const uno::Sequence<sal_Int8> aSeq(
+                        static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                        aDestStrm.GetEndOfData());
                     rValue <<= aSeq;
                 }
             }

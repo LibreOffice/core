@@ -355,7 +355,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 #include "gallery.hxx"
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
 {

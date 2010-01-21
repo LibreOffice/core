@@ -37,8 +37,8 @@
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 #include "formula/IFunctionDescription.hxx"
 
 #include "funcpage.hxx"

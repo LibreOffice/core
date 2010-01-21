@@ -36,6 +36,7 @@ LIBBASENAME = helplinker
 PACKAGE = com$/sun$/star$/help
 TARGETTYPE=CUI
 
+.IF "$(SOLAR_JAVA)"!=""
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -76,14 +77,15 @@ ADDFILES = $(subst,$(SOLARBINDIR)$/help,$(CLASSDIR) $(TRANSEX3FILES))
 JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar 
 .IF "$(SYSTEM_LUCENE)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
-COMP=fix_system_lucene
+JARCLASSPATH = file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
+JARCLASSPATH = lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
   
 JARTARGET	   	   = LuceneHelpWrapper.jar
 JARCOMPRESS        = TRUE 
-CUSTOMMANIFESTFILE = MANIFEST.MF 
+CUSTOMMANIFESTFILE = MANIFEST.MF
  
 # --- Targets ------------------------------------------------------
 
@@ -94,15 +96,17 @@ ALLTAR : $(ADDFILES)
 .IF "$(JARTARGETN)"!=""
 $(JAVATARGET) : $(ADDFILES)
 $(JARTARGETN) : $(ADDFILES)
-$(JARTARGETN) : $(COMP)
 .ENDIF
 
 $(CLASSDIR)$/$(PACKAGE)$/%.class : $(SOLARBINDIR)$/help$/$(PACKAGE)$/%.class 
     $(MKDIRHIER) $(@:d)	
     $(COPY) $< $@
 
-
 fix_system_lucene:
     @echo "Fix Java Class-Path entry for Lucene libraries from system."
     @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
     -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF
+.ELSE
+all:
+        @echo java disabled
+.ENDIF

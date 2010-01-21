@@ -30,8 +30,6 @@
 #ifndef SVX_FMPROPBRW_HXX
 #define SVX_FMPROPBRW_HXX
 
-#include "fmtools.hxx"
-
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -43,6 +41,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/childwin.hxx>
+#include "svx/fmtools.hxx"
 
 //========================================================================
 class FmPropBrwMgr : public SfxChildWindow

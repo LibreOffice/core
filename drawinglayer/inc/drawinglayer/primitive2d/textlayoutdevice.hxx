@@ -49,9 +49,10 @@ class VirtualDevice;
 class Font;
 class String;
 class OutputDevice;
+class GDIMetaFile;
 
-namespace drawinglayer { namespace primitive2d {
-    class FontAttributes;
+namespace drawinglayer { namespace attribute {
+    class FontAttribute;
 }}
 
 namespace basegfx {
@@ -66,18 +67,27 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TextLayouterDevice class
+
+            This helper class exists to isolate all accesses to VCL
+            text formatting/handling functionality for primitive implementations.
+            When in the future FontHandling may move to an own library independent
+            from VCL, primitives will be prepared.
+         */
         class TextLayouterDevice
         {
-            // internally used VirtualDevice
+            /// internally used VirtualDevice
             VirtualDevice&                  mrDevice;
 
         public:
+            /// constructor/destructor
             TextLayouterDevice();
             ~TextLayouterDevice();
 
+            /// tooling methods
             void setFont(const Font& rFont);
-            void setFontAttributes(
-                const FontAttributes& rFontAttributes,
+            void setFontAttribute(
+                const attribute::FontAttribute& rFontAttribute,
                 double fFontScaleX,
                 double fFontScaleY,
                 const ::com::sun::star::lang::Locale & rLocale);
@@ -105,6 +115,15 @@ namespace drawinglayer
                 const String& rText,
                 xub_StrLen nIndex,
                 xub_StrLen nLength) const;
+
+            double getFontAscent() const;
+            double getFontDescent() const;
+
+            void addTextRectActions(
+                const Rectangle& rRectangle,
+                const String& rText,
+                sal_uInt16 nStyle,
+                GDIMetaFile& rGDIMetaFile);
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -116,23 +135,25 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // Create a VCL-Font based on the definitions in FontAttributes
-        // and the given FontScaling. The FontScaling defines the FontHeight
-        // (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
-        // both defines FontStretching, where no stretching happens at
-        // fFontScaleY == fFontScaleX
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
+        /** Create a VCL-Font based on the definitions in FontAttribute
+            and the given FontScaling. The FontScaling defines the FontHeight
+            (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
+            both defines FontStretching, where no stretching happens at
+            fFontScaleY == fFontScaleX
+         */
+        Font getVclFontFromFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
             const ::com::sun::star::lang::Locale & rLocale);
 
-        // Generate FontAttributes DataSet derived from the given VCL-Font.
-        // The FontScaling with fFontScaleY, fFontScaleX relationship (see
-        // above) will be set in return parameter o_rSize to allow further
-        // processing
-        FontAttributes getFontAttributesFromVclFont(
+        /** Generate FontAttribute DataSet derived from the given VCL-Font.
+            The FontScaling with fFontScaleY, fFontScaleX relationship (see
+            above) will be set in return parameter o_rSize to allow further
+            processing
+         */
+        attribute::FontAttribute getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,
             bool bRTL,

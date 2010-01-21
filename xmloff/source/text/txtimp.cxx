@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1568,15 +1568,7 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
     {
         if( !mpOutlineStylesCandidates )
         {
-#ifdef IRIX
-            /* GCC 2 bug when member function is called as part of an array
-             * initialiser
-             */
-            sal_Int8 count = xChapterNumbering->getCount();
-            mpOutlineStylesCandidates = new ::std::vector<OUString>[count];
-#else
             mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
-#endif
         }
         mpOutlineStylesCandidates[nOutlineLevel-1].push_back( rStyleName );
     }
@@ -1661,8 +1653,14 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         pProps->Name = sHeadingStyleName;
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            pProps->Value <<= sChosenStyles[i];
-            xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            // --> OD 2009-12-11 #i107610#
+            if ( bSetEmptyLevels ||
+                 sChosenStyles[i].getLength() > 0 )
+            // <--
+            {
+                pProps->Value <<= sChosenStyles[i];
+                xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
+            }
         }
         // <--
     }

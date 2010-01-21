@@ -31,10 +31,13 @@
 #define _SVX_FMHELP_HRC
 
 // include     -----------------------------------------------------------
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
+
+// in solar.hrc
+//#define HID_FORMS_START               (HID_LIB_START+4000)
+//#define HID_FORMS_END                 (HID_LIB_START+4999)
 
 // Help-Ids --------------------------------------------------------------
-
 #define HID_DLG_DBMSG                           ( HID_FORMS_START +   1)
 #define HID_FORM_NAVIGATOR                      ( HID_FORMS_START +   2)
 #define HID_FORM_NAVIGATOR_WIN                  ( HID_FORMS_START +   3)
@@ -45,7 +48,7 @@
 #define HID_FM_DLG_SEARCH                       ( HID_FORMS_START +   8)
 #define HID_SEARCH_TEXT                         ( HID_FORMS_START +   9)
 #define HID_SEARCH_ALLFIELDS                    ( HID_FORMS_START +  10)
-#define HID_SEARCH_SINGLEFIELD                  ( HID_FORMS_START +  11)
+//#define HID_SEARCH_SINGLEFIELD                  ( HID_FORMS_START +  11)
 #define HID_SEARCH_FIELDSELECTION               ( HID_FORMS_START +  12)
 #define HID_SEARCH_POSITION                     ( HID_FORMS_START +  13)
 #define HID_SEARCH_FORMATTER                    ( HID_FORMS_START +  14)
@@ -75,9 +78,9 @@
 #define HID_XFORMS_NAMESPACEITEM_DLG            ( HID_FORMS_START +  38)
 #define HID_XFORMS_NAMESPACEITEM_LIST           ( HID_FORMS_START +  39)
 #define HID_XFORMS_MANAGENAMESPACE_DLG          ( HID_FORMS_START +  40)
-#define HID_TP_XFORMS_INSTANCE                  ( HID_FORMS_START +  41)
-#define HID_TP_XFORMS_SUBMISSION                ( HID_FORMS_START +  42)
-#define HID_TP_XFORMS_BINDING                   ( HID_FORMS_START +  43)
+//#define HID_TP_XFORMS_INSTANCE                  ( HID_FORMS_START +  41)
+//#define HID_TP_XFORMS_SUBMISSION                ( HID_FORMS_START +  42)
+//#define HID_TP_XFORMS_BINDING                   ( HID_FORMS_START +  43)
 #define HID_MN_XFORMS_MODELS_ADD                ( HID_FORMS_START +  44)
 #define HID_MN_XFORMS_MODELS_EDIT               ( HID_FORMS_START +  45)
 #define HID_MN_XFORMS_MODELS_REMOVE             ( HID_FORMS_START +  46)
@@ -102,7 +105,6 @@
 #define HID_XFORMS_TAB_CONTROL                  ( HID_FORMS_START +  65)
     // if you add a new define here, please adjust the overflow check
     // at the end of the file!!
-
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------

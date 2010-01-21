@@ -73,8 +73,8 @@ namespace drawinglayer
                 return;
             }
 
-            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-            switch(rCandidate.getPrimitiveID())
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
+            switch(rCandidate.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                 {

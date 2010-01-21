@@ -32,7 +32,6 @@
 #include "precompiled_svx.hxx"
 
 #include "fmundo.hxx"
-#include "fmtools.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include "svditer.hxx"
@@ -55,8 +54,9 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 /** === end UNO includes === **/
 
+#include "svx/fmtools.hxx"
 #include <rtl/logfile.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>
