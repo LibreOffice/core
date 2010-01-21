@@ -151,7 +151,6 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sUseReplaceTbl;
     String          sCptlSttWord;
     String          sCptlSttSent;
-    String          sTypo;
     String          sUserStyle;
     String          sBullet;
     String          sByInputBullet;

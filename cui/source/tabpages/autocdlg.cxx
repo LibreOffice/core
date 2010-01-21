@@ -456,7 +456,6 @@ enum OfaAutoFmtOptions
     DEL_EMPTY_NODE,
     REPLACE_USER_COLL,
     REPLACE_BULLETS,
-    REPLACE_QUOTATION,
     MERGE_SINGLE_LINE_PARA
 };
 
@@ -473,7 +472,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sUseReplaceTbl      (CUI_RES(   ST_USE_REPLACE  )),
     sCptlSttWord        (CUI_RES(   ST_CPTL_STT_WORD)),
     sCptlSttSent        (CUI_RES(   ST_CPTL_STT_SENT)),
-    sTypo               (CUI_RES(   ST_TYPO         )),
     sUserStyle          (CUI_RES(   ST_USER_STYLE   )),
     sBullet             (CUI_RES(   ST_BULLET       )),
     sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
@@ -497,10 +495,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     //typ. Anfuehrungszeichen einsetzen
     SvtSysLocale aSysLcl;
     const LocaleDataWrapper& rLcl = aSysLcl.GetLocaleData();
-    sTypo.SearchAndReplace( String::CreateFromAscii("%1"),
-                                        rLcl.getDoubleQuotationMarkStart());
-    sTypo.SearchAndReplace( String::CreateFromAscii("%2"),
-                                        rLcl.getDoubleQuotationMarkEnd());
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
     aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
@@ -626,10 +620,6 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     bModified |= pOpt->bDelEmptyNode != bCheck;
     pOpt->bDelEmptyNode = bCheck;
 
-    bCheck = aCheckLB.IsChecked(REPLACE_QUOTATION, CBCOL_FIRST);
-    bModified |= pOpt->bReplaceQuote != bCheck;
-    pOpt->bReplaceQuote = bCheck;
-
     bCheck = aCheckLB.IsChecked(REPLACE_USER_COLL, CBCOL_FIRST);
     bModified |= pOpt->bChgUserColl != bCheck;
     pOpt->bChgUserColl = bCheck;
@@ -740,7 +730,6 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sDeleteEmptyPara,   CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sUserStyle,         CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sBullet,            CBCOL_FIRST ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sTypo,              CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sRightMargin,       CBCOL_FIRST ));
 
     aCheckLB.CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_FIRST,    pOpt->bAutoCorrect );
@@ -761,7 +750,6 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFmtDelSpacesBetweenLines );
     aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesBetweenLines );
     aCheckLB.CheckEntryPos( DEL_EMPTY_NODE,     CBCOL_FIRST,    pOpt->bDelEmptyNode );
-    aCheckLB.CheckEntryPos( REPLACE_QUOTATION,  CBCOL_FIRST,    pOpt->bReplaceQuote );
     aCheckLB.CheckEntryPos( REPLACE_USER_COLL,  CBCOL_FIRST,    pOpt->bChgUserColl );
     aCheckLB.CheckEntryPos( REPLACE_BULLETS,    CBCOL_FIRST,    pOpt->bChgEnumNum );
 

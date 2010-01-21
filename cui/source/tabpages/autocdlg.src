@@ -207,10 +207,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
         /* ### ACHTUNG: Neuer Text in Resource? Leere Absätze entfernen : Leere Absõtze entfernen */
         Text [ en-US ] = "Remove blank paragraphs" ;
     };
-    String ST_TYPO
-    {
-        Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
-    };
     String ST_USER_STYLE
     {
         Text [ en-US ] = "Replace Custom Styles" ;
@@ -508,7 +504,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     String ST_ORDINAL
     {
-        Text [ en-US ] = "Format ordinal numbers suffixes" ;
+        Text [ en-US ] = "Format ordinal numbers suffixes (1st -> 1^st)" ;
     };
     FixedLine FL_SINGLE
     {
