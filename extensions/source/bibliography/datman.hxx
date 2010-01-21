@@ -35,7 +35,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -98,7 +98,7 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >                m_xGridModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xSourceProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >             m_xFormCtrl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xFormCtrl;
         // #100312# -------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
         BibInterceptorHelper* m_pInterceptorHelper;
@@ -191,7 +191,7 @@ public:
         const rtl::OUString&        GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController();
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
         // #100312# ----------
         void RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
