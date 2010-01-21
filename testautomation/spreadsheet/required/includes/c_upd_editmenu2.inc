@@ -590,7 +590,7 @@ testcase tEditImageMap
     Aktiv.Click
     '/// Click on 'Macro...'-button
 	printlog " Click on 'Macro...'-button"
-	warnlog "#i102720# - Macro assignment does not work"
+	warnlog "#i102720# => crash, therefor this functionality is outcommented"
 '		Makro.Click
 '		Kontext "MakroZuweisen"
 '		Call DialogTest ( MakroZuweisen )
