@@ -94,9 +94,46 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star;
 using namespace ::svxform;
 using namespace ::svx;
 
+
+struct ColumnInfo
+{
+    ::rtl::OUString sColumnName;
+    ::rtl::OUString sLabel;
+    bool bColumn;
+    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
+        : sColumnName(i_sColumnName)
+        , sLabel(i_sLabel)
+        , bColumn(true)
+    {
+    }
+    ColumnInfo(const ::rtl::OUString& i_sColumnName)
+        : sColumnName(i_sColumnName)
+        , bColumn(false)
+    {
+    }
+};
+
+void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
+{
+    uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
+    const ::rtl::OUString* pEntries = aEntries.getConstArray();
+    sal_Int32 nEntries = aEntries.getLength();
+    for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
+    {
+        uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),UNO_QUERY_THROW);
+        ::rtl::OUString sLabel;
+        if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
+            xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
+        if ( sLabel.getLength() )
+            _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+        else
+            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+    }
+}
 //==================================================================
 // class FmFieldWinListBox
 //==================================================================
@@ -152,7 +189,8 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     aDescriptor[ daConnection ] <<= pTabWin->GetConnection().getTyped();
     aDescriptor[ daCommand ]    <<= pTabWin->GetObjectName();
     aDescriptor[ daCommandType ]<<= pTabWin->GetObjectType();
-    aDescriptor[ daColumnName ] <<= ::rtl::OUString( GetEntryText( pSelected ) );
+    ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
+    aDescriptor[ daColumnName ] <<= pInfo->sColumnName;
 
     TransferableHelper* pTransferColumn = new OColumnTransferable(
         aDescriptor, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR
@@ -241,7 +279,8 @@ sal_Bool FmFieldWin::createSelectionControls( )
 
         aDescr[ daCommand ]     <<= GetObjectName();
         aDescr[ daCommandType ] <<= GetObjectType();
-        aDescr[ daColumnName ]  <<= ::rtl::OUString( pListBox->GetEntryText( pSelected) );
+        ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
+        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//::rtl::OUString( pListBox->GetEntryText( pSelected) );
 
         // transfer this to the SFX world
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
@@ -347,15 +386,14 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         // the place, and connectRowset should be replaced with ensureRowSetConnection
 
         // get the fields of the object
-        Sequence< ::rtl::OUString> aFieldNames;
-        if ( m_aConnection.is() && m_aObjectName.getLength() )
-            aFieldNames = getFieldNamesByCommandDescriptor( m_aConnection, m_nObjectType, m_aObjectName );
 
-        // put them into the list
-        const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
-        sal_Int32 nFieldsCount = aFieldNames.getLength();
-        for ( sal_Int32 i = 0; i < nFieldsCount; ++i, ++pFieldNames)
-            pListBox->InsertEntry( * pFieldNames);
+        if ( m_aConnection.is() && m_aObjectName.getLength() )
+        {
+            Reference< XComponent > xKeepFieldsAlive;
+            Reference< XNameAccess > xColumns = getFieldsByCommandDescriptor( m_aConnection, m_nObjectType, m_aObjectName,xKeepFieldsAlive );
+            if ( xColumns.is() )
+                lcl_addToList(*pListBox,xColumns);
+        }
 
         // Prefix setzen
         UniString  aPrefix;
