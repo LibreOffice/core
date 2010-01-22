@@ -45,6 +45,7 @@ using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 
 // -------------------------------------------------------------------------
 OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
@@ -103,14 +104,25 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
 
 // -------------------------------------------------------------------------
 ::vos::ORef< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
-    const Reference< XDatabaseMetaData >& _rxDBMetaData )
+    const Reference< XDatabaseMetaData >& _rxDBMetaData,const Reference< XNameAccess>& i_xQueryColumns )
 {
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
     ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
 
     StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
-        aReturn->get().push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ,aColumnMap) );
+    {
+        OParseColumn* pColumn = createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i,aColumnMap );
+        aReturn->get().push_back( pColumn );
+        if ( i_xQueryColumns.is() && i_xQueryColumns->hasByName(pColumn->getRealName()) )
+        {
+            Reference<XPropertySet> xColumn(i_xQueryColumns->getByName(pColumn->getRealName()),UNO_QUERY_THROW);
+            ::rtl::OUString sLabel;
+            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL)) >>= sLabel;
+            if ( sLabel.getLength() )
+                pColumn->setLabel(sLabel);
+        }
+    }
 
     return aReturn;
 }

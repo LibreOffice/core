@@ -36,6 +36,7 @@
 #include <vos/ref.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/proparrhlp.hxx>
 
 namespace connectivity
@@ -99,7 +100,8 @@ namespace connectivity
             static ::vos::ORef< OSQLColumns >
                 createColumnsForResultSet(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns
                 );
 
             DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
