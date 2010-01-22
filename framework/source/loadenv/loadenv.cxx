@@ -1725,9 +1725,8 @@ void LoadEnv::impl_reactForLoadingState()
 
     if (bThrow)
     {
-        css::uno::Exception aEx;
-        if ( aRequest >>= aEx )
-            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, aEx );
+        if  ( aRequest.isExtractableTo( ::cppu::UnoType< css::uno::Exception >::get() ) )
+            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, aRequest );
     }
 
     // <- SAFE ----------------------------------
