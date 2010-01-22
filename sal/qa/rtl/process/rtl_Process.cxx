@@ -36,7 +36,7 @@
 #include <string.h>
 #include <sal/types.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <rtl/process.h>
