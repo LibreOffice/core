@@ -385,17 +385,25 @@ void XcuParser::handleItem(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
+    rtl::OUString path(xmldata::convertFromUtf8(attrPath));
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePathRepresentation(
-            xmldata::convertFromUtf8(attrPath), &modificationPath_,
-            &finalizedLayer));
+            path, &modificationPath_, &finalizedLayer));
     if (!node.is()) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("nonexisting path attribute in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
+        //TODO: Within Components::parseModificationLayer (but only there) it
+        // can rightly happen that data is read that does not match a schema
+        // (that no schema exists, or that the schema specifies a different
+        // type), namely if the schema was brought along by an extension that
+        // has been removed or replaced; instead of taking care of that at all
+        // the relevant places, as a hack, only "top-level" <item>s (that only
+        // appear in modification layer data) with unknown path are filtered out
+        // here.
+        OSL_TRACE(
+            "configmgr unknown <item path=\"%s\">",
+            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr());
+        state_.push(State()); // ignored
+        return;
     }
     OSL_ASSERT(!modificationPath_.empty());
     componentName_ = modificationPath_.front();
