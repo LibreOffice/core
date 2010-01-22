@@ -107,7 +107,8 @@ namespace rptui
                 }
             }
 
-            setPlaceholderText( getVclWindowPeer( xComponent ), sDataField );
+            if ( xComponent.is() )
+                setPlaceholderText( getVclWindowPeer( xComponent ), sDataField );
         }
         catch (uno::Exception)
         {
