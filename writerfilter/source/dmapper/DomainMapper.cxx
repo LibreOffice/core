@@ -4442,6 +4442,9 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
             //sal_uInt32 nSize = pContext->size();
             //<--
 
+            if (pContext == NULL)
+                pContext.reset(new PropertyMap());
+
             m_pImpl->appendTextPortion( sText, pContext );
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->startElement("text");
@@ -4512,7 +4515,12 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
                   set at the field or directly inserted into the text*/
                 m_pImpl->SetFieldResult( sText );
             else
+            {
+                if (pContext == NULL)
+                    pContext.reset(new PropertyMap());
+
                 m_pImpl->appendTextPortion( sText, pContext );
+            }
 
         }
     }
