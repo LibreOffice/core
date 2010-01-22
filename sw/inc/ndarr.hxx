@@ -282,8 +282,7 @@ public:
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
 
-    SwNodeRange ExpandRangeForTableBox(const SwNodeRange & rRange);
-    TableRanges_t ExpandTableRanges(const TableRanges_t & rRanges);
+    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
 
     //create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,

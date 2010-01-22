@@ -1269,8 +1269,11 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     return pNdTbl;
 }
 
-SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
+SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
 {
+    SwNodeRange * pResult = NULL;
+    bool bChanged = false;
+
     SwNodeIndex aNewStart = rRange.aStart;
     SwNodeIndex aNewEnd = rRange.aEnd;
 
@@ -1288,7 +1291,10 @@ SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
             aIndex = *pEndNode;
 
             if (aIndex > aNewEnd)
+            {
                 aNewEnd = aIndex;
+                bChanged = true;
+            }
         }
         else if (rNode.IsEndNode())
         {
@@ -1296,7 +1302,10 @@ SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
             SwNodeIndex aStartIndex = *pStartNode;
 
             if (aStartIndex < aNewStart)
+            {
                 aNewStart = aStartIndex;
+                bChanged = true;
+            }
         }
 
         if (aIndex < aEndIndex)
@@ -1310,36 +1319,16 @@ SwNodeRange SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
         SwNodeIndex aStartIndex(*pStartNode);
         aNewStart = aStartIndex;
         aNewEnd = aIndex;
+        bChanged = true;
 
         ++aIndex;
         pNode = &aIndex.GetNode();
     }
 
-    return SwNodeRange(aNewStart, aNewEnd);
-}
+    if (bChanged)
+        pResult = new SwNodeRange(aNewStart, aNewEnd);
 
-SwNodes::TableRanges_t SwNodes::ExpandTableRanges
-(const SwNodes::TableRanges_t & rTableRanges)
-{
-    TableRanges_t aResult;
-
-    TableRanges_t::const_iterator aRowEndIter = rTableRanges.end();
-    for (TableRanges_t::const_iterator aRowIter = rTableRanges.begin();
-         aRowIter != aRowEndIter; ++aRowIter)
-    {
-        NodeRanges_t aRowRanges;
-        NodeRanges_t::const_iterator aCellEndIter = aRowIter->end();
-        for (NodeRanges_t::const_iterator aCellIter = aRowIter->begin();
-             aCellIter != aCellEndIter; ++aCellIter)
-        {
-            SwNodeRange aRange = ExpandRangeForTableBox(*aCellIter);
-            aRowRanges.push_back(aRange);
-        }
-
-        aResult.push_back(aRowRanges);
-    }
-
-    return aResult;
+    return pResult;
 }
 
 /*-- 18.05.2006 08:23:28---------------------------------------------------
