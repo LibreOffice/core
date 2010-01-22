@@ -32,7 +32,7 @@
 #define _SVDPAGV_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/svdhlpln.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <svx/svdsob.hxx>

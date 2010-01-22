@@ -84,7 +84,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(TOOLSLIB)					\
-    $(SVTOOLLIB)				\
+    $(SVLLIB)				\
     $(UNOTOOLSLIB)				\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\

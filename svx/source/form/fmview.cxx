@@ -35,7 +35,7 @@
 #undef REFERENCE
 #endif
 #include <svtools/ehdl.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -61,7 +61,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmprop.hrc"

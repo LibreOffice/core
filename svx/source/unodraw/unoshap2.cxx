@@ -47,7 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/fltcall.hxx>
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 
 #include <boost/scoped_ptr.hpp>
 

@@ -35,11 +35,11 @@
 
 #include <svx/unoshtxt.hxx>
 #include <unoedhlp.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/style.hxx>
+#include <svl/hint.hxx>
+#include <svl/style.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdobj.hxx>
@@ -350,6 +350,9 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
 void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
+    // #i105988 keep reference to this object
+    rtl::Reference< SvxTextEditSourceImpl > xThis( this );
+
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
 

@@ -34,9 +34,9 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_LONGS_DECL
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 
@@ -281,7 +281,7 @@ SV_IMPL_PTRARR( OUStrings_Impl, OUStringPtr )
 SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif
 
@@ -872,6 +872,11 @@ void XMLTextParagraphExport::exportListChange(
         }
     }
 
+    const bool bExportODF =
+                ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
+    const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
+                                    GetExport().getDefaultVersion();
+
     // start a new list
     if ( rNextInfo.GetLevel() > 0 )
     {
@@ -894,10 +899,6 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeOpened > 0 )
         {
-            const bool bExportODF =
-                        ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
-            const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
-                                            GetExport().getDefaultVersion();
             const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
             // Currently only the text documents support <ListId>.
             // Thus, for other document types <sListId> is empty.
@@ -1103,16 +1104,14 @@ void XMLTextParagraphExport::exportListChange(
         pListElements->Remove( pListElements->Count()-1 );
         delete pElem;
 
-        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() )
+        // --> OD 2009-11-12 #i103745# - only for sub lists
+        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
+             rNextInfo.GetLevel() != 1 )
+        // <--
         {
             // start new sub list respectively list on same list level
             pElem = (*pListElements)[pListElements->Count()-1];
             GetExport().EndElement( *pElem, sal_True );
-            if ( rNextInfo.GetLevel() == 1 )
-            {
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                        GetExport().EncodeStyleName( rNextInfo.GetNumRulesName() ) );
-            }
             GetExport().IgnorableWhitespace();
             GetExport().StartElement( *pElem, sal_False );
         }
@@ -1124,8 +1123,18 @@ void XMLTextParagraphExport::exportListChange(
             OUStringBuffer aBuffer;
             aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                              aBuffer.makeStringAndClear() );
+                                      aBuffer.makeStringAndClear() );
         }
+        // --> OD 2009-11-12 #i103745# - handle restart without start value on list level 1
+        else if ( rNextInfo.IsRestart() && /*!rNextInfo.HasStartValue() &&*/
+                  rNextInfo.GetLevel() == 1 )
+        {
+            OUStringBuffer aBuffer;
+            aBuffer.append( (sal_Int32)rNextInfo.GetListLevelStartValue() );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                      aBuffer.makeStringAndClear() );
+        }
+        // <--
         if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
              GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
@@ -1359,7 +1368,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 //    delete pExportedLists;
     // <--
     delete pListAutoPool;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
     // --> OD 2008-04-25 #refactorlists#
@@ -3438,7 +3447,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         default:
             if( cChar < 0x0020 )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 OSL_ENSURE( txtparae_bContainsIllegalCharacters ||
                             cChar >= 0x0020,
                             "illegal character in text content" );

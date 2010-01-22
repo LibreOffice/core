@@ -35,7 +35,7 @@
 
 #include <eertfpar.hxx>
 #include <impedit.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/escpitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include "fontitem.hxx"
