@@ -78,6 +78,7 @@ my $WIN;
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
+my $force_ooo_module = '0';
 my %is_ooo_module;
 my %is_so_module;
 my $DELIMITER;
@@ -275,7 +276,7 @@ sub check_modules_scm
 sub is_openoffice_module
 {
     my $module              = shift;
-    return "TRUE", if defined $is_ooo_module{ $module };
+    return "TRUE", if ( $force_ooo_module || defined $is_ooo_module{ $module } );
     return "";
 }
 
@@ -1114,7 +1115,7 @@ sub parse_options{
     my $extract;
     my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
                              'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date , 'c' => \$create_dirs ,
-                             'n' => \$no_gsicheck );
+                             'n' => \$no_gsicheck , 'o' => \$force_ooo_module );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
@@ -1126,7 +1127,11 @@ sub parse_options{
             exit(1);
         }
     }
-    if( $help || !$success || $#ARGV > 1 || ( !$sdffile ) ){
+    if( $help ){
+        usage();
+        exit(0);
+    }
+    if( !$success || $#ARGV > 1 || ( !$sdffile ) ){
         usage();
         exit(1);
     }
@@ -1167,6 +1172,8 @@ sub usage{
     print STDERR "    -h              File with localize.sdf's\n!";
     print STDERR "    -n              No gsicheck\n";
     print STDERR "    -i              Module to merge\n";
+    print STDERR "    -o              force using ooo localization from the l10n module instead of l10n_so; \n";
+    print STDERR "                    useful if the type can't be detected by the .svn tags; \n";
     print STDERR "    -v              Verbose\n";
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";

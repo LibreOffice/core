@@ -938,10 +938,25 @@ int _cdecl main( int argc, char *argv[] )
     bool hasPwd = treeconfig.getActiveRepositories( repos );
     if( hasPwd ) cout << "Found special path!\n";
 
+    string minor_ext;
+    bool has_minor_ext;
+
+    if( Export::GetEnv("UPDMINOREXT") != NULL )
+    {
+        minor_ext     = string( Export::GetEnv("UPDMINOREXT") );
+        has_minor_ext = minor_ext.size();
+    }
+    else
+        has_minor_ext = false;
+
     // localize through all repositories
     for( vector<string>::iterator iter = repos.begin(); iter != repos.end() ; ++iter )
     {
-        string curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter;
+        string curRepository;
+        if( has_minor_ext )
+            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter + minor_ext;
+        else
+            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter;
         cout << "Localizing repository " << curRepository << "\n";
         SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bQuiet2 , bSkipLinks );
         aIter.SetLanguageRestriction( sLanguages );
