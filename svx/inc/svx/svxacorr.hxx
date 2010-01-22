@@ -216,7 +216,6 @@ class SVX_DLLPUBLIC SvxAutoCorrect
 
     long nFlags;
     sal_Unicode cStartDQuote, cEndDQuote, cStartSQuote, cEndSQuote,
-                c1Div2, c1Div4, c3Div4,
                 cEmDash, cEnDash;
 
 
