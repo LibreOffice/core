@@ -91,7 +91,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svl/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <svtools/insdlg.hxx>
 
