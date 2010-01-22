@@ -1952,8 +1952,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
                 if( pSet->GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                 {
-                    mpPropSet->setPropertyValue( pMap, rVal, *pSet );
-
+                    SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rVal, *pSet );
                 }
             }
 

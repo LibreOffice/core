@@ -1122,7 +1122,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
                     if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                     {
-                        mpPropSet->setPropertyValue( pMap, rValue, aSet );
+                        SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rValue, aSet );
                     }
                 }
             }
