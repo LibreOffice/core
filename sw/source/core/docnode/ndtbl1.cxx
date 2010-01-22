@@ -176,8 +176,8 @@ BOOL lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
 
 inline void InsertLine( SvPtrarr& rLineArr, SwTableLine* pLine )
 {
-    if( USHRT_MAX == rLineArr.GetPos( (void*&)pLine ) )
-        rLineArr.Insert( (void*&)pLine, rLineArr.Count() );
+    if( USHRT_MAX == rLineArr.GetPos( pLine ) )
+        rLineArr.Insert( pLine, rLineArr.Count() );
 }
 
 //-----------------------------------------------------------------------------
@@ -560,8 +560,8 @@ BOOL SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
 #***********************************************************************/
 inline void InsertCell( SvPtrarr& rCellArr, SwCellFrm* pCellFrm )
 {
-    if( USHRT_MAX == rCellArr.GetPos( (void*&)pCellFrm ) )
-        rCellArr.Insert( (void*&)pCellFrm, rCellArr.Count() );
+    if( USHRT_MAX == rCellArr.GetPos( pCellFrm ) )
+        rCellArr.Insert( pCellFrm, rCellArr.Count() );
 }
 
 //-----------------------------------------------------------------------------
