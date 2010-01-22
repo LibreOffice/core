@@ -114,41 +114,51 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
     pCombiList->Insert(pNew);
 }
 
+sal_Bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
+{
+    sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
+    sal_Int32 nValue = 0;
+    if( rVal >>= nValue )
+        bConvert = (nValue > 0);
+    return bConvert;
+}
+
+
 //----------------------------------------------------------------------
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues ) const
 {
     uno::Any aVal;
     if(!pMap || !pMap->nWID)
         return aVal;
 
-    // item holen
     const SfxPoolItem* pItem = 0;
     SfxItemPool* pPool = rSet.GetPool();
-
     rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
-
     if( NULL == pItem && pPool )
-    {
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
-    }
 
     const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-
     BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
-    // item-Wert als UnoAny zurueckgeben
     if(pItem)
     {
         pItem->QueryValue( aVal, nMemberId );
-
-        // convert typeless SfxEnumItem to enum type
-        if ( !(pMap->nMemberId & SFX_METRIC_ITEM) && pMap->pType->getTypeClass() == uno::TypeClass_ENUM && aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        if( pMap->nMemberId & SFX_METRIC_ITEM )
         {
+            if( eMapUnit != SFX_MAPUNIT_100TH_MM )
+            {
+                if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aVal ) )
+                    SvxUnoConvertToMM( eMapUnit, aVal );
+            }
+        }
+        else if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
+              aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        {
+            // convert typeless SfxEnumItem to enum type
             sal_Int32 nEnum;
             aVal >>= nEnum;
-
             aVal.setValue( &nEnum, *pMap->pType );
         }
     }
@@ -161,7 +171,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 }
 
 //----------------------------------------------------------------------
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues ) const
 {
     if(!pMap || !pMap->nWID)
         return;
@@ -190,6 +200,14 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         uno::Any aValue( rVal );
 
         const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+
+        // check for needed metric translation
+        if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != SFX_MAPUNIT_100TH_MM )
+        {
+            if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aValue ) )
+                SvxUnoConvertFromMM( eMapUnit, aValue );
+        }
+
         pNewItem = pItem->Clone();
 
         BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);

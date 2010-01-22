@@ -57,8 +57,8 @@ public:
     ~SvxItemPropertySet();
 
     // Methoden, die direkt mit dem ItemSet arbeiten
-    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent ) const;
-    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal, SfxItemSet& rSet ) const;
+    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent=true, bool bDontConvertNegativeValues=false ) const;
+    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues=false ) const;
 
     // Methoden, die stattdessen Any benutzen
     ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
@@ -70,7 +70,6 @@ public:
 
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
     const SfxItemPropertyMapEntry* getPropertyMapEntries() const {return _pMap;}
-    //void setPropertyMap( const SfxItemPropertyMapEntry *pMap ) { _pMap = pMap; }
     const SfxItemPropertyMap* getPropertyMap()const { return &m_aPropertyMap;}
     const SfxItemPropertySimpleEntry* getPropertyMapEntry(const ::rtl::OUString &rName) const;
 

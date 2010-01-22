@@ -4551,49 +4551,14 @@ SdrObject* SdrObject::getSdrObjectFromXShape( const ::com::sun::star::uno::Refer
     return pSvxShape ? pSvxShape->GetSdrObject() : 0;
 }
 
-/** this function checks if a SFX_METRIC_ITEM realy needs to be converted.
-    This check is for items that store either metric values if theire positiv
-    or percentage if theire negativ.
-*/
-sal_Bool SvxUnoCheckForConversion( const SfxItemSet&, sal_Int32 nWID, const uno::Any& rVal )
-{
-    sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
-
-    switch( nWID )
-    {
-    case XATTR_FILLBMP_SIZEX:
-    case XATTR_FILLBMP_SIZEY:
-        {
-            sal_Int32 nValue = 0;
-            if( rVal >>= nValue )
-                bConvert = nValue > 0;
-            break;
-        }
-    }
-
-    // the default is to always
-    return bConvert;
-}
-
 uno::Any SvxItemPropertySet_getPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet )
 {
     if(!pMap || !pMap->nWID)
         return uno::Any();
 
-    uno::Any aVal = rPropSet.getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES) );
-    if( pMap->nMemberId & SFX_METRIC_ITEM )
-    {
-        // check for needed metric translation
-        SfxItemPool* pPool = rSet.GetPool();
-        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-        if( (pMap->nMemberId & SFX_METRIC_ITEM) && (eMapUnit != SFX_MAPUNIT_100TH_MM) )
-        {
-            if( SvxUnoCheckForConversion( rSet, pMap->nWID, aVal ) )
-                SvxUnoConvertToMM( eMapUnit, aVal );
-        }
-    }
-
-    return aVal;
+    // Check is for items that store either metric values if thei are positiv or percentage if thei are negativ.
+    bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
+    return rPropSet.getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES), bDontConvertNegativeValues );
 }
 
 void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
@@ -4601,18 +4566,6 @@ void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, co
     if(!pMap || !pMap->nWID)
         return;
 
-    uno::Any aValue( rVal );
-    if( pMap->nMemberId & SFX_METRIC_ITEM )
-    {
-        // check for needed metric translation
-        SfxItemPool* pPool = rSet.GetPool();
-        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-        if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != SFX_MAPUNIT_100TH_MM )
-        {
-            if( SvxUnoCheckForConversion( rSet, pMap->nWID, aValue ) )
-                SvxUnoConvertFromMM( eMapUnit, aValue );
-        }
-    }
-
-    rPropSet.setPropertyValue( pMap, aValue, rSet );
+    bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
+    rPropSet.setPropertyValue( pMap, rVal, rSet, bDontConvertNegativeValues );
 }
