@@ -263,7 +263,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             filter.addProperty("Type", PropertyAttribute.MAYBEVOID, Integer.valueOf(DataType.LONGVARCHAR));
             final XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,filter);
 
-            m_composer.appendFilterByColumn(column, true);
+            m_composer.appendFilterByColumn(column, true,SQLFilterOperator.LIKE);
             assure("At least one row should exist",m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
 
         }

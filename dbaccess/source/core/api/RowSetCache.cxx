@@ -138,7 +138,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew,
-                           const ORowSetValueVector& _aParameterValueForCache)
+                           const ORowSetValueVector& _aParameterValueForCache,
+                           const ::rtl::OUString& i_sRowSetFilter)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
@@ -260,7 +261,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             m_pCacheSet = new OBookmarkSet();
             m_xCacheSet = m_pCacheSet;
-            m_pCacheSet->construct(_xRs);
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
 
             // check privileges
             m_nPrivileges = Privilege::SELECT;
@@ -294,7 +295,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             m_pCacheSet = new OStaticSet();
             m_xCacheSet = m_pCacheSet;
-            m_pCacheSet->construct(_xRs);
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
             m_nPrivileges = Privilege::SELECT;
         }
         else
@@ -335,7 +336,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             {
                 m_pCacheSet = pKeySet;
                 m_xCacheSet = m_pCacheSet;
-                pKeySet->construct(_xRs);
+                pKeySet->construct(_xRs,i_sRowSetFilter);
 
                 if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
                 {
@@ -359,7 +360,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 m_xCacheSet = NULL;
                 m_pCacheSet = new OStaticSet();
                 m_xCacheSet = m_pCacheSet;
-                m_pCacheSet->construct(_xRs);
+                m_pCacheSet->construct(_xRs,i_sRowSetFilter);
                 m_nPrivileges = Privilege::SELECT;
             }
         }
@@ -1284,9 +1285,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
 
-    if ( !moveToBookmark(aBookmark) )
-        m_aMatrixIter = m_pMatrix->end();
-
+    moveToBookmark(aBookmark);
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
 //      *m_aMatrixIter = m_aInsertRow;
