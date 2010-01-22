@@ -96,6 +96,7 @@ namespace dbtools
         const sal_Char* getPROPERTY_ID_FIELDTYPE()          { return    "FieldType"; }
         const sal_Char* getPROPERTY_ID_VALUE()              { return    "Value"; }
         const sal_Char* getPROPERTY_ID_ACTIVE_CONNECTION()  { return    "ActiveConnection"; }
+        const sal_Char* getPROPERTY_ID_LABEL()              { return    "Label"; }
 
     //============================================================
     //= error messages
@@ -183,6 +184,7 @@ namespace dbtools
                 case PROPERTY_ID_HAVINGCLAUSE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_HAVINGCLAUSE()      ); break; }
                 case PROPERTY_ID_ISSIGNED:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSIGNED()          ); break; }
                 case PROPERTY_ID_ISSEARCHABLE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSEARCHABLE()      ); break; }
+                case PROPERTY_ID_LABEL:                     { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_LABEL()             ); break; }
                 case PROPERTY_ID_APPLYFILTER:               { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_APPLYFILTER()       ); break; }
                 case PROPERTY_ID_FILTER:                    { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_FILTER()            ); break; }
                 case PROPERTY_ID_MASTERFIELDS:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_MASTERFIELDS()      ); break; }

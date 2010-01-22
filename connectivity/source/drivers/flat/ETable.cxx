@@ -307,7 +307,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),::rtl::OUString(),
                                                 ColumnValue::NULLABLE,
                                                 nPrecision,
                                                 nScale,

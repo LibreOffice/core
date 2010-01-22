@@ -155,6 +155,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
         connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 pColDesc->aField6,
                                                 pColDesc->sField13,
+                                                pColDesc->sField12,
                                                 nField11,
                                                 pColDesc->nField7,
                                                 pColDesc->nField9,
@@ -210,7 +211,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
     aSql += ::rtl::OUString::createFromAscii(" ADD ");
-    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),m_pTable->getTypeCreatePattern());
+    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )
