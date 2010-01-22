@@ -279,7 +279,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             }
             else
             {
-                mpPropSet->setPropertyValue( pEntry, aValue, aSet );
+                SvxItemPropertySet_setPropertyValue( *mpPropSet, pEntry, aValue, aSet );
             }
 
             mpSet->Put( aSet );

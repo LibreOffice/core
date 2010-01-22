@@ -1170,7 +1170,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         }
         else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pEntry, aValue, aSet ))
         {
-            GetStylePropertySet().setPropertyValue( pEntry, aValue, aSet );
+            SvxItemPropertySet_setPropertyValue( GetStylePropertySet(), pEntry, aValue, aSet );
         }
 
         rStyleSet.Put( aSet );
