@@ -533,7 +533,8 @@ void SvtFilterOptions::SetWriter2WinWord( BOOL bFlag )
 
 BOOL SvtFilterOptions::IsUseEnhancedFields() const
 {
-    return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
+    return false; // disable for now;
+//    return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
 }
 
 void SvtFilterOptions::SetUseEnhancedFields( BOOL bFlag )
