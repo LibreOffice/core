@@ -589,7 +589,8 @@ namespace dxcanvas
                                    &rValues.maColors[0]+rValues.maColors.getLength(),
                                    aColors.begin(),
                                    boost::bind(
-                                       &tools::sequenceToArgb,
+                                       (Gdiplus::ARGB (*)( const uno::Sequence< double >& ))(
+                                           &tools::sequenceToArgb),
                                        _1));
                     std::vector< Gdiplus::REAL > aStops;
                     comphelper::sequenceToContainer(aStops,rValues.maStops);
