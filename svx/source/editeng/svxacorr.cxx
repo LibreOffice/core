@@ -669,7 +669,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
 
 BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const String& rTxt,
-                                xub_StrLen , xub_StrLen nEndPos,
+                                xub_StrLen, xub_StrLen nEndPos,
                                 LanguageType eLang )
 {
     bool bRet = false;
@@ -690,29 +690,39 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
         bool bIsSpecial = allChars.indexOf( sal_Unicode( cChar ) ) != -1;
         if ( bIsSpecial )
         {
-            // Check the previous char
-            sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
-            if ( ( chars.indexOf( sal_Unicode( cPrevChar ) ) == -1 ) && cPrevChar != '\t' )
+            // Get the last word delimiter position
+            xub_StrLen nSttWdPos = nEndPos;
+            while( nSttWdPos && !IsWordDelim( rTxt.GetChar( --nSttWdPos )))
+                ;
+
+            // Check the presence of "://" in the word
+            xub_StrLen nStrPos = rTxt.Search( String::CreateFromAscii( "://" ), nSttWdPos + 1 );
+            if ( STRING_NOTFOUND == nStrPos )
             {
-                // Remove any previous normal space
-                xub_StrLen nPos = nEndPos - 1;
-                while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                // Check the previous char
+                sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+                if ( ( chars.indexOf( sal_Unicode( cPrevChar ) ) == -1 ) && cPrevChar != '\t' )
                 {
-                    if ( nPos == 0 ) break;
-                    nPos--;
-                    cPrevChar = rTxt.GetChar( nPos );
-                }
+                    // Remove any previous normal space
+                    xub_StrLen nPos = nEndPos - 1;
+                    while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                    {
+                        if ( nPos == 0 ) break;
+                        nPos--;
+                        cPrevChar = rTxt.GetChar( nPos );
+                    }
 
-                if ( nPos != 0 )
-                {
-                    nPos++;
-                    if ( nEndPos - nPos > 0 )
-                        rDoc.Delete( nPos, nEndPos );
+                    if ( nPos != 0 )
+                    {
+                        nPos++;
+                        if ( nEndPos - nPos > 0 )
+                            rDoc.Delete( nPos, nEndPos );
 
-                    // Add the non-breaking space at the end pos
-                    if ( bHasSpace )
-                        rDoc.Insert( nPos, CHAR_HARDBLANK );
-                    bRet = true;
+                        // Add the non-breaking space at the end pos
+                        if ( bHasSpace )
+                            rDoc.Insert( nPos, CHAR_HARDBLANK );
+                        bRet = true;
+                    }
                 }
             }
         }
