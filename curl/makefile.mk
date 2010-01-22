@@ -47,6 +47,12 @@ all:
 
 TARFILE_NAME=curl-7.19.7
 PATCH_FILES=curl-7.19.7.patch
+
+.IF "$(GUI)"=="WNT"
+    PATCH_FILES+=curl-7.19.7_win.patch
+.ENDIF
+
+
 #CONVERTFILES= \
     lib$/Makefile.vc6
 
