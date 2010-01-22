@@ -36,13 +36,19 @@ import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.sdbc.DataType;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.NumberFormatter;
@@ -51,6 +57,8 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FilterComponent
 {
@@ -115,10 +123,10 @@ public class FilterComponent
     final int SO_SECONDBOOLFIELDNAME = 256 + 2;
     final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
-    int SO_BOOLEANLIST[] = {
+    int SO_BOOLEANLIST[] =
+    {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
     };
-
     final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
@@ -130,25 +138,23 @@ public class FilterComponent
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
-            try
+            int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            String sControlName = "";
+            switch (iKey)
             {
-                int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
-                String sControlName = "";
-                switch (iKey)
-                {
-                    //              case SOOPTQUERYMODE:
-                    //                  getfilterstate();
-                    case SO_FIRSTFIELDNAME:
-                    case SO_SECONDFIELDNAME:
-                    case SO_THIRDFIELDNAME:
-                    case SO_FOURTHFIELDNAME:
-                        sControlName = getControlName(EventObject.Source);
-                        String sControlNameSuffix = sIncSuffix + "_" + getIndexNumber(sControlName);
-                        XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
-                        String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
-                        FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
+                //              case SOOPTQUERYMODE:
+                //                  getfilterstate();
+                case SO_FIRSTFIELDNAME:
+                case SO_SECONDFIELDNAME:
+                case SO_THIRDFIELDNAME:
+                case SO_FOURTHFIELDNAME:
+                    sControlName = getControlName(EventObject.Source);
+                    String sControlNameSuffix = sIncSuffix + "_" + getIndexNumber(sControlName);
+                    XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
+                    String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
+                    FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
 
-                        String sControlNameTextValue = "txtValue" + sControlNameSuffix;
+                    String sControlNameTextValue = "txtValue" + sControlNameSuffix;
 //                        String sControlNameBooleanList = "lstBoolean" + sControlNameSuffix;
 //                        if (aFieldColumn.FieldType == DataType.BOOLEAN)
 //                        {
@@ -161,41 +167,36 @@ public class FilterComponent
 //                            CurUnoDialog.setControlVisible(sControlNameTextValue, true);
 //                            CurUnoDialog.setControlVisible(sControlNameBooleanList, false);
 
-                            XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
-                            XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
-                            Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", Boolean.valueOf(CurFieldColumn.isNumberFormat()));
-                            final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
-                            aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.getDBFormatKey(), aNumberFormatter);
+                    XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
+                    XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
+                    Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", Boolean.valueOf(CurFieldColumn.isNumberFormat()));
+                    final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
+                    aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.getDBFormatKey(), aNumberFormatter);
 //                         }
 
-                        break;
-                    case SO_FIRSTCONDITION:
-                    case SO_SECONDCONDITION:
-                    case SO_THIRDCONDITION:
-                    case SO_FOURTHCONDITION:
-                        sControlName = getControlName(EventObject.Source);
-                        break;
-                    case SOOPTORMODE:
-                    case SOOPTANDMODE:
-                        // getfilterstate();
-                        return;
+                    break;
+                case SO_FIRSTCONDITION:
+                case SO_SECONDCONDITION:
+                case SO_THIRDCONDITION:
+                case SO_FOURTHCONDITION:
+                    sControlName = getControlName(EventObject.Source);
+                    break;
+                case SOOPTORMODE:
+                case SOOPTANDMODE:
+                    // getfilterstate();
+                    return;
 
                 case SO_FIRSTBOOLFIELDNAME:
                 case SO_SECONDBOOLFIELDNAME:
                 case SO_THIRDBOOLFIELDNAME:
                 case SO_FOURTHBOOLFIELDNAME:
-                        sControlName = getControlName(EventObject.Source);
+                    sControlName = getControlName(EventObject.Source);
                     break;
 
-                    default:
-                        break;
-                }
-                togglefollowingControlRow(sControlName);
+                default:
+                    break;
             }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-            }
+            togglefollowingControlRow(sControlName);
         }
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -208,15 +209,8 @@ public class FilterComponent
 
         public void textChanged(TextEvent EventObject)
         {
-            try
-            {
-                String sName = getControlName(EventObject.Source);
-                togglefollowingControlRow(sName);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-            }
+            String sName = getControlName(EventObject.Source);
+            togglefollowingControlRow(sName);
         }
 
         public void disposing(EventObject EventObject)
@@ -248,10 +242,10 @@ public class FilterComponent
     }
 
     public static String getIndexNumber(String _sStr)
-        {
-            String sLastNumber = _sStr.substring(_sStr.length() - 1, _sStr.length());
-            return sLastNumber;
-        }
+    {
+        String sLastNumber = _sStr.substring(_sStr.length() - 1, _sStr.length());
+        return sLastNumber;
+    }
 
     /**
      * Enable the next ControlRow if the Condition is complete in the current line
@@ -293,102 +287,67 @@ public class FilterComponent
         int nFilterCount = getFilterCount();
         if (nFilterCount > 0)
         {
-            if (this.getfilterstate() == this.SOI_MATCHALL)
+            try
             {
-                filterconditions = new PropertyValue[1][nFilterCount];
-            }
-            else
-            {
-                filterconditions = new PropertyValue[nFilterCount][1];
-            }
-            int a = 0;
-            for (int i = 0; i < RowCount; i++)
-            {
-                ControlRow CurControlRow = oControlRows[i];
-                if (CurControlRow.isEnabled())
+                final String serviceName = "com.sun.star.beans.PropertyBag";
+                final XPropertyContainer column = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
+
+                column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
+                column.addProperty("Name", PropertyAttribute.BOUND, "");
+                final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
+
+                if ( oQueryMetaData.getSQLQueryComposer().getQuery().length() == 0)
                 {
-                    if (CurControlRow.isConditionComplete())
+                    final String fromClause = oQueryMetaData.getSQLQueryComposer().getFromClause();
+                    StringBuffer sql = new StringBuffer();
+                    sql.append(oQueryMetaData.getSQLQueryComposer().getSelectClause(true));
+                    sql.append(' ');
+                    sql.append(fromClause);
+                    oQueryMetaData.getSQLQueryComposer().getQueryComposer().setElementaryQuery(sql.toString());
+                }
+                int a = 0;
+                for (int i = 0; i < RowCount; i++)
+                {
+                    ControlRow CurControlRow = oControlRows[i];
+                    if (CurControlRow.isEnabled())
                     {
-                        Object aValue;
-                        String sFieldName = CurControlRow.getSelectedFieldName();
-                        int nOperator = (int) CurControlRow.getSelectedOperator();
-                        FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
-                        if (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getTextFormatKey())
+                        if (CurControlRow.isConditionComplete())
                         {
-                            aValue = "'" + CurControlRow.getValue() + "'";
-                        }
-//// TODO the following code is bound to be deprecated as soon as the query composer is able to handle date/time values as numbers
-                        else if ((aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getDateFormatKey()) ||
-                                (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey()))
-                        {
-                            String sDate = CurControlRow.getDateTimeString(true);
-                            aValue = "{D '" + sDate + "' }";  // FormatsSupplier
-                        }
-                        else if (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getTimeFormatKey())
-                        {
-                            String sTime = CurControlRow.getDateTimeString(true);
-                            aValue = "'{T '" + sTime + "' }";
-                        }
-                        else
-                        {
-                            aValue = CurControlRow.getValue();
-                            // if void
-                            if (! AnyConverter.isVoid(aValue))
+                            String sFieldName = CurControlRow.getSelectedFieldName();
+                            int nOperator = (int) CurControlRow.getSelectedOperator();
+                            FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
+                            columnSet.setPropertyValue("Name", aFieldColumn.getFieldName());
+                            columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
+                            Object value = CurControlRow.getValue();
+                            switch(aFieldColumn.getFieldType())
                             {
-                                switch (aFieldColumn.getFieldType())
-                                {
-                                    case DataType.TINYINT:
-                                    case DataType.BIGINT:
-                                    case DataType.INTEGER:
-                                    case DataType.SMALLINT:
-                                        if ( AnyConverter.isDouble(aValue) )
-                                            aValue = String.valueOf(((Double) aValue).intValue());
-                                        break;
-                                    case DataType.BIT:
-                                    case DataType.BOOLEAN:
-                                        // curValue = CurControlRow.getText(); // wrong! (creates something like 'WAHR'/'FALSCH' if german locale is used.
-
-                                        // double dblvalue = ((Double) curValue).doubleValue();
-                                        //curValue = new Boolean(dblvalue == 1.0); // wrong! we need a string, not a boolean value
-
-                                        // converts the '1.0'/'0.0' (EffectiveValue) to a 'boolean' String like 'true'/'false'
-                                        if ( AnyConverter.isDouble(aValue) )
-                                            aValue = String.valueOf(((Double) aValue).intValue() == 1);
-                                        break;
-                                    default:
-                                        aValue = String.valueOf(aValue);
-                                        break;
-                                }
+                                case DataType.TIMESTAMP:
+                                case DataType.DATE:
+                                    value = ((Double)value) - oQueryMetaData.getNullDateCorrection();
+                                    break;
                             }
+                            column.addProperty("Value", PropertyAttribute.MAYBEVOID, value);
+                            columnSet.setPropertyValue("Value", value);
+                            oQueryMetaData.getSQLQueryComposer().getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
                         }
-
-                        PropertyValue oPropertyValue = Properties.createProperty(sFieldName, aValue, nOperator);
-                        if (getfilterstate()/*this.ifilterstate*/ == this.SOI_MATCHALL)
-                        {
-                            if (i == 0)
-                            {
-                                filterconditions[0] = new PropertyValue[nFilterCount];
-                            }
-                            filterconditions[0][a] = oPropertyValue;
-                        }
-                        else
-                        {
-                            filterconditions[a][0] = oPropertyValue;
-                        }
-                        a++;
                     }
                 }
+                filterconditions = oQueryMetaData.getSQLQueryComposer().getQueryComposer().getStructuredFilter();
+                int[] iduplicate = JavaTools.getDuplicateFieldIndex(filterconditions);
+                if (iduplicate[0] != -1)
+                {
+                    PropertyValue aduplicatecondition = filterconditions[iduplicate[0]][iduplicate[1]];
+                    String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
+                    CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
+                    CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", Integer.valueOf(1), Integer.valueOf(2)));
+                    return new PropertyValue[][]
+                            {
+                            };
+                }
             }
-            int[] iduplicate = JavaTools.getDuplicateFieldIndex(filterconditions);
-            if (iduplicate[0] != -1)
+            catch (Exception ex)
             {
-                PropertyValue aduplicatecondition = filterconditions[iduplicate[0]][iduplicate[1]];
-                String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
-                CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
-                CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", Integer.valueOf(1), Integer.valueOf(2)));
-                return new PropertyValue[][]
-                        {
-                        };
+                Logger.getLogger(FilterComponent.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else
@@ -416,8 +375,10 @@ public class FilterComponent
             String soperator = sLogicOperators[_filtercondition.Handle - 1];
             sreturn = JavaTools.replaceSubString(sreturn, soperator, "<LOGICOPERATOR>");
             String sDisplayValue = "";
-            if ( !AnyConverter.isVoid(_filtercondition.Value) )
+            if (!AnyConverter.isVoid(_filtercondition.Value))
+            {
                 sDisplayValue = AnyConverter.toString(_filtercondition.Value);
+            }
             sreturn = JavaTools.replaceSubString(sreturn, sDisplayValue, "<VALUE>");
             return sreturn;
         }
@@ -446,24 +407,17 @@ public class FilterComponent
 
     private void addfiltercondition(int _index, String _curFieldName, Object _curValue, int _curOperator)
     {
-        try
+        String ValString = String.valueOf(_curValue);
+        PropertyValue oPropertyValue = Properties.createProperty(_curFieldName, ValString, _curOperator);
+        getfilterstate();
+        if (getfilterstate() == this.SOI_MATCHALL)
         {
-            String ValString = String.valueOf(_curValue);
-            PropertyValue oPropertyValue = Properties.createProperty(_curFieldName, ValString, _curOperator);
-            getfilterstate();
-            if (getfilterstate() == this.SOI_MATCHALL)
+            if (_index == 0)
             {
-                if (_index == 0)
-                {
-                    filterconditions[0] = new PropertyValue[getFilterCount()];
-                }
-                filterconditions[0][_index] = new PropertyValue();
-                filterconditions[0][_index] = oPropertyValue;
+                filterconditions[0] = new PropertyValue[getFilterCount()];
             }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.out);
+            filterconditions[0][_index] = new PropertyValue();
+            filterconditions[0][_index] = oPropertyValue;
         }
     }
 
@@ -478,8 +432,8 @@ public class FilterComponent
             }
         }
         return a;
-    // FilterCount = a;
-    // return FilterCount;
+        // FilterCount = a;
+        // return FilterCount;
     }
 
     /** Creates a new instance of FilterComponent
@@ -495,95 +449,88 @@ public class FilterComponent
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
-        try
+        this.curHelpID = _firstHelpID;
+        this.xMSF = _xMSF;
+        this.IStep = Integer.valueOf(iStep);
+
+        curtabindex = UnoDialog.setInitialTabindex(iStep);
+        this.CurUnoDialog = CurUnoDialog;
+        this.RowCount = FilterCount;
+        this.oQueryMetaData = _oQueryMetaData;
+        boolean bEnabled;
+        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
+        // iStartPosX = iPosX;
+        // iStartPosY = iPosY;
+
+        String soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
+        String soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
+        slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
+        slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
+        slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
+        sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
+        sBooleanValues = CurUnoDialog.m_oResource.getResArray(BaseID + 36, 2); // true, false
+
+        sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
+
+        // create Radiobuttons
+        // * match all
+        // * match one
+        optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
+                new String[]
+                {
+                    "Height",
+                    "HelpURL",
+                    "Label",
+                    "PositionX",
+                    "PositionY",
+                    "State",
+                    "Step",
+                    "TabIndex",
+                    "Width"
+                },
+                new Object[]
+                {
+                    Integer.valueOf(9),
+                    "HID:" + curHelpID++,
+                    soptMatchAll,
+                    Integer.valueOf(iPosX),
+                    Integer.valueOf(iPosY),
+                    Short.valueOf((short) 1),
+                    IStep,
+                    Short.valueOf(curtabindex++),
+                    Integer.valueOf(203)
+                });
+        optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
+                new String[]
+                {
+                    "Height",
+                    "HelpURL",
+                    "Label",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "TabIndex",
+                    "Width"
+                },
+                new Object[]
+                {
+                    Integer.valueOf(9),
+                    "HID:" + curHelpID++,
+                    soptMatchAny,
+                    Integer.valueOf(iPosX),
+                    Integer.valueOf(iPosY + 12),
+                    IStep,
+                    Short.valueOf(curtabindex++),
+                    Integer.valueOf(203)
+                });
+        getfilterstate();
+
+        oControlRows = new ControlRow[FilterCount];
+        for (int i = 0; i < FilterCount; i++)
         {
-            this.curHelpID = _firstHelpID;
-            this.xMSF = _xMSF;
-            this.IStep = Integer.valueOf(iStep);
-
-            curtabindex = UnoDialog.setInitialTabindex(iStep);
-            this.CurUnoDialog = CurUnoDialog;
-            this.RowCount = FilterCount;
-            this.oQueryMetaData = _oQueryMetaData;
-            boolean bEnabled;
-            sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
-            // iStartPosX = iPosX;
-            // iStartPosY = iPosY;
-
-            String soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
-            String soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
-            slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
-            slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
-            slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
-            sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
-            sBooleanValues = CurUnoDialog.m_oResource.getResArray(BaseID + 36, 2); // true, false
-
-            sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
-
-            // create Radiobuttons
-            // * match all
-            // * match one
-            optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
-                    new String[]
-                    {
-                        "Height",
-                        "HelpURL",
-                        "Label",
-                        "PositionX",
-                        "PositionY",
-                        "State",
-                        "Step",
-                        "TabIndex",
-                        "Width"
-                    },
-                    new Object[]
-                    {
-                        Integer.valueOf(9),
-                        "HID:" + curHelpID++,
-                        soptMatchAll,
-                        Integer.valueOf(iPosX),
-                        Integer.valueOf(iPosY),
-                        Short.valueOf((short) 1),
-                        IStep,
-                        Short.valueOf(curtabindex++),
-                        Integer.valueOf(203)
-                    });
-            optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
-                    new String[]
-                    {
-                        "Height",
-                        "HelpURL",
-                        "Label",
-                        "PositionX",
-                        "PositionY",
-                        "Step",
-                        "TabIndex",
-                        "Width"
-                    },
-                    new Object[]
-                    {
-                        Integer.valueOf(9),
-                        "HID:" + curHelpID++,
-                        soptMatchAny,
-                        Integer.valueOf(iPosX),
-                        Integer.valueOf(iPosY + 12),
-                        IStep,
-                        Short.valueOf(curtabindex++),
-                        Integer.valueOf(203)
-                    });
-            getfilterstate();
-
-            oControlRows = new ControlRow[FilterCount];
-            for (int i = 0; i < FilterCount; i++)
-            {
-                bEnabled = (i == 0);
-                oControlRows[i] = new ControlRow(iPosX, iPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
-                iPosY += 43;
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.out);
+            bEnabled = (i == 0);
+            oControlRows[i] = new ControlRow(iPosX, iPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
+            iPosY += 43;
         }
     }
 
@@ -639,29 +586,21 @@ public class FilterComponent
 
     public void addNumberFormats()
     {
-        try
-        {
-            iDateFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD");
-            iTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("HH:MM:SS");
-            iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.out);
-        }
+        iDateFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD");
+        iTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("HH:MM:SS");
+        iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
     }
 
     // -------------------------------------------------------------------------
     //
     //
     // -------------------------------------------------------------------------
-
     class ControlRow
     {
+
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
-
         protected XInterface[] ControlElements = new XInterface[6];
         private boolean m_bEnabled;
         String[] FieldNames;
@@ -778,7 +717,7 @@ public class FilterComponent
                             Boolean.TRUE,
                             Integer.valueOf(13),
                             "HID:" + _firstRowHelpID++,
-                            Short.valueOf(UnoDialog.getListBoxLineCount() /* 7 */) ,
+                            Short.valueOf(UnoDialog.getListBoxLineCount() /* 7 */),
                             Integer.valueOf(nPosX1),
                             Integer.valueOf(iCompPosY + 23),
                             IStep,
@@ -808,7 +747,7 @@ public class FilterComponent
                             Boolean.TRUE,
                             Integer.valueOf(13),
                             "HID:" + _firstRowHelpID++,
-                            Short.valueOf((short) sLogicOperators.length /* 7 */ ),
+                            Short.valueOf((short) sLogicOperators.length /* 7 */),
                             Integer.valueOf(nPosX2),
                             Integer.valueOf(iCompPosY + 23),
                             IStep,
@@ -883,8 +822,9 @@ public class FilterComponent
                 {
                     int nSelOperator = getSelectedOperator();
                     // short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
-                    if (nSelOperator == com.sun.star.sdb.SQLFilterOperator.SQLNULL ||   /* is null */
-                        nSelOperator == com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL) /* is not null */
+                    if (nSelOperator == com.sun.star.sdb.SQLFilterOperator.SQLNULL
+                            || /* is null */ nSelOperator == com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL) /* is not null */
+
                     {
                         // disable value field
                         Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), "Enabled", Boolean.FALSE);
@@ -946,13 +886,27 @@ public class FilterComponent
                     {
                         sValue = JavaTools.replaceSubString(sValue, "", "{D '");
                         sValue = JavaTools.replaceSubString(sValue, "", "' }");
-                        oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
+                        try
+                        {
+                            oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
+                        }
+                        catch (java.lang.Exception ex)
+                        {
+                            Logger.getLogger(FilterComponent.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else if (sValue.indexOf("{T '") > -1)
                     {
                         sValue = JavaTools.replaceSubString(sValue, "", "{T '");
                         sValue = JavaTools.replaceSubString(sValue, "", "' }");
-                        oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
+                        try
+                        {
+                            oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
+                        }
+                        catch (java.lang.Exception ex)
+                        {
+                            Logger.getLogger(FilterComponent.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
                 else if (AnyConverter.isBoolean(_filtercondition.Value))
@@ -1004,7 +958,9 @@ public class FilterComponent
             m_bEnabled = _bEnabled;
             if (isEnabled())
             {
-                short[] iselected = new short[] {};
+                short[] iselected = new short[]
+                {
+                };
                 try
                 {
                     iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
@@ -1015,7 +971,10 @@ public class FilterComponent
                 }
                 if ((iselected.length) == 0)
                 {
-                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[] { 0 });
+                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[]
+                            {
+                                0
+                            });
                 }
             }
             else if (!isConditionComplete())
@@ -1047,28 +1006,28 @@ public class FilterComponent
                 short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
                 switch (SelFields[0])
                 {
-                case 0:
-                    return com.sun.star.sdb.SQLFilterOperator.EQUAL;
-                case 1:
-                    return com.sun.star.sdb.SQLFilterOperator.NOT_EQUAL;
-                case 2:
-                    return com.sun.star.sdb.SQLFilterOperator.LESS;
-                case 3:
-                    return com.sun.star.sdb.SQLFilterOperator.GREATER;
-                case 4:
-                    return com.sun.star.sdb.SQLFilterOperator.LESS_EQUAL;
-                case 5:
-                    return com.sun.star.sdb.SQLFilterOperator.GREATER_EQUAL;
-                case 6:
-                    return com.sun.star.sdb.SQLFilterOperator.LIKE;
-                case 7:
-                    return com.sun.star.sdb.SQLFilterOperator.NOT_LIKE;
-                case 8:
-                    return com.sun.star.sdb.SQLFilterOperator.SQLNULL;
-                case 9:
-                    return com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL;
-                default:
-                    return -1;
+                    case 0:
+                        return com.sun.star.sdb.SQLFilterOperator.EQUAL;
+                    case 1:
+                        return com.sun.star.sdb.SQLFilterOperator.NOT_EQUAL;
+                    case 2:
+                        return com.sun.star.sdb.SQLFilterOperator.LESS;
+                    case 3:
+                        return com.sun.star.sdb.SQLFilterOperator.GREATER;
+                    case 4:
+                        return com.sun.star.sdb.SQLFilterOperator.LESS_EQUAL;
+                    case 5:
+                        return com.sun.star.sdb.SQLFilterOperator.GREATER_EQUAL;
+                    case 6:
+                        return com.sun.star.sdb.SQLFilterOperator.LIKE;
+                    case 7:
+                        return com.sun.star.sdb.SQLFilterOperator.NOT_LIKE;
+                    case 8:
+                        return com.sun.star.sdb.SQLFilterOperator.SQLNULL;
+                    case 9:
+                        return com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL;
+                    default:
+                        return -1;
                 }
             }
             catch (Exception exception)
@@ -1081,43 +1040,19 @@ public class FilterComponent
         // TODO make a difference between Text and Numbers
         protected Object getValue()
         {
-            try
-            {
-                return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-            }
-            return null;
+            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }
 
         protected Object getText()
         {
-            try
-            {
-                return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-            }
-            return null;
+            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
         }
 
         protected String getDateTimeString(boolean bgetDate)
         {
-            try
-            {
                 double dblValue = ((Double) getValue()).doubleValue();
                 NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
                 return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-                return null;
-            }
         }
     }
 }

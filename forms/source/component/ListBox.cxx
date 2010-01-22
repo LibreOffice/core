@@ -704,25 +704,10 @@ namespace frm
                         else
                         {
                             // otherwise look for the alias
-                            Reference<XSQLQueryComposerFactory> xFactory(xConnection, UNO_QUERY);
-                            if (!xFactory.is())
-                                break;
-
-                            Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
-                            try
-                            {
-                                ::rtl::OUString aStatement;
-                                xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= aStatement;
-                                xComposer->setQuery( aStatement );
-                            }
-                            catch(Exception&)
-                            {
-                                disposeComponent(xComposer);
-                                break;
-                            }
+                            Reference< XColumnsSupplier > xSupplyFields;
+                            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupplyFields;
 
                             // search the field
-                            Reference<XColumnsSupplier> xSupplyFields(xComposer, UNO_QUERY);
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
 
                             Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
@@ -733,7 +718,6 @@ namespace frm
                                 if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                                     xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                             }
-                            disposeComponent(xComposer);
                         }
                     }
                     if (!aFieldName.getLength())

@@ -329,10 +329,10 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         boolean bQueryCreated = false;
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = CurReportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(this.xWindow, false, false);
+            bQueryCreated = CurReportDocument.getRecordParser().getSQLQueryComposer().setQueryCommand(this.xWindow, false, false);
 
             CurReportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery();
+            String sQuery = CurReportDocument.getRecordParser().getSQLQueryComposer().getQuery();
             CurReportDocument.setCommand(sQuery);
         }
         else
@@ -347,11 +347,11 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
-                    CurReportDocument.getRecordParser().oSQLQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    CurReportDocument.getRecordParser().oSQLQueryComposer.prependSortingCriteria();
+                    CurReportDocument.getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(sCommand);
+                    CurReportDocument.getRecordParser().getSQLQueryComposer().prependSortingCriteria();
 // TODO: check with query
                     CurReportDocument.setCommandType(CommandType.COMMAND);
-                    CurReportDocument.setCommand(CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery());
+                    CurReportDocument.setCommand(CurReportDocument.getRecordParser().getSQLQueryComposer().getQuery());
                     bQueryCreated = true;
                 }
                 else
@@ -711,7 +711,6 @@ public static XLogger getLogger()
             if (CurReportDocument.getRecordParser().getConnection(CurPropertyValue))
             {
                 // CurReportDocument.getDoc().xProgressBar.setValue(20);
-                CurReportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.getRecordParser());
                 buildSteps();
 
                 CurReportDocument.checkInvariants();
