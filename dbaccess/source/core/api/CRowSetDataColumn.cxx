@@ -78,8 +78,8 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const ORowSetCacheIterator& _rColumnValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aColumnValue(_rColumnValue)
-    ,m_aDescription(_rDescription)
     ,m_sLabel(i_sLabel)
+    ,m_aDescription(_rDescription)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
     OColumnSettings::registerProperties( *this );
