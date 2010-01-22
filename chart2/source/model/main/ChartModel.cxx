@@ -1138,18 +1138,20 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         switch( (*aIt).second )
         {
             case SERVICE_DASH_TABLE:
-                return m_pImplChartModel->GetDashTable();
             case SERVICE_GARDIENT_TABLE:
-                return m_pImplChartModel->GetGradientTable();
             case SERVICE_HATCH_TABLE:
-                return m_pImplChartModel->GetHatchTable();
             case SERVICE_BITMAP_TABLE:
-                return m_pImplChartModel->GetBitmapTable();
             case SERVICE_TRANSP_GRADIENT_TABLE:
-                return m_pImplChartModel->GetTransparencyGradientTable();
             case SERVICE_MARKER_TABLE:
-                // not supported
-                return 0;
+                {
+                    uno::Reference< lang::XMultiServiceFactory > xFact(
+                        this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+                    if ( xFact.is() )
+                    {
+                        return xFact->createInstance( rServiceSpecifier );
+                    }
+                }
+                break;
             case SERVICE_NAMESPACE_MAP:
                 // not yet supported, @todo
 //                 return 0;

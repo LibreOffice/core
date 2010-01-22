@@ -74,6 +74,7 @@
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svx/unofill.hxx>
 
 #include <time.h>
 
@@ -2915,6 +2916,88 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /*
     OSL_ENSURE(false,"not implemented");
 }
 
+// ____ XMultiServiceFactory ____
+
+Reference< uno::XInterface > ChartView::createInstance( const ::rtl::OUString& aServiceSpecifier )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
+    if ( pModel )
+    {
+        if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DashTable" ) ) == 0 )
+        {
+            if ( !m_xDashTable.is() )
+            {
+                m_xDashTable = SvxUnoDashTable_createInstance( pModel );
+            }
+            return m_xDashTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) == 0 )
+        {
+            if ( !m_xGradientTable.is() )
+            {
+                m_xGradientTable = SvxUnoGradientTable_createInstance( pModel );
+            }
+            return m_xGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) == 0 )
+        {
+            if ( !m_xHatchTable.is() )
+            {
+                m_xHatchTable = SvxUnoHatchTable_createInstance( pModel );
+            }
+            return m_xHatchTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) == 0 )
+        {
+            if ( !m_xBitmapTable.is() )
+            {
+                m_xBitmapTable = SvxUnoBitmapTable_createInstance( pModel );
+            }
+            return m_xBitmapTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) == 0 )
+        {
+            if ( !m_xTransGradientTable.is() )
+            {
+                m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( pModel );
+            }
+            return m_xTransGradientTable;
+        }
+        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) == 0 )
+        {
+            if ( !m_xMarkerTable.is() )
+            {
+                m_xMarkerTable = SvxUnoMarkerTable_createInstance( pModel );
+            }
+            return m_xMarkerTable;
+        }
+    }
+
+    return 0;
+}
+
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+    throw (uno::Exception, uno::RuntimeException)
+{
+    OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
+    (void) Arguments; // avoid warning
+    return createInstance( ServiceSpecifier );
+}
+
+uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aServiceNames( 6 );
+
+    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
+    aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
+    aServiceNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
+    aServiceNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
+    aServiceNames[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) );
+    aServiceNames[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) );
+
+    return aServiceNames;
+}
 
 //.............................................................................
 } //namespace chart

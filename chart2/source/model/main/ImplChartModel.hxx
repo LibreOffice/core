@@ -160,17 +160,6 @@ public:
     void CreateDefaultChart();
 
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetDashTable() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetGradientTable() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetHatchTable() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetBitmapTable() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface > GetTransparencyGradientTable() const;
-
-    ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface > GetXMLNameSpaceMap() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
@@ -229,12 +218,6 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xDashTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xGradientTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xHatchTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xBitmapTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTransparencyGradientTable;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
