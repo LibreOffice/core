@@ -48,6 +48,8 @@
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -85,6 +87,7 @@ using namespace ::svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
@@ -3042,43 +3045,22 @@ void DbFilterField::Update()
         if (!xForm.is())
             return;
 
+        Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
+        Reference< XTablesSupplier > xSupTab;
+        xFormProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupTab;
+
         Reference< XConnection >  xConnection(getRowSetConnection(xForm));
-        if (!xConnection.is())
-            return;
-
-        Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-        if (!xFactory.is())
-        {
-            DBG_ERROR("DbFilterField::Update : used the right place to request the ::com::sun::star::sdb::XSQLQueryComposerFactory interface ?");
-            return;
-        }
-
-        Reference< ::com::sun::star::sdb::XSQLQueryComposer >  xComposer = xFactory->createQueryComposer();
-        try
-        {
-            Reference< ::com::sun::star::beans::XPropertySet >  xFormAsSet(xForm, UNO_QUERY);
-            ::rtl::OUString sStatement;
-            xFormAsSet->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sStatement;
-            xComposer->setQuery(sStatement);
-        }
-        catch(const Exception&)
-        {
-            ::comphelper::disposeComponent(xComposer);
-            return;
-        }
-
-        Reference< ::com::sun::star::beans::XPropertySet >  xComposerAsSet(xComposer, UNO_QUERY);
-        if (!xComposerAsSet.is())
+        if (!xSupTab.is())
             return;
 
         // search the field
-        Reference< ::com::sun::star::container::XNameAccess >    xFieldNames;
-        Reference< ::com::sun::star::container::XNameAccess >    xTablesNames;
-        Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet;
+        Reference< XColumnsSupplier > xSupCol(xSupTab,UNO_QUERY);
+        Reference< ::com::sun::star::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
+        if (!xFieldNames->hasByName(aName))
+            return;
 
-        ::cppu::extractInterface(xFieldNames, xComposerAsSet->getPropertyValue(FM_PROP_SELECTED_FIELDS));
-        ::cppu::extractInterface(xTablesNames, xComposerAsSet->getPropertyValue(FM_PROP_SELECTED_TABLES));
-        ::cppu::extractInterface(xComposerFieldAsSet, xFieldNames->getByName(aName));
+        Reference< ::com::sun::star::container::XNameAccess >    xTablesNames = xSupTab->getTables();
+        Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
 
         if (xComposerFieldAsSet.is() && ::comphelper::hasProperty(FM_PROP_TABLENAME, xComposerFieldAsSet) &&
             ::comphelper::hasProperty(FM_PROP_FIELDSOURCE, xComposerFieldAsSet))

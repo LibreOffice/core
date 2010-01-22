@@ -136,7 +136,7 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 
 #define PROPERTY_ID_INVALID_INDEX                   41
 #define PROPERTY_ID_HY010                           43
-    // FREE
+#define PROPERTY_ID_LABEL                           44
 #define PROPERTY_ID_DELIMITER                       45
 #define PROPERTY_ID_FORMATKEY                       46
 #define PROPERTY_ID_LOCALE                          47

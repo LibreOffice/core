@@ -155,6 +155,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     ) );
     pColumn->setIsSearchable( _rxResMetaData->isSearchable( _nColumnPos ) );
     pColumn->setRealName(_rxResMetaData->getColumnName( _nColumnPos ));
+    pColumn->setLabel(sLabel);
     return pColumn;
 }
 
@@ -171,7 +172,7 @@ void OParseColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME),                PROPERTY_ID_REALNAME,               0,  &m_aRealName,               ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DBASEPRECISIONCHANGED),   PROPERTY_ID_DBASEPRECISIONCHANGED,  0,  &m_bDbasePrecisionChanged,  ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSEARCHABLE),            PROPERTY_ID_ISSEARCHABLE,           0,  &m_bIsSearchable,           ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
-
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL),                   PROPERTY_ID_LABEL,                  0,  &m_sLabel,                  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper() const
