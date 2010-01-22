@@ -468,34 +468,6 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
  * SwXParagraphEnumeration
  ******************************************************************/
 
-static SwStartNode *
-lcl_InitStartNode(const CursorType eType, SwUnoCrsr *const pCursor)
-{
-    switch (eType)
-    {
-        case CURSOR_TBLTEXT: // table cell: pCursor points at first paragraph
-            return pCursor->Start()->nNode.GetNode().StartOfSectionNode();
-        case CURSOR_SELECTION_IN_TABLE: // table
-            return pCursor->Start()->nNode.GetNode().FindTableNode();
-        default:
-            return 0;
-    }
-}
-
-static SwTable const*
-lcl_InitTable(const CursorType eType, SwStartNode const*const pStartNode)
-{
-    switch (eType)
-    {
-        case CURSOR_TBLTEXT: // table cell
-            return & pStartNode->FindTableNode()->GetTable();
-        case CURSOR_SELECTION_IN_TABLE: // table
-            return & static_cast<SwTableNode const*>(pStartNode)->GetTable();
-        default:
-            return 0;
-    }
-}
-
 class SwXParagraphEnumeration::Impl
     : public SwClient
 {
@@ -517,16 +489,17 @@ public:
 
     Impl(   uno::Reference< text::XText > const& xParent,
             ::std::auto_ptr<SwUnoCrsr> pCursor,
-            const CursorType eType)
+            const CursorType eType,
+            SwStartNode const*const pStartNode, SwTable const*const pTable)
         : SwClient( pCursor.release() )
         , m_xParentText( xParent )
         , m_eCursorType( eType )
         // remember table and start node for later travelling
         // (used in export of tables in tables)
-        , m_pOwnStartNode( lcl_InitStartNode(eType, GetCursor()) )
+        , m_pOwnStartNode( pStartNode )
         // for import of tables in tables we have to remember the actual
         // table and start node of the current position in the enumeration.
-        , m_pOwnTable( lcl_InitTable(eType, m_pOwnStartNode) )
+        , m_pOwnTable( pTable )
         , m_nEndIndex( GetCursor()->End()->nNode.GetIndex() )
         , m_nFirstParaStart( -1 )
         , m_nLastParaEnd( -1 )
@@ -534,6 +507,10 @@ public:
     {
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
         OSL_ENSURE(GetRegisteredIn(),  "SwXParagraphEnumeration: no cursor?");
+        OSL_ENSURE(   !((CURSOR_SELECTION_IN_TABLE == eType) ||
+                        (CURSOR_TBLTEXT == eType))
+                   || (m_pOwnTable && m_pOwnStartNode),
+            "SwXParagraphEnumeration: table type but no start node or table?");
 
         if ((CURSOR_SELECTION == m_eCursorType) ||
             (CURSOR_SELECTION_IN_TABLE == m_eCursorType))
@@ -576,8 +553,10 @@ void SwXParagraphEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
         ::std::auto_ptr<SwUnoCrsr> pCursor,
-        const CursorType eType)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType) )
+        const CursorType eType,
+        SwStartNode const*const pStartNode, SwTable const*const pTable)
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
+                    pStartNode, pTable) )
 {
 }
 /*-- 10.12.98 11:52:12---------------------------------------------------

@@ -1227,8 +1227,12 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
             GetDoc()->CreateUnoCrsr(aPos, sal_False));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
 
+        // remember table and start node for later travelling
+        // (used in export of tables in tables)
+        SwTable const*const pTable( & pSttNd->FindTableNode()->GetTable() );
         SwXParagraphEnumeration *const pEnum =
-            new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_TBLTEXT);
+            new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_TBLTEXT,
+                    pSttNd, pTable);
 
         aRef = pEnum;
 //      // no Cursor in protected sections

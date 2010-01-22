@@ -3157,8 +3157,14 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException)
     }
     const CursorType eSetType = (CURSOR_TBLTEXT == m_pImpl->m_eType)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+    SwTableNode const*const pStartNode( (CURSOR_TBLTEXT == m_pImpl->m_eType)
+            ? rUnoCursor.GetPoint()->nNode.GetNode().FindTableNode()
+            : 0);
+    SwTable const*const pTable(
+            (pStartNode) ? & pStartNode->GetTable() : 0 );
     const uno::Reference< container::XEnumeration > xRet =
-        new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType);
+        new SwXParagraphEnumeration(
+                pParentText, pNewCrsr, eSetType, pStartNode, pTable);
 
     return xRet;
 }
