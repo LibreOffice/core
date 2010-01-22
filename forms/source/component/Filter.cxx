@@ -400,17 +400,10 @@ namespace frm
             const Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
 
             // create a query composer
+            Reference< XColumnsSupplier > xSuppColumns;
+            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSuppColumns;
+
             const Reference< XConnection > xConnection( ::dbtools::getConnection( xForm ), UNO_SET_THROW );
-            const Reference< XSQLQueryComposerFactory >  xFactory( xConnection, UNO_QUERY_THROW );
-            const Reference< XSQLQueryComposer > xComposer( xFactory->createQueryComposer(), UNO_SET_THROW );
-
-            // set the statement on the composer
-            ::rtl::OUString sStatement;
-            xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sStatement;
-            xComposer->setQuery( sStatement );
-
-            // the field we're bound to
-            const Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY_THROW );
             const Reference< XNameAccess > xFieldNames( xSuppColumns->getColumns(), UNO_SET_THROW );
             if ( !xFieldNames->hasByName( sFieldName ) )
                 return;
@@ -420,7 +413,7 @@ namespace frm
             xComposerFieldProps->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName;
 
             // obtain the table of the field
-            const Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
+            const Reference< XTablesSupplier > xSuppTables( xSuppColumns, UNO_QUERY_THROW );
             const Reference< XNameAccess > xTablesNames( xSuppTables->getTables(), UNO_SET_THROW );
             const Reference< XNamed > xNamedTable( xTablesNames->getByName( sTableName ), UNO_QUERY_THROW );
             sTableName = xNamedTable->getName();

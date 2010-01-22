@@ -175,12 +175,11 @@ public class Finalizer
         XComponent[] ret = null;
         try
         {
-            CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurDBMetaData);
             String queryname = getTitle();
-            boolean bsuccess = CurDBMetaData.oSQLQueryComposer.setQueryCommand(CurUnoDialog.xWindow, true, true);
+            boolean bsuccess = CurDBMetaData.getSQLQueryComposer().setQueryCommand(CurUnoDialog.xWindow, true, true,false);
             if (bsuccess)
             {
-                bsuccess = CurDBMetaData.createQuery(CurDBMetaData.oSQLQueryComposer, queryname);
+                bsuccess = CurDBMetaData.createQuery(CurDBMetaData.getSQLQueryComposer(), queryname);
                 if (bsuccess)
                 {
                     short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
@@ -197,7 +196,6 @@ public class Finalizer
                                 CurUnoDialog.getCurFrame());
                     }
                     CurUnoDialog.xDialog.endExecute();
-                    CurDBMetaData.oSQLQueryComposer = null;
                     CurDBMetaData = null;
                     CurUnoDialog = null;
                 }

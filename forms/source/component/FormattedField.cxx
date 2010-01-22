@@ -583,7 +583,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
 
                     // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
                     // to recalc it, which is done by translateDbColumnToControlValue
-                    if ( m_xColumn.is() && m_xAggregateFastSet.is() && !m_xCursor->isBeforeFirst() && !m_xCursor->isAfterLast())
+                    if ( m_xColumn.is() && m_xAggregateFastSet.is()  && !m_xCursor->isBeforeFirst() && !m_xCursor->isAfterLast())
                     {
                         setControlValue( translateDbColumnToControlValue(), eOther );
                     }
