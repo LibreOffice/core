@@ -816,19 +816,30 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
 void ODatabaseModelImpl::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArgs )
 {
     ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
+    ENSURE_OR_THROW( _rURL.getLength(), "invalid URL" );
 
-    ::rtl::OUString sDocumentLocation( aMediaDescriptor.getOrDefault( "SalvagedFile", _rURL ) );
-    if ( !sDocumentLocation.getLength() )
-        // this indicates "the document is being recovered, but _rURL already is the real document URL,
-        // not the temporary document location"
-        sDocumentLocation = _rURL;
+    ::rtl::OUString sDocumentLocation( _rURL );
+    ::rtl::OUString sDocumentURL( _rURL );
 
     if ( aMediaDescriptor.has( "SalvagedFile" ) )
+    {
+        const ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
+        // If SalvagedFile is an empty string, this indicates "the document is being recovered, but _rURL already
+        // is the real document URL, not the temporary document location"
+        if ( sSalvagedFile.getLength() )
+        {
+            // otherwise, SalvagedFile is the URL of the document which we should mimic, though we're loaded from
+            // the file denoted by _rURL.
+            sDocumentLocation = _rURL;
+            sDocumentURL = sSalvagedFile;
+        }
+
         aMediaDescriptor.remove( "SalvagedFile" );
+    }
 
     m_aArgs = stripLoadArguments( aMediaDescriptor );
 
-    switchToURL( sDocumentLocation, _rURL );
+    switchToURL( sDocumentLocation, sDocumentURL );
 }
 
 // -----------------------------------------------------------------------------
