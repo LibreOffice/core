@@ -36,7 +36,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
-#include <com/sun/star/report/XFormattedField.hpp>
 /** === end UNO includes === **/
 
 //#include <boost/noncopyable.hpp>
