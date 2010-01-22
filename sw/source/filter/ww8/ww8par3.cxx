@@ -280,9 +280,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     }
     else
     {
-        //@TODO fix: copy pasting here!!!!!!!!!!!!!!
-        //REVIEW: don't let this throught.... sometime I forget to get rid of my proof of concept stuff. Please kindly remind me!!!!!
-
+        // TODO: review me
         String aBookmarkName;
         WW8PLCFx_Book* pB = pPlcxMan->GetBook();
         if (pB!=NULL)
