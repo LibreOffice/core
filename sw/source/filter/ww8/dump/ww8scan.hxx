@@ -48,7 +48,7 @@
 
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef WW8STRUC_HXX
 #include <ww8struc.hxx>     // FIB, STSHI, STD

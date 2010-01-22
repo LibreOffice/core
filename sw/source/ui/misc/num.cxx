@@ -93,9 +93,9 @@
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
 
 static BOOL bLastRelative = FALSE;
 

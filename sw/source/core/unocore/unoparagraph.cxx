@@ -48,7 +48,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
@@ -293,7 +293,6 @@ void SAL_CALL SwXParagraph::SetPropertyValues_Impl(
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap*   pMap = m_pPropSet->getPropertyMap();
-        OUString sTmp;
         SwParaSelection aParaSel( & aCursor );
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
@@ -306,7 +305,7 @@ void SAL_CALL SwXParagraph::SetPropertyValues_Impl(
                     throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
                 SwXTextCursor::SetPropertyValue(aCursor, *m_pPropSet,
-                                        sTmp, pValues[nProp]);
+                                        pPropertyNames[nProp], pValues[nProp]);
             }
         }
     }

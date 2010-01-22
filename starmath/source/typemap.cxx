@@ -141,10 +141,10 @@
 #define SvxCellVerJustifyEnumItem SfxVoidItem
 #define SvxCellOrientationEnumItem SfxVoidItem
 #include <sfx2/msg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/zoomitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
 #define SFX_TYPEMAP
 #include "smslots.hxx"

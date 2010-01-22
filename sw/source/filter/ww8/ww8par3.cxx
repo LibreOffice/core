@@ -33,7 +33,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
@@ -76,7 +76,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/postitem.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <errhdl.hxx>
 #include <unoobj.hxx>
 #include <doc.hxx>
@@ -96,7 +96,7 @@
 #include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 
 #include <IMark.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <stdio.h>

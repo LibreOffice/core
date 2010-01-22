@@ -38,7 +38,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/txtcmp.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <sfx2/docfile.hxx>
 #include "svx/unolingu.hxx"

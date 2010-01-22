@@ -35,10 +35,10 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #include <svtools/filter.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svxacorr.hxx>
@@ -64,12 +64,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/dlgutil.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/langitem.hxx>
 #include <svx/splwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/acorrcfg.hxx>
 #include <swmodule.hxx>
 #include <cmdid.h>
@@ -92,7 +92,7 @@
 // <- #111827#
 
 #include <unomid.h>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <map>
 #include <svtools/langtab.hxx>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
@@ -101,7 +101,7 @@
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 #include <svx/brshitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 
@@ -428,7 +428,7 @@ bGrammarResults(false)
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
-    const bool bIsDark = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -440,7 +440,7 @@ bGrammarResults(false)
         uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
         if (xNamed.is())
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bIsDark );
+            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bHC );
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
@@ -529,7 +529,7 @@ bGrammarResults(false)
                 if (xSvcInfo.is())
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName(), bIsDark) );
+                            xSvcInfo->getImplementationName(), bHC) );
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -583,7 +583,7 @@ bGrammarResults(false)
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING, rImg );
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -717,7 +717,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////

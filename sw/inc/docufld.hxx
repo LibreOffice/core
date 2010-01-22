@@ -35,7 +35,7 @@
 #include <tools/datetime.hxx>
 
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 #include "fldbas.hxx"
 #include "numrule.hxx"
@@ -547,6 +547,8 @@ public:
 
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
+
+    sal_uInt32 GetNumberOfParagraphs() const;
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );

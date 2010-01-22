@@ -30,7 +30,7 @@
 #ifndef _EDGLBLDC_HXX
 #define _EDGLBLDC_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SwSection;
 class SwTOXBase;

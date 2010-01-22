@@ -48,10 +48,10 @@
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <uitool.hxx>
 #include <pagedesc.hxx>

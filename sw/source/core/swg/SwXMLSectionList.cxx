@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <SwXMLSectionList.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

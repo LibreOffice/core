@@ -36,7 +36,7 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/langitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/tstpitem.hxx>
@@ -2220,7 +2220,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
     }
     pNd->InsertText( aNumStr, aPos,
-            IDocumentContentOperations::INS_EMPTYEXPAND );
+           static_cast<IDocumentContentOperations::InsertFlags>(
+               IDocumentContentOperations::INS_EMPTYEXPAND |
+               IDocumentContentOperations::INS_FORCEHINTEXPAND) );
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );

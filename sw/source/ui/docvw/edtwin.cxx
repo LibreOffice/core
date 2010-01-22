@@ -48,15 +48,15 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cmdevt.h>
 #include <sot/storage.hxx>
-#include <svtools/macitem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <svl/macitem.hxx>
+#include <unotools/securityoptions.hxx>
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
@@ -64,7 +64,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/htmlmode.hxx>
@@ -157,7 +157,7 @@
 #include "postit.hxx"
 
 //JP 11.10.2001: enable test code for bug fix 91313
-#if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
+#if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
 
@@ -1505,7 +1505,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case KS_CheckKey:
             eKeyState = KS_KeyToView;       // default weiter zur View
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // JP 19.01.99: zum Umschalten des Cursor Verhaltens in ReadOnly
             //              Bereichen

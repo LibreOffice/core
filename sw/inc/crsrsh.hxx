@@ -45,7 +45,6 @@
 #include <node.hxx>
 #include <tblsel.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <IMark.hxx>
 
 
 // einige Forward Deklarationen
@@ -468,7 +467,7 @@ public:
      */
     void Combine();
 
-#if defined( PRODUCT )
+#if !defined(DBG_UTIL)
     void SttCrsrMove() { ++nCrsrMove; StartAction(); }
     void EndCrsrMove( const BOOL bIdleEnd = FALSE )
             { EndAction( bIdleEnd ); --nCrsrMove; }

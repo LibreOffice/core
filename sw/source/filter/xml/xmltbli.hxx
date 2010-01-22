@@ -40,7 +40,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 class SwXMLImport;

@@ -32,12 +32,12 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>      // define ITEMIDs
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
