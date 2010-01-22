@@ -1335,7 +1335,11 @@ void SAL_CALL VCartesianAxis::createLabels()
             if(apTickIter.get())
             {
                 if(nTextLevel==0)
+                {
                     nScreenDistanceBetweenTicks = TickmarkHelper_2D::getTickScreenDistance( *apTickIter.get() );
+                    if( nTextLevelCount>1 )
+                        nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
+                }
 
                 AxisLabelProperties aCopy(m_aAxisLabelProperties);
                 aCopy.bRhythmIsFix = true;
