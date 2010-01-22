@@ -1671,7 +1671,7 @@ void SAL_CALL SfxBaseModel::saveToRecoveryFile( const ::rtl::OUString& i_TargetL
 
 void SAL_CALL SfxBaseModel::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
-    SfxModelGuard aGuard( *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
     // delegate to our "load" method
     ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
