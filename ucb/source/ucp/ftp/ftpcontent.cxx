@@ -577,13 +577,13 @@ Any SAL_CALL FTPContent::execute(
                 action = THROWINTERACTIVECONNECT;
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
                 action = THROWRESOLVENAME;
-            else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
-                    e.code() == CURLE_BAD_PASSWORD_ENTERED ||
-                    e.code() == CURLE_FTP_WEIRD_PASS_REPLY )
+            else if( e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
+                     e.code() == CURLE_FTP_WEIRD_PASS_REPLY ||
+                     e.code() == CURLE_LOGIN_DENIED)
                 action = THROWAUTHENTICATIONREQUEST;
-            else if(e.code() == CURLE_FTP_ACCESS_DENIED)
+            else if(e.code() == CURLE_REMOTE_ACCESS_DENIED)
                 action = THROWACCESSDENIED;
-            else if(e.code() == CURLE_FTP_QUOTE_ERROR)
+            else if(e.code() == CURLE_QUOTE_ERROR)
                 action = THROWQUOTE;
             else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
                 action = THROWNOFILE;
