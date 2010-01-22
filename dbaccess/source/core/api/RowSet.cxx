@@ -1843,6 +1843,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             i+1,
                                                                             m_xActiveConnection->getMetaData(),
                                                                             aDescription,
+                                                                            ::rtl::OUString(),
                                                                             m_aCurrentRow);
                         aColumnMap.insert(StringMap::value_type(sName,0));
                         aColumns->get().push_back(pColumn);
@@ -1933,14 +1934,22 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                         aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
+                    ::rtl::OUString sParseLabel;
+                    if ( xColumn.is() )
+                    {
+                        xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
+                    }
                     ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
                                                                         this,
                                                                         this,
                                                                         i,
                                                                         m_xActiveConnection->getMetaData(),
                                                                         aDescription,
+                                                                        sParseLabel,
                                                                         m_aCurrentRow);
                     aColumns->get().push_back(pColumn);
+
+
                     if(!sColumnLabel.getLength())
                     {
                         if(xColumn.is())
@@ -2761,11 +2770,15 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             rParent.m_pColumns->getByName(*pIter) >>= xColumn;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
+            ::rtl::OUString sParseLabel;
+            xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
             ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                                 this,
                                                                 i,
                                                                 rParent.m_xActiveConnection->getMetaData(),
                                                                 aDescription,
+                                                                sParseLabel,
                                                                 m_aCurrentRow);
             aColumns->get().push_back(pColumn);
             pColumn->setName(*pIter);

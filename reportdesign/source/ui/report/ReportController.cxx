@@ -3592,8 +3592,14 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         xShapePropLabel->setPosition(aPosLabel);
                     }
                     OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0]);
-                    uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
+                    uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
+
+                    ::rtl::OUString sLabel;
+                    if ( xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+                        xField->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+                    if ( sLabel.getLength() )
+                        xShapeProp->setLabel(sLabel);
 
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
                     {

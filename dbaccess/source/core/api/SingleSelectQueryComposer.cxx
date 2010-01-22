@@ -865,7 +865,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         {
             // This is a valid case. If we can syntactically parse the query, but not semantically
             // (e.g. because it is based on a table we do not know), then there will be no SelectColumns
-            aSelectColumns = ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, m_xMetaData );
+            aSelectColumns = ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, m_xMetaData ,xQueryColumns);
             break;
         }
 

@@ -69,6 +69,24 @@ using namespace beans;
 using namespace lang;
 using namespace container;
 using namespace ::svx;
+
+struct ColumnInfo
+{
+    ::rtl::OUString sColumnName;
+    ::rtl::OUString sLabel;
+    bool bColumn;
+    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
+        : sColumnName(i_sColumnName)
+        , sLabel(i_sLabel)
+        , bColumn(true)
+    {
+    }
+    ColumnInfo(const ::rtl::OUString& i_sColumnName)
+        : sColumnName(i_sColumnName)
+        , bColumn(false)
+    {
+    }
+};
 class OAddFieldWindowListBox    : public SvTreeListBox
 {
     OAddFieldWindow*                    m_pTabWin;
@@ -284,7 +302,24 @@ namespace
         const ::rtl::OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries );
+            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries) );
+    }
+    void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
+    {
+        uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
+        const ::rtl::OUString* pEntries = aEntries.getConstArray();
+        sal_Int32 nEntries = aEntries.getLength();
+        for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
+        {
+            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),UNO_QUERY_THROW);
+            ::rtl::OUString sLabel;
+            if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+                xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+            if ( sLabel.getLength() )
+                _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+            else
+                _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+        }
     }
 }
 
@@ -331,7 +366,7 @@ void OAddFieldWindow::Update()
                 m_xColumns = dbtools::getFieldsByCommandDescriptor( xCon, GetCommandType(), GetCommand(), m_xHoldAlive );
             if ( m_xColumns.is() )
             {
-                lcl_addToList( *m_pListBox, m_xColumns->getElementNames() );
+                lcl_addToList( *m_pListBox, m_xColumns );
                 uno::Reference< container::XContainer> xContainer(m_xColumns,uno::UNO_QUERY);
                 if ( xContainer.is() )
                     m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
@@ -429,10 +464,11 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
         _rDescriptor[ ::svx::daEscapeProcessing ]   <<= GetEscapeProcessing();
         _rDescriptor[ ::svx::daConnection ]         <<= getConnection();
 
-        ::rtl::OUString sColumnName = m_pListBox->GetEntryText( _pSelected );
-        _rDescriptor[ ::svx::daColumnName ]         <<= sColumnName;
-        if ( m_xColumns->hasByName( sColumnName ) )
-            _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(sColumnName);
+        ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
+        // ::rtl::OUString sColumnName = m_pListBox->GetEntryText( _pSelected );
+        _rDescriptor[ ::svx::daColumnName ]         <<= pInfo->sColumnName;
+        if ( m_xColumns->hasByName( pInfo->sColumnName ) )
+            _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
     }
 }
 // -----------------------------------------------------------------------------
@@ -441,8 +477,17 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
     if ( m_pListBox.get() )
     {
         ::rtl::OUString sName;
-        if ( _rEvent.Accessor >>= sName )
-            m_pListBox->InsertEntry(sName);
+        if ( (_rEvent.Accessor >>= sName) && m_xColumns->hasByName(sName) )
+        {
+            uno::Reference< beans::XPropertySet> xColumn(m_xColumns->getByName(sName),UNO_QUERY_THROW);
+            ::rtl::OUString sLabel;
+            if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+                xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+            if ( sLabel.getLength() )
+                m_pListBox->InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+            else
+                m_pListBox->InsertEntry( sName,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -452,7 +497,7 @@ void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEven
     {
         m_pListBox->Clear();
         if ( m_xColumns.is() )
-            lcl_addToList( *m_pListBox, m_xColumns->getElementNames() );
+            lcl_addToList( *m_pListBox, m_xColumns );
     }
 }
 // -----------------------------------------------------------------------------

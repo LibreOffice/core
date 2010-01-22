@@ -56,6 +56,7 @@ namespace dbaccess
                         sal_Int32 _nPos,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const ::rtl::OUString& _rDescription,
+                        const ::rtl::OUString& i_sLabel,
                         ORowSetCacheIterator& _rColumnValue);
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
