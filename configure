@@ -592,8 +592,6 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 BUILD_TYPE
 LOCAL_SOLVER
-DO_FETCH_TARBALLS
-TARFILE_LOCATION
 VERBOSE
 ENABLE_LAYOUT
 ENABLE_STATIC_GTK
@@ -910,6 +908,8 @@ DISABLE_ATL
 DISABLE_ACTIVEX
 ENABLE_DIRECTX
 WITH_BINFILTER
+DO_FETCH_TARBALLS
+TARFILE_LOCATION
 ENABLE_FONTCONFIG
 ENABLE_CUPS
 DISABLE_STRIP
@@ -1793,7 +1793,7 @@ Optional Features:
   --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
 
-  --disable-fetch-external Disables fetching external tarballs from web sources
+  --disable-fetch-external Disables fetching external tarballs from web sources.
 
   --enable-lockdown       Enables the gconf integration work in OOo
 
@@ -5524,6 +5524,16 @@ else
 $as_echo "no" >&6; }
 fi
 
+
+if test -z $TARFILE_LOCATION; then
+   TARFILE_LOCATION="DEFAULT"
+fi
+
+
+if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
+   && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
+   DO_FETCH_TARBALLS="yes"
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable filters for legacy binary file formats (StarOffice 5.2)" >&5
@@ -14889,30 +14899,41 @@ $as_echo "$as_me: WARNING: Building SeaMonkey with mingwin is not tested, and li
       MOZILLA_VERSION=1.1.14
    fi
    MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-   for e in gz bz2; do
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
-$as_echo_n "checking for $MOZILLA_SOURCE_VERSION.tar.$e... " >&6; }
-      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+   MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mozilla sources" >&5
+$as_echo_n "checking for mozilla sources... " >&6; }
+   if test -z "$MOZILLA_FETCH_FILE"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
-         HAVE_MOZILLA_TARBALL=n
+      HAVE_MOZILLA_TARBALL=n
+   else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $MOZILLA_FETCH_FILE" >&5
+$as_echo_n "checking for $MOZILLA_FETCH_FILE... " >&6; }
+      if test ! -e "$TARFILE_LOCATION/$MOZILLA_FETCH_FILE"; then
+         if test -z "$DO_FETCH"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: will be fetched" >&5
+$as_echo "will be fetched" >&6; }
+            HAVE_MOZILLA_TARBALL=y
+         else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+$as_echo "not found" >&6; }
+            HAVE_MOZILLA_TARBALL=n
+         fi
       else
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: found" >&5
 $as_echo "found" >&6; }
          HAVE_MOZILLA_TARBALL=y
       fi
-   done
+   fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         as_fn_error "Mozilla/SeaMonkey source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
-The archives can be found here:
-ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" "$LINENO" 5
+      as_fn_error "Mozilla/SeaMonkey source archive not found.
+Use \"./fetch_tarballs.sh ooo.lst\" to download." "$LINENO" 5
    fi
    if test "$_os" = "WINNT"; then
       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for moztools binaries" >&5
 $as_echo_n "checking for moztools binaries... " >&6; }
-      if test ! -e "moz/download/vc8-moztools.zip" ; then
-        as_fn_error "The following file is missing in moz/download: vc8-moztools.zip
+      if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip" ; then
+        as_fn_error "The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
 (from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" "$LINENO" 5
       else
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
@@ -22470,15 +22491,6 @@ else
 $as_echo "not set" >&6; }
 fi
 
-
-if test -z $TARFILE_LOCATION; then
-   TARFILE_LOCATION="DEFAULT"
-fi
-
-
-if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes"; then
-   DO_FETCH_TARBALLS="yes"
-fi
 
 echo "********************************************************************"
 echo "*                                                                  *"

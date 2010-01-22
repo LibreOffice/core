@@ -36,7 +36,7 @@ AC_ARG_ENABLE(ldap,
                           or OpenLDAP LDAP SDK
 ],,)
 AC_ARG_ENABLE(fetch-external,
-[  --disable-fetch-external Disables fetching external tarballs from web sources
+[  --disable-fetch-external Disables fetching external tarballs from web sources.
 ],,)
 AC_ARG_WITH(external-tar,
 [  --with-external-tar=<TARFILE PATH>   Specify path to tarfiles manually ],
@@ -1216,6 +1216,19 @@ else
 fi
 AC_SUBST(ENABLE_FONTCONFIG)
 
+dnl ===================================================================
+dnl find external tarballs.
+dnl ===================================================================
+if test -z $TARFILE_LOCATION; then
+   TARFILE_LOCATION="DEFAULT"
+fi
+AC_SUBST(TARFILE_LOCATION)
+
+if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
+   && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
+   DO_FETCH_TARBALLS="yes"
+fi
+AC_SUBST(DO_FETCH_TARBALLS)
 
 dnl ===================================================================
 dnl Disable legacy binary file formats filters
@@ -4420,26 +4433,34 @@ if test "$BUILD_MOZAB" = "TRUE"; then
       MOZILLA_VERSION=1.1.14
    fi
    MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-   for e in gz bz2; do
-      AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
-      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         AC_MSG_RESULT([not found])
-         HAVE_MOZILLA_TARBALL=n
+   MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
+   AC_MSG_CHECKING([for mozilla sources])
+   if test -z "$MOZILLA_FETCH_FILE"; then
+      AC_MSG_RESULT([not found])
+      HAVE_MOZILLA_TARBALL=n
+   else
+      AC_MSG_CHECKING([for $MOZILLA_FETCH_FILE])
+      if test ! -e "$TARFILE_LOCATION/$MOZILLA_FETCH_FILE"; then
+         if test -z "$DO_FETCH"; then
+            AC_MSG_RESULT([will be fetched])
+            HAVE_MOZILLA_TARBALL=y
+         else
+            AC_MSG_RESULT([not found])
+            HAVE_MOZILLA_TARBALL=n
+         fi
       else
          AC_MSG_RESULT([found])
          HAVE_MOZILLA_TARBALL=y
       fi
-   done
+   fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
-Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
-The archives can be found here:
-ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
+      AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
+Use "./fetch_tarballs.sh ooo.lst" to download.])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
-      if test ! -e "moz/download/vc8-moztools.zip" ; then
-        AC_MSG_ERROR([The following file is missing in moz/download: vc8-moztools.zip
+      if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip" ; then
+        AC_MSG_ERROR([The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
 (from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)])
       else
          AC_MSG_RESULT([ok])
@@ -6757,18 +6778,6 @@ else
 fi
 AC_SUBST(VERBOSE)
 
-dnl ===================================================================
-dnl external tarballs.
-dnl ===================================================================
-if test -z $TARFILE_LOCATION; then
-   TARFILE_LOCATION="DEFAULT"
-fi
-AC_SUBST(TARFILE_LOCATION)
-
-if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes"; then
-   DO_FETCH_TARBALLS="yes"
-fi
-AC_SUBST(DO_FETCH_TARBALLS)
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
