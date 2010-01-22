@@ -191,24 +191,6 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    /**
-     * Check the current list of reference tokens, and add the upper left
-     * corner of the minimum range that encloses all ranges if certain
-     * conditions are met.
-     *
-     * @param rRefTokens list of reference tokens
-     *
-     * @return true if the corner was added, false otherwise.
-     */
-    static bool addUpperLeftCornerIfMissing(::std::vector<ScSharedTokenRef>& rRefTokens);
-
-private:
-
-    void detectRangesFromDataSource(::std::vector<ScSharedTokenRef>& rRefTokens,
-                                    ::com::sun::star::chart::ChartDataRowSource& rRowSource,
-                                    bool& rRowSourceDetected,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource);
-
 private:
 
     ScDocument*                 m_pDocument;
