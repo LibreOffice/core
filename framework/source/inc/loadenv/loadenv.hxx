@@ -420,6 +420,7 @@ class LoadEnv : private ThreadHelpBase
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
 */
+
     //___________________________________________
     // static interface
 
@@ -456,6 +457,14 @@ class LoadEnv : private ThreadHelpBase
          */
         static EContentType classifyContent(const ::rtl::OUString&                                 sURL            ,
                                             const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
+
+        /** TODO document me ... */
+        static  void initializeUIDefaults(
+                    const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
+                    ::comphelper::MediaDescriptor& io_lMediaDescriptor,
+                    const bool _bUIMode,
+                    QuietInteraction** o_ppQuiteInteraction
+                );
 
         /** TODO document me ... */
         void impl_setResult(sal_Bool bResult);

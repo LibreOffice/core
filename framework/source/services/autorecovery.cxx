@@ -32,6 +32,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 #include "services/autorecovery.hxx"
+#include <loadenv/loadenv.hxx>
 
 //_______________________________________________
 // own includes
@@ -2622,6 +2623,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else
             continue; // TODO ERROR!
 
+        LoadEnv::initializeUIDefaults( m_xSMGR, lDescriptor, true, NULL );
+
         // <- SAFE ------------------------------
         aWriteLock.unlock();
 
@@ -2662,7 +2665,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             ::comphelper::MediaDescriptor lPatchDescriptor(rInfo.Document->getArgs());
             lPatchDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.RealFilter;
-            rInfo.Document->attachResource(sURL, lPatchDescriptor.getAsConstPropertyValueList());
+            rInfo.Document->attachResource(rInfo.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
         }
 
         css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);

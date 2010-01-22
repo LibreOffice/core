@@ -324,22 +324,41 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
 
     /*TODO progress is bound to a frame ... How can we set it here? */
 
+    // UI mode
+    const bool bUIMode =
+        ( ( m_eFeature & E_WORK_WITH_UI )                                                                          == E_WORK_WITH_UI ) &&
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_HIDDEN() , sal_False ) == sal_False      ) &&
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
+
+    initializeUIDefaults(
+        m_xSMGR,
+        m_lMediaDescriptor,
+        bUIMode,
+        &m_pQuietInteraction
+    );
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+}
+
+/*-----------------------------------------------
+    22.01.2010
+-----------------------------------------------*/
+void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
+                                    ::comphelper::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
+                                    QuietInteraction** o_ppQuietInteraction )
+{
     css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
     sal_Int16                                             nMacroMode         ;
     sal_Int16                                             nUpdateMode        ;
 
-    // UI mode
-    if (
-        ((m_eFeature & E_WORK_WITH_UI)                                                                          == E_WORK_WITH_UI) &&
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN() , sal_False) == sal_False     ) &&
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False) == sal_False     )
-       )
+    if ( i_bUIMode )
     {
         nMacroMode  = css::document::MacroExecMode::USE_CONFIG;
         nUpdateMode = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
         try
         {
-            xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(m_xSMGR->createInstance(IMPLEMENTATIONNAME_UIINTERACTIONHANDLER), css::uno::UNO_QUERY);
+            xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(i_rSMGR->createInstance(IMPLEMENTATIONNAME_UIINTERACTIONHANDLER), css::uno::UNO_QUERY);
         }
         catch(const css::uno::RuntimeException&) {throw;}
         catch(const css::uno::Exception&       ) {      }
@@ -349,27 +368,28 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     {
         nMacroMode  = css::document::MacroExecMode::NEVER_EXECUTE;
         nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
-        m_pQuietInteraction = new QuietInteraction();
-        m_pQuietInteraction->acquire();
-        xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(static_cast< css::task::XInteractionHandler* >(m_pQuietInteraction), css::uno::UNO_QUERY);
+        QuietInteraction* pQuietInteraction = new QuietInteraction();
+        xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(static_cast< css::task::XInteractionHandler* >(pQuietInteraction), css::uno::UNO_QUERY);
+        if ( o_ppQuietInteraction != NULL )
+        {
+            *o_ppQuietInteraction = pQuietInteraction;
+            (*o_ppQuietInteraction)->acquire();
+        }
     }
 
     if (
-        (xInteractionHandler.is()                                                                                            ) &&
-        (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()) == m_lMediaDescriptor.end())
+        (xInteractionHandler.is()                                                                                       ) &&
+        (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end())
        )
     {
-        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
     }
 
-    if (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == m_lMediaDescriptor.end())
-        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()] <<= nMacroMode;
+    if (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()] <<= nMacroMode;
 
-    if (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()) == m_lMediaDescriptor.end())
-        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    if (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
 
 /*-----------------------------------------------
