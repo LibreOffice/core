@@ -42,9 +42,10 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 LIB1OBJFILES = \
     $(SLO)$/appendunixshellword.obj \
     $(SLO)$/extendapplicationenvironment.obj \
+    $(SLO)$/solarmutex.obj \
     $(SLO)$/getprocessworkingdir.obj
 
 OBJFILES = $(OBJ)$/pathutils.obj
-SLOFILES = $(SLO)$/pathutils.obj $(LIB1OBJFILES)
+SLOFILES = $(SLO)$/pathutils.obj $(LIB1OBJFILES) $(SLO)$/solarmutex.obj
 
 .INCLUDE: target.mk

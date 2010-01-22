@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_gfx.cxx,v $
- * $Revision: 1.20.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -535,68 +534,47 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
 
-    if ( maLineColor.Is() && nPoints && pPath )
+    if ( nPoints > 1 && maLineColor.Is() && pPath )
     {
         PSSetColor (maLineColor);
         PSSetColor ();
         PSSetLineWidth ();
 
-        if (pFlgAry[0] != POLY_NORMAL) //There must be a starting point to moveto
-        {
-            return;
-        }
-        else
-        {
-            snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
-            WritePS(mpPageBody, pString);
-        }
+        snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
+        WritePS(mpPageBody, pString);
 
         // Handle the drawing of mixed lines mixed with curves
         // - a normal point followed by a normal point is a line
         // - a normal point followed by 2 control points and a normal point is a curve
         for (unsigned int i=1; i<nPoints;)
         {
-            if (pFlgAry[i+1] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
+            if (pFlgAry[i] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
             {
-                if (i+1 >= nPoints) return; //Make sure we don't pass the end of the array
                 snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
                 i++;
             }
             else //Otherwise we're drawing a spline
             {
-                if (i+3 >= nPoints) return; //Make sure we don't pass the end of the array
-                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
-                        pPath[i+1].X(), pPath[i+1].Y(),
-                        pPath[i+2].X(), pPath[i+2].Y(),
-                        pPath[i+3].X(), pPath[i+3].Y());
+                if (i+2 >= nPoints)
+                    return; //Error: wrong sequence of contol/normal points somehow
+                if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
+                    (pFlgAry[i+2] != POLY_CONTROL))
+                {
+                    snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
+                             pPath[i].X(), pPath[i].Y(),
+                             pPath[i+1].X(), pPath[i+1].Y(),
+                             pPath[i+2].X(), pPath[i+2].Y());
+                }
+                else
+                {
+                    DBG_ERROR( "PrinterGfx::DrawPolyLineBezier: Strange output" );
+                }
                 i+=3;
             }
             WritePS(mpPageBody, pString);
         }
-    }
 
-    // if eofill and stroke, save the current path
-    if( maFillColor.Is() && maLineColor.Is())
-        PSGSave();
-
-    // first draw area
-    if( maFillColor.Is() )
-    {
-        PSSetColor (maFillColor);
-        PSSetColor ();
-        WritePS (mpPageBody, "eofill\n");
-    }
-
-    // restore the current path
-    if( maFillColor.Is() && maLineColor.Is())
-        PSGRestore();
-
-    // now draw outlines
-    if( maLineColor.Is() )
-    {
-        PSSetColor (maLineColor);
-        PSSetColor ();
-        PSSetLineWidth ();
+        // now draw outlines
         WritePS (mpPageBody, "stroke\n");
     }
 }
@@ -635,7 +613,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
             }
             else
             {
-                fprintf(stderr, "Strange output\n");
+                DBG_ERROR( "PrinterGfx::DrawPolygonBezier: Strange output" );
             }
             i+=3;
         }
@@ -699,9 +677,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                 }
                 else
                 {
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf(stderr, "Strange output\n");
-#endif
+                    DBG_ERROR( "PrinterGfx::DrawPolyPolygonBezier: Strange output" );
                 }
                 j+=3;
             }
