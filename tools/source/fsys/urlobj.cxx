@@ -425,7 +425,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, false, false, false },
         { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
           false, false, false, true, false },
-        { "", "", 0, false, false, false, false, false, false, false, false },
+        { "", "", 0, false, false, false, false, true, true, true, false },
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
           true } };
 
@@ -874,7 +874,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
     // Parse //<user>;AUTH=<auth>@<host>:<port> or
     // //<user>:<password>@<host>:<port> or
     // //<reg_name>
-    if (m_eScheme == INET_PROT_GENERIC || getSchemeInfo().m_bAuthority)
+    if (getSchemeInfo().m_bAuthority)
     {
         sal_Unicode const * pUserInfoBegin = 0;
         sal_Unicode const * pUserInfoEnd = 0;
@@ -1226,7 +1226,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         pUserInfoBegin = pAuthority;
                         pUserInfoEnd = pPos;
                     }
-                else if (m_eScheme == INET_PROT_GENERIC || getSchemeInfo().m_bHost)
+                else if (getSchemeInfo().m_bHost)
                 {
                     pHostPortBegin = pAuthority;
                     pHostPortEnd = pPos;
@@ -1334,7 +1334,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
         if (pHostPortBegin)
         {
             sal_Unicode const * pPort = pHostPortEnd;
-            if ( (m_eScheme == INET_PROT_GENERIC || getSchemeInfo().m_bPort) && pHostPortBegin < pHostPortEnd )
+            if ( getSchemeInfo().m_bPort && pHostPortBegin < pHostPortEnd )
             {
                 sal_Unicode const * p1 = pHostPortEnd - 1;
                 while (p1 > pHostPortBegin && INetMIME::isDigit(*p1))
@@ -1363,7 +1363,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     }
                     break;
                 default:
-                    if (pHostPortBegin == pPort && pPort != pHostPortEnd)
+                    if (pHostPortBegin == pPort)
                     {
                         setInvalid();
                         return false;
@@ -2895,7 +2895,7 @@ bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
             break;
 
         default:
-            if (aSynHost.getLength() == 0  && m_aPort.isPresent())
+            if (aSynHost.getLength() == 0)
                 return false;
             break;
     }
@@ -3421,10 +3421,6 @@ bool INetURLObject::checkHierarchical() const {
             false, "INetURLObject::checkHierarchical vnd.sun.star.expand");
         return true;
     } else {
-        // set hierarchical for generic schemes
-        if (m_eScheme == INET_PROT_GENERIC) {
-            return true;
-        }
         return getSchemeInfo().m_bHierarchical;
     }
 }
@@ -4172,7 +4168,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     break;
 
                 default:
-                    if (aSynHost.getLength() == 0  && nThePort != 0)
+                    if (aSynHost.getLength() == 0)
                     {
                         setInvalid();
                         return false;
