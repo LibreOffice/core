@@ -130,6 +130,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionTables;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionQueries;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
         ::comphelper::ComponentContext                                                      m_aContext;
@@ -140,8 +141,10 @@ namespace dbaccess
 
         ::rtl::OUString                         m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
         ::rtl::OUString                         m_sDecimalSep;
+        ::rtl::OUString                         m_sCommand;
         ::com::sun::star::lang::Locale          m_aLocale;
         sal_Int32                               m_nBoolCompareMode; // how to compare bool values
+        sal_Int32                               m_nCommandType;
 
         // <properties>
         ::rtl::OUString                         m_sOrignal;
@@ -172,8 +175,8 @@ namespace dbaccess
 
         void setConditionByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column
                                 , sal_Bool andCriteria
-                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,::rtl::OUString>& _aSetFunctor);
-
+                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,::rtl::OUString>& _aSetFunctor
+                                ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
             @param  _aGetFunctor
@@ -249,18 +252,19 @@ namespace dbaccess
         virtual void SAL_CALL setElementaryQuery( const ::rtl::OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setFilter( const ::rtl::OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setStructuredFilter( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL appendFilterByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendFilterByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendGroupByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setGroup( const ::rtl::OUString& group ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setHavingClause( const ::rtl::OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setStructuredHavingClause( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL appendHavingClauseByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendHavingClauseByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendOrderByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool ascending ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setOrder( const ::rtl::OUString& order ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XSingleSelectQueryAnalyzer
         virtual ::rtl::OUString SAL_CALL getQuery(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setQuery( const ::rtl::OUString& command ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setCommand( const ::rtl::OUString& command,sal_Int32 CommandType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getFilter(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getGroup(  ) throw (::com::sun::star::uno::RuntimeException);

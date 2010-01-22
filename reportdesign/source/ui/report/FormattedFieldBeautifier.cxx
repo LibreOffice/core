@@ -91,39 +91,25 @@ namespace rptui
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
         ::rtl::OUString sDataField;
-        uno::Reference< report::XReportComponent > xComponent;
+        uno::Reference< report::XReportComponent > xComponent( _rxComponent, uno::UNO_QUERY );
 
         try
         {
-            // is it a formatted field?
-            uno::Reference< report::XFormattedField > xFormattedField( _rxComponent, uno::UNO_QUERY );
-            if ( xFormattedField.is() )
+            uno::Reference< report::XReportControlModel > xControlModel( xComponent, uno::UNO_QUERY );
+            if ( xControlModel.is() )
             {
-                sDataField = xFormattedField->getDataField();
-                xComponent.set( xFormattedField.get() );
-            }
-            else
-            {
-                // perhaps an image control?
-                uno::Reference< report::XImageControl > xImageControl( _rxComponent, uno::UNO_QUERY );
-                if ( xImageControl.is() )
-                {
-                    sDataField = xImageControl->getDataField();
-                    xComponent.set( xImageControl.get() );
-                }
-            }
-            if ( !xComponent.is() )
-                return;
+                sDataField = xControlModel->getDataField();
 
-            if ( sDataField.getLength() )
-            {
-                ReportFormula aFormula( sDataField );
-                sDataField = aFormula.getEqualUndecoratedContent();
+                if ( sDataField.getLength() )
+                {
+                    ReportFormula aFormula( sDataField );
+                    sDataField = aFormula.getEqualUndecoratedContent();
+                }
             }
 
             setPlaceholderText( getVclWindowPeer( xComponent ), sDataField );
         }
-        catch (uno::Exception e)
+        catch (uno::Exception)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

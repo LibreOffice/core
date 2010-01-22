@@ -145,9 +145,9 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     sInterval = sInterval.getToken(0,')',nIndex);
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:YEAR")))
+                                else if ( sFormula == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:YEAR")))
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
+                                else if ( sFormula == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }

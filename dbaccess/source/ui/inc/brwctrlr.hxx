@@ -344,14 +344,15 @@ namespace dbaui
         void        ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving = ::rtl::OUString());
-        void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
+        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserOrder(const ::rtl::OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition();
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   createParser_nothrow();
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );

@@ -157,6 +157,7 @@ namespace dbaccess
         ::rtl::OUString m_sSchemaName;
         ::rtl::OUString m_sTableName;
         ::rtl::OUString m_sRealName;
+        ::rtl::OUString m_sLabel;
         // </properties>
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xOriginalTableColumn;
@@ -168,7 +169,7 @@ namespace dbaccess
         OQueryColumn(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::rtl::OUString& _sNewName
+            const ::rtl::OUString i_sLabel
         );
 
         // XTypeProvider

@@ -110,7 +110,7 @@ namespace dbaccess
     public:
 
         // late constructor
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
 
         // ::com::sun::star::sdbc::XRow

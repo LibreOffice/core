@@ -650,7 +650,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 }
 
                 aInitialValues.push_back( NamedValue( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) ) );
-                aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
+                ::rtl::OUString sLabel;
+                xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+                if ( sLabel.getLength() )
+                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( sLabel ) ) );
+                else
+                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
 
                 Reference< XPropertySet > xGridCol( xColFactory->createColumn( aCurrentModelType ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
@@ -681,8 +686,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 Any aDescription;
                 if ( xColPSI->hasPropertyByName( PROPERTY_HELPTEXT ) )
                     aDescription = xColumn->getPropertyValue( PROPERTY_HELPTEXT );
-                if ( !aDescription.hasValue() )
-                    aDescription <<= ::rtl::OUString();
+                ::rtl::OUString sTemp;
+                aDescription >>= sTemp;
+                if ( !sTemp.getLength() )
+                    xColumn->getPropertyValue( PROPERTY_DESCRIPTION ) >>= sTemp;
+
+                aDescription <<= sTemp;
                 aInitialValues.push_back( NamedValue( PROPERTY_HELPTEXT, aDescription ) );
 
                 // ... horizontal justify

@@ -3567,6 +3567,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             aPos.Y += xShapeProp->getHeight();
                         aPos.X += nShapeWidth;
                     }
+                    ::rtl::OUString sLabel;
+                    if ( xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+                        xField->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+
                     if (pSectionViews[0] != pSectionViews[1] &&
                         nOBJID == OBJ_DLG_FORMATTEDFIELD) // we want this nice feature only at FORMATTEDFIELD
                     {
@@ -3574,6 +3578,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         // pSectionViews[1].position.x = pSectionViews[0].position.x
                         uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY_THROW);
                         uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY_THROW);
+                        if ( sLabel.getLength() )
+                            xShapePropTextField->setName(sLabel);
                         awt::Point aPosLabel = xShapePropLabel->getPosition();
                         awt::Point aPosTextField = xShapePropTextField->getPosition();
                         aPosTextField.X = aPosLabel.X;
@@ -3592,7 +3598,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         xShapePropLabel->setPosition(aPosLabel);
                     }
                     OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0]);
-                    uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
+                    uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
