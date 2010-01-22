@@ -145,7 +145,12 @@ rtl::Reference< Node > RootAccess::getNode() {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
                  pathRepresentation_),
-                static_cast< cppu::OWeakObject * >(this));
+                0);
+                // RootAccess::queryInterface indirectly calls
+                // RootAccess::getNode, so if this RootAccess were passed out in
+                // RuntimeException.Context, client code that called
+                // queryInterface on it would cause trouble; therefore,
+                // RuntimeException.Context is left null here
         }
         OSL_ASSERT(!path_.empty());
         name_ = path_.back();
