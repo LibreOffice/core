@@ -1039,7 +1039,8 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
       || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
     {
         nRet = errno;
-        (void) close( SourceFileFD );
+        close( SourceFileFD );
+        close( DestFileFD );
         return nRet;
     }
 
