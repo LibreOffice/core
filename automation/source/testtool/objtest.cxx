@@ -886,7 +886,8 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         if ( !pUIds )
             return;
         pNewDef = new ControlDef("Active",SmartId(0));
-        if (! pUIds->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
+        const ControlItem *pItem = pNewDef;
+        if (! pUIds->Insert(pItem))
         {
             ADD_WARNING_LOG2( GEN_RES_STR1c( S_DOUBLE_NAME, "Active" ), Filename, nLineNr );
             delete pNewDef;
@@ -993,7 +994,8 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                 OldTree = (ControlDef*)pNames->GetObject(nElement);
                 pNewDef = new ControlDef(aLongname,aShortname,OldTree,TRUE);
 
-                if (! pNames->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
+                const ControlItem *pItem = pNewDef;
+                if (! pNames->Insert(pItem))
                 {
                     ADD_WARNING_LOG2( GEN_RES_STR1( S_DOUBLE_NAME, aLine ), Filename, nLineNr );
                     delete pNewDef;
@@ -1060,7 +1062,8 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     }
                 }
 
-                if (! pNames->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
+                const ControlItem *pItem = pNewDef;
+                if (! pNames->Insert(pItem))
                 {
                     ADD_WARNING_LOG2( GEN_RES_STR1( S_DOUBLE_NAME, aLine ), Filename, nLineNr );
                     delete pNewDef;
@@ -1535,7 +1538,8 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 }
             }
 
-            if (! pNames->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
+            const ControlItem *pItem = pNewDef;
+            if (! pNames->Insert(pItem))
             {
                 DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
                 delete pNewDef;

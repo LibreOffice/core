@@ -139,7 +139,7 @@ DBG_DTOR(ControlItem,0);
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 
 #define MK_SON_ACCESS( ClassName )\
-    BOOL SonInsert( const ClassName *pNewEntry ) { return pSons->C40_PTR_INSERT( ControlItem, (ControlItem*&)pNewEntry ); }\
+    BOOL SonInsert( const ClassName *pNewEntry ) { const ControlItem *pItem = pNewEntry; return pSons->Insert( pItem ); }\
     BOOL SonSeek_Entry( const ClassName *pSearchEntry, USHORT *nRes = NULL) { return pSons->Seek_Entry( pSearchEntry, nRes ); }\
     ClassName* SonGetObject( USHORT nNr ) { return (ClassName*)pSons->GetObject( nNr ); }
 
