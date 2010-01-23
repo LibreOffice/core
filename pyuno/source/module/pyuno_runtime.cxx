@@ -449,31 +449,31 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_UNSIGNED_LONG:
     {
-        sal_uInt32 l;
+        sal_uInt32 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLong (l), SAL_NO_ACQUIRE );
     }
     case typelib_TypeClass_HYPER:
     {
-        sal_Int64 l;
+        sal_Int64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromLongLong (l), SAL_NO_ACQUIRE);
     }
     case typelib_TypeClass_UNSIGNED_HYPER:
     {
-        sal_uInt64 l;
+        sal_uInt64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLongLong (l), SAL_NO_ACQUIRE);
     }
     case typelib_TypeClass_FLOAT:
     {
-        float f;
+        float f = 0.0;
         a >>= f;
         return PyRef(PyFloat_FromDouble (f), SAL_NO_ACQUIRE);
     }
     case typelib_TypeClass_DOUBLE:
     {
-        double d;
+        double d = 0.0;
         a >>= d;
         return PyRef( PyFloat_FromDouble (d), SAL_NO_ACQUIRE);
     }

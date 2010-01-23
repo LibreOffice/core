@@ -853,8 +853,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) );
     if( ! b ){
-        float f1;
-        float f2;
+        float f1(0.0);
+        float f2(0.0);
         r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f1;
         r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f2;
         fprintf( stderr, "compareMyPropertySet: %f %f 3\n",f1,f2 );
@@ -864,7 +864,7 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double" ))) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
-    sal_Bool b1 ,b2;
+    sal_Bool b1(sal_False), b2(sal_False);
     Any a =r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
     a >>= b1;
     a = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
