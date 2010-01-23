@@ -2136,35 +2136,35 @@ void ORowSetValue::fill(const Any& _rValue)
         }
         case TypeClass_FLOAT:
         {
-            float aDummy;
+            float aDummy(0.0);
             _rValue >>= aDummy;
             (*this) = aDummy;
             break;
         }
         case TypeClass_DOUBLE:
         {
-            double aDummy;
+            double aDummy(0.0);
             _rValue >>= aDummy;
             (*this) = aDummy;
             break;
         }
         case TypeClass_BYTE:
         {
-            sal_Int8 aDummy;
+            sal_Int8 aDummy(0);
             _rValue >>= aDummy;
             (*this) = aDummy;
             break;
         }
         case TypeClass_SHORT:
         {
-            sal_Int16 aDummy;
+            sal_Int16 aDummy(0);
             _rValue >>= aDummy;
             (*this) = aDummy;
             break;
         }
         case TypeClass_LONG:
         {
-            sal_Int32 aDummy;
+            sal_Int32 aDummy(0);
             _rValue >>= aDummy;
             (*this) = aDummy;
             break;

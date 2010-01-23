@@ -1031,7 +1031,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     {
                         if ( rAdj.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
                         {
-                            double fValue;
+                            double fValue = 0.0;
                             rAdj.Value >>= fValue;
                             rUnitConverter.convertDouble( aStrBuffer, fValue );
                         }
