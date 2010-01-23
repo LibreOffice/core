@@ -406,7 +406,7 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, Sdr
         y2=BigMulDiv(x,nDirY,nDirX);
         long l1=Abs(x1)+Abs(y1);
         long l2=Abs(x2)+Abs(y2);
-        if (l1<=l2 !=(pView!=NULL && pView->IsBigOrtho())) {
+        if ((l1<=l2) != (pView!=NULL && pView->IsBigOrtho())) {
             x=x1; y=y1;
         } else {
             x=x2; y=y2;
