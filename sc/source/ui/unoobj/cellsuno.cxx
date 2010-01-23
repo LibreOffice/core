@@ -1126,7 +1126,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                 {
                     //  #87871# accept integer types because Basic passes a floating point
                     //  variable as byte, short or long if it's an integer number.
-                    double fVal;
+                    double fVal(0.0);
                     rElement >>= fVal;
                     pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
                 }
