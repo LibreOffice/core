@@ -374,10 +374,12 @@ void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxC
         Reference< XFilterController > xController( xElement, UNO_QUERY );
         OSL_ENSURE( xController.is(), "FmFilterAdapter::InsertElements: no XFilterController, cannot sync data!" );
         if ( xController.is() )
+        {
             if ( _bAdd )
                 xController->addFilterControllerListener( this );
             else
                 xController->removeFilterControllerListener( this );
+        }
     }
 }
 
