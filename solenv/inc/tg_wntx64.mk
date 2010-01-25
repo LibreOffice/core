@@ -484,16 +484,25 @@ $(SHL2IMPLIBN_X64):	\
 .ENDIF 			# "$(SHL2TARGETN_X64)"!=""
 
 
+$(SLO_X64)/%.obj : %.cpp
+    @echo ------------------------------
+    @echo Making: $@
+    @@-$(RM) $@ >& $(NULLDEV)
+    -$(MKDIR) $(@:d)
+    @-$(MKDIR) $(MISC_X64)
+    $(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cpp $(CAPTURE_OUTPUT)
 
 $(SLO_X64)/%.obj : %.cxx
     @echo Making: $@
     @@-$(RM) $@ >& $(NULLDEV)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
     $(COMMAND_ECHO)$(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
 
 $(SLO_X64)/%.obj : $(MISC)/%.c
     @echo Making: $@
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
     @@-$(RM) $@
     @$(TYPE) $(mktmp $(CC_X64) $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(MISC)/$*.c )
     @$(ECHONL)
@@ -502,9 +511,8 @@ $(SLO_X64)/%.obj : $(MISC)/%.c
 $(SLO_X64)/%.obj : %.c
     @echo Making: $@
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
     @@-$(RM) $@
     $(COMMAND_ECHO)$(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $*.c )
 
 .ENDIF			# "$(BUILD_X64)"!=""
-
-BUILD64=1

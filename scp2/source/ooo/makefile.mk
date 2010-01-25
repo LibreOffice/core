@@ -53,6 +53,11 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
 
+.IF "$(BUILD_X64)"!=""
+SCPDEFS+=-DBUILD_X64
+.ENDIF
+
+
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 
 .IF "$(PROF_EDITION)"!=""
@@ -212,6 +217,9 @@ SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
 .ENDIF
+.IF "$(SYSTEM_NEON)" == "YES"
+SCPDEFS+=-DSYSTEM_NEON
+.ENDIF
 
 # if yes or unset (neon not used) -> do not install openssl library!
 .IF $(SYSTEM_OPENSSL) != "YES"
@@ -293,7 +301,6 @@ PARFILES +=                        \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
-        mergemodules_ooo.par       \
         vc_redist.par              \
         windowscustomaction_ooo.par
 .ENDIF
