@@ -68,6 +68,9 @@
 #include <classes/fwkresid.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
+#include <xml/menuconfiguration.hxx>
+#include <uielement/menubarmanager.hxx>
+
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -75,6 +78,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::container;
 
 namespace framework
 {
@@ -326,5 +330,67 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
+MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, USHORT   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
+{
+}
+
+MenuToolbarController::~MenuToolbarController()
+{
+    try
+    {
+        if ( m_xMenuManager.is() )
+            m_xMenuManager->dispose();
+    }
+    catch( Exception& ) {}
+    if ( pMenu )
+    {
+        delete pMenu;
+        pMenu = NULL;
+    }
+
+}
+
+class Toolbarmenu : public PopupMenu
+{
+    public:
+    Toolbarmenu();
+    ~Toolbarmenu();
+};
+
+Toolbarmenu::Toolbarmenu()
+{
+    OSL_TRACE("**** contstructing Toolbarmenu 0x%x", this );
+}
+
+Toolbarmenu::~Toolbarmenu()
+{
+    OSL_TRACE("**** destructing Toolbarmenu 0x%x", this );
+}
+
+void SAL_CALL MenuToolbarController::click() throw (RuntimeException)
+{
+    createPopupWindow();
+}
+
+Reference< XWindow > SAL_CALL
+MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( !pMenu )
+    {
+        Reference< XDispatchProvider > xDispatch;
+        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+        pMenu = new Toolbarmenu();
+        m_xMenuManager.set( new MenuBarManager( m_xServiceManager, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
+        if ( m_xMenuManager.is() )
+        {
+            MenuBarManager* pMgr = dynamic_cast< MenuBarManager* >( m_xMenuManager.get() );
+            pMgr->SetItemContainer( m_xMenuDesc );
+        }
+    }
+
+    ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
+    pMenu->Execute( m_pToolbar, aRect, POPUPMENU_EXECUTE_DOWN );
+    return NULL;
+}
 } // namespace
 
