@@ -330,15 +330,22 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
             ::rtl::OUString sOldName,sNewName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
-            Reference<XChild> xChild(evt.Source,UNO_QUERY);
-            if ( xChild.is() )
-            {
-                Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
-                if ( xContent.is() )
-                    sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
-            }
 
-            getContainer()->elementReplaced( eType , sOldName, sNewName );
+            // if the old name is empty, then this is a newly inserted content. We're notified of it via the
+            // elementInserted method, so there's no need to handle it here.
+
+            if ( sOldName.getLength() )
+            {
+                Reference<XChild> xChild(evt.Source,UNO_QUERY);
+                if ( xChild.is() )
+                {
+                    Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
+                    if ( xContent.is() )
+                        sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
+                }
+
+                getContainer()->elementReplaced( eType , sOldName, sNewName );
+            }
         }
     }
 

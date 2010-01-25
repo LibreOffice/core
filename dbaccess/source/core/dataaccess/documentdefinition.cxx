@@ -1397,16 +1397,16 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                 return sal_True;
             if ( pDocuSave && pDocuSave->wasSelected() )
             {
-                ::osl::MutexGuard aGuard(m_aMutex);
-                Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
-                if ( xNC.is() )
-                {
-                    m_pImpl->m_aProps.aTitle = pDocuSave->getName();
-                    Reference< XContent> xContent = this;
-                    xNC->insertByName(pDocuSave->getName(),makeAny(xContent));
+                Reference<XNameContainer> xNC( pDocuSave->getContent(), UNO_QUERY_THROW );
 
-                    updateDocumentTitle();
-                }
+                ::osl::ResettableMutexGuard aGuard( m_aMutex );
+                NameChangeNotifier aNameChangeAndNotify( *this, pDocuSave->getName(), aGuard );
+                m_pImpl->m_aProps.aTitle = pDocuSave->getName();
+
+                Reference< XContent> xContent = this;
+                xNC->insertByName(pDocuSave->getName(),makeAny(xContent));
+
+                updateDocumentTitle();
             }
         }
 
@@ -2069,7 +2069,7 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
 {
     try
     {
-        osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+        ::osl::ResettableMutexGuard aGuard(m_aMutex);
         if ( _rNewName.equals( m_pImpl->m_aProps.aTitle ) )
             return;
 
@@ -2082,12 +2082,11 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
         Any aOld = makeAny( m_pImpl->m_aProps.aTitle );
         Any aNew = makeAny( _rNewName );
 
-        aGuard.clear();
-        fire(&nHandle, &aNew, &aOld, 1, sal_True );
-        m_pImpl->m_aProps.aTitle = _rNewName;
-        fire(&nHandle, &aNew, &aOld, 1, sal_False );
+        {
+            NameChangeNotifier aNameChangeAndNotify( *this, _rNewName, aGuard );
+            m_pImpl->m_aProps.aTitle = _rNewName;
+        }
 
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard2( m_aMutex );
         if ( m_xEmbeddedObject.is() && m_xEmbeddedObject->getCurrentState() == EmbedStates::ACTIVE )
             updateDocumentTitle();
     }
@@ -2239,6 +2238,43 @@ void SAL_CALL ODocumentDefinition::notifyClosing( const lang::EventObject& /*Sou
 void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
 }
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_rNewValue, const Any& i_rOldValue,
+        sal_Bool i_bVetoable, const NotifierAccess )
+{
+    fire( &i_nHandle, &i_rNewValue, &i_rOldValue, 1, i_bVetoable );
+}
+
+// =============================================================================
+// NameChangeNotifier
+// =============================================================================
+// -----------------------------------------------------------------------------
+NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefinition, const ::rtl::OUString& i_rNewName,
+                                  ::osl::ResettableMutexGuard& i_rClearForNotify )
+    :m_rDocumentDefinition( i_rDocumentDefinition )
+    ,m_aOldValue( makeAny( i_rDocumentDefinition.getCurrentName() ) )
+    ,m_aNewValue( makeAny( i_rNewName ) )
+    ,m_rClearForNotify( i_rClearForNotify )
+{
+    impl_fireEvent_throw( sal_True );
+}
+
+// -----------------------------------------------------------------------------
+NameChangeNotifier::~NameChangeNotifier()
+{
+    impl_fireEvent_throw( sal_False );
+}
+
+// -----------------------------------------------------------------------------
+void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
+{
+    m_rClearForNotify.clear();
+    m_rDocumentDefinition.firePropertyChange(
+        PROPERTY_ID_NAME, m_aNewValue, m_aOldValue, i_bVetoable, ODocumentDefinition::NotifierAccess() );
+    m_rClearForNotify.reset();
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

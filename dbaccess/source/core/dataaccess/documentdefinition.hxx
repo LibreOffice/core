@@ -201,6 +201,16 @@ public:
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
 
+    struct NotifierAccess { friend class NameChangeNotifier; private: NotifierAccess() { } };
+    const ::rtl::OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
+    void firePropertyChange(
+                  sal_Int32 i_nHandle,
+            const ::com::sun::star::uno::Any& i_rNewValue,
+            const ::com::sun::star::uno::Any& i_rOldValue,
+                  sal_Bool i_bVetoable,
+            const NotifierAccess
+        );
+
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
         @param _bOpenedInDesignMode
@@ -238,7 +248,6 @@ private:
     bool
         impl_close_throw();
 
-private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
@@ -250,7 +259,6 @@ private:
     // OContentHelper overridables
     virtual ::rtl::OUString determineContentType() const;
 
-private:
     /** fills the load arguments
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -345,6 +353,25 @@ private:
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment,
             ::com::sun::star::uno::Any& _out_rComponent,
             ::osl::ClearableMutexGuard & _aClearableGuard);
+};
+
+class NameChangeNotifier
+{
+public:
+    NameChangeNotifier(
+        ODocumentDefinition& i_rDocumentDefinition,
+        const ::rtl::OUString& i_rNewName,
+        ::osl::ResettableMutexGuard& i_rClearForNotify
+    );
+    ~NameChangeNotifier();
+
+private:
+            ODocumentDefinition&            m_rDocumentDefinition;
+    const   ::com::sun::star::uno::Any      m_aOldValue;
+    const   ::com::sun::star::uno::Any      m_aNewValue;
+    mutable ::osl::ResettableMutexGuard&    m_rClearForNotify;
+
+    void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };
 
 //........................................................................
