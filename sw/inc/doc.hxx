@@ -88,6 +88,8 @@ class SwList;
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
+#include <set>
+#include <map>
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
@@ -207,7 +209,8 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
-struct SwPrintData;
+class SwPrintData;
+class SwPrintUIOptions;
 class SdrPageView;
 struct SwConversionArgs;
 class SwRewriter;
@@ -215,6 +218,10 @@ class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
+class SwPrintData;
+class SwRenderData;
+class SwPageFrm;
+class SwViewOption;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -1360,6 +1367,15 @@ public:
     // travel over PaM Ring
     sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
+
+    // get the set of printable pages for the XRenderable API by
+    // evaluating the respective settings (see implementation)
+    void CalculatePagesForPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void CalculatePagePairsForProspectPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions,
+            sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
