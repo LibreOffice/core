@@ -179,6 +179,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         {
             ScAsciiOptions aOptions;
             pDlg->GetOptions( aOptions );
+            pDlg->SaveParameters();
             aFilterOptions = aOptions.WriteToString();
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }

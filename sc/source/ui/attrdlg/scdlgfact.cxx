@@ -198,6 +198,11 @@ void AbstractScImportAsciiDlg_Impl::SetTextToColumnsMode()
     pDlg->SetTextToColumnsMode();
 }
 
+void AbstractScImportAsciiDlg_Impl::SaveParameters()
+{
+    pDlg->SaveParameters();
+}
+
 // AbstractScImportAsciiDlg_Impl end
 
 //AbstractScAutoFormatDlg_Impl begin

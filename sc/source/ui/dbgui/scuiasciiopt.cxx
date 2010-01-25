@@ -422,13 +422,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
-    if (mbFileImport)
-        save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
-                         aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
-                         aRbFixed.IsChecked(),
-                         static_cast<sal_Int32>(aNfRow.GetValue()),
-                         static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
-                         static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
     delete[] mpRowPosArray;
 }
 
@@ -540,6 +533,20 @@ void ScImportAsciiDlg::SetTextToColumnsMode()
     // Always detect special numbers for text-to-columns mode.
     aCkbDetectNumber.Check();
     aCkbDetectNumber.Disable();
+}
+
+void ScImportAsciiDlg::SaveParameters()
+{
+    if (!mbFileImport)
+        // We save parameters only for file import.
+        return;
+
+    save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
+                     aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
+                     aRbFixed.IsChecked(),
+                     static_cast<sal_Int32>(aNfRow.GetValue()),
+                     static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
+                     static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()

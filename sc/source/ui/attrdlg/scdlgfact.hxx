@@ -120,6 +120,7 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for
     DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
     virtual void                        GetOptions( ScAsciiOptions& rOpt );
     virtual void                        SetTextToColumnsMode();
+    virtual void                        SaveParameters();
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg  //add for ScAutoFormatDlg

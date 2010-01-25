@@ -107,6 +107,7 @@ public:
 
     void                        GetOptions( ScAsciiOptions& rOpt );
     void                        SetTextToColumnsMode();
+    void                        SaveParameters();
 
 private:
     /** Sets the selected char set data to meCharSet and mbCharSetSystem. */

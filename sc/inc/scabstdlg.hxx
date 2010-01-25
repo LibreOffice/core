@@ -69,6 +69,7 @@ class AbstractScImportAsciiDlg : public VclAbstractDialog  //add for ScImportAsc
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
     virtual void                        SetTextToColumnsMode() = 0;
+    virtual void                        SaveParameters() = 0;
 };
 
 
