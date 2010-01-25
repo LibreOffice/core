@@ -204,9 +204,9 @@ testcase tmHelpContents
                       qaerrorlog "There is no printer available - please install one on your system!"
                   endif
                   sleep 2
-               kontext "DruckenDLG"
+               kontext "Printing"
                '/// On the dialog 'Print' press the button 'Cancel' ///'
-               DruckenDLG.cancel
+               Printing.cancel
             Kontext "TB_Help"
             '///+ click on button 'Add to Bookmarks ...' ///'
             SetBookmarks.Click

@@ -78,9 +78,9 @@ testcase tToolsOptionsWriterOther
     '- !!! -Current Document only- ist bei office beenden zu beachten!!!
 
     Call hNewDocument
-    printlog ("'///- Tools/Options/Writer: General ///")
+    printlog ("- Tools/Options/Writer: General ")
 
-    printlog ("'/// - save states ///")
+    printlog (" - save states ")
     ToolsOptions
     Call hToolsOptions ("WRITER","GENERAL")
 
@@ -94,7 +94,7 @@ testcase tToolsOptionsWriterOther
     iMasseinheit = Masseinheit.GetSelIndex
     sTabAbstand = Tabulatorenabstand.GetText
 
-    printlog ("'/// - all states inverting ///")
+    printlog ("- all states inverting ")
 
     if irgendwas(2) Then Feldbefehle.UnCheck Else Feldbefehle.Check
     if Feldbefehle.IsChecked  Then if irgendwas(3) Then Diagramme.UnCheck Else Diagramme.Check
@@ -124,11 +124,11 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - SO quit - start ///")
+    printlog ("- SO quit - start ")
 
     Call wOfficeRestart
 
-    printlog ("'/// - checking states ///")
+    printlog ("- checking states ")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GENERAL" )
 
@@ -144,7 +144,7 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - all UnCheck -> o ///")
+    printlog ("- all UnCheck -> o ")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GENERAL" )
 
@@ -159,7 +159,7 @@ testcase tToolsOptionsWriterOther
     Masseinheit.Select (1)
     Tabulatorenabstand.ToMin
     sTemp = Tabulatorenabstand.GetText
-    printlog ("'/// More test ///'")
+    printlog ("More test ///'")
     Tabulatorenabstand.More
     if ( sTemp = Tabulatorenabstand.GetText ) Then WarnLog "Tabulatorenabstand More-Button not working; stemp1: "+sTemp + " =? (2) " +Tabulatorenabstand.GetText
     sTemp = Tabulatorenabstand.GetText
@@ -167,7 +167,7 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all UnChecked ///")
+    printlog ("- check if all UnChecked ")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GENERAL" )
 
@@ -186,7 +186,7 @@ testcase tToolsOptionsWriterOther
 
 '---------------------------------------------------------------------------------
 
-    printlog ("'///  check if tab stops get saved in document ///")
+    printlog ("- check if tab stops get saved in document ")
     Call hNewDocument
 
     ' set Default Tab Stop to 2,5cm
@@ -240,7 +240,7 @@ testcase tToolsOptionsWriterOther
     Call hCloseDocument
 
 '---------------------------------------------------------------------------------
-    Printlog ("'/// - all Check -> x ///")
+    Printlog ("- all Check -> x ")
 
     ToolsOptions
     Call hToolsOptions ("WRITER","GENERAL")
@@ -264,7 +264,7 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - check if all Checked ///")
+    printlog ("- check if all Checked ")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GENERAL" )
 
@@ -280,7 +280,7 @@ testcase tToolsOptionsWriterOther
     if ( Masseinheit.GetSelIndex <> iTemp ) Then WarnLog "Masseinheit is not item " + iTemp + " it's: " + Masseinheit.GetSelIndex
     if (LiberalMeasurement (sTemp,Tabulatorenabstand.GetText) <> TRUE ) Then WarnLog "Tabulatorenabstand is not " + sTemp + " it's: " + Tabulatorenabstand.GetText
 
-    printlog ("'/// - restore states ///")
+    printlog ("- restore states ")
 
 '   if ( irgendwas(1) =  TRUE ) Then NurFuerAktuellesDokument.Check            Else NurFuerAktuellesDokument.UnCheck
     if ( irgendwas(2) =  TRUE ) Then Feldbefehle.Check                         Else Feldbefehle.UnCheck
@@ -327,7 +327,7 @@ sub hGetAllOptionsWriterGeneralCaption
     fHoleTabPage2 = ConvertPath(gOfficePath + "user\work\opt2_" + iSprache + "." + gPlatGroup)
 
     '------------------------
-    Printlog "'///(1/3) Get all items before selecting smth. ///"
+    Printlog "(1/3) Get all items before selecting smth. "
     ' put them in lsHoleTabPage and write them to 'user\work\opt__...'
 
     Call hNewDocument
@@ -355,7 +355,7 @@ sub hGetAllOptionsWriterGeneralCaption
 
 '   ------------------------
 
-    Printlog "'///(2/3) Select every ListItem & exit with OK ///"
+    Printlog "(2/3) Select every ListItem & exit with OK "
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
@@ -381,7 +381,7 @@ sub hGetAllOptionsWriterGeneralCaption
     ExtrasOptionenDlg.OK
 
     '------------------------
-    Printlog "'///(3/3) Get all items after selecting all ///"
+    Printlog "(3/3) Get all items after selecting all "
     ' put them in lsHoleTabPage2 and write them to 'user\work\opt2_...'
 
     ToolsOptions
@@ -429,9 +429,9 @@ testcase tToolsOptionsWriterAutoCaption
 
     '/// !no more Listentries than 9, you have to update the allocation for the var's! ///'
     Call hNewDocument
-    printlog "'///- Tools/Options/Writer: AutoCaption ///"
+    printlog "- Tools/Options/Writer: AutoCaption "
 
-    printlog ("'/// - save states ///")
+    printlog ("- save states ")
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
@@ -463,7 +463,7 @@ testcase tToolsOptionsWriterAutoCaption
     next i
 
     '-- just checking the checkboxes of 'ObjectList'
-    printlog ("'/// - uncheck all object - checkboxes ///")
+    printlog ("- uncheck all object - checkboxes ")
     for i=1 to NumberOfObjects
         ObjectList.Select (i)
         ObjectList.UnCheck
@@ -471,7 +471,7 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    printlog ("'/// - verify if all unchecked and check all ///")
+    printlog ("- verify if all unchecked and check all ")
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
@@ -486,7 +486,7 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - verify all checkboxes are checked ///")
+    printlog ("- verify all checkboxes are checked ")
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
@@ -498,10 +498,11 @@ testcase tToolsOptionsWriterAutoCaption
         end if
     next i
 
-    printlog ("'/// - change states ///")
+    printlog ("- change states ")
     '/// look if properties get saved for each list item
     for i=1 to NumberOfObjects
         ObjectList.Select (i)
+        printlog " - " & ObjectList.GetText
         if ObjectList.IsChecked Then
             if i <= 7 then Numbering.Select i
             CaptionSeparator.Settext "Caption Separator " & cstr(i)
@@ -520,16 +521,12 @@ testcase tToolsOptionsWriterAutoCaption
                     ApplyBorderAndShadow.Check
                 case 4:
                     Category.Select 5
-                    Position.Select 2
                 case 5:
                     Category.Select 2
-                    Position.Select 1
                 case 6:
                     Category.Select 3
-                    Position.Select 2
                 case 7:
                     Category.Select 4
-                    Position.Select 1
                 case 8:
                     Category.Select 5
                     if Numbering.GetItemCount > 7 then
@@ -537,7 +534,6 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         Numbering.Select 4
                     end if
-                    Position.Select 2
                 case 9:
                     Category.Select 2
                     if Numbering.GetItemCount > 7 then
@@ -545,7 +541,6 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         Numbering.Select 5
                     end if
-                    Position.Select 1
 
                 end select
                 vCategoryTmp(i) = Category.GetSelText
@@ -556,17 +551,17 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - SO quit - start ///")
+    printlog ("- SO quit - start")
 
     Call wOfficeRestart
 
-    printlog ("'/// - checking states ///")
+    printlog ("- checking states ")
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
     for i=1 to NumberOfObjects
-        printlog "-   checking: " & ObjectList.Gettext
         ObjectList.Select (i)
+        printlog " - " & ObjectList.GetText
 		wait 500
         if ObjectList.IsChecked Then
             if i <= 7 then
@@ -632,31 +627,31 @@ testcase tToolsOptionsWriterAutoCaption
                     end if
 
                 case 4:
-                    if Position.GetSelIndex <> 2 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
                 case 5:
-                    if Position.GetSelIndex <> 1 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
                 case 6:
-                    if Position.GetSelIndex <> 2 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
                 case 7:
-                    if Position.GetSelIndex <> 1 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
                 case 8:
@@ -674,10 +669,10 @@ testcase tToolsOptionsWriterAutoCaption
                         end if
                     end if
 
-                    if Position.GetSelIndex <> 2 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
                 case 9:
@@ -695,10 +690,10 @@ testcase tToolsOptionsWriterAutoCaption
                         end if
                     end if
 
-                    if Position.GetSelIndex <> 1 then
-                        Warnlog "-    'Position' changed after restart"
+                    if Position.IsEnabled = true then
+                        Warnlog "-    'Position' should be disabled"
                     else
-                        printlog "-    'Position' => ok"
+                        printlog "-    'Position' disabled => ok"
                     end if
 
             end select
@@ -710,7 +705,7 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    printlog ("'/// - restore states ///")
+    printlog ("- restore states ")
 
     ToolsOptions
     Call hToolsOptions ("WRITER","AutoCaption")
@@ -765,10 +760,10 @@ testcase tToolsOptionsWriterGeneral
 
     ' State is saved with document. Thats why I use 3 docs
     Call hNewDocument
-    printlog "'///- Extras / Optionen / Sonstiges / Verkn?pfungen aktualisieren ///"
+    printlog "- Extras / Optionen / Sonstiges / Verkn?pfungen aktualisieren "
     ToolsOptions
     Call hToolsOptions("WRITER","GENERAL")
-    printlog "'///- Update links when loading -> always ///"
+    printlog "- Update links when loading -> always "
     Immer.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -796,7 +791,7 @@ testcase tToolsOptionsWriterGeneral
     ToolsOptions
     Call hToolsOptions("WRITER","GENERAL")
     if not Immer.IsChecked then Warnlog "Option 'always' has not been changed"
-    printlog "'///- Update links when loading -> On request ///"
+    printlog "- Update links when loading -> On request "
     AufNachfrage.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -820,7 +815,7 @@ testcase tToolsOptionsWriterGeneral
     ToolsOptions
     Call hToolsOptions("WRITER","GENERAL")
     if not AufNachfrage.IsChecked then Warnlog "Option 'On request' has been changed"
-    printlog "'///- Update links when loading -> Never ///"
+    printlog "- Update links when loading -> Never "
     Nie.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -873,7 +868,7 @@ endcase
 testcase tToolsOptionsWriterMailMerge
 
     Call hNewDocument
-    printlog ("'///- Tools/Options/Writer: Mail Merge ///")
+    printlog ("- Tools/Options/Writer: Mail Merge ")
     Kontext "Navigator"
     if Navigator.Exists then ViewNavigator
     ToolsOptions
