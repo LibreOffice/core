@@ -2665,7 +2665,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             ::comphelper::MediaDescriptor lPatchDescriptor(rInfo.Document->getArgs());
             lPatchDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.RealFilter;
-            rInfo.Document->attachResource(rInfo.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
+            rInfo.Document->attachResource(sURL, lPatchDescriptor.getAsConstPropertyValueList());
         }
 
         css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
