@@ -368,13 +368,13 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
             case(-1):
                     if (isInstall4AllUsers)
                     {
-                        key = HKEY_CURRENT_USER;
-                        OutputDebugStringFormat(L"HKEY_CURRENT_USER" );
+                        key = HKEY_LOCAL_MACHINE;
+                        OutputDebugStringFormat(L"HKEY_LOCAL_MACHINE" );
                     }
                     else
                     {
-                        key = HKEY_LOCAL_MACHINE;
-                        OutputDebugStringFormat(L"HKEY_LOCAL_MACHINE" );
+                        key = HKEY_CURRENT_USER;
+                        OutputDebugStringFormat(L"HKEY_CURRENT_USER" );
                     }
                 break;
             case(0):
@@ -393,7 +393,9 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                     key = HKEY_USERS;
                     OutputDebugStringFormat(L"HKEY_USERS" );
                 break;
-
+            default:
+                    OutputDebugStringFormat(L"Unknown Root!" );
+                break;
         }
 
         OutputDebugStringFormat(L"Key:");
