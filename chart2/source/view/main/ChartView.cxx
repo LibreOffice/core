@@ -2631,7 +2631,6 @@ void ChartView::impl_updateView()
                 // /--
                 ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
                 m_pDrawModelWrapper->lockControllers();
-                m_pDrawModelWrapper->updateTablesFromChartModel( m_xChartModel );
                 // \--
             }
 
