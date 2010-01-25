@@ -133,6 +133,12 @@ public:
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // OPropertySetHelper
+    virtual void SAL_CALL getFastPropertyValue(
+                                ::com::sun::star::uno::Any& o_rValue,
+                                sal_Int32 i_nHandle
+                            ) const;
+
     // XComponentSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException);
 

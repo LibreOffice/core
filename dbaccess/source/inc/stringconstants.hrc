@@ -183,6 +183,7 @@
 #define PROPERTY_ID_THOUSAND_DELIMITER      140
 #define PROPERTY_ID_ENCODING                141
 #define PROPERTY_ID_HELP_URL                142
+#define PROPERTY_ID_PERSISTENT_PATH         143
 
 //============================================================
 //= property names

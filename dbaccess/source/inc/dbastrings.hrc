@@ -48,7 +48,9 @@ namespace dbaccess
     //============================================================
     //= Properties
     //============================================================
-    DECLARE_CONSTASCII_USTRING(PROPERTY_APPLYFORMDESIGNMODE);
+    DECLARE_CONSTASCII_USTRING( PROPERTY_APPLYFORMDESIGNMODE );
+    DECLARE_CONSTASCII_USTRING( PROPERTY_IS_FORM );
+    DECLARE_CONSTASCII_USTRING( PROPERTY_PERSISTENT_PATH );
 }
 
 #endif // DBACCESS_SHARED_DBASTRINGS_HRC

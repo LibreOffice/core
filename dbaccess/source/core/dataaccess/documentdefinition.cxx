@@ -632,15 +632,39 @@ IMPLEMENT_SERVICE_INFO1(ODocumentDefinition,"com.sun.star.comp.dba.ODocumentDefi
 //--------------------------------------------------------------------------
 void ODocumentDefinition::registerProperties()
 {
-    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
-    registerProperty(PROPERTY_AS_TEMPLATE, PROPERTY_ID_AS_TEMPLATE, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.bAsTemplate, ::getCppuType(&m_pImpl->m_aProps.bAsTemplate));
-    registerProperty(PROPERTY_PERSISTENT_NAME, PROPERTY_ID_PERSISTENT_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.sPersistentName, ::getCppuType(&m_pImpl->m_aProps.sPersistentName));
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsForm")), PROPERTY_ID_IS_FORM, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_bForm, ::getCppuType(&m_bForm));
+#define REGISTER_PROPERTY( name, location ) \
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+
+#define REGISTER_PROPERTY_BV( name, location ) \
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+
+    REGISTER_PROPERTY_BV( NAME,            m_pImpl->m_aProps.aTitle            );
+    REGISTER_PROPERTY   ( AS_TEMPLATE,     m_pImpl->m_aProps.bAsTemplate       );
+    REGISTER_PROPERTY   ( PERSISTENT_NAME, m_pImpl->m_aProps.sPersistentName   );
+    REGISTER_PROPERTY   ( IS_FORM,         m_bForm                             );
 }
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
+{
+    if ( i_nHandle == PROPERTY_ID_PERSISTENT_PATH )
+    {
+        ::rtl::OUString sPersistentPath;
+        if ( m_pImpl->m_aProps.sPersistentName.getLength() )
+        {
+            ::rtl::OUStringBuffer aBuffer;
+            aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
+            aBuffer.append( sal_Unicode( '/' ) );
+            aBuffer.append( m_pImpl->m_aProps.sPersistentName );
+            sPersistentPath = aBuffer.makeStringAndClear();
+        }
+        o_rValue <<= sPersistentPath;
+        return;
+    }
+
+    OPropertyStateContainer::getFastPropertyValue( o_rValue, i_nHandle );
+}
+
 // -----------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL ODocumentDefinition::getPropertySetInfo(  ) throw(RuntimeException)
 {
@@ -658,10 +682,21 @@ IPropertyArrayHelper& ODocumentDefinition::getInfoHelper()
 //--------------------------------------------------------------------------
 IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
 {
+    // properties maintained by our base class (see registerProperties)
     Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new OPropertyArrayHelper(aProps);
+    describeProperties( aProps );
+
+    // properties not maintained by our base class
+    Sequence< Property > aManualProps( 1 );
+    aManualProps[0].Name = PROPERTY_PERSISTENT_PATH;
+    aManualProps[0].Handle = PROPERTY_ID_PERSISTENT_PATH;
+    aManualProps[0].Type = ::getCppuType( static_cast< const ::rtl::OUString* >( NULL ) );
+    aManualProps[0].Attributes = PropertyAttribute::READONLY;
+
+    return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );
 }
+
+// -----------------------------------------------------------------------------
 class OExecuteImpl
 {
     sal_Bool& m_rbSet;
@@ -669,6 +704,7 @@ public:
     OExecuteImpl(sal_Bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=sal_True; }
     ~OExecuteImpl(){ m_rbSet = sal_False; }
 };
+
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -1569,18 +1605,15 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::separateOpenCommandArguments( const Sequence< PropertyValue >& i_rOpenCommandArguments,
-        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& o_rEmbeddedObjectDescriptor )
+        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& /*o_rEmbeddedObjectDescriptor*/ )
 {
     ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
     o_rDocumentLoadArgs.merge( aOpenCommandArguments, false );
 
-    // the only OpenCommandArgument so far, which belongs into the EmbeddedObjectDescriptor, and not the document's
-    // media descriptor, is RecoverFromStorage
-    if ( aOpenCommandArguments.has( "RecoverFromStorage" ) )
-    {
-        o_rEmbeddedObjectDescriptor.put( "RecoverFromStorage", aOpenCommandArguments.get( "RecoverFromStorage" ) );
-        o_rDocumentLoadArgs.remove( "RecoverFromStorage" );
-    }
+    // This method is to separate OpenCommandArguments into args which belong into the EmbeddedObjectDescriptor,
+    // and args which belong into the document's media descriptor.
+
+    // Well, there was some intermediate state where such args really existed - at the moment, they don't.
 }
 
 // -----------------------------------------------------------------------------
