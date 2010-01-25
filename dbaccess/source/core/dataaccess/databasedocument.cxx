@@ -579,7 +579,7 @@ namespace
     DocumentGuard aGuard( *this );
 
     // The implementation here is somewhat sloppy, in that it returns whether *any* part of the whole
-    // database document, including opened sub components, is modified. This is more that what is requested:
+    // database document, including opened sub components, is modified. This is more than what is requested:
     // We need to return <TRUE/> if the doc itself, or any of the opened sub components, has been modified
     // since the last call to any of the save* methods, or since the document has been loaded/created.
     // However, the API definition explicitly allows to be that sloppy ...

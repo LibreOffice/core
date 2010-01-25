@@ -834,7 +834,10 @@ void ODatabaseModelImpl::attachResource( const ::rtl::OUString& _rURL, const Seq
             sDocumentURL = sSalvagedFile;
         }
 
-        aMediaDescriptor.remove( "SalvagedFile" );
+        if ( sSalvagedFile == _rURL )
+            // SalvagedFile doesn't carry any information anymore
+            aMediaDescriptor.remove( "SalvagedFile" );
+
     }
 
     m_aArgs = stripLoadArguments( aMediaDescriptor );
