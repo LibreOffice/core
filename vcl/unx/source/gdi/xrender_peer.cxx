@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
 #include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
