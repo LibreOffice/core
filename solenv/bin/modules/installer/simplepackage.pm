@@ -135,7 +135,7 @@ sub register_extensions
                 $localtemppath =~ s/\\/\//g;
                 $localtemppath = "/".$localtemppath;
             }
-            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " -env:UNO_JAVA_JFW_ENV_JREHOME=true -env:UNO_JAVA_JFW_ENV_CLASSPATH=true 2\>\&1 |";
 
             print "... $systemcall ...\n";
 
