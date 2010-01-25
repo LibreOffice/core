@@ -35,14 +35,16 @@
 #include "sal/types.h"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include "shell.hxx"
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
+#include <vcl/jobset.hxx>
 class SfxBaseController;
 class Size;
 class Fraction;
@@ -269,6 +271,7 @@ public:
     virtual PrintDialog*        CreatePrintDialog( Window *pParent );
     void                        LockPrinter( BOOL bLock = TRUE );
     BOOL                        IsPrinterLocked() const;
+    virtual JobSetup            GetJobSetup() const;
 
     // Workingset
     virtual void                WriteUserData( String&, BOOL bBrowse = FALSE );
@@ -289,6 +292,11 @@ public:
     */
     void                        SetCurrentDocument() const;
 
+    /** get an XRenderable instance that can render this docuement
+    */
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+
+
     virtual void                MarginChanged();
     const Size&                 GetMargin() const;
     void                        SetMargin( const Size& );
@@ -305,6 +313,7 @@ public:
     BOOL                        TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
     void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
+    void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
 
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, BOOL );
 

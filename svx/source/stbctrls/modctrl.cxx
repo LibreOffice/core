@@ -36,7 +36,7 @@
 #ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
 #define _SVX_MODCTRL_CXX

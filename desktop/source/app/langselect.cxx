@@ -39,7 +39,7 @@
 #include <rtl/string.hxx>
 #endif
 #ifndef _SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #include <tools/resid.hxx>
 #include <i18npool/mslangid.hxx>
@@ -142,6 +142,18 @@ bool LanguageSelection::prepareLanguage()
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
             xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+
+            MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
+
+            OUString sLocale;
+            xProp->getPropertyValue(OUString::createFromAscii("ooSetupSystemLocale")) >>= sLocale;
+            if ( sLocale.getLength() )
+            {
+                loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+                MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
+            }
+            else
+                MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
 
             bSuccess = sal_True;
         }

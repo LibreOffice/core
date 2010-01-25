@@ -31,7 +31,7 @@
 #define _OUTLINER_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #ifndef RID_OUTL_START

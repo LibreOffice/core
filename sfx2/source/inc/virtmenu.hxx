@@ -32,7 +32,7 @@
 #define _SFXVIRTMENU_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "mnucfga.hxx"
 

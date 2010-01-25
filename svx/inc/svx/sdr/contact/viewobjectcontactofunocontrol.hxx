@@ -99,14 +99,24 @@ namespace sdr { namespace contact {
         */
         virtual void ActionChanged();
 
+        /** to be called when any aspect of the control which requires view updates changed
+        */
+        struct ImplAccess { friend class ViewObjectContactOfUnoControl_Impl; friend class ViewObjectContactOfUnoControl; private: ImplAccess() { } };
+        void onControlChangedOrModified( ImplAccess ) { impl_onControlChangedOrModified(); }
+
     protected:
         ~ViewObjectContactOfUnoControl();
 
         // support for Primitive2D
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
+        // visibility check
+        virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const;
+        /// to be called when any aspect of the control which requires view updates changed
+        void impl_onControlChangedOrModified();
+
     private:
-        ViewObjectContactOfUnoControl();                                                  // never implemented
+        ViewObjectContactOfUnoControl();                                                    // never implemented
         ViewObjectContactOfUnoControl( const ViewObjectContactOfUnoControl& );              // never implemented
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
     };

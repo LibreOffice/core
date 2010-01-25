@@ -58,7 +58,7 @@
 //#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
 //#endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/storage.hxx>
@@ -261,6 +261,7 @@ public:
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
     void                        Stamp_SetPrintCancelState(sal_Bool bState);
@@ -303,6 +304,9 @@ public:
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    virtual sal_Bool            AcceptStateUpdate() const;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 
@@ -589,7 +593,7 @@ public:
                                         sal_uInt16 nIdx2 = INDEX_IGNORE,
                                         sal_uInt16 nIdx3 = INDEX_IGNORE);
 
-    virtual sal_Bool            Print( Printer &rPrt,
+    sal_Bool                    Print( Printer &rPrt,
                                        sal_uInt16 nIdx1,
                                        sal_uInt16 nIdx2 = INDEX_IGNORE,
                                        sal_uInt16 nIdx3 = INDEX_IGNORE,
@@ -889,6 +893,7 @@ public:
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     SfxObjectShell*         GetObjectShell() const
                             { return pObjSh; }
+
 };
 
 #endif

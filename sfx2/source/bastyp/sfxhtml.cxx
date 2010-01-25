@@ -46,9 +46,9 @@
 #include <svtools/imaprect.hxx>
 #ifndef _SVSTDARR_ULONGS_DECL
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 

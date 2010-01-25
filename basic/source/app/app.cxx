@@ -80,7 +80,7 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 
 #include <ucbhelper/content.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace comphelper;
 using namespace cppu;
@@ -1401,19 +1401,10 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 //          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
             break;
         case RID_FILEPRINT:
-#ifndef UNX
             if( pWork )
                 pPrn->Print( pWork->GetText(), pWork->pDataEdit->GetText(), this );
-#else
-            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
-#endif
             break;
         case RID_FILESETUP:
-#ifndef UNX
-            pPrn->Setup();
-#else
-            InfoBox( this, SttResId( IDS_NOPRINTERERROR ) ).Execute();
-#endif
             break;
         case RID_QUIT:
             if( Close() ) aBasicApp.Quit();
