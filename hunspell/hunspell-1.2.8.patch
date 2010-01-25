@@ -343,7 +343,7 @@
 -#include "config.h"
 --- misc/hunspell-1.2.8/src/hunspell/makefile.mk	Tue Jun 17 10:57:55 2008
 +++ misc/build/hunspell-1.2.8/src/hunspell/makefile.mk	Thu Feb 19 18:13:52 2009
-@@ -60,11 +60,12 @@
+@@ -60,11 +60,13 @@
  #
  #*************************************************************************
  
@@ -355,6 +355,7 @@
 -LIBTARGET=NO
 +LIBTARGET=YES
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB= 
  
  #----- Settings ---------------------------------------------------------
  
