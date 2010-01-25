@@ -53,23 +53,6 @@
 #include <utility>
 #include <strsafe.h>
 
-//----------------------------------------------------------
-#ifdef DEBUG
-inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
-{
-    CHAR    buffer[1024];
-    va_list args;
-
-    va_start( args, pFormat );
-    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
-    OutputDebugStringA( buffer );
-}
-#else
-static inline void OutputDebugStringFormat( LPCSTR, ... )
-{
-}
-#endif
-
 
 /*---------------------------------------------
     INFO - INFO - INFO - INFO - INFO - INFO

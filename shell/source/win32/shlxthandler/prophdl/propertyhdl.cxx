@@ -42,41 +42,9 @@
 
 #include "internal/stream_helper.hxx"
 
-//----------------------------------------------------------
-#ifdef DEBUG
-inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
-{
-    CHAR    buffer[1024];
-    va_list args;
-
-    va_start( args, pFormat );
-    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
-    OutputDebugStringA( buffer );
-}
-#else
-static inline void OutputDebugStringFormat( LPCSTR, ... )
-{
-}
-#endif
-
 //----------------------------
 //
 //----------------------------
-
-//namespace /* private */
-/*{
-    SHPropertyHdl PropertyHdlTable[] =
-    {
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_TITLE},    VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Title",    L"Title"},
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_AUTHOR},   VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Author",   L"Author"},
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_SUBJECT},  VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Subject",  L"Subject"},
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_KEYWORDS}, VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Keywords", L"Keywords"},
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_COMMENTS}, VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Comments", L"Comments"},
-        {{PSGUID_SUMMARYINFORMATION, PIDSI_PAGECOUNT},VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Pagecount", L"Pagecount"}
-    };
-
-    size_t PropertyHdlTableSize = sizeof(PropertyHdlTable)/sizeof(PropertyHdlTable[0]);
-}*/
 
 //
 // Map of property keys to the locations of their value(s) in the .??? XML schema

@@ -399,6 +399,17 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     if ((riid != IID_IUnknown) && (riid != IID_IClassFactory))
         return E_NOINTERFACE;
 
+    if ( rclsid == CLSID_INFOTIP_HANDLER )
+        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_INFOTIP_HANDLER\n" );
+    else if ( rclsid == CLSID_COLUMN_HANDLER )
+        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_COLUMN_HANDLER\n" );
+    else if ( rclsid == CLSID_PROPERTYSHEET_HANDLER )
+        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_PROPERTYSHEET_HANDLER\n" );
+    else if ( rclsid == CLSID_THUMBVIEWER_HANDLER )
+        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
+    else if ( rclsid == CLSID_PROPERTY_HANDLER )
+        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_PROPERTY_HANDLER\n" );
+
     IUnknown* pUnk = new CClassFactory(rclsid);
     if (0 == pUnk)
         return E_OUTOFMEMORY;

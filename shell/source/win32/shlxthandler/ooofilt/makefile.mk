@@ -99,7 +99,8 @@ CDEFS_X64+=-D_WIN32_IE=0x501
 USE_DEFFILE_X64=TRUE
 
 SLOFILES_X64=$(SLO_X64)$/ooofilt.obj\
-        $(SLO_X64)$/propspec.obj
+        $(SLO_X64)$/propspec.obj\
+        $(SLO_X64)$/stream_helper.obj
 
 SHL1TARGET_X64=$(TARGET)
 

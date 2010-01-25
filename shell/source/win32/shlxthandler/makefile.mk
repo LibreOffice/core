@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.14 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -83,7 +79,7 @@ SHL1STDLIBS+=\
     $(GDI32LIB)\
     $(GDIPLUSLIB)\
     $(SHLWAPILIB)\
-    propsys.lib
+    $(PROPSYSLIB)
 
 SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
@@ -112,7 +108,9 @@ SLOFILES_X64= \
     $(SLO_X64)$/shlxthdl.obj\
     $(SLO_X64)$/listviewbuilder.obj\
     $(SLO_X64)$/document_statistic.obj\
-    $(SLO_X64)$/thumbviewer.obj
+    $(SLO_X64)$/thumbviewer.obj\
+    $(SLO_X64)$/propertyhdl.obj\
+    $(SLO_X64)$/stream_helper.obj\
 
 SHL1TARGET_X64=$(TARGET)
 SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\
@@ -131,7 +129,8 @@ SHL1STDLIBS_X64+=\
     $(GDIPLUSLIB_X64) \
     $(MSVCRT_X64)   \
     $(MSVCPRT_X64)  \
-    $(OLDNAMESLIB_X64)
+    $(OLDNAMESLIB_X64)\
+    $(PROPSYSLIB_X64)
 
 SHL1LIBS_X64+=$(SLB_X64)$/util.lib\
     $(SLB_X64)$/ooofilereader.lib

@@ -46,7 +46,7 @@ CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=$(SLO)$/propertyhdl.obj
+SLOFILES=$(SLO)$/$(TARGET).obj
 
 .IF "$(BUILD_X64)"!=""
 CFLAGS_X64+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
