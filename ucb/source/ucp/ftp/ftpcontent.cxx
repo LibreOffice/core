@@ -581,9 +581,19 @@ Any SAL_CALL FTPContent::execute(
                      e.code() == CURLE_FTP_WEIRD_PASS_REPLY ||
                      e.code() == CURLE_LOGIN_DENIED)
                 action = THROWAUTHENTICATIONREQUEST;
-            else if(e.code() == CURLE_REMOTE_ACCESS_DENIED)
+            else if(e.code() == CURLE_FTP_ACCESS_DENIED
+// MacOS SDK 10.4 (curl 7.19.1) doesn't define CURLE_REMOTE_ACCESS_DENIED
+#ifdef CURLE_REMOTE_ACCESS_DENIED
+                    || e.code() == CURLE_REMOTE_ACCESS_DENIED
+#endif
+                )
                 action = THROWACCESSDENIED;
-            else if(e.code() == CURLE_QUOTE_ERROR)
+            else if(e.code() == CURLE_FTP_QUOTE_ERROR
+// MacOS SDK 10.4 (curl 7.19.1) doesn't define CURLE_QUOTE_ERROR
+#ifdef CURLE_QUOTE_ERROR
+                || e.code() == CURLE_QUOTE_ERROR
+#endif
+                )
                 action = THROWQUOTE;
             else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
                 action = THROWNOFILE;
