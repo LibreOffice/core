@@ -30,30 +30,34 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-#include "datasourcehandling.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <tools/debug.hxx>
-#include <comphelper/interaction.hxx>
-#include <vcl/stdtext.hxx>
-#ifndef EXTENSIONS_ABPRESID_HRC
+
 #include "abpresid.hrc"
-#endif
-#include "componentmodule.hxx"
 #include "abptypes.hxx"
+#include "componentmodule.hxx"
+#include "datasourcehandling.hxx"
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
+
+#include <comphelper/interaction.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <vcl/stdtext.hxx>
 
 //.........................................................................
 namespace abp
@@ -76,26 +80,6 @@ namespace abp
     struct PackageAccessControl { };
 
     //=====================================================================
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbRegisteredNamesNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
-        return s_sNodeName;
-    }
-
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbNameNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Name");
-        return s_sNodeName;
-    }
-
-    //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDbLocationNodeName()
-    {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
-        return s_sNodeName;
-    }
     //---------------------------------------------------------------------
     static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
     {
@@ -173,28 +157,24 @@ namespace abp
         const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _sName,
         const ::rtl::OUString& _sURL ) SAL_THROW (( ::com::sun::star::uno::Exception ))
     {
-        // the config node where all pooling relevant info are stored under
-        OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            _rxORB, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+        OSL_ENSURE( _sName.getLength(), "lcl_registerDataSource: invalid name!" );
+        OSL_ENSURE( _sURL.getLength(), "lcl_registerDataSource: invalid URL!" );
+        try
+        {
 
-        if (!aDbRegisteredNamesRoot.isValid())
-            // already asserted by the OConfigurationTreeRoot
-            return;
+            ::comphelper::ComponentContext aContext( _rxORB );
+            Reference< XDatabaseRegistrations > xRegistrations(
+                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
-        OSL_ENSURE(_sName.getLength(),"No Name given!");
-        OSL_ENSURE(_sURL.getLength(),"No URL given!");
-
-        OConfigurationNode aThisDriverSettings;
-        if ( aDbRegisteredNamesRoot.hasByName(_sName) )
-            aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_sName);
-        else
-            aThisDriverSettings = aDbRegisteredNamesRoot.createNode(_sName);
-
-        // set the values
-        aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(_sName));
-        aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(_sURL));
-
-        aDbRegisteredNamesRoot.commit();
+            if ( xRegistrations->hasRegisteredDatabase( _sName ) )
+                xRegistrations->changeDatabaseLocation( _sName, _sURL );
+            else
+                xRegistrations->registerDatabaseLocation( _sName, _sURL );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //=====================================================================
