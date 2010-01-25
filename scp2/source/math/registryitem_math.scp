@@ -686,16 +686,6 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Smat
 End
 
 // registering the property handler for the supported file types
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odf
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odf";
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxm
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxm";
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odf, gid_Module_Prg_Math_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxm, gid_Module_Prg_Math_Bin )

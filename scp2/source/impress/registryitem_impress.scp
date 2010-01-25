@@ -977,33 +977,13 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simp
 End
 
 // registering the property handler for the supported file types
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odp
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odp";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_otp
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.otp";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odp, gid_Module_Prg_Impress_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( otp, gid_Module_Prg_Impress_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxi, gid_Module_Prg_Impress_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sti, gid_Module_Prg_Impress_Bin )
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxi
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxi";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sti
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sti";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+// registering the mso file types
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_Bin, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 7, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_Bin, pps,  PPS,  MS_POWERPOINT_SHOW, 7, simpress.exe, open, Impress )

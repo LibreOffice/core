@@ -520,6 +520,18 @@ End
 
 // ---------------------------------------
 
+#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension,modid) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = modid; \
+        Styles = (X64); \
+        Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
+        Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
+        Val64 = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
+    End
+
+// ---------------------------------------
+
 #if defined WNT
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"

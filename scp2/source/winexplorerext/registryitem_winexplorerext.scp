@@ -191,31 +191,39 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
+    Val64 = "%PRODUCTNAME Property Handler";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl_MSS
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Name = "ManualSafeSave";
     Value = "#1";
+    Val64 = "#1";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
+    Val64 = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll\"";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Name = "ThreadingModel";
     Value = "Apartment";
+    Val64 = "Apartment";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved

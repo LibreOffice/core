@@ -1109,33 +1109,13 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scal
 End
 
 // registering the property handler for the supported file types
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_ods
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.ods";
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_ots
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.ots";
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( ods, gid_Module_Prg_Calc_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( ots, gid_Module_Prg_Calc_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxc, gid_Module_Prg_Calc_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stc, gid_Module_Prg_Calc_Bin )
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxc
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxc";
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_stc
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.stc";
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+// registering the mso file types
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_Bin, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_Bin, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )

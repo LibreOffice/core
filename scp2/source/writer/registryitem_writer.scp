@@ -1485,56 +1485,16 @@ End
 
 
 // registering the property handler for the supported file types
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odt
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odt";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_ott
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.ott";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odt, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( ott, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( oth, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odm, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxw, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stw, gid_Module_Prg_Wrt_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxg, gid_Module_Prg_Wrt_Bin )
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_oth
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.oth";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odm
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odm";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxw
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxw";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_stw
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.stw";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxg
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxg";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-
+// registering the mso file types
 // CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,                 key,  cond, disp_name,        icon_id, app, default, dox_type)
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Doc,  gid_Module_Prg_Wrt_Bin, doc,  DOC,  MS_WORD_DOCUMENT_OLD, 1, swriter.exe, open, Writer )

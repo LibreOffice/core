@@ -929,30 +929,8 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sdra
 End
 
 // registering the property handler for the supported file types
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_odg
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.odg";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
 
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_otg
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.otg";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_sxd
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.sxd";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
-
-RegistryItem gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_std
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.std";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Value = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-End
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odg, gid_Module_Prg_Draw_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( otg, gid_Module_Prg_Draw_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxd, gid_Module_Prg_Draw_Bin )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( std, gid_Module_Prg_Draw_Bin )
