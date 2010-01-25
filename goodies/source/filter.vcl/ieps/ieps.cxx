@@ -185,7 +185,7 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
      *
      */
     rtl::OUString url;
-    rtl::OUString path=rtl::OUString::createFromAscii(getenv("PATH"));
+    rtl::OUString path(reinterpret_cast<const sal_Unicode(_wgetenv(L"PATH")));
 
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)
