@@ -75,6 +75,9 @@ sub new {
     $self->{ACTIVATED_MODULES} = {};
     $self->{MODULE_REPOSITORY} = {};
     $self->{REAL_MODULES} = {};
+    if (defined $self->{USER_SOURCE_ROOT}) {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+    };
     $self->{SOURCE_CONFIG_FILE} = get_config_file($source_root);
     $self->{SOURCE_CONFIG_DEFAULT} = $source_root .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
