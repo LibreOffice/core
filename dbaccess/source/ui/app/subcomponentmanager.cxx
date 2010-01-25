@@ -29,6 +29,7 @@
 
 #include "subcomponentmanager.hxx"
 #include "AppController.hxx"
+#include "dbustrings.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XFrame.hpp>
@@ -39,6 +40,7 @@
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -79,6 +81,8 @@ namespace dbaui
     using ::com::sun::star::ucb::XCommandProcessor;
     using ::com::sun::star::ucb::Command;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::PropertyChangeEvent;
     /** === end UNO using === **/
 
     //==============================================================================
@@ -94,8 +98,10 @@ namespace dbaui
             Reference< XController >        xController;
             /// the model of the sub component. Might be <NULL/>
             Reference< XModel >             xModel;
-            /// the document definition which holds the component, if any
-            Reference< XCommandProcessor > xComponentCommandProcessor;
+            /// the document definition which holds the component, if any; as CommandProcessor
+            Reference< XCommandProcessor >  xComponentCommandProcessor;
+            /// the document definition which holds the component, if any; as PropertySet
+            Reference< XPropertySet >       xDocumentDefinitionProperties;
 
             SubComponentDescriptor()
                 :xFrame()
@@ -108,11 +114,14 @@ namespace dbaui
             {
                 if ( !impl_constructFrom( _rxComponent ) )
                 {
+                    // _rxComponent is neither a model, nor a controller, nor a frame
+                    // => it must be a css.sdb.DocumentDefinition
                     Reference< XComponentSupplier > xCompSupp( _rxComponent, UNO_QUERY_THROW );
                     Reference< XComponent > xComponent( xCompSupp->getComponent(), UNO_QUERY_THROW );
                     if ( !impl_constructFrom( xComponent ) )
                         throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal component type." ) ), NULL );
                     xComponentCommandProcessor.set( _rxComponent, UNO_QUERY_THROW );
+                    xDocumentDefinitionProperties.set( _rxComponent, UNO_QUERY_THROW );
                 }
             }
 
@@ -362,6 +371,47 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
+    void SAL_CALL SubComponentManager::propertyChange( const PropertyChangeEvent& i_rEvent ) throw (RuntimeException)
+    {
+        if ( i_rEvent.PropertyName != PROPERTY_NAME )
+            // by definition, it's allowed to broadcast more than what we've registered for
+            return;
+
+        // find the sub component whose name changed
+        for (   SubComponentMap::iterator comp = m_pData->m_aComponents.begin();
+                comp != m_pData->m_aComponents.end();
+                ++comp
+            )
+        {
+            if ( comp->second.xDocumentDefinitionProperties != i_rEvent.Source )
+                continue;
+
+            ::rtl::OUString sNewName;
+            OSL_VERIFY( i_rEvent.NewValue >>= sNewName );
+
+            ::rtl::OUString sOldKnownName( comp->first.sName );
+            ::rtl::OUString sOldName;
+            OSL_VERIFY( i_rEvent.OldValue >>= sOldName );
+            OSL_ENSURE( sOldName == sOldKnownName, "SubComponentManager::propertyChange: inconsistency in the old names!" );
+
+            // obtain old values
+            SubComponentAccessor aKey( comp->first );
+            SubComponentDescriptor aElement( comp->second );
+
+            // remove old values
+            m_pData->m_aComponents.erase( comp );
+
+            // re-insert under new name
+            aKey.sName = sNewName;
+            m_pData->m_aComponents.insert( SubComponentMap::value_type(
+                aKey, aElement
+            ) ) ;
+
+            break;
+        }
+    }
+
+    //--------------------------------------------------------------------
     void SAL_CALL SubComponentManager::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
@@ -480,6 +530,8 @@ namespace dbaui
             aElement.xController->addEventListener( this );
         if ( aElement.xModel.is() )
             aElement.xModel->addEventListener( this );
+        if ( aElement.xDocumentDefinitionProperties.is() )
+            aElement.xDocumentDefinitionProperties->addPropertyChangeListener( PROPERTY_NAME, this );
 
         // notify this to interested parties
         aGuard.clear();
