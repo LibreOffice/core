@@ -4759,7 +4759,10 @@ void Window::doLazyDelete()
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);
     DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
+    {
+        Show( FALSE );
         SetParent( ImplGetDefaultWindow() );
+    }
     vcl::LazyDeletor<Window>::Delete( this );
 }
 

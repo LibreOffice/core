@@ -720,6 +720,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
 #ifdef GRCACHE_REUSE_VECTORS
     // if we have an exact match, then we can reuse the glyph vectors from before
     if (pSegRecord && (pSegRecord->glyphs().size() > 0) &&
+        (pSegRecord->fontScale() == mfScaling) &&
         !(SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags) )
     {
         mnWidth = pSegRecord->width();
@@ -765,7 +766,8 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
                 !(SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags))
             {
                 pSegRecord->setGlyphVectors(mnWidth, mvGlyphs, mvCharDxs,
-                                            mvChar2BaseGlyph, mvGlyph2Char);
+                                            mvChar2BaseGlyph, mvGlyph2Char,
+                                            mfScaling);
             }
 #endif
 #endif

@@ -118,9 +118,8 @@ void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
 {
     vcl::DeletionListener aDel( this );
 
-    m_aIterators.push_back( ListenerIt() );
+    m_aIterators.push_back(ListenerIt(m_aListeners.begin()));
     size_t nIndex = m_aIterators.size() - 1;
-    m_aIterators[ nIndex ].m_aIt = m_aListeners.begin();
     while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )
     {
         m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );

@@ -192,7 +192,11 @@ public:
     void*           GetEntryData( USHORT nPos ) const;
 
     void            SetTopEntry( USHORT nPos );
+    void            ShowProminentEntry( USHORT nPos );
     USHORT          GetTopEntry() const;
+
+    void            SetProminentEntryType( ProminentEntry eType );
+    ProminentEntry  GetProminentEntryType() const;
 
     USHORT          GetDisplayLineCount() const;
 
