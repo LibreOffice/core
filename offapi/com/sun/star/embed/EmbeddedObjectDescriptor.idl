@@ -54,6 +54,8 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
 #endif
 
+#include <com/sun/star/embed/XStorage.idl>
+
 //============================================================================
 
 module com { module sun { module star { module embed {
