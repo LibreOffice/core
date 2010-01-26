@@ -558,7 +558,7 @@ IMPL_LINK( FontImportDialog, RefreshTimeoutHdl, void*, EMPTYARG )
     std::list< String > aFiles;
     m_aNewFonts.clear();
     OUString aDirectory( m_aFromDirEdt.GetText() );
-    FindFiles( aDirectory, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PFA;PFB;TTF;TTC" ) ), m_aSubDirsBox.IsChecked() );
+    FindFiles( aDirectory, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PFA;PFB;TTF;TTC;OTF" ) ), m_aSubDirsBox.IsChecked() );
     OString aDir( OUStringToOString( aDirectory, aEncoding ) );
     aDir += "/";
     while( aFiles.begin() != aFiles.end() )
