@@ -205,7 +205,7 @@ STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 # libdl.so - no really an GUI library but required in this context
 STDLIBGUIMT+=-ldl
 STDSHLGUIMT+=-ldl
-X11LINK_DYNAMIC = -lX11
+X11LINK_DYNAMIC = -lXext -lX11
 
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract

@@ -90,7 +90,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
-     $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -592,33 +592,6 @@ elsif ( $platform =~ m/osf1/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
 } 
-elsif ( $platform =~ m/irix/ )
-{     print "Setting Irix specific values... ";
-      $outfile        = "IrixMipsEnv.Set";
-      $BIG_SVX        = "TRUE";
-      if ($CC =~ "gcc" ) {
-            $COM          = "GCC";
-            $OUTPATH        = "unxirgm";
-            $CVER           = "C300";
-      }
-	  else {
-	  	$COM            = "C730";
-        $CVER           = "C730";
-        $OUTPATH        = "unxirxm3";
-      }
-      $COMPATH        = '@COMPATH@';
-      $CPU            = "M";
-      $CPUNAME        = "MIPS";
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $OS             = "IRIX";
-      $PATH_SEPERATOR = $ps;
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
-}
 elsif ( $platform =~ m/cygwin/ ) 
 {
       $COMPATH        = PathFormat('@COMPATH@');
@@ -1039,7 +1012,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|irix|freebsd|aix/)
+elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1105,7 +1078,7 @@ if ($platform =~ m/cygwin|os2/)
 }
      
 # The general environment path.
-if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
+if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1337,7 +1310,7 @@ if ($platform =~ m/solaris/)
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbasd|osf1|irix|aix|freebsd/)
+elsif ($platform =~ m/linux|netbasd|osf1|aix|freebsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1380,7 +1353,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|irix/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
 if ($platform =~ m/linux|freebsd|netbsd/)
@@ -1424,9 +1397,6 @@ if ($platform =~ m/linux/)
    		}
    		elsif ($platform =~ m/netbsd/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
-   		}
-   		elsif ($platform =~ m/irix/)
-   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
    		}
 
    		#java threads include path
@@ -1495,14 +1465,6 @@ elsif ($platform =~ m/darwin/)
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
-}
-
-if ($SYSTEM_PYTHON eq "NO") {
-    $PYTHONPATH           = '.'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'pyuno'.$wps.$SOLARVER.$ds.$INPATH.$ds.'bin'.$ds.'pyuno';
-    if ($GUIBASE eq "WIN") {
-        # PYTHONPATH need to use '\' directory seperators;
-        $PYTHONPATH = WinPath( $PYTHONPATH, ";" );
-    }
 }
 
 #
@@ -1830,11 +1792,9 @@ ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
 ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
-ToFile( "WITH_FONTOOO",      "@WITH_FONTOOO@",     "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
 ToFile( "GOBJECT_LIBS",      "@GOBJECT_LIBS@",     "e" );
-ToFile( "SYSTEM_MSPACK",     "@SYSTEM_MSPACK@",    "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
@@ -1982,9 +1942,6 @@ ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 
 ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
-if ($SYSTEM_PYTHON eq "NO") {
-    ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
-}
 
 #
 # Writing the aliases to file.
