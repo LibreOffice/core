@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile$
- * $Revision$
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -27,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
@@ -175,7 +175,7 @@ void XRenderPeer::InitRenderLib()
 #if 0 // not having trapezoid support is supported
     if( !pFunc ) return;
 #endif
-    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const XTrap*,int))pFunc;
+    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
 
 #endif // XRENDER_LINK
 
