@@ -499,6 +499,26 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     #undef STYLE_IMAGE_LISTEF
 };
 
+Bitmap BMP_PRESOBJ_GRAPHIC
+{
+    File = "image.bmp" ;
+};
+Bitmap BMP_PRESOBJ_OBJECT
+{
+    File = "object.bmp" ;
+};
+Bitmap BMP_PRESOBJ_CHART
+{
+    File = "chart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_ORGCHART
+{
+    File = "orgchart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_TABLE
+{
+    File = "table.bmp" ;
+};
 Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";

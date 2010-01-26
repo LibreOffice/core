@@ -205,11 +205,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
         break;
 
-        case PRESOBJ_GRAPHIC:
-        case PRESOBJ_OBJECT:
-        case PRESOBJ_CHART:
-        case PRESOBJ_ORGCHART:
-        case PRESOBJ_TABLE:
         case PRESOBJ_OUTLINE:
         {
             pSdrObj = new SdrRectObj(OBJ_OUTLINETEXT);
@@ -235,6 +230,63 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         case PRESOBJ_TEXT:
         {
             pSdrObj = new SdrRectObj(OBJ_TEXT);
+        }
+        break;
+
+        case PRESOBJ_GRAPHIC:
+        {
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_GRAPHIC ) );
+            Graphic  aGraphic( aBmpEx );
+            OutputDevice &aOutDev = *Application::GetDefaultDevice();
+            aOutDev.Push();
+
+            aOutDev.SetMapMode( aGraphic.GetPrefMapMode() );
+            Size aSizePix = aOutDev.LogicToPixel( aGraphic.GetPrefSize() );
+            aOutDev.SetMapMode(MAP_100TH_MM);
+
+            Size aSize = aOutDev.PixelToLogic(aSizePix);
+            Point aPnt (0, 0);
+            Rectangle aRect (aPnt, aSize);
+            pSdrObj = new SdrGrafObj(aGraphic, aRect);
+            aOutDev.Pop();
+        }
+        break;
+
+        case PRESOBJ_OBJECT:
+        {
+            pSdrObj = new SdrOle2Obj();
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_OBJECT ) );
+            Graphic aGraphic( aBmpEx );
+            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+        }
+        break;
+
+        case PRESOBJ_CHART:
+        {
+            pSdrObj = new SdrOle2Obj();
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
+            Graphic aGraphic( aBmpEx );
+            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+        }
+        break;
+
+        case PRESOBJ_ORGCHART:
+        {
+            pSdrObj = new SdrOle2Obj();
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
+            Graphic aGraphic( aBmpEx );
+            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+        }
+
+        case PRESOBJ_TABLE:
+        {
+            pSdrObj = new SdrOle2Obj();
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
+            Graphic aGraphic( aBmpEx );
+            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
 

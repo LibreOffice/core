@@ -47,6 +47,12 @@
 #define STR_PRESOBJ_ORGCHART                    RID_GLOB_START+11
 #define STR_PRESOBJ_TABLE                       RID_GLOB_START+12
 #define STR_PRESOBJ_IMAGE                       RID_GLOB_START+13
+#define BMP_PRESOBJ_GRAPHIC                     RID_GLOB_START+14
+#define BMP_PRESOBJ_OBJECT                      RID_GLOB_START+15
+#define BMP_PRESOBJ_CHART                       RID_GLOB_START+16
+#define BMP_PRESOBJ_ORGCHART                    RID_GLOB_START+17
+#define BMP_PRESOBJ_TABLE                       RID_GLOB_START+18
+#define BMP_PRESOBJ_IMAGE                       RID_GLOB_START+19
 #define STR_OUTLINEVIEWSHELL                    RID_GLOB_START+21
 #define STR_DRAWVIEWSHELL                       RID_GLOB_START+22
 #define STR_TEXTOBJECTBARSHELL                  RID_GLOB_START+23
