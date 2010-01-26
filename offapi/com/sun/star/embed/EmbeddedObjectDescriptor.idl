@@ -92,6 +92,19 @@ service EmbeddedObjectDescriptor
     [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor
                                                 OutplaceDispatchInterceptor;
 
+    /** denotes the storage from which the embedded object is to be recovered.
+
+        <p>Upon activating the embedded object, it is normally loaded from a storage as denoted by
+        the parameters to the <type>XEmbedObjectCreator</type> method calls.</p>
+
+        <p>You can pass a non-<NULL/> <code>RecoveryStorage</code> in the object descriptor if you wish to load the
+        embedded object from an alternate storage.</p>
+
+        <p>The object will still be based on the storage denoted in the <code>XEmbedObjectCreator</code> method
+        call, i.e., subsequent save operations will still use that storage. <code>RecoveryStorage</code> is used
+        at loading time only, and then discarded.</p>
+    */
+    [optional, property] XStorage RecoveryStorage;
 };
 
 //============================================================================
