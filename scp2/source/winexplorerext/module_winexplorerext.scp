@@ -43,6 +43,8 @@ Module gid_Module_Optional_Winexplorerext
 			 gid_File_Lib_OOoFiltProxy,
 			 gid_File_Lib_OOoFilt64,
 			 gid_File_Lib_OOoFiltProxy64,
+			 gid_File_Lib_PropertyHdl,
+			 gid_File_Lib_PropertyHdl64,
              gid_File_Lib_Shlxthdl_Msvcr71,
              gid_File_Lib_Shlxthdl_Stlport,
              gid_File_Lib_Shlxtmsi,

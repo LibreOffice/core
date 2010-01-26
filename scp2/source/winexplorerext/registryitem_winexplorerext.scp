@@ -212,8 +212,8 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
-    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
-    Val64 = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll\"";
+    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\propertyhdl.dll\"";
+    Val64 = "\"[BASISINSTALLLOCATION]program\shlxthdl\propertyhdl_x64.dll\"";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel
