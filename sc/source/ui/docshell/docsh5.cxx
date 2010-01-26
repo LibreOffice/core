@@ -100,8 +100,9 @@ void ScDocShell::ErrorMessage( USHORT nGlobStrId )
 BOOL ScDocShell::IsEditable() const
 {
     // import into read-only document is possible - must be extended if other filters use api
+    // #i108547# MSOOXML filter uses "IsChangeReadOnlyEnabled" property
 
-    return !IsReadOnly() || aDocument.IsImportingXML();
+    return !IsReadOnly() || aDocument.IsImportingXML() || aDocument.IsChangeReadOnlyEnabled();
 }
 
 void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW /* nY2 */ )
