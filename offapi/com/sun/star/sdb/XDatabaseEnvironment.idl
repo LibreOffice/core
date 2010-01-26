@@ -54,39 +54,14 @@
 
 //=============================================================================
 
-/** specifies the root of the data access beans. It provides the possiblity
-    to open a data access bean, which contains tables, queries, forms, and
-    report documents, or to open a connection to a database.
+/** is not to be used anymore.
 
     @deprecated
  */
 published interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 {
-    //-------------------------------------------------------------------------
-
-    /** returns an existing DatabaseAccess bean specified by it's URL.
-
-
-        <p>Database Access beans are always shared, so if there's a second request
-        for the same bean, the same instance of the bean will be returned, if it is still alive.
-        </p>
-        @param URL
-            a database url of the form sdbc:subprotocol:subname
-        @returns
-            the database access object for this url
-     */
     XDatabaseAccess getDatabaseAccess([in]string URL)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** creates a new DatabaseAccess bean specified by it's URL.
-        @param URL
-            a database url of the form sdbc:subprotocol:subname
-        @param title
-            the title of the database access
-        @returns
-            the new created database access object for this url
-     */
     XDatabaseAccess createDatabaseAccess([in]string URL, [in]string title)
         raises (com::sun::star::sdbc::SQLException);
 };
