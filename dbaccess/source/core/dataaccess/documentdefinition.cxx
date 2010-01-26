@@ -2078,14 +2078,8 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
         if ( _rNewName.indexOf( '/' ) != -1 )
             m_aErrorHelper.raiseException( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES, *this );
 
-        sal_Int32 nHandle = PROPERTY_ID_NAME;
-        Any aOld = makeAny( m_pImpl->m_aProps.aTitle );
-        Any aNew = makeAny( _rNewName );
-
-        {
-            NameChangeNotifier aNameChangeAndNotify( *this, _rNewName, aGuard );
-            m_pImpl->m_aProps.aTitle = _rNewName;
-        }
+        NameChangeNotifier aNameChangeAndNotify( *this, _rNewName, aGuard );
+        m_pImpl->m_aProps.aTitle = _rNewName;
 
         if ( m_xEmbeddedObject.is() && m_xEmbeddedObject->getCurrentState() == EmbedStates::ACTIVE )
             updateDocumentTitle();
