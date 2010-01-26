@@ -1,22 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: OSXTransferable.hxx,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "PictToBmpFlt.hxx"
 
 /* This is a work-around to prevent 'deprecated' warning for 'KillPicture' API
    Hopefully we can get rid of this whole code again when the OOo PICT filter
    are good enough to be used see #i78953 thus this hack would vanish to again.
  */
+#include <premac.h>
 #include <AvailabilityMacros.h>
 #undef DEPRECATED_ATTRIBUTE
 #define DEPRECATED_ATTRIBUTE
 
-#include <premac.h>
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <postmac.h>
 
-
 bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
                com::sun::star::uno::Sequence<sal_Int8>& aBmp)
 {
+
   bool result = false;
 
   ComponentInstance bmpExporter;
@@ -111,4 +141,61 @@ bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
   CloseComponent(pictExporter);
 
   return result;
+}
+
+bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict,
+                 com::sun::star::uno::Sequence<sal_Int8>& aBmp,
+                 NSBitmapImageFileType eInFormat)
+{
+    if( eInFormat == PICTImageFileType )
+        return PICTtoBMP( aPict, aBmp );
+
+    bool bResult = false;
+
+    NSData* pData = [NSData dataWithBytesNoCopy: (void*)aPict.getConstArray() length: aPict.getLength() freeWhenDone: 0];
+    if( pData )
+    {
+        NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
+        if( pRep )
+        {
+            NSData* pOut = [pRep representationUsingType: NSBMPFileType properties: nil];
+            if( pOut )
+            {
+                aBmp.realloc( [pOut length] );
+                [pOut getBytes: aBmp.getArray() length: aBmp.getLength()];
+                bResult = (aBmp.getLength() != 0);
+            }
+        }
+    }
+
+    return bResult;
+}
+
+bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp,
+                 com::sun::star::uno::Sequence<sal_Int8>& aPict,
+                 NSBitmapImageFileType eOutFormat
+                )
+{
+    if( eOutFormat == PICTImageFileType )
+        return BMPtoPICT( aBmp, aPict );
+
+    bool bResult = false;
+
+    NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(aBmp.getConstArray()) length: aBmp.getLength() freeWhenDone: 0];
+    if( pData )
+    {
+        NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
+        if( pRep )
+        {
+            NSData* pOut = [pRep representationUsingType: eOutFormat properties: nil];
+            if( pOut )
+            {
+                aPict.realloc( [pOut length] );
+                [pOut getBytes: aPict.getArray() length: aPict.getLength()];
+                bResult = (aPict.getLength() != 0);
+            }
+        }
+    }
+
+    return bResult;
 }
