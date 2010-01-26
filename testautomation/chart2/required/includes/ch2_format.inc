@@ -798,6 +798,8 @@ endcase
 '-------------------------------------------------------------------------------
 '
 testcase tFormatAxisXAxis
+
+	Dim bAsianLanguage as boolean
     Dim iCountTabPg as integer
     iCountTabPg = 0
     
@@ -806,6 +808,8 @@ testcase tFormatAxisXAxis
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
     endif
+    printlog " Enable language support for CJK (Tools-Options-Language Support)"
+    bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
     printlog "Select chart using navigator"
     call fSelectFirstOLE   
     printlog "Edit / Object / Edit"
@@ -834,7 +838,7 @@ testcase tFormatAxisXAxis
     printlog "Goto tab page Line"
     Kontext
     iCountTabPg = Active.GetPageCount
-    if iCountTabPg <> 7 then 
+    if iCountTabPg <> 8 then 
         warnlog "Format::Axis::XAxis should have 8 tab pages but has " & iCountTabPg & "."            
     else             
         printlog "Format::Axis::XAxis has 8 tab pages."
@@ -880,6 +884,10 @@ testcase tFormatAxisXAxis
     call DialogTest ( TabChartAxisNumbers )   
     printlog "Close dialog with cancel"
     TabChartAxisNumbers.Cancel
+    printlog " Set support for CJK back to default (Tools – Options – Language Support)"
+    if bAsianLanguage = FALSE then
+        Call ActiveDeactivateAsianSupport(FALSE)
+    end if
     printlog "File / Close"
     Call hCloseDocument
 endcase
@@ -887,6 +895,8 @@ endcase
 '-------------------------------------------------------------
 '
 testcase tFormatAxisYAxis
+
+	Dim bAsianLanguage as boolean
     Dim iCountTabPg as integer
     Dim iCrossingEntries as integer
     Dim iCategoryEntries as integer
@@ -903,7 +913,9 @@ testcase tFormatAxisYAxis
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
-    endif   
+    endif
+    printlog " Enable language support for CJK (Tools-Options-Language Support)"
+    bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
     printlog "Select chart using navigator"
     call fSelectFirstOLE   
     printlog "Edit / Object / Edit"
@@ -931,10 +943,10 @@ testcase tFormatAxisYAxis
     FormatAxisYAxis   
     Kontext
     iCountTabPg = Active.GetPageCount
-    if iCountTabPg <> 7 then 
-        warnlog "Format::Axis::YAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    if iCountTabPg <> 8 then 
+        warnlog "Format::Axis::YAxis should have 8 tab pages but has " & iCountTabPg & "."            
     else             
-        printlog "Format::Axis::YAxis has 7 tab pages."
+        printlog "Format::Axis::YAxis has 8 tab pages."
     endif          
     printlog "Goto tab page Characters"
     Active.SetPage TabFont    
@@ -1024,7 +1036,10 @@ testcase tFormatAxisYAxis
     endif
     Kontext "TabChartAxisPositioning"
     printlog "Leave dialog with Cancel."
-    TabChartAxisPositioning.Cancel    
+    TabChartAxisPositioning.Cancel
+    if bAsianLanguage = FALSE then
+        Call ActiveDeactivateAsianSupport(FALSE)
+    end if
     printlog "File / Close"   
     Call hCloseDocument
 endcase
@@ -1113,14 +1128,18 @@ endcase
 '-------------------------------------------------------------
 '
 testcase tFormatAxisSecondaryXAxis
-    Dim iCountTabPg as integer
+    
+	Dim bAsianLanguage as boolean
+	Dim iCountTabPg as integer
     iCountTabPg = 0
 
     printlog "Load simple chart document"
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
-    endif    
+    endif
+	printlog " Enable language support for CJK (Tools-Options-Language Support)"
+    bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
     printlog "Select chart using navigator"
     call fSelectFirstOLE   
     printlog "Edit / Object / Edit"
@@ -1168,10 +1187,10 @@ testcase tFormatAxisSecondaryXAxis
     printlog "Goto tab page Line"
     Kontext
     iCountTabPg = Active.GetPageCount
-    if iCountTabPg <> 7 then 
-        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    if iCountTabPg <> 8 then 
+        warnlog "Format::Axis::XAxis should have 8 tab pages but has " & iCountTabPg & "."            
     else             
-        printlog "Format::Axis::XAxis has 7 tab pages."
+        printlog "Format::Axis::XAxis has 8 tab pages."
     endif    
     Active.SetPage TabFormatChartLine    
     printlog "Check if tab page Line exists"
@@ -1213,7 +1232,10 @@ testcase tFormatAxisSecondaryXAxis
     Kontext "TabChartAxisNumbers"
     call DialogTest ( TabChartAxisNumbers )   
     printlog "Close dialog with cancel"
-    TabChartAxisNumbers.Cancel   
+    TabChartAxisNumbers.Cancel
+    if bAsianLanguage = FALSE then
+        Call ActiveDeactivateAsianSupport(FALSE)
+    end if
     printlog "File / Close"
     Call hCloseDocument   
 endcase
@@ -1221,14 +1243,18 @@ endcase
 '-------------------------------------------------------------
 '
 testcase tFormatAxisSecondaryYAxis
-    Dim iCountTabPg as integer
+    
+	Dim bAsianLanguage as boolean
+	Dim iCountTabPg as integer
     iCountTabPg = 0
 
     printlog "Load simple chart document"
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
-    endif    
+    endif
+    printlog " Enable language support for CJK (Tools-Options-Language Support)"
+    bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
     printlog "Select chart using navigator"
     call fSelectFirstOLE    
     printlog "Edit / Object / Edit"
@@ -1258,10 +1284,10 @@ testcase tFormatAxisSecondaryYAxis
     printlog "Goto tab page Line"
     Kontext
     iCountTabPg = Active.GetPageCount
-    if iCountTabPg <> 7 then 
-        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    if iCountTabPg <> 8 then 
+        warnlog "Format::Axis::XAxis should have 8 tab pages but has " & iCountTabPg & "."            
     else             
-        printlog "Format::Axis::XAxis has 7 tab pages."
+        printlog "Format::Axis::XAxis has 8 tab pages."
     endif    
     Active.SetPage TabFormatChartLine    
     printlog "Check if tab page Line exists"
@@ -1303,7 +1329,11 @@ testcase tFormatAxisSecondaryYAxis
     Kontext "TabChartAxisNumbers"
     call DialogTest ( TabChartAxisNumbers )   
     printlog "Close dialog with cancel"
-    TabChartAxisNumbers.Cancel   
+    TabChartAxisNumbers.Cancel
+    printlog " Set support for CJK back to default (Tools – Options – Language Support)"
+    if bAsianLanguage = FALSE then
+        Call ActiveDeactivateAsianSupport(FALSE)
+    end if
     printlog "File / Close"
     Call hCloseDocument   
 endcase

@@ -43,7 +43,7 @@ sub main
     PrintLog "---------------------------------------------------------------------"
     Printlog "-----                    Grid Layout for CJK  in Writer         -----"
     PrintLog "---------------------------------------------------------------------"
-
+    
     use "framework\optional\includes\w_grid_layout1.inc"
    
     sAsianLanguageFlag = CheckAsianLanguageSupport("Current")
@@ -80,7 +80,9 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\required\t_doc1.inc"
     use "global\tools\includes\required\t_tools1.inc"
-    use "framework\tools\includes\CJK_tools.inc"    
+    use "global\tools\includes\optional\t_docfuncs.inc"
+   
+    use "framework\tools\includes\CJK_tools.inc"   
     gApplication   = "WRITER"
     Call GetUseFiles
 end sub
