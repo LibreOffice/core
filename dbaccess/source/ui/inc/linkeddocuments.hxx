@@ -114,9 +114,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 newDocument(
                     sal_Int32 _nNewFormId,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
-                    const sal_Int32 _nCommandType,
-                    const ::rtl::OUString& _sObjectName
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
                 );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >

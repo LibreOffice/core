@@ -458,7 +458,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName )
+void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName )
 {
     // ensure we're connected
     if ( !isConnected() )
@@ -475,6 +475,9 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
+    if ( !i_rObjectName )
+        return;
+
     // ensure an existing object
     Reference< XNameAccess > xContainer( getElements( lcl_objectType2ElementType( _nObjectType ) ) );
     if ( !xContainer.is() )
@@ -487,19 +490,19 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     {
     case DatabaseObject::TABLE:
     case DatabaseObject::QUERY:
-        bExistentObject = xContainer->hasByName( _rObjectName );
+        bExistentObject = xContainer->hasByName( *i_rObjectName );
         break;
     case DatabaseObject::FORM:
     case DatabaseObject::REPORT:
     {
         Reference< XHierarchicalNameAccess > xHierarchy( xContainer, UNO_QUERY_THROW );
-        bExistentObject = xHierarchy->hasByHierarchicalName( _rObjectName );
+        bExistentObject = xHierarchy->hasByHierarchicalName( *i_rObjectName );
     }
     break;
     }
 
     if ( !bExistentObject )
-        throw NoSuchElementException( _rObjectName, *this );
+        throw NoSuchElementException( *i_rObjectName, *this );
 }
 
 // -----------------------------------------------------------------------------
@@ -524,6 +527,28 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
         _ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
         _ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
         ::comphelper::NamedValueCollection( _Arguments )
+    ) );
+
+    return xComponent;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType ) throw (IllegalArgumentException, SQLException, RuntimeException)
+{
+    return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >() );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments ) throw (IllegalArgumentException, SQLException, RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
+
+    Reference< XComponent > xComponent( newElement(
+        lcl_objectType2ElementType( i_nObjectType ),
+        ::comphelper::NamedValueCollection( i_rArguments )
     ) );
 
     return xComponent;

@@ -348,7 +348,7 @@ namespace dbaui
         return impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", xDefinition, -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 _nNewFormId, Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _sObjectName )
+    Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 _nNewFormId, Reference< XComponent >& _xDefinition )
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         // determine the URL to use for the new document
@@ -367,6 +367,7 @@ namespace dbaui
             case ID_FORM_NEW_IMPRESS:
                 aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
                 break;
+
             case ID_REPORT_NEW_TEXT:
                 aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
                 break;
@@ -408,12 +409,6 @@ namespace dbaui
                     aCommand.Argument <<= aOpenCommand;
                     WaitObject aWaitCursor( m_pDialogParent );
                     xNewDocument.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
-                    Reference<XPropertySet> xProp(xNewDocument,UNO_QUERY);
-                    if ( xProp.is() && _sObjectName.getLength() )
-                    {
-                        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(_nCommandType));
-                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(_sObjectName));
-                    }
                 }
             }
         }

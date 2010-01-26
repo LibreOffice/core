@@ -197,10 +197,11 @@ namespace dbaui
         /** opens a new frame for creation or auto pilot
             @param  _eType
                 Defines the type to open
-            @param  _bSQLView
-                If <TRUE/> the query design will be opened in SQL view, otherwise not.
+            @param  i_rAdditionalArguments
+                Additional arguments to pass when creating the component
         */
-        void newElement( ElementType _eType , sal_Bool _bSQLView );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments );
 
         /** creates a new database object, using an auto pilot
             @param _eType
@@ -402,7 +403,7 @@ namespace dbaui
         /** verifies the object type denotes a valid DatabaseObject, and the object name denotes an existing
             object of this type. Throws if not.
         */
-        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName );
+        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName );
 
     protected:
         // ----------------------------------------------------------------
@@ -467,6 +468,8 @@ namespace dbaui
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XContextMenuInterception
         virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
