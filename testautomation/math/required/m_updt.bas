@@ -47,6 +47,7 @@ sub main
    use "math\required\includes\m_007_.inc"   ' help
    use "math\required\includes\m_010_.inc"
    use "math\required\includes\m_020_.inc"   ' toolbars
+   use "global\required\includes\g_009.inc"
 
    Call hStatusIn ( "Math","m_updt.bas" )
 
@@ -63,6 +64,7 @@ sub main
    Call m_020_       ' toolbars
    Call M_010_       ' Operators
    Call M_001_       ' File Menu
+   Call g_printing()
    Call tFileExportAsPDF
 
    Call hStatusOut
@@ -76,7 +78,10 @@ sub LoadIncludeFiles
    use "global\required\includes\g_customize.inc"
    use "global\required\includes\g_001.inc"
    use "global\required\includes\g_009.inc"
+   use "global\required\includes\g_printing.inc"
    use "global\tools\includes\optional\t_ui_filters.inc" ' for gMathFilter in m_001_.inc
+   use "global\tools\includes\optional\t_docfuncs.inc"
+   use "global\tools\includes\optional\t_control_objects.inc"
    gApplication = "MATH"
    Call GetUseFiles
 end sub

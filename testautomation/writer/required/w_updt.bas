@@ -58,8 +58,10 @@ sub main
     use "writer\required\includes\w_010_1.inc"
     use "writer\required\includes\w_011_.inc"
     use "writer\required\includes\w_020_.inc"
-
+    
     Printlog "******* Ressource-Test Writer Document *******"
+
+    Call wChangeDefaultView()
 
     Call hStatusIn ( "writer", "w_updt.bas" )
     Call w_001_              ' Menu File
@@ -87,7 +89,10 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\required\includes\g_001.inc"
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
+    use "global\required\includes\g_printing.inc"
     use "global\tools\includes\optional\t_xml_filter1.inc"       ' global routines for XML-functionality
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
 
     gApplication   = "WRITER"
     GetUseFiles ()
