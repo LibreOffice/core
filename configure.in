@@ -3962,11 +3962,11 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
    fi
 
    # check curl version
-   AC_MSG_CHECKING([whether curl is >= 7.9.8])
+   AC_MSG_CHECKING([whether curl is >= 7.13.1])
    if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "9" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "8"; then 
-      AC_MSG_ERROR([no, you need at least curl 7.9,8])
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then 
+      AC_MSG_ERROR([no, you need at least curl 7.13,1])
    else
       AC_MSG_RESULT([yes])
    fi
