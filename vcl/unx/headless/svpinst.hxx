@@ -111,6 +111,9 @@ class SvpSalInstance : public SalInstance
     std::list< SalUserEvent > m_aUserEvents;
 
     std::list< SalFrame* > m_aFrames;
+
+    bool isFrameAlive( const SalFrame* pFrame ) const;
+
 public:
     static SvpSalInstance* s_pDefaultInstance;
 
