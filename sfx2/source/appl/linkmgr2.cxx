@@ -236,7 +236,7 @@ BOOL LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 
                     if( pFile )
                         *pFile = sFile;
-                    if( pLink )
+                    if( pLinkStr )
                         *pLinkStr = sRange;
                     if( pFilter )
                         *pFilter = sLNm.Copy( nPos );
