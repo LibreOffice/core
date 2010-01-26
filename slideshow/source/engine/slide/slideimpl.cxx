@@ -368,11 +368,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       bool                                                  bIntrinsicAnimationsAllowed,
                       bool                                                  bDisableAnimationZOrder ) :
     mxDrawPage( xDrawPage ),
-#ifdef ENABLE_PRESENTER_EXTRA_UI
-      mxDrawPagesSupplier( xDrawPages ),
-#else
-    mxDrawPagesSupplier( NULL ),
-#endif
+    mxDrawPagesSupplier( xDrawPages ),
     mxRootNode( xRootNode ),
     mpLayerManager( new LayerManager(
                         rViewContainer,
@@ -1269,6 +1265,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
 #ifdef ENABLE_PRESENTER_EXTRA_UI
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
 #else
+    (void)xDrawPages;
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
 #endif
                                                       rEventMultiplexer, rScreenUpdater,
