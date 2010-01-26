@@ -27,6 +27,7 @@
 
 #include "dbdocrecovery.hxx"
 #include "sdbcoretools.hxx"
+#include "dbastrings.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
@@ -48,6 +49,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <hash_map>
+#include <algorithm>
 
 //........................................................................
 namespace dbaccess
@@ -626,9 +628,17 @@ namespace dbaccess
                 ++map
             )
         {
+            const SubComponentType eComponentType = map->first;
+            if ( ( eComponentType != FORM ) && ( eComponentType != REPORT ) )
+            {
+                // nobody saves tables/queries/relations at the moment, so encountering those is worth an assertion
+                OSL_ENSURE( false, "DatabaseDocumentRecovery::recoverSubDocuments: only embedded objects can be recovered currently!" );
+                continue;
+            }
+
             // the storage for all components of the current type
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
-                lcl_getComponentsStorageName( map->first ), ElementModes::READ ), UNO_QUERY_THROW );
+                lcl_getComponentsStorageName( eComponentType ), ElementModes::READ ), UNO_QUERY_THROW );
 
             // loop thru all components of this type
             for (   MapStringToCompDesc::const_iterator stor = map->second.begin();
@@ -636,6 +646,7 @@ namespace dbaccess
                     ++stor
                 )
             {
+                const ::rtl::OUString sComponentName( stor->second.sName );
                 if ( !xComponentsStor->hasByName( stor->first ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -643,7 +654,7 @@ namespace dbaccess
                     message.append( "DatabaseDocumentRecovery::recoverSubDocuments: inconsistent recovery storage: storage '" );
                     message.append( ::rtl::OUStringToOString( stor->first, RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "' not found in '" );
-                    message.append( ::rtl::OUStringToOString( lcl_getComponentsStorageName( map->first ), RTL_TEXTENCODING_ASCII_US ) );
+                    message.append( ::rtl::OUStringToOString( lcl_getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "', but required per map file!" );
                     OSL_ENSURE( false, message.makeStringAndClear() );
                 #endif
@@ -656,12 +667,12 @@ namespace dbaccess
 
                 // recover the single component
                 Reference< XStorage > xCompStor( xComponentsStor->openStorageElement( stor->first, ElementModes::READ ) );
-
                 ::comphelper::NamedValueCollection aLoadArgs;
-                aLoadArgs.put( "RecoverFromStorage", xCompStor );
+                aLoadArgs.put( "RecoveryStorage", xCompStor );
+
                 try
                 {
-                    Reference< XComponent > xSubComponent = xDocumentUI->loadComponentWithArguments( map->first, stor->second.sName, stor->second.bForEditing,
+                    Reference< XComponent > xSubComponent = xDocumentUI->loadComponentWithArguments( eComponentType, sComponentName, stor->second.bForEditing,
                         aLoadArgs.getPropertyValues() );
 
                     // at the moment, we only store, during session save, sub components which are modified. So, set this

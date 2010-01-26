@@ -1605,15 +1605,24 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::separateOpenCommandArguments( const Sequence< PropertyValue >& i_rOpenCommandArguments,
-        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& /*o_rEmbeddedObjectDescriptor*/ )
+        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& o_rEmbeddedObjectDescriptor )
 {
     ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
+
+    const sal_Char* pObjectDescriptorArgs[] =
+    {
+        "RecoveryStorage"
+    };
+    for ( size_t i=0; i < sizeof( pObjectDescriptorArgs ) / sizeof( pObjectDescriptorArgs[0] ); ++i )
+    {
+        if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
+        {
+            o_rEmbeddedObjectDescriptor.put( pObjectDescriptorArgs[i], aOpenCommandArguments.get( pObjectDescriptorArgs[i] ) );
+            aOpenCommandArguments.remove( pObjectDescriptorArgs[i] );
+        }
+    }
+
     o_rDocumentLoadArgs.merge( aOpenCommandArguments, false );
-
-    // This method is to separate OpenCommandArguments into args which belong into the EmbeddedObjectDescriptor,
-    // and args which belong into the document's media descriptor.
-
-    // Well, there was some intermediate state where such args really existed - at the moment, they don't.
 }
 
 // -----------------------------------------------------------------------------
