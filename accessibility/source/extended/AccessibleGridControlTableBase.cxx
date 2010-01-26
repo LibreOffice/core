@@ -263,16 +263,6 @@ sal_Int32 AccessibleGridControlTableBase::implGetChildIndex(
     return nRow * m_aTable.GetColumnCount() + nColumn;
 }
 
-sal_Bool AccessibleGridControlTableBase::implIsRowSelected( sal_Int32 nRow ) const
-{
-    return m_aTable.IsRowSelected( nRow );
-}
-
-sal_Int32 AccessibleGridControlTableBase::implGetSelectedRowCount() const
-{
-    return m_aTable.GetSelectedRowCount();
-}
-
 void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >& rSeq )
 {
     rSeq = comphelper::containerToSequence(m_aTable.GetSelectedRows());
