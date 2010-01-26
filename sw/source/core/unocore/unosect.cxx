@@ -36,8 +36,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <tools/link.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/xmlcnitm.hxx>
 #include <sfx2/linkmgr.hxx>

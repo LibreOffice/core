@@ -40,8 +40,8 @@
 
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/aeitem.hxx>
 
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
@@ -50,8 +50,8 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <caption.hxx>
-#include <svtools/PasswordHelper.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -78,8 +78,8 @@
 #include <svx/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/topfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <tools/errinf.hxx>
 #include <tools/urlobj.hxx>
@@ -1605,7 +1605,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
 

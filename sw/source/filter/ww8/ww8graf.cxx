@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <hintids.hxx>
 #include <osl/endian.h>
 #include <svx/fmglob.hxx>
@@ -73,7 +73,7 @@
 #include <svx/outliner.hxx>         // #79453#
 #include <svx/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
 #include <fmtornt.hxx>
 #include <fmtcntnt.hxx>
@@ -504,14 +504,15 @@ ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
 // ItemSet gestopft.
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
 {
-    if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl )
+    SwWW8StyInf * pStyInf = GetStyle(nColl);
+    if( pStyInf != NULL && pStyInf->pFmt && pStyInf->bColl )
     {
         const SfxPoolItem* pItem;
         for( USHORT i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
         {
             //If we are set in the source and not set in the destination
             //then add it in.
-            if ( SFX_ITEM_SET == pCollA[nColl].pFmt->GetItemState(
+            if ( SFX_ITEM_SET == pStyInf->pFmt->GetItemState(
                 i, true, &pItem ) )
             {
                 SfxItemPool *pEditPool = rS.GetPool();

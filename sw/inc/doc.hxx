@@ -60,7 +60,7 @@ class SwList;
 // <--
 #include <IDocumentExternalData.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
@@ -77,7 +77,7 @@ class SwList;
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -88,6 +88,8 @@ class SwList;
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
+#include <set>
+#include <map>
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
@@ -206,7 +208,8 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
-struct SwPrintData;
+class SwPrintData;
+class SwPrintUIOptions;
 class SdrPageView;
 struct SwConversionArgs;
 class SwRewriter;
@@ -214,6 +217,10 @@ class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
+class SwPrintData;
+class SwRenderData;
+class SwPageFrm;
+class SwViewOption;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -491,7 +498,7 @@ private:
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
@@ -1065,7 +1072,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
@@ -1359,6 +1366,15 @@ public:
     // travel over PaM Ring
     sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
+
+    // get the set of printable pages for the XRenderable API by
+    // evaluating the respective settings (see implementation)
+    void CalculatePagesForPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void CalculatePagePairsForProspectPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions,
+            sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;

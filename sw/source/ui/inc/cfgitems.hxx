@@ -31,7 +31,7 @@
 #define _CFGITEMS_HXX
 
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <printdata.hxx>
 
@@ -39,7 +39,7 @@
 
 class SwWriterApp;
 class SwModule;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
@@ -155,15 +155,15 @@ public:
 
 
     BOOL   IsPrintProspect() const      { return bPrintProspect; }
-    BOOL   IsPrintProspect_RTL() const      { return bPrintProspect_RTL; }
+    BOOL   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
     void   SetPrintProspect(BOOL bFlag ){ bPrintProspect = bFlag; }
-    void   SetPrintProspect_RTL(BOOL bFlag ){ bPrintProspect_RTL = bFlag; }
+    void   SetPrintProspectRTL(BOOL bFlag ){ bPrintProspectRTL = bFlag; }
     BOOL IsPrintGraphic () const { return bPrintGraphic; }
     BOOL IsPrintTable () const { return bPrintTable; }
     BOOL IsPrintDraw () const { return bPrintDraw; }
     BOOL IsPrintControl () const { return bPrintControl; }
-    BOOL IsPrintLeftPage () const { return bPrintLeftPage; }
-    BOOL IsPrintRightPage() const { return bPrintRightPage; }
+    BOOL IsPrintLeftPage () const { return bPrintLeftPages; }
+    BOOL IsPrintRightPage() const { return bPrintRightPages; }
     BOOL IsPrintReverse  () const { return bPrintReverse; }
     BOOL IsPaperFromSetup() const { return bPaperFromSetup; }
     BOOL IsPrintEmptyPages() const { return bPrintEmptyPages; }
@@ -207,7 +207,7 @@ public:
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */

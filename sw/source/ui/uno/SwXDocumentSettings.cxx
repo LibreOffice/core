@@ -46,7 +46,7 @@
 #include <sfx2/printer.hxx>
 #include <editsh.hxx>
 #include <drawdoc.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <unotxdoc.hxx>
 #include <cmdid.h>
 #include <svx/zoomitem.hxx>

@@ -40,12 +40,12 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <vcl/cvtgrf.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/rtfout.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/tstpitem.hxx>
@@ -520,7 +520,7 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
 
         rRTFWrt.SetStrm( *pSaveStrm );  // Stream-Pointer wieder zurueck
 
-        if( aTmpStrm.GetSize() )            // gibt es SWG spezifische Attribute ??
+        if ( aTmpStrm.GetEndOfData() ) // gibt es SWG spezifische Attribute?
         {
             aTmpStrm.Seek( 0L );
             rRTFWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << aTmpStrm << '}';

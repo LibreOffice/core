@@ -36,7 +36,7 @@
 #include <hints.hxx>
 
 #include <vcl/graph.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/boxitem.hxx>
@@ -45,7 +45,7 @@
 #include <svx/cntritem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/crsditem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
 #include <fmtpdsc.hxx>
@@ -1682,7 +1682,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
 BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet*
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                pMoreAttrs /*= 0*/
 #endif
                             )

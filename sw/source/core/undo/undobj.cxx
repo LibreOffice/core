@@ -68,7 +68,7 @@ public:
     SwNodeIndex* GetMvSttIdx() const
         { return SwUndoSaveSection::GetMvSttIdx(); }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nRedlineCount;
 #endif
 };
@@ -1089,7 +1089,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         ASSERT( !this, "keine gueltigen Daten!" )
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().Count();
 #endif
 }

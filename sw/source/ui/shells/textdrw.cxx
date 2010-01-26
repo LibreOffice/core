@@ -51,7 +51,7 @@
 
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <avmedia/mediawindow.hxx>
 
 #include <unomid.h>

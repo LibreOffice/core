@@ -104,7 +104,7 @@
 #include <fldupde.hxx>
 
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG

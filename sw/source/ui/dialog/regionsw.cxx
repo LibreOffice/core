@@ -34,11 +34,11 @@
 
 #include <hintids.hxx>
 #include <uitool.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/docfilt.hxx>

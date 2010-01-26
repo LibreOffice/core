@@ -45,7 +45,7 @@
 #include <view.hxx>
 #include <swundo.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -63,7 +63,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <svx/boxitem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>
 #include <unoprnms.hxx>

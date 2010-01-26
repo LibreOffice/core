@@ -41,9 +41,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/adjitem.hxx>
@@ -978,6 +978,24 @@ void WW8AttributeOutput::StartRunProperties()
 {
     WW8_WrPlcFld* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
     m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
+}
+
+
+void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+{
+    if (pRedlineData)
+    {
+        const String &rComment = pRedlineData->GetComment();
+        //Only possible to export to main text
+        if (rComment.Len() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
+        {
+            if (m_rWW8Export.pAtn->IsNewRedlineComment(pRedlineData))
+            {
+                m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+            }
+        }
+    }
 }
 
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -2553,8 +2571,8 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
 
 void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
-    const SwPostItField& rPFld = *(SwPostItField*)pFld;
-    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rPFld );
+    const SwPostItField *pPFld = (const SwPostItField*)pFld;
+    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
 
@@ -3580,7 +3598,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,

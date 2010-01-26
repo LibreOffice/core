@@ -35,24 +35,24 @@
 #define _SW_FRMVALID_HXX
 #include <hintids.hxx>
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
 #include <tools/errinf.hxx>
 #include <svx/svdview.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <basic/sbxvar.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <svx/opaqitem.hxx>
 #include <svx/fontitem.hxx>

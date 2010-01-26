@@ -51,15 +51,15 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/undo.hxx>
+#include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/editeng.hxx>
 #include <svx/svxdlg.hxx>
@@ -69,6 +69,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 
+#include "unomodel.hxx"
 #include "view.hxx"
 #include "config.hxx"
 #include "dialog.hxx"
@@ -88,8 +89,6 @@
 
 #define SmViewShell
 #include "smslots.hxx"
-
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::accessibility;
@@ -1010,18 +1009,25 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
 }
 
 void SmViewShell::Impl_Print(
-        OutputDevice &rOutDev, const SmPrintSize ePrintSize,
+        OutputDevice &rOutDev,
+        const SmPrintUIOptions &rPrintUIOptions,
         Rectangle aOutRect, Point aZeroPoint )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Impl_Print" );
 
-    SmModule *pp = SM_MOD1();
+    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, sal_True );
+    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
+    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
+    SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
+    const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
+// IsIgnoreSpacesRight is a parser option! Thus it does not get evaluated here anymore (too late).
+//    const bool bNoRightSpaces = rPrintUIOptions.getBoolValue( PRTUIOPT_NO_RIGHT_SPACE, sal_True );
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
 
     // output text on top
-    if (pp->GetConfig()->IsPrintTitle())
+    if (bIsPrintTitle)
     {
         Size aSize600 (0, 600);
         Size aSize650 (0, 650);
@@ -1041,7 +1047,7 @@ void SmViewShell::Impl_Print(
 
         Size aDescSize (GetTextSize(rOutDev, GetDoc()->GetComment(), aOutRect.GetWidth() - 200));
 
-        if (pp->GetConfig()->IsPrintFrame())
+        if (bIsPrintFrame)
             rOutDev.DrawRect(Rectangle(aOutRect.TopLeft(),
                                Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
         aOutRect.Top() += 200;
@@ -1068,11 +1074,9 @@ void SmViewShell::Impl_Print(
     }
 
     // output text on bottom
-    if (pp->GetConfig()->IsPrintFormulaText())
+    if (bIsPrintFormulaText)
     {
-//        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
-        Font aFont;
-
+        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetColor( Color(COL_BLACK) );
 
@@ -1083,7 +1087,7 @@ void SmViewShell::Impl_Print(
 
         aOutRect.Bottom() -= aSize.Height() + 600;
 
-        if (pp->GetConfig()->IsPrintFrame())
+        if (bIsPrintFrame)
             rOutDev.DrawRect(Rectangle(aOutRect.BottomLeft(),
                                Size(aOutRect.GetWidth(), 200 + aSize.Height() + 200)));
 
@@ -1094,7 +1098,7 @@ void SmViewShell::Impl_Print(
         aOutRect.Bottom() -= 200;
     }
 
-    if (pp->GetConfig()->IsPrintFrame())
+    if (bIsPrintFrame)
         rOutDev.DrawRect(aOutRect);
 
     aOutRect.Top()    += 100;
@@ -1105,6 +1109,9 @@ void SmViewShell::Impl_Print(
     Size aSize (GetDoc()->GetSize());
 
     MapMode    OutputMapMode;
+    // PDF export should always use PRINT_SIZE_NORMAL ...
+    if (!rPrintUIOptions.getBoolValue( "IsPrinter", sal_False ) )
+        ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {
         case PRINT_SIZE_NORMAL:
@@ -1129,7 +1136,7 @@ void SmViewShell::Impl_Print(
 
         case PRINT_SIZE_ZOOMED:
         {
-            Fraction aFraction (pp->GetConfig()->GetPrintZoomFactor(), 100);
+            Fraction aFraction( nZoomFactor, 100 );
 
             OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             break;
@@ -1155,44 +1162,10 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog)
+USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-
-    SmPrinterAccess aPrinterAccess( *GetDoc() );
-    Printer *pPrinter = aPrinterAccess.GetPrinter();
-    //OutputDevice *pOutDev = pPrinter;
-
-    SfxViewShell::Print (rProgress, bIsAPI, pPrintDialog);
-
-    pPrinter->StartPage();
-
-    Point     aZeroPoint;
-    Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
-
-    Point   aPrtPageOffset( pPrinter->GetPageOffset() );
-    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
-
-    // set minimum top and bottom border
-    if (aPrtPageOffset.Y() < 2000)
-        OutputRect.Top() += 2000 - aPrtPageOffset.Y();
-    if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
-        OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
-                                       (aPrtPageOffset.Y() + OutputRect.Bottom()));
-
-    // set minimum left and right border
-    if (aPrtPageOffset.X() < 2500)
-        OutputRect.Left() += 2500 - aPrtPageOffset.X();
-    if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
-        OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
-                                      (aPrtPageOffset.X() + OutputRect.Right()));
-
-    SmModule *pp = SM_MOD1();
-    Impl_Print( *pPrinter, pp->GetConfig()->GetPrintSize(),
-                 OutputRect, aZeroPoint );
-
-    pPrinter->EndPage();
-
+    DBG_ASSERT( 0, "SmViewShell::Print: no longer usewd with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
@@ -1653,7 +1626,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );

@@ -36,7 +36,7 @@
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/udlnitem.hxx>
@@ -65,7 +65,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>

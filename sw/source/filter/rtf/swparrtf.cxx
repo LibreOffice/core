@@ -37,9 +37,9 @@
 
 #include <tools/errinf.hxx>
 #include <tools/stream.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/tstpitem.hxx>
@@ -379,7 +379,7 @@ void SwRTFParser::Continue( int nToken )
                 pPam->GetPoint()->nContent.Assign( pTxtNode, nStt );
             }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // !!! sollte nicht moeglich sein, oder ??
 ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
             "Pam.Bound1 steht noch im Node" );
@@ -2199,7 +2199,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     SwPaM aPam( *pPam->GetPoint() );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( nSNd <= nENd, "Start groesser als Ende" );
     SwNode* pDebugNd = pDoc->GetNodes()[ nSNd ];
     ASSERT( pDebugNd->IsCntntNode(), "Start kein ContentNode" );

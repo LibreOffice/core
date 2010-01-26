@@ -33,7 +33,7 @@
 
 #include <cppuhelper/weakref.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/shared_ptr.hpp>

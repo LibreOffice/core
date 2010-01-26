@@ -36,7 +36,7 @@
 #include <hints.hxx>
 #include <tools/pstm.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/brkitem.hxx>
@@ -99,8 +99,13 @@ SwFrm::SwFrm( SwModify *pMod ) :
     pNext( 0 ),
     pPrev( 0 ),
     pDrawObjs( 0 )
+    , bInfBody( FALSE )
+    , bInfTab ( FALSE )
+    , bInfFly ( FALSE )
+    , bInfFtn ( FALSE )
+    , bInfSct ( FALSE )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
 #endif
 
@@ -3864,7 +3869,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                 if( pLastSctCnt == pCnt )
                     pLastSctCnt = NULL;
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
                 ASSERT( !pLastSctCnt, "Where's the last SctCntnt?" );
 #endif
@@ -3892,7 +3897,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                     pLastSctCnt = NULL;
                 }
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
                 ASSERT( !pLastTabCnt, "Where's the last TabCntnt?" );
 #endif

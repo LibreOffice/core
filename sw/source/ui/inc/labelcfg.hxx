@@ -46,7 +46,8 @@ public:
     SwLabelConfig();
     virtual ~SwLabelConfig();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
     void    FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
     const com::sun::star::uno::Sequence<rtl::OUString>&

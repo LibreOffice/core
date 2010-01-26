@@ -36,7 +36,7 @@
 #include <tools/gen.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <map>
@@ -44,7 +44,7 @@
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
@@ -109,7 +109,7 @@ class WW8_WrPlcFld;
 class WW8_WrMagicTable;
 class WW8_WrPlcFtnEdn;
 class WW8_WrPlcPn;
-class WW8_WrPlcPostIt;
+class WW8_WrPlcAnnotations;
 class MSWordSections;
 class WW8_WrPlcTxtBoxes;
 class WW8_WrPct;            // Verwaltung
@@ -488,7 +488,7 @@ public:
     WW8_WrPlcPn* pChpPlc;
     MSWordAttrIter* pChpIter;
     MSWordStyles* pStyles;
-    WW8_WrPlcPostIt* pAtn;
+    WW8_WrPlcAnnotations* pAtn;
     WW8_WrPlcTxtBoxes *pTxtBxs, *pHFTxtBxs;
 
     const sw::Frame *mpParentFrame; //If set we are exporting content inside
@@ -1149,16 +1149,30 @@ public:
     void Append( WW8_CP nCp, const SwFmtFtn& rFtn );
 };
 
-class WW8_WrPlcPostIt : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
+struct WW8_Annotation
+{
+    const OutlinerParaObject* mpRichText;
+    String msSimpleText;
+    String msOwner;
+    DateTime maDateTime;
+    WW8_Annotation(const SwPostItField* pPostIt);
+    WW8_Annotation(const SwRedlineData* pRedline);
+};
+
+class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
 {
 private:
     //No copying
-    WW8_WrPlcPostIt(const WW8_WrPlcPostIt&);
-    WW8_WrPlcPostIt& operator=(WW8_WrPlcPostIt&);
+    WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&);
+    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&);
+    std::set<const SwRedlineData*> maProcessedRedlines;
 public:
-    WW8_WrPlcPostIt() {}
+    WW8_WrPlcAnnotations() {}
+    ~WW8_WrPlcAnnotations();
 
-    void Append( WW8_CP nCp, const SwPostItField& rPostIt );
+    void Append( WW8_CP nCp, const SwPostItField* pPostIt );
+    void Append( WW8_CP nCp, const SwRedlineData* pRedLine );
+    bool IsNewRedlineComment( const SwRedlineData* pRedLine );
     bool WriteTxt( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
 };

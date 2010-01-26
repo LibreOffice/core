@@ -58,7 +58,7 @@
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <pam.hxx>

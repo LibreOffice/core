@@ -161,14 +161,14 @@ public:
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
-    virtual void Paint( const SwRect& ) const;
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
 
     virtual void  CheckDirection( BOOL bVert );
     virtual void Cut();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 

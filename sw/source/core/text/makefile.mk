@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,6 @@ CFLAGS+=-DENABLE_GRAPHITE
 .ENDIF
 # --- Files --------------------------------------------------------
 
-.IF "$(product)$(cap)" == ""
-CXXFILES += \
-        txtio.cxx
-.ENDIF
-
-
-
 SLOFILES =  \
                 $(SLO)$/atrstck.obj \
                 $(SLO)$/EnhancedPDFExportHelper.obj \
@@ -100,7 +93,7 @@ SLOFILES =  \
         $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
-.IF "$(product)$(cap)" == ""
+.IF "$(dbgutil)"!=""
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF

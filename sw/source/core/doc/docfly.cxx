@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -679,7 +679,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // Continue with next selected object and assert, if this isn't excepted.
             if ( !pContact )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 bool bNoUserCallExcepted =
                         pObj->ISA(SwDrawVirtObj) &&
                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();

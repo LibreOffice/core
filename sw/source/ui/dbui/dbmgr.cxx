@@ -63,17 +63,17 @@
 #include <pagedesc.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <sfx2/printer.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
@@ -120,7 +120,7 @@
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <svx/langitem.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
@@ -454,80 +454,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             bRet = Merge(&rMergeDesc.rSh);   // Mischen
             break;
 
-        case DBMGR_MERGE_MAILMERGE: // Serienbrief
-        {
-            SwView& rView = rMergeDesc.rSh.GetView();
-            SfxDispatcher *pDis = rView.GetViewFrame()->GetDispatcher();
-            SfxItemSet aPrintArgs( rView.GetPool(),
-                    SID_SILENT, SID_SILENT, //5528
-                    SID_ASYNCHRON, SID_ASYNCHRON, //5811
-                    SID_PRINT_FIRST_PAGE, SID_PRINT_FIRST_PAGE,  //   5001
-                    SID_PRINT_LAST_PAGE,  SID_PRINT_LAST_PAGE,   //   5002
-                    SID_PRINT_COPIES,     SID_PRINT_COPIES,      //   5003
-                    SID_PRINTER_NAME,     SID_PRINTER_NAME,     //5322
-                    SID_SELECTION,        SID_SELECTION,        //5346
-                    SID_FILE_NAME,        SID_FILE_NAME,         // 5507
-                    SID_PRINT_PAGES,      SID_PRINT_PAGES,      //6589
-                    SID_PRINT_COLLATE,    SID_PRINT_COLLATE,    //6590
-                    FN_QRY_MERGE, FN_QRY_MERGE,
-                    0 );
-            aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) );
-
-            // !! Currently (Jan-2003) silent is defined by supplying *any*
-            // !! item!!  (Thus according to OS it would be silent even when
-            // !! other items then SID_SILENT would be supplied!)
-            // !! Therefore it has to be the 0 pointer when not silent.
-            if(IsMergeSilent())
-            {
-                aPrintArgs.Put( SfxBoolItem(SID_SILENT, TRUE) );
-                // #i25686# printing should be done asynchronously to prevent dangling offices
-                // when mail merge is called as command line macro
-                // #i52629# aynchronous printing should only be done in silent mode - otherwise
-                // the printer dialog does not come up
-                aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDesc.bPrintAsync ));
-            }
-            // convert PropertyValues
-            const beans::PropertyValue* pPrintOptions = rMergeDesc.aPrintOptions.getConstArray();
-            for( sal_Int32 nOption = 0; nOption < rMergeDesc.aPrintOptions.getLength(); ++nOption)
-            {
-                if( pPrintOptions[nOption].Name.equalsAscii( "CopyCount" ))
-                {
-                    sal_Int16 nCopies = 0;
-                    if((pPrintOptions[nOption].Value >>= nCopies) && nCopies > 0)
-                        aPrintArgs.Put( SfxInt16Item( SID_PRINT_COPIES, nCopies ));
-                }
-                else if( pPrintOptions[nOption].Name.equalsAscii( "FileName" ))
-                {
-                    ::rtl::OUString sFileName;
-                    if( (pPrintOptions[nOption].Value >>= sFileName) && sFileName.getLength() > 0)
-                        aPrintArgs.Put( SfxStringItem( SID_FILE_NAME, sFileName ));
-                }
-                else if( pPrintOptions[nOption].Name.equalsAscii( "Collate" ))
-                {
-                    sal_Bool bCollate = sal_False;
-                    if( pPrintOptions[nOption].Value >>= bCollate )
-                        aPrintArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bCollate ));
-                }
-                else if( pPrintOptions[nOption].Name.equalsAscii( "Pages" ))
-                {
-                    ::rtl::OUString sPages;
-                    if( (pPrintOptions[nOption].Value >>= sPages) && sPages.getLength() )
-                        aPrintArgs.Put( SfxStringItem( SID_PRINT_PAGES, sPages ));
-                }
-                else if( pPrintOptions[nOption].Name.equalsAscii( "Wait" ))
-                {
-                    sal_Bool bWait = sal_False;
-                    if( pPrintOptions[nOption].Value >>= bWait )
-                        aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, !bWait ));
-                }
-
-            }
-            pDis->Execute( SID_PRINTDOC,
-                                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
-                                 aPrintArgs );
-        }
-        break;
-
+        case DBMGR_MERGE_MAILMERGE: // printing merge from 'old' merge dialog or from UNO-component
         case DBMGR_MERGE_MAILING:
         case DBMGR_MERGE_MAILFILES:
         case DBMGR_MERGE_SINGLE_FILE:
@@ -853,323 +780,6 @@ SwNewDBMgr::~SwNewDBMgr()
     }
     delete pImpl;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:   Serienbrief drucken
- --------------------------------------------------------------------*/
-
-
-BOOL SwNewDBMgr::MergePrint( SwView& rView,
-                             SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
-{
-    SwWrtShell* pSh = &rView.GetWrtShell();
-    //check if the doc is synchronized and contains at least one linked section
-    BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
-    //merge source is already open
-    rOpt.nMergeCnt = 0;
-    //#i56195# no field update while printing mail merge documents
-    rOpt.bUpdateFieldsInPrinting = sal_False;
-    if(pImpl->pMergeData)
-    {
-        if(pImpl->pMergeData->aSelection.getLength())
-            rOpt.nMergeCnt = pImpl->pMergeData->aSelection.getLength();
-        else if(pImpl->pMergeData->xResultSet.is())
-        {
-            sal_Int32 nCount;
-            if( lcl_getCountFromResultSet( nCount, pImpl->pMergeData->xResultSet ) )
-                rOpt.nMergeCnt = (ULONG)nCount;
-        }
-    }
-
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
-
-    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
-    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
-    if( rOpt.IsPrintSingleJobs()  )
-        pPrt->SetEndPrintHdl( Link() );
-
-    BOOL bUserBreak = FALSE,
-         bRet = FALSE;
-    long nStartRow, nEndRow;
-    //calculate number of data sets to be printed
-
-    Sequence<PropertyValue> aViewProperties(16);
-    PropertyValue* pViewProperties =  aViewProperties.getArray();
-    pViewProperties[0].Name = C2U("MailMergeCount");
-    pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
-    pViewProperties[1].Name = C2U("PrintGraphics");
-    pViewProperties[1].Value <<= (sal_Bool)rOpt.IsPrintGraphic();
-    pViewProperties[2].Name = C2U("PrintTables");
-    pViewProperties[2].Value <<= (sal_Bool)rOpt.IsPrintTable();
-    pViewProperties[3].Name = C2U("PrintDrawings");
-    pViewProperties[3].Value <<= (sal_Bool)rOpt.IsPrintDraw();
-    pViewProperties[4].Name = C2U("PrintLeftPages");
-    pViewProperties[4].Value <<= (sal_Bool)rOpt.IsPrintLeftPage();
-    pViewProperties[5].Name = C2U("PrintRightPages");
-    pViewProperties[5].Value <<= (sal_Bool)rOpt.IsPrintRightPage();
-    pViewProperties[6].Name = C2U("PrintControls");
-    pViewProperties[6].Value <<= (sal_Bool)rOpt.IsPrintControl();
-    pViewProperties[7].Name = C2U("PrintReversed");
-    pViewProperties[7].Value <<= (sal_Bool)rOpt.IsPrintReverse();
-    pViewProperties[8].Name = C2U("PrintPaperFromSetup");
-    pViewProperties[8].Value <<= (sal_Bool)rOpt.IsPaperFromSetup();
-    pViewProperties[9].Name = C2U("PrintFaxName");
-    pViewProperties[9].Value <<= rOpt.GetFaxName();
-    pViewProperties[10].Name = C2U("PrintAnnotationMode");
-    pViewProperties[10].Value <<= (text::NotePrintMode) rOpt.GetPrintPostIts();
-    pViewProperties[11].Name = C2U("PrintProspect");
-    pViewProperties[11].Value <<= (sal_Bool)rOpt.IsPrintProspect();
-    pViewProperties[12].Name = C2U("PrintPageBackground");
-    pViewProperties[12].Value <<= (sal_Bool)rOpt.IsPrintPageBackground();
-    pViewProperties[13].Name = C2U("PrintBlackFonts");
-    pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
-    pViewProperties[14].Name = C2U("IsSinglePrintJob");
-    pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
-    pViewProperties[15].Name = C2U("PrintEmptyPages");
-    pViewProperties[15].Value <<= (sal_Bool)rOpt.IsPrintEmptyPages();
-
-    rView.SetAdditionalPrintOptions(aViewProperties);
-    do {
-        nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
-        {
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), pSh->GetView().GetViewFrame()->GetObjectShell()));
-            pSh->ViewShell::UpdateFlds();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), pSh->GetView().GetViewFrame()->GetObjectShell()));
-            ++rOpt.nMergeAct;
-
-            // launch MailMergeEvent if required
-            const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
-            if (pEvtSrc)
-            {
-                uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
-                text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
-                pEvtSrc->LaunchMailMergeEvent( aEvt );
-            }
-
-            rView.SfxViewShell::Print( rProgress, bIsAPI ); // ggf Basic-Macro ausfuehren
-            if( rOpt.IsPrintSingleJobs() && bRet )
-            {
-                //rOpt.bJobStartet = FALSE;
-                bRet = FALSE;
-            }
-
-            bMergeLock = TRUE;
-            if(rOpt.IsPrintProspect())
-            {
-                if( ! pPrt->IsJobActive() )
-                {
-                    pPrt->SetJobValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
-                                       String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
-                    pPrt->StartJob( rOpt.GetJobName() );
-                }
-                if( pPrt->IsJobActive() )
-                {
-                    pSh->PrintProspect( rOpt, rProgress, rOpt.IsPrintProspect_RTL() );
-                    bRet = TRUE;
-                }
-            }
-            else if( pSh->Prt( rOpt, &rProgress ) )
-                bRet = TRUE;
-            bMergeLock = FALSE;
-
-            if( !pPrt->IsJobActive() )
-            {
-                bUserBreak = TRUE;
-                bRet = FALSE;
-                break;
-            }
-            if( !rOpt.IsPrintSingleJobs() )
-            {
-                String& rJNm = (String&)rOpt.GetJobName();
-                rJNm.Erase();
-            }
-        }
-        nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
-    } while( bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord());
-
-    if( rOpt.IsPrintSingleJobs() )
-    {
-        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
-        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
-        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )        //Schon zu spaet?
-            aSfxSaveLnk.Call( pTmpPrinter );
-    }
-
-    rOpt.nMergeCnt = 0;
-    rOpt.nMergeAct = 0;
-
-    nMergeType = DBMGR_INSERT;
-
-    SwDocShell* pDocSh = rView.GetDocShell();
-    SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(pDocSh);
-
-    while (pTmpFrm)     // Alle Views Invalidieren
-    {
-        SwView *pVw = PTR_CAST(SwView, pTmpFrm->GetViewShell());
-        if (pVw)
-            pVw->GetEditWin().Invalidate();
-        pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, pDocSh);
-    }
-
-    return bRet;
-}
-/*-- 21.06.2004 09:08:16---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
-{
-    SwWrtShell* pSh = &rView.GetWrtShell();
-    //check if the doc is synchronized and contains at least one linked section
-    //merge source is already open
-    rOpt.nMergeCnt = 0;
-    rOpt.SetPrintSingleJobs( sal_True );
-
-    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
-    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
-    if( rOpt.IsPrintSingleJobs()  )
-        pPrt->SetEndPrintHdl( Link() );
-
-    BOOL bUserBreak = FALSE,
-         bRet = FALSE;
-    //calculate number of data sets to be printed
-
-    Sequence<PropertyValue> aViewProperties(16);
-    PropertyValue* pViewProperties =  aViewProperties.getArray();
-    pViewProperties[0].Name = C2U("MailMergeCount");
-    pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
-    pViewProperties[1].Name = C2U("PrintGraphics");
-    pViewProperties[1].Value <<= (sal_Bool)rOpt.IsPrintGraphic();
-    pViewProperties[2].Name = C2U("PrintTables");
-    pViewProperties[2].Value <<= (sal_Bool)rOpt.IsPrintTable();
-    pViewProperties[3].Name = C2U("PrintDrawings");
-    pViewProperties[3].Value <<= (sal_Bool)rOpt.IsPrintDraw();
-    pViewProperties[4].Name = C2U("PrintLeftPages");
-    pViewProperties[4].Value <<= (sal_Bool)rOpt.IsPrintLeftPage();
-    pViewProperties[5].Name = C2U("PrintRightPages");
-    pViewProperties[5].Value <<= (sal_Bool)rOpt.IsPrintRightPage();
-    pViewProperties[6].Name = C2U("PrintControls");
-    pViewProperties[6].Value <<= (sal_Bool)rOpt.IsPrintControl();
-    pViewProperties[7].Name = C2U("PrintReversed");
-    pViewProperties[7].Value <<= (sal_Bool)rOpt.IsPrintReverse();
-    pViewProperties[8].Name = C2U("PrintPaperFromSetup");
-    pViewProperties[8].Value <<= (sal_Bool)rOpt.IsPaperFromSetup();
-    pViewProperties[9].Name = C2U("PrintFaxName");
-    pViewProperties[9].Value <<= rOpt.GetFaxName();
-    pViewProperties[10].Name = C2U("PrintAnnotationMode");
-    pViewProperties[10].Value <<= (text::NotePrintMode) rOpt.GetPrintPostIts();
-    pViewProperties[11].Name = C2U("PrintProspect");
-    pViewProperties[11].Value <<= (sal_Bool)rOpt.IsPrintProspect();
-    pViewProperties[12].Name = C2U("PrintPageBackground");
-    pViewProperties[12].Value <<= (sal_Bool)rOpt.IsPrintPageBackground();
-    pViewProperties[13].Name = C2U("PrintBlackFonts");
-    pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
-    pViewProperties[14].Name = C2U("IsSinglePrintJob");
-    pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
-    pViewProperties[15].Name = C2U("PrintEmptyPages");
-    pViewProperties[15].Value <<= (sal_Bool)rOpt.IsPrintEmptyPages();
-
-    rView.SetAdditionalPrintOptions(aViewProperties);
-
-    SwMailMergeConfigItem* pConfigItem = rView.GetMailMergeConfigItem();
-    DBG_ASSERT(pConfigItem, "mail merge config item is missing");
-    if(!pConfigItem)
-        return sal_False;
-
-    USHORT nDocStart = pConfigItem->GetPrintRangeStart();
-    USHORT nDocEnd = pConfigItem->GetPrintRangeEnd();
-    DBG_ASSERT(nDocStart < nDocEnd && nDocEnd <= pConfigItem->GetMergedDocumentCount(),
-            "merge print settings are not correct");
-
-    for( sal_uInt32 nPrintDocument = nDocStart; nPrintDocument < nDocEnd; ++nPrintDocument)
-    {
-        SwDocMergeInfo& rDocInfo = pConfigItem->GetDocumentMergeInfo(nPrintDocument);
-        rOpt.aMulti.SelectAll(FALSE);
-        rOpt.aMulti.Select(Range( rDocInfo.nStartPageInTarget, rDocInfo.nEndPageInTarget ), TRUE );
-
-        ++rOpt.nMergeAct;
-
-        // launch MailMergeEvent if required
-        const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
-        if (pEvtSrc)
-        {
-            uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
-            text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
-            pEvtSrc->LaunchMailMergeEvent( aEvt );
-        }
-
-        String aTmp;
-        aTmp += String::CreateFromInt32( rDocInfo.nStartPageInTarget );
-        aTmp += '-';
-        aTmp += String::CreateFromInt32( rDocInfo.nEndPageInTarget );
-
-        Sequence<PropertyValue> aAddViewProperties(1);
-        PropertyValue* pAddViewProperties =  aAddViewProperties.getArray();
-        pAddViewProperties[0].Name = C2U("Pages");
-        pAddViewProperties[0].Value <<= ::rtl::OUString( aTmp );
-        rView.SetAdditionalPrintOptions(aAddViewProperties);
-
-        rView.SfxViewShell::Print( rProgress, bIsAPI ); // ggf Basic-Macro ausfuehren
-        if( rOpt.IsPrintSingleJobs() && bRet )
-        {
-            //rOpt.bJobStartet = FALSE;
-            bRet = FALSE;
-        }
-
-        bMergeLock = TRUE;
-        if(rOpt.IsPrintProspect())
-        {
-            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
-            {
-                pSh->PrintProspect( rOpt, rProgress,  rOpt.IsPrintProspect_RTL() );
-                bRet = TRUE;
-            }
-        }
-        else if( pSh->Prt( rOpt, &rProgress ) )
-            bRet = TRUE;
-        bMergeLock = FALSE;
-
-        if( !pPrt->IsJobActive() )
-        {
-            bUserBreak = TRUE;
-            bRet = FALSE;
-            break;
-        }
-        if( !rOpt.IsPrintSingleJobs() )
-        {
-            String& rJNm = (String&)rOpt.GetJobName();
-            rJNm.Erase();
-        }
-    }
-
-    if( rOpt.IsPrintSingleJobs() )
-    {
-        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
-        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
-        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )     //Schon zu spaet?
-            aSfxSaveLnk.Call( pTmpPrinter );
-    }
-
-    rOpt.nMergeCnt = 0;
-    rOpt.nMergeAct = 0;
-
-    nMergeType = DBMGR_INSERT;
-
-    SwDocShell* pDocSh = rView.GetDocShell();
-    SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(pDocSh);
-
-    while (pTmpFrm)     // Alle Views Invalidieren
-    {
-        SwView *pVw = PTR_CAST(SwView, pTmpFrm->GetViewShell());
-        if (pVw)
-            pVw->GetEditWin().Invalidate();
-        pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, pDocSh);
-    }
-
-    return bRet;
-}
-
-
 
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbriefe als einzelne Dokumente speichern
@@ -1317,6 +927,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // in case of creating a single resulting file this has to be created here
             SwWrtShell* pTargetShell = 0;
             SfxObjectShellRef xTargetDocShell;
+            SwView* pTargetView = 0;
             std::auto_ptr< utl::TempFile > aTempFile;
             String sModifiedStartingPageDesc;
             String sStartingPageDesc;
@@ -1329,7 +940,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 xTargetDocShell->DoInitNew( 0 );
                 SfxViewFrame* pTargetFrame = SfxViewFrame::CreateViewFrame( *xTargetDocShell, 0, TRUE );
 
-                SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
+                pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
 
                 //initiate SelectShell() to create sub shells
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
@@ -1650,27 +1261,83 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // save the single output document
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
-                DBG_ASSERT( aTempFile.get(), "Temporary file not available" );
-                INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
-                SfxMedium* pDstMed = new SfxMedium(
-                    aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-                    STREAM_STD_READWRITE, TRUE );
-                pDstMed->SetFilter( pStoreToFilter );
-                if(pDstMed->GetItemSet())
+                if( rMergeDescriptor.nMergeType != DBMGR_MERGE_MAILMERGE )
                 {
-                    if(pStoreToFilterOptions )
-                        pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
-                    if(rMergeDescriptor.aSaveToFilterData.getLength())
-                        pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
-                }
+                    DBG_ASSERT( aTempFile.get(), "Temporary file not available" );
+                    INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
+                    SfxMedium* pDstMed = new SfxMedium(
+                        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+                        STREAM_STD_READWRITE, TRUE );
+                    pDstMed->SetFilter( pStoreToFilter );
+                    if(pDstMed->GetItemSet())
+                    {
+                        if(pStoreToFilterOptions )
+                            pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
+                        if(rMergeDescriptor.aSaveToFilterData.getLength())
+                            pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
+                    }
 
-                xTargetDocShell->DoSaveAs(*pDstMed);
-                xTargetDocShell->DoSaveCompleted(pDstMed);
-                if( xTargetDocShell->GetError() )
+                    xTargetDocShell->DoSaveAs(*pDstMed);
+                    xTargetDocShell->DoSaveCompleted(pDstMed);
+                    if( xTargetDocShell->GetError() )
+                    {
+                        // error message ??
+                        ErrorHandler::HandleError( xTargetDocShell->GetError() );
+                        bLoop = FALSE;
+                    }
+                }
+                else if( pTargetView ) // must be available!
                 {
-                    // error message ??
-                    ErrorHandler::HandleError( xTargetDocShell->GetError() );
-                    bLoop = FALSE;
+                    //print the target document
+        #if OSL_DEBUG_LEVEL > 1
+                    sal_Bool  _bVal;
+                    sal_Int16 _nVal;
+                    rtl::OUString  _sVal;
+                    const beans::PropertyValue* pDbgPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
+                    for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                    {
+                        rtl::OUString aName( pDbgPrintOptions[nOption].Name );
+                        uno::Any aVal( pDbgPrintOptions[nOption].Value );
+                        aVal >>= _bVal;
+                        aVal >>= _nVal;
+                        aVal >>= _sVal;
+                    }
+        #endif
+                    // printing should be done synchronously otherwise the document
+                    // might already become invalid during the process
+                    uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+                    const sal_Int32 nOpts = aOptions.getLength();
+                    aOptions.realloc( nOpts + 1 );
+                    aOptions[ nOpts ].Name = rtl::OUString::createFromAscii( "Wait" );
+                    aOptions[ nOpts ].Value <<= sal_True ;
+//                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) );
+//                    // #i52629# aynchronous printing should only be done in silent mode - otherwise
+//                    // the printer dialog does not come up
+//                    aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDescriptor.bPrintAsync ));
+                    // move print options
+                    const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
+                    for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                    {
+                        if( pPrintOptions[nOption].Name.equalsAscii( "CopyCount" )
+                            ||( pPrintOptions[nOption].Name.equalsAscii( "FileName" ))
+                            ||( pPrintOptions[nOption].Name.equalsAscii( "Collate" ))
+                            ||( pPrintOptions[nOption].Name.equalsAscii( "Pages" ))
+                            ||( pPrintOptions[nOption].Name.equalsAscii( "Wait" )))
+                        {
+                            aOptions.realloc( nOpts + 1 );
+                            aOptions[ nOpts ].Name = pPrintOptions[nOption].Name;
+                            aOptions[ nOpts ].Value = pPrintOptions[nOption].Value ;
+                        }
+                    }
+
+//                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
+//                    if (pModOpt->IsSinglePrintJob())
+//                    {
+//                    }
+//                    else
+//                    {
+                        pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+//                    }
                 }
                 xTargetDocShell->DoClose();
             }
@@ -2902,6 +2569,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
+                    aMergeDesc.bCreateSingleFile= true;
                     MergeNew(aMergeDesc);
 
                     pWorkDoc->SetNewDBMgr( pWorkDBMgr );

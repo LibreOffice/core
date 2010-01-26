@@ -38,8 +38,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
 #include <goodies/mailenum.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -227,6 +227,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     m_aDialogSize( GetSizePixel() )
 {
     FreeResource();
+    aSingleJobsCB.Show(sal_False); // not supported in since cws printerpullpages anymore
     //task #97066# mailing of form letters is currently not supported
     aMailingRB.Show(FALSE);
     aSubjectFT.Show(FALSE);
@@ -347,7 +348,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
-    aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());
+    //aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());// not supported in since cws printerpullpages anymore
 
     sal_Int16 nMailingMode(pModOpt->GetMailingFormats());
     aFormatSwCB.Check((nMailingMode & TXTFORMAT_OFFICE) != 0);
@@ -872,7 +873,7 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, RID_SVXDLG_MULTIPATH);
+        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this );
         DBG_ASSERT(pFileDlg, "Dialogdiet fail!");
         pFileDlg->SetFiles(aAttachED.GetText());
         pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
@@ -940,5 +941,4 @@ SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) 
 SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
 {
 }
-
 

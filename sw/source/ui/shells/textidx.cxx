@@ -35,8 +35,8 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>

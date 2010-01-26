@@ -34,9 +34,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "hintids.hxx"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
@@ -55,7 +55,7 @@
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"

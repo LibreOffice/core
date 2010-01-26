@@ -46,12 +46,12 @@
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>

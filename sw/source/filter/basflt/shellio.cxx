@@ -33,9 +33,9 @@
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/fstathelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/fstathelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>

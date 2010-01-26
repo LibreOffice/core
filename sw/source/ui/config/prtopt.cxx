@@ -69,8 +69,8 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
         "Page/LeftPage",                // 13 not in SW/Web
         "Page/RightPage",               // 14 not in SW/Web
         "EmptyPages",                   // 15 not in SW/Web
-        "Content/PrintPlaceholders",     // 16 not in Sw/Web
-        "Content/PrintHiddenText"      // 17
+        "Content/PrintPlaceholders",    // 16 not in Sw/Web
+        "Content/PrintHiddenText"       // 17 not in Sw/Web
     };
     const int nCount = bIsWeb ? 12 : 18;
     Sequence<OUString> aNames(nCount);
@@ -92,6 +92,8 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     bPrintPageBackground = !bWeb;
     bPrintBlackFont = bWeb;
     bPrintTextPlaceholder = bPrintHiddenText = sal_False;
+    if (bWeb)
+        bPrintEmptyPages = sal_False;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -119,13 +121,13 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
                     break;
                     case  6: bPrintReverse      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  7: bPrintProspect      = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  8: bPrintProspect_RTL  = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  8: bPrintProspectRTL  = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  9: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 10: pValues[nProp] >>= sFaxName;  break;
                     case 11: bPaperFromSetup    = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 12: bPrintDraw         = *(sal_Bool*)pValues[nProp].getValue() ;  break;
-                    case 13: bPrintLeftPage     = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 14: bPrintRightPage        = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 13: bPrintLeftPages    = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 14: bPrintRightPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 15: bPrintEmptyPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 16: bPrintTextPlaceholder = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 17: bPrintHiddenText = *(sal_Bool*)pValues[nProp].getValue();  break;
@@ -133,6 +135,12 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
             }
         }
     }
+
+    // currently there is just one checkbox for print drawings and print graphics
+    // In the UI. (File/Print dialog and Tools/Options/.../Print)
+    // And since print graphics is the only available in Writer and WrtierWeb ...
+
+    bPrintDraw = bPrintGraphic;
 }
 /* -----------------------------06.09.00 16:50--------------------------------
 
@@ -143,6 +151,9 @@ SwPrintOptions::~SwPrintOptions()
 /* -----------------------------06.09.00 16:43--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void    SwPrintOptions::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -164,18 +175,24 @@ void    SwPrintOptions::Commit()
             case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
             case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
             case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  8: bVal = bPrintProspect_RTL      ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  8: bVal = bPrintProspectRTL      ; pValues[nProp].setValue(&bVal, rType);  break;
             case  9: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;
             case 10: pValues[nProp] <<= sFaxName;  break;
             case 11: bVal = bPaperFromSetup     ; pValues[nProp].setValue(&bVal, rType);  break;
             case 12: bVal = bPrintDraw           ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 13: bVal = bPrintLeftPage       ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 14: bVal = bPrintRightPage     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 13: bVal = bPrintLeftPages      ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 14: bVal = bPrintRightPages    ; pValues[nProp].setValue(&bVal, rType);  break;
             case 15: bVal = bPrintEmptyPages    ; pValues[nProp].setValue(&bVal, rType);  break;
             case 16: bVal = bPrintTextPlaceholder; pValues[nProp].setValue(&bVal, rType);  break;
             case 17: bVal = bPrintHiddenText; pValues[nProp].setValue(&bVal, rType);  break;
         }
     }
+
+    // currently there is just one checkbox for print drawings and print graphics
+    // In the UI. (File/Print dialog and Tools/Options/.../Print)
+    // And since print graphics is the only available in Writer and WrtierWeb ...
+    bPrintDraw = bPrintGraphic;
+
     PutProperties(aNames, aValues);
 }
 

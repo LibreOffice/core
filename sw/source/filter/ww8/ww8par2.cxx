@@ -285,7 +285,7 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
     {
         if( pTabDesc && pTabDesc->getOldRedlineStack() )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ASSERT( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
 #else
             pTabDesc->getOldRedlineStack()->close( rPos, eType );
@@ -827,7 +827,8 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
     {
         // nur fuer SwTxtFmtColl, nicht CharFmt
         // WW: 0 = no Numbering
-        if (pCollA[nAktColl].bColl && *pData)
+        SwWW8StyInf * pColl = GetStyle(nAktColl);
+        if (pColl != NULL && pColl->bColl && *pData)
         {
             // Bereich WW:1..9 -> SW:0..8 keine Aufzaehlung / Nummerierung
 
@@ -861,12 +862,16 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
 
 void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) // Sprm 12
 {
-    if( !pAktColl || nLen <= 0                  // nur bei Styledef
-        || !pCollA[nAktColl].bColl              // CharFmt -> ignorieren
-        || ( nIniFlags & WW8FL_NO_OUTLINE ) ){
-        nSwNumLevel = 0xff;
-        return;
+    {
+        SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+        if( !pAktColl || nLen <= 0                  // nur bei Styledef
+            || (pStyInf && !pStyInf->bColl)              // CharFmt -> ignorieren
+            || ( nIniFlags & WW8FL_NO_OUTLINE ) ){
+            nSwNumLevel = 0xff;
+            return;
+        }
     }
+
     if( nSwNumLevel <= MAXLEVEL         // Bereich WW:1..9 -> SW:0..8
         && nSwNumLevel <= 9 ){      // keine Aufzaehlung / Nummerierung
 
@@ -892,7 +897,10 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, (WW8_ANLD*)pData, 0, false);
         pAktColl->SetFmtAttr( SwNumRuleItem( pNR->GetName() ) );
-        pCollA[nAktColl].bHasStyNumRule = true;
+
+        SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+        if (pStyInf != NULL)
+            pStyInf->bHasStyNumRule = true;
     }
 }
 
@@ -1007,9 +1015,10 @@ void SwWW8ImplReader::StartAnl(const BYTE* pSprm13)
         }
     }
 
-    if (!sNumRule.Len() && pCollA[nAktColl].bHasStyNumRule)
+    SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+    if (!sNumRule.Len() && pStyInf->bHasStyNumRule)
     {
-        sNumRule = pCollA[nAktColl].pFmt->GetNumRule().GetValue();
+        sNumRule = pStyInf->pFmt->GetNumRule().GetValue();
         pNumRule = rDoc.FindNumRulePtr(sNumRule);
         if (!pNumRule)
             sNumRule.Erase();
@@ -1502,7 +1511,7 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
     if (nLen != 6)
         return;
     mbHasSpacing=true;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BYTE nWhichCell =
 #endif
             *pParams++;
@@ -1556,7 +1565,7 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
 
     ASSERT(nOverrideSpacing[nWhichCell] < 0x10,
         "Unexpected value for nSideBits");
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BYTE nUnknown2 =
 #endif
             *pParams++;
@@ -3919,8 +3928,8 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     : WW8Style(*pI->pTableStream, _rFib), maSprmParser(_rFib.GetFIBVersion()),
     pIo(pI), pStStrm(pI->pTableStream), pStyRule(0), nWwNumLevel(0)
 {
-    pIo->pCollA = new SwWW8StyInf[ cstd ]; // Style-UEbersetzung WW->SW
     pIo->nColls = cstd;
+    pIo->pCollA = cstd ? new SwWW8StyInf[ cstd ] : NULL; // Style-UEbersetzung WW->SW
 }
 
 void WW8RStyle::Set1StyleDefaults()
@@ -4692,7 +4701,7 @@ void WW8RStyle::Import()
 //
     // fuer z.B. Tabellen wird ein immer gueltiger Std-Style gebraucht
 
-    if( pIo->pCollA[0].pFmt && pIo->pCollA[0].bColl && pIo->pCollA[0].bValid )
+    if( pIo->StyleExists(0) && pIo->pCollA[0].pFmt && pIo->pCollA[0].bColl && pIo->pCollA[0].bValid )
         pIo->pDfltTxtFmtColl = (SwTxtFmtColl*)pIo->pCollA[0].pFmt;
     else
         pIo->pDfltTxtFmtColl = pIo->rDoc.GetDfltTxtFmtColl();

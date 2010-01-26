@@ -37,7 +37,7 @@
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/xexch.hxx>

@@ -57,21 +57,20 @@
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/langitem.hxx>
-// --> OD 2005-02-28 #i43427#
 #include <svx/opaqitem.hxx>
-// <--
-#include <svx/svxmsbas.hxx>
+#include <svx/charhiddenitem.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -129,7 +128,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <svtools/itemiter.hxx>  //SfxItemIter
+#include <svl/itemiter.hxx>  //SfxItemIter
 
 #include <stdio.h>
 
@@ -989,7 +988,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                 SfxItemState eState = SFX_ITEM_DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET)
+                if (eState != SFX_ITEM_SET && rReader.pCollA != NULL)
                     pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
             }
 
@@ -1630,7 +1629,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
+    pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
+    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_HIDDEN);
 
     return 0;
 }
@@ -2163,7 +2164,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = maFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
             eSrcCharSet = pCollA[nCharFmt].GetCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl))
             eSrcCharSet = pCollA[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
@@ -2221,10 +2222,13 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-            eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-            eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        if (pCollA != NULL)
+        {
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+                eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
+            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+                eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        }
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
             /*
@@ -4216,7 +4220,7 @@ namespace
 
 #define WW_BLOCKSIZE 0x200
 
-    void DecryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -4233,7 +4237,7 @@ namespace
         }
     }
 
-    void DecryptXOR(svx::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
         ULONG nSt = rIn.Tell();
         rIn.Seek(STREAM_SEEK_TO_END);
@@ -4366,7 +4370,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
                         aPassword[nChar] = sPassword.GetChar(nChar);
 
-                    svx::MSCodec_XorWord95 aCtx;
+                    msfilter::MSCodec_XorWord95 aCtx;
                     aCtx.InitKey(aPassword);
                     if (aCtx.VerifyKey(pWwFib->nKey, pWwFib->nHash))
                     {
@@ -4424,7 +4428,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     sal_uInt8 aSaltHash[ 16 ];
                     pTableStream->Read(aSaltHash, 16);
 
-                    svx::MSCodec_Std97 aCtx;
+                    msfilter::MSCodec_Std97 aCtx;
                     aCtx.InitKey(aPassword, aDocId);
                     if (aCtx.VerifyKey(aSaltData, aSaltHash))
                     {

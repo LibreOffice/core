@@ -34,7 +34,7 @@
 #include "cmdid.h"
 #include "hintids.hxx"
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/protitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/opaqitem.hxx>

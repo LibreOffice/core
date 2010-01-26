@@ -38,7 +38,7 @@
 
 #include "hintids.hxx"
 #include <tools/string.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/htmlkywd.hxx>

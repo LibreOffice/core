@@ -115,7 +115,7 @@
 #include <fmtflcnt.hxx>
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/unolingu.hxx>
 #include <fmtclds.hxx>

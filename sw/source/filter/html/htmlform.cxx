@@ -40,7 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -70,6 +70,9 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XImageConsumer.hpp>
+#include <com/sun/star/form/XImageProducerSupplier.hpp>
+#include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>

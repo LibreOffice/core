@@ -41,11 +41,11 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/lckbitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
@@ -151,8 +151,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-//  const SfxDocumentInfoItem& rItem = (const SfxDocumentInfoItem&)rSet.Get(SID_DOCINFO);
-//  if(rItem.IsOwnFormat())
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
@@ -1105,7 +1103,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
-                                        pStrm->GetData(), pStrm->GetSize() );
+                                    pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? (Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;

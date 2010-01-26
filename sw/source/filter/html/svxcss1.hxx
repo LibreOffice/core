@@ -31,12 +31,12 @@
 #define _SVXCSS1_HXX
 
 #include <tools/string.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svxenum.hxx>
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <rtl/textenc.h>
 #include "parcss1.hxx"

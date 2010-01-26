@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
 #include <docary.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
@@ -1194,7 +1194,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 ASSERT( FALSE, "CheckPageDescs, missing solution" );
@@ -1237,7 +1237,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.
@@ -1668,7 +1668,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                         rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
 #else
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();

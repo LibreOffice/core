@@ -37,10 +37,10 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/whiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
