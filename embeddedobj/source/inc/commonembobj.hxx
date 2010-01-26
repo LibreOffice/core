@@ -151,7 +151,7 @@ protected:
     ::rtl::OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xObjectStorage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xObjectLoadStorage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xRecoveryStorage;
 
     // link related stuff
     ::rtl::OUString m_aLinkURL;

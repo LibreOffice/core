@@ -647,7 +647,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         m_xObjectStorage.clear();
-        m_xObjectLoadStorage.clear();
+        m_xRecoveryStorage.clear();
     }
 
     m_bClosed = sal_True; // the closing succeeded

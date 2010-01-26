@@ -550,9 +550,9 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
         if ( xDoc.is() )
         {
-            if ( m_xObjectLoadStorage.is() )
+            if ( m_xRecoveryStorage.is() )
             {
-                xDoc->loadFromStorage( m_xObjectLoadStorage, aArgs );
+                xDoc->loadFromStorage( m_xRecoveryStorage, aArgs );
                 SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
             }
             else
@@ -736,12 +736,13 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< document::XStorageBasedDocument >& xDoc, const uno::Reference< embed::XStorage >& xStorage )
 {
     xDoc->switchToStorage( xStorage );
+
     uno::Reference< util::XModifiable > xModif( xDoc, uno::UNO_QUERY );
     if ( xModif.is() )
         xModif->setModified( sal_False );
 
-    if ( m_xObjectLoadStorage.is() )
-        m_xObjectLoadStorage.clear();
+    if ( m_xRecoveryStorage.is() )
+        m_xRecoveryStorage.clear();
 }
 
 //------------------------------------------------------
@@ -1077,9 +1078,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
         }
-        else if ( lObjArgs[nObjInd].Name.equalsAscii( "RecoverFromStorage" ) )
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "RecoveryStorage" ) )
         {
-            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xObjectLoadStorage );
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xRecoveryStorage );
         }
 
 
