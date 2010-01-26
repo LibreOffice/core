@@ -275,6 +275,35 @@ interface XDatabaseDocumentUI
         raises ( ::com::sun::star::lang::IllegalArgumentException,
                  ::com::sun::star::container::NoSuchElementException,
                  ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub cokmponent of the given type
+
+        <p>In opposite to <member>createComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+    */
+    ::com::sun::star::lang::XComponent createComponent(
+                    [in] long ObjectType )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub cokmponent of the given type
+
+        <p>In opposite to <member>createComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+    */
+    ::com::sun::star::lang::XComponent createComponentWithArguments(
+                    [in] long ObjectType,
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::sdbc::SQLException );
 };
 
 //=============================================================================
