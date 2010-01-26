@@ -230,8 +230,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     CheckBox CB_SHOWALL
     {
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
-        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Show it~ems without data";
         TabStop = TRUE ;
     };
