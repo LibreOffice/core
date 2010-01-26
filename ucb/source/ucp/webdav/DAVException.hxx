@@ -108,17 +108,37 @@ class DAVException
 {
     public:
         enum ExceptionCode {
-            DAV_HTTP_ERROR = 0, // Generic error, mData = error message
-            DAV_HTTP_LOOKUP,    // Name lookup failed, mData = server[:port]
-            DAV_HTTP_AUTH,      // User authentication failed on server
-            DAV_HTTP_AUTHPROXY, // User authentication failed on proxy
-            DAV_HTTP_CONNECT,   // Could not connect to server, mData = server[:port]
+            DAV_HTTP_ERROR = 0, // Generic error,
+                                // mData = server error message,
+                                // mStatusCode = HTTP status code
+            DAV_HTTP_LOOKUP,    // Name lookup failed,
+                                // mData = server[:port]
+            DAV_HTTP_AUTH,      // User authentication failed on server,
+                                // mData = server[:port]
+            DAV_HTTP_AUTHPROXY, // User authentication failed on proxy,
+                                // mData = proxy server[:port]
+            DAV_HTTP_CONNECT,   // Could not connect to server,
+                                // mData = server[:port]
             DAV_HTTP_TIMEOUT,   // Connection timed out
+                                // mData = server[:port]
             DAV_HTTP_FAILED,    // The precondition failed
+                                // mData = server[:port]
             DAV_HTTP_RETRY,     // Retry request
-            DAV_HTTP_REDIRECT,  // See http_redirect.h, mData = new URL
-            DAV_SESSION_CREATE, // session creation error, mData = server[:port]
-            DAV_INVALID_ARG };  // mData = file URL
+                                // mData = server[:port]
+            DAV_HTTP_REDIRECT,  // Request was redirected,
+                                // mData = new URL
+            DAV_SESSION_CREATE, // session creation error,
+                                // mData = server[:port]
+            DAV_INVALID_ARG,    // invalid argument
+
+            DAV_LOCK_EXPIRED,   // DAV lock expired
+
+            DAV_NOT_LOCKED,     // not locked
+
+            DAV_LOCKED_SELF,    // locked by this OOo session
+
+            DAV_LOCKED          // locked by third party
+        };
 
     private:
         ExceptionCode   mExceptionCode;

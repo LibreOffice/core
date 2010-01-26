@@ -41,7 +41,7 @@
  **************************************************************************
 
  - Root Folder vs. 'normal' Folder
-     - root doesn't support command 'delete'
+    - root doesn't support command 'delete'
     - root doesn't support command 'insert'
     - root needs not created via XContentCreator - queryContent with root
       folder id ( HIERARCHY_ROOT_FOLDER_URL ) always returns a value != 0
@@ -457,8 +457,8 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
         aRet <<= getCommandInfo( Environment );
     }
-    else if ( isFolder() && aCommand.Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "open" ) ) && isFolder() )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -481,9 +481,9 @@ uno::Any SAL_CALL HierarchyContent::execute(
                 = new DynamicResultSet( m_xSMgr, this, aOpenCommand );
         aRet <<= xSet;
     }
-    else if ( ( m_eKind != ROOT ) && !isReadOnly() &&
-              aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "insert" ) ) &&
+              ( m_eKind != ROOT ) && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // insert
@@ -508,9 +508,9 @@ uno::Any SAL_CALL HierarchyContent::execute(
                              : ucb::NameClash::ERROR;
         insert( nNameClash, Environment );
     }
-    else if ( ( m_eKind != ROOT ) && !isReadOnly() &&
-              aCommand.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "delete" ) ) &&
+              ( m_eKind != ROOT ) && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // delete
@@ -546,13 +546,13 @@ uno::Any SAL_CALL HierarchyContent::execute(
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-    else if ( isFolder() && !isReadOnly() &&
-              aCommand.Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) )
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) &&
+              isFolder() && !isReadOnly() )
     {
         //////////////////////////////////////////////////////////////////
         // transfer
-        //  ( Not available at link objects )
+        //      ( Not available at link objects )
         //////////////////////////////////////////////////////////////////
 
         ucb::TransferInfo aInfo;
@@ -570,6 +570,31 @@ uno::Any SAL_CALL HierarchyContent::execute(
         }
 
         transfer( aInfo, Environment );
+    }
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
+              isFolder() && !isReadOnly() )
+    {
+        //////////////////////////////////////////////////////////////////
+        // createNewContent
+        //      ( Not available at link objects )
+        //////////////////////////////////////////////////////////////////
+
+        ucb::ContentInfo aInfo;
+        if ( !( aCommand.Argument >>= aInfo ) )
+        {
+            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+
+        aRet <<= createNewContent( aInfo );
     }
     else
     {
@@ -607,54 +632,7 @@ uno::Sequence< ucb::ContentInfo > SAL_CALL
 HierarchyContent::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
-    if ( isFolder() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
-
-        // Folder.
-        aSeq.getArray()[ 0 ].Type
-            = rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes
-            = ucb::ContentInfoAttribute::KIND_FOLDER;
-
-        uno::Sequence< beans::Property > aFolderProps( 1 );
-        aFolderProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "Title" ),
-                    -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND );
-        aSeq.getArray()[ 0 ].Properties = aFolderProps;
-
-        // Link.
-        aSeq.getArray()[ 1 ].Type
-            = rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
-        aSeq.getArray()[ 1 ].Attributes
-            = ucb::ContentInfoAttribute::KIND_LINK;
-
-        uno::Sequence< beans::Property > aLinkProps( 2 );
-        aLinkProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "Title" ),
-                    -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND );
-        aLinkProps.getArray()[ 1 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "TargetURL" ),
-                    -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND );
-        aSeq.getArray()[ 1 ].Properties = aLinkProps;
-
-        return aSeq;
-    }
-    else
-    {
-        OSL_ENSURE( sal_False,
-                    "queryCreatableContentsInfo called on non-folder object!" );
-
-        return uno::Sequence< ucb::ContentInfo >( 0 );
-    }
+    return m_aProps.getCreatableContentsInfo();
 }
 
 //=========================================================================
@@ -1026,7 +1004,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                 xRow->appendString ( rProp, rData.getContentType() );
             }
             else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM(  "Title" ) ) )
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
             {
                 xRow->appendString ( rProp, rData.getTitle() );
             }
@@ -1039,6 +1017,12 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                         RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
             {
                 xRow->appendBoolean( rProp, rData.getIsFolder() );
+            }
+            else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            {
+                xRow->appendObject(
+                    rProp, uno::makeAny( rData.getCreatableContentsInfo() ) );
             }
             else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "TargetURL" ) ) )
@@ -1123,6 +1107,15 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                           // @@@ Might actually be read-only!
                           beans::PropertyAttribute::BOUND ),
                 rData.getTargetURL() );
+        xRow->appendObject(
+            beans::Property(
+                rtl::OUString::createFromAscii( "CreatableContentsInfo" ),
+                -1,
+                getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                | beans::PropertyAttribute::READONLY ),
+            uno::makeAny( rData.getCreatableContentsInfo() ) );
 
         // Append all Additional Core Properties.
 
@@ -1162,10 +1155,10 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+//    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+//    aEvent.OldValue       =
+//    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1202,6 +1195,15 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        {
+            // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
+        }
+        else if ( rValue.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1953,3 +1955,58 @@ void HierarchyContent::transfer(
     }
 }
 
+//=========================================================================
+//=========================================================================
+//
+// HierarchyContentProperties Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+uno::Sequence< ucb::ContentInfo >
+HierarchyContentProperties::getCreatableContentsInfo() const
+{
+    if ( getIsFolder() )
+    {
+        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+
+        // Folder.
+        aSeq.getArray()[ 0 ].Type
+            = rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE );
+        aSeq.getArray()[ 0 ].Attributes
+            = ucb::ContentInfoAttribute::KIND_FOLDER;
+
+        uno::Sequence< beans::Property > aFolderProps( 1 );
+        aFolderProps.getArray()[ 0 ] = beans::Property(
+                    rtl::OUString::createFromAscii( "Title" ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND );
+        aSeq.getArray()[ 0 ].Properties = aFolderProps;
+
+        // Link.
+        aSeq.getArray()[ 1 ].Type
+            = rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
+        aSeq.getArray()[ 1 ].Attributes
+            = ucb::ContentInfoAttribute::KIND_LINK;
+
+        uno::Sequence< beans::Property > aLinkProps( 2 );
+        aLinkProps.getArray()[ 0 ] = beans::Property(
+                    rtl::OUString::createFromAscii( "Title" ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND );
+        aLinkProps.getArray()[ 1 ] = beans::Property(
+                    rtl::OUString::createFromAscii( "TargetURL" ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND );
+        aSeq.getArray()[ 1 ].Properties = aLinkProps;
+
+        return aSeq;
+    }
+    else
+    {
+        return uno::Sequence< ucb::ContentInfo >( 0 );
+    }
+}
