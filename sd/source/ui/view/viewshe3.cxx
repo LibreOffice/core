@@ -59,11 +59,10 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/outliner.hxx>
-#include <svtools/misccfg.hxx>
 #include <svx/editstat.hxx>
 #include <tools/multisel.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/intitem.hxx>
+#include <svl/style.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -92,7 +91,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
 
 using namespace ::com::sun::star;

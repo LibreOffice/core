@@ -33,7 +33,7 @@
 
 #include <osl/module.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/xflclit.hxx>

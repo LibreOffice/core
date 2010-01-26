@@ -50,7 +50,7 @@
 #include <vcl/bmpacc.hxx>
 //#include <vcl/toolbox.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

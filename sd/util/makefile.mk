@@ -55,6 +55,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
     $(SRS)$/uitable.srs			\
+    $(SRS)$/view.srs			\
     $(SRS)$/uiannotations.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
@@ -171,6 +172,7 @@ SHL2STDLIBS= \
             $(VCLLIB) \
                         $(SOTLIB) \
             $(TOOLSLIB) \
+              $(UNOTOOLSLIB)      \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
@@ -249,7 +251,7 @@ DEF5NAME=$(SHL5TARGET)
 
 SHL5STDLIBS = $(ISDLIB) \
               $(SVXCORELIB)       \
-              $(SVXMSFILTERLIB)   \
+              $(MSFILTERLIB)   \
               $(SFX2LIB)          \
               $(SVTOOLLIB)        \
               $(SOTLIB)           \

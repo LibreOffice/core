@@ -136,6 +136,11 @@ public:
     */
     virtual ErrCode DoVerb (long nVerb);
 
+    /** Return a new renderer that can be used for example for printing the
+        document.
+    */
+    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
+
     /// Forwarded to the print manager.
     virtual SfxPrinter* GetPrinter (BOOL bCreate = FALSE);
 

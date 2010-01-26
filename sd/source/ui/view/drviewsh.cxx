@@ -32,8 +32,8 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
-#include <svtools/aeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>

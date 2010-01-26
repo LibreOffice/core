@@ -40,7 +40,7 @@
 #include <svx/dialmgr.hxx>
 
 #include "app.hrc"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnedit.hxx>
@@ -53,7 +53,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/xtable.hxx>
@@ -73,7 +73,7 @@
 // #109583#
 #include <svx/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 #include "sdresid.hxx"
