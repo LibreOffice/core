@@ -805,7 +805,7 @@ testcase tFormatAxisXAxis
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
-    endif   
+    endif
     printlog "Select chart using navigator"
     call fSelectFirstOLE   
     printlog "Edit / Object / Edit"
@@ -835,9 +835,9 @@ testcase tFormatAxisXAxis
     Kontext
     iCountTabPg = Active.GetPageCount
     if iCountTabPg <> 7 then 
-        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+        warnlog "Format::Axis::XAxis should have 8 tab pages but has " & iCountTabPg & "."            
     else             
-        printlog "Format::Axis::XAxis has 7 tab pages."
+        printlog "Format::Axis::XAxis has 8 tab pages."
     endif    
     Active.SetPage TabFormatChartLine    
     printlog "Check if tab page Line exists"
@@ -879,7 +879,7 @@ testcase tFormatAxisXAxis
     Kontext "TabChartAxisNumbers"
     call DialogTest ( TabChartAxisNumbers )   
     printlog "Close dialog with cancel"
-    TabChartAxisNumbers.Cancel   
+    TabChartAxisNumbers.Cancel
     printlog "File / Close"
     Call hCloseDocument
 endcase
