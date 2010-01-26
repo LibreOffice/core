@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontconfig.cxx,v $
- * $Revision: 1.30.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,33 +36,40 @@
 using namespace psp;
 
 #ifdef ENABLE_FONTCONFIG
-#include <fontconfig/fontconfig.h>
-#include <ft2build.h>
-#include <fontconfig/fcfreetype.h>
-// be compatible with fontconfig 2.2.0 release
-#ifndef FC_WEIGHT_BOOK
-    #define FC_WEIGHT_BOOK 75
-#endif
-#ifndef FC_EMBEDDED_BITMAP
-    #define FC_EMBEDDED_BITMAP "embeddedbitmap"
-#endif
-#ifndef FC_FAMILYLANG
-    #define FC_FAMILYLANG "familylang"
-#endif
+    #include <fontconfig/fontconfig.h>
+    #include <ft2build.h>
+    #include <fontconfig/fcfreetype.h>
+    // allow compile on baseline (currently with fontconfig 2.2.0)
+    #ifndef FC_WEIGHT_BOOK      // TODO: remove when baseline moves to fc>=2.2.1
+        #define FC_WEIGHT_BOOK 75
+    #endif
+    #ifndef FC_EMBEDDED_BITMAP  // TODO: remove when baseline moves to fc>=2.3.92
+        #define FC_EMBEDDED_BITMAP "embeddedbitmap"
+    #endif
+    #ifndef FC_FAMILYLANG       // TODO: remove when baseline moves to fc>=2.2.97
+        #define FC_FAMILYLANG "familylang"
+    #endif
+    #ifndef FC_HINT_STYLE       // TODO: remove when baseline moves to fc>=2.2.91
+        #define FC_HINT_STYLE  "hintstyle"
+        #define FC_HINT_NONE   0
+        #define FC_HINT_SLIGHT 1
+        #define FC_HINT_MEDIUM 2
+        #define FC_HINT_FULL   3
+    #endif
 #else
-typedef void FcConfig;
-typedef void FcObjectSet;
-typedef void FcPattern;
-typedef void FcFontSet;
-typedef void FcCharSet;
-typedef int FcResult;
-typedef int FcBool;
-typedef int FcMatchKind;
-typedef char FcChar8;
-typedef int FcChar32;
-typedef unsigned int FT_UInt;
-typedef void* FT_Face;
-typedef int FcSetName;
+    typedef void FcConfig;
+    typedef void FcObjectSet;
+    typedef void FcPattern;
+    typedef void FcFontSet;
+    typedef void FcCharSet;
+    typedef int FcResult;
+    typedef int FcBool;
+    typedef int FcMatchKind;
+    typedef char FcChar8;
+    typedef int FcChar32;
+    typedef unsigned int FT_UInt;
+    typedef void* FT_Face;
+    typedef int FcSetName;
 #endif
 
 #include <cstdio>
