@@ -29,21 +29,18 @@
  ************************************************************************/
 #ifndef _SVX_THESDLG_HXX
 #define _SVX_THESDLG_HXX
-// include ---------------------------------------------------------------
 
-#include <com/sun/star/uno/Sequence.hxx>
+
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XMeaning.hpp>
-
-#include <boost/shared_ptr.hpp>
 
 #include "svx/stddlg.hxx"
 #include "svx/svxdllapi.h"
 
+#include <boost/shared_ptr.hpp>
 
-class MenuButton;
 class Button;
-class ListBox;
+class MenuButton;
+class ComboBox;
 class SvxCheckListBox;
 
 /////////////////////////////////////////////////////////////////
@@ -54,29 +51,12 @@ class SVX_DLLPUBLIC SvxThesaurusDialog : public SvxStandardDialog
 {
     boost::shared_ptr< SvxThesaurusDialog_Impl > m_pImpl;
 
-#ifdef _SVX_THESDLG_CXX
-    SVX_DLLPRIVATE bool     UpdateAlternativesBox_Impl();
-    SVX_DLLPRIVATE void     SetWindowTitle(sal_Int16 nLanguage);
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
-            queryMeanings_Impl( ::rtl::OUString& rTerm, const ::com::sun::star::lang::Locale& rLocale, const ::com::sun::star::beans::PropertyValues& rProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-    // Handler
-    DECL_LINK( LanguageHdl_Impl, MenuButton * );
-    DECL_LINK( LookUpHdl_Impl, Button * );
-    DECL_LINK( WordSelectHdl_Impl, ListBox * );
-    DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
-    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
-
-    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox * );
-#endif
-
     SVX_DLLPRIVATE virtual void     Apply();
 
 public:
     SvxThesaurusDialog( Window* pParent,
                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
-                        const String &rWord, sal_Int16 nLanguage );
+                        const String &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 
     String          GetWord();
