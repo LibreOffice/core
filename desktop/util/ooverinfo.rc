@@ -69,7 +69,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName",		"SOFFICE\0"
-				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright",		S_CRIGHT " Oracle, Inc.\0"
 			}
 #else
 			block "040904E4"
@@ -81,7 +81,7 @@ VS_VERSION_INFO versioninfo
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
 				value "InternalName", 		"SOFFICE\0"
-				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright", 	S_CRIGHT " Oracle, Inc.\0"
 			}
 #endif
 		}
