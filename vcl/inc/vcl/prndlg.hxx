@@ -61,6 +61,8 @@ namespace vcl
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
+
+            bool useHCColorReplacement() const;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();

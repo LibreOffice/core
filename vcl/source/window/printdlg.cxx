@@ -45,16 +45,22 @@
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/unohelp.hxx"
 
 #include "unotools/localedatawrapper.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/awt/Size.hpp"
 
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
 #define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
@@ -69,7 +75,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
 {
     SetPaintTransparent( TRUE );
     SetBackground();
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if( useHCColorReplacement() )
         maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
     else
         maPageVDev.SetBackground( Color( COL_WHITE ) );
@@ -79,12 +85,76 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
+bool PrintDialog::PrintPreviewWindow::useHCColorReplacement() const
+{
+    bool bRet = false;
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        try
+        {
+            // get service provider
+            Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+            // create configuration hierachical access name
+            if( xSMgr.is() )
+            {
+                try
+                {
+                    Reference< XMultiServiceFactory > xConfigProvider(
+                        Reference< XMultiServiceFactory >(
+                            xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "com.sun.star.configuration.ConfigurationProvider" ))),
+                            UNO_QUERY )
+                        );
+                    if( xConfigProvider.is() )
+                    {
+                        Sequence< Any > aArgs(1);
+                        PropertyValue aVal;
+                        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Accessibility" ) );
+                        aArgs.getArray()[0] <<= aVal;
+                        Reference< XNameAccess > xConfigAccess(
+                            Reference< XNameAccess >(
+                                xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                                aArgs ),
+                                UNO_QUERY )
+                            );
+                        if( xConfigAccess.is() )
+                        {
+                            try
+                            {
+                                sal_Bool bValue = sal_False;
+                                Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsForPagePreviews" ) ) );
+                                if( aAny >>= bValue )
+                                    bRet = bool(bValue);
+                            }
+                            catch( NoSuchElementException& )
+                            {
+                            }
+                            catch( WrappedTargetException& )
+                            {
+                            }
+                        }
+                    }
+                }
+                catch( Exception& )
+                {
+                }
+            }
+        }
+        catch( WrappedTargetException& )
+        {
+        }
+    }
+    return bRet;
+}
+
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        if( useHCColorReplacement() )
             maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
         else
             maPageVDev.SetBackground( Color( COL_WHITE ) );
@@ -214,9 +284,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     #endif
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        GetSettings().GetStyleSettings().GetWindowColor().IsDark()
-        )
+    if( useHCColorReplacement() )
     {
         maMtf.ReplaceColors( Color( COL_BLACK ), Color( COL_WHITE ), 30 );
     }
