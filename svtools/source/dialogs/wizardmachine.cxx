@@ -36,7 +36,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/svtdata.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 
 //.........................................................................
