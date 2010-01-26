@@ -31,6 +31,8 @@
 
 #include "system.h"
 
+#include "file_url.h"
+
 #include <osl/diagnose.h>
 #include <osl/profile.h>
 #include <osl/process.h>
@@ -502,9 +504,9 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        CHAR szFileName[MAX_LONG_PATH];
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_LONG_PATH, NULL, NULL);
         GetPrivateProfileString(pszSection, pszEntry, pszDefault, pszString, MaxLen, szFileName);
     }
 
@@ -683,9 +685,9 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        CHAR szFileName[MAX_LONG_PATH];
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_LONG_PATH, NULL, NULL);
         WritePrivateProfileString(pszSection, pszEntry, pszString, szFileName);
     }
 
@@ -794,9 +796,9 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        CHAR szFileName[MAX_LONG_PATH];
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_LONG_PATH, NULL, NULL);
         WritePrivateProfileString(pszSection, pszEntry, NULL, szFileName);
     }
 
@@ -868,9 +870,9 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        CHAR szFileName[MAX_LONG_PATH];
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_LONG_PATH, NULL, NULL);
         n = GetPrivateProfileString(pszSection, NULL, NULL, pszBuffer, MaxLen, szFileName);
     }
 
@@ -887,8 +889,8 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName)
 {
     sal_Bool bFailed;
-    sal_Unicode wcsFile[MAX_PATH];
-    sal_Unicode wcsPath[MAX_PATH];
+    sal_Unicode wcsFile[MAX_LONG_PATH];
+    sal_Unicode wcsPath[MAX_LONG_PATH];
     sal_uInt32  nFileLen;
     sal_uInt32  nPathLen = 0;
 
@@ -898,7 +900,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
     /* build file name */
     if (strName && strName->length)
     {
-        if(strName->length >= MAX_PATH)
+        if(strName->length >= MAX_LONG_PATH)
             return sal_False;
 
         wcscpy(wcsFile, strName->buffer);
@@ -906,7 +908,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
         if (rtl_ustr_indexOfChar( wcsFile, L'.' ) == -1)
         {
-            if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_PATH)
+            if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_LONG_PATH)
                 return sal_False;
 
             /* add default extension */
@@ -937,12 +939,12 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         if ((nPos = rtl_ustr_lastIndexOfChar( pProgName, L'.' )) != -1 )
             nLen -= 4;
 
-        if ((nFileLen = nLen - nOffset) >= MAX_PATH)
+        if ((nFileLen = nLen - nOffset) >= MAX_LONG_PATH)
             return sal_False;
 
         wcsncpy(wcsFile, pProgName + nOffset, nFileLen);
 
-        if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_PATH)
+        if (nFileLen + wcslen(STR_INI_EXTENSION) >= MAX_LONG_PATH)
             return sal_False;
 
         /* add default extension */
@@ -972,7 +974,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
             if (bFailed) return (sal_False);
 
-            if (strHome->length >= MAX_PATH)
+            if (strHome->length >= MAX_LONG_PATH)
                 return sal_False;
 
             wcscpy( wcsPath, strHome->buffer);
@@ -983,7 +985,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METAHOME);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METAHOME);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= MAX_LONG_PATH)
                     return sal_False;
 
                 wcscpy(wcsPath + nPathLen, pPath);
@@ -1004,7 +1006,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 
             if (bFailed) return (sal_False);
 
-            if (strConfig->length >= MAX_PATH)
+            if (strConfig->length >= MAX_LONG_PATH)
                 return sal_False;
 
             wcscpy( wcsPath, strConfig->buffer);
@@ -1015,7 +1017,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METACFG);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METACFG);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= MAX_LONG_PATH)
                     return sal_False;
 
                 wcscpy(wcsPath + nPathLen, pPath);
@@ -1028,7 +1030,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = GetWindowsDirectoryW(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
+            if (((nPathLen = GetWindowsDirectoryW(wcsPath, MAX_LONG_PATH)) == 0) || (nPathLen >= MAX_LONG_PATH))
                 return (sal_False);
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))
@@ -1036,7 +1038,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
                 pPath += RTL_CONSTASCII_LENGTH(STR_INI_METASYS);
                 nLen -= RTL_CONSTASCII_LENGTH(STR_INI_METASYS);
 
-                if (nLen + nPathLen >= MAX_PATH)
+                if (nLen + nPathLen >= MAX_LONG_PATH)
                     return sal_False;
 
                 wcscpy(wcsPath + nPathLen, pPath);
@@ -1054,7 +1056,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
             nPathLen = wcslen(wcsPath);
         }
 
-        else if(nLen < MAX_PATH)
+        else if(nLen < MAX_LONG_PATH)
         {
             wcscpy(wcsPath, pPath);
             nPathLen = wcslen(wcsPath);
@@ -1071,7 +1073,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         osl_freeSecurityHandle(security);
 
         if (bFailed) return (sal_False);
-        if (strConfigDir->length >= MAX_PATH)
+        if (strConfigDir->length >= MAX_LONG_PATH)
             return sal_False;
 
         wcscpy(wcsPath, strConfigDir->buffer);
@@ -1084,7 +1086,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         wcsPath[nPathLen] = 0;
     }
 
-    if (nPathLen + nFileLen >= MAX_PATH)
+    if (nPathLen + nFileLen >= MAX_LONG_PATH)
         return sal_False;
 
     /* append file name */
@@ -1140,9 +1142,9 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     }
     else
     {
-        CHAR szFileName[MAX_PATH];
+        CHAR szFileName[MAX_LONG_PATH];
 
-        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_PATH, NULL, NULL);
+        WideCharToMultiByte(CP_ACP,0, pProfile->m_strFileName->buffer, -1, szFileName, MAX_LONG_PATH, NULL, NULL);
         n = GetPrivateProfileSectionNames(pszBuffer, MaxLen, szFileName);
     }
 
@@ -2333,7 +2335,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
     sal_Char Buffer[4096] = "";
     sal_Char Product[132] = "";
 
-    WCHAR wcsPath[MAX_PATH] = L"";
+    WCHAR wcsPath[MAX_LONG_PATH] = L"";
     DWORD dwPathLen = 0;
 
     if (*strPath == L'"')
@@ -2367,7 +2369,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
             rtl_uString * strSVFallback = NULL;
             rtl_uString * strSVLocation = NULL;
             rtl_uString * strSVName     = NULL;
-            sal_Char Dir[MAX_PATH];
+            sal_Char Dir[MAX_LONG_PATH];
             oslProfile hProfile;
 
             rtl_uString_newFromAscii(&strSVFallback, SVERSION_FALLBACK);
@@ -2488,15 +2490,15 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                     }
                     else
                     {
-                        CHAR szPath[MAX_PATH];
+                        CHAR szPath[MAX_LONG_PATH];
                         int n;
 
-                        if ((n = WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL)) > 0)
+                        if ((n = WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_LONG_PATH, NULL, NULL)) > 0)
                         {
                             strcpy(szPath + n, SVERSION_USER);
                             if (access(szPath, 0) >= 0)
                             {
-                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + dwPathLen, MAX_PATH - dwPathLen );
+                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + dwPathLen, MAX_LONG_PATH - dwPathLen );
                             }
                         }
                     }
@@ -2572,9 +2574,9 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
         }
 
         {
-            CHAR szPath[MAX_PATH];
+            CHAR szPath[MAX_LONG_PATH];
 
-            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL);
+            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_LONG_PATH, NULL, NULL);
 
             /* if file not exists, remove any specified subdirectories
                like "bin" or "program" */
@@ -2598,7 +2600,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             }
                             else
                             {
-                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + nPos + 1, MAX_PATH - (nPos + 1) );
+                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, wcsPath + nPos + 1, MAX_LONG_PATH - (nPos + 1) );
                             }
                         }
                         else
@@ -2621,9 +2623,9 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
         wcscpy(wcsPath + dwPathLen, strFile);
 
         {
-            CHAR szPath[MAX_PATH];
+            CHAR szPath[MAX_LONG_PATH];
 
-            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_PATH, NULL, NULL);
+            WideCharToMultiByte(CP_ACP,0, wcsPath, -1, szPath, MAX_LONG_PATH, NULL, NULL);
 
             if ((access(szPath, 0) < 0) && (strlen(Product) > 0))
             {
@@ -2674,7 +2676,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                         if (strlen(Buffer) > 0)
                         {
                             dwPathLen = MultiByteToWideChar(
-                                CP_ACP, 0, Buffer, -1, wcsPath, MAX_PATH );
+                                CP_ACP, 0, Buffer, -1, wcsPath, MAX_LONG_PATH );
                             dwPathLen -=1;
 
                             /* build full path */
@@ -2691,12 +2693,12 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             }
                             else
                             {
-                                CHAR szPath[MAX_PATH];
+                                CHAR szPath[MAX_LONG_PATH];
                                 int n;
 
                                 if ((n = WideCharToMultiByte(
                                          CP_ACP,0, wcsPath, -1, szPath,
-                                         MAX_PATH, NULL, NULL))
+                                         MAX_LONG_PATH, NULL, NULL))
                                     > 0)
                                 {
                                     strcpy(szPath + n, SVERSION_USER);
@@ -2705,7 +2707,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                                         dwPathLen += MultiByteToWideChar(
                                             CP_ACP, 0, SVERSION_USER, -1,
                                             wcsPath + dwPathLen,
-                                            MAX_PATH - dwPathLen );
+                                            MAX_LONG_PATH - dwPathLen );
                                     }
                                 }
                             }

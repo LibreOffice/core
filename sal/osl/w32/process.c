@@ -46,6 +46,7 @@
 
 #include "procimpl.h"
 #include "sockimpl.h"
+#include "file_url.h"
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
@@ -225,10 +226,10 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-    TCHAR buffer[MAX_PATH];
+    TCHAR buffer[MAX_LONG_PATH];
     DWORD buflen;
 
-    if ((buflen = GetModuleFileNameW (0, buffer, MAX_PATH)) > 0)
+    if ((buflen = GetModuleFileNameW (0, buffer, MAX_LONG_PATH)) > 0)
     {
         rtl_uString * pAbsPath = 0;
         rtl_uString_newFromStr_WithLength (&(pAbsPath), buffer, buflen);
@@ -286,11 +287,11 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         {
             /* Ensure absolute path */
             DWORD dwResult;
-            TCHAR szBuffer[MAX_PATH];
+            TCHAR szBuffer[MAX_LONG_PATH];
 
             dwResult = SearchPath (
-                0, ppArgs[0]->buffer, L".exe", MAX_PATH, szBuffer, 0);
-            if ((0 < dwResult) && (dwResult < MAX_PATH))
+                0, ppArgs[0]->buffer, L".exe", MAX_LONG_PATH, szBuffer, 0);
+            if ((0 < dwResult) && (dwResult < MAX_LONG_PATH))
             {
                 /* Replace argv[0] with it's absolute path */
                 rtl_uString_newFromStr_WithLength(
@@ -418,7 +419,7 @@ extern oslMutex g_CurrentDirectoryMutex;
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
-    TCHAR   szBuffer[MAX_PATH];
+    TCHAR   szBuffer[MAX_LONG_PATH];
     DWORD   dwLen;
 
 

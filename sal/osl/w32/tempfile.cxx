@@ -215,7 +215,7 @@ oslFileError SAL_CALL osl_createTempFile(
     if (osl_File_E_None != osl_error)
         return osl_error;
 
-    /* allocate enough space on the stack */
+    /* allocate enough space on the stack, the file name can not be longer than MAX_PATH */
     STACK_ALLOC(tmp_name, WCHAR, (rtl_uString_getLength(base_directory) + MAX_PATH));
 
     if (tmp_name)
@@ -241,7 +241,7 @@ oslFileError SAL_CALL osl_createTempFile(
 //#############################################
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
-    WCHAR   szBuffer[MAX_PATH];
+    WCHAR   szBuffer[MAX_LONG_PATH];
     LPWSTR  lpBuffer = szBuffer;
     DWORD   nBufferLength = ELEMENTS_OF_ARRAY(szBuffer) - 1;
 

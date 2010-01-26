@@ -32,6 +32,8 @@
 #include "system.h"
 #include <tlhelp32.h>
 
+#include "file_url.h"
+
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -312,7 +314,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
         if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
         {
             IMAGEHLP_MODULE ModuleInfo;
-            CHAR    szModuleFileName[MAX_PATH];
+            CHAR    szModuleFileName[MAX_LONG_PATH];
             LPSTR   lpSearchPath = NULL;
 
             if ( GetModuleFileNameA( NULL, szModuleFileName, sizeof(szModuleFileName) ) )
@@ -426,7 +428,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 
                 if ( (BYTE *)pv >= (BYTE *)modinfo.lpBaseOfDll && (BYTE *)pv < (BYTE *)modinfo.lpBaseOfDll + modinfo.SizeOfImage )
                 {
-                    WCHAR   szBuffer[MAX_PATH];
+                    WCHAR   szBuffer[MAX_LONG_PATH];
                     rtl_uString *ustrSysPath = NULL;
 
                     GetModuleFileNameW( lpModules[iModule], szBuffer, bufsizeof(szBuffer) );

@@ -32,6 +32,8 @@
 #include "system.h"
 #include <tchar.h>
 
+#include "file_url.h"
+
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
@@ -115,7 +117,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
     BOOL    fSuccess = FALSE;
     BOOL    fAutoReport = FALSE;
     TCHAR   szBuffer[1024];
-    TCHAR   szPath[MAX_PATH];
+    TCHAR   szPath[MAX_LONG_PATH];
     LPTSTR  lpFilePart;
     PROCESS_INFORMATION ProcessInfo;
     STARTUPINFO StartupInfo;
@@ -180,7 +182,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
         }
     }
 
-    if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
+    if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_LONG_PATH, szPath, &lpFilePart ) )
     {
         ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
         StartupInfo.cb = sizeof(StartupInfo.cb);
