@@ -265,21 +265,9 @@ void SwView::StartTextConversion(
     // do not do text conversion if it is active elsewhere
     if (GetWrtShell().HasConvIter())
     {
-//        MessBox( 0, WB_OK, String( SW_RES( STR_SPELL_TITLE ) ),
-//                String( SW_RES( STR_MULT_INTERACT_SPELL_WARN ) ) ).Execute();
         return;
     }
-/*
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_SPELLING, aEmptyStr, pEditWin,
-         RID_SVXERRCTX, DIALOG_MGR() );
 
-    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
-    if(!xSpell.is())
-    {   // keine Arme keine Kekse
-        ErrorHandler::HandleError( ERRCODE_SVX_LINGU_LINGUNOTEXISTS );
-        return;
-    }
-*/
     SpellKontext(sal_True);
 
     const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
@@ -642,12 +630,6 @@ void SwView::StartThesaurus()
     sal_Bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( sal_False );
 
-#ifdef TL_NEVER
-//!!! hier mu� noch was getan werden... (Umsetzung der Funktionalitaet)
-    // ErrorLink setzen, alten merken
-    Link aOldLnk = pSpell->ChgErrorLink(LINK(this, SwView, SpellError));
-#endif
-
     // get initial LookUp text
     const sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection();
     String aTmp = GetThesaurusLookUpText( bSelection );
@@ -656,47 +638,13 @@ void SwView::StartThesaurus()
     SvxThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
-    {
         SpellError( &eLang );
-    }
     else
     {
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), sal_True );
-            pDlg = new SvxThesaurusDialog( &GetEditWin(),
-                                           xThes, aTmp, eLang );
-        }
-
-        {
-            // Hier wird der Thesaurus-Dialog im Applikationsfenster zentriert,
-            // und zwar oberhalb oder unterhalb der Cursorposition, je nachdem,
-            // wo mehr Platz ist.
-
-            // Current Word:
-            SwRect aRect( pWrtShell->GetCharRect() );
-            Point aTopPos = aRect.Pos();
-            Point aBtmPos( aTopPos.X(), aRect.Bottom() );
-            aTopPos = GetEditWin().LogicToPixel( aTopPos );
-            aTopPos = GetEditWin().OutputToScreenPixel( aTopPos );
-            aBtmPos = GetEditWin().LogicToPixel( aBtmPos );
-            aBtmPos = GetEditWin().OutputToScreenPixel( aBtmPos );
-            // ::frame::Desktop:
-            Rectangle aRct = GetEditWin().GetDesktopRectPixel();
-            Point aWinTop( aRct.TopLeft() );
-            Point aWinBtm( aRct.BottomRight() );
-            if ( aTopPos.Y() - aWinTop.Y() > aWinBtm.Y() - aBtmPos.Y() )
-                aWinBtm.Y() = aTopPos.Y();
-            else
-                aWinTop.Y() = aBtmPos.Y();
-
-            Size aSz = pDlg->GetSizePixel();
-            if ( aWinBtm.Y() - aWinTop.Y() > aSz.Height() )
-            {
-                aWinTop.X() = ( aWinTop.X() + aWinBtm.X() - aSz.Width() ) / 2;
-                aWinTop.Y() = ( aWinTop.Y() + aWinBtm.Y() - aSz.Height() ) / 2;
-                pDlg->SetPosPixel( aWinTop );
-            }
+            pDlg = new SvxThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );
         }
 
         if ( pDlg->Execute()== RET_OK )
