@@ -50,6 +50,10 @@ TARFILE_MD5=6244eb0b6e2647ee50470951fa6efb47
 TARFILE_ROOTDIR=mozilla
 PATCH_FILES=nss.patch
 
+.IF "$(OS)"=="MACOSX"
+PATCH_FILES+=nss_macosx.patch
+.ENDIF # "$(OS)"=="MACOSX"
+
 .IF "$(debug)" != ""
 .ELSE
 BUILD_OPT=1
@@ -65,13 +69,21 @@ USE_64:=1
 .ENDIF			# "$(CPU)"=="X"
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
+.IF "$(OS)$(COM)"=="FREEBSDGCC"
+.IF "$(CPU)"=="X"
+# force 64-bit buildmode
+USE_64:=1
+.EXPORT : USE_64
+.ENDIF			# "$(CPU)"=="X"
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)"=="MACOSX"
 .IF "$(EXTRA_CFLAGS)"!=""
 CPP:=gcc -E $(EXTRA_CFLAGS)
 CXX:=g++ $(EXTRA_CFLAGS)
 CC:=gcc $(EXTRA_CFLAGS)
-.EXPORT : CPP
+MACOS_SDK_DIR*=$(MACDEVSDK)
+.EXPORT : CPP MACOS_SDK_DIR
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 

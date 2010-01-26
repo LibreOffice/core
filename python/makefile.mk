@@ -51,7 +51,9 @@ all:
 
 TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
-PATCH_FILES=Python-$(PYVERSION).patch
+PATCH_FILES=\
+    Python-$(PYVERSION).patch \
+    Python-ssl.patch
 
 CONFIGURE_DIR=
 
@@ -81,11 +83,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-in
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
-.IF "$(OS)" == "IRIX"
-BUILD_ACTION=$(ENV_BUILD) gmake -j$(EXTMAXPROCESS) ; gmake install
-.ELSE
 BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; chmod -R ug+w $(MYCWD)/python-inst
-.ENDIF
 .ELSE
 # ----------------------------------
 # WINDOWS
