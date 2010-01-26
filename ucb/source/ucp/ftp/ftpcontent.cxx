@@ -578,22 +578,18 @@ Any SAL_CALL FTPContent::execute(
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
                 action = THROWRESOLVENAME;
             else if( e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
-                     e.code() == CURLE_FTP_WEIRD_PASS_REPLY ||
-                     e.code() == CURLE_LOGIN_DENIED)
+/*
+MacOS SDK 10.4 uses curl 7.13.1 (current baseline). Curl introduced new error codes with this version.
+*/
+#if LIBCURL_VERSION_NUM>=0x070d01 /* 7.13.1 */
+                    e.code() == CURLE_LOGIN_DENIED ||
+#endif
+                     e.code() == CURLE_BAD_PASSWORD_ENTERED ||
+                     e.code() == CURLE_FTP_WEIRD_PASS_REPLY)
                 action = THROWAUTHENTICATIONREQUEST;
-            else if(e.code() == CURLE_FTP_ACCESS_DENIED
-// MacOS SDK 10.4 (curl 7.19.1) doesn't define CURLE_REMOTE_ACCESS_DENIED
-#ifdef CURLE_REMOTE_ACCESS_DENIED
-                    || e.code() == CURLE_REMOTE_ACCESS_DENIED
-#endif
-                )
+            else if(e.code() == CURLE_FTP_ACCESS_DENIED)
                 action = THROWACCESSDENIED;
-            else if(e.code() == CURLE_FTP_QUOTE_ERROR
-// MacOS SDK 10.4 (curl 7.19.1) doesn't define CURLE_QUOTE_ERROR
-#ifdef CURLE_QUOTE_ERROR
-                || e.code() == CURLE_QUOTE_ERROR
-#endif
-                )
+            else if(e.code() == CURLE_FTP_QUOTE_ERROR)
                 action = THROWQUOTE;
             else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
                 action = THROWNOFILE;
