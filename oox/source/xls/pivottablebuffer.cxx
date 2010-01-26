@@ -1425,7 +1425,7 @@ void PivotTable::finalizeImport()
             }
             catch( Exception& )
             {
-                OSL_ENSURE( false, "PivotTable::finalizeImport - exception while creating the pivot table" );
+                OSL_ENSURE( false, "PivotTable::finalizeImport - exception while creating the DataPilot table" );
             }
         }
     }
