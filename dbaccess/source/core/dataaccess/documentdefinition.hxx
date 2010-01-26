@@ -216,7 +216,7 @@ private:
         @param _bOpenedInDesignMode
             determines whether the embedded object has been opened for designing it or for data display
     */
-    void impl_onActivateEmbeddedObject();
+    void    impl_onActivateEmbeddedObject();
 
     /** initializes a newly created view/controller which is displaying our embedded object
 
@@ -226,27 +226,30 @@ private:
         @param  _rxController
             the controller which belongs to the XModel of our (active) embedded object
     */
-    void impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
+    void    impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
 
     /** removes the given frame from the desktop's frame collection
         @raises ::com::sun::star::uno::RuntimeException
     */
-    void impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+    void    impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
     /** opens the UI for this sub document
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-        impl_openUI_nolck_throw( bool _bForEditing );
+            impl_openUI_nolck_throw( bool _bForEditing );
 
     /** stores our document, if it's already loaded
     */
-    void
-        impl_store_throw();
+    void    impl_store_throw();
 
     /** closes our document, if it's open
     */
-    bool
-        impl_close_throw();
+    bool    impl_close_throw();
+
+    /** returns our component, creates it if necessary
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >
+            impl_getComponent_throw( const bool i_ForceCreate = true );
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;

@@ -1922,18 +1922,18 @@ void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
     }
 }
 // -----------------------------------------------------------------------------
-Reference< util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeException)
+Reference< util::XCloseable > ODocumentDefinition::impl_getComponent_throw( const bool i_ForceCreate )
 {
     OSL_ENSURE(m_xEmbeddedObject.is(),"Illegal call for embeddedObject");
-    Reference< util::XCloseable> xComp;
+    Reference< util::XCloseable > xComp;
     if ( m_xEmbeddedObject.is() )
     {
-        int nOldState = m_xEmbeddedObject->getCurrentState();
-        int nState = nOldState;
-        if ( nOldState == EmbedStates::LOADED )
+        int nState = m_xEmbeddedObject->getCurrentState();
+        if ( ( nState == EmbedStates::LOADED ) && i_ForceCreate )
         {
             m_xEmbeddedObject->changeState( EmbedStates::RUNNING );
-            nState = EmbedStates::RUNNING;
+            nState = m_xEmbeddedObject->getCurrentState();
+            OSL_ENSURE( nState == EmbedStates::RUNNING, "ODocumentDefinition::impl_getComponent_throw: could not switch to RUNNING!" );
         }
 
         if ( nState == EmbedStates::ACTIVE || nState == EmbedStates::RUNNING )
@@ -1947,6 +1947,13 @@ Reference< util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeE
         }
     }
     return xComp;
+}
+
+// -----------------------------------------------------------------------------
+Reference< util::XCloseable > ODocumentDefinition::getComponent() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return impl_getComponent_throw( true );
 }
 
 // -----------------------------------------------------------------------------
@@ -2130,7 +2137,11 @@ bool ODocumentDefinition::prepareClose()
         // by the embedding component. Thus, we do the suspend call here.
         // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
 
-        Reference< XModel > xModel( getComponent(), UNO_QUERY );
+        Reference< util::XCloseable > xComponent( impl_getComponent_throw( false ) );
+        if ( !xComponent.is() )
+            return true;
+
+        Reference< XModel > xModel( xComponent, UNO_QUERY );
         Reference< XController > xController;
         if ( xModel.is() )
             xController = xModel->getCurrentController();
