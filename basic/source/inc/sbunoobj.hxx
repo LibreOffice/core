@@ -44,6 +44,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
 
 class SbUnoObject: public SbxObject
@@ -227,6 +228,23 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > getServiceCtorDesc( void )
         { return m_xServiceCtorDesc; }
 };
+
+
+// Wrapper for UNO Singleton
+class SbUnoSingleton : public SbxObject
+{
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
+
+public:
+    TYPEINFO();
+    SbUnoSingleton( const String& aName_,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
+
+    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+};
+SV_DECL_IMPL_REF(SbUnoSingleton);
+
+SbUnoSingleton* findUnoSingleton( const String& rName );
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any
