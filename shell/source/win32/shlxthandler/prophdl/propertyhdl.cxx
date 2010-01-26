@@ -42,9 +42,11 @@
 
 #include "internal/stream_helper.hxx"
 
-//----------------------------
-//
-//----------------------------
+//---------------------------
+// Module global
+//---------------------------
+long g_DllRefCnt = 0;
+HINSTANCE g_hModule = NULL;
 
 //
 // Map of property keys to the locations of their value(s) in the .??? XML schema
@@ -130,17 +132,17 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
 }
 
 //----------------------------
-ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef(void)
+ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef( void )
 {
-    return InterlockedIncrement(&m_RefCnt);
+    return InterlockedIncrement( &m_RefCnt );
 }
 
 //----------------------------
-ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void)
+ULONG STDMETHODCALLTYPE CPropertyHdl::Release( void )
 {
-    long refcnt = InterlockedDecrement(&m_RefCnt);
+    long refcnt = InterlockedDecrement( &m_RefCnt );
 
-    if (0 == m_RefCnt)
+    if ( 0 == m_RefCnt )
         delete this;
 
     return refcnt;
@@ -315,4 +317,143 @@ HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex
     }
 
     return S_FALSE;
+}
+
+//-----------------------------------------------------------------------------
+//                              CClassFactory
+//-----------------------------------------------------------------------------
+
+long CClassFactory::s_ServerLocks = 0;
+
+//-----------------------------------------------------------------------------
+CClassFactory::CClassFactory( const CLSID& clsid ) :
+    m_RefCnt(1),
+    m_Clsid(clsid)
+{
+    InterlockedIncrement( &g_DllRefCnt );
+}
+
+//-----------------------------------------------------------------------------
+CClassFactory::~CClassFactory()
+{
+    InterlockedDecrement( &g_DllRefCnt );
+}
+
+//-----------------------------------------------------------------------------
+//                              IUnknown methods
+//-----------------------------------------------------------------------------
+HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject )
+{
+    *ppvObject = 0;
+
+    if ( IID_IUnknown == riid || IID_IClassFactory == riid )
+    {
+        IUnknown* pUnk = this;
+        pUnk->AddRef();
+        *ppvObject = pUnk;
+        return S_OK;
+    }
+
+    return E_NOINTERFACE;
+}
+
+//-----------------------------------------------------------------------------
+ULONG STDMETHODCALLTYPE CClassFactory::AddRef( void )
+{
+    return InterlockedIncrement( &m_RefCnt );
+}
+
+//-----------------------------------------------------------------------------
+ULONG STDMETHODCALLTYPE CClassFactory::Release( void )
+{
+    long refcnt = InterlockedDecrement( &m_RefCnt );
+
+    if (0 == refcnt)
+        delete this;
+
+    return refcnt;
+}
+
+//-----------------------------------------------------------------------------
+//                          IClassFactory methods
+//-----------------------------------------------------------------------------
+HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
+            IUnknown __RPC_FAR *pUnkOuter,
+            REFIID riid,
+            void __RPC_FAR *__RPC_FAR *ppvObject)
+{
+    if ( pUnkOuter != NULL )
+        return CLASS_E_NOAGGREGATION;
+
+    IUnknown* pUnk = 0;
+
+    if ( CLSID_PROPERTY_HANDLER == m_Clsid )
+        pUnk = static_cast<IPropertyStore*>( new CPropertyHdl() );
+
+    POST_CONDITION(pUnk != 0, "Could not create COM object");
+
+    if (0 == pUnk)
+        return E_OUTOFMEMORY;
+
+    HRESULT hr = pUnk->QueryInterface( riid, ppvObject );
+
+    // if QueryInterface failed the component will destroy itself
+    pUnk->Release();
+
+    return hr;
+}
+
+//-----------------------------------------------------------------------------
+HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( BOOL fLock )
+{
+    if ( fLock )
+        InterlockedIncrement( &s_ServerLocks );
+    else
+        InterlockedDecrement( &s_ServerLocks );
+
+    return S_OK;
+}
+
+//-----------------------------------------------------------------------------
+bool CClassFactory::IsLocked()
+{
+    return ( s_ServerLocks > 0 );
+}
+
+//-----------------------------------------------------------------------------
+extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
+{
+    OutputDebugStringFormat( "DllGetClassObject.\n" );
+    *ppv = 0;
+
+    if ( rclsid != CLSID_PROPERTY_HANDLER )
+        return CLASS_E_CLASSNOTAVAILABLE;
+
+    if ( (riid != IID_IUnknown) && (riid != IID_IClassFactory) )
+        return E_NOINTERFACE;
+
+    IUnknown* pUnk = new CClassFactory( rclsid );
+    if ( 0 == pUnk )
+        return E_OUTOFMEMORY;
+
+    *ppv = pUnk;
+    return S_OK;
+}
+
+//-----------------------------------------------------------------------------
+extern "C" STDAPI DllCanUnloadNow( void )
+{
+    OutputDebugStringFormat( "DllCanUnloadNow.\n" );
+    if (CClassFactory::IsLocked() || g_DllRefCnt > 0)
+        return S_FALSE;
+
+    return S_OK;
+}
+
+//-----------------------------------------------------------------------------
+BOOL WINAPI DllMain( HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpReserved*/ )
+{
+    OutputDebugStringFormat( "DllMain.\n" );
+    g_hModule = hInst;
+    return TRUE;
 }
