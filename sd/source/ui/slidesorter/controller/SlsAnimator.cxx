@@ -69,19 +69,6 @@ public:
 
 
 
-class Animator::DrawLock
-{
-public:
-    DrawLock (view::SlideSorterView& rView);
-    ~DrawLock (void);
-
-private:
-    view::SlideSorterView& mrView;
-};
-
-
-
-
 Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maTimer(),
@@ -134,7 +121,7 @@ Animator::AnimationId Animator::AddAnimation (
     // Prevent redraws except for the ones in TimeoutHandler.
     // While the Animator is active it will schedule repaints regularly.
     // Repaints in between would only lead to visual artifacts.
-    mpDrawLock.reset(new DrawLock(mrSlideSorter.GetView()));
+    mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
     maTimer.Start();
 
     return pAnimation->mnAnimationId;
@@ -156,7 +143,7 @@ Animator::AnimationId Animator::AddInfiniteAnimation (
     // Prevent redraws except for the ones in TimeoutHandler.
     // While the Animator is active it will schedule repaints regularly.
     // Repaints in between would only lead to visual artifacts.
-    mpDrawLock.reset(new DrawLock(mrSlideSorter.GetView()));
+    mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
     maTimer.Start();
 
     return pAnimation->mnAnimationId;
@@ -242,7 +229,7 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 
     if (maAnimations.size() > 0)
     {
-        mpDrawLock.reset(new DrawLock(mrSlideSorter.GetView()));
+        mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
         maTimer.Start();
     }
 
@@ -327,23 +314,6 @@ bool Animator::Animation::IsExpired (void)
 }
 
 
-
-
-//===== Animator::DrawLock ====================================================
-
-Animator::DrawLock::DrawLock (view::SlideSorterView& rView)
-    : mrView(rView)
-{
-    mrView.LockRedraw(true);
-}
-
-
-
-
-Animator::DrawLock::~DrawLock (void)
-{
-    mrView.LockRedraw(false);
-}
 
 
 } } } // end of namespace ::sd::slidesorter::controller

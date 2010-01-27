@@ -835,18 +835,14 @@ void SlideSorterController::SetZoom (long int nZoom)
     if (nZoom < 1)
         nZoom = 1;
 
-    mrView.LockRedraw(true);
-    mrView.GetLayouter().SetZoom(nZoom/100.0);
-    mrView.Layout();
-    GetScrollBarManager().UpdateScrollBars (false);
-    mrView.GetPreviewCache()->InvalidateCache();
-    mrView.RequestRepaint();
-    mrView.LockRedraw(false);
-
-    /*
-        ViewShell::SetZoom (nZoom);
-        GetViewFrame()->GetBindings().Invalidate (SID_ATTR_ZOOM);
-    */
+    {
+        SlideSorterView::DrawLock aLock (mrView);
+        mrView.GetLayouter().SetZoom(nZoom/100.0);
+        mrView.Layout();
+        GetScrollBarManager().UpdateScrollBars (false);
+        mrView.GetPreviewCache()->InvalidateCache();
+        mrView.RequestRepaint();
+    }
 }
 
 

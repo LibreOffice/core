@@ -146,13 +146,12 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             // a crash.
             if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
             {
-                mrSlideSorter.GetView().LockRedraw (TRUE);
+                view::SlideSorterView::DrawLock aLock (mrSlideSorter);
                 if(xFunc.is())
                     xFunc->DoPaste();
                 else
                     DoPaste();
                 mrController.GetSelectionManager()->MakeSelectionVisible();
-                mrSlideSorter.GetView().LockRedraw(FALSE);
             }
             rRequest.Done();
             break;

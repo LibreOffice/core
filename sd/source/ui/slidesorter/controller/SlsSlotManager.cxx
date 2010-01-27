@@ -1177,7 +1177,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
     // When a new page has been inserted then select it, make it the
     // current page, and focus it.
-    mrSlideSorter.GetView().LockRedraw(TRUE);
+    view::SlideSorterView::DrawLock aLock (mrSlideSorter);
     if (mrSlideSorter.GetModel().GetPageCount() > nPageCount)
     {
         nInsertionIndex++;
@@ -1189,7 +1189,6 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         }
     }
     rSelector.EnableBroadcasting();
-    mrSlideSorter.GetView().LockRedraw(FALSE);
 }
 
 

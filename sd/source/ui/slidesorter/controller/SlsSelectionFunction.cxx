@@ -1687,7 +1687,7 @@ void SelectionFunction::RectangleSelector::ProcessRectangleSelection (void)
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
     if (rOverlay.GetSelectionRectangleOverlay()->IsVisible())
     {
-        mrSlideSorter.GetView().LockRedraw(true);
+        view::SlideSorterView::DrawLock aLock (mrSlideSorter);
 
         PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
 
@@ -1743,8 +1743,6 @@ void SelectionFunction::RectangleSelector::ProcessRectangleSelection (void)
 
         // Rely on auto scrolling to make page objects visible.
         mrSlideSorter.GetController().GetSelectionManager()->ResetMakeSelectionVisiblePending();
-
-        mrSlideSorter.GetView().LockRedraw(false);
     }
 }
 

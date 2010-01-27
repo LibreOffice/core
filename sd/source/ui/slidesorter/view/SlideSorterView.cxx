@@ -885,14 +885,6 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 
 
-void SlideSorterView::LockRedraw (const bool bLock)
-{
-    ::sd::View::LockRedraw(bLock ? TRUE : FALSE);
-}
-
-
-
-
 void SlideSorterView::SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor)
 {
     if (mpPageUnderMouse != rpDescriptor)
@@ -1030,6 +1022,35 @@ bool SlideSorterView::SetState (
         mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));
     return mpPageObjectPainter;
 }
+
+
+
+
+//===== Animator::DrawLock ====================================================
+
+SlideSorterView::DrawLock::DrawLock (view::SlideSorterView& rView)
+    : mrView(rView)
+{
+    mrView.LockRedraw(TRUE);
+}
+
+
+
+
+SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
+    : mrView(rSlideSorter.GetView())
+{
+    mrView.LockRedraw(TRUE);
+}
+
+
+
+
+SlideSorterView::DrawLock::~DrawLock (void)
+{
+    mrView.LockRedraw(FALSE);
+}
+
 
 
 } } } // end of namespace ::sd::slidesorter::view

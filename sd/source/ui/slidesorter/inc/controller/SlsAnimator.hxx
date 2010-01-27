@@ -33,6 +33,7 @@
 #define SD_SLIDESORTER_CONTROLLER_ANIMATOR_HXX
 
 #include "SlideSorter.hxx"
+#include "view/SlideSorterView.hxx"
 #include <vcl/timer.hxx>
 #include <sal/types.h>
 #include <vector>
@@ -99,8 +100,7 @@ private:
     typedef ::std::vector<boost::shared_ptr<Animation> > AnimationList;
     AnimationList maAnimations;
 
-    class DrawLock;
-    ::boost::scoped_ptr<DrawLock> mpDrawLock;
+    ::boost::scoped_ptr<view::SlideSorterView::DrawLock> mpDrawLock;
 
     AnimationId mnNextAnimationId;
 

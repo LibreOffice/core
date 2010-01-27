@@ -193,13 +193,6 @@ public:
     */
     void AddSdrObject (SdrObject& rObject);
 
-    /** Lock or unlock painting into the content window.
-        @param bLock
-            When <TRUE/> then painting is locked.  When <FALSE/> then
-            painting is unlocked.
-    */
-    void LockRedraw (const bool bLock);
-
     void SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
     void SetButtonUnderMouse (const sal_Int32 nButtonIndex);
 
@@ -210,6 +203,16 @@ public:
         const bool bStateValue);
 
     ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
+
+    class DrawLock
+    {
+    public:
+        DrawLock (view::SlideSorterView& rView);
+        DrawLock (SlideSorter& rSlideSorter);
+        ~DrawLock (void);
+    private:
+        view::SlideSorterView& mrView;
+    };
 
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);

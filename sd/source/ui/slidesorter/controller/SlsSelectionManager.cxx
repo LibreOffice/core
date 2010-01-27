@@ -235,7 +235,7 @@ bool SelectionManager::MoveSelectedPages (const sal_Int32 nTargetPageIndex)
     bool bMoved (false);
     PageSelector& rSelector (mrController.GetPageSelector());
 
-    mrSlideSorter.GetView().LockRedraw (TRUE);
+    view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
     SlideSorterController::ModelChangeLock aLock (mrController);
 
     // Transfer selection of the slide sorter to the document.
@@ -275,8 +275,6 @@ bool SelectionManager::MoveSelectedPages (const sal_Int32 nTargetPageIndex)
     if (bMoved)
         mrController.GetSlotManager()->ExecuteCommandAsynchronously(
             ::std::auto_ptr<controller::Command>(pCommand));
-
-    mrSlideSorter.GetView().LockRedraw (FALSE);
 
     return bMoved;
 }
