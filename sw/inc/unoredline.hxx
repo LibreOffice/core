@@ -31,9 +31,11 @@
 #define _UNOREDLINE_HXX
 
 #include <unoport.hxx>
-#include <unoobj.hxx>
+#include <unotext.hxx>
+
 
 class SwRedline;
+
 /* -----------------------------19.12.00 11:35--------------------------------
 
  ---------------------------------------------------------------------------*/
