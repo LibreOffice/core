@@ -389,7 +389,8 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
             }
         }
 
-        if ( fValid && _tcslen( lpszPath ) >= MAX_PATH )
+        /* The path can be longer than MAX_PATH only in case it has the longpath prefix */
+        if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && _tcslen( lpszPath ) >= MAX_PATH )
         {
             fValid = FALSE;
             lpComponent = lpszPath + MAX_PATH;
@@ -638,7 +639,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                         /* it should be an UNC path, use the according prefix */
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX_UNC, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX_UNC, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
                         rtl_uString_newFromStr_WithLength( &strSuffix, pDecodedURL + nSkip + 2, nDecodedLen - nSkip - 2 );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
@@ -650,8 +651,8 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                     {
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, pDecodedURL + nSkip + 2, nDecodedLen - nSkip - 2 );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1 );
+                        rtl_uString_newFromStr_WithLength( &strSuffix, pDecodedURL + nSkip, nDecodedLen - nSkip );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
 
@@ -719,7 +720,7 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC );
+                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
                     OSL_ENSURE( nIgnore == 8, "Unexpected long path UNC prefix!" );
 
                     /* generate the normal UNC path */
@@ -732,7 +733,7 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX );
+                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1;
                     OSL_ENSURE( nIgnore == 4, "Unexpected long path prefix!" );
 
                     /* generate the normal path */
