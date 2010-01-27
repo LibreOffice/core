@@ -114,9 +114,9 @@ typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
 
 // Identifier fuer die dbg_-Properies als Strings anlegen
-static String ID_DBG_SUPPORTEDINTERFACES( RTL_CONSTASCII_USTRINGPARAM("Dbg_SupportedInterfaces") );
-static String ID_DBG_PROPERTIES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Properties") );
-static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
+static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
+static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
+static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
 static ::rtl::OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
 static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("ooo.vba") );
@@ -1632,7 +1632,7 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     String aRet;
     if( eType != TypeClass_INTERFACE )
     {
-        aRet += ID_DBG_SUPPORTEDINTERFACES;
+        aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
         aRet.AppendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
@@ -2655,15 +2655,15 @@ void SbUnoObject::implCreateDbgProperties( void )
     Property aProp;
 
     // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
-    SbxVariableRef xVarRef = new SbUnoProperty( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, aProp, -1, false );
+    SbxVariableRef xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, aProp, -1, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -2: Properties ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_PROPERTIES, SbxSTRING, aProp, -2, false );
+    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, aProp, -2, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -3: Methoden ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, aProp, -3, false );
+    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, aProp, -3, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 

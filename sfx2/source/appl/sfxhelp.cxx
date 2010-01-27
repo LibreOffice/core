@@ -721,9 +721,6 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
     return aHelpURL;
 }
 
-static ::rtl::OUString OFFICE_HELP_TASK = ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK"));
-static ::rtl::OUString OFFICE_HELP      = ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP"     ));
-
 SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
                                     Reference< XFrame >& rHelpContent)
 {
@@ -732,7 +729,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 
     // otherwhise - create new help task
     Reference< XFrame > xHelpTask = xDesktop->findFrame(
-        OFFICE_HELP_TASK,
+        ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK")),
         FrameSearchFlag::TASKS | FrameSearchFlag::CREATE);
     if (!xHelpTask.is())
         return 0;
@@ -747,7 +744,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
     if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
     {
         // Customize UI ...
-        xHelpTask->setName( OFFICE_HELP_TASK );
+        xHelpTask->setName( ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK")) );
 
         Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
         if (xProps.is())
@@ -761,13 +758,13 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 
         // This sub frame is created internaly (if we called new SfxHelpWindow_Impl() ...)
         // It should exist :-)
-        xHelpContent = xHelpTask->findFrame(OFFICE_HELP, FrameSearchFlag::CHILDREN);
+        xHelpContent = xHelpTask->findFrame(::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP")), FrameSearchFlag::CHILDREN);
     }
 
     if (!xHelpContent.is())
         delete pHelpWindow;
 
-    xHelpContent->setName(OFFICE_HELP);
+    xHelpContent->setName(::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP")));
 
     rHelpTask    = xHelpTask;
     rHelpContent = xHelpContent;
@@ -837,10 +834,10 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     // in both cases)!
 
     Reference< XFrame > xHelp = xDesktop->findFrame(
-        OFFICE_HELP_TASK,
+        ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK")),
         FrameSearchFlag::CHILDREN);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
-        OFFICE_HELP,
+        ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP")),
         FrameSearchFlag::CHILDREN);
 
     SfxHelpWindow_Impl* pHelpWindow = 0;

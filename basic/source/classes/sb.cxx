@@ -67,20 +67,17 @@ TYPEINIT1(StarBASIC,SbxObject)
 #define RTLNAME "@SBRTL"
 //  i#i68894#
 
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
-
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
-        pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+        pVBAGlobals = (SbUnoObject*)Find( String(RTL_CONSTASCII_USTRINGPARAM("VBAGlobals")), SbxCLASS_DONTCARE );
     return pVBAGlobals;
 }
 
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
-    if( rName == aThisComponent )
+    if( rName.EqualsAscii("ThisComponent") )
         return NULL;
     // rename to init globals
     if ( getVBAGlobals( ) )

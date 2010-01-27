@@ -100,19 +100,12 @@ typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
 //  + BOOL      bReference
 
 static const char* szStdLibName = "Standard";
-static const char* szBasicStorage = "StarBASIC";
+static const char szBasicStorage[] = "StarBASIC";
 static const char* szOldManagerStream = "BasicManager";
-static const char* szManagerStream = "BasicManager2";
+static const char szManagerStream[] = "BasicManager2";
 static const char* szImbedded = "LIBIMBEDDED";
 static const char* szCryptingKey = "CryptedBasic";
 static const char* szScriptLanguage = "StarBasic";
-
-static const String BasicStreamName( String::CreateFromAscii(szBasicStorage) );
-static const String ManagerStreamName( String::CreateFromAscii(szManagerStream) );
-
-
-#define DEFINE_CONST_UNICODE(CONSTASCII)    UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
 DBG_NAME( BasicManager );
@@ -669,7 +662,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     // If there is no Manager Stream, no further actions are necessary
-    if ( rStorage.IsStream( ManagerStreamName ) )
+    if ( rStorage.IsStream( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)) ) )
     {
         LoadBasicManager( rStorage, rBaseURL );
         // StdLib contains Parent:
@@ -710,12 +703,12 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
         // #91626 Save all stream data to save it unmodified if basic isn't modified
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-            ( ManagerStreamName, eStreamReadMode );
+            ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
         *static_cast<SvStream*>(&xManagerStream) >> *mpImpl->mpManagerStream;
 
         SotStorageRef xBasicStorage = rStorage.OpenSotStorage
-                                ( BasicStreamName, eStorageReadMode, FALSE );
+                                ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), eStorageReadMode, FALSE );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
         {
             USHORT nLibs = GetLibCount();
@@ -924,7 +917,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 //  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-        ( ManagerStreamName, eStreamReadMode );
+        ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
 
     String aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1172,7 +1165,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
         xStorage = new SotStorage( FALSE, aStorageName, eStorageReadMode );
 
     SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( BasicStreamName, eStorageReadMode, FALSE );
+                            ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), eStorageReadMode, FALSE );
 
     if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
     {
@@ -1425,10 +1418,10 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
         else
             xStorage = new SotStorage( FALSE, pLibInfo->GetStorageName() );
 
-        if ( xStorage->IsStorage( BasicStreamName ) )
+        if ( xStorage->IsStorage( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) ) )
         {
             SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( BasicStreamName, STREAM_STD_READWRITE, FALSE );
+                            ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), STREAM_STD_READWRITE, FALSE );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {
@@ -1448,7 +1441,7 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
                 if ( !aInfoList.Count() )
                 {
                     xBasicStorage.Clear();
-                    xStorage->Remove( BasicStreamName );
+                    xStorage->Remove( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
                     // delete the Storage, too.
