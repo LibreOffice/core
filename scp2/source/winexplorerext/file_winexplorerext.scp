@@ -42,13 +42,6 @@ File gid_File_Lib_OOoFilt
     Name = "ooofilt.dll";
 End
 
-File gid_File_Lib_OOoFiltProxy
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofiltproxy.dll";
-End
-
 #ifdef BUILD_X64
 
 File gid_File_Lib_OOoFilt64
@@ -56,14 +49,6 @@ File gid_File_Lib_OOoFilt64
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "ooofilt_x64.dll";
-    ComponentCondition = "VersionNT64";
-End
-
-File gid_File_Lib_OOoFiltProxy64
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofiltproxy_x64.dll";
     ComponentCondition = "VersionNT64";
 End
 
