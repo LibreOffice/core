@@ -2073,7 +2073,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
             if ( !aHelper->isConnected() )
                 break;
 
-            xComponent = aHelper->newDocument( _eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT, xDefinition );
+            xComponent = aHelper->newDocument( _eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT, i_rAdditionalArguments, xDefinition );
         }
         break;
 
