@@ -57,7 +57,7 @@ public class OfficeTableLayoutController extends SectionLayoutController
     protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
             throws DataSourceException
     {
-        final AttributeMap attributeMap = new AttributeMap( super.computeAttributes(fc, element, target) );
+        final AttributeMap attributeMap = new AttributeMap(super.computeAttributes(fc, element, target));
         final Section s = (Section) element;
         int rowCount = 0;
         final Node[] nodeArray = s.getNodeArray();
@@ -67,8 +67,7 @@ public class OfficeTableLayoutController extends SectionLayoutController
             if (node instanceof Element)
             {
                 final Element child = (Element) node;
-                if (OfficeNamespaces.TABLE_NS.equals(child.getNamespace()) &&
-                        OfficeToken.TABLE_ROW.equals(child.getType()))
+                if (OfficeNamespaces.TABLE_NS.equals(child.getNamespace()) && OfficeToken.TABLE_ROW.equals(child.getType()))
                 {
                     rowCount += 1;
                 }

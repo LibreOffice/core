@@ -83,7 +83,7 @@ public class SDBCReportData implements DataSource
                 parameters = xSuppParams.getParameters();
             }
 
-            final XColumnsSupplier columnsSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, rowSet);
+            final XColumnsSupplier columnsSup = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, rowSet);
             final XNameAccess columns = columnsSup.getColumns();
             final String[] columnNamesList = columns.getElementNames();
             final XResultSetMetaDataSupplier sup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, rowSet);
@@ -92,7 +92,9 @@ public class SDBCReportData implements DataSource
             columnCount = resultSetMetaData.getColumnCount();
             firstParameterIndex = columnCount + 1;
             if (parameters != null)
+            {
                 columnCount += parameters.getCount();
+            }
 
             columnTypes = new int[columnCount];
             columnNames = new String[columnCount];
@@ -111,7 +113,7 @@ public class SDBCReportData implements DataSource
                         final XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
                                 XPropertySet.class, parameters.getByIndex(i - firstParameterIndex));
                         columnNames[i - 1] = (String) paramColumn.getPropertyValue("Name");
-                        columnTypes[i - 1] = ((Integer) paramColumn.getPropertyValue("Type")).intValue();
+                        columnTypes[i - 1] = (Integer) paramColumn.getPropertyValue("Type");
                     }
                     catch (Exception e)
                     {
@@ -151,7 +153,9 @@ public class SDBCReportData implements DataSource
     public boolean absolute(final int row) throws DataSourceException
     {
         if (rowSet == null)
+        {
             return false;
+        }
         try
         {
             if (row == 0)
@@ -170,7 +174,9 @@ public class SDBCReportData implements DataSource
     public boolean next() throws DataSourceException
     {
         if (rowSet == null)
+        {
             return false;
+        }
         try
         {
             return rowSet.next();
@@ -294,7 +300,9 @@ public class SDBCReportData implements DataSource
     public Object getObject(final int column) throws DataSourceException
     {
         if (rowSet == null)
+        {
             return null;
+        }
         try
         {
             final boolean isParameterValue = (parameters != null) && (column >= firstParameterIndex);

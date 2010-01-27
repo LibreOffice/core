@@ -57,6 +57,8 @@ public class SOImageService implements ImageService
 
     /**
      * Creates a new instance of SOImageService
+     * @param xCompContext
+     * @throws ReportExecutionException
      */
     public SOImageService(final XComponentContext xCompContext)
             throws ReportExecutionException, com.sun.star.uno.Exception
@@ -87,7 +89,10 @@ public class SOImageService implements ImageService
         final Dimension dim = new Dimension();
         try
         {
-            final PropertyValue[] value = new PropertyValue[]{new PropertyValue()};
+            final PropertyValue[] value = new PropertyValue[]
+            {
+                new PropertyValue()
+            };
             // value[0] = new PropertyValue();
             value[0].Name = "InputStream";
             value[0].Value = image;
@@ -106,7 +111,7 @@ public class SOImageService implements ImageService
                     {
                         imageSize = (Size) xImage.getPropertyValue("SizePixel");
                         final int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
-                        final double fac = 2540 / (double)dpi;
+                        final double fac = 2540 / (double) dpi;
                         dim.setSize(imageSize.Width * fac, imageSize.Height * fac);
                     }
                 }
@@ -135,7 +140,10 @@ public class SOImageService implements ImageService
     {
         try
         {
-            final PropertyValue[] value = new PropertyValue[]{new PropertyValue()};
+            final PropertyValue[] value = new PropertyValue[]
+            {
+                new PropertyValue()
+            };
             value[0].Name = "InputStream";
             value[0].Value = image;
 

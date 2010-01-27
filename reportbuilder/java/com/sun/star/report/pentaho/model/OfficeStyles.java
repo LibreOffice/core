@@ -91,7 +91,7 @@ public class OfficeStyles extends Element
 
                 final StyleKey styleKey = (StyleKey) obj;
 
-                if (!family.equals(styleKey.family) || ( name != null ? !name.equals(styleKey.name) : styleKey.name != null) )
+                if (!family.equals(styleKey.family) || (name != null ? !name.equals(styleKey.name) : styleKey.name != null))
                 {
                     return false;
                 }
