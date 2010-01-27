@@ -3575,7 +3575,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
         {
             ::std::auto_ptr<ScChartListener> pListener(
                 new ScChartListener(rObjName, pDoc, pRefTokens.release()));
-            pListener->SetDirty(true);
+            pListener->SetUsed(true);
             pListener->StartListeningTo();
             pChartCollection->Insert(pListener.release());
 

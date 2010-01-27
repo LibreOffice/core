@@ -186,7 +186,7 @@ public:
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
-    void            SetDirty();
+    void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
                         BOOL bSetChartRangeLists = FALSE );
 

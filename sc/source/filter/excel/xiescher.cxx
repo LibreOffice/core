@@ -105,6 +105,7 @@
 #include "convuno.hxx"
 #include "postit.hxx"
 #include "globstr.hrc"
+#include "chartlis.hxx"
 
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
@@ -3755,6 +3756,9 @@ void XclImpObjectManager::ConvertObjects()
                     rDffManager.ProcessDrawing( maDffStrm, *aPIt );
         }
     }
+    ScChartListenerCollection* pChartListeners = GetDoc().GetChartListenerCollection();
+    if (pChartListeners && pChartListeners->GetCount())
+        pChartListeners->SetDirty();
 }
 
 String XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const
