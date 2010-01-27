@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: implncvt.hxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: hidother.src,v $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,51 +28,7 @@
  *
  ************************************************************************/
 
-#ifndef _SV_LINECONV_HXX
-#define _SV_LINECONV_HXX
+#include "vcl/svids.hrc"
 
-#include <tools/poly.hxx>
-#include <vcl/lineinfo.hxx>
+hidspecial HID_PRINTDLG                         { HelpID = HID_PRINTDLG; };
 
-// --------------------
-// - ImplLineConverter
-// --------------------
-
-struct ImplFloatPoint;
-
-class ImplLineConverter
-{
-    BOOL            mbClosed;
-    BOOL            mbRefPoint;
-    INT32           mnRefDistance;
-
-    double          mfWidthHalf;
-    LineInfo        maLineInfo;
-
-    double          mfDashDotLenght;
-    double          mfDistanceLenght;
-
-    UINT32          mnDashCount;
-    UINT32          mnDotCount;
-
-    Polygon         maPolygon;
-    UINT32          mnFloat0Points;
-    ImplFloatPoint* mpFloat0;
-    UINT32          mnFloat1Points;
-    ImplFloatPoint* mpFloat1;
-
-    UINT32          mnLinesAvailable;
-    UINT32          mnLines;
-
-    ImplFloatPoint* mpFloatPoint;
-
-    public:
-
-                    ImplLineConverter( const Polygon& rPoly, const LineInfo& rLineInfo, const Point* pRefPoint );
-                    ~ImplLineConverter();
-
-    const Polygon*  ImplGetFirst();
-    const Polygon*  ImplGetNext();
-};
-
-#endif

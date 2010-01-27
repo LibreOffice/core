@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: aquaprintview.h,v $
- * $Revision: 1.3.114.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,43 +25,28 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_AQUAPRINTVIEW_H
-#define _VCL_AQUAPRINTVIEW_H
-
-#include "premac.h"
-#include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#ifndef _VCL_OLDPRINTADAPTOR
+#define _VCL_OLDPRINTADAPTOR
 
 #include "vcl/print.hxx"
 
-class AquaSalInfoPrinter;
-
-struct PrintAccessoryViewState
+namespace vcl
 {
-    bool        bNeedRestart;
-    sal_Int32   nLastPage;
+    struct ImplOldStyleAdaptorData;
+    class VCL_DLLPUBLIC OldStylePrintAdaptor : public PrinterController
+    {
+        ImplOldStyleAdaptorData*    mpData;
+    public:
+        OldStylePrintAdaptor( const boost::shared_ptr< Printer >& );
+        virtual ~OldStylePrintAdaptor();
 
-    PrintAccessoryViewState()
-    : bNeedRestart( false ), nLastPage( 0 ) {}
-};
+        void StartPage();
+        void EndPage();
 
-@interface AquaPrintView : NSView
-{
-    vcl::PrinterController*     mpController;
-    AquaSalInfoPrinter*         mpInfoPrinter;
+        virtual int  getPageCount() const;
+        virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const;
+        virtual void printPage( int i_nPage ) const;
+    };
 }
--(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
--(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
--(NSRect)rectForPage: (int)page;
--(NSPoint)locationOfPrintRect: (NSRect)aRect;
--(void)drawRect: (NSRect)rect;
-@end
-
-@interface AquaPrintAccessoryView : NSObject
-{
-}
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState;
-@end
-
 
 #endif
