@@ -71,8 +71,8 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-path=$(my_path) -env:arg-user=$(MISC)/user \
-        -env:arg-doc=$(BIN)/smoketestdoc.sxw \
-        -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}"
+        -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}" \
+        -env:arg-dbgsv=$(PWD)/dbgsv.ini -env:arg-doc=$(BIN)/smoketestdoc.sxw
 .IF "$(OS)" == "WNT"
     $(RM) -r $(MISC)/installation.flag `cat $(MISC)/installation.flag`
 .ENDIF

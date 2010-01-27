@@ -65,7 +65,6 @@
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/process.h"
-#include "osl/thread.hxx"
 #include "osl/time.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
@@ -157,6 +156,8 @@ void Listener::dispatchFinished(css::frame::DispatchResultEvent const & Result)
 
 class Test: public CppUnit::TestFixture {
 public:
+    Test(): process_(0) {}
+
     virtual void setUp();
 
     virtual void tearDown();
@@ -183,17 +184,25 @@ void Test::setUp() {
             RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
         rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident)) +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
-    rtl::OUString userArg(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
-        toUrl(getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")))));
     rtl::OUString noquickArg(
         RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
     rtl::OUString nofirstArg(
         RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
     rtl::OUString acceptArg(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc);
+    rtl::OUString userArg(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
+        toUrl(getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")))));
+    rtl::OUString jreArg(
+        RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
+    rtl::OUString classpathArg(
+        RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
+    rtl::OUString dbgsvArg(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:DBGSV_INIT=")) +
+        getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbgsv"))));
     rtl_uString * args[] = {
-        noquickArg.pData, nofirstArg.pData, userArg.pData, acceptArg.pData };
+        noquickArg.pData, nofirstArg.pData, acceptArg.pData, userArg.pData,
+        jreArg.pData, classpathArg.pData, dbgsvArg.pData };
     rtl_uString ** envs = 0;
     rtl::OUString argEnv;
     if (getOptionalArgument(
@@ -233,37 +242,44 @@ void Test::setUp() {
                 }
             }
             TimeValue delay = { 1, 0 }; // 1 sec
-            osl::Thread::wait(delay);
+            CPPUNIT_ASSERT_EQUAL(
+                osl_Process_E_TimedOut,
+                osl_joinProcessWithTimeout(process_, &delay));
         }
     } catch (...) {
         CPPUNIT_ASSERT_EQUAL(
             osl_Process_E_None, osl_terminateProcess(process_));
         osl_freeProcessHandle(process_);
+        process_ = 0;
         throw;
     }
 }
 
 void Test::tearDown() {
-    css::uno::Reference< css::frame::XDesktop > desktop(
-        factory_->createInstance(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-        css::uno::UNO_QUERY_THROW);
-    factory_.clear();
-    try {
-        CPPUNIT_ASSERT(desktop->terminate());
-        desktop.clear();
-    } catch (css::lang::DisposedException &) {}
-        // it appears that DisposedExceptions can already happen while receiving
-        // the response of the terminate call
-    CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
-    oslProcessInfo info;
-    info.Size = sizeof info;
-    CPPUNIT_ASSERT_EQUAL(
-        osl_Process_E_None,
-        osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
-    CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
-    osl_freeProcessHandle(process_);
+    if (factory_.is()) {
+        css::uno::Reference< css::frame::XDesktop > desktop(
+            factory_->createInstance(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
+            css::uno::UNO_QUERY_THROW);
+        factory_.clear();
+        try {
+            CPPUNIT_ASSERT(desktop->terminate());
+            desktop.clear();
+        } catch (css::lang::DisposedException &) {}
+            // it appears that DisposedExceptions can already happen while
+            // receiving the response of the terminate call
+    }
+    if (process_ != 0) {
+        CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
+        oslProcessInfo info;
+        info.Size = sizeof info;
+        CPPUNIT_ASSERT_EQUAL(
+            osl_Process_E_None,
+            osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
+        CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
+        osl_freeProcessHandle(process_);
+    }
 }
 
 void Test::test() {
