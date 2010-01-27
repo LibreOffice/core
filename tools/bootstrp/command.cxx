@@ -358,7 +358,7 @@ CCommand::CCommand( ByteString &rString )
 {
     rString.SearchAndReplace( '\t', ' ' );
     aCommand = rString.GetToken( 0, ' ' );
-    aCommandLine = Search();
+    aCommandLine = Search( "PATH" );
 #ifndef UNX
     aCommandLine += " /c ";
 #else
@@ -368,7 +368,7 @@ CCommand::CCommand( ByteString &rString )
     ByteString sCmd( rString.GetToken( 0, ' ' ));
     ByteString sParam( rString.Copy( sCmd.Len()));
 
-    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += Search( "PATH", sCmd );
     aCommandLine += sParam;
 
     ImplInit();
@@ -382,7 +382,7 @@ CCommand::CCommand( const char *pChar )
     aString.SearchAndReplace( '\t', ' ' );
     aCommand = aString.GetToken( 0, ' ' );
 
-    aCommandLine = Search();
+    aCommandLine = Search( "PATH" );
 #ifndef UNX
     aCommandLine += " /c ";
 #else
@@ -393,7 +393,7 @@ CCommand::CCommand( const char *pChar )
     ByteString sCmd( rString.GetToken( 0, ' ' ));
     ByteString sParam( rString.Copy( sCmd.Len()));
 
-    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += Search( "PATH", sCmd );
     aCommandLine += sParam;
 
     ImplInit();

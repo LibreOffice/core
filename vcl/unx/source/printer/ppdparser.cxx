@@ -64,7 +64,6 @@ using namespace rtl;
 
 std::list< PPDParser* > PPDParser::aAllParsers;
 std::hash_map< OUString, OUString, OUStringHash >* PPDParser::pAllPPDFiles = NULL;
-static String aEmptyString;
 
 class PPDDecompressStream
 {
@@ -1031,12 +1030,12 @@ void PPDParser::parseConstraint( const ByteString& rLine )
         m_aConstraints.push_back( aConstraint );
 }
 
-const String& PPDParser::getDefaultPaperDimension() const
+String PPDParser::getDefaultPaperDimension() const
 {
     if( m_pDefaultPaperDimension )
         return m_pDefaultPaperDimension->m_aOption;
 
-    return aEmptyString;
+    return String();
 }
 
 bool PPDParser::getMargins(
@@ -1103,10 +1102,10 @@ bool PPDParser::getPaperDimension(
     return true;
 }
 
-const String& PPDParser::matchPaper( int nWidth, int nHeight ) const
+String PPDParser::matchPaper( int nWidth, int nHeight ) const
 {
     if( ! m_pPaperDimensions )
-        return aEmptyString;
+        return String();
 
     int nPDim = -1;
     double PDWidth, PDHeight;
@@ -1140,51 +1139,51 @@ const String& PPDParser::matchPaper( int nWidth, int nHeight ) const
     {
         // swap portrait/landscape and try again
         bDontSwap = true;
-        const String& rRet = matchPaper( nHeight, nWidth );
+        String rRet = matchPaper( nHeight, nWidth );
         bDontSwap = false;
         return rRet;
     }
 
-    return nPDim != -1 ? m_pPaperDimensions->getValue( nPDim )->m_aOption : aEmptyString;
+    return nPDim != -1 ? m_pPaperDimensions->getValue( nPDim )->m_aOption : String();
 }
 
-const String& PPDParser::getDefaultInputSlot() const
+String PPDParser::getDefaultInputSlot() const
 {
     if( m_pDefaultInputSlot )
         return m_pDefaultInputSlot->m_aValue;
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getSlot( int nSlot ) const
+String PPDParser::getSlot( int nSlot ) const
 {
     if( ! m_pInputSlots )
-        return aEmptyString;
+        return String();
 
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aOption;
     else if( m_pInputSlots->countValues() > 0 )
         return m_pInputSlots->getValue( (ULONG)0 )->m_aOption;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getSlotCommand( int nSlot ) const
+String PPDParser::getSlotCommand( int nSlot ) const
 {
     if( ! m_pInputSlots )
-        return aEmptyString;
+        return String();
 
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aValue;
     else if( m_pInputSlots->countValues() > 0 )
         return m_pInputSlots->getValue( (ULONG)0 )->m_aValue;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getSlotCommand( const String& rSlot ) const
+String PPDParser::getSlotCommand( const String& rSlot ) const
 {
     if( ! m_pInputSlots )
-        return aEmptyString;
+        return String();
 
     for( int i=0; i < m_pInputSlots->countValues(); i++ )
     {
@@ -1192,39 +1191,39 @@ const String& PPDParser::getSlotCommand( const String& rSlot ) const
         if( pValue->m_aOption == rSlot )
             return pValue->m_aValue;
     }
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getPaperDimension( int nPaperDimension ) const
+String PPDParser::getPaperDimension( int nPaperDimension ) const
 {
     if( ! m_pPaperDimensions )
-        return aEmptyString;
+        return String();
 
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aOption;
     else if( m_pPaperDimensions->countValues() > 0 )
         return m_pPaperDimensions->getValue( (ULONG)0 )->m_aOption;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getPaperDimensionCommand( int nPaperDimension ) const
+String PPDParser::getPaperDimensionCommand( int nPaperDimension ) const
 {
     if( ! m_pPaperDimensions )
-        return aEmptyString;
+        return String();
 
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aValue;
     else if( m_pPaperDimensions->countValues() > 0 )
         return m_pPaperDimensions->getValue( (ULONG)0 )->m_aValue;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getPaperDimensionCommand( const String& rPaperDimension ) const
+String PPDParser::getPaperDimensionCommand( const String& rPaperDimension ) const
 {
     if( ! m_pPaperDimensions )
-        return aEmptyString;
+        return String();
 
     for( int i=0; i < m_pPaperDimensions->countValues(); i++ )
     {
@@ -1232,7 +1231,7 @@ const String& PPDParser::getPaperDimensionCommand( const String& rPaperDimension
         if( pValue->m_aOption == rPaperDimension )
             return pValue->m_aValue;
     }
-    return aEmptyString;
+    return String();
 }
 
 void PPDParser::getResolutionFromString(
@@ -1290,13 +1289,13 @@ void PPDParser::getResolution( int nNr, int& rXRes, int& rYRes ) const
                              rXRes, rYRes );
 }
 
-const String& PPDParser::getResolutionCommand( int nXRes, int nYRes ) const
+String PPDParser::getResolutionCommand( int nXRes, int nYRes ) const
 {
     if( ( ! m_pResolutions || m_pResolutions->countValues() == 0 ) && m_pDefaultResolution )
         return m_pDefaultResolution->m_aValue;
 
     if( ! m_pResolutions )
-        return aEmptyString;
+        return String();
 
     int nX, nY;
     for( int i = 0; i < m_pResolutions->countValues(); i++ )
@@ -1306,46 +1305,46 @@ const String& PPDParser::getResolutionCommand( int nXRes, int nYRes ) const
         if( nX == nXRes && nY == nYRes )
             return m_pResolutions->getValue( i )->m_aValue;
     }
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getDefaultDuplexType() const
+String PPDParser::getDefaultDuplexType() const
 {
     if( m_pDefaultDuplexType )
         return m_pDefaultDuplexType->m_aValue;
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getDuplex( int nDuplex ) const
+String PPDParser::getDuplex( int nDuplex ) const
 {
     if( ! m_pDuplexTypes )
-        return aEmptyString;
+        return String();
 
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aOption;
     else if( m_pDuplexTypes->countValues() > 0 )
         return m_pDuplexTypes->getValue( (ULONG)0 )->m_aOption;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getDuplexCommand( int nDuplex ) const
+String PPDParser::getDuplexCommand( int nDuplex ) const
 {
     if( ! m_pDuplexTypes )
-        return aEmptyString;
+        return String();
 
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aValue;
     else if( m_pDuplexTypes->countValues() > 0 )
         return m_pDuplexTypes->getValue( (ULONG)0 )->m_aValue;
 
-    return aEmptyString;
+    return String();
 }
 
-const String& PPDParser::getDuplexCommand( const String& rDuplex ) const
+String PPDParser::getDuplexCommand( const String& rDuplex ) const
 {
     if( ! m_pDuplexTypes )
-        return aEmptyString;
+        return String();
 
     for( int i=0; i < m_pDuplexTypes->countValues(); i++ )
     {
@@ -1353,7 +1352,7 @@ const String& PPDParser::getDuplexCommand( const String& rDuplex ) const
         if( pValue->m_aOption == rDuplex )
             return pValue->m_aValue;
     }
-    return aEmptyString;
+    return String();
 }
 
 void PPDParser::getFontAttributes(
@@ -1383,14 +1382,14 @@ void PPDParser::getFontAttributes(
     }
 }
 
-const String& PPDParser::getFont( int nFont ) const
+String PPDParser::getFont( int nFont ) const
 {
     if( ! m_pFontList )
-        return aEmptyString;
+        return String();
 
     if( nFont >=0 && nFont < m_pFontList->countValues() )
         return m_pFontList->getValue( nFont )->m_aOption;
-    return aEmptyString;
+    return String();
 }
 
 /*

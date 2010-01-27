@@ -128,19 +128,18 @@ struct DbgDataType
 #define DBG_FUNC_SAVEDATA           5
 #define DBG_FUNC_SETPRINTMSGBOX     6
 #define DBG_FUNC_SETPRINTWINDOW     7
-#define DBG_FUNC_SETPRINTSHELL      8
-#define DBG_FUNC_SETPRINTTESTTOOL   9
-#define DBG_FUNC_MEMTEST            10
-#define DBG_FUNC_XTORINFO           11
-#define DBG_FUNC_MEMINFO            12
-#define DBG_FUNC_COREDUMP           13
-#define DBG_FUNC_ALLERROROUT        14
-#define DBG_FUNC_SETTESTSOLARMUTEX  15
-#define DBG_FUNC_TESTSOLARMUTEX     16
-#define DBG_FUNC_PRINTFILE          17
-#define DBG_FUNC_GETPRINTMSGBOX     18
-#define DBG_FUNC_FILTERMESSAGE      19          // new for #i38967
-#define DBG_FUNC_UPDATEOSLHOOK      20
+#define DBG_FUNC_SETPRINTTESTTOOL   8
+#define DBG_FUNC_MEMTEST            9
+#define DBG_FUNC_XTORINFO           10
+#define DBG_FUNC_MEMINFO            11
+#define DBG_FUNC_COREDUMP           12
+#define DBG_FUNC_ALLERROROUT        13
+#define DBG_FUNC_SETTESTSOLARMUTEX  14
+#define DBG_FUNC_TESTSOLARMUTEX     15
+#define DBG_FUNC_PRINTFILE          16
+#define DBG_FUNC_GETPRINTMSGBOX     17
+#define DBG_FUNC_FILTERMESSAGE      18          // new for #i38967
+#define DBG_FUNC_UPDATEOSLHOOK      19
 
 TOOLS_DLLPUBLIC void* DbgFunc( USHORT nAction, void* pData = NULL );
 
@@ -177,11 +176,6 @@ inline DbgPrintLine DbgGetPrintMsgBox()
 inline void DbgSetPrintWindow( DbgPrintLine pProc )
 {
     DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(long)pProc );
-}
-
-inline void DbgSetPrintShell( DbgPrintLine pProc )
-{
-    DbgFunc( DBG_FUNC_SETPRINTSHELL, (void*)(long)pProc );
 }
 
 inline void DbgSetPrintTestTool( DbgPrintLine pProc )
@@ -347,6 +341,7 @@ void DbgPrintStackTree( void* p );
 
 TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, USHORT nOutType = DBG_OUT_TRACE,
              const sal_Char* pFile = NULL, USHORT nLine = 0 );
+TOOLS_DLLPUBLIC void DbgPrintShell(char const * message);
 TOOLS_DLLPUBLIC void DbgOutTypef( USHORT nOutType, const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
