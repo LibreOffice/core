@@ -46,7 +46,8 @@
 using ::std::auto_ptr;
 using ::std::find_if;
 using ::std::vector;
-using namespace formula;
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 
 // ============================================================================
 // *** Helper classes ***
@@ -169,105 +170,59 @@ private:
 
 // Cached external cells ======================================================
 
-/** Base class to store the contents of one external cell (record CRN). */
+/** Stores the contents of a consecutive row of external cells (record CRN). */
 class XclExpCrn : public XclExpRecord
 {
-protected:
-    /** @param nAddSize  The size of additional data derived classes will write. */
-    explicit            XclExpCrn( SCCOL nScCol, SCROW nScRow, sal_uInt8 nId, sal_uInt32 nAddLen = 0 );
+public:
+    explicit            XclExpCrn( SCCOL nScCol, SCROW nScRow, const Any& rValue );
+
+    /** Returns true, if the passed value could be appended to this record. */
+    bool                InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue );
 
 private:
-    /** Writes the start of the record that is equal in all CRN records and calls WriteAddData(). */
     virtual void        WriteBody( XclExpStream& rStrm );
 
-    /** Called to write additional data following the common record contents.
-        @descr  Derived classes should overwrite this function to write their data. */
-    virtual void        WriteAddData( XclExpStream& rStrm ) = 0;
+    void                WriteBool( XclExpStream& rStrm, bool bValue );
+    void                WriteDouble( XclExpStream& rStrm, double fValue );
+    void                WriteString( XclExpStream& rStrm, const OUString& rValue );
+    void                WriteError( XclExpStream& rStrm, sal_uInt8 nErrCode );
+    void                WriteEmpty( XclExpStream& rStrm );
 
 private:
-    sal_uInt16          mnXclCol;   /// Column index of the external cell.
-    sal_uInt16          mnXclRow;   /// Row index of the external cell.
-    sal_uInt8           mnId;       /// Identifier for data type (EXC_CACHEDVAL_***).
+    typedef ::std::vector< Any > CachedValues;
+
+    CachedValues        maValues;   /// All cached values.
+    SCCOL               mnScCol;    /// Column index of the first external cell.
+    SCROW               mnScRow;    /// Row index of the external cells.
 };
 
 // ----------------------------------------------------------------------------
 
-/** Cached data of an external value cell. */
-class XclExpCrnDouble : public XclExpCrn
+/** Represents the record XCT which is the header record of a CRN record list.
+ */
+class XclExpXct : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit            XclExpCrnDouble( SCCOL nScCol, SCROW nScRow, double fVal );
-
-private:
-    /** Writes the double value following the common record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
-
-private:
-    double              mfVal;      /// Value of the cached cell.
-};
-
-// ----------------------------------------------------------------------------
-
-/** Cached data of an external text cell. */
-class XclExpCrnString : public XclExpCrn
-{
-public:
-    explicit            XclExpCrnString( SCCOL nScCol, SCROW nScRow, const String& rText );
-
-private:
-    /** Writes the string following the common record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
-
-private:
-    XclExpString        maText;     /// Text of the cached cell.
-};
-
-// ----------------------------------------------------------------------------
-
-/// Cached data of an external Boolean cell. */
-class XclExpCrnBool : public XclExpCrn
-{
-public:
-    explicit            XclExpCrnBool( SCCOL nScCol, SCROW nScRow, bool bBoolVal );
-
-private:
-    /** Writes the Boolean value following the common record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
-
-private:
-    sal_uInt16          mnBool;     /// Boolean value of the cached cell.
-};
-
-// Cached cells of a sheet ====================================================
-
-/// Represents the record XCT which is the header record of a CRN record list. */
-class XclExpXct : public XclExpRecord
-{
-public:
-    explicit            XclExpXct( const String& rTabName, sal_uInt16 nSBTab );
+    explicit            XclExpXct( const XclExpRoot& rRoot,
+                            const String& rTabName, sal_uInt16 nSBTab,
+                            ScExternalRefCache::TableTypeRef xCacheTable );
 
     /** Returns the external sheet name. */
     inline const XclExpString& GetTabName() const { return maTabName; }
 
     /** Stores all cells in the given range in the CRN list. */
-    void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange );
+    void                StoreCellRange( const ScRange& rRange );
 
-    void                StoreCell( const XclExpRoot& rRoot, const ScAddress& rCell, const formula::FormulaToken& rToken );
-    void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, const formula::FormulaToken& rToken );
+    void                StoreCell( const ScAddress& rCell, const ::formula::FormulaToken& rToken );
+    void                StoreCellRange( const ScRange& rRange, const ::formula::FormulaToken& rToken );
 
     /** Writes the XCT and all CRN records. */
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    /** Writes the XCT record contents. */
-    virtual void        WriteBody( XclExpStream& rStrm );
-
-private:
-    typedef XclExpRecordList< XclExpCrn >   XclExpCrnList;
-    typedef XclExpCrnList::RecordRefType    XclExpCrnRef;
-
-    XclExpCrnList       maCrnList;      /// CRN records that follow this record.
+    ScExternalRefCache::TableTypeRef mxCacheTable;
     ScMarkData          maUsedCells;    /// Contains addresses of all stored cells.
+    ScRange             maBoundRange;   /// Bounding box of maUsedCells.
     XclExpString        maTabName;      /// Sheet name of the external sheet.
     sal_uInt16          mnSBTab;        /// Referred sheet index in SUPBOOK record.
 };
@@ -356,14 +311,14 @@ public:
     /** Stores all cells in the given range in the CRN list of the specified SUPBOOK sheet. */
     void                StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab );
 
-    void                StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const formula::FormulaToken& rToken );
-    void                StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const formula::FormulaToken& rToken );
+    void                StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const ::formula::FormulaToken& rToken );
+    void                StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const ::formula::FormulaToken& rToken );
 
     sal_uInt16          GetTabIndex( const String& rTabName ) const;
     sal_uInt16          GetTabCount() const;
 
     /** Inserts a new sheet name into the SUPBOOK and returns the SUPBOOK internal sheet index. */
-    sal_uInt16          InsertTabName( const String& rTabName );
+    sal_uInt16          InsertTabName( const String& rTabName, ScExternalRefCache::TableTypeRef xCacheTable );
     /** Finds or inserts an EXTERNNAME record for add-ins.
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertAddIn( const String& rName );
@@ -1009,6 +964,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
     // range address.  Excel just writes '02 00 1C 17' for all the other types
     // of external names.
 
+    using namespace ::formula;
     do
     {
         if (mpArray->GetLen() != 1)
@@ -1165,209 +1121,198 @@ sal_uInt16 XclExpExtNameBuffer::AppendNew( XclExpExtNameBase* pExtName )
 
 // Cached external cells ======================================================
 
-XclExpCrn::XclExpCrn( SCCOL nScCol, SCROW nScRow, sal_uInt8 nId, sal_uInt32 nAddLen ) :
-    XclExpRecord( EXC_ID_CRN, 5 + nAddLen ),
-    mnXclCol( static_cast< sal_uInt16 >( nScCol ) ),
-    mnXclRow( static_cast< sal_uInt16 >( nScRow ) ),
-    mnId( nId )
+XclExpCrn::XclExpCrn( SCCOL nScCol, SCROW nScRow, const Any& rValue ) :
+    XclExpRecord( EXC_ID_CRN, 4 ),
+    mnScCol( nScCol ),
+    mnScRow( nScRow )
 {
+    maValues.push_back( rValue );
+}
+
+bool XclExpCrn::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
+{
+    if( (nScRow != mnScRow) || (nScCol != static_cast< SCCOL >( mnScCol + maValues.size() )) )
+        return false;
+    maValues.push_back( rValue );
+    return true;
 }
 
 void XclExpCrn::WriteBody( XclExpStream& rStrm )
 {
-    rStrm   << static_cast< sal_uInt8 >( mnXclCol )
-            << static_cast< sal_uInt8 >( mnXclCol )
-            << mnXclRow
-            << mnId;
-    WriteAddData( rStrm );
+    rStrm   << static_cast< sal_uInt8 >( mnScCol + maValues.size() - 1 )
+            << static_cast< sal_uInt8 >( mnScCol )
+            << static_cast< sal_uInt16 >( mnScRow );
+    for( CachedValues::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt )
+    {
+        if( aIt->has< bool >() )
+            WriteBool( rStrm, aIt->get< bool >() );
+        else if( aIt->has< double >() )
+            WriteDouble( rStrm, aIt->get< double >() );
+        else if( aIt->has< OUString >() )
+            WriteString( rStrm, aIt->get< OUString >() );
+        else
+            WriteEmpty( rStrm );
+    }
 }
 
-// ----------------------------------------------------------------------------
-
-XclExpCrnDouble::XclExpCrnDouble( SCCOL nScCol, SCROW nScRow, double fVal ) :
-    XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_DOUBLE, 8 ),
-    mfVal( fVal )
+void XclExpCrn::WriteBool( XclExpStream& rStrm, bool bValue )
 {
+    rStrm << EXC_CACHEDVAL_BOOL << sal_uInt8( bValue ? 1 : 0);
+    rStrm.WriteZeroBytes( 7 );
 }
 
-void XclExpCrnDouble::WriteAddData( XclExpStream& rStrm )
+void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
-    rStrm << mfVal;
+    if( ::rtl::math::isNan( fValue ) )
+    {
+        USHORT nScError = static_cast< USHORT >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
+        WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
+    }
+    else
+    {
+        rStrm << EXC_CACHEDVAL_DOUBLE << fValue;
+    }
 }
 
-// ----------------------------------------------------------------------------
-
-XclExpCrnString::XclExpCrnString( SCCOL nScCol, SCROW nScRow, const String& rText ) :
-    XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_STRING ),
-    maText( rText )
+void XclExpCrn::WriteString( XclExpStream& rStrm, const OUString& rValue )
 {
-    // set correct size after maText is initialized
-    AddRecSize( maText.GetSize() );
+    rStrm << EXC_CACHEDVAL_STRING << XclExpString( rValue );
 }
 
-void XclExpCrnString::WriteAddData( XclExpStream& rStrm )
+void XclExpCrn::WriteError( XclExpStream& rStrm, sal_uInt8 nErrCode )
 {
-    rStrm << maText;
+    rStrm << EXC_CACHEDVAL_ERROR << nErrCode;
+    rStrm.WriteZeroBytes( 7 );
 }
 
-// ----------------------------------------------------------------------------
-
-XclExpCrnBool::XclExpCrnBool( SCCOL nScCol, SCROW nScRow, bool bBoolVal ) :
-    XclExpCrn( nScCol, nScRow, EXC_CACHEDVAL_BOOL, 8 ),
-    mnBool( bBoolVal ? 1 : 0 )
+void XclExpCrn::WriteEmpty( XclExpStream& rStrm )
 {
-}
-
-void XclExpCrnBool::WriteAddData( XclExpStream& rStrm )
-{
-    rStrm << mnBool;
-    rStrm.WriteZeroBytes( 6 );
+    rStrm << EXC_CACHEDVAL_EMPTY;
+    rStrm.WriteZeroBytes( 8 );
 }
 
 // Cached cells of a sheet ====================================================
 
-XclExpXct::XclExpXct( const String& rTabName, sal_uInt16 nSBTab ) :
-    XclExpRecord( EXC_ID_XCT, 4 ),
+XclExpXct::XclExpXct( const XclExpRoot& rRoot, const String& rTabName,
+        sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef xCacheTable ) :
+    XclExpRoot( rRoot ),
+    mxCacheTable( xCacheTable ),
+    maBoundRange( ScAddress::INITIALIZE_INVALID ),
     maTabName( rTabName ),
     mnSBTab( nSBTab )
 {
 }
 
-void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
+void XclExpXct::StoreCellRange( const ScRange& rRange )
 {
     // #i70418# restrict size of external range to prevent memory overflow
     if( (rRange.aEnd.Col() - rRange.aStart.Col()) * (rRange.aEnd.Row() - rRange.aStart.Row()) > 1024 )
         return;
 
-    ScDocument& rDoc = rRoot.GetDoc();
-    SvNumberFormatter& rFormatter = rRoot.GetFormatter();
-    SCTAB nScTab = rRange.aStart.Tab();
-    SCCOL nScLastCol = rRange.aEnd.Col();
-    SCROW nScLastRow = rRange.aEnd.Row();
-
-    for( SCROW nScRow = rRange.aStart.Row(); nScRow <= nScLastRow; ++nScRow )
-    {
-        for( SCCOL nScCol = rRange.aStart.Col(); nScCol <= nScLastCol; ++nScCol )
-        {
-            if( !maUsedCells.IsCellMarked( nScCol, nScRow, TRUE ) )
-            {
-                XclExpCrnRef xCrn;
-                if( rDoc.HasValueData( nScCol, nScRow, nScTab ) )
-                {
-                    ScAddress   aAddr( nScCol, nScRow, nScTab );
-                    double      fVal    = rDoc.GetValue( aAddr );
-                    ULONG       nFormat = rDoc.GetNumberFormat( aAddr );
-                    short       nType   = rFormatter.GetType( nFormat );
-                    bool        bIsBool = (nType == NUMBERFORMAT_LOGICAL);
-
-                    if( !bIsBool && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) &&
-                            (rDoc.GetCellType( aAddr ) == CELLTYPE_FORMULA) )
-                        if( ScFormulaCell* pCell = static_cast< ScFormulaCell* >( rDoc.GetCell( aAddr ) ) )
-                            bIsBool = (pCell->GetFormatType() == NUMBERFORMAT_LOGICAL);
-
-                    if( bIsBool && ((fVal == 0.0) || (fVal == 1.0)) )
-                        xCrn.reset( new XclExpCrnBool( nScCol, nScRow, (fVal == 1.0) ) );
-                    else
-                        xCrn.reset( new XclExpCrnDouble( nScCol, nScRow, fVal ) );
-                }
-                else
-                {
-                    String aText;
-                    rDoc.GetString( nScCol, nScRow, nScTab, aText );
-                    xCrn.reset( new XclExpCrnString( nScCol, nScRow, aText ) );
-                }
-                maCrnList.AppendRecord( xCrn );
-            }
-        }
-    }
-
     maUsedCells.SetMultiMarkArea( rRange );
+    maBoundRange.ExtendTo( rRange );
 }
 
-void XclExpXct::StoreCell( const XclExpRoot& /*rRoot*/, const ScAddress& rCell, const formula::FormulaToken& rToken )
+void XclExpXct::StoreCell( const ScAddress& rCell, const ::formula::FormulaToken& rToken )
 {
-    switch (rToken.GetType())
-    {
-        case svString:
-        {
-            XclExpCrnRef xCrn(
-                new XclExpCrnString(rCell.Col(), rCell.Row(), rToken.GetString()));
-            maCrnList.AppendRecord(xCrn);
-        }
-        break;
-        case svDouble:
-        {
-            XclExpCrnRef xCrn(
-                new XclExpCrnDouble(rCell.Col(), rCell.Row(), rToken.GetDouble()));
-            maCrnList.AppendRecord(xCrn);
-        }
-        break;
-        case svEmptyCell:
-        {
-            XclExpCrnRef xCrn(
-                new XclExpCrnDouble(rCell.Col(), rCell.Row(), 0.0));
-            maCrnList.AppendRecord(xCrn);
-        }
-        break;
-        default:
-            ;   // nothing
-    }
+    maUsedCells.SetMultiMarkArea( ScRange( rCell ) );
+    maBoundRange.ExtendTo( ScRange( rCell ) );
+    (void)rToken;
 }
 
-void XclExpXct::StoreCellRange( const XclExpRoot& /*rRoot*/, const ScRange& rRange, const formula::FormulaToken& rToken )
+void XclExpXct::StoreCellRange( const ScRange& rRange, const ::formula::FormulaToken& rToken )
 {
-    if (rToken.GetType() != svMatrix)
-        return;
-
-    if (rRange.aStart.Tab() != rRange.aEnd.Tab())
-        // multi-table range is not supported here.
-        return;
-
-    const ScMatrix* pMtx = static_cast<const ScToken*>(&rToken)->GetMatrix();
-    if (!pMtx)
-        return;
-
-    SCSIZE nCols, nRows;
-    pMtx->GetDimensions(nCols, nRows);
-    const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
-    if (static_cast<SCCOL>(nCols) != e.Col() - s.Col() + 1 ||
-        static_cast<SCROW>(nRows) != e.Row() - s.Row() + 1)
-    {
-        // size mis-match!
-        return;
-    }
-
-    for (SCCOL nCol = 0; nCol < static_cast< SCCOL >( nCols ); ++nCol)
-    {
-        for (SCROW nRow = 0; nRow < static_cast< SCROW >( nRows ); ++nRow)
-        {
-            if (pMtx->IsString(nCol, nRow))
-            {
-                XclExpCrnRef xCrn(new XclExpCrnString(
-                    s.Col() + nCol, s.Row() + nRow, pMtx->GetString(nCol, nRow)));
-                maCrnList.AppendRecord(xCrn);
-            }
-            else if (pMtx->IsValueOrEmpty(nCol, nRow))
-            {
-                XclExpCrnRef xCrn(new XclExpCrnDouble(
-                    s.Col() + nCol, s.Row() + nRow, pMtx->GetDouble(nCol, nRow)));
-                maCrnList.AppendRecord(xCrn);
-            }
-        }
-    }
+    maUsedCells.SetMultiMarkArea( rRange );
+    maBoundRange.ExtendTo( rRange );
+    (void)rToken;
 }
+
+namespace {
+
+class XclExpCrnList : public XclExpRecordList< XclExpCrn >
+{
+public:
+    /** Inserts the passed value into an existing or new CRN record.
+        @return  True = value inserted successfully, false = CRN list is full. */
+    bool                InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue );
+};
+
+bool XclExpCrnList::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
+{
+    RecordRefType xLastRec = GetLastRecord();
+    if( xLastRec.is() && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
+        return true;
+    if( GetSize() == SAL_MAX_UINT16 )
+        return false;
+    AppendNewRecord( new XclExpCrn( nScCol, nScRow, rValue ) );
+    return true;
+}
+
+} // namespace
 
 void XclExpXct::Save( XclExpStream& rStrm )
 {
-    XclExpRecord::Save( rStrm );
-    maCrnList.Save( rStrm );
-}
+    if( !mxCacheTable )
+        return;
 
-void XclExpXct::WriteBody( XclExpStream& rStrm )
-{
-    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maCrnList.GetSize() );
-    rStrm << nCount << mnSBTab;
+    /*  Get the range of used rows in the cache table. This may help to
+        optimize building the CRN record list if the cache table does not
+        contain all referred cells, e.g. if big empty ranges are used in the
+        formulas. */
+    ::std::pair< SCROW, SCROW > aRowRange = mxCacheTable->getRowRange();
+    if( aRowRange.first >= aRowRange.second )
+        return;
+
+    /*  Crop the bounding range of used cells in this table to Excel limits.
+        Return if there is no external cell inside these limits. */
+    if( !GetAddressConverter().ValidateRange( maBoundRange, false ) )
+        return;
+
+    /*  Find the resulting row range that needs to be processed. */
+    SCROW nScRow1 = ::std::max( aRowRange.first, maBoundRange.aStart.Row() );
+    SCROW nScRow2 = ::std::min( aRowRange.second - 1, maBoundRange.aEnd.Row() );
+    if( nScRow1 > nScRow2 )
+        return;
+
+    /*  Build and collect all CRN records before writing the XCT record. This
+        is needed to determine the total number of CRN records which must be
+        known when writing the XCT record (possibly encrypted, so seeking the
+        output strem back after writing the CRN records is not an option). */
+    XclExpCrnList aCrnRecs;
+    SvNumberFormatter& rFormatter = GetFormatter();
+    bool bValid = true;
+    for( SCROW nScRow = nScRow1; bValid && (nScRow <= nScRow2); ++nScRow )
+    {
+        ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
+        for( SCCOL nScCol = aColRange.first; bValid && (nScCol < aColRange.second); ++nScCol )
+        {
+            if( maUsedCells.IsCellMarked( nScCol, nScRow, TRUE ) )
+            {
+                sal_uInt32 nScNumFmt = 0;
+                ScExternalRefCache::TokenRef xToken = mxCacheTable->getCell( nScCol, nScRow, &nScNumFmt );
+                using namespace ::formula;
+                if( xToken.get() ) switch( xToken->GetType() )
+                {
+                    case svDouble:
+                        bValid = (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) ?
+                            aCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
+                            aCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
+                    break;
+                    case svString:
+                        // do not save empty strings (empty cells) to cache
+                        if( xToken->GetString().Len() > 0 )
+                            bValid = aCrnRecs.InsertValue( nScCol, nScRow, Any( OUString( xToken->GetString() ) ) );
+                    break;
+                }
+            }
+        }
+    }
+
+    // write the XCT record and the list of CRN records
+    rStrm.StartRecord( EXC_ID_XCT, 4 );
+    rStrm << static_cast< sal_uInt16 >( aCrnRecs.GetSize() ) << mnSBTab;
+    rStrm.EndRecord();
+    aCrnRecs.Save( rStrm );
 }
 
 // External documents (EXTERNSHEET/SUPBOOK), base class =======================
@@ -1474,15 +1419,11 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl ) :
 
     // We need to create all tables up front to ensure the correct table order.
     ScExternalRefManager* pRefMgr = rRoot.GetDoc().GetExternalRefManager();
-    sal_uInt16 nFileId = pRefMgr->getExternalFileId(rUrl);
-    vector<String> aTabNames;
-    pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-    if (aTabNames.empty())
-        return;
-
-    vector<String>::const_iterator itr = aTabNames.begin(), itrEnd = aTabNames.end();
-    for (; itr != itrEnd; ++itr)
-        InsertTabName(*itr);
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId( rUrl );
+    ScfStringVec aTabNames;
+    pRefMgr->getAllCachedTableNames( nFileId, aTabNames );
+    for( ScfStringVec::const_iterator aBeg = aTabNames.begin(), aIt = aBeg, aEnd = aTabNames.end(); aIt != aEnd; ++aIt )
+        InsertTabName( *aIt, pRefMgr->getCacheTable( nFileId, aIt - aBeg ) );
 }
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, const String& rTopic ) :
@@ -1516,31 +1457,22 @@ void XclExpSupbook::FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
 
 void XclExpSupbook::StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab )
 {
-    XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    if( xXct.is() )
-        xXct->StoreCellRange( GetRoot(), rRange );
+    if( XclExpXct* pXct = maXctList.GetRecord( nSBTab ).get() )
+        pXct->StoreCellRange( rRange );
 }
 
 void XclExpSupbook::StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const formula::FormulaToken& rToken )
 {
-    XclExpXctRef xXct = maXctList.GetRecord(nSBTab);
-    if (!xXct.is())
-        return;
-
-    xXct->StoreCell(GetRoot(), rCell, rToken);
+    if( XclExpXct* pXct = maXctList.GetRecord( nSBTab ).get() )
+        pXct->StoreCell( rCell, rToken );
 }
 
 void XclExpSupbook::StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const formula::FormulaToken& rToken )
 {
-    if (rRange.aStart.Tab() != rRange.aEnd.Tab())
-        // multi-table range is not allowed!
-        return;
-
-    XclExpXctRef xXct = maXctList.GetRecord(nSBTab);
-    if (!xXct.is())
-        return;
-
-    xXct->StoreCellRange(GetRoot(), rRange, rToken);
+    // multi-table range is not allowed!
+    if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
+        if( XclExpXct* pXct = maXctList.GetRecord( nSBTab ).get() )
+            pXct->StoreCellRange( rRange, rToken );
 }
 
 sal_uInt16 XclExpSupbook::GetTabIndex( const String& rTabName ) const
@@ -1561,11 +1493,11 @@ sal_uInt16 XclExpSupbook::GetTabCount() const
     return ulimit_cast<sal_uInt16>(maXctList.GetSize());
 }
 
-sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName )
+sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName, ScExternalRefCache::TableTypeRef xCacheTable )
 {
     DBG_ASSERT( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
-    XclExpXctRef xXct( new XclExpXct( rTabName, nSBTab ) );
+    XclExpXctRef xXct( new XclExpXct( GetRoot(), rTabName, nSBTab, xCacheTable ) );
     AddRecSize( xXct->GetTabName().GetSize() );
     maXctList.AppendRecord( xXct );
     return nSBTab;
@@ -1789,6 +1721,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const String& rTab
     SCTAB nTabCount = rRange.aEnd.Tab() - rRange.aStart.Tab() + 1;
 
     // If this is a multi-table range, get token for each table.
+    using namespace ::formula;
     vector<FormulaToken*> aMatrixList;
     aMatrixList.reserve(nTabCount);
 

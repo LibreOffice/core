@@ -164,50 +164,6 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
     return false;
 }
 
-
-sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
-{
-    using namespace ScErrorCodes;
-    switch( nScError )
-    {
-        case errIllegalArgument:        return EXC_ERR_VALUE;
-        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
-        case errDivisionByZero:         return EXC_ERR_DIV0;
-        case errIllegalParameter:       return EXC_ERR_VALUE;
-        case errPairExpected:           return EXC_ERR_VALUE;
-        case errOperatorExpected:       return EXC_ERR_VALUE;
-        case errVariableExpected:       return EXC_ERR_VALUE;
-        case errParameterExpected:      return EXC_ERR_VALUE;
-        case errNoValue:                return EXC_ERR_VALUE;
-        case errCircularReference:      return EXC_ERR_VALUE;
-        case errNoCode:                 return EXC_ERR_NULL;
-        case errNoRef:                  return EXC_ERR_REF;
-        case errNoName:                 return EXC_ERR_NAME;
-        case errNoAddin:                return EXC_ERR_NAME;
-        case errNoMacro:                return EXC_ERR_NAME;
-        case NOTAVAILABLE:              return EXC_ERR_NA;
-    }
-    return EXC_ERR_NA;
-}
-
-USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
-{
-    using namespace ScErrorCodes;
-    switch( nXclError )
-    {
-        case EXC_ERR_NULL:  return errNoCode;
-        case EXC_ERR_DIV0:  return errDivisionByZero;
-        case EXC_ERR_VALUE: return errNoValue;
-        case EXC_ERR_REF:   return errNoRef;
-        case EXC_ERR_NAME:  return errNoName;
-        case EXC_ERR_NUM:   return errIllegalFPOperation;
-        case EXC_ERR_NA:    return NOTAVAILABLE;
-        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
-    }
-    return NOTAVAILABLE;
-}
-
-
 sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked )
 {
     if( nXclRot == EXC_ROT_STACKED )
@@ -255,6 +211,59 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
     return EXC_ORIENT_NONE;
 }
 
+sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
+{
+    using namespace ScErrorCodes;
+    switch( nScError )
+    {
+        case errIllegalArgument:        return EXC_ERR_VALUE;
+        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
+        case errDivisionByZero:         return EXC_ERR_DIV0;
+        case errIllegalParameter:       return EXC_ERR_VALUE;
+        case errPairExpected:           return EXC_ERR_VALUE;
+        case errOperatorExpected:       return EXC_ERR_VALUE;
+        case errVariableExpected:       return EXC_ERR_VALUE;
+        case errParameterExpected:      return EXC_ERR_VALUE;
+        case errNoValue:                return EXC_ERR_VALUE;
+        case errCircularReference:      return EXC_ERR_VALUE;
+        case errNoCode:                 return EXC_ERR_NULL;
+        case errNoRef:                  return EXC_ERR_REF;
+        case errNoName:                 return EXC_ERR_NAME;
+        case errNoAddin:                return EXC_ERR_NAME;
+        case errNoMacro:                return EXC_ERR_NAME;
+        case NOTAVAILABLE:              return EXC_ERR_NA;
+    }
+    return EXC_ERR_NA;
+}
+
+USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
+{
+    using namespace ScErrorCodes;
+    switch( nXclError )
+    {
+        case EXC_ERR_NULL:  return errNoCode;
+        case EXC_ERR_DIV0:  return errDivisionByZero;
+        case EXC_ERR_VALUE: return errNoValue;
+        case EXC_ERR_REF:   return errNoRef;
+        case EXC_ERR_NAME:  return errNoName;
+        case EXC_ERR_NUM:   return errIllegalFPOperation;
+        case EXC_ERR_NA:    return NOTAVAILABLE;
+        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
+    }
+    return NOTAVAILABLE;
+}
+
+double XclTools::ErrorToDouble( sal_uInt8 nXclError )
+{
+    union
+    {
+        double fVal;
+        sal_math_Double smD;
+    };
+    ::rtl::math::setNan( &fVal );
+    smD.nan_parts.fraction_lo = GetScErrorCode( nXclError );
+    return fVal;
+}
 
 XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue )
 {
@@ -283,7 +292,6 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
     }
     return eType;
 }
-
 
 sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 {

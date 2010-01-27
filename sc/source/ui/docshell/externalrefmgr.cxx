@@ -241,6 +241,26 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows) const
     rRows.swap(aRows);
 }
 
+::std::pair< SCROW, SCROW > ScExternalRefCache::Table::getRowRange() const
+{
+    ::std::pair< SCROW, SCROW > aRange( 0, 0 );
+    if( !maRows.empty() )
+    {
+        // iterate over entire container (hash map is not sorted by key)
+        RowsDataType::const_iterator itr = maRows.begin(), itrEnd = maRows.end();
+        aRange.first = itr->first;
+        aRange.second = itr->first + 1;
+        while( ++itr != itrEnd )
+        {
+            if( itr->first < aRange.first )
+                aRange.first = itr->first;
+            else if( itr->first >= aRange.second )
+                aRange.second = itr->first + 1;
+        }
+    }
+    return aRange;
+}
+
 void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols) const
 {
     RowsDataType::const_iterator itrRow = maRows.find(nRow);
@@ -258,6 +278,33 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols) con
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aCols.begin(), aCols.end());
     rCols.swap(aCols);
+}
+
+::std::pair< SCCOL, SCCOL > ScExternalRefCache::Table::getColRange( SCROW nRow ) const
+{
+    ::std::pair< SCCOL, SCCOL > aRange( 0, 0 );
+
+    RowsDataType::const_iterator itrRow = maRows.find( nRow );
+    if (itrRow == maRows.end())
+        // this table doesn't have the specified row.
+        return aRange;
+
+    const RowDataType& rRowData = itrRow->second;
+    if( !rRowData.empty() )
+    {
+        // iterate over entire container (hash map is not sorted by key)
+        RowDataType::const_iterator itr = rRowData.begin(), itrEnd = rRowData.end();
+        aRange.first = itr->first;
+        aRange.second = itr->first + 1;
+        while( ++itr != itrEnd )
+        {
+            if( itr->first < aRange.first )
+                aRange.first = itr->first;
+            else if( itr->first >= aRange.second )
+                aRange.second = itr->first + 1;
+        }
+    }
+    return aRange;
 }
 
 void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
@@ -1941,6 +1988,9 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     SfxItemSet* pSet = new SfxAllItemSet(SFX_APP()->GetPool());
     if (aOptions.Len())
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
+
+    // make medium hidden to prevent assertion from progress bar
+    pSet->Put( SfxBoolItem( SID_HIDDEN, TRUE ) );
 
     auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, false, pFilter, pSet));
     if (pMedium->GetError() != ERRCODE_NONE)
