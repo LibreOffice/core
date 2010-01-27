@@ -58,8 +58,6 @@ function fAutocorrectOptions(Options as String)
     case "CapitalizeFirstLetter"       : Einstellungen.TypeKeys "<Down>",2
     case "AutomaticBoldAndUnderline"   : Einstellungen.TypeKeys "<Down>",3
     case "URLRecognition"              : Einstellungen.TypeKeys "<Down>",4
-    case "Replace1st"                  : Einstellungen.TypeKeys "<Down>",5
-    case "Replace1/2"                  : Einstellungen.TypeKeys "<Down>",6
     case "ReplaceDashes"               : Einstellungen.TypeKeys "<Down>",7
     case "DeleteSpaceParagraph"        : Einstellungen.TypeKeys "<Down>",8
     case "DeleteSpaceLine"             : Einstellungen.TypeKeys "<Down>",9

@@ -390,7 +390,7 @@ endcase
 '-------------------------------------------------------------------------------
 testcase tToolsAutocorrectOption
 
-    const cEntryCount = 9
+    const cEntryCount = 7
     dim i as integer
     dim iEntryCount as integer
     dim sEntries (20, 2) as string
@@ -407,14 +407,14 @@ testcase tToolsAutocorrectOption
     sEntries (4,2) = "*Hello* " '"_Hello_ "
     sEntries (5,1) = "URL Recognition"
     sEntries (5,2) = "It is www.ksta.de "
-    sEntries (6,1) = "Replace 1st... with 1^st..."
-    sEntries (6,2) = "1st "
-    sEntries (7,1) = "Replace 1/2 ... with ÃÂ» ..."
-    sEntries (7,2) = "1/2 "
-    sEntries (8,1) = "Replace dashes"
-    sEntries (8,2) = "Hello - Hrbert "
-    sEntries (9,1) = "Ignore double spaces"
-    sEntries (9,2) = "Hello  this is 2  blanks "
+    'sEntries (6,1) = "Replace 1st... with 1^st..."
+    'sEntries (6,2) = "1st "
+    'sEntries (7,1) = "Replace 1/2 ... with ÃÂ» ..."
+    'sEntries (7,2) = "1/2 "
+    sEntries (6,1) = "Replace dashes"
+    sEntries (6,2) = "Hello - Hrbert "
+    sEntries (7,1) = "Ignore double spaces"
+    sEntries (7,2) = "Hello  this is 2  blanks "
 
     Printlog "- Tools / Autocorrect -options"
     Call hNewDocument()

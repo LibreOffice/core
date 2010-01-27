@@ -488,8 +488,8 @@ testcase tToolsAutocorrectAutoformat
     Kontext "TabOptionenAutokorrektur"
     Call DialogTest ( TabOptionenAutokorrektur )
     printlog " Step through all options in list"
-    printlog " Tabpage Options: With entry 11 button 'Edit' should be enabled"
-    Einstellungen.TypeKeys "<Down>",11
+    printlog " Tabpage Options: With entry 10 button 'Edit' should be enabled"
+    Einstellungen.TypeKeys "<Down>",10
     Wait 500
     if Bearbeiten.IsEnabled then
         Bearbeiten.Click
@@ -497,11 +497,11 @@ testcase tToolsAutocorrectAutoformat
         DialogTest (Sonderzeichen)
         Sonderzeichen.Cancel
     else
-        Warnlog "- Button 'Edit' on Entry 11 disabled!"
+        Warnlog "- Button 'Edit' on Entry 10 disabled!"
     end if
 
     Kontext "TabOptionenAutokorrektur"
-    printlog " Tabpage Options: With entry 17 button 'Edit' should be enabled"
+    printlog " Tabpage Options: With entry 16 button 'Edit' should be enabled"
     Einstellungen.TypeKeys "<Down>",6
     Wait 500
     if Bearbeiten.IsEnabled then
@@ -514,7 +514,7 @@ testcase tToolsAutocorrectAutoformat
     end if
 
     Kontext "TabOptionenAutokorrektur"
-    printlog " Tabpage Options: With entry 19 button 'Edit' should be enabled"
+    printlog " Tabpage Options: With entry 18 button 'Edit' should be enabled"
     Einstellungen.TypeKeys "<Down>",2
     Wait 500
     if Bearbeiten.IsEnabled then
