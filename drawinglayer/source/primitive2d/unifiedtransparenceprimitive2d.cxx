@@ -2,7 +2,7 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: unifiedalphaprimitive2d.cxx,v $
+ *  $RCSfile: UnifiedTransparencePrimitive2D.cxx,v $
  *
  *  $Revision: 1.5 $
  *
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
@@ -55,39 +55,46 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        UnifiedAlphaPrimitive2D::UnifiedAlphaPrimitive2D(
+        UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
             const Primitive2DSequence& rChildren,
-            double fAlpha)
+            double fTransparence)
         :   GroupPrimitive2D(rChildren),
-            mfAlpha(fAlpha)
+            mfTransparence(fTransparence)
         {
         }
 
-        bool UnifiedAlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        bool UnifiedTransparencePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const UnifiedAlphaPrimitive2D& rCompare = (UnifiedAlphaPrimitive2D&)rPrimitive;
+                const UnifiedTransparencePrimitive2D& rCompare = (UnifiedTransparencePrimitive2D&)rPrimitive;
 
-                return (getAlpha() == rCompare.getAlpha());
+                return (getTransparence() == rCompare.getTransparence());
             }
 
             return false;
         }
 
-        Primitive2DSequence UnifiedAlphaPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange UnifiedTransparencePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(0.0 == getAlpha())
+            // do not use the fallback to decomposition here since for a correct BoundRect we also
+            // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
+            return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
+        }
+
+        Primitive2DSequence UnifiedTransparencePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            if(0.0 == getTransparence())
             {
                 // no transparence used, so just use the content
                 return getChildren();
             }
-            else if(getAlpha() > 0.0 && getAlpha() < 1.0)
+            else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // The idea is to create a AlphaPrimitive2D with alpha content using a fill color
-                // corresponding to the alpha value. Problem is that in most systems, the right
+                // The idea is to create a TransparencePrimitive2D with transparent content using a fill color
+                // corresponding to the transparence value. Problem is that in most systems, the right
                 // and bottom pixel array is not filled when filling polygons, thus this would not
-                // always produce a complete alpha bitmap. There are some solutions:
+                // always produce a complete transparent bitmap. There are some solutions:
                 //
                 // - Grow the used polygon range by one discrete unit in X and Y. This
                 // will make the decomposition view-dependent.
@@ -99,17 +106,17 @@ namespace drawinglayer
                 // solution stays view-independent.
                 //
                 // I will take the last one here. The small overhead of two primitives will only be
-                // used when UnifiedAlphaPrimitive2D is not handled directly.
+                // used when UnifiedTransparencePrimitive2D is not handled directly.
                 const basegfx::B2DRange aPolygonRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
                 const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aPolygonRange));
-                const basegfx::BColor aGray(getAlpha(), getAlpha(), getAlpha());
-                Primitive2DSequence aAlphaContent(2);
+                const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
+                Primitive2DSequence aTransparenceContent(2);
 
-                aAlphaContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
-                aAlphaContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
+                aTransparenceContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
+                aTransparenceContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 
                 // create sub-transparence group with a gray-colored rectangular fill polygon
-                const Primitive2DReference xRefB(new AlphaPrimitive2D(getChildren(), aAlphaContent));
+                const Primitive2DReference xRefB(new TransparencePrimitive2D(getChildren(), aTransparenceContent));
                 return Primitive2DSequence(&xRefB, 1L);
             }
             else
@@ -120,7 +127,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(UnifiedAlphaPrimitive2D, PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D)
+        ImplPrimitrive2DIDBlock(UnifiedTransparencePrimitive2D, PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

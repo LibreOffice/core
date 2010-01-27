@@ -69,6 +69,7 @@ public:
     SdrObjGroup();
     virtual ~SdrObjGroup();
 
+    virtual void SetBoundRectDirty();
     virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual SdrLayerID GetLayer() const;

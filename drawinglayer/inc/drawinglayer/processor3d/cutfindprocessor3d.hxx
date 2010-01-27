@@ -44,26 +44,38 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** CutFindProcessor class
+
+            This processor extracts all cuts of 3D plane geometries in the feeded primitives
+            with the given cut vector, based on the ViewInformation3D given.
+         */
         class CutFindProcessor : public BaseProcessor3D
         {
         private:
-            // the start and stop point for the cut vector
+            /// the start and stop point for the cut vector
             basegfx::B3DPoint                       maFront;
             basegfx::B3DPoint                       maBack;
 
-            // the found cut points
+            /// the found cut points
             ::std::vector< basegfx::B3DPoint >      maResult;
 
-            // #i102956# the transformation change from TransformPrimitive3D processings
-            // needs to be remembered to be able to transform found cuts to the
-            // basic coordinate system the processor starts with
+            /*  #i102956# the transformation change from TransformPrimitive3D processings
+                needs to be remembered to be able to transform found cuts to the
+                basic coordinate system the processor starts with
+             */
             basegfx::B3DHomMatrix                   maCombinedTransform;
 
-            // bitfield
+            /// bitfield
             bool                                    mbAnyHit : 1;
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            /*  this flag decides if primitives which are invisible will be taken into account for
+                HitTesting or not.
+             */
+            bool                                    mbUseInvisiblePrimitiveContent : 1;
+
+            /*  as tooling, the process() implementation takes over API handling and calls this
+                virtual render method when the primitive implementation is BasePrimitive3D-based.
+             */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -72,9 +84,16 @@ namespace drawinglayer
                 const basegfx::B3DPoint& rBack,
                 bool bAnyHit);
 
-            // data access
+            /// data write access
+            void setUseInvisiblePrimitiveContent(bool bNew)
+            {
+                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
+            }
+
+            /// data read access
             const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
             bool getAnyHit() const { return mbAnyHit; }
+            bool getUseInvisiblePrimitiveContent() const { return mbUseInvisiblePrimitiveContent;}
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

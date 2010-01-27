@@ -35,7 +35,6 @@
 #include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrconnectorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,35 +54,27 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            ::basegfx::B2DPolygon aEdgeTrack(GetEdgeObj().getEdgeTrack());
+            const basegfx::B2DPolygon& rEdgeTrack = GetEdgeObj().getEdgeTrack();
 
-            // base visualisation on EdgeTrack
-            if(aEdgeTrack.count())
-            {
-                // ckeck attributes
-                const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
-                SdrText* pSdrText = GetEdgeObj().getText(0);
+            // what to do when no EdgeTrack is provided (HitTest and selectability) ?
+            OSL_ENSURE(0 != rEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");
 
-                if(pSdrText)
-                {
-                    drawinglayer::attribute::SdrLineShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(rItemSet, *pSdrText);
+            // ckeck attributes
+            const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
+            const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(
+                    rItemSet,
+                    GetEdgeObj().getText(0)));
 
-                    if(pAttribute)
-                    {
-                        if(pAttribute->isVisible())
-                        {
-                            // create primitive
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrConnectorPrimitive2D(*pAttribute, aEdgeTrack));
-                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                        }
+            // create primitive. Always create primitives to allow the decomposition of
+            // SdrConnectorPrimitive2D to create needed invisible elements for HitTest
+            // and/or BoundRect
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrConnectorPrimitive2D(
+                    aAttribute,
+                    rEdgeTrack));
 
-                        delete pAttribute;
-                    }
-                }
-            }
-
-            return xRetval;
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
     } // end of namespace contact
 } // end of namespace sdr

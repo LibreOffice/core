@@ -33,8 +33,8 @@
 #define INCLUDED_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

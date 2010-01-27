@@ -48,20 +48,27 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** Geometry2DExtractingProcessor class
+
+            This processor extracts the 2D geometry (projected geometry) of all feeded primitives.
+            It is e.g. used as sub-processor for contour extraction where 3D geometry is only
+            useful as 2D projected geometry.
+         */
         class Geometry2DExtractingProcessor : public BaseProcessor3D
         {
         private:
-            // result holding vector (2D)
+            /// result holding vector (2D)
             primitive2d::Primitive2DSequence                maPrimitive2DSequence;
 
-            // object transformation for scene for 2d definition
+            /// object transformation for scene for 2d definition
             basegfx::B2DHomMatrix                           maObjectTransformation;
 
-            // the modifiedColorPrimitive stack
+            /// the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                    maBColorModifierStack;
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            /*  as tooling, the process() implementation takes over API handling and calls this
+                virtual render method when the primitive implementation is BasePrimitive3D-based.
+             */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -69,7 +76,7 @@ namespace drawinglayer
                 const geometry::ViewInformation3D& rViewInformation,
                 const basegfx::B2DHomMatrix& rObjectTransformation);
 
-            // data access
+            // data read access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }

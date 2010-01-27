@@ -37,19 +37,20 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/borderline.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
+#include <svx/sdr/attribute/sdrfilltextattribute.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "cell.hxx"
 #include "tablelayouter.hxx"
@@ -99,31 +100,44 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            if(getSdrFTAttribute().getFill() || getSdrFTAttribute().getText())
+            if(!getSdrFTAttribute().getFill().isDefault()
+                || !getSdrFTAttribute().getText().isDefault())
             {
                 // prepare unit polygon
-                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-                const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::tools::createPolygonFromRect(aUnitRange));
+                const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::tools::createUnitPolygon());
 
                 // add fill
-                if(getSdrFTAttribute().getFill())
+                if(!getSdrFTAttribute().getFill().isDefault())
                 {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(
-                        aUnitPolyPolygon,
-                        getTransform(),
-                        *getSdrFTAttribute().getFill(),
-                        getSdrFTAttribute().getFillFloatTransGradient()));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                        createPolyPolygonFillPrimitive(
+                            aUnitPolyPolygon,
+                            getTransform(),
+                            getSdrFTAttribute().getFill(),
+                            getSdrFTAttribute().getFillFloatTransGradient()));
+                }
+                else
+                {
+                    // if no fill create one for HitTest and BoundRect fallback
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                        createHiddenGeometryPrimitives2D(
+                            true,
+                            aUnitPolyPolygon,
+                            getTransform()));
                 }
 
                 // add text
-                if(getSdrFTAttribute().getText())
+                if(!getSdrFTAttribute().getText().isDefault())
                 {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(
-                        aUnitPolyPolygon,
-                        getTransform(),
-                        *getSdrFTAttribute().getText(),
-                        0,
-                        true, false, false));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                        createTextPrimitive(
+                            aUnitPolyPolygon,
+                            getTransform(),
+                            getSdrFTAttribute().getText(),
+                            attribute::SdrLineAttribute(),
+                            true,
+                            false,
+                            false));
                 }
             }
 
@@ -539,14 +553,13 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const sdr::table::SdrTableObj& rTableObj = GetTableObj();
             const uno::Reference< com::sun::star::table::XTable > xTable = rTableObj.getTable();
-               const SfxItemSet& rObjectItemSet = rTableObj.GetMergedItemSet();
 
             if(xTable.is())
             {
                 // create primitive representation for table
+                drawinglayer::primitive2d::Primitive2DSequence xRetval;
                 const sal_Int32 nRowCount(xTable->getRowCount());
                 const sal_Int32 nColCount(xTable->getColumnCount());
                 const sal_Int32 nAllCount(nRowCount * nColCount);
@@ -599,7 +612,7 @@ namespace sdr
                                     const SfxItemSet& rCellItemSet = xCurrentCell->GetItemSet();
                                     const sal_uInt32 nTextIndex(nColCount * aCellPos.mnRow + aCellPos.mnCol);
                                     const SdrText* pSdrText = rTableObj.getText(nTextIndex);
-                                    drawinglayer::attribute::SdrFillTextAttribute* pAttribute = 0;
+                                    drawinglayer::attribute::SdrFillTextAttribute aAttribute;
 
                                     if(pSdrText)
                                     {
@@ -609,7 +622,7 @@ namespace sdr
                                         const sal_Int32 nUpper(xCurrentCell->GetTextUpperDistance());
                                         const sal_Int32 nLower(xCurrentCell->GetTextLowerDistance());
 
-                                        pAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
+                                        aAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
                                             rCellItemSet,
                                             pSdrText,
                                             &nLeft,
@@ -619,21 +632,17 @@ namespace sdr
                                     }
                                     else
                                     {
-                                        pAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
+                                        aAttribute = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
                                             rCellItemSet,
                                             pSdrText);
                                     }
 
-                                    if(pAttribute)
+                                    // always create cell primitives for BoundRect and HitTest
                                     {
-                                        if(pAttribute->isVisible())
-                                        {
-                                            const drawinglayer::primitive2d::Primitive2DReference xCellReference(new drawinglayer::primitive2d::SdrCellPrimitive2D(
-                                                aCellMatrix, *pAttribute));
-                                            xCellSequence[nCellInsert++] = xCellReference;
-                                        }
-
-                                        delete pAttribute;
+                                        const drawinglayer::primitive2d::Primitive2DReference xCellReference(
+                                            new drawinglayer::primitive2d::SdrCellPrimitive2D(
+                                                aCellMatrix, aAttribute));
+                                        xCellSequence[nCellInsert++] = xCellReference;
                                     }
 
                                     // handle cell borders
@@ -678,21 +687,46 @@ namespace sdr
                     xRetval = xCellSequence;
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xBorderSequence);
                 }
-            }
 
-            if(xRetval.hasElements())
-            {
-                // check and create evtl. shadow for created content
-                drawinglayer::attribute::SdrShadowAttribute* pNewShadowAttribute = drawinglayer::primitive2d::createNewSdrShadowAttribute(rObjectItemSet);
-
-                if(pNewShadowAttribute)
+                if(xRetval.hasElements())
                 {
-                    xRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(xRetval, *pNewShadowAttribute);
-                    delete pNewShadowAttribute;
-                }
-            }
+                    // check and create evtl. shadow for created content
+                       const SfxItemSet& rObjectItemSet = rTableObj.GetMergedItemSet();
+                    const drawinglayer::attribute::SdrShadowAttribute aNewShadowAttribute(
+                        drawinglayer::primitive2d::createNewSdrShadowAttribute(rObjectItemSet));
 
-            return xRetval;
+                    if(!aNewShadowAttribute.isDefault())
+                    {
+                        xRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(xRetval, aNewShadowAttribute);
+                    }
+                }
+
+                return xRetval;
+            }
+            else
+            {
+                // take unrotated snap rect (direct model data) for position and size
+                const Rectangle& rRectangle = rTableObj.GetGeoRect();
+                const basegfx::B2DRange aObjectRange(
+                    rRectangle.Left(), rRectangle.Top(),
+                    rRectangle.Right(), rRectangle.Bottom());
+
+                // create object matrix
+                const GeoStat& rGeoStat(rTableObj.GetGeoStat());
+                const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
+                const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
+                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+                // credate an invisible outline for the cases where no visible content exists
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                        false,
+                        aObjectMatrix));
+
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
         }
 
         ViewContactOfTableObj::ViewContactOfTableObj(::sdr::table::SdrTableObj& rTableObj)

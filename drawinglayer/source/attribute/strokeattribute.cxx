@@ -45,16 +45,143 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        double StrokeAttribute::getFullDotDashLen() const
+        class ImpStrokeAttribute
         {
-            if(0.0 == mfFullDotDashLen && maDotDashArray.size())
+        public:
+            // refcounter
+            sal_uInt32                              mnRefCount;
+
+            // data definitions
+            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
+            double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
+
+            ImpStrokeAttribute(
+                const ::std::vector< double >& rDotDashArray,
+                double fFullDotDashLen)
+            :   mnRefCount(0),
+                maDotDashArray(rDotDashArray),
+                mfFullDotDashLen(fFullDotDashLen)
             {
-                // calculate length on demand
-                const double fAccumulated(::std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));
-                const_cast< StrokeAttribute* >(this)->mfFullDotDashLen = fAccumulated;
             }
 
-            return mfFullDotDashLen;
+            // data read access
+            const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
+            double getFullDotDashLen() const
+            {
+                if(0.0 == mfFullDotDashLen && maDotDashArray.size())
+                {
+                    // calculate length on demand
+                    const double fAccumulated(::std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));
+                    const_cast< ImpStrokeAttribute* >(this)->mfFullDotDashLen = fAccumulated;
+                }
+
+                return mfFullDotDashLen;
+            }
+
+            bool operator==(const ImpStrokeAttribute& rCandidate) const
+            {
+                return (getDotDashArray() == rCandidate.getDotDashArray()
+                    && getFullDotDashLen() == rCandidate.getFullDotDashLen());
+            }
+
+            static ImpStrokeAttribute* get_global_default()
+            {
+                static ImpStrokeAttribute* pDefault = 0;
+
+                if(!pDefault)
+                {
+                    pDefault = new ImpStrokeAttribute(
+                        std::vector< double >(),
+                        0.0);
+
+                    // never delete; start with RefCount 1, not 0
+                    pDefault->mnRefCount++;
+                }
+
+                return pDefault;
+            }
+        };
+
+        StrokeAttribute::StrokeAttribute(
+            const ::std::vector< double >& rDotDashArray,
+            double fFullDotDashLen)
+        :   mpStrokeAttribute(new ImpStrokeAttribute(
+                rDotDashArray, fFullDotDashLen))
+        {
+        }
+
+        StrokeAttribute::StrokeAttribute()
+        :   mpStrokeAttribute(ImpStrokeAttribute::get_global_default())
+        {
+            mpStrokeAttribute->mnRefCount++;
+        }
+
+        StrokeAttribute::StrokeAttribute(const StrokeAttribute& rCandidate)
+        :   mpStrokeAttribute(rCandidate.mpStrokeAttribute)
+        {
+            mpStrokeAttribute->mnRefCount++;
+        }
+
+        StrokeAttribute::~StrokeAttribute()
+        {
+            if(mpStrokeAttribute->mnRefCount)
+            {
+                mpStrokeAttribute->mnRefCount--;
+            }
+            else
+            {
+                delete mpStrokeAttribute;
+            }
+        }
+
+        bool StrokeAttribute::isDefault() const
+        {
+            return mpStrokeAttribute == ImpStrokeAttribute::get_global_default();
+        }
+
+        StrokeAttribute& StrokeAttribute::operator=(const StrokeAttribute& rCandidate)
+        {
+            if(rCandidate.mpStrokeAttribute != mpStrokeAttribute)
+            {
+                if(mpStrokeAttribute->mnRefCount)
+                {
+                    mpStrokeAttribute->mnRefCount--;
+                }
+                else
+                {
+                    delete mpStrokeAttribute;
+                }
+
+                mpStrokeAttribute = rCandidate.mpStrokeAttribute;
+                mpStrokeAttribute->mnRefCount++;
+            }
+
+            return *this;
+        }
+
+        bool StrokeAttribute::operator==(const StrokeAttribute& rCandidate) const
+        {
+            if(rCandidate.mpStrokeAttribute == mpStrokeAttribute)
+            {
+                return true;
+            }
+
+            if(rCandidate.isDefault() != isDefault())
+            {
+                return false;
+            }
+
+            return (*rCandidate.mpStrokeAttribute == *mpStrokeAttribute);
+        }
+
+        const ::std::vector< double >& StrokeAttribute::getDotDashArray() const
+        {
+            return mpStrokeAttribute->getDotDashArray();
+        }
+
+        double StrokeAttribute::getFullDotDashLen() const
+        {
+            return mpStrokeAttribute->getFullDotDashLen();
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

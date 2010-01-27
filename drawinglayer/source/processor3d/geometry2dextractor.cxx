@@ -135,8 +135,8 @@ namespace drawinglayer
                 case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :
                 case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
                 case PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D :
-                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
-                case PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_UNIFIEDTRANSPARENCETEXTUREPRIMITIVE3D :
                 {
                     // TexturePrimitive3D: Process children, do not try to decompose
                     const primitive3d::TexturePrimitive3D& rTexturePrimitive = static_cast< const primitive3d::TexturePrimitive3D& >(rCandidate);

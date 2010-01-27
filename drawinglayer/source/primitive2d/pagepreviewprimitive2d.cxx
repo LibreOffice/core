@@ -77,7 +77,10 @@ namespace drawinglayer
 
                     if(!aAllowedContentRange.isInside(aRealContentRange))
                     {
-                        const Primitive2DReference xReferenceA(new MaskPrimitive2D(basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aAllowedContentRange)), aContent));
+                        const Primitive2DReference xReferenceA(
+                            new MaskPrimitive2D(
+                                basegfx::B2DPolyPolygon(
+                                    basegfx::tools::createPolygonFromRect(aAllowedContentRange)), aContent));
                         aContent = Primitive2DSequence(&xReferenceA, 1);
                     }
 

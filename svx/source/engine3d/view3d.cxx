@@ -74,7 +74,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -208,8 +208,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
                     // if we have full overlay from selected objects, embed with 50% transparence, the
                     // transformation is added to the OverlayPrimitive2DSequenceObject
-                    drawinglayer::primitive2d::Primitive2DReference aUnifiedAlphaPrimitive2D(new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aContent, 0.5));
-                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlphaPrimitive2D, 1);
+                    drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aContent, 0.5));
+                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
 
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 

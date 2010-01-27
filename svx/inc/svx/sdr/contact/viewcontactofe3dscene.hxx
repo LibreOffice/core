@@ -33,21 +33,15 @@
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 class E3dScene;
-
-namespace drawinglayer {
-    namespace geometry {
-        class ViewInformation3D;
-    }
-    namespace attribute {
-        class SdrSceneAttribute;
-        class SdrLightingAttribute;
-    }
-}
 
 namespace basegfx {
     class B3DRange;
@@ -70,7 +64,6 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfE3dScene(E3dScene& rScene);
-            virtual ~ViewContactOfE3dScene();
 
             // access to SdrObject
             E3dScene& GetE3dScene() const
@@ -101,14 +94,14 @@ namespace sdr
 
         protected:
             // the 3d transformation stack
-            drawinglayer::geometry::ViewInformation3D*          mpViewInformation3D;
+            drawinglayer::geometry::ViewInformation3D           maViewInformation3D;
 
             // the object transformation
-            basegfx::B2DHomMatrix*                              mpObjectTransformation;
+            basegfx::B2DHomMatrix                               maObjectTransformation;
 
             // attributes
-            drawinglayer::attribute::SdrSceneAttribute*         mpSdrSceneAttribute;
-            drawinglayer::attribute::SdrLightingAttribute*      mpSdrLightingAttribute;
+            drawinglayer::attribute::SdrSceneAttribute          maSdrSceneAttribute;
+            drawinglayer::attribute::SdrLightingAttribute       maSdrLightingAttribute;
 
             // create methods for ViewInformation3D and ObjectTransformation
             void createViewInformation3D(const ::basegfx::B3DRange& rContentRange);

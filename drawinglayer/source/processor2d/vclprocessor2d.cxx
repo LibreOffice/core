@@ -44,7 +44,6 @@
 #include <vclhelperbitmaprender.hxx>
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <vclhelpergradient.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
@@ -52,8 +51,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
@@ -380,7 +379,7 @@ namespace drawinglayer
                 {
                     // color gets completely replaced, get it
                     const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
 
                     mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -454,7 +453,7 @@ namespace drawinglayer
                         {
                             // color gets completely replaced, get it
                             const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                            basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                            basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                             aPolygon.transform(aLocalTransform);
 
                             mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -610,7 +609,7 @@ namespace drawinglayer
                 else
                 {
                     // try to catch cases where the bitmap will be color-modified to a single
-                    // color (e.g. shadow). This would NOT be optimizable with an alpha channel
+                    // color (e.g. shadow). This would NOT be optimizable with an transparence channel
                     // at the Bitmap which we do not have here. When this should change, this
                     // optimization has to be reworked accordingly.
                     const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());
@@ -883,10 +882,10 @@ namespace drawinglayer
                         if(getOptionsDrawinglayer().IsAntiAliasing())
                         {
                             // with AA, use 8bit AlphaMask to get nice borders
-                            VirtualDevice& rAlpha = aBufferDevice.getAlpha();
-                            rAlpha.SetLineColor();
-                            rAlpha.SetFillColor(COL_BLACK);
-                            rAlpha.DrawPolyPolygon(aMask);
+                            VirtualDevice& rTransparence = aBufferDevice.getTransparence();
+                            rTransparence.SetLineColor();
+                            rTransparence.SetFillColor(COL_BLACK);
+                            rTransparence.DrawPolyPolygon(aMask);
 
                             // dump buffer to outdev
                             aBufferDevice.paint();
@@ -919,7 +918,7 @@ namespace drawinglayer
         }
 
         // unified sub-transparence. Draw to VDev first.
-        void VclProcessor2D::RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate)
+        void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate)
         {
             static bool bForceToDecomposition(false);
 
@@ -932,14 +931,14 @@ namespace drawinglayer
                 }
                 else
                 {
-                    if(0.0 == rTransCandidate.getAlpha())
+                    if(0.0 == rTransCandidate.getTransparence())
                     {
                         // no transparence used, so just use the content
                         process(rTransCandidate.getChildren());
                     }
-                    else if(rTransCandidate.getAlpha() > 0.0 && rTransCandidate.getAlpha() < 1.0)
+                    else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
                     {
-                        // alpha is in visible range
+                        // transparence is in visible range
                         basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
                         aRange.transform(maCurrentTransformation);
                         impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
@@ -956,8 +955,8 @@ namespace drawinglayer
                             // back to old OutDev
                             mpOutputDevice = pLastOutputDevice;
 
-                            // dump buffer to outdev using given alpha
-                            aBufferDevice.paint(rTransCandidate.getAlpha());
+                            // dump buffer to outdev using given transparence
+                            aBufferDevice.paint(rTransCandidate.getTransparence());
                         }
                     }
                 }
@@ -965,7 +964,7 @@ namespace drawinglayer
         }
 
         // sub-transparence group. Draw to VDev first.
-        void VclProcessor2D::RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate)
+        void VclProcessor2D::RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate)
         {
             if(rTransCandidate.getChildren().hasElements())
             {
@@ -983,14 +982,14 @@ namespace drawinglayer
                     process(rTransCandidate.getChildren());
 
                     // set to mask
-                    mpOutputDevice = &aBufferDevice.getAlpha();
+                    mpOutputDevice = &aBufferDevice.getTransparence();
 
-                    // when painting alpha masks, reset the color stack
+                    // when painting transparence masks, reset the color stack
                     basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
                     maBColorModifierStack = basegfx::BColorModifierStack();
 
-                    // paint mask to it (always with alpha intensities, evtl. with AA)
-                    process(rTransCandidate.getAlpha());
+                    // paint mask to it (always with transparence intensities, evtl. with AA)
+                    process(rTransCandidate.getTransparence());
 
                     // back to old color stack
                     maBColorModifierStack = aLastBColorModifierStack;

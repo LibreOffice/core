@@ -46,6 +46,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -58,9 +59,12 @@ namespace drawinglayer
             Primitive2DSequence xRetval(1);
 
             // create background object
-            basegfx::B2DPolygon aBackgroundPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+            basegfx::B2DPolygon aBackgroundPolygon(basegfx::tools::createUnitPolygon());
             aBackgroundPolygon.transform(getTransform());
-            const Primitive2DReference xRefBackground(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aBackgroundPolygon), getBackgroundColor()));
+            const Primitive2DReference xRefBackground(
+                new PolyPolygonColorPrimitive2D(
+                    basegfx::B2DPolyPolygon(aBackgroundPolygon),
+                    getBackgroundColor()));
             xRetval[0] = xRefBackground;
 
             // try to get graphic snapshot
@@ -87,10 +91,13 @@ namespace drawinglayer
                 basegfx::B2DRange aDestRange(aSourceRange);
                 aDestRange.grow(-0.5 * fDiscreteSize);
 
-                if(::basegfx::fTools::equalZero(aDestRange.getWidth()) || ::basegfx::fTools::equalZero(aDestRange.getHeight()))
+                if(basegfx::fTools::equalZero(aDestRange.getWidth()) || basegfx::fTools::equalZero(aDestRange.getHeight()))
                 {
-                    // shrunk primitive has no content (zero size in X or Y), nothing to display, nothing to return
-                    xRetval = Primitive2DSequence();
+                    // shrunk primitive has no content (zero size in X or Y), nothing to display. Still create
+                    // invisible content for HitTest and BoundRect
+                    const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(xRetval));
+
+                    xRetval = Primitive2DSequence(&xHiddenLines, 1);
                 }
                 else
                 {

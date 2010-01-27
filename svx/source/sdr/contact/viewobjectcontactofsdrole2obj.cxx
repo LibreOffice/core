@@ -39,11 +39,11 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdview.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -207,7 +207,7 @@ namespace sdr
                     if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
                     {
                         // shade the representation if the object is activated outplace
-                        basegfx::B2DPolygon aObjectOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aObjectOutline(basegfx::tools::createUnitPolygon());
                         aObjectOutline.transform(aObjectTransform);
 
                         // Use a FillHatchPrimitive2D with necessary attributes

@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: hittestprimitive3d.cxx,v $
+ *  $RCSfile: sdrattribute.hxx,v $
  *
- *  $Revision: 1.1.2.1 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008/09/25 17:12:14 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,44 +33,61 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
-#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
 
-using namespace com::sun::star;
+namespace basegfx {
+    class BColor;
+    class B2DVector;
+}
+
+namespace drawinglayer { namespace attribute {
+    class ImpSdrShadowAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
-    namespace primitive3d
+    namespace attribute
     {
-        HitTestPrimitive3D::HitTestPrimitive3D(
-            const Primitive3DSequence& rChildren)
-        :   GroupPrimitive3D(rChildren)
+        class SdrShadowAttribute
         {
-        }
+        private:
+            ImpSdrShadowAttribute*              mpSdrShadowAttribute;
 
-        basegfx::B3DRange HitTestPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
-        {
-            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
-        }
+        public:
+            /// constructors/assignmentoperator/destructor
+            SdrShadowAttribute(
+                const basegfx::B2DVector& rOffset,
+                double fTransparence,
+                const basegfx::BColor& rColor);
+            SdrShadowAttribute();
+            SdrShadowAttribute(const SdrShadowAttribute& rCandidate);
+            SdrShadowAttribute& operator=(const SdrShadowAttribute& rCandidate);
+            ~SdrShadowAttribute();
 
-        Primitive3DSequence HitTestPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            // return empty sequence
-            return Primitive3DSequence();
-        }
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
-        // provide unique ID
-        ImplPrimitrive3DIDBlock(HitTestPrimitive3D, PRIMITIVE3D_ID_HITTESTPRIMITIVE3D)
+            // compare operator
+            bool operator==(const SdrShadowAttribute& rCandidate) const;
 
-    } // end of namespace primitive3d
+            // data access
+            const basegfx::B2DVector& getOffset() const;
+            double getTransparence() const;
+            const basegfx::BColor& getColor() const;
+        };
+    } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
+
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
+
 // eof

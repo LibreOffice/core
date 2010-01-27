@@ -74,7 +74,7 @@ namespace drawinglayer
             /// Grid color for single-pixel grid points
             basegfx::BColor                                 maBColor;
 
-            /// The Bitmap (with alpha) for grid cross points
+            /// The Bitmap (with transparence) for grid cross points
             BitmapEx                                        maCrossMarker;
 
             /** the last used object to view transformtion and the last Viewport,

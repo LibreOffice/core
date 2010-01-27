@@ -59,20 +59,6 @@ namespace sdr
         {
         }
 
-        bool ViewObjectContactOfGroup::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
-        {
-            const bool bHasChildren(0 != GetViewContact().GetObjectCount());
-
-            if(!bHasChildren && (GetObjectContact().isOutputToPrinter() || GetObjectContact().isOutputToRecordingMetaFile()))
-            {
-                // empty group uses fallback gray empty frame display. Do neither print nor PDF export it
-                return false;
-            }
-
-            // call parent
-            return ViewObjectContactOfSdrObj::isPrimitiveVisible(rDisplayInfo);
-        }
-
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
             const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());

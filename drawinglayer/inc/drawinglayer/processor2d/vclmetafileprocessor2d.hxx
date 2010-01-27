@@ -47,6 +47,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
 class GDIMetaFile;
 class Rectangle;
 class Gradient;
@@ -70,10 +71,22 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** VclMetafileProcessor2D class
+
+            This processor derived from VclProcessor2D is the base class for rendering
+            all feeded primitives to a classical VCL-Metafile, including all over the
+            time grown extra data in comments and PDF exception data creations. Also
+            printing needs some exception stuff.
+
+            All in all it is needed to emulate the old ::paint output from the old
+            Drawinglayer as long as exporters and/or filters still use the Metafile
+            and the extra-data added to it (which can be seen mostly as 'extensions'
+            or simply as 'hacks').
+         */
         class VclMetafileProcessor2D : public VclProcessor2D
         {
         private:
-            // local helper(s)
+            /// local helper(s)
             Rectangle impDumpToMetaFile(
                 const primitive2d::Primitive2DSequence& rContent,
                 GDIMetaFile& o_rContentMetafile);
@@ -93,42 +106,47 @@ namespace drawinglayer
             void impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
 
-            // the current clipping PolyPolygon from MaskPrimitive2D
+            /// the current clipping PolyPolygon from MaskPrimitive2D
             basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
-            // the target MetaFile
+            /// the target MetaFile
             GDIMetaFile*                        mpMetaFile;
 
-            // do not allow embedding SvtGraphicFills into each other,
-            // use a counter to prevent that
+            /*  do not allow embedding SvtGraphicFills into each other,
+                use a counter to prevent that
+             */
             sal_uInt32                          mnSvtGraphicFillCount;
 
-            // same for SvtGraphicStroke
+            /// same for SvtGraphicStroke
             sal_uInt32                          mnSvtGraphicStrokeCount;
 
-            // hold the last unified transparence value to have it handy
-            // on SvtGraphicStroke creation
+            /*  hold the last unified transparence value to have it handy
+                on SvtGraphicStroke creation
+             */
             double                              mfCurrentUnifiedTransparence;
 
-            // break iterator support
-            // made static so it only needs to be fetched once, even with many single
-            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
-            // but exists for OOo runtime now by purpose.
+            /*  break iterator support
+                made static so it only needs to be fetched once, even with many single
+                constructed VclMetafileProcessor2D. It's still incarnated on demand,
+                but exists for OOo runtime now by purpose.
+             */
             static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
 
-            // vcl::PDFExtOutDevData support
-            // For the first step, some extra actions at vcl::PDFExtOutDevData need to
-            // be emulated with the VclMetafileProcessor2D. These are potentially temporarily
-            // since PDF export may use PrimitiveSequences one day directly.
+            /*  vcl::PDFExtOutDevData support
+                For the first step, some extra actions at vcl::PDFExtOutDevData need to
+                be emulated with the VclMetafileProcessor2D. These are potentially temporarily
+                since PDF export may use PrimitiveSequences one day directly.
+             */
             vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
 
         protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
+            /*  the local processor for BasePrinitive2D-Implementation based primitives,
+                called from the common process()-implementation
+             */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            // constructor/destructor
+            /// constructor/destructor
             VclMetafileProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);

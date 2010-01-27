@@ -53,10 +53,10 @@
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <vcl/salbtype.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <vcl/svapp.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -589,7 +589,14 @@ namespace drawinglayer
         Primitive2DSequence NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return createFill(false);
+            if(!getFillGradient().isDefault())
+            {
+                return createFill(false);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -841,7 +848,7 @@ namespace
     }
 
     /** helper to create a regular BotmapEx from a MaskAction (definitions
-        which use a bitmap without alpha but define one of the colors as
+        which use a bitmap without transparence but define one of the colors as
         transparent)
      */
     BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
@@ -2728,7 +2735,7 @@ namespace
                             if(aSubContent.hasElements())
                             {
                                 rTargetHolders.Current().append(
-                                    new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                         aSubContent,
                                         nTransparence * 0.01));
                             }
@@ -2839,9 +2846,9 @@ namespace
 
                                 if(aAttribute.getStartColor() == aAttribute.getEndColor())
                                 {
-                                    // not really a gradient; create UnifiedAlphaPrimitive2D
+                                    // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             xSubContent,
                                             aAttribute.getStartColor().luminance()));
                                 }
@@ -2853,17 +2860,17 @@ namespace
                                         aTargetRectangle.Right(), aTargetRectangle.Bottom());
                                     aRange.transform(rPropertyHolders.Current().getTransformation());
 
-                                    // prepare gradient for alpha content
-                                    const drawinglayer::primitive2d::Primitive2DReference xAlpha(
+                                    // prepare gradient for transparent content
+                                    const drawinglayer::primitive2d::Primitive2DReference xTransparence(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
 
-                                    // create alpha primitive
+                                    // create transparence primitive
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::AlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::TransparencePrimitive2D(
                                             xSubContent,
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xAlpha, 1)));
+                                            drawinglayer::primitive2d::Primitive2DSequence(&xTransparence, 1)));
                                 }
                             }
                         }

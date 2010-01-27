@@ -111,6 +111,8 @@ public:
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
 
+    virtual void SetBoundRectDirty();
+
     // access to cleanup of depth mapper
     void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }
 

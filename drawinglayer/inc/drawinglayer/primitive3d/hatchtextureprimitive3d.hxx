@@ -37,6 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

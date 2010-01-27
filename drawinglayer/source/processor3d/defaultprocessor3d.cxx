@@ -48,9 +48,11 @@
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <vcl/bitmapex.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -493,10 +495,10 @@ namespace drawinglayer
                     impRenderBitmapTexturePrimitive3D(rPrimitive);
                     break;
                 }
-                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D :
                 {
-                    // AlphaTexturePrimitive3D
-                    const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(rBasePrimitive);
+                    // TransparenceTexturePrimitive3D
+                    const primitive3d::TransparenceTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::TransparenceTexturePrimitive3D& >(rBasePrimitive);
                     mnTransparenceCounter++;
                     impRenderGradientTexturePrimitive3D(rPrimitive, true);
                     mnTransparenceCounter--;

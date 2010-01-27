@@ -39,9 +39,20 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
 class SdrText;
-namespace drawinglayer { namespace animation { class AnimationEntryList; }}
-namespace drawinglayer { namespace attribute { class SdrFormTextAttribute; }}
+
+namespace drawinglayer { namespace animation {
+    class AnimationEntryList;
+}}
+
+namespace drawinglayer { namespace attribute {
+    class SdrFormTextAttribute;
+}}
+
+namespace drawinglayer { namespace attribute {
+    class ImpSdrTextAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -52,41 +63,13 @@ namespace drawinglayer
         class SdrTextAttribute
         {
         private:
-            // all-text attributes. The SdrText itself and a copy
-            // of te OPO
-            const SdrText*                          mpSdrText;
-            OutlinerParaObject                      maOutlinerParaObject;
-
-            // Set when it's a FormText; contains all FormText attributes
-            SdrFormTextAttribute*                   mpSdrFormTextAttribute;
-
-            // text distances
-            sal_Int32                               maTextLeftDistance;
-            sal_Int32                               maTextUpperDistance;
-            sal_Int32                               maTextRightDistance;
-            sal_Int32                               maTextLowerDistance;
-
-            // #i101556# use versioning from text attributes to detect changes
-            sal_uInt32                              maPropertiesVersion;
-
-            // text alignments
-            SdrTextHorzAdjust                       maSdrTextHorzAdjust;
-            SdrTextVertAdjust                       maSdrTextVertAdjust;
-
-            // bitfield
-            unsigned                                mbContour : 1;
-            unsigned                                mbFitToSize : 1;
-            unsigned                                mbHideContour : 1;
-            unsigned                                mbBlink : 1;
-            unsigned                                mbScroll : 1;
-            unsigned                                mbInEditMode : 1;
-            unsigned                                mbFixedCellHeight : 1;
-            unsigned                                mbWrongSpell : 1;
+            ImpSdrTextAttribute*        mpSdrTextAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             SdrTextAttribute(
                 const SdrText& rSdrText,
-                const OutlinerParaObject& rOutlinerParaObjectPtr,
+                const OutlinerParaObject& rOutlinerParaObject,
                 XFormTextStyle eFormTextStyle,
                 sal_Int32 aTextLeftDistance,
                 sal_Int32 aTextUpperDistance,
@@ -102,38 +85,44 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell);
-            ~SdrTextAttribute();
-
-            // copy constructor and assigment operator
+            SdrTextAttribute();
             SdrTextAttribute(const SdrTextAttribute& rCandidate);
             SdrTextAttribute& operator=(const SdrTextAttribute& rCandidate);
+            ~SdrTextAttribute();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
             bool operator==(const SdrTextAttribute& rCandidate) const;
 
-            // data access
-            const SdrText& getSdrText() const { return *mpSdrText; }
-            const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
-            bool isContour() const { return mbContour; }
-            bool isFitToSize() const { return mbFitToSize; }
-            bool isHideContour() const { return mbHideContour; }
-            bool isBlink() const { return mbBlink; }
-            bool isScroll() const { return mbScroll; }
-            bool isInEditMode() const { return mbInEditMode; }
-            bool isFixedCellHeight() const { return mbFixedCellHeight; }
-            bool isWrongSpell() const { return mbWrongSpell; }
-            const SdrFormTextAttribute* getSdrFormTextAttribute() const { return mpSdrFormTextAttribute; }
-            sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
-            sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
-            sal_Int32 getTextRightDistance() const { return maTextRightDistance; }
-            sal_Int32 getTextLowerDistance() const { return maTextLowerDistance; }
-            sal_uInt32 getPropertiesVersion() const { return maPropertiesVersion; }
-            SdrTextHorzAdjust getSdrTextHorzAdjust() const { return maSdrTextHorzAdjust; }
-            SdrTextVertAdjust getSdrTextVertAdjust() const { return maSdrTextVertAdjust; }
+            // data read access
+            const SdrText& getSdrText() const;
+            const OutlinerParaObject& getOutlinerParaObject() const;
+            bool isContour() const;
+            bool isFitToSize() const;
+            bool isHideContour() const;
+            bool isBlink() const;
+            bool isScroll() const;
+            bool isInEditMode() const;
+            bool isFixedCellHeight() const;
+            bool isWrongSpell() const;
+            const SdrFormTextAttribute& getSdrFormTextAttribute() const;
+            sal_Int32 getTextLeftDistance() const;
+            sal_Int32 getTextUpperDistance() const;
+            sal_Int32 getTextRightDistance() const;
+            sal_Int32 getTextLowerDistance() const;
+            sal_uInt32 getPropertiesVersion() const;
+            SdrTextHorzAdjust getSdrTextHorzAdjust() const;
+            SdrTextVertAdjust getSdrTextVertAdjust() const;
 
-            // animation timing generation
-            void getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
-            void getScrollTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList, double fFrameLength, double fTextLength) const;
+            // helpers: animation timing generators
+            void getBlinkTextTiming(
+                drawinglayer::animation::AnimationEntryList& rAnimList) const;
+            void getScrollTextTiming(
+                drawinglayer::animation::AnimationEntryList& rAnimList,
+                double fFrameLength,
+                double fTextLength) const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

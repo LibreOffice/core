@@ -122,11 +122,17 @@ namespace drawinglayer
             */
             ViewInformation2D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
+            /// default (empty) constructor
+            ViewInformation2D();
+
             /// copy constructor
             ViewInformation2D(const ViewInformation2D& rCandidate);
 
             /// destructor
             ~ViewInformation2D();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             /// assignment operator
             ViewInformation2D& operator=(const ViewInformation2D& rCandidate);

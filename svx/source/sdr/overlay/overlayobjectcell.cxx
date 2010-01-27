@@ -38,7 +38,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 
 using namespace ::basegfx;
@@ -87,12 +87,12 @@ namespace sdr
                 if(mePaintType == CELL_OVERLAY_TRANSPARENT)
                 {
                     // embed in 50% transparent paint
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
-                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             aRetval,
                             0.5));
 
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
                 }
                 else // CELL_OVERLAY_INVERT
                 {

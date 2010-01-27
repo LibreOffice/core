@@ -35,7 +35,7 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +50,6 @@ namespace drawinglayer
         Primitive2DSequence SdrCaptionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
-            Primitive2DSequence aHitTestContent;
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
@@ -59,68 +58,66 @@ namespace drawinglayer
                 getCornerRadiusY()));
 
             // add fill
-            if(getSdrLFSTAttribute().getFill())
+            if(getSdrLFSTAttribute().getFill().isDefault())
+            {
+                // create invisible fill for HitTest
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        true,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform()));
+            }
+            else
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),
-                        *getSdrLFSTAttribute().getFill(),
-                        getSdrLFSTAttribute().getFillFloatTransGradient()));
-            }
-            else
-            {
-                // if no fill, create one for HitTest and BoundRect fallback
-                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
-                    createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        attribute::SdrFillAttribute(0.0, basegfx::BColor(0.0, 0.0, 0.0)),
+                        getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
-            if(getSdrLFSTAttribute().getLine())
+            if(getSdrLFSTAttribute().getLine().isDefault())
+            {
+                // create invisible line for HitTest/BoundRect
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform()));
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(getTail()),
+                        getTransform()));
+            }
+            else
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolygonLinePrimitive(
                         aUnitOutline,
                         getTransform(),
-                        *getSdrLFSTAttribute().getLine()));
+                        getSdrLFSTAttribute().getLine(),
+                        attribute::SdrLineStartEndAttribute()));
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolygonLinePrimitive(
                         getTail(),
                         getTransform(),
-                        *getSdrLFSTAttribute().getLine(),
+                        getSdrLFSTAttribute().getLine(),
                         getSdrLFSTAttribute().getLineStartEnd()));
-            }
-            else
-            {
-                // if initially no line is defined, create one for HitTest and BoundRect. It
-                // is sufficient to use the tail; the body is already ensured with fill creation
-                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
-                    createPolygonLinePrimitive(
-                        getTail(),
-                        getTransform(),
-                        attribute::SdrLineAttribute(basegfx::BColor(0.0, 0.0, 0.0))));
-            }
-
-            // add HitTest and BoundRect helper geometry (if exists)
-            if(aHitTestContent.hasElements())
-            {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
-                    Primitive2DReference(new HitTestPrimitive2D(aHitTestContent)));
             }
 
             // add text
-            if(getSdrLFSTAttribute().getText())
+            if(!getSdrLFSTAttribute().getText().isDefault())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),
-                        *getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getText(),
                         getSdrLFSTAttribute().getLine(),
                         false,
                         false,
@@ -128,9 +125,9 @@ namespace drawinglayer
             }
 
             // add shadow
-            if(getSdrLFSTAttribute().getShadow())
+            if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;

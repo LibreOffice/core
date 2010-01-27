@@ -313,6 +313,22 @@ namespace drawinglayer
                 impInterpretPropertyValues(rViewParameters);
             }
 
+            ImpViewInformation2D()
+            :   mnRefCount(0),
+                maObjectTransformation(),
+                maViewTransformation(),
+                maObjectToViewTransformation(),
+                maInverseObjectToViewTransformation(),
+                maViewport(),
+                maDiscreteViewport(),
+                mxVisualizedPage(),
+                mfViewTime(),
+                mbReducedDisplayQuality(false),
+                mxViewInformation(),
+                mxExtendedInformation()
+            {
+            }
+
             const basegfx::B2DHomMatrix& getObjectTransformation() const
             {
                 return maObjectTransformation;
@@ -410,6 +426,21 @@ namespace drawinglayer
                     && mfViewTime == rCandidate.mfViewTime
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
+
+            static ImpViewInformation2D* get_global_default()
+            {
+                static ImpViewInformation2D* pDefault = 0;
+
+                if(!pDefault)
+                {
+                    pDefault = new ImpViewInformation2D();
+
+                    // never delete; start with RefCount 1, not 0
+                    pDefault->mnRefCount++;
+                }
+
+                return pDefault;
+            }
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -442,6 +473,12 @@ namespace drawinglayer
         {
         }
 
+        ViewInformation2D::ViewInformation2D()
+        :   mpViewInformation2D(ImpViewInformation2D::get_global_default())
+        {
+            mpViewInformation2D->mnRefCount++;
+        }
+
         ViewInformation2D::ViewInformation2D(const ViewInformation2D& rCandidate)
         :   mpViewInformation2D(rCandidate.mpViewInformation2D)
         {
@@ -461,6 +498,11 @@ namespace drawinglayer
             {
                 delete mpViewInformation2D;
             }
+        }
+
+        bool ViewInformation2D::isDefault() const
+        {
+            return mpViewInformation2D == ImpViewInformation2D::get_global_default();
         }
 
         ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D& rCandidate)
@@ -487,6 +529,11 @@ namespace drawinglayer
             if(rCandidate.mpViewInformation2D == mpViewInformation2D)
             {
                 return true;
+            }
+
+            if(rCandidate.isDefault() != isDefault())
+            {
+                return false;
             }
 
             return (*rCandidate.mpViewInformation2D == *mpViewInformation2D);

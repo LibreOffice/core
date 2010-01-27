@@ -37,9 +37,10 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -91,13 +92,13 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        /** UnifiedAlphaTexturePrimitive3D class
+        /** UnifiedTransparenceTexturePrimitive3D class
 
             This 3D primitive expands TexturePrimitive3D to a unified
-            alpha (transparence) texture definition. All 3D primitives
+            transparence texture definition. All 3D primitives
             embedded here will be shown with the given transparency.
          */
-        class UnifiedAlphaTexturePrimitive3D : public TexturePrimitive3D
+        class UnifiedTransparenceTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// transparency definition
@@ -105,7 +106,7 @@ namespace drawinglayer
 
         public:
             /// constructor
-            UnifiedAlphaTexturePrimitive3D(
+            UnifiedTransparenceTexturePrimitive3D(
                 double fTransparence,
                 const Primitive3DSequence& rChildren);
 
@@ -114,6 +115,9 @@ namespace drawinglayer
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+
+            /// own getB3DRange implementation to include transparent geometries to BoundRect calculations
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
             /// local decomposition.
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
@@ -208,18 +212,18 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        /** AlphaTexturePrimitive3D class
+        /** TransparenceTexturePrimitive3D class
 
-            This 3D primitive expands TexturePrimitive3D to a alpha texture
-            definition. For alpha definition, a gradient is used. The values in
-            that gradient will be interpreted as luminance Alpha-Values. All 3D
+            This 3D primitive expands TexturePrimitive3D to a transparence texture
+            definition. For transparence definition, a gradient is used. The values in
+            that gradient will be interpreted as luminance Transparence-Values. All 3D
             primitives embedded here will be shown with the defined transparence.
          */
-        class AlphaTexturePrimitive3D : public GradientTexturePrimitive3D
+        class TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
         {
         public:
             /// constructor
-            AlphaTexturePrimitive3D(
+            TransparenceTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize);

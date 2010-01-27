@@ -55,7 +55,7 @@ namespace drawinglayer
             invariant, so that the bitmap is always visualized unscaled and
             unrotated.
             It is used e.g. for grid position visualisation. The given Bitmap
-            (with alpha) is defined to be visible centered at each of the given
+            (with transparence) is defined to be visible centered at each of the given
             positions.
             It decomposes to the needed number of BitmapPrimitive2D's, so it would
             be efficient to handle it directly in a renderer.

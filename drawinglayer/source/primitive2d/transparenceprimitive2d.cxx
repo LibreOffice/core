@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -49,28 +49,28 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        AlphaPrimitive2D::AlphaPrimitive2D(
+        TransparencePrimitive2D::TransparencePrimitive2D(
             const Primitive2DSequence& rChildren,
-            const Primitive2DSequence& rAlpha)
+            const Primitive2DSequence& rTransparence)
         :   GroupPrimitive2D(rChildren),
-            maAlpha(rAlpha)
+            maTransparence(rTransparence)
         {
         }
 
-        bool AlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        bool TransparencePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const AlphaPrimitive2D& rCompare = (AlphaPrimitive2D&)rPrimitive;
+                const TransparencePrimitive2D& rCompare = (TransparencePrimitive2D&)rPrimitive;
 
-                return (getAlpha() == rCompare.getAlpha());
+                return (getTransparence() == rCompare.getTransparence());
             }
 
             return false;
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(AlphaPrimitive2D, PRIMITIVE2D_ID_ALPHAPRIMITIVE2D)
+        ImplPrimitrive2DIDBlock(TransparencePrimitive2D, PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D)
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

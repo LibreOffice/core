@@ -41,7 +41,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -52,8 +51,8 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include <tools/stream.hxx>
@@ -73,8 +72,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
@@ -160,7 +159,7 @@ namespace drawinglayer
         {
             if(bIsTransparenceGradient)
             {
-                // it's about alpha channel intensities (black/white), do not use color modifier
+                // it's about transparence channel intensities (black/white), do not use color modifier
                 o_rVCLGradient.SetStartColor(Color(rFiGrAtt.getStartColor()));
                 o_rVCLGradient.SetEndColor(Color(rFiGrAtt.getEndColor()));
             }
@@ -444,13 +443,13 @@ namespace drawinglayer
             fills. Thus, users have the choice to use the SvtGraphicFill info or the created output
             actions.
             Even for XFillTransparenceItem it is used, thus it may need to be supported in
-            UnifiedAlphaPrimitive2D, too, when interpreted as normally filled PolyPolygon.
+            UnifiedTransparencePrimitive2D, too, when interpreted as normally filled PolyPolygon.
             Implemented for:
                 PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D,
-                and for PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D when detected unified alpha
+                and for PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D when detected unified transparence
 
             XPATHSTROKE_SEQ_BEGIN, XPATHSTROKE_SEQ_END:
 
@@ -1483,138 +1482,166 @@ namespace drawinglayer
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D :
+                {
+                    // HiddenGeometryPrimitive2D; to rebuilt the old MetaFile creation, it is necessary to
+                    // not ignore them (as it was thought), but to add a MetaFile entry for them.
+                    basegfx::B2DRange aInvisibleRange(rCandidate.getB2DRange(getViewInformation2D()));
+
+                    if(!aInvisibleRange.isEmpty())
+                    {
+                        aInvisibleRange.transform(maCurrentTransformation);
+                        const Rectangle aRectLogic(
+                            (sal_Int32)floor(aInvisibleRange.getMinX()), (sal_Int32)floor(aInvisibleRange.getMinY()),
+                            (sal_Int32)ceil(aInvisibleRange.getMaxX()), (sal_Int32)ceil(aInvisibleRange.getMaxY()));
+
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor();
+                        mpOutputDevice->DrawRect(aRectLogic);
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
                     // for metafile: Need to examine what the pure vcl version is doing here actually
                     // - uses DrawTransparent with metafile for content and a gradient
                     // - uses DrawTransparent for single PolyPoylgons directly. Can be detected by
                     //   checking the content for single PolyPolygonColorPrimitive2D
-                    const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate = static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
+                    const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
 
                     if(rContent.hasElements())
                     {
-                        // try to identify a single PolyPolygonColorPrimitive2D in the
-                        // content part of the alpha primitive
-                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = 0;
-                        static bool bForceToMetafile(false);
-
-                        if(!bForceToMetafile && 1 == rContent.getLength())
+                        if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
-                            const primitive2d::Primitive2DReference xReference(rContent[0]);
-                            pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+                            // not transparent at all, use content
+                            process(rUniTransparenceCandidate.getChildren());
                         }
-
-                        // PolyPolygonGradientPrimitive2D, PolyPolygonHatchPrimitive2D and
-                        // PolyPolygonBitmapPrimitive2D are derived from PolyPolygonColorPrimitive2D.
-                        // Check also for correct ID to exclude derived implementations
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                        else if(rUniTransparenceCandidate.getTransparence() > 0.0 && rUniTransparenceCandidate.getTransparence() < 1.0)
                         {
-                            // single transparent PolyPolygon identified, use directly
-                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
-                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
-                            aLocalPolyPolygon.transform(maCurrentTransformation);
+                            // try to identify a single PolyPolygonColorPrimitive2D in the
+                            // content part of the transparence primitive
+                            const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = 0;
+                            static bool bForceToMetafile(false);
 
-                            // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                            SvtGraphicFill* pSvtGraphicFill = 0;
-
-                            if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                            if(!bForceToMetafile && 1 == rContent.getLength())
                             {
-                                // setup simple color with transparence fill stuff like in impgrfll
-                                pSvtGraphicFill = new SvtGraphicFill(
-                                    PolyPolygon(aLocalPolyPolygon),
-                                    Color(aPolygonColor),
-                                    rUniAlphaCandidate.getAlpha(),
-                                    SvtGraphicFill::fillEvenOdd,
-                                    SvtGraphicFill::fillSolid,
-                                    SvtGraphicFill::Transform(),
-                                    false,
-                                    SvtGraphicFill::hatchSingle,
-                                    Color(),
-                                    SvtGraphicFill::gradientLinear,
-                                    Color(),
-                                    Color(),
-                                    0,
-                                    Graphic());
+                                const primitive2d::Primitive2DReference xReference(rContent[0]);
+                                pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
                             }
 
-                            // set line and fill color
-                            const sal_uInt16 nTransPercentVcl((sal_uInt16)basegfx::fround(rUniAlphaCandidate.getAlpha() * 100.0));
-                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                            mpOutputDevice->SetLineColor();
+                            // PolyPolygonGradientPrimitive2D, PolyPolygonHatchPrimitive2D and
+                            // PolyPolygonBitmapPrimitive2D are derived from PolyPolygonColorPrimitive2D.
+                            // Check also for correct ID to exclude derived implementations
+                            if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                            {
+                                // single transparent PolyPolygon identified, use directly
+                                const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                                basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+                                aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                            // call VCL directly; encapsulate with SvtGraphicFill
-                            impStartSvtGraphicFill(pSvtGraphicFill);
-                            mpOutputDevice->DrawTransparent(
-                                PolyPolygon(aLocalPolyPolygon),
-                                nTransPercentVcl);
-                            impEndSvtGraphicFill(pSvtGraphicFill);
-                        }
-                        else
-                        {
-                            // svae old mfCurrentUnifiedTransparence and set new one
-                            // so that contained SvtGraphicStroke may use the current one
-                            const double fLastCurrentUnifiedTransparence(mfCurrentUnifiedTransparence);
-                            // #i105377# paint the content metafile opaque as the transparency gets
-                            // split of into the gradient below
-                            // mfCurrentUnifiedTransparence = rUniAlphaCandidate.getAlpha();
-                            mfCurrentUnifiedTransparence = 0;
+                                // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
+                                SvtGraphicFill* pSvtGraphicFill = 0;
 
-                            // various content, create content-metafile
-                            GDIMetaFile aContentMetafile;
-                            const Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
+                                if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                                {
+                                    // setup simple color with transparence fill stuff like in impgrfll
+                                    pSvtGraphicFill = new SvtGraphicFill(
+                                        PolyPolygon(aLocalPolyPolygon),
+                                        Color(aPolygonColor),
+                                        rUniTransparenceCandidate.getTransparence(),
+                                        SvtGraphicFill::fillEvenOdd,
+                                        SvtGraphicFill::fillSolid,
+                                        SvtGraphicFill::Transform(),
+                                        false,
+                                        SvtGraphicFill::hatchSingle,
+                                        Color(),
+                                        SvtGraphicFill::gradientLinear,
+                                        Color(),
+                                        Color(),
+                                        0,
+                                        Graphic());
+                                }
 
-                            // restore mfCurrentUnifiedTransparence; it may have been used
-                            // while processing the sub-content in impDumpToMetaFile
-                            mfCurrentUnifiedTransparence = fLastCurrentUnifiedTransparence;
+                                // set line and fill color
+                                const sal_uInt16 nTransPercentVcl((sal_uInt16)basegfx::fround(rUniTransparenceCandidate.getTransparence() * 100.0));
+                                mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                mpOutputDevice->SetLineColor();
 
-                            // create uniform VCL gradient for uniform transparency
-                            Gradient aVCLGradient;
-                            const sal_uInt8 nTransPercentVcl((sal_uInt8)basegfx::fround(rUniAlphaCandidate.getAlpha() * 255.0));
-                            const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
+                                // call VCL directly; encapsulate with SvtGraphicFill
+                                impStartSvtGraphicFill(pSvtGraphicFill);
+                                mpOutputDevice->DrawTransparent(
+                                    PolyPolygon(aLocalPolyPolygon),
+                                    nTransPercentVcl);
+                                impEndSvtGraphicFill(pSvtGraphicFill);
+                            }
+                            else
+                            {
+                                // svae old mfCurrentUnifiedTransparence and set new one
+                                // so that contained SvtGraphicStroke may use the current one
+                                const double fLastCurrentUnifiedTransparence(mfCurrentUnifiedTransparence);
+                                // #i105377# paint the content metafile opaque as the transparency gets
+                                // split of into the gradient below
+                                // mfCurrentUnifiedTransparence = rUniTransparenceCandidate.getTransparence();
+                                mfCurrentUnifiedTransparence = 0;
 
-                            aVCLGradient.SetStyle(GRADIENT_LINEAR);
-                            aVCLGradient.SetStartColor(aTransColor);
-                            aVCLGradient.SetEndColor(aTransColor);
-                            aVCLGradient.SetAngle(0);
-                            aVCLGradient.SetBorder(0);
-                            aVCLGradient.SetOfsX(0);
-                            aVCLGradient.SetOfsY(0);
-                            aVCLGradient.SetStartIntensity(100);
-                            aVCLGradient.SetEndIntensity(100);
-                            aVCLGradient.SetSteps(2);
+                                // various content, create content-metafile
+                                GDIMetaFile aContentMetafile;
+                                const Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
-                            // render it to VCL
-                            mpOutputDevice->DrawTransparent(
-                                aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                aPrimitiveRectangle.GetSize(), aVCLGradient);
+                                // restore mfCurrentUnifiedTransparence; it may have been used
+                                // while processing the sub-content in impDumpToMetaFile
+                                mfCurrentUnifiedTransparence = fLastCurrentUnifiedTransparence;
+
+                                // create uniform VCL gradient for uniform transparency
+                                Gradient aVCLGradient;
+                                const sal_uInt8 nTransPercentVcl((sal_uInt8)basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0));
+                                const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
+
+                                aVCLGradient.SetStyle(GRADIENT_LINEAR);
+                                aVCLGradient.SetStartColor(aTransColor);
+                                aVCLGradient.SetEndColor(aTransColor);
+                                aVCLGradient.SetAngle(0);
+                                aVCLGradient.SetBorder(0);
+                                aVCLGradient.SetOfsX(0);
+                                aVCLGradient.SetOfsY(0);
+                                aVCLGradient.SetStartIntensity(100);
+                                aVCLGradient.SetEndIntensity(100);
+                                aVCLGradient.SetSteps(2);
+
+                                // render it to VCL
+                                mpOutputDevice->DrawTransparent(
+                                    aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                    aPrimitiveRectangle.GetSize(), aVCLGradient);
+                            }
                         }
                     }
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // for metafile: Need to examine what the pure vcl version is doing here actually
                     // - uses DrawTransparent with metafile for content and a gradient
                     // i can detect this here with checking the gradient part for a single
                     // FillGradientPrimitive2D and reconstruct the gradient.
-                    // If that detection goes wrong, i have to create an alpha-blended bitmap. Eventually
-                    // do that in stripes, else RenderAlphaPrimitive2D may just be used
-                    const primitive2d::AlphaPrimitive2D& rAlphaCandidate = static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rAlphaCandidate.getChildren();
-                    const primitive2d::Primitive2DSequence rAlpha = rAlphaCandidate.getAlpha();
+                    // If that detection goes wrong, i have to create an transparence-blended bitmap. Eventually
+                    // do that in stripes, else RenderTransparencePrimitive2D may just be used
+                    const primitive2d::TransparencePrimitive2D& rTransparenceCandidate = static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence rContent = rTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DSequence rTransparence = rTransparenceCandidate.getTransparence();
 
-                    if(rContent.hasElements() && rAlpha.hasElements())
+                    if(rContent.hasElements() && rTransparence.hasElements())
                     {
                         // try to identify a single FillGradientPrimitive2D in the
-                        // alpha part of the primitive
+                        // transparence part of the primitive
                         const primitive2d::FillGradientPrimitive2D* pFiGradient = 0;
                         static bool bForceToBigTransparentVDev(false);
 
-                        if(!bForceToBigTransparentVDev && 1 == rAlpha.getLength())
+                        if(!bForceToBigTransparentVDev && 1 == rTransparence.getLength())
                         {
-                            const primitive2d::Primitive2DReference xReference(rAlpha[0]);
+                            const primitive2d::Primitive2DReference xReference(rTransparence[0]);
                             pFiGradient = dynamic_cast< const primitive2d::FillGradientPrimitive2D* >(xReference.get());
                         }
 
@@ -1646,7 +1673,7 @@ namespace drawinglayer
                             // Okay, basic implementation finished and tested. The DPI stuff was hard
                             // and not easy to find out that it's needed.
                             // Since this will not yet happen normally (as long as noone constructs
-                            // alpha primitives with non-trivial alpha content) i will for now not
+                            // transparence primitives with non-trivial transparence content) i will for now not
                             // refine to tiling here.
 
                             basegfx::B2DRange aViewRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
@@ -1697,9 +1724,9 @@ namespace drawinglayer
                                 aBufferProcessor.process(rContent);
                                 const Bitmap aBmContent(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
 
-                                // draw alpha using pixel renderer
+                                // draw transparence using pixel renderer
                                 aBufferDevice.Erase();
-                                aBufferProcessor.process(rAlpha);
+                                aBufferProcessor.process(rTransparence);
                                 const AlphaMask aBmAlpha(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
@@ -1781,27 +1808,6 @@ namespace drawinglayer
                     {
                         // write end tag
                         mpPDFExtOutDevData->EndStructureElement();
-                    }
-
-                    break;
-                }
-                case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D :
-                {
-                    // #i99123#
-                    // invisible primitive; to rebuilt the old MetaFile creation, it is necessary to
-                    // not ignore them (as it was thought), but to add a MetaFile entry for them.
-                    basegfx::B2DRange aInvisibleRange(rCandidate.getB2DRange(getViewInformation2D()));
-
-                    if(!aInvisibleRange.isEmpty())
-                    {
-                        aInvisibleRange.transform(maCurrentTransformation);
-                        const Rectangle aRectLogic(
-                            (sal_Int32)floor(aInvisibleRange.getMinX()), (sal_Int32)floor(aInvisibleRange.getMinY()),
-                            (sal_Int32)ceil(aInvisibleRange.getMaxX()), (sal_Int32)ceil(aInvisibleRange.getMaxY()));
-
-                        mpOutputDevice->SetFillColor();
-                        mpOutputDevice->SetLineColor();
-                        mpOutputDevice->DrawRect(aRectLogic);
                     }
 
                     break;

@@ -66,28 +66,37 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** ZBufferProcessor3D class
+
+            This 3D renderer derived from DefaultProcessor3D renders all feeded primitives to a 2D
+            raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
+            transparent content.
+         */
         class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
-            // the raster target, a Z-Buffer
+            /// the raster target, a Z-Buffer
             basegfx::BZPixelRaster*                             mpBZPixelRaster;
 
-            // inverse of EyeToView for rasterconversion with evtl. Phong shading
+            /// inverse of EyeToView for rasterconversion with evtl. Phong shading
             basegfx::B3DHomMatrix                               maInvEyeToView;
 
-            // The raster converter for Z-Buffer
+            /// The raster converter for Z-Buffer
             ZBufferRasterConverter3D*                           mpZBufferRasterConverter3D;
 
-            // AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
-            // will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
+            /*  AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
+                will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
+              */
             sal_uInt16                                          mnAntiAlialize;
 
-            // remembered RasterPrimitive3D's which need to be painted back to front
-            // for transparent 3D parts
+            /*  remembered RasterPrimitive3D's which need to be painted back to front
+                for transparent 3D parts
+             */
             std::vector< RasterPrimitive3D >*                   mpRasterPrimitive3Ds;
 
             //////////////////////////////////////////////////////////////////////////////
             // rasterconversions for filled and non-filled polygons
+
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const;
             virtual void rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const;
 
@@ -105,7 +114,7 @@ namespace drawinglayer
 
             void finish();
 
-            // get the result as bitmapEx
+            /// get the result as bitmapEx
             BitmapEx getBitmapEx() const;
         };
     } // end of namespace processor3d

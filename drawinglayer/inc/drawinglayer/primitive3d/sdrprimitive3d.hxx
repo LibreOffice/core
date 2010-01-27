@@ -40,8 +40,8 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
+#include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@ namespace drawinglayer
             /// object surface attributes
             basegfx::B3DHomMatrix                       maTransform;
             basegfx::B2DVector                          maTextureSize;
-            attribute::SdrLineFillShadowAttribute       maSdrLFSAttribute;
+            attribute::SdrLineFillShadowAttribute3D     maSdrLFSAttribute;
             attribute::Sdr3DObjectAttribute             maSdr3DObjectAttribute;
 
         protected:
@@ -80,13 +80,13 @@ namespace drawinglayer
             SdrPrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// data read access
             const basegfx::B3DHomMatrix& getTransform() const { return maTransform; }
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
-            const attribute::SdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
+            const attribute::SdrLineFillShadowAttribute3D& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
             const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
 
             /// compare operator

@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -49,25 +49,24 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        HitTestPrimitive2D::HitTestPrimitive2D(
+        HiddenGeometryPrimitive2D::HiddenGeometryPrimitive2D(
             const Primitive2DSequence& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
 
-        basegfx::B2DRange HitTestPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange HiddenGeometryPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
         }
 
-        Primitive2DSequence HitTestPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // return empty sequence
             return Primitive2DSequence();
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(HitTestPrimitive2D, PRIMITIVE2D_ID_HITTESTPRIMITIVE2D)
+        ImplPrimitrive2DIDBlock(HiddenGeometryPrimitive2D, PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
