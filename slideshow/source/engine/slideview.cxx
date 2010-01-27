@@ -86,9 +86,7 @@ struct StaticUnitRectPoly : public rtl::StaticWithInit<basegfx::B2DPolygon, Stat
 {
     basegfx::B2DPolygon operator()()
     {
-        return basegfx::tools::createPolygonFromRect(
-            basegfx::B2DRectangle( 0.0, 0.0,
-                                   1.0, 1.0 ) );
+        return basegfx::tools::createUnitPolygon();
     }
 };
 

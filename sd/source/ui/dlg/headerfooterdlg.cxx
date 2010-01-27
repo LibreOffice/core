@@ -859,8 +859,7 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
     // create geometry using unit range and object transform
-    const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createPolygonFromRect(aUnitRange));
+    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createUnitPolygon());
     aGeometry.transform(aObjectTransform);
 
     // apply line pattern if wanted
