@@ -236,7 +236,7 @@ namespace dbaui
                 {
                     ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
                     aArgs.remove( "Hidden" );
-                    xModel->attachResource( xModel->getURL(), aArgs.getPropertyValues() );
+                    xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
                 }
             }
             catch( const Exception& )

@@ -1048,7 +1048,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
             // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
-            xModel->attachResource( xModel->getURL(), m_aArgs );
+            xModel->attachResource( ::rtl::OUString(), m_aArgs );
         }
 
         if ( _bInitialize )

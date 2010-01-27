@@ -702,7 +702,14 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
             // (we do not support macro signatures, so we can ignore this call)
     }
 
-    m_pImpl->attachResource( _rURL, _rArguments );
+    // if no URL has been provided, the caller was lazy enough to not call our getLocation/getURL - which is allowed ...
+    ::rtl::OUString sURL( _rURL );
+    if ( !sURL.getLength() )
+        sURL = getLocation();
+    if ( !sURL.getLength() )
+        sURL = getURL();
+
+    m_pImpl->attachResource( sURL, _rArguments );
 
     if ( impl_isInitializing() )
     {   // this means we've just been loaded, and this is the attachResource call which follows
@@ -886,7 +893,7 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 ::rtl::OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
-    return m_pImpl->getURL();
+    return m_pImpl->getDocFileLocation();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
