@@ -274,6 +274,10 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect );
 
+        /** Create the unit polygon
+         */
+        B2DPolygon createUnitPolygon();
+
         /** Create a circle polygon with given radius.
 
             This method creates a circle approximation consisting of
