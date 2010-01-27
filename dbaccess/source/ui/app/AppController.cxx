@@ -1392,11 +1392,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         QueryDesigner aDesigner( getORB(), this, getFrame(), true );
 
-                        ::comphelper::NamedValueCollection aArgs;
-                        aArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
+                        ::comphelper::NamedValueCollection aCreationArgs;
+                        aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aArgs ), UNO_QUERY );
+                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
