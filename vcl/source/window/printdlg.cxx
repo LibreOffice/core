@@ -202,9 +202,14 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         // replacement is active
         Push();
         Rectangle aTextRect( Point( 0, 0 ), aSize );
-        Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
-        aFont.SetSize( Size( 0, aSize.Height()/12 ) );
-        SetFont( aFont );
+        DecorationView aVw( this );
+        aVw.DrawFrame( aTextRect, FRAME_DRAW_GROUP );
+        aTextRect.Left()   += 2;
+        aTextRect.Top()    += 2;
+        aTextRect.Right()  -= 2;
+        aTextRect.Bottom() -= 2;
+        Font aFont( GetSettings().GetStyleSettings().GetLabelFont() );
+        SetZoomedPointFont( aFont );
         DrawText( aTextRect, maReplacementString,
                   TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE
                  );
