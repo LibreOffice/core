@@ -158,8 +158,8 @@ StarOffice Draw : Basic;programming
 StarOffice Draw : Basic;recording macros
 StarOffice Draw : basic fonts
 StarOffice Draw : behind object command
-StarOffice Draw : BȨzier curves
-StarOffice Draw : BȨzier curves;control points in presentations
+StarOffice Draw : Bézier curves
+StarOffice Draw : Bézier curves;control points in presentations
 StarOffice Draw : bi-directional writing
 StarOffice Draw : binding space
 StarOffice Draw : bitmaps
@@ -2887,8 +2887,8 @@ StarOffice Basic : Basic IDE;Integrated Development Environment
 StarOffice Basic : Basic IDE;macros
 StarOffice Basic : BasicLibraries (LibraryContainer)
 StarOffice Basic : Beep statement
-StarOffice Basic : BȨzier curves
-StarOffice Basic : BȨzier curves;control points in presentations
+StarOffice Basic : Bézier curves
+StarOffice Basic : Bézier curves;control points in presentations
 StarOffice Basic : bi-directional writing
 StarOffice Basic : binding space
 StarOffice Basic : bitmaps
@@ -5524,8 +5524,8 @@ StarOffice Calc : Basic IDE for user-defined functions
 StarOffice Calc : Bessel functions
 StarOffice Calc : BETADIST function
 StarOffice Calc : BETAINV function
-StarOffice Calc : BȨzier curves
-StarOffice Calc : BȨzier curves;control points in presentations
+StarOffice Calc : Bézier curves
+StarOffice Calc : Bézier curves;control points in presentations
 StarOffice Calc : bi-directional writing
 StarOffice Calc : BIN2DEC function
 StarOffice Calc : BIN2HEX function
@@ -9189,8 +9189,8 @@ StarOffice Base : Basic;fonts for source display
 StarOffice Base : Basic;programming
 StarOffice Base : Basic;recording macros
 StarOffice Base : basic fonts
-StarOffice Base : BȨzier curves
-StarOffice Base : BȨzier curves;control points in presentations
+StarOffice Base : Bézier curves
+StarOffice Base : Bézier curves;control points in presentations
 StarOffice Base : bi-directional writing
 StarOffice Base : binding space
 StarOffice Base : bitmaps
@@ -11401,8 +11401,8 @@ StarOffice Math : Basic;fonts for source display
 StarOffice Math : Basic;programming
 StarOffice Math : Basic;recording macros
 StarOffice Math : basic fonts
-StarOffice Math : BȨzier curves
-StarOffice Math : BȨzier curves;control points in presentations
+StarOffice Math : Bézier curves
+StarOffice Math : Bézier curves;control points in presentations
 StarOffice Math : bi-directional writing
 StarOffice Math : binary operators
 StarOffice Math : binary operators 
@@ -13960,8 +13960,8 @@ StarOffice Impress : Basic;programming
 StarOffice Impress : Basic;recording macros
 StarOffice Impress : basic fonts
 StarOffice Impress : behind object command
-StarOffice Impress : BȨzier curves
-StarOffice Impress : BȨzier curves;control points in presentations
+StarOffice Impress : Bézier curves
+StarOffice Impress : Bézier curves;control points in presentations
 StarOffice Impress : bi-directional writing
 StarOffice Impress : binding space
 StarOffice Impress : bitmaps
@@ -16680,8 +16680,8 @@ StarOffice Chart : Basic;fonts for source display
 StarOffice Chart : Basic;programming
 StarOffice Chart : Basic;recording macros
 StarOffice Chart : basic fonts
-StarOffice Chart : BȨzier curves
-StarOffice Chart : BȨzier curves;control points in presentations
+StarOffice Chart : Bézier curves
+StarOffice Chart : Bézier curves;control points in presentations
 StarOffice Chart : bi-directional writing
 StarOffice Chart : binding space
 StarOffice Chart : bitmaps
@@ -19001,8 +19001,8 @@ StarOffice Writer : Basic;programming
 StarOffice Writer : Basic;recording macros
 StarOffice Writer : basic fonts
 StarOffice Writer : behavior of rows/columns
-StarOffice Writer : BȨzier curves
-StarOffice Writer : BȨzier curves;control points in presentations
+StarOffice Writer : Bézier curves
+StarOffice Writer : Bézier curves;control points in presentations
 StarOffice Writer : bi-directional writing
 StarOffice Writer : bibliographies
 StarOffice Writer : binding space
