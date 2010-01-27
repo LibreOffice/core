@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XDatabaseAccessListener.idl,v $
- * $Revision: 1.11 $
+ * $RCSfile: PaperFormat.idl,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,30 +27,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_XDatabaseAccessListener_idl__
-#define __com_sun_star_sdb_XDatabaseAccessListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
- module com {  module sun {  module star {  module sdb {
+#ifndef __com_sun_star_view_DuplexMode_idl__
+#define __com_sun_star_view_DuplexMode_idl__
 
 
-/** is not to be used anymore
-    @deprecated
+//=============================================================================
+
+module com {  module sun {  module star {  module view {
+
+//=============================================================================
+
+/** These constants specify available duplex modes
  */
-published interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
+constants DuplexMode
 {
-    [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
-    boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
-    [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
+    //-------------------------------------------------------------------------
+    /** specifies an unknown duplex mode.
+     */
+    const short UNKNOWN = 0;
+
+    //-------------------------------------------------------------------------
+    /** specifies that there is no duplex mode enabled
+     */
+    const short OFF = 1;
+
+    //-------------------------------------------------------------------------
+    /** specifies a long edge duplex mode
+     */
+    const short LONGEDGE = 2;
+
+    //-------------------------------------------------------------------------
+    /** specifies a short edge duplex mode
+     */
+    const short SHORTEDGE = 3;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*===========================================================================
-===========================================================================*/
 #endif
