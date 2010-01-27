@@ -41,7 +41,7 @@ Module gid_Module_Optional_Systemintegration
     Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL,INSTALLCANFAIL,USEFORCE);
   #endif
   #if (defined(LINUX)) || (defined(SOLARIS))
-    PackageName = "%UNIXPRODUCTNAME-desktop-integration.tar.gz";
+    PackageName = "%UNIXPACKAGENAME-desktop-integration.tar.gz";
   #else
     PackageName = "";
   #endif
