@@ -1439,7 +1439,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" -lt "3"; then
@@ -1450,6 +1449,9 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
            AC_MSG_ERROR([version "$_gcc_version" gives internal error with small.])
 	    fi
       fi
+   fi
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+      AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
    fi
    AC_MSG_RESULT([checked (gcc $_gcc_version)])
    if test "$_os" = "SunOS"; then
@@ -2058,6 +2060,10 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
    _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
+
+   if test "$_os" = "Darwin" -a "$_gpp_major" -ge "4" -a "$_gpp_minor" -ge "1" ; then
+      AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly])
+   fi
    
    AC_MSG_RESULT([checked (g++ $_gpp_version)])
 
@@ -3696,29 +3702,27 @@ AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 
-dnl ===================================================================
-dnl Check for system python
-dnl ===================================================================
+# ===================================================================
+# Check for system python
+# ===================================================================
+AC_MSG_CHECKING([which python to use])
 if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
    with_system_python=yes
-fi
-AC_MSG_CHECKING([which python to use])
-if test -n "$with_system_python" -o -n "$with_system_libs" && \
+   AC_MSG_RESULT([compiling against MacOSX10.4u.sdk (python version 2.3)])
+   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+   PYTHON_LIBS="-framework Python"
+elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
-   SYSTEM_PYTHON=YES
    AC_MSG_RESULT([external])
    AM_PATH_PYTHON([2.2])
 
    python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
    python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
    PYTHON_CFLAGS="-I$python_include"
-
-   if test "$_os" = "Darwin"; then
-      PYTHON_LIBS="-framework Python"
-   else
-      PYTHON_LIBS="-lpython$python_version"
-   fi
-   
+   PYTHON_LIBS="-lpython$python_version"
+fi
+if test "$with_system_python" != "no" ; then 
+   SYSTEM_PYTHON=YES
    dnl check if the headers really work:
    save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
@@ -4275,6 +4279,16 @@ else
 fi
 
 AC_MSG_CHECKING([whether to build provided NSS module])
+if test "$_os" = "Darwin" -a "$enable_nss_module" != "no" ; then
+   # FIXME: TODO: make the nss module work with the SDK (conflicting libsqlite3.dylib)
+   dnl bother with a Snow-Leopard specific check or just disable for all?
+   MACOSXVER=`sw_vers -productVersion | $AWK -F. '{print \$1*10000+\$2*100+\$3}'`
+   if test "$MACOSXVER" -ge "100600" ; then
+      AC_MSG_WARN([The nss module causes trouble when building on Snow Leopard with the MacOSX10.4u.sdk - disabling])
+      echo        "The nss module causes trouble when building on Snow Leopard with the MacOSX10.4u.sdk - disabling" >> warn
+      enable_nss_module=no
+   fi
+fi
 if test "$enable_nss_module" != "no"; then
    ENABLE_NSS_MODULE="YES"
    BUILD_TYPE="$BUILD_TYPE NSS"

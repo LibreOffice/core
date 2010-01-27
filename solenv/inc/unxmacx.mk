@@ -89,8 +89,8 @@ ARCH_FLAGS*=
 # objcpp = Objective C++ compiler to use
 CXX*=g++
 CC*=gcc
-objc*=gcc
-objcpp*=g++
+objc*=$(CC)
+objcpp*=$(CXX)
 
 CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
 
