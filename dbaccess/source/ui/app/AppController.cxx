@@ -1357,10 +1357,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             bAutoPilot = sal_True;
                             eType = E_QUERY;
                             break;
-                        case ID_NEW_QUERY_SQL:
-                            aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_False );
-                            // run through
                         case ID_NEW_QUERY_DESIGN:
+                            aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
+                            // run through
+                        case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
                             break;
                          case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
@@ -1390,10 +1390,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        QueryDesigner aDesigner( getORB(), this, getFrame(), true, SID_DB_NEW_VIEW_SQL == _nId );
+                        QueryDesigner aDesigner( getORB(), this, getFrame(), true );
+
+                        ::comphelper::NamedValueCollection aArgs;
+                        aArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aArgs ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
@@ -1958,20 +1961,33 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             Any aDataSource;
             if ( _eOpenMode == E_OPEN_DESIGN )
             {
-                sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
+                bool bAddViewTypeArg = false;
 
                 if ( _eType == E_TABLE )
                 {
                     if ( impl_isAlterableView_nothrow( _sName ) )
-                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true, bQuerySQLMode ) );
+                    {
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true ) );
+                        bAddViewTypeArg = true;
+                    }
                     else
+                    {
                         pDesigner.reset( new TableDesigner( getORB(), this, m_aCurrentFrame.getFrame() ) );
+                    }
                 }
                 else if ( _eType == E_QUERY )
                 {
-                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false, bQuerySQLMode ) );
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false ) );
+                    bAddViewTypeArg = true;
                 }
                 aDataSource <<= m_xDataSource;
+
+                if ( bAddViewTypeArg )
+                {
+                    const bool bQueryGraphicalMode =( _nInstigatorCommand != SID_DB_APP_EDIT_SQL_VIEW );
+                    aArguments.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, bQueryGraphicalMode );
+                }
+
             }
             else
             {
@@ -2091,11 +2107,11 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
             }
             else if ( _eType == E_QUERY )
             {
-                pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false, i_rAdditionalArguments ) );
+                pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false ) );
             }
 
             Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-            xComponent.set( pDesigner->createNew( xDataSource ), UNO_QUERY );
+            xComponent.set( pDesigner->createNew( xDataSource, i_rAdditionalArguments ), UNO_QUERY );
         }
         break;
 

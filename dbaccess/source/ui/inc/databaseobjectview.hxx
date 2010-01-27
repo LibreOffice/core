@@ -94,6 +94,7 @@ namespace dbaui
                         m_xApplication;
         ::rtl::OUString m_sComponentURL;
 
+
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 doDispatch(
@@ -159,7 +160,8 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             createNew(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _xDataSource
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _xDataSource,
+                const ::comphelper::NamedValueCollection& i_rDispatchArgs = ::comphelper::NamedValueCollection()
             );
 
         /** opens a view for an existent object
@@ -188,7 +190,6 @@ namespace dbaui
     {
     protected:
         sal_Int32                           m_nCommandType;
-        ::comphelper::NamedValueCollection  m_aCreationArgs;
 
     protected:
         virtual void fillDispatchArgs(
@@ -202,16 +203,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            bool _bCreateView,
-            const ::comphelper::NamedValueCollection& i_rCreationArgs
-        );
-
-        QueryDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            bool _bCreateView,
-            const bool i_bSQLView
+            bool _bCreateView
         );
     };
 

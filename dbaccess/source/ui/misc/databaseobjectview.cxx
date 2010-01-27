@@ -77,11 +77,11 @@ namespace dbaui
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
             const ::rtl::OUString& _rComponentURL )
-        :m_xORB         ( _rxORB         )
-        ,m_xParentFrame ( _rxParentFrame )
-        ,m_xFrameLoader (                )
-        ,m_xApplication ( _rxApplication )
-        ,m_sComponentURL( _rComponentURL )
+        :m_xORB             ( _rxORB            )
+        ,m_xParentFrame     ( _rxParentFrame    )
+        ,m_xFrameLoader     (                   )
+        ,m_xApplication     ( _rxApplication    )
+        ,m_sComponentURL    ( _rComponentURL    )
     {
         OSL_ENSURE( m_xORB.is(), "DatabaseObjectView::DatabaseObjectView: invalid service factory!" );
         OSL_ENSURE( m_xApplication.is(), "DatabaseObjectView::DatabaseObjectView: invalid connection!" );
@@ -97,9 +97,9 @@ namespace dbaui
     }
 
     //----------------------------------------------------------------------
-    Reference< XComponent > DatabaseObjectView::createNew(const Reference< XDataSource >& _xDataSource )
+    Reference< XComponent > DatabaseObjectView::createNew( const Reference< XDataSource >& _xDataSource, const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
-        return doCreateView( makeAny( _xDataSource ), ::rtl::OUString(), ::comphelper::NamedValueCollection() );
+        return doCreateView( makeAny( _xDataSource ), ::rtl::OUString(), i_rDispatchArgs );
     }
 
     //----------------------------------------------------------------------
@@ -114,9 +114,10 @@ namespace dbaui
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
         ::comphelper::NamedValueCollection aDispatchArgs;
-        fillDispatchArgs( aDispatchArgs, _rDataSource, _rObjectName );
 
-        aDispatchArgs.merge( i_rCreationArgs, true );
+        aDispatchArgs.merge( i_rCreationArgs, false );    // false => do not overwrite
+        fillDispatchArgs( aDispatchArgs, _rDataSource, _rObjectName );
+        aDispatchArgs.merge( i_rCreationArgs, true );    // true => do overwrite
 
         return doDispatch( aDispatchArgs );
     }
@@ -202,20 +203,10 @@ namespace dbaui
     //======================================================================
     //----------------------------------------------------------------------
     QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
-        const Reference< XFrame >& _rxParentFrame, bool _bCreateView, const ::comphelper::NamedValueCollection& i_rCreationArgs )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN ) )
-        ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
-        ,m_aCreationArgs( i_rCreationArgs )
-    {
-    }
-
-    //----------------------------------------------------------------------
-    QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
-        const Reference< XFrame >& _rxParentFrame, bool _bCreateView, const bool i_bSQLView )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN ) )
+        const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN )
         ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
     {
-        m_aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, !i_bSQLView );
     }
 
     //----------------------------------------------------------------------
@@ -223,7 +214,6 @@ namespace dbaui
         const ::rtl::OUString& _rObjectName )
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
-        i_rDispatchArgs.merge( m_aCreationArgs, false );    // false => do not overwrite
 
         const bool bIncludeQueryName = 0 != _rObjectName.getLength();
         const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
@@ -240,9 +230,6 @@ namespace dbaui
         {
             i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, sal_False );
         }
-
-        // give the args passed to our ctor the highest prio, let them overrule any self-made setting
-        i_rDispatchArgs.merge( m_aCreationArgs, true );
     }
 
     //======================================================================
