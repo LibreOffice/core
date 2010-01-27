@@ -673,19 +673,9 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
         Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
 
         if ( xSupp.is() )
+        {
             xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
-
-        // if we don't get the catalog from the original driver we have to try them all.
-        if ( !xTablesSup.is() )
-        { // !TODO: Why?
-            Reference< XEnumerationAccess> xEnumAccess( xManager, UNO_QUERY_THROW );
-            Reference< XEnumeration > xEnum( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
-            while ( xEnum.is() && xEnum->hasMoreElements() && !xTablesSup.is() )
-            {
-                xEnum->nextElement() >>= xSupp;
-                if ( xSupp.is() )
-                    xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
-            }
+            OSL_ENSURE(xTablesSup.is(),"No table supplier!");
         }
     }
     catch( const Exception& )
