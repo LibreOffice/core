@@ -1251,13 +1251,11 @@ ScDBRangeBase* ScInterpreter::PopDoubleRef()
             return new ScDBInternalRange(pDok,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
-        break;
         case svMatrix:
         {
             ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
             return new ScDBExternalRange(pDok, pMat);
         }
-        break;
         default:
             SetError( errIllegalParameter);
     }

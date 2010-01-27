@@ -59,7 +59,7 @@ namespace {
 
 void lcl_toUpper(OUString& rStr)
 {
-    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, rStr.getLength());
+    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, static_cast<USHORT>(rStr.getLength()));
 }
 
 }
@@ -654,7 +654,8 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         else
             nRow = mpParam->nRow2 + 1; // Naechste Spalte
     }
-    return false;
+// statement unreachable
+//    return false;
 }
 
 bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
