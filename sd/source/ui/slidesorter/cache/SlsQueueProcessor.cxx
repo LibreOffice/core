@@ -44,6 +44,7 @@ QueueProcessor::QueueProcessor (
     RequestQueue& rQueue,
     const ::boost::shared_ptr<BitmapCache>& rpCache,
     const Size& rPreviewSize,
+    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
     : maMutex(),
       maTimer(),
@@ -51,6 +52,7 @@ QueueProcessor::QueueProcessor (
       mnTimeBetweenLowPriorityRequests (100/*ms*/),
       mnTimeBetweenRequestsWhenNotIdle (1000/*ms*/),
       maPreviewSize(rPreviewSize),
+      mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(rpCacheContext),
       mrQueue(rQueue),
       mpCache(rpCache),
@@ -140,9 +142,12 @@ void QueueProcessor::Terminate (void)
 
 
 
-void QueueProcessor::SetPreviewSize (const Size& rPreviewSize)
+void QueueProcessor::SetPreviewSize (
+    const Size& rPreviewSize,
+    const bool bDoSuperSampling)
 {
     maPreviewSize = rPreviewSize;
+    mbDoSuperSampling = bDoSuperSampling;
 }
 
 
@@ -212,7 +217,7 @@ void QueueProcessor::ProcessOneRequest (
             if (pSdPage != NULL)
             {
                 const ::boost::shared_ptr<BitmapEx> pPreview (
-                    maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize));
+                    maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize, mbDoSuperSampling));
                 mpCache->SetBitmap (
                     pSdPage,
                     pPreview,

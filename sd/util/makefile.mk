@@ -54,6 +54,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
+    $(SRS)$/slsview.srs			\
     $(SRS)$/uitable.srs			\
     $(SRS)$/view.srs			\
     $(SRS)$/uiannotations.srs	\

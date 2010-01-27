@@ -97,11 +97,14 @@ public:
     */
     PageCache (
         const Size& rPreviewSize,
+        const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
 
     ~PageCache (void);
 
-    void ChangeSize(const Size& rPreviewSize);
+    void ChangeSize(
+        const Size& rPreviewSize,
+        const bool bDoSuperSampling);
 
     /** Request a preview bitmap for the specified page object in the
         specified size.  The returned bitmap may be a preview of the
@@ -113,33 +116,27 @@ public:
         method again if receives the correctly sized preview bitmap.
         @param rRequestData
             This data is used to determine the preview.
-        @param rSize
-            The size of the requested preview bitmap.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize);
+    BitmapEx GetPreviewBitmap (CacheKey aKey);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
         method does nothing.
     */
-    void RequestPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize);
+    void RequestPreviewBitmap (CacheKey aKey);
 
     /** Tell the cache that the bitmap associated with the given request
-        data is not up-to-date anymore.  Unlike the RequestPreviewBitmap()
-        method this does not trigger the rendering itself.  It just
-        remembers to render it when the preview is requested the next time.
-        @param rRequestData
-            It is safe to pass a (barly) living object.  It will called only
-            once to obtain its page object.
+        data is not up-to-date anymore.
+        @param bRequestPreview
+            When <TRUE/> then a new preview is requested and will lead
+            eventually to a repaint of the associated page object.
     */
-    void InvalidatePreviewBitmap (CacheKey aKey);
+    void InvalidatePreviewBitmap (
+        const CacheKey aKey,
+        const bool bRequestPreview);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a

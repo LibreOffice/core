@@ -46,6 +46,8 @@ class SdDrawDocument;
 
 namespace css = ::com::sun::star;
 
+class SdrPage;
+
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
@@ -69,6 +71,7 @@ public:
     SlideSorterModel (SlideSorter& rSlideSorter);
 
     virtual ~SlideSorterModel (void);
+    void Dispose (void);
 
     /** This method is present to let the view create a ShowView for
         displaying slides.
@@ -132,6 +135,18 @@ public:
     sal_Int32 GetIndex (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& rxSlide) const;
 
+    /** Return a page descriptor for the given SdrPage.  Page descriptors
+        are created on demand.  The page descriptor is found (or not found)
+        in (at most) linear time.  Note that all page descriptors in front of
+        the one associated with the given XDrawPage are created when not yet
+        present. When the SdrPage is not found then all descriptors are
+        created.
+        @return
+            Returns the index to the requested page descriptor or -1 when
+            there is no such page descriptor.
+    */
+    sal_Int32 GetIndex (const SdrPage* pPage) const;
+
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
         tries not to throw away to much information already gathered.  This
@@ -153,17 +168,6 @@ public:
     /** Set the selection of the called model to exactly that of the document.
     */
     void SynchronizeModelSelection (void);
-
-    /** Replace the factory for the creation of the page objects and
-        contacts with the given object.  The old factory is destroyed.
-    */
-    void SetPageObjectFactory(
-        ::std::auto_ptr<controller::PageObjectFactory> pPageObjectFactory);
-
-    /** Return the page object factory.  It none has been set so far or it
-        has been reset, then a new one is created.
-    */
-    const controller::PageObjectFactory& GetPageObjectFactory (void) const;
 
     /** Return the mutex so that the caller can lock it and then safely
         access the model.
@@ -197,7 +201,6 @@ private:
     EditMode meEditMode;
     typedef ::std::vector<SharedPageDescriptor> DescriptorContainer;
     mutable DescriptorContainer maPageDescriptors;
-    mutable ::std::auto_ptr<controller::PageObjectFactory> mpPageObjectFactory;
 
     /** Resize the descriptor container according to current values of
         page kind and edit mode.

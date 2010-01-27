@@ -41,20 +41,26 @@
 #include "cache/SlsPageCacheManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "controller/SlideSorterController.hxx"
 
 namespace sd { namespace slidesorter { namespace cache {
 
 GenericPageCache::GenericPageCache (
     const Size& rPreviewSize,
+    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
     : mpBitmapCache(),
       maRequestQueue(rpCacheContext),
       mpQueueProcessor(),
       mpCacheContext(rpCacheContext),
-      maPreviewSize(rPreviewSize)
+      maPreviewSize(rPreviewSize),
+      mbDoSuperSampling(bDoSuperSampling)
 {
+    // A large size may indicate an error of the caller.  After all we
+    // are creating previews.
+        DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
+        "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
+        "This may indicate an error.");
 }
 
 
@@ -91,36 +97,44 @@ void GenericPageCache::ProvideCacheAndProcessor (void)
             maRequestQueue,
             mpBitmapCache,
             maPreviewSize,
+            mbDoSuperSampling,
             mpCacheContext));
 }
 
 
 
 
-void GenericPageCache::ChangePreviewSize (const Size& rPreviewSize)
+void GenericPageCache::ChangePreviewSize (
+    const Size& rPreviewSize,
+    const bool bDoSuperSampling)
 {
-    if (rPreviewSize != maPreviewSize)
+    if (rPreviewSize!=maPreviewSize || bDoSuperSampling!=mbDoSuperSampling)
     {
+        // A large size may indicate an error of the caller.  After all we
+        // are creating previews.
+        DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
+            "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
+            "This may indicate an error.");
+
         if (mpBitmapCache.get() != NULL)
         {
             mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
                 mpBitmapCache, maPreviewSize, rPreviewSize);
             if (mpQueueProcessor.get() != NULL)
             {
-                mpQueueProcessor->SetPreviewSize(rPreviewSize);
+                mpQueueProcessor->SetPreviewSize(rPreviewSize, bDoSuperSampling);
                 mpQueueProcessor->SetBitmapCache(mpBitmapCache);
             }
         }
         maPreviewSize = rPreviewSize;
+        mbDoSuperSampling = bDoSuperSampling;
     }
 }
 
 
 
 
-BitmapEx GenericPageCache::GetPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
+BitmapEx GenericPageCache::GetPreviewBitmap (CacheKey aKey)
 {
     OSL_ASSERT(aKey != NULL);
 
@@ -134,17 +148,12 @@ BitmapEx GenericPageCache::GetPreviewBitmap (
         OSL_ASSERT(pPreview.get() != NULL);
         aPreview = *pPreview;
         Size aBitmapSize (aPreview.GetSizePixel());
-        if (aBitmapSize != rSize)
+        if (aBitmapSize != maPreviewSize)
         {
-            // The bitmap has the wrong size.
-            DBG_ASSERT (rSize.Width() < 1000,
-                "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
-                "This may indicate an error.");
-
             // Scale the bitmap to the desired size when that is possible,
             // i.e. the bitmap is not empty.
             if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
-                aPreview.Scale (rSize, BMP_SCALE_FAST);
+                aPreview.Scale (maPreviewSize, BMP_SCALE_FAST);
         }
         bMayBeUpToDate = true;
     }
@@ -154,7 +163,7 @@ BitmapEx GenericPageCache::GetPreviewBitmap (
     // Request the creation of a correctly sized preview bitmap.  We do this
     // even when the size of the bitmap in the cache is correct because its
     // content may be not up-to-date anymore.
-    RequestPreviewBitmap(aKey, rSize, bMayBeUpToDate);
+    RequestPreviewBitmap(aKey, bMayBeUpToDate);
 
     return aPreview;
 }
@@ -164,7 +173,6 @@ BitmapEx GenericPageCache::GetPreviewBitmap (
 
 void GenericPageCache::RequestPreviewBitmap (
     CacheKey aKey,
-    const Size& rSize,
     bool bMayBeUpToDate)
 {
     OSL_ASSERT(aKey != NULL);
@@ -180,7 +188,7 @@ void GenericPageCache::RequestPreviewBitmap (
     if (bIsUpToDate)
     {
         ::boost::shared_ptr<BitmapEx> pPreview (mpBitmapCache->GetBitmap(pPage));
-        if (pPreview.get()==NULL || pPreview->GetSizePixel()!=rSize)
+        if (pPreview.get()==NULL || pPreview->GetSizePixel()!=maPreviewSize)
               bIsUpToDate = false;
     }
 

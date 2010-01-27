@@ -1181,9 +1181,9 @@ void SlideShow::StartFullscreenPresentation( )
     // fullscreen.
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
+    pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
     pWorkWindow->StartPresentationMode( TRUE, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
-    pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
 
     if (pWorkWindow->IsVisible())
     {

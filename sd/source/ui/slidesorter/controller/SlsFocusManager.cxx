@@ -175,7 +175,7 @@ bool FocusManager::ToggleFocus (void)
 
 bool FocusManager::HasFocus (void) const
 {
-    return mrSlideSorter.GetView().GetWindow()->HasFocus();
+    return mrSlideSorter.GetContentWindow()->HasFocus();
 }
 
 
@@ -246,8 +246,7 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
 {
     if (rpDescriptor.get() != NULL)
     {
-        rpDescriptor->RemoveFocus();
-        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
+        mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, false);
     }
 }
 
@@ -260,7 +259,7 @@ void FocusManager::ShowFocusIndicator (
 {
     if (rpDescriptor.get() != NULL)
     {
-        rpDescriptor->SetFocus ();
+        mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
 
         if (bScrollToFocus)
         {
@@ -268,10 +267,7 @@ void FocusManager::ShowFocusIndicator (
             // it, so that the focus indicator becomes visible.
             view::SlideSorterView& rView (mrSlideSorter.GetView());
             mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
-                rView.GetPageBoundingBox (
-                    GetFocusedPageDescriptor(),
-                    view::SlideSorterView::CS_MODEL,
-                    view::SlideSorterView::BBT_INFO));
+                GetFocusedPageDescriptor()->GetBoundingBox());
         }
 
         mrSlideSorter.GetView().RequestRepaint (rpDescriptor);

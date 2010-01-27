@@ -36,7 +36,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageObjectFactory.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
@@ -79,8 +78,7 @@ SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
       mxSlides(),
       mePageKind(PK_STANDARD),
       meEditMode(EM_PAGE),
-      maPageDescriptors(0),
-      mpPageObjectFactory(NULL)
+      maPageDescriptors(0)
 {
 }
 
@@ -88,6 +86,14 @@ SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
 
 
 SlideSorterModel::~SlideSorterModel (void)
+{
+    ClearDescriptorList ();
+}
+
+
+
+
+void SlideSorterModel::Dispose (void)
 {
     ClearDescriptorList ();
 }
@@ -195,8 +201,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
             pDescriptor.reset(new PageDescriptor (
                 Reference<drawing::XDrawPage>(mxSlides->getByIndex(nPageIndex),UNO_QUERY),
                 pPage,
-                nPageIndex,
-                GetPageObjectFactory()));
+                nPageIndex));
             maPageDescriptors[nPageIndex] = pDescriptor;
         }
     }
@@ -263,6 +268,47 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
 
 
 
+sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
+{
+    if (pPage == NULL)
+        return -1;
+
+    ::osl::MutexGuard aGuard (maMutex);
+
+    // First try to guess the right index.
+    sal_Int16 nNumber ((pPage->GetPageNum()-1)/2);
+    SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
+    if (pDescriptor.get() != NULL
+        && pDescriptor->GetPage() == pPage)
+    {
+        return nNumber;
+    }
+
+    // Guess was wrong, iterate over all slides and search for the right
+    // one.
+    const sal_Int32 nCount (maPageDescriptors.size());
+    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+        SharedPageDescriptor pDescriptor (maPageDescriptors[nIndex]);
+
+        // Make sure that the descriptor exists.  Without it the given slide
+        // can not be found.
+        if (pDescriptor.get() == NULL)
+        {
+            // Call GetPageDescriptor() to create the missing descriptor.
+            pDescriptor = GetPageDescriptor(nIndex, true);
+        }
+
+        if (pDescriptor->GetPage() == pPage)
+            return nIndex;
+    }
+
+    return  -1;
+}
+
+
+
+
 /** For now this method uses a trivial algorithm: throw away all descriptors
     and create them anew (on demand).  The main problem that we are facing
     when designing a better algorithm is that we can not compare pointers to
@@ -312,7 +358,7 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        pDescriptor->GetPage()->SetSelected (pDescriptor->IsSelected());
+        pDescriptor->GetPage()->SetSelected(pDescriptor->HasState(PageDescriptor::ST_Selected));
     }
 }
 
@@ -327,50 +373,8 @@ void SlideSorterModel::SynchronizeModelSelection (void)
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        if (pDescriptor->GetPage()->IsSelected())
-            pDescriptor->Select ();
-        else
-            pDescriptor->Deselect ();
+        pDescriptor->SetState(PageDescriptor::ST_Selected, pDescriptor->GetPage()->IsSelected());
     }
-}
-
-
-
-
-void SlideSorterModel::SetPageObjectFactory(
-    ::std::auto_ptr<controller::PageObjectFactory> pPageObjectFactory)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    mpPageObjectFactory = pPageObjectFactory;
-    // When a NULL pointer was given then create a default factory.
-    const controller::PageObjectFactory& rFactory (GetPageObjectFactory());
-    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
-    while (aAllPages.HasMoreElements())
-    {
-        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        pDescriptor->SetPageObjectFactory(rFactory);
-    }
-}
-
-
-
-
-const controller::PageObjectFactory&
-    SlideSorterModel::GetPageObjectFactory (void) const
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    if (mpPageObjectFactory.get() == NULL)
-    {
-        // We have to create a new factory.  The pointer is mutable so we
-        // are alowed to do so.
-        mpPageObjectFactory = ::std::auto_ptr<controller::PageObjectFactory> (
-            new controller::PageObjectFactory(
-                mrSlideSorter.GetView().GetPreviewCache(),
-                mrSlideSorter.GetController().GetProperties()));
-    }
-    return *mpPageObjectFactory.get();
 }
 
 

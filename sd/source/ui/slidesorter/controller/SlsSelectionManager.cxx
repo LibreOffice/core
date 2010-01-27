@@ -37,6 +37,7 @@
 #include "SlsSelectionCommand.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsAnimator.hxx"
+#include "controller/SlsAnimationFunction.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "controller/SlsProperties.hxx"
@@ -46,6 +47,7 @@
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsLayouter.hxx"
 #include "drawdoc.hxx"
 #include "Window.hxx"
 #include <svx/svxids.hrc>
@@ -80,6 +82,7 @@ namespace {
         SlideSorter& mrSlideSorter;
         double mnStart;
         double mnEnd;
+        ::boost::function<double(double)> maAccelerationFunction;
     };
     class HorizontalVisibleAreaScroller
     {
@@ -91,6 +94,7 @@ namespace {
         SlideSorter& mrSlideSorter;
         double mnStart;
         double mnEnd;
+        ::boost::function<double(double)> maAccelerationFunction;
     };
 }
 
@@ -329,6 +333,14 @@ bool SelectionManager::IsMakeSelectionVisiblePending (void) const
 
 
 
+void SelectionManager::ResetMakeSelectionVisiblePending (void)
+{
+    mbIsMakeSelectionVisiblePending = false;
+}
+
+
+
+
 /** We have to distinguish three cases: 1) the selection is empty, 2) the
     selection fits completely into the visible area, 3) it does not.
     1) The visible area is not modified.
@@ -346,7 +358,7 @@ bool SelectionManager::IsMakeSelectionVisiblePending (void) const
 */
 Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
 {
-    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
+    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return Size(0,0);
 
@@ -357,6 +369,7 @@ Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
     model::SharedPageDescriptor pFirst;
     model::SharedPageDescriptor pLast;
     Rectangle aSelectionBox;
+    const view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
     model::PageEnumeration aSelectedPages (
         PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
     while (aSelectedPages.HasMoreElements())
@@ -367,10 +380,7 @@ Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
             pFirst = pDescriptor;
         pLast = pDescriptor;
 
-        aSelectionBox.Union (mrSlideSorter.GetView().GetPageBoundingBox (
-            pDescriptor,
-            view::SlideSorterView::CS_MODEL,
-            view::SlideSorterView::BBT_INFO));
+        aSelectionBox.Union(rLayouter.GetPageObjectBox(pDescriptor->GetPageIndex(), true));
     }
 
     if (pFirst != NULL)
@@ -395,7 +405,7 @@ Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
 
 Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
 {
-    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
+    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return Size(0,0);
 
@@ -408,7 +418,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
     {
         // Scroll the visible area to make aSelectionBox visible.
         sal_Int32 nNewTop (aVisibleArea.Top());
-        if (mrSlideSorter.GetController().GetProperties()->IsCenterSelection())
+        if (mrSlideSorter.GetProperties()->IsCenterSelection())
         {
             nNewTop = rBox.Top() - (aVisibleArea.GetHeight() - rBox.GetHeight()) / 2;
         }
@@ -431,11 +441,12 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
         // Scroll.
         if (nNewTop != aVisibleArea.Top())
         {
-            mrController.GetAnimator()->AddAnimation(
-                VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop),
-                mrSlideSorter.GetController().GetProperties()->IsSmoothSelectionScrolling() ?
-                    1000 : 0
-                );
+            if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
+                mrController.GetAnimator()->AddAnimation(
+                    VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop),
+                    300);
+            else
+                VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop)(1.0);
         }
 
         return Size(0,aVisibleArea.Top() - nNewTop);
@@ -444,7 +455,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
     {
         // Scroll the visible area to make aSelectionBox visible.
         sal_Int32 nNewLeft (aVisibleArea.Left());
-        if (mrSlideSorter.GetController().GetProperties()->IsCenterSelection())
+        if (mrSlideSorter.GetProperties()->IsCenterSelection())
         {
             nNewLeft = rBox.Left() - (aVisibleArea.GetWidth() - rBox.GetWidth()) / 2;
         }
@@ -467,11 +478,12 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
         // Scroll.
         if (nNewLeft != aVisibleArea.Left())
         {
-            mrController.GetAnimator()->AddAnimation(
-                HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft),
-                mrSlideSorter.GetController().GetProperties()->IsSmoothSelectionScrolling() ?
-                    1000 : 0
-                );
+            if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
+                mrController.GetAnimator()->AddAnimation(
+                    HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft),
+                    300);
+            else
+                HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft)(1.0);
         }
 
         return Size(aVisibleArea.Left() - nNewLeft, 0);
@@ -509,7 +521,7 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
 
 bool SelectionManager::DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const
 {
-    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
+    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return true;
 
@@ -562,10 +574,7 @@ Rectangle SelectionManager::ResolveLargeSelection (
     }
     OSL_ASSERT(pRepresentative.get() != NULL);
 
-    return mrSlideSorter.GetView().GetPageBoundingBox (
-        pRepresentative,
-        view::SlideSorterView::CS_MODEL,
-        view::SlideSorterView::BBT_INFO);
+    return pRepresentative->GetBoundingBox();
 }
 
 
@@ -624,21 +633,29 @@ VerticalVisibleAreaScroller::VerticalVisibleAreaScroller (
     const double nEnd)
     : mrSlideSorter(rSlideSorter),
       mnStart(nStart),
-      mnEnd(nEnd)
+      mnEnd(nEnd),
+      maAccelerationFunction(
+          controller::AnimationParametricFunction(
+              controller::AnimationBezierFunction (0.1,0.6)))
 {
 }
 
 
 
-void VerticalVisibleAreaScroller::operator() (const double nValue)
+void VerticalVisibleAreaScroller::operator() (const double nTime)
 {
+    const double nLocalTime (maAccelerationFunction(nTime));
+    const sal_Int32 nNewTop (mnStart * (1.0 - nLocalTime) + mnEnd * nLocalTime);
+    mrSlideSorter.GetViewShell()->Scroll(
+        0,
+        nNewTop - mrSlideSorter.GetController().GetScrollBarManager().GetTop());
     mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-    mrSlideSorter.GetController().GetScrollBarManager().SetTop(
-        int(mnStart * (1.0 - nValue) + mnEnd * nValue));
 }
 
 
 
+
+//===== HorizontalVisibleAreaScroller =========================================
 
 HorizontalVisibleAreaScroller::HorizontalVisibleAreaScroller (
     SlideSorter& rSlideSorter,
@@ -646,18 +663,25 @@ HorizontalVisibleAreaScroller::HorizontalVisibleAreaScroller (
     const double nEnd)
     : mrSlideSorter(rSlideSorter),
       mnStart(nStart),
-      mnEnd(nEnd)
+      mnEnd(nEnd),
+      maAccelerationFunction(
+          controller::AnimationParametricFunction(
+              controller::AnimationBezierFunction (0.1,0.6)))
+
 {
 }
 
 
 
 
-void HorizontalVisibleAreaScroller::operator() (const double nValue)
+void HorizontalVisibleAreaScroller::operator() (const double nTime)
 {
+    const double nLocalTime (maAccelerationFunction(nTime));
+    const sal_Int32 nNewLeft (mnStart * (1.0 - nLocalTime) + mnEnd * nLocalTime);
+    mrSlideSorter.GetViewShell()->Scroll(
+        nNewLeft - mrSlideSorter.GetController().GetScrollBarManager().GetLeft(),
+        0);
     mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-    mrSlideSorter.GetController().GetScrollBarManager().SetLeft(
-        int(mnStart * (1.0 - nValue) + mnEnd * nValue));
 }
 
 } // end of anonymous namespace

@@ -47,10 +47,10 @@ class BitmapCompressor;
 
 /** This low level cache is the actual bitmap container.  It supports a
     precious flag for every preview bitmap and keeps track of total sizes
-    for all previews with as well as those without the flag.  The precious
-    flag is used by compaction algorithms to determine which previews may be
-    compressed or even discarded and which have to remain in their original
-    form.  The precious flag is usually set for the visible previews.
+    for all previews with/without this flag.  The precious flag is used by
+    compaction algorithms to determine which previews may be compressed or
+    even discarded and which have to remain in their original form.  The
+    precious flag is usually set for the visible previews.
 */
 class BitmapCache
 {

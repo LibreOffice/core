@@ -35,6 +35,7 @@
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 class Point;
 class Rectangle;
@@ -133,10 +134,14 @@ public:
     */
     void SetTop (const sal_Int32 nTop);
 
+    sal_Int32 GetTop (void) const;
+
     /** Update the horizontal scroll bar so that the visible area has the
         given left value.
     */
     void SetLeft (const sal_Int32 nLeft);
+
+    sal_Int32 GetLeft (void) const;
 
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.
@@ -157,11 +162,17 @@ public:
     /** Call this method to scroll a window while the mouse is in dragging a
         selection.  If the mouse is near the window border or is outside the
         window then scroll the window accordingly.
+        @param rMouseWindowPosition
+            The mouse position for which the scroll amount is calculated.
+        @param rAutoScrollFunctor
+            Every time when the window is scrolled then this functor is executed.
         @return
             When the window is scrolled then this method returns <TRUE/>.
             When the window is not changed then <FALSE/> is returned.
     */
-    bool AutoScroll (const Point& rMouseWindowPosition);
+    bool AutoScroll (
+        const Point& rMouseWindowPosition,
+        const ::boost::function<void(void)>& rAutoScrollFunctor);
 
     void StopAutoScroll (void);
 
@@ -200,11 +211,14 @@ private:
     */
     Timer maAutoScrollTimer;
     Size maAutoScrollOffset;
+    bool mbIsAutoScrollActive;
 
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
     ::boost::shared_ptr<sd::Window> mpContentWindow;
+
+    ::boost::function<void(void)> maAutoScrollFunctor;
 
     void SetWindowOrigin (
         double nHorizontalPosition,

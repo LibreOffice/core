@@ -39,6 +39,8 @@ ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
 PRJINC=..$/..
 
+IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -46,18 +48,20 @@ PRJINC=..$/..
 
 # --- Files --------------------------------------------------------
 
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
+    SlsIcons.src
+
 SLOFILES =      								\
-    $(SLO)$/SlsFontProvider.obj					\
-    $(SLO)$/SlsPageObject.obj					\
-    $(SLO)$/SlsPageObjectViewContact.obj		\
-    $(SLO)$/SlsPageObjectViewObjectContact.obj	\
-    $(SLO)$/SlsLayouter.obj						\
     $(SLO)$/SlideSorterView.obj					\
+    $(SLO)$/SlsFontProvider.obj					\
+    $(SLO)$/SlsInsertAnimator.obj				\
+    $(SLO)$/SlsLayeredDevice.obj				\
+    $(SLO)$/SlsLayouter.obj						\
+    $(SLO)$/SlsPageObjectLayouter.obj			\
+    $(SLO)$/SlsPageObjectPainter.obj			\
     $(SLO)$/SlsViewCacheContext.obj				\
     $(SLO)$/SlsViewOverlay.obj
-
-EXCEPTIONSFILES=								\
-    $(SLO)$/SlsPageObjectViewObjectContact.obj
 
 # --- Tagets -------------------------------------------------------
 

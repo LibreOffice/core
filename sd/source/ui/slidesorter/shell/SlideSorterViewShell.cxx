@@ -191,8 +191,8 @@ void SlideSorterViewShell::Initialize (void)
     // the new view shell.  (One is created earlier while the construtor
     // of the base class is executed.  At that time the correct
     // accessibility object can not be constructed.)
-    ::Window* pWindow = mpSlideSorter->GetActiveWindow();
-    if (pWindow != NULL)
+    ::boost::shared_ptr<sd::Window> pWindow (mpSlideSorter->GetContentWindow());
+    if (pWindow)
     {
         pWindow->Hide();
         pWindow->Show();
@@ -641,10 +641,7 @@ void SlideSorterViewShell::SetZoom (long int )
 void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    Size aPageSize (mpSlideSorter->GetView().GetPageBoundingBox(
-        0,
-        view::SlideSorterView::CS_MODEL,
-        view::SlideSorterView::BBT_SHAPE).GetSize());
+    Size aPageSize (mpSlideSorter->GetView().GetLayouter().GetPageObjectSize());
 
     Rectangle aRect(rZoomRect);
 

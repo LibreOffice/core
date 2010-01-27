@@ -47,12 +47,18 @@ class QueueProcessor;
 class GenericPageCache
 {
 public:
-    /** The page chache is created with references both to the SlideSorter.
-        This allows access to both view and model and the cache can so fill
-        itself with requests for all or just the visible pages.
+    /** The page chache is created with a reference to the SlideSorter and
+        thus has access to both view and model.  This allows the cache to
+        fill itself with requests for all pages or just the visible ones.
+        @param rPreviewSize
+            The size of the previews is expected in pixel values.
+        @param bDoSuperSampling
+            When <TRUE/> the previews are rendered larger and then scaled
+            down to the requested size to improve image quality.
     */
     GenericPageCache (
         const Size& rPreviewSize,
+        const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
 
     ~GenericPageCache (void);
@@ -61,10 +67,12 @@ public:
         resize of the slide sorter window or a change of the number of
         columns.
     */
-    void ChangePreviewSize (const Size& rPreviewSize);
+    void ChangePreviewSize (
+        const Size& rPreviewSize,
+        const bool bDoSuperSampling);
 
     /** Request a preview bitmap for the specified page object in the
-        specified size.  The returned bitmap may be preview of the preview,
+        specified size.  The returned bitmap may be a preview of the preview,
         i.e. either a scaled (up or down) version of a previous preview (of
         the wrong size) or an empty bitmap.  In this case a request for the
         generation of a new preview is created and inserted into the request
@@ -73,33 +81,26 @@ public:
         receives the correctly sized preview bitmap.
         @param rRequestData
             This data is used to determine the preview.
-        @param rSize
-            The size of the requested preview bitmap.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize);
+    BitmapEx GetPreviewBitmap (CacheKey aKey);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
         method does nothing.
         @param rRequestData
             This data is used to determine the preview.
-        @param rSize
-            The size of the requested preview bitmap in pixel coordinates.
         @param bMayBeUpToDate
             This flag helps the method to determine whether an existing
             preview that matches the request is up to date.  If the caller
-            know that it is not then by passing <FALSE/> he tells us that we
+            knows that it is not then by passing <FALSE/> he tells us that we
             do not have to check the up-to-date flag a second time.  If
-            unsure pass <TRUE/>.
+            unsure use <TRUE/>.
     */
     void RequestPreviewBitmap (
         CacheKey aKey,
-        const Size& rSize,
         bool bMayBeUpToDate = true);
 
     /** Tell the cache to replace the bitmap associated with the given
@@ -146,6 +147,8 @@ private:
     /** The current size of preview bitmaps.
     */
     Size maPreviewSize;
+
+    bool mbDoSuperSampling;
 
     /** Both bitmap cache and queue processor are created on demand by this
         method.

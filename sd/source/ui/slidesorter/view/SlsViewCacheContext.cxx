@@ -35,11 +35,11 @@
 
 #include "SlsViewCacheContext.hxx"
 
+#include "SlideSorter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
 #include "drawdoc.hxx"
@@ -52,11 +52,9 @@
 namespace sd { namespace slidesorter { namespace view {
 
 
-ViewCacheContext::ViewCacheContext (
-    model::SlideSorterModel& rModel,
-    SlideSorterView& rView)
-    : mrModel(rModel),
-      mrView(rView)
+ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
+    : mrModel(rSlideSorter.GetModel()),
+      mrSlideSorter(rSlideSorter)
 {
 }
 
@@ -78,16 +76,12 @@ void ViewCacheContext::NotifyPreviewCreation (
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != NULL)
     {
-        // Use direct view-invalidate here and no ActionChanged() at the VC
-        // since the VC is a PageObjectViewObjectContact and in its ActionChanged()
-        // implementation invalidates the cache entry again.
-        view::PageObjectViewObjectContact* pContact = pDescriptor->GetViewObjectContact();
-        if (pContact != NULL)
-            pContact->GetObjectContact().InvalidatePartOfView(pContact->getObjectRange());
+        // Force a repaint that will trigger their re-creation.
+        mrSlideSorter.GetView().RequestRepaint(pDescriptor);
     }
     else
     {
-        OSL_ASSERT(pDescriptor.get() != NULL);
+        OSL_ASSERT(pDescriptor);
     }
 }
 
@@ -96,7 +90,7 @@ void ViewCacheContext::NotifyPreviewCreation (
 
 bool ViewCacheContext::IsIdle (void)
 {
-    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrView.GetWindow()));
+    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow().get()));
     if (nIdleState == tools::IdleDetection::IDET_IDLE)
         return true;
     else
@@ -108,7 +102,7 @@ bool ViewCacheContext::IsIdle (void)
 
 bool ViewCacheContext::IsVisible (cache::CacheKey aKey)
 {
-    return GetDescriptor(aKey)->IsVisible();
+    return GetDescriptor(aKey)->HasState(model::PageDescriptor::ST_Visible);
 }
 
 

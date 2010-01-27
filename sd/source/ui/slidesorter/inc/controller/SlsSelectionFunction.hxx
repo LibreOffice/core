@@ -31,10 +31,13 @@
 #ifndef SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 #define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 
-#include "controller/SlsSlideFunction.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
-#include <tools/list.hxx>
-#include <memory>
+#include "controller/SlsFocusManager.hxx"
+#include "fupoor.hxx"
+#include <svtools/transfer.hxx>
+//#include <memory>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class SdSlideViewShell;
 class SdWindow;
@@ -51,7 +54,8 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
 
 class SelectionFunction
-    : public SlideFunction
+    : public FuPoor,
+      private ::boost::noncopyable
 {
 public:
     TYPEINFO();
@@ -63,10 +67,9 @@ public:
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Paint(const Rectangle&, ::sd::Window* );
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -89,6 +92,8 @@ public:
     */
     virtual bool cancel();
 
+    void MouseDragged (const AcceptDropEvent& rEvent);
+
 protected:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
@@ -101,8 +106,8 @@ protected:
 
 private:
     class SubstitutionHandler;
+    class RectangleSelector;
     class EventDescriptor;
-    class InsertionIndicatorHandler;
 
     /// Set in MouseButtonDown this flag indicates that a page has been hit.
     bool mbPageHit;
@@ -122,12 +127,23 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    ::std::auto_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    ::boost::scoped_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    ::boost::scoped_ptr<RectangleSelector> mpRectangleSelector;
 
-    ::std::auto_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
+    /** Remember where the left mouse button was pressed.
+    */
+    sal_Int32 mnButtonDownPageIndex;
+    sal_Int32 mnButtonDownButtonIndex;
+
+    bool mbIsDeselectionPending;
+
+    /** Remember the slide where the shift key was pressed and started a
+        multiselection via keyboard.
+    */
+    sal_Int32 mnShiftKeySelectionAnchor;
 
     DECL_LINK( DragSlideHdl, Timer* );
-    void StartDrag (void);
+    void StartDrag (const Point& rMousePosition);
 
     /** Set the selection to exactly the specified page and also set it as
         the current page.
@@ -154,36 +170,19 @@ private:
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().
 
-    /// Select the specified page and set the selection anchor.
-    void SelectHitPage (const model::SharedPageDescriptor& rpDescriptor);
-    /// Deselect the specified page.
-    void DeselectHitPage (const model::SharedPageDescriptor& rpDescriptor);
     /// Deselect all pages.
     void DeselectAllPages (void);
 
-    /** for a possibly following mouse motion by starting the drag timer
+    /** For a possibly following mouse motion by starting the drag timer
         that after a short time of pressed but un-moved mouse starts a drag
         operation.
     */
-    void PrepareMouseMotion (const Point& aMouseModelPosition);
+    void StartDragTimer (void);
 
     /** Select all pages between and including the selection anchor and the
         specified page.
     */
     void RangeSelect (const model::SharedPageDescriptor& rpDescriptor);
-
-    /** Start a rectangle selection at the given position.
-    */
-    void StartRectangleSelection (const Point& aMouseModelPosition);
-
-    /** Update the rectangle selection so that the given position becomes
-        the new second point of the selection rectangle.
-    */
-    void UpdateRectangleSelection (const Point& aMouseModelPosition);
-
-    /** Select all pages that lie completly in the selection rectangle.
-    */
-    void ProcessRectangleSelection (bool bToggleSelection);
 
     /** Hide and clear the insertion indiciator, substitution display and
         selection rectangle.
@@ -204,9 +203,27 @@ private:
         const EventDescriptor& rDescriptor,
         const KeyEvent& rEvent) const;
 
+    /** Compute a numerical code that describes the current state like
+        whether the selection rectangle is visible or whether the page under
+        the mouse or the one that has the focus is selected.
+    */
+    sal_uInt32 EncodeState (const EventDescriptor& rDescriptor) const;
+
     void EventPreprocessing (const EventDescriptor& rEvent);
     bool EventProcessing (const EventDescriptor& rEvent);
     void EventPostprocessing (const EventDescriptor& rEvent);
+
+    void UpdatePageUnderMouse (
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown);
+
+    void ProcessButtonClick (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const sal_Int32 nButtonIndex);
+
+    void MoveFocus (
+        const FocusManager::FocusMoveDirection eDirection,
+        const bool bIsShiftDown);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

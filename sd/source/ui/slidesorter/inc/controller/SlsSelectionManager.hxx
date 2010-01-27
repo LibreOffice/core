@@ -35,6 +35,7 @@
 #include "model/SlsSharedPageDescriptor.hxx"
 #include <sal/types.h>
 #include <tools/gen.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <vector>
 
 class Link;
@@ -83,6 +84,10 @@ public:
         moved to the visible area of the slide sorter view.
     */
     bool IsMakeSelectionVisiblePending (void) const;
+
+    /** Reset any request to make the set of selected pages visible.
+    */
+    void ResetMakeSelectionVisiblePending (void);
 
     enum SelectionHint { SH_FIRST, SH_LAST, SH_RECENT };
 

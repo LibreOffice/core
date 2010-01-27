@@ -32,9 +32,6 @@
 #include "precompiled_sd.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
-#include "view/SlsPageObject.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
-#include "controller/SlsPageObjectFactory.hxx"
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -51,20 +48,18 @@ namespace sd {  namespace slidesorter { namespace model {
 PageDescriptor::PageDescriptor (
     const Reference<drawing::XDrawPage>& rxPage,
     SdPage* pPage,
-    const sal_Int32 nIndex,
-    const controller::PageObjectFactory& rPageObjectFactory)
+    const sal_Int32 nIndex)
     : mpPage(pPage),
       mxPage(rxPage),
       mnIndex(nIndex),
-      mpPageObjectFactory(&rPageObjectFactory),
-      mpPageObject(NULL),
       mbIsSelected(false),
+      mbWasSelected(false),
       mbIsVisible(false),
       mbIsFocused(false),
       mbIsCurrent(false),
-      mpViewObjectContact(NULL),
-      maModelBorder(0,0,0,0),
-      maPageNumberAreaModelSize(0,0)
+      mbIsMouseOver(false),
+      maBoundingBox(),
+      maVisualState(nIndex)
 {
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
 }
@@ -103,74 +98,104 @@ sal_Int32 PageDescriptor::GetPageIndex (void) const
 
 
 
-view::PageObject* PageDescriptor::GetPageObject (void)
+bool PageDescriptor::HasState (const State eState) const
 {
-    if (mpPageObject==NULL && mpPageObjectFactory!=NULL && mpPage != NULL)
+    switch (eState)
     {
-        mpPageObject = mpPageObjectFactory->CreatePageObject(mpPage, shared_from_this());
+        case ST_Visible:
+            return mbIsVisible;
+
+        case ST_Selected:
+            return mbIsSelected;
+
+        case ST_WasSelected:
+            return mbWasSelected;
+
+        case ST_Focused:
+            return mbIsFocused;
+
+        case ST_MouseOver:
+            return mbIsMouseOver;
+
+        case ST_Current:
+            return mbIsCurrent;
+
+        case ST_Excluded:
+            return mpPage!=NULL && mpPage->IsExcluded();
+
+        default:
+            OSL_ASSERT(false);
+            return false;
+    }
+}
+
+
+
+
+bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
+{
+    bool bModified (false);
+    switch (eState)
+    {
+        case ST_Visible:
+            bModified = (bNewStateValue!=mbIsVisible);
+            if (bModified)
+                mbIsVisible = bNewStateValue;
+            break;
+
+        case ST_Selected:
+            bModified = (bNewStateValue!=mbIsSelected);
+            if (bModified)
+                mbIsSelected = bNewStateValue;
+            break;
+
+        case ST_WasSelected:
+            bModified = (bNewStateValue!=mbWasSelected);
+            if (bModified)
+                mbWasSelected = bNewStateValue;
+            break;
+
+        case ST_Focused:
+            bModified = (bNewStateValue!=mbIsFocused);
+            if (bModified)
+                mbIsFocused = bNewStateValue;
+            break;
+
+        case ST_MouseOver:
+            bModified = (bNewStateValue!=mbIsMouseOver);
+            if (bModified)
+                mbIsMouseOver = bNewStateValue;
+            break;
+
+        case ST_Current:
+            bModified = (bNewStateValue!=mbIsCurrent);
+            if (bModified)
+                mbIsCurrent = bNewStateValue;
+            break;
+
+        case ST_Excluded:
+            // This is a state of the page and has to be handled differently
+            // from the view-only states.
+            if (mpPage != NULL)
+                if (bNewStateValue != (mpPage->IsExcluded()==TRUE))
+                {
+                    mpPage->SetExcluded(bNewStateValue);
+                    bModified = true;
+                }
+            break;
     }
 
-    return mpPageObject;
+    if (bModified)
+        maVisualState.UpdateVisualState(*this);
+    return bModified;
 }
 
 
 
 
-void PageDescriptor::ReleasePageObject (void)
+VisualState& PageDescriptor::GetVisualState (void)
 {
-    mpPageObject = NULL;
-}
-
-
-
-
-bool PageDescriptor::IsVisible (void) const
-{
-    return mbIsVisible;
-}
-
-
-
-
-void PageDescriptor::SetVisible (bool bIsVisible)
-{
-    mbIsVisible = bIsVisible;
-}
-
-
-
-
-bool PageDescriptor::Select (void)
-{
-    if ( ! IsSelected())
-    {
-        mbIsSelected = true;
-        return true;
-    }
-    else
-        return false;
-}
-
-
-
-
-bool PageDescriptor::Deselect (void)
-{
-    if (IsSelected())
-    {
-        mbIsSelected = false;
-        return true;
-    }
-    else
-        return false;
-}
-
-
-
-
-bool PageDescriptor::IsSelected (void) const
-{
-    return mbIsSelected;
+    return maVisualState;
 }
 
 
@@ -179,10 +204,7 @@ bool PageDescriptor::IsSelected (void) const
 bool PageDescriptor::UpdateSelection (void)
 {
     if (mpPage!=NULL && (mpPage->IsSelected()==TRUE) != mbIsSelected)
-    {
-        mbIsSelected = ! mbIsSelected;
-        return true;
-    }
+        return SetState(ST_Selected, !mbIsSelected);
     else
         return false;
 }
@@ -190,109 +212,28 @@ bool PageDescriptor::UpdateSelection (void)
 
 
 
-bool PageDescriptor::IsFocused (void) const
+Rectangle PageDescriptor::GetBoundingBox (void) const
 {
-    return mbIsFocused;
+    Rectangle aBox (maBoundingBox);
+    const Point aOffset (maVisualState.GetLocationOffset());
+    aBox.Move(aOffset.X(), aOffset.Y());
+    return aBox;
 }
 
 
 
 
-void PageDescriptor::SetFocus (void)
+Point PageDescriptor::GetLocation (void) const
 {
-    mbIsFocused = true;
+    return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
 }
 
 
 
 
-void PageDescriptor::RemoveFocus (void)
+void PageDescriptor::SetBoundingBox (const Rectangle& rBoundingBox)
 {
-    mbIsFocused = false;
-}
-
-
-
-
-view::PageObjectViewObjectContact*
-    PageDescriptor::GetViewObjectContact (void) const
-{
-    return mpViewObjectContact;
-}
-
-
-
-
-void PageDescriptor::SetViewObjectContact (
-    view::PageObjectViewObjectContact* pViewObjectContact)
-{
-    mpViewObjectContact = pViewObjectContact;
-}
-
-
-
-
-const controller::PageObjectFactory&
-    PageDescriptor::GetPageObjectFactory (void) const
-{
-    return *mpPageObjectFactory;
-}
-
-
-
-
-void PageDescriptor::SetPageObjectFactory (
-    const controller::PageObjectFactory& rFactory)
-{
-    mpPageObjectFactory = &rFactory;
-}
-
-
-
-
-void PageDescriptor::SetModelBorder (const SvBorder& rBorder)
-{
-    maModelBorder = rBorder;
-}
-
-
-
-
-SvBorder PageDescriptor::GetModelBorder (void) const
-{
-    return maModelBorder;
-}
-
-
-
-
-void PageDescriptor::SetPageNumberAreaModelSize (const Size& rSize)
-{
-    maPageNumberAreaModelSize = rSize;
-}
-
-
-
-
-Size PageDescriptor::GetPageNumberAreaModelSize (void) const
-{
-    return maPageNumberAreaModelSize;
-}
-
-
-
-
-bool PageDescriptor::IsCurrentPage (void) const
-{
-    return mbIsCurrent;
-}
-
-
-
-
-void PageDescriptor::SetIsCurrentPage (const bool bIsCurrent)
-{
-    mbIsCurrent = bIsCurrent;
+    maBoundingBox = rBoundingBox;
 }
 
 

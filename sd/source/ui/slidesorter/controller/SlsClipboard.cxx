@@ -39,8 +39,8 @@
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsViewOverlay.hxx"
-#include "view/SlsPageObject.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
@@ -212,7 +212,7 @@ void Clipboard::DoPaste (::Window* pWindow)
             sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
             // Select the pasted pages and make the first of them the
             // current page.
-            mrSlideSorter.GetView().GetWindow()->GrabFocus();
+            mrSlideSorter.GetContentWindow()->GrabFocus();
             SelectPageRange(nInsertPosition, nInsertPageCount);
         }
     }
@@ -233,11 +233,11 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
     // selection.
     // d) After the last page when there is no selection and no focus.
 
-    view::InsertionIndicatorOverlay& rInsertionIndicatorOverlay (
-        mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay());
-    if (rInsertionIndicatorOverlay.isVisible())
+    ::boost::shared_ptr<controller::InsertionIndicatorHandler> pInsertionIndicatorHandler (
+        mrController.GetInsertionIndicatorHandler());
+    if (pInsertionIndicatorHandler->IsActive())
     {
-        nInsertPosition = rInsertionIndicatorOverlay.GetInsertionPageIndex();
+        nInsertPosition = pInsertionIndicatorHandler->GetInsertionPageIndex();
     }
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
@@ -426,13 +426,15 @@ void Clipboard::CreateSlideTransferable (
 
 
 void Clipboard::StartDrag (
-    const Point&,
+    const Point& rPosition,
     ::Window* pWindow)
 {
     maPagesToRemove.clear();
     maPagesToSelect.clear();
     mbUpdateSelectionPending = false;
-    CreateSlideTransferable (pWindow, TRUE);
+    CreateSlideTransferable(pWindow, TRUE);
+
+    mrController.GetInsertionIndicatorHandler()->UpdatePosition(rPosition);
 }
 
 
@@ -441,8 +443,8 @@ void Clipboard::StartDrag (
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     // Hide the substitution display and insertion indicator.
-    mrSlideSorter.GetView().GetOverlay().GetSubstitutionOverlay().setVisible(false);
-    mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
+    mrSlideSorter.GetView().GetOverlay().GetSubstitutionOverlay()->SetIsVisible(false);
+    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End();
 
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
@@ -497,6 +499,11 @@ sal_Int8 Clipboard::AcceptDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
 
+    FunctionReference rFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
+    SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(rFunction.get());
+    if (pSelectionFunction != NULL)
+        pSelectionFunction->MouseDragged(rEvent);
+
     switch (IsDropAccepted())
     {
         case DT_PAGE:
@@ -521,12 +528,11 @@ sal_Int8 Clipboard::AcceptDrop (
             // Show the insertion marker and the substitution for a drop.
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
             view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-            rOverlay.GetInsertionIndicatorOverlay().SetPosition (aPosition);
-            rOverlay.GetInsertionIndicatorOverlay().setVisible(true);
-            rOverlay.GetSubstitutionOverlay().SetPosition (aPosition);
+            mrController.GetInsertionIndicatorHandler()->UpdatePosition(aPosition);
+            rOverlay.GetSubstitutionOverlay()->SetPosition(aPosition);
 
             // Scroll the window when the mouse reaches the window border.
-            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
+            //            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
         }
         break;
 
@@ -576,12 +582,11 @@ sal_Int8 Clipboard::ExecuteDrop (
 
             // Get insertion position and then turn off the insertion indicator.
             view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-            rOverlay.GetInsertionIndicatorOverlay().SetPosition(
-                aEventModelPosition);
-            USHORT nIndex = DetermineInsertPosition (*pDragTransferable);
+            mrController.GetInsertionIndicatorHandler()->UpdatePosition(aEventModelPosition);
+            USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
             OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",
                 nIndex);
-            rOverlay.GetInsertionIndicatorOverlay().setVisible(false);
+            mrController.GetInsertionIndicatorHandler()->End();
 
             if (bContinue)
             {
@@ -644,9 +649,8 @@ USHORT Clipboard::DetermineInsertPosition (const SdTransferable& )
     // Tell the model to move the dragged pages behind the one with the
     // index nInsertionIndex which first has to be transformed into an index
     // understandable by the document.
-    view::InsertionIndicatorOverlay& rOverlay (
-        mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay());
-    sal_Int32 nInsertionIndex (rOverlay.GetInsertionPageIndex());
+    sal_Int32 nInsertionIndex (
+        mrController.GetInsertionIndicatorHandler()->GetInsertionPageIndex());
 
     // The index returned by the overlay starts with 1 for the first slide.
     // This is now converted that to an SdModel index that also starts with 1.

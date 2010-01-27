@@ -64,9 +64,9 @@ class Animator;
 class Clipboard;
 class CurrentSlideManager;
 class FocusManager;
+class InsertionIndicatorHandler;
 class Listener;
 class PageSelector;
-class Properties;
 class ScrollBarManager;
 class SelectionManager;
 class SlotManager;
@@ -87,6 +87,8 @@ public:
     virtual void Init (void);
 
     virtual ~SlideSorterController (void);
+
+    void Dispose (void);
 
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
@@ -138,6 +140,7 @@ public:
     ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager (void) const;
     ::boost::shared_ptr<SlotManager> GetSlotManager (void) const;
     ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
+    ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler (void) const;
 
     // forward VCLs PrePaint window event to DrawingLayer
     void PrePaint();
@@ -240,11 +243,6 @@ public:
     */
     bool IsContextMenuOpen (void) const;
 
-    /** Return a collection of properties that are used througout the slide
-        sorter.
-    */
-    ::boost::shared_ptr<Properties> GetProperties (void) const;
-
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
     */
@@ -265,6 +263,7 @@ private:
     ::std::auto_ptr<ScrollBarManager> mpScrollBarManager;
     mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
     ::boost::shared_ptr<SelectionManager> mpSelectionManager;
+    ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
     ::boost::shared_ptr<Animator> mpAnimator;
 
     // The listener listens to UNO events and thus is a UNO object.
@@ -306,11 +305,6 @@ private:
     /** Remember whether the context menu is open.
     */
     bool mbIsContextMenuOpen;
-
-    /** Some slide sorter wide properties that are used in different
-        classes.
-    */
-    ::boost::shared_ptr<Properties> mpProperties;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().

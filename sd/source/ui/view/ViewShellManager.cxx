@@ -45,7 +45,7 @@
 #include <hash_map>
 
 #undef VERBOSE
-#define VERBOSE 2
+//#define VERBOSE 2
 
 namespace sd {
 

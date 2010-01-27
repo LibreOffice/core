@@ -32,14 +32,19 @@
 #define SD_SLIDESORTER_VIEW_OVERLAY_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
+#include "view/SlsILayerPainter.hxx"
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <osl/mutex.hxx>
-#include <svx/sdr/overlay/overlayobject.hxx>
 #include <tools/gen.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vector>
 #include <boost/weak_ptr.hpp>
-#include <boost/noncopyable.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 
 class OutputDevice;
 class Region;
@@ -57,15 +62,11 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
 } } }
 
-namespace sdr { namespace overlay {
-class OverlayManager;
-} }
-
 namespace sd { namespace slidesorter { namespace view {
 
 
+class LayeredDevice;
 class InsertionIndicatorOverlay;
-class PageObjectViewObjectContact;
 class SelectionRectangleOverlay;
 class SubstitutionOverlay;
 class ViewOverlay;
@@ -73,23 +74,37 @@ class ViewOverlay;
 /** This base class of slide sorter overlays uses the drawing layer overlay
     support for the display.
 */
-class OverlayBase
-    : public sdr::overlay::OverlayObject
+class OverlayBase :
+    public ILayerPainter,
+    public ::boost::enable_shared_from_this<OverlayBase>
 {
 public:
-    OverlayBase (ViewOverlay& rViewOverlay);
+    OverlayBase (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
     virtual ~OverlayBase (void);
+
+    bool IsVisible (void) const;
+    void SetIsVisible (const bool bIsVisible);
+
+    virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator);
+
+    sal_Int32 GetLayerIndex (void) const;
 
 protected:
     ::osl::Mutex maMutex;
 
     ViewOverlay& mrViewOverlay;
+    SharedILayerInvalidator mpLayerInvalidator;
 
-    /** Make sure that the overlay object is registered at the
-        OverlayManager.  This registration is done on demand.
-    */
-    void EnsureRegistration (void);
-    void RemoveRegistration();
+    class Invalidator;
+    friend class Invalidator;
+
+    virtual Rectangle GetBoundingBox (void) const = 0;
+
+private:
+    bool mbIsVisible;
+    const sal_Int32 mnLayerIndex;
+
+    void Invalidate (const Rectangle& rInvalidationBox);
 };
 
 
@@ -102,7 +117,7 @@ class SubstitutionOverlay
     : public OverlayBase
 {
 public:
-    SubstitutionOverlay (ViewOverlay& rViewOverlay);
+    SubstitutionOverlay (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
     virtual ~SubstitutionOverlay (void);
 
     /** Setup the substitution display of the given set of selected pages.
@@ -111,7 +126,8 @@ public:
     */
     void Create (
         model::PageEnumeration& rSelection,
-        const Point& rPosition);
+        const Point& rPosition,
+        const model::SharedPageDescriptor& rpHitDescriptor);
 
     /** Clear the substitution display.  Until the next call of Create() no
         substution is painted.
@@ -124,16 +140,36 @@ public:
     void SetPosition (const Point& rPosition);
     Point GetPosition (void) const;
 
-    // react on stripe definition change
-    virtual void stripeDefinitionHasChanged();
+    virtual void Paint (
+        OutputDevice& rDevice,
+        const Rectangle& rRepaintArea);
 
 protected:
-    // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+    virtual Rectangle GetBoundingBox (void) const;
 
 private:
     Point maPosition;
-    basegfx::B2DPolyPolygon maShapes;
+    Point maTranslation;
+    /** The substitution paints only the page object under the mouse and the
+        8-neighborhood around it.  It uses different levels of transparency
+        for the center and the four elements at its sides and the four
+        elements at its corners.  All values between 0 (opaque) and 100
+        (fully transparent.)
+    */
+    static const sal_Int32 mnCenterTransparency;
+    static const sal_Int32 mnSideTransparency;
+    static const sal_Int32 mnCornerTransparency;
+
+    class ItemDescriptor
+    {
+    public:
+        BitmapEx maImage;
+        Point maLocation;
+        double mnTransparency;
+        basegfx::B2DPolygon maShape;
+    };
+    ::std::vector<ItemDescriptor> maItems;
+    Rectangle maBoundingBox;
 };
 
 
@@ -147,20 +183,19 @@ class SelectionRectangleOverlay
     : public OverlayBase
 {
 public:
-    SelectionRectangleOverlay (ViewOverlay& rViewOverlay);
-    virtual ~SelectionRectangleOverlay();
+    SelectionRectangleOverlay (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
 
     void Start (const Point& rAnchor);
     void Update (const Point& rSecondCorner);
 
     Rectangle GetSelectionRectangle (void);
 
-    // react on stripe definition change
-    virtual void stripeDefinitionHasChanged();
+    virtual void Paint (
+        OutputDevice& rDevice,
+        const Rectangle& rRepaintArea);
 
 protected:
-    // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+    virtual Rectangle GetBoundingBox (void) const;
 
 private:
     Point maAnchor;
@@ -177,59 +212,34 @@ class InsertionIndicatorOverlay
     : public OverlayBase
 {
 public:
-    InsertionIndicatorOverlay (ViewOverlay& rViewOverlay);
-    virtual ~InsertionIndicatorOverlay();
+    InsertionIndicatorOverlay (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
 
     /** Given a position in model coordinates this method calculates the
-        insertion marker both as an index in the document and as a rectangle
+        insertion marker both as an index in the document and as a location
         used for drawing the insertion indicator.
     */
-    void SetPosition (const Point& rPosition);
+    void SetLocation (const Point& rPosition);
 
-    sal_Int32 GetInsertionPageIndex (void) const;
+    virtual void Paint (
+        OutputDevice& rDevice,
+        const Rectangle& rRepaintArea);
 
 protected:
-    // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+    virtual Rectangle GetBoundingBox (void) const;
 
 private:
-    sal_Int32 mnInsertionIndex;
-    Rectangle maBoundingBox;
-
+    // Center of the insertion indicator.
+    Point maLocation;
+    /** Remember whether the insertion indicator is displayed before (left
+        of or above) or after (right of or below) the page at the insertion
+        index.
+    */
+    bool mbIsBeforePage;
+    ImageList maIcons;
+    Image maIconWithBorder;
+    Image maIcon;
+    Image maMask;
     void SetPositionAndSize (const Rectangle& rBoundingBox);
-};
-
-
-
-
-/** Paint a frame around the slide preview under the mouse.  The actual
-    painting is done by the PageObjectViewObjectContact of the slidesorter.
-*/
-class MouseOverIndicatorOverlay
-    : public OverlayBase
-{
-public:
-    MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay);
-    virtual ~MouseOverIndicatorOverlay (void);
-
-    /** Set the page object for which to paint a mouse over indicator.
-        @param pContact
-            A value of <NULL/> indicates to not paint the mouse over indicator.
-    */
-    void SetSlideUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
-
-protected:
-    // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
-
-private:
-    /** The page under the mouse is stored as weak shared pointer so that
-        model changes can be handled without having the SlideSorterModel
-        inform this class explicitly.
-    */
-    ::boost::weak_ptr<model::PageDescriptor> mpPageUnderMouse;
-
-    view::PageObjectViewObjectContact* GetViewObjectContact (void) const;
 };
 
 
@@ -249,24 +259,24 @@ private:
 class ViewOverlay
 {
 public:
-    ViewOverlay (SlideSorter& rSlideSorter);
-    ~ViewOverlay (void);
+    ViewOverlay (
+        SlideSorter& rSlideSorter,
+        const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice);
+    virtual ~ViewOverlay (void);
 
-    SelectionRectangleOverlay& GetSelectionRectangleOverlay (void);
-    MouseOverIndicatorOverlay& GetMouseOverIndicatorOverlay (void);
-    InsertionIndicatorOverlay& GetInsertionIndicatorOverlay (void);
-    SubstitutionOverlay& GetSubstitutionOverlay (void);
+    ::boost::shared_ptr<SelectionRectangleOverlay> GetSelectionRectangleOverlay (void);
+    ::boost::shared_ptr<InsertionIndicatorOverlay> GetInsertionIndicatorOverlay (void);
+    ::boost::shared_ptr<SubstitutionOverlay> GetSubstitutionOverlay (void);
 
     SlideSorter& GetSlideSorter (void) const;
-
-    sdr::overlay::OverlayManager* GetOverlayManager (void) const;
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
 
 private:
     SlideSorter& mrSlideSorter;
-    SelectionRectangleOverlay maSelectionRectangleOverlay;
-    MouseOverIndicatorOverlay maMouseOverIndicatorOverlay;
-    InsertionIndicatorOverlay maInsertionIndicatorOverlay;
-    SubstitutionOverlay maSubstitutionOverlay;
+    const ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
+    ::boost::shared_ptr<SelectionRectangleOverlay> mpSelectionRectangleOverlay;
+    ::boost::shared_ptr<InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
+    ::boost::shared_ptr<SubstitutionOverlay> mpSubstitutionOverlay;
 };
 
 

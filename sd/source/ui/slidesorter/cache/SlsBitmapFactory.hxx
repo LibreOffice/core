@@ -56,7 +56,8 @@ public:
 
     ::boost::shared_ptr<BitmapEx> CreateBitmap (
         const SdPage& rPage,
-        const Size& rPixelSize);
+        const Size& rPixelSize,
+        const bool bDoSuperSampling);
 
 private:
     PreviewRenderer maRenderer;

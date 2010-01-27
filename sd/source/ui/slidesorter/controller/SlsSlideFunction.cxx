@@ -49,7 +49,7 @@ SlideFunction::SlideFunction (
     SfxRequest& rRequest)
     : FuPoor (
         rSlideSorter.GetViewShell(),
-        rSlideSorter.GetView().GetWindow(),
+        rSlideSorter.GetContentWindow().get(),
         &rSlideSorter.GetView(),
         rSlideSorter.GetModel().GetDocument(),
         rRequest)

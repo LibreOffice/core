@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "SlsListener.hxx"
 
 #include "SlideSorter.hxx"
@@ -40,6 +40,7 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "view/SlideSorterView.hxx"
+#include "cache/SlsPageCache.hxx"
 #include "drawdoc.hxx"
 
 #include "glob.hrc"
@@ -129,7 +130,7 @@ Listener::Listener (
         if (pMainViewShell != NULL
             && pMainViewShell!=pViewShell)
         {
-            StartListening (*pMainViewShell);
+            StartListening(*pMainViewShell);
         }
 
         Link aLink (LINK(this, Listener, EventMultiplexerCallback));
@@ -309,18 +310,27 @@ void Listener::Notify (
     if (rHint.ISA(SdrHint))
     {
         SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        if(rSdrHint.GetKind() == HINT_PAGEORDERCHG )
+        switch (rSdrHint.GetKind())
         {
-            if (rBroadcaster.ISA(SdDrawDocument))
-            {
-                SdDrawDocument& rDocument (
-                    static_cast<SdDrawDocument&>(rBroadcaster));
-                if (rDocument.GetMasterSdPageCount(PK_STANDARD)
-                    == rDocument.GetMasterSdPageCount(PK_NOTES))
+            case HINT_PAGEORDERCHG:
+                if (rBroadcaster.ISA(SdDrawDocument))
                 {
-                    mrController.HandleModelChange();
+                    SdDrawDocument& rDocument (static_cast<SdDrawDocument&>(rBroadcaster));
+                    if (rDocument.GetMasterSdPageCount(PK_STANDARD)
+                        == rDocument.GetMasterSdPageCount(PK_NOTES))
+                    {
+                        mrController.HandleModelChange();
+                    }
                 }
-            }
+                break;
+
+            case HINT_OBJINSERTED:
+            case HINT_OBJREMOVED:
+            case HINT_OBJCHG:
+                mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
+                    rSdrHint.GetPage(),
+                    true);
+                break;
         }
     }
     else if (rHint.ISA(ViewShellHint))

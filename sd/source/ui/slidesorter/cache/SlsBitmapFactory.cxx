@@ -37,7 +37,6 @@
 
 #include "PreviewRenderer.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
 #include <svx/svdtypes.hxx>
@@ -52,7 +51,7 @@ class PageObjectViewObjectContact;
 namespace sd { namespace slidesorter { namespace cache {
 
 BitmapFactory::BitmapFactory (void)
-    : maRenderer(NULL,false)
+    : maRenderer(NULL, false)
 {
 }
 
@@ -68,14 +67,23 @@ BitmapFactory::~BitmapFactory (void)
 
 ::boost::shared_ptr<BitmapEx> BitmapFactory::CreateBitmap (
     const SdPage& rPage,
-    const Size& rPixelSize)
+    const Size& rPixelSize,
+    const bool bDoSuperSampling)
 {
-    Image aPreview (maRenderer.RenderPage (
-        &rPage,
-        rPixelSize,
-        String()));
+    Size aSize (rPixelSize);
+    if (bDoSuperSampling)
+    {
+        aSize.Width() *= 2;
+        aSize.Height() *= 2;
+    }
 
-    return ::boost::shared_ptr<BitmapEx>(new BitmapEx(aPreview.GetBitmapEx()));
+    const Image aPreview (maRenderer.RenderPage (&rPage, aSize, String()));
+
+    ::boost::shared_ptr<BitmapEx> pPreview (new BitmapEx(aPreview.GetBitmapEx()));
+    if (bDoSuperSampling)
+        pPreview->Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
+
+    return pPreview;
 }
 
 

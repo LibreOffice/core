@@ -49,22 +49,20 @@ PRJINC=..$/..
 SLOFILES =      							\
     $(SLO)$/SlideSorterController.obj		\
     $(SLO)$/SlsAnimator.obj	    			\
+    $(SLO)$/SlsAnimationFunction.obj	    \
     $(SLO)$/SlsClipboard.obj	    		\
     $(SLO)$/SlsCurrentSlideManager.obj	    \
     $(SLO)$/SlsFocusManager.obj				\
+    $(SLO)$/SlsInsertionIndicatorHandler.obj\
     $(SLO)$/SlsListener.obj					\
-    $(SLO)$/SlsPageObjectFactory.obj		\
     $(SLO)$/SlsPageSelector.obj				\
     $(SLO)$/SlsProperties.obj				\
     $(SLO)$/SlsScrollBarManager.obj			\
     $(SLO)$/SlsSelectionCommand.obj	    	\
+    $(SLO)$/SlsSelectionFunction.obj		\
     $(SLO)$/SlsSelectionManager.obj	    	\
     $(SLO)$/SlsSlotManager.obj				\
-    $(SLO)$/SlsTransferable.obj				\
-                                            \
-    $(SLO)$/SlsHideSlideFunction.obj		\
-    $(SLO)$/SlsSelectionFunction.obj		\
-    $(SLO)$/SlsSlideFunction.obj		
+    $(SLO)$/SlsTransferable.obj
 
 EXCEPTIONSFILES=							\
     $(SLO)$/SlideSorterController.obj

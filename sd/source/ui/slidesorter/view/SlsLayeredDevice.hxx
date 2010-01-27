@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: SlsViewCacheContext.hxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SD_SLIDESORTER_VIEW_LAYERED_DEVICE_HXX
+#define SD_SLIDESORTER_VIEW_LAYERED_DEVICE_HXX
+
+#include "view/SlsILayerPainter.hxx"
+
+#include <tools/gen.hxx>
+#include <vcl/region.hxx>
+#include <vcl/virdev.hxx>
+
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <vector>
+
+class Window;
+
+namespace sd { namespace slidesorter { namespace view {
+
+class LayeredDevice
+    : public ::boost::enable_shared_from_this<LayeredDevice>
+
+{
+public:
+    LayeredDevice (const ::boost::shared_ptr< ::Window>& rpTargetWindow);
+    ~LayeredDevice (void);
+
+    void Invalidate (
+        const Rectangle& rInvalidationBox,
+        const sal_Int32 nLayer);
+    void InvalidateAllLayers (
+        const Rectangle& rInvalidationBox);
+
+    void RegisterPainter (
+        const SharedILayerPainter& rPainter,
+        const sal_Int32 nLayer);
+
+    void RemovePainter (
+        const SharedILayerPainter& rPainter,
+        const sal_Int32 nLayer);
+
+    bool HasPainter (const sal_Int32 nLayer);
+
+    void Repaint (const Region& rRepaintRegion);
+
+    void Resize (void);
+
+    void Dispose (void);
+
+    class Layer
+    {
+    public:
+        Layer (void);
+
+        void Initialize (const ::boost::shared_ptr< ::Window>& rpTargetWindow);
+        void Invalidate (const Rectangle& rInvalidationBox);
+        void Validate (const MapMode& rMapMode);
+        void Repaint (
+            OutputDevice& rTargetDevice,
+            const Rectangle& rRepaintRectangle);
+        void Resize (const Size& rSize);
+        void AddPainter (const SharedILayerPainter& rpPainter);
+        void RemovePainter (const SharedILayerPainter& rpPainter);
+        bool HasPainter (void) const;
+        void Dispose (void);
+
+    private:
+        ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
+        ::std::vector<SharedILayerPainter> maPainters;
+        Region maInvalidationRegion;
+        void ValidateRectangle (const Rectangle& rBox);
+    };
+
+private:
+    const ::boost::shared_ptr< ::Window> mpTargetWindow;
+    ::std::vector<Layer> maLayers;
+    ::boost::scoped_ptr<VirtualDevice> mpBackBuffer;
+    MapMode maSavedMapMode;
+
+    void RepaintRectangle (const Rectangle& rRepaintRectangle);
+    void HandleMapModeChange (void);
+};
+
+
+} } } // end of namespace ::sd::slidesorter::view
+
+#endif

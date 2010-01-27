@@ -321,7 +321,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsHighlightCurrentSlide (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return false;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsHighlightCurrentSlide();
+        return mpSlideSorter->GetProperties()->IsHighlightCurrentSlide();
 }
 
 
@@ -333,7 +333,7 @@ void SAL_CALL SlideSorterService::setIsHighlightCurrentSlide (sal_Bool bValue)
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
     {
-        mpSlideSorter->GetController().GetProperties()->SetHighlightCurrentSlide(bValue);
+        mpSlideSorter->GetProperties()->SetHighlightCurrentSlide(bValue);
         controller::SlideSorterController::ModelChangeLock aLock (mpSlideSorter->GetController());
         mpSlideSorter->GetController().HandleModelChange();
     }
@@ -349,7 +349,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowSelection (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return false;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsShowSelection();
+        return mpSlideSorter->GetProperties()->IsShowSelection();
 }
 
 
@@ -360,7 +360,7 @@ void SAL_CALL SlideSorterService::setIsShowSelection (sal_Bool bValue)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetShowSelection(bValue);
+        mpSlideSorter->GetProperties()->SetShowSelection(bValue);
 }
 
 
@@ -373,7 +373,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowFocus (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return false;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsShowFocus();
+        return mpSlideSorter->GetProperties()->IsShowFocus();
 }
 
 
@@ -384,7 +384,7 @@ void SAL_CALL SlideSorterService::setIsShowFocus (sal_Bool bValue)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetShowFocus(bValue);
+        mpSlideSorter->GetProperties()->SetShowFocus(bValue);
 }
 
 
@@ -397,7 +397,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsCenterSelection (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return false;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsCenterSelection();
+        return mpSlideSorter->GetProperties()->IsCenterSelection();
 }
 
 
@@ -408,7 +408,7 @@ void SAL_CALL SlideSorterService::setIsCenterSelection (sal_Bool bValue)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetCenterSelection(bValue);
+        mpSlideSorter->GetProperties()->SetCenterSelection(bValue);
 }
 
 
@@ -421,7 +421,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsSuspendPreviewUpdatesDuringFullScreen
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return true;
     else
-        return mpSlideSorter->GetController().GetProperties()
+        return mpSlideSorter->GetProperties()
             ->IsSuspendPreviewUpdatesDuringFullScreenPresentation();
 }
 
@@ -434,7 +434,7 @@ void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPres
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()
+        mpSlideSorter->GetProperties()
             ->SetSuspendPreviewUpdatesDuringFullScreenPresentation(bValue);
 }
 
@@ -474,7 +474,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return false;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsSmoothSelectionScrolling();
+        return mpSlideSorter->GetProperties()->IsSmoothSelectionScrolling();
 }
 
 
@@ -485,7 +485,7 @@ void SAL_CALL SlideSorterService::setIsSmoothScrolling (sal_Bool bValue)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetSmoothSelectionScrolling(bValue);
+        mpSlideSorter->GetProperties()->SetSmoothSelectionScrolling(bValue);
 }
 
 
@@ -499,7 +499,7 @@ util::Color SAL_CALL SlideSorterService::getBackgroundColor (void)
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetController().GetProperties()->GetBackgroundColor().GetColor());
+            mpSlideSorter->GetProperties()->GetBackgroundColor().GetColor());
 }
 
 
@@ -510,8 +510,7 @@ void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundCol
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetBackgroundColor(
-            Color(aBackgroundColor));
+        mpSlideSorter->GetProperties()->SetBackgroundColor(Color(aBackgroundColor));
 }
 
 
@@ -525,7 +524,7 @@ util::Color SAL_CALL SlideSorterService::getTextColor (void)
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetController().GetProperties()->GetTextColor().GetColor());
+            mpSlideSorter->GetProperties()->GetTextColor().GetColor());
 }
 
 
@@ -536,8 +535,7 @@ void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetTextColor(
-            Color(aTextColor));
+        mpSlideSorter->GetProperties()->SetTextColor(Color(aTextColor));
 }
 
 
@@ -551,7 +549,7 @@ util::Color SAL_CALL SlideSorterService::getSelectionColor (void)
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetController().GetProperties()->GetSelectionColor().GetColor());
+            mpSlideSorter->GetProperties()->GetSelectionColor().GetColor());
 }
 
 
@@ -562,8 +560,7 @@ void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetSelectionColor(
-            Color(aSelectionColor));
+        mpSlideSorter->GetProperties()->SetSelectionColor(Color(aSelectionColor));
 }
 
 
@@ -577,7 +574,7 @@ util::Color SAL_CALL SlideSorterService::getHighlightColor (void)
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetController().GetProperties()->GetHighlightColor().GetColor());
+            mpSlideSorter->GetProperties()->GetHighlightColor().GetColor());
 }
 
 
@@ -588,8 +585,7 @@ void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetHighlightColor(
-            Color(aHighlightColor));
+        mpSlideSorter->GetProperties()->SetHighlightColor(Color(aHighlightColor));
 }
 
 
@@ -601,7 +597,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly (void)
     if (mpSlideSorter.get() == NULL || ! mpSlideSorter->IsValid())
         return true;
     else
-        return mpSlideSorter->GetController().GetProperties()->IsUIReadOnly();
+        return mpSlideSorter->GetProperties()->IsUIReadOnly();
 }
 
 
@@ -612,8 +608,7 @@ void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
-        mpSlideSorter->GetController().GetProperties()->SetUIReadOnly(
-            bIsUIReadOnly);
+        mpSlideSorter->GetProperties()->SetUIReadOnly(bIsUIReadOnly);
 }
 
 

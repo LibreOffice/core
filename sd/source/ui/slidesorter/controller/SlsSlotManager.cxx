@@ -36,13 +36,13 @@
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageSelector.hxx"
 #include "controller/SlsClipboard.hxx"
-#include "controller/SlsSelectionFunction.hxx"
-#include "controller/SlsFocusManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsFocusManager.hxx"
+#include "controller/SlsInsertionIndicatorHandler.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsSelectionManager.hxx"
-#include "SlsHideSlideFunction.hxx"
 #include "SlsCommand.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
@@ -103,6 +103,24 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd { namespace slidesorter { namespace controller {
 
+namespace {
+
+/** The state of a set of slides with respect to being excluded from the
+    slide show.
+*/
+enum SlideExclusionState {UNDEFINED, EXCLUDED, INCLUDED, MIXED};
+
+void ChangeSlideExclusionState (SlideSorter& rSlideSorter, SfxRequest& rRequest);
+
+/** Return for the given set of slides whether they included are
+    excluded from the slide show.
+*/
+SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet);
+
+} // end of anonymous namespace
+
+
+
 SlotManager::SlotManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maCommandQueue()
@@ -139,7 +157,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_HIDE_SLIDE:
         case SID_SHOW_SLIDE:
-            HideSlideFunction::Create(mrSlideSorter, rRequest);
+            ChangeSlideExclusionState(mrSlideSorter, rRequest);
             break;
 
         case SID_PAGES_PER_ROW:
@@ -167,6 +185,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SELECTALL:
             mrSlideSorter.GetController().GetPageSelector().SelectAllPages();
+            mrSlideSorter.GetController().GetSelectionManager()->ResetMakeSelectionVisiblePending();
             rRequest.Done();
             break;
 
@@ -184,7 +203,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PRESENTATION_DLG:
             FuSlideShowDlg::Create (
                 pShell,
-                mrSlideSorter.GetView().GetWindow(),
+                mrSlideSorter.GetContentWindow().get(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -193,7 +212,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_CUSTOMSHOW_DLG:
             FuCustomShowDlg::Create (
                 pShell,
-                mrSlideSorter.GetView().GetWindow(),
+                mrSlideSorter.GetContentWindow().get(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -202,7 +221,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_EXPAND_PAGE:
             FuExpandPage::Create (
                 pShell,
-                mrSlideSorter.GetView().GetWindow(),
+                mrSlideSorter.GetContentWindow().get(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -211,7 +230,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_SUMMARY_PAGE:
             FuSummaryPage::Create (
                 pShell,
-                mrSlideSorter.GetView().GetWindow(),
+                mrSlideSorter.GetContentWindow().get(),
                 &mrSlideSorter.GetView(),
                 pDocument,
                 rRequest);
@@ -518,7 +537,7 @@ void SlotManager::GetCtrlState (SfxItemSet& rSet)
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
     {
-        ULONG nMode = mrSlideSorter.GetView().GetWindow()->GetDrawMode();
+        ULONG nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
         UINT16 nQuality = 0;
 
         switch (nMode)
@@ -671,23 +690,22 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
-        HideSlideFunction::ExclusionState eState (
-            HideSlideFunction::GetExclusionState(aSelectedPages));
+        const SlideExclusionState eState (GetSlideExclusionState(aSelectedPages));
         switch (eState)
         {
-            case HideSlideFunction::MIXED:
+            case MIXED:
                 // Show both entries.
                 break;
 
-            case HideSlideFunction::EXCLUDED:
+            case EXCLUDED:
                 rSet.DisableItem(SID_HIDE_SLIDE);
                 break;
 
-            case HideSlideFunction::INCLUDED:
+            case INCLUDED:
                 rSet.DisableItem(SID_SHOW_SLIDE);
                 break;
 
-            case HideSlideFunction::UNDEFINED:
+            case UNDEFINED:
                 rSet.DisableItem(SID_HIDE_SLIDE);
                 rSet.DisableItem(SID_SHOW_SLIDE);
                 break;
@@ -904,7 +922,7 @@ void SlotManager::RenameSlide (void)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
-                mrSlideSorter.GetActiveWindow(),
+                mrSlideSorter.GetContentWindow().get(),
                 aPageName, aDescr);
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
@@ -1076,11 +1094,11 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
     // No selection.  Is there an insertion indicator?
     else if (mrSlideSorter.GetView().GetOverlay()
-        .GetInsertionIndicatorOverlay().isVisible())
+        .GetInsertionIndicatorOverlay()->IsVisible())
     {
         // Select the page before the insertion indicator.
-        nInsertionIndex = mrSlideSorter.GetView().GetOverlay()
-            .GetInsertionIndicatorOverlay().GetInsertionPageIndex();
+        nInsertionIndex
+            = mrSlideSorter.GetController().GetInsertionIndicatorHandler()->GetInsertionPageIndex();
         nInsertionIndex --;
         rSelector.SelectPage (nInsertionIndex);
     }
@@ -1157,15 +1175,18 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         }
     }
 
-    // When a new page has been inserted then select it and make it the
-    // current page.
+    // When a new page has been inserted then select it, make it the
+    // current page, and focus it.
     mrSlideSorter.GetView().LockRedraw(TRUE);
     if (mrSlideSorter.GetModel().GetPageCount() > nPageCount)
     {
         nInsertionIndex++;
         model::SharedPageDescriptor pDescriptor = mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex);
         if (pDescriptor.get() != NULL)
+        {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+            mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(pDescriptor);
+        }
     }
     rSelector.EnableBroadcasting();
     mrSlideSorter.GetView().LockRedraw(FALSE);
@@ -1229,6 +1250,104 @@ IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
 
     return 1;
 }
+
+
+
+
+//-----------------------------------------------------------------------------
+
+namespace {
+
+void ChangeSlideExclusionState (
+    SlideSorter& rSlideSorter,
+    SfxRequest& rRequest)
+{
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(rSlideSorter.GetModel()));
+
+    SlideExclusionState eState (UNDEFINED);
+
+    switch (rRequest.GetSlot())
+    {
+        case SID_HIDE_SLIDE:
+            eState = EXCLUDED;
+            break;
+
+        case SID_SHOW_SLIDE:
+            eState = INCLUDED;
+            break;
+
+        default:
+            eState = UNDEFINED;
+            break;
+    }
+
+    if (eState != UNDEFINED)
+    {
+        // Set status at the selected pages.
+        aSelectedPages.Rewind ();
+        while (aSelectedPages.HasMoreElements())
+        {
+            model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+            rSlideSorter.GetView().SetState(
+                pDescriptor,
+                model::PageDescriptor::ST_Excluded,
+                eState==EXCLUDED);
+        }
+    }
+
+    SfxBindings& rBindings = rSlideSorter.GetViewShell()->GetViewFrame()->GetBindings();
+    rBindings.Invalidate(SID_PRESENTATION);
+    rBindings.Invalidate(SID_REHEARSE_TIMINGS);
+    rBindings.Invalidate(SID_HIDE_SLIDE);
+    rBindings.Invalidate(SID_SHOW_SLIDE);
+    rSlideSorter.GetModel().GetDocument()->SetChanged();
+}
+
+
+
+
+SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
+{
+    SlideExclusionState eState (UNDEFINED);
+    BOOL bState;
+
+    // Get toggle state of the selected pages.
+    while (rPageSet.HasMoreElements() && eState!=MIXED)
+    {
+        bState = rPageSet.GetNextElement()->GetPage()->IsExcluded();
+        switch (eState)
+        {
+            case UNDEFINED:
+                // Use the first selected page to set the inital value.
+                eState = bState ? EXCLUDED : INCLUDED;
+                break;
+
+            case EXCLUDED:
+                // The pages before where all not part of the show,
+                // this one is.
+                if ( ! bState)
+                    eState = MIXED;
+                break;
+
+            case INCLUDED:
+                // The pages before where all part of the show,
+                // this one is not.
+                if (bState)
+                    eState = MIXED;
+                break;
+
+            case MIXED:
+            default:
+                // No need to change anything.
+                break;
+        }
+    }
+
+    return eState;
+}
+
+} // end of anonymous namespace
 
 } } } // end of namespace ::sd::slidesorter::controller
 

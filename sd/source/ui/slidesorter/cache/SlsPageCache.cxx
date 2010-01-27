@@ -48,10 +48,12 @@ namespace sd { namespace slidesorter { namespace cache {
 
 PageCache::PageCache (
     const Size& rPreviewSize,
+    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
    : mpImplementation(
         new GenericPageCache(
             rPreviewSize,
+            bDoSuperSampling,
             rpCacheContext))
 {
 }
@@ -66,38 +68,39 @@ PageCache::~PageCache (void)
 
 
 
-void PageCache::ChangeSize(const Size& rPreviewSize)
+void PageCache::ChangeSize (
+    const Size& rPreviewSize,
+    const bool bDoSuperSampling)
 {
-    mpImplementation->ChangePreviewSize(rPreviewSize);
+    mpImplementation->ChangePreviewSize(rPreviewSize, bDoSuperSampling);
 }
 
 
 
 
-BitmapEx PageCache::GetPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
+BitmapEx PageCache::GetPreviewBitmap (CacheKey aKey)
 {
-    return mpImplementation->GetPreviewBitmap(aKey, rSize);
+    return mpImplementation->GetPreviewBitmap(aKey);
 }
 
 
 
 
-void PageCache::RequestPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
+void PageCache::RequestPreviewBitmap (CacheKey aKey)
 {
-    return mpImplementation->RequestPreviewBitmap(aKey, rSize);
+    return mpImplementation->RequestPreviewBitmap(aKey);
 }
 
 
 
 
 void PageCache::InvalidatePreviewBitmap (
-    CacheKey aKey)
+    const CacheKey aKey,
+    const bool bRequestPreview)
 {
     mpImplementation->InvalidatePreviewBitmap(aKey);
+    if (bRequestPreview)
+        RequestPreviewBitmap(aKey);
 }
 
 

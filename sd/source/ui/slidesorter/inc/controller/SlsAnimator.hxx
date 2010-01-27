@@ -53,10 +53,19 @@ public:
     Animator (SlideSorter& rSlideSorter);
     ~Animator (void);
 
+    /** When disposed the animator will stop its work immediately and not
+        process any timer events anymore.
+    */
+    void Dispose (void);
+
     /** An animation object is called with values between 0 and 1 as single
         argument to its operator() method.
     */
-    typedef ::boost::function1<void, double> AnimationFunction;
+    typedef ::boost::function1<void, double> AnimationFunctor;
+    typedef ::boost::function0<void> FinishFunctor;
+
+    typedef sal_Int32 AnimationId;
+    static const AnimationId NotAnAnimationId = -1;
 
     /** Schedule a new animation for execution.  The () operator of that
         animation will be called with increasing values between 0 and 1 for
@@ -66,20 +75,34 @@ public:
         @param nDuration
             The duration in milli seconds.
     */
-    void AddAnimation (
-        const AnimationFunction& rAnimation,
-        const sal_Int32 nDuration);
+    AnimationId AddAnimation (
+        const AnimationFunctor& rAnimation,
+        const sal_Int32 nDuration,
+        const FinishFunctor& rFinishFunctor = FinishFunctor());
+
+    AnimationId AddInfiniteAnimation (
+        const AnimationFunctor& rAnimation,
+        const double nDelta);
+
+    /** Abort and remove an animation.  In order to reduce the bookkeeping
+        on the caller side, it is OK to call this method with an animation
+        function that is not currently being animated.  Such a call is
+        silently ignored.
+    */
+    void RemoveAnimation (const AnimationId nAnimationId);
 
 private:
     SlideSorter& mrSlideSorter;
     Timer maTimer;
-
+    bool mbIsDisposed;
     class Animation;
     typedef ::std::vector<boost::shared_ptr<Animation> > AnimationList;
     AnimationList maAnimations;
 
     class DrawLock;
     ::boost::scoped_ptr<DrawLock> mpDrawLock;
+
+    AnimationId mnNextAnimationId;
 
     DECL_LINK(TimeoutHandler, Timer*);
 
@@ -88,12 +111,13 @@ private:
             When one or more animation has finished then <TRUE/> is
             returned.  Call CleanUpAnimationList() in this case.
     */
-    bool ServeAnimations (void);
+    bool ProcessAnimations (void);
 
     /** Remove animations that have expired.
     */
     void CleanUpAnimationList (void);
 };
+
 
 } } } // end of namespace ::sd::slidesorter::controller
 

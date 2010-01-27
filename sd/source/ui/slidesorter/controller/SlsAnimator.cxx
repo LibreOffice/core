@@ -33,6 +33,7 @@
 #include "controller/SlsAnimator.hxx"
 #include "view/SlideSorterView.hxx"
 #include "View.hxx"
+#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -46,14 +47,23 @@ class Animator::Animation
 {
 public:
     Animation (
-        const Animator::AnimationFunction& rAnimation,
-        const double nDelta);
+        const Animator::AnimationFunctor& rAnimation,
+        const double nDelta,
+        const double nEnd,
+        const Animator::AnimationId nAnimationId,
+        const Animator::FinishFunctor& rFinishFunctor);
     ~Animation (void);
     bool Run (void);
+    void Expire (void);
     bool IsExpired (void);
-    Animator::AnimationFunction maAnimation;
+
+    Animator::AnimationFunctor maAnimation;
+    Animator::FinishFunctor maFinishFunctor;
+    const Animator::AnimationId mnAnimationId;
     double mnValue;
-    double mnDelta;
+    const double mnEnd;
+    const double mnDelta;
+    bool mbIsExpired;
 };
 
 
@@ -62,11 +72,11 @@ public:
 class Animator::DrawLock
 {
 public:
-    DrawLock (View& rView);
+    DrawLock (view::SlideSorterView& rView);
     ~DrawLock (void);
 
 private:
-    View& mrView;
+    view::SlideSorterView& mrView;
 };
 
 
@@ -75,8 +85,10 @@ private:
 Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maTimer(),
+      mbIsDisposed(false),
       maAnimations(),
-      mpDrawLock()
+      mpDrawLock(),
+      mnNextAnimationId(0)
 {
     maTimer.SetTimeout(gnResolution);
     maTimer.SetTimeoutHdl(LINK(this,Animator,TimeoutHandler));
@@ -87,6 +99,19 @@ Animator::Animator (SlideSorter& rSlideSorter)
 
 Animator::~Animator (void)
 {
+    if ( ! mbIsDisposed)
+    {
+        OSL_ASSERT(mbIsDisposed);
+        Dispose();
+    }
+}
+
+
+
+
+void Animator::Dispose (void)
+{
+    mbIsDisposed = true;
     maTimer.Stop();
     mpDrawLock.reset();
 }
@@ -94,25 +119,82 @@ Animator::~Animator (void)
 
 
 
-void Animator::AddAnimation (
-    const AnimationFunction& rAnimation,
-    const sal_Int32 nDuration)
+Animator::AnimationId Animator::AddAnimation (
+    const AnimationFunctor& rAnimation,
+    const sal_Int32 nDuration,
+    const FinishFunctor& rFinishFunctor)
 {
+    OSL_ASSERT( ! mbIsDisposed);
+
     const double nDelta = double(gnResolution) / double(nDuration);
-    maAnimations.push_back(boost::shared_ptr<Animation>(new Animation(rAnimation, nDelta)));
+    boost::shared_ptr<Animation> pAnimation (
+        new Animation(rAnimation, nDelta, 1.0,  ++mnNextAnimationId, rFinishFunctor));
+    maAnimations.push_back(pAnimation);
 
     // Prevent redraws except for the ones in TimeoutHandler.
     // While the Animator is active it will schedule repaints regularly.
     // Repaints in between would only lead to visual artifacts.
     mpDrawLock.reset(new DrawLock(mrSlideSorter.GetView()));
     maTimer.Start();
+
+    return pAnimation->mnAnimationId;
 }
 
 
 
 
-bool Animator::ServeAnimations (void)
+Animator::AnimationId Animator::AddInfiniteAnimation (
+    const AnimationFunctor& rAnimation,
+    const double nDelta)
 {
+    OSL_ASSERT( ! mbIsDisposed);
+
+    boost::shared_ptr<Animation> pAnimation (
+        new Animation(rAnimation, nDelta, -1.0, mnNextAnimationId++, FinishFunctor()));
+    maAnimations.push_back(pAnimation);
+
+    // Prevent redraws except for the ones in TimeoutHandler.
+    // While the Animator is active it will schedule repaints regularly.
+    // Repaints in between would only lead to visual artifacts.
+    mpDrawLock.reset(new DrawLock(mrSlideSorter.GetView()));
+    maTimer.Start();
+
+    return pAnimation->mnAnimationId;
+}
+
+
+
+
+void Animator::RemoveAnimation (const Animator::AnimationId nId)
+{
+    OSL_ASSERT( ! mbIsDisposed);
+
+    const AnimationList::iterator iAnimation (::std::find_if(
+        maAnimations.begin(),
+        maAnimations.end(),
+        ::boost::bind(
+            ::std::equal_to<Animator::AnimationId>(),
+            nId,
+            ::boost::bind(&Animation::mnAnimationId, _1))));
+    if (iAnimation != maAnimations.end())
+    {
+        OSL_ASSERT((*iAnimation)->mnAnimationId == nId);
+        (*iAnimation)->Expire();
+        maAnimations.erase(iAnimation);
+    }
+
+    // Reset the animation id when we can.
+    if (maAnimations.empty())
+        mnNextAnimationId = 0;
+}
+
+
+
+
+bool Animator::ProcessAnimations (void)
+{
+    OSL_ASSERT( ! mbIsDisposed);
+
     bool bExpired (false);
 
     AnimationList aCopy (maAnimations);
@@ -130,6 +212,8 @@ bool Animator::ServeAnimations (void)
 
 void Animator::CleanUpAnimationList (void)
 {
+    OSL_ASSERT( ! mbIsDisposed);
+
     AnimationList aActiveAnimations;
 
     AnimationList::const_iterator iAnimation;
@@ -147,7 +231,10 @@ void Animator::CleanUpAnimationList (void)
 
 IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 {
-    if (ServeAnimations())
+    if (mbIsDisposed)
+        return 0;
+
+    if (ProcessAnimations())
         CleanUpAnimationList();
 
     // Unlock the draw lock.  This should lead to a repaint.
@@ -168,11 +255,18 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 //===== Animator::Animation ===================================================
 
 Animator::Animation::Animation (
-    const Animator::AnimationFunction& rAnimation,
-    const double nDelta)
+    const Animator::AnimationFunctor& rAnimation,
+    const double nDelta,
+    const double nEnd,
+    const Animator::AnimationId nId,
+    const Animator::FinishFunctor& rFinishFunctor)
     : maAnimation(rAnimation),
+      maFinishFunctor(rFinishFunctor),
       mnValue(0),
-      mnDelta(nDelta)
+      mnEnd(nEnd),
+      mnDelta(nDelta),
+      mnAnimationId(nId),
+      mbIsExpired(false)
 {
 
     maAnimation(mnValue);
@@ -192,16 +286,35 @@ Animator::Animation::~Animation (void)
 
 bool Animator::Animation::Run (void)
 {
-    if (mnValue < 1.0)
+    if ( ! mbIsExpired)
     {
-        maAnimation(mnValue);
-        mnValue += mnDelta;
-        return false;
+        if (mnEnd>=0 && mnValue>=mnEnd)
+        {
+            maAnimation(mnEnd);
+            Expire();
+            return true;
+        }
+        else
+        {
+            maAnimation(mnValue);
+            mnValue += mnDelta;
+            return false;
+        }
     }
     else
-    {
-        maAnimation(1.0);
         return true;
+}
+
+
+
+
+void Animator::Animation::Expire (void)
+{
+    if ( ! mbIsExpired)
+    {
+        mbIsExpired = true;
+        if (maFinishFunctor)
+            maFinishFunctor();
     }
 }
 
@@ -210,7 +323,7 @@ bool Animator::Animation::Run (void)
 
 bool Animator::Animation::IsExpired (void)
 {
-    return mnValue >= 1.0;
+    return mbIsExpired;
 }
 
 
@@ -218,10 +331,10 @@ bool Animator::Animation::IsExpired (void)
 
 //===== Animator::DrawLock ====================================================
 
-Animator::DrawLock::DrawLock (View& rView)
+Animator::DrawLock::DrawLock (view::SlideSorterView& rView)
     : mrView(rView)
 {
-    mrView.LockRedraw(TRUE);
+    mrView.LockRedraw(true);
 }
 
 
@@ -229,7 +342,7 @@ Animator::DrawLock::DrawLock (View& rView)
 
 Animator::DrawLock::~DrawLock (void)
 {
-    mrView.LockRedraw(FALSE);
+    mrView.LockRedraw(false);
 }
 
 

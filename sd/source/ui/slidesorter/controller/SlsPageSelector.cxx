@@ -36,6 +36,7 @@
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -47,6 +48,8 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <boost/bind.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -54,7 +57,6 @@ using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
 namespace sd { namespace slidesorter { namespace controller {
-
 
 PageSelector::PageSelector (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
@@ -112,7 +114,7 @@ void PageSelector::UpdateAllPages (void)
             bSelectionHasChanged = true;
         }
 
-        if (pDescriptor->IsSelected())
+        if (pDescriptor->HasState(PageDescriptor::ST_Selected))
             mnSelectedPageCount++;
     }
 
@@ -151,7 +153,8 @@ void PageSelector::SelectPage (const SdPage* pPage)
 
 void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get()!=NULL && rpDescriptor->Select())
+    if (rpDescriptor.get()!=NULL
+        && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
     {
         mnSelectedPageCount ++;
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
@@ -193,7 +196,8 @@ void PageSelector::DeselectPage (const SdPage* pPage)
 
 void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get()!=NULL && rpDescriptor->Deselect())
+    if (rpDescriptor.get()!=NULL
+        && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
     {
         mnSelectedPageCount --;
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
@@ -213,7 +217,7 @@ bool PageSelector::IsPageSelected (int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get() != NULL)
-        return pDescriptor->IsSelected();
+        return pDescriptor->HasState(PageDescriptor::ST_Selected);
     else
         return false;
 }
@@ -315,7 +319,7 @@ void PageSelector::DisableBroadcasting (void)
     for (int nIndex=0; nIndex<nPageCount; nIndex++)
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
-        if (pDescriptor.get()!=NULL && pDescriptor->IsSelected())
+        if (pDescriptor.get()!=NULL && pDescriptor->HasState(PageDescriptor::ST_Selected))
             pSelection->push_back(pDescriptor->GetPage());
     }
 

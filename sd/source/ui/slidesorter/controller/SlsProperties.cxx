@@ -41,7 +41,7 @@ Properties::Properties (void)
       mbIsShowSelection(true),
       mbIsShowFocus(true),
       mbIsCenterSelection(false),
-      mbIsSmoothSelectionScrolling(false),
+      mbIsSmoothSelectionScrolling(true),//false),
       mbIsSuspendPreviewUpdatesDuringFullScreenPresentation(true),
       maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),

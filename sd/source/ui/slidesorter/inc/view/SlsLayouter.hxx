@@ -31,6 +31,8 @@
 #ifndef SD_SLIDESORTER_VIEW_LAYOUTER_HXX
 #define SD_SLIDESORTER_VIEW_LAYOUTER_HXX
 
+#include "SlideSorter.hxx"
+#include "SlsPageObjectLayouter.hxx"
 #include <sal/types.h>
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
@@ -69,15 +71,19 @@ namespace sd { namespace slidesorter { namespace view {
 class Layouter
 {
 public:
-    Layouter (void);
+    Layouter (const ::boost::shared_ptr< ::Window>& rpWindow);
     ~Layouter (void);
+
+    ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
 
     /** Set the minimal, the maximal, and the desired width of the page
         objects.  The three parameters have to fullfill the constraint
         nMinimalWidth <= nPreferredWidth <= nMaximalWidth or the call is
         ignored.
     */
-    void SetObjectWidth (sal_Int32 nMinimalWidth, sal_Int32 nMaximalWidth,
+    void SetObjectWidth (
+        sal_Int32 nMinimalWidth,
+        sal_Int32 nMaximalWidth,
         sal_Int32 nPreferredWidth);
 
     /** Set the horizontal and vertical borders in pixel coordinates between
@@ -98,23 +104,6 @@ public:
             shall not be modified.  A value of 10 is the default.
     */
     void SetBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
-        sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
-
-    /** Set the borders arround every page object.
-        @param nLeftBorder
-            A negative value indicates that the left border shall not be
-            modified.  A value of 0 is the default.
-        @param nRightBorder
-            A negative value indicates that the left border shall not be
-            modified.  A value of 0 is the default.
-        @param nTopBorder
-            A negative value indicates that the left border shall not be
-            modified.  A value of 0 is the default.
-        @param nBottomBorder
-            A negative value indicates that the left border shall not be
-            modified.  A value of 0 is the default.
-    */
-    void SetPageBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
         sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
 
     /** Set the horizontal and vertical gaps between adjacent page objects.
@@ -140,35 +129,43 @@ public:
         dimension or the call is ignored.
         @param rWindowSize
             The size of the window in pixels that the slide sorter is
-            displayed in.
-        @param rPageObjectSize
+            displayed in.  This can differ from the size of mpWindow during
+            detection of whether or not the scroll bars should be visible.
+        @param rPreviewModelSize
             Size of each page in model coordinates.
-        @param pDevice
-            The map mode of this output device is adapted to the new layout
-            of the page objects.
+        @param rpWindow
+            The map mode of this window is adapted to the new layout of the
+            page objects.
         @return
             The return value indicates whether the Get... methods can be
             used to obtain valid values (<TRUE/>).
     */
     bool RearrangeHorizontal (
         const Size& rWindowSize,
-        const Size& rPageObjectSize,
-        OutputDevice* pDevice,
+        const Size& rPreviewModelSize,
         const sal_uInt32 nPageCount);
     bool RearrangeVertical (
         const Size& rWindowSize,
-        const Size& rPageObjectSize,
-        OutputDevice* pDevice);
+        const Size& rPreviewModelSize,
+        const sal_uInt32 nPageCount);
 
     /** Change the zoom factor.  This does not change the general layout
         (number of columns).
     */
-    void SetZoom (double nZoomFactor, OutputDevice* pDevice);
-    void SetZoom (Fraction nZoomFactor, OutputDevice* pDevice);
+    void SetZoom (double nZoomFactor);
+    void SetZoom (Fraction nZoomFactor);
 
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;
+
+    sal_Int32 GetRowCount (void) const;
+
+    sal_Int32 GetRow (const sal_Int32 nIndex) const;
+
+    sal_Int32 GetColumn (const sal_Int32 nIndex) const;
+
+    sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 
     /** Returns whether the column count is fixed (<TRUE/>) or variable
         (<FALSE/>).  It is fixed if SetColumnCount() was called with the
@@ -183,17 +180,19 @@ public:
 
     Size GetPageObjectSize (void) const;
 
-    /** Return the bounding box in model coordinates of the nIndex-th page
+    /** Return the bounding box in window coordinates of the nIndex-th page
         object.
     */
-    Rectangle GetPageObjectBox (sal_Int32 nIndex) const;
+    Rectangle GetPageObjectBox (
+        const sal_Int32 nIndex,
+        const bool bIncludeBorderAndGap = false) const;
 
     /** Return the bounding box in model coordinates of the page that
         contains the given amount of page objects.
     */
-    Rectangle GetPageBox (sal_Int32 nObjectCount) const;
+    Rectangle GetPageBox (const sal_Int32 nObjectCount = -1) const;
 
-    /** Return the rectangle that bounds the insertion marker that is
+    /** Return the location of the center of the insertion marker that is
         specified by the parameters.
         @param nIndex
             Index of the page object from which the position of the marker
@@ -210,16 +209,15 @@ public:
             <FALSE/> is given then the marker will be positioned below or to
             the right of the page object.
     */
-    Rectangle GetInsertionMarkerBox (
-        sal_Int32 nIndex,
-        bool bVertical,
-        bool bLeftOrTop) const;
+    Point GetInsertionMarkerLocation (
+        const sal_Int32 nIndex,
+        const bool bVertical,
+        const bool bLeftOrTop) const;
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
     */
-    sal_Int32 GetIndexOfFirstVisiblePageObject (
-        const Rectangle& rVisibleArea) const;
+    sal_Int32 GetIndexOfFirstVisiblePageObject (const Rectangle& rVisibleArea) const;
 
     /** Return the index of the last fully or partially visible page
         object.  This takes into account only the vertical dimension.
@@ -227,8 +225,7 @@ public:
             The returned index may be larger than the number of existing
             page objects.
     */
-    sal_Int32 GetIndexOfLastVisiblePageObject (
-        const Rectangle& rVisibleArea) const;
+    sal_Int32 GetIndexOfLastVisiblePageObject (const Rectangle& rVisibleArea) const;
 
     /** Return the index of the page object that is rendered at the given
         point.
@@ -247,7 +244,7 @@ public:
     */
     sal_Int32 GetIndexAtPoint (
         const Point& rModelPosition,
-        bool bIncludePageBorders = false) const;
+        const bool bIncludePageBorders = false) const;
 
     /** Return the page index of where to do an insert operation when the
         user would release the the mouse button at the given position after
@@ -275,58 +272,29 @@ public:
         const Point& rModelPosition,
         bool bAllowVerticalPosition) const;
 
-    typedef ::std::pair<double,double> DoublePoint;
-    /** Transform a point given in model coordinates in to layouter
-        coordinates.  Layouter coordinates are floating point numbers where
-        the integer part denotes a row or a column and the part after the
-        decimal point is a relative position in that row or column.
-    */
-    DoublePoint ConvertModelToLayouterCoordinates (
-        const Point& rModelPoint) const;
-
-    /** Transform a point given in layouter coordinates to model
-        coordinates.  See ConvertModelToLayouterCoordinates for a
-        description of layouter coordinates.
-    */
-    Point ConvertLayouterToModelCoordinates (
-        const DoublePoint&rLayouterPoint) const;
-
-    typedef ::std::vector<Rectangle> BackgroundRectangleList;
-    const BackgroundRectangleList& GetBackgroundRectangleList (void) const;
-
 private:
-    class ScreenAndModelValue {public:
-        sal_Int32 mnScreen,mnModel;
-        explicit ScreenAndModelValue (sal_Int32 nScreen, sal_Int32 nModel = 0)
-            : mnScreen(nScreen),mnModel(nModel) {}
-    };
-    ScreenAndModelValue mnRequestedLeftBorder;
-    ScreenAndModelValue mnRequestedRightBorder;
-    ScreenAndModelValue mnRequestedTopBorder;
-    ScreenAndModelValue mnRequestedBottomBorder;
-    ScreenAndModelValue mnLeftBorder;
-    ScreenAndModelValue mnRightBorder;
-    ScreenAndModelValue mnTopBorder;
-    ScreenAndModelValue mnBottomBorder;
-    ScreenAndModelValue mnLeftPageBorder;
-    ScreenAndModelValue mnRightPageBorder;
-    ScreenAndModelValue mnTopPageBorder;
-    ScreenAndModelValue mnBottomPageBorder;
-    ScreenAndModelValue mnVerticalGap;
-    ScreenAndModelValue mnHorizontalGap;
-    ScreenAndModelValue mnInsertionMarkerThickness;
-    ScreenAndModelValue mnTotalVerticalGap;
-    ScreenAndModelValue mnTotalHorizontalGap;
+    ::boost::shared_ptr< ::Window> mpWindow;
+    sal_Int32 mnRequestedLeftBorder;
+    sal_Int32 mnRequestedRightBorder;
+    sal_Int32 mnRequestedTopBorder;
+    sal_Int32 mnRequestedBottomBorder;
+    sal_Int32 mnLeftBorder;
+    sal_Int32 mnRightBorder;
+    sal_Int32 mnTopBorder;
+    sal_Int32 mnBottomBorder;
+    sal_Int32 mnVerticalGap;
+    sal_Int32 mnHorizontalGap;
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnPreferredWidth;
     sal_Int32 mnMaximalWidth;
     sal_Int32 mnMinimalColumnCount;
     sal_Int32 mnMaximalColumnCount;
+    sal_Int32 mnPageCount;
     sal_Int32 mnColumnCount;
-    Size maPageObjectModelSize;
-    Size maPageObjectPixelSize;
+    sal_Int32 mnRowCount;
+    Size maPageObjectSize;
 
-    BackgroundRectangleList maBackgroundRectangleList;
+    ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
 
     enum GapMembership { GM_NONE, GM_PREVIOUS, GM_BOTH, GM_NEXT,
                          GM_PAGE_BORDER};
@@ -384,9 +352,6 @@ private:
         @param nIndex
             The row index of the upper row or the column index of the left
             column.
-        @param nLeftOrTopPageBorder
-            Width in model coordinates of the border the the right of or
-            below a page.
         @param nGap
              Width or height of the gap in model coordiantes between the
              page borders.
@@ -399,7 +364,6 @@ private:
         sal_Int32 nDistanceIntoGap,
         GapMembership eGapMembership,
         sal_Int32 nIndex,
-        sal_Int32 nLeftOrTopPageBorder,
         sal_Int32 nGap) const;
 };
 

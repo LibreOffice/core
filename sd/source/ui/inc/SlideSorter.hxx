@@ -63,11 +63,11 @@ namespace sd { namespace slidesorter { namespace controller {
 class Listener;
 class SlideSorterController;
 class SlotManager;
+class Properties;
 } } }
 
 
 namespace sd { namespace slidesorter {
-
 
 /** Show previews for all the slides in a document and allow the user to
     insert or delete slides and modify the order of the slides.
@@ -146,11 +146,6 @@ public:
     */
     ::boost::shared_ptr<sd::Window> GetContentWindow (void) const;
 
-    /** Return the active window as it is returned by a view shell.
-        Typically the content window.
-    */
-    ::sd::Window* GetActiveWindow (void) const;
-
     model::SlideSorterModel& GetModel (void) const;
 
     view::SlideSorterView& GetView (void) const;
@@ -192,6 +187,11 @@ public:
         of functions even when there is no SlideSorterViewShell.
     */
     void SetCurrentFunction (const FunctionReference& rpFunction);
+
+    /** Return a collection of properties that are used througout the slide
+        sorter.
+    */
+    ::boost::shared_ptr<controller::Properties> GetProperties (void) const;
 
 protected:
     /** This virtual method makes it possible to create a specialization of
@@ -238,6 +238,10 @@ private:
     */
     bool mbLayoutPending;
 
+    /** Some slide sorter wide properties that are used in different
+        classes.
+    */
+    ::boost::shared_ptr<controller::Properties> mpProperties;
 
     SlideSorter (
         ViewShell& rViewShell,
