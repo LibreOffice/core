@@ -905,6 +905,7 @@ function getSofficeNative() as string
         sVendor(iVendorEntries) = "OpenOffice.org"  : inc (iVendorEntries)
         
         iOfficeEntries = 1
+        sOffice(iOfficeEntries) = "Oracle Open Office"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarOffice"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarSuite"     : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "OpenOffice.org": inc (iOfficeEntries)
