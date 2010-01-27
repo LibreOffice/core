@@ -655,6 +655,8 @@ void OAppDetailPageHelper::paste()
 // -----------------------------------------------------------------------------
 bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
 {
+    if ( !_pEntry )
+        return false;
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
     if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
         ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
