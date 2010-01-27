@@ -548,14 +548,9 @@ namespace dbaccess
 DBG_NAME(ODocumentDefinition)
 
 //--------------------------------------------------------------------------
-ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxContainer
-                                         , const Reference< XMultiServiceFactory >& _xORB
-                                         ,const TContentPtr& _pImpl
-                                         , sal_Bool _bForm
-                                         , const Sequence< sal_Int8 >& _aClassID
-                                         ,const Reference<XConnection>& _xConnection
-                                         )
-                                         :OContentHelper(_xORB,_rxContainer,_pImpl)
+ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XMultiServiceFactory >& _xORB,
+                                          const TContentPtr& _pImpl, sal_Bool _bForm )
+    :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_pInterceptor(NULL)
     ,m_bForm(_bForm)
@@ -566,9 +561,19 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
 {
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
-    if ( _aClassID.getLength() )
-        loadEmbeddedObject( _xConnection, _aClassID, Sequence< PropertyValue >(), false, false );
 }
+
+//--------------------------------------------------------------------------
+void ODocumentDefinition::initialLoad( const Sequence< sal_Int8 >& i_rClassID, const Sequence< PropertyValue >& i_rCreationArgs,
+                                       const Reference< XConnection >& i_rConnection )
+{
+    OSL_ENSURE( i_rClassID.getLength(), "ODocumentDefinition::initialLoad: illegal class ID!" );
+    if ( !i_rClassID.getLength() )
+        return;
+
+    loadEmbeddedObject( i_rConnection, i_rClassID, i_rCreationArgs, false, false );
+}
+
 //--------------------------------------------------------------------------
 ODocumentDefinition::~ODocumentDefinition()
 {

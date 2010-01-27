@@ -113,13 +113,17 @@ protected:
 public:
 
     ODocumentDefinition(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-            ,const TContentPtr& _pImpl
-            ,sal_Bool _bForm
-            ,const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+            const TContentPtr& _pImpl,
+            sal_Bool _bForm
         );
+
+    void    initialLoad(
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& i_rClassID,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& i_rConnection
+            );
 
 // com::sun::star::lang::XTypeProvider
     DECLARE_TYPEPROVIDER( );

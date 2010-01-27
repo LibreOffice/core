@@ -205,6 +205,20 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const ::rtl
 {
     return createInstanceWithArguments( aServiceSpecifier, Sequence< Any >() );
 }
+
+namespace
+{
+    template< class TYPE >
+    void lcl_extractAndRemove( ::comphelper::NamedValueCollection& io_rArguments, const ::rtl::OUString& i_rName, TYPE& o_rValue )
+    {
+        if ( io_rArguments.has( i_rName ) )
+        {
+            io_rArguments.get_ensureType( i_rName, o_rValue );
+            io_rArguments.remove( i_rName );
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException)
 {
@@ -213,65 +227,46 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     if ( ServiceSpecifier == SERVICE_SDB_DOCUMENTDEFINITION )
     {
         MutexGuard aGuard(m_aMutex);
-        ::rtl::OUString sName,sPersistentName,sURL;
+
+        // extrat known arguments
+        ::rtl::OUString sName, sPersistentName, sURL;
         Reference< XCommandProcessor > xCopyFrom;
-        Reference<XConnection> xConnection;
-        Sequence<sal_Int8> aClassID;
-        sal_Bool bAsTemplate = sal_False;
+        Reference< XConnection > xConnection;
+        sal_Bool bAsTemplate;
+        Sequence< sal_Int8 > aClassID;
 
-        const Any* pBegin = _aArguments.getConstArray();
-        const Any* pEnd = pBegin + _aArguments.getLength();
-        PropertyValue aValue;
-        for(;pBegin != pEnd;++pBegin)
+        ::comphelper::NamedValueCollection aArgs( _aArguments );
+        lcl_extractAndRemove( aArgs, PROPERTY_NAME, sName );
+        lcl_extractAndRemove( aArgs, PROPERTY_PERSISTENT_NAME, sPersistentName );
+        lcl_extractAndRemove( aArgs, PROPERTY_URL, sURL );
+        lcl_extractAndRemove( aArgs, PROPERTY_EMBEDDEDOBJECT, xCopyFrom );
+        lcl_extractAndRemove( aArgs, PROPERTY_ACTIVE_CONNECTION, xConnection );
+        lcl_extractAndRemove( aArgs, PROPERTY_AS_TEMPLATE, bAsTemplate );
+
+        // ClassID has two allowed types, so a special treatment here
+        Any aClassIDArg = aArgs.get( "ClassID" );
+        if ( aClassIDArg.hasValue() )
         {
-            *pBegin >>= aValue;
-            if ( aValue.Name.equalsAscii(PROPERTY_NAME) )
+            if ( !( aClassIDArg >>= aClassID ) )
             {
-                aValue.Value >>= sName;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_PERSISTENT_NAME) )
-            {
-                aValue.Value >>= sPersistentName;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_EMBEDDEDOBJECT) )
-            {
-                xCopyFrom.set(aValue.Value,UNO_QUERY);
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_URL) )
-            {
-                aValue.Value >>= sURL;
-            }
-            else if ( aValue.Name.equalsAscii(PROPERTY_ACTIVE_CONNECTION) )
-            {
-                xConnection.set(aValue.Value,UNO_QUERY);
-            }
-            else if ( aValue.Name.equalsAscii("ClassID") )
-            {
-                if (! ( aValue.Value >>= aClassID ) )
-                {
-                    // Extended for usage also with a string
-                    ::rtl::OUString suValue;
-                    aValue.Value >>= suValue;
-                    aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( suValue );
+                // Extended for usage also with a string
+                ::rtl::OUString sClassIDString;
+                if ( !( aClassIDArg >>= sClassIDString ) )
+                    throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
 
-                }
-                rtl::OUString suClassID = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation(aClassID);
-                volatile int dummy = 0;
-                (void)dummy;
-                (void)suClassID;
+                aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( sClassIDString );
             }
-            else if ( aValue.Name.equalsAscii(PROPERTY_AS_TEMPLATE) )
-            {
-                aValue.Value >>= bAsTemplate;
-            }
-            else
-            {
-                // DBG_ASSERT("unknown property exception");
-            }
+
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OUString sClassIDString = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation( aClassID );
+            (void)sClassIDString;
+#endif
+            aArgs.remove( "ClassID" );
         }
+        // Everything which now is still present in the arguments is passed to the embedded object
+        const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
 
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-
         sal_Bool bNew = ( 0 == sPersistentName.getLength() );
         if ( bNew )
         {
@@ -317,7 +312,16 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
 
-        xContent = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer, aClassID, xConnection );
+        ::rtl::Reference< ODocumentDefinition > pDocDef = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer );
+        if ( aClassID.getLength() )
+        {
+            pDocDef->initialLoad( aClassID, aCreationArgs, xConnection );
+        }
+        else
+        {
+            OSL_ENSURE( aCreationArgs.getLength() == 0, "ODocumentContainer::createInstance: additional creation args are lost, if you do not provide a class ID." );
+        }
+        xContent = pDocDef.get();
 
         if ( sURL.getLength() )
         {
