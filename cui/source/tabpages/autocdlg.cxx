@@ -494,7 +494,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
 
     //typ. Anfuehrungszeichen einsetzen
     SvtSysLocale aSysLcl;
-    const LocaleDataWrapper& rLcl = aSysLcl.GetLocaleData();
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
     aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
