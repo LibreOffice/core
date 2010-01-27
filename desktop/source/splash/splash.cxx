@@ -446,8 +446,14 @@ bool SplashScreen::findBitmap(rtl::OUString const & path) {
             haveBitmap = findAppBitmap(path);
     }
     if ( !haveBitmap )
+    {
         haveBitmap = loadBitmap(
             path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.png")));
+        if ( !haveBitmap )
+            haveBitmap = loadBitmap(
+                path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.bmp")));
+    }
+
     return haveBitmap;
 }
 
@@ -477,10 +483,17 @@ bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
     aStrBuf.append( OUString::valueOf( nWidth ));
     aStrBuf.appendAscii( "x" );
     aStrBuf.append( OUString::valueOf( nHeight ));
-    aStrBuf.appendAscii( ".png" );
-    OUString aBmpFileName = aStrBuf.makeStringAndClear();
+
+    OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
+    OUString aBmpFileName       = aRootIntroFileName + OUString::createFromAscii(".png");
 
     bool haveBitmap = loadBitmap( path, aBmpFileName );
+    if ( !haveBitmap )
+    {
+        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
+        haveBitmap   = loadBitmap( path, aBmpFileName );
+    }
+
     if ( !haveBitmap )
     {
         aStrBuf.appendAscii( "intro_" );
@@ -488,10 +501,16 @@ bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
         aStrBuf.append( OUString::valueOf( nWidth ));
         aStrBuf.appendAscii( "x" );
         aStrBuf.append( OUString::valueOf( nHeight ));
-        aStrBuf.appendAscii( ".png" );
-        aBmpFileName = aStrBuf.makeStringAndClear();
+
+        aRootIntroFileName = aStrBuf.makeStringAndClear();
+        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".png");
 
         haveBitmap = loadBitmap( path, aBmpFileName );
+        if ( !haveBitmap )
+        {
+            aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
+            haveBitmap   = loadBitmap( path, aBmpFileName );
+        }
     }
     return haveBitmap;
 }
@@ -506,9 +525,16 @@ bool SplashScreen::findAppBitmap(rtl::OUString const & path)
         aStrBuf.appendAscii( "intro_" );
         aStrBuf.appendAscii( "_" );
         aStrBuf.append( _sAppName );
-        aStrBuf.appendAscii( ".png" );
-        OUString aBmpFileName = aStrBuf.makeStringAndClear();
+
+        OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
+
+        OUString aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".png" );
         haveBitmap = loadBitmap( path, aBmpFileName );
+        if ( !haveBitmap )
+        {
+            aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".bmp" );
+            haveBitmap = loadBitmap( path, aBmpFileName );
+        }
     }
     return haveBitmap;
 }

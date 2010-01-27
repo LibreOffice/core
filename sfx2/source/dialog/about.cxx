@@ -161,6 +161,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
             rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
     }
 
     if ( !bLoaded )
@@ -168,6 +172,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         bLoaded = impl_loadBitmap(
             rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
             rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
     }
 
     // Transparenter Font
