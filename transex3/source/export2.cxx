@@ -354,17 +354,18 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
     const int BUFFERSIZE    = 8192;
     char buf[ BUFFERSIZE ];
 
-    FILE*  IN_FILE = fopen( source.GetBuffer() , "r" );
-    FILE* OUT_FILE = fopen( dest.GetBuffer() , "w" );
-
+    FILE* IN_FILE = fopen( source.GetBuffer() , "r" );
     if( IN_FILE == NULL )
     {
         cerr << "Export::CopyFile WARNING: Could not open " << source.GetBuffer() << "\n";
         return false;
     }
+
+    FILE* OUT_FILE = fopen( dest.GetBuffer() , "w" );
     if( OUT_FILE == NULL )
     {
         cerr << "Export::CopyFile WARNING: Could not open/create " << dest.GetBuffer() << " for writing\n";
+        fclose( IN_FILE );
         return false;
     }
 
