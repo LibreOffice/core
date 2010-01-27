@@ -75,6 +75,10 @@ namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
 
+namespace comphelper {
+    class NamedValueCollection;
+}
+
 #define NUM_SUPPORTED_STATES 5
 // #define NUM_SUPPORTED_VERBS 5
 
@@ -183,8 +187,8 @@ private:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
                 const ::rtl::OUString& aNewName );
 
-    ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
-    ::rtl::OUString GetPresetFilterName() { return m_aPresetFilterName; }
+    ::rtl::OUString GetDocumentServiceName() const { return m_aDocServiceName; }
+    ::rtl::OUString GetPresetFilterName() const { return m_aPresetFilterName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,
@@ -201,7 +205,7 @@ private:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
-    ::rtl::OUString GetFilterName( sal_Int32 nVersion );
+    ::rtl::OUString GetFilterName( sal_Int32 nVersion ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadLink_Impl();
@@ -218,12 +222,21 @@ private:
             const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& xDoc,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
+    void FillDefaultLoadArgs_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rxStorage,
+                  ::comphelper::NamedValueCollection& o_rLoadArgs
+        ) const;
+
+    void EmbedAndReparentDoc_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& i_rxDocument
+        ) const;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateTempDocFromLink_Impl();
 
-    ::rtl::OUString GetBaseURL_Impl();
+    ::rtl::OUString GetBaseURL_Impl() const;
     ::rtl::OUString GetBaseURLFrom_Impl(
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs );
