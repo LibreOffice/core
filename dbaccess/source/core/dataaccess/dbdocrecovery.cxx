@@ -672,8 +672,16 @@ namespace dbaccess
 
                 try
                 {
-                    Reference< XComponent > xSubComponent = xDocumentUI->loadComponentWithArguments( eComponentType, sComponentName, stor->second.bForEditing,
-                        aLoadArgs.getPropertyValues() );
+                    Reference< XComponent > xSubComponent;
+                    if ( sComponentName.getLength() )
+                    {
+                        xSubComponent = xDocumentUI->loadComponentWithArguments( eComponentType, sComponentName,
+                            stor->second.bForEditing, aLoadArgs.getPropertyValues() );
+                    }
+                    else
+                    {
+                        xSubComponent = xDocumentUI->createComponentWithArguments( eComponentType, aLoadArgs.getPropertyValues() );
+                    }
 
                     // at the moment, we only store, during session save, sub components which are modified. So, set this
                     // recovered sub component to "modified", too.
