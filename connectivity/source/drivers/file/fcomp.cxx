@@ -638,7 +638,6 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
     switch ( nTokenId )
     {
         case SQL_TOKEN_CHAR_LENGTH:
-        case SQL_TOKEN_CHARACTER_LENGTH:
         case SQL_TOKEN_LENGTH:
         case SQL_TOKEN_OCTET_LENGTH:
         case SQL_TOKEN_ASCII:
@@ -680,7 +679,6 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             switch( nTokenId )
             {
                 case SQL_TOKEN_CHAR_LENGTH:
-                case SQL_TOKEN_CHARACTER_LENGTH:
                 case SQL_TOKEN_LENGTH:
                 case SQL_TOKEN_OCTET_LENGTH:
                     pOperator = new OOp_CharLength();

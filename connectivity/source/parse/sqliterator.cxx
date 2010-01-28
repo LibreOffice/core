@@ -829,17 +829,17 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             aColumnName = pColumnRef->getChild(0)->getTokenValue();
 
             OSQLParseNode *pDatatype = pColumnRef->getChild(1);
-            if (pDatatype && SQL_ISRULE(pDatatype,data_type))
+            if (pDatatype && SQL_ISRULE(pDatatype,character_string_type))
             {
-                //data type
-                //  0 | 1| 2  |3
-                //char  (  20  )
-                aTypeName = pDatatype->getChild(0)->getTokenValue();
-                if (pDatatype->count() == 4
-                    && SQL_ISPUNCTUATION(pDatatype->getChild(1), "(")
-                    && SQL_ISPUNCTUATION(pDatatype->getChild(3) , ")") )
+                const OSQLParseNode *pType = pDatatype->getChild(0);
+                aTypeName = pType->getTokenValue();
+                if (pDatatype->count() == 2 && (pType->getTokenID() == SQL_TOKEN_CHAR || pType->getTokenID() == SQL_TOKEN_CHARACTER ))
+                    nType = DataType::CHAR;
+
+                const OSQLParseNode *pParams = pDatatype->getChild(pDatatype->count()-1);
+                if ( pParams->count() )
                 {
-                    nLen = pDatatype->getChild(2)->getTokenValue().toInt32();
+                    nLen = pParams->getChild(1)->getTokenValue().toInt32();
                 }
             }
             else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
@@ -849,7 +849,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
 
             if (aTypeName.getLength())
             {
-                //TO DO:Create a new class for create statement to handle field length
+                //TODO:Create a new class for create statement to handle field length
                 OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,::rtl::OUString(),::rtl::OUString(),
                     ColumnValue::NULLABLE_UNKNOWN,0,0,nType,sal_False,sal_False,isCaseSensitive());
                 pColumn->setFunction(sal_False);
