@@ -41,7 +41,7 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 #include "sdbcoretools.hxx"
-#include "dbdocrecovery.hxx"
+#include "recovery/dbdocrecovery.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/Optional.hpp>

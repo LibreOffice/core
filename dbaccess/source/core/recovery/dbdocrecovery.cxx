@@ -25,7 +25,7 @@
 
 #include "precompiled_dbaccess.hxx"
 
-#include "dbdocrecovery.hxx"
+#include "recovery/dbdocrecovery.hxx"
 #include "sdbcoretools.hxx"
 #include "dbastrings.hrc"
 
