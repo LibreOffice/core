@@ -220,6 +220,14 @@ published service UnoControlComboBoxModel
         @since OOo 3.1
     */
     [optional, property] short WritingMode;
+
+    /** defines how the mouse wheel can be used to scroll through the control's content.
+
+        <p>Usually, the mouse wheel scrool through the control's entry list. Using this property,
+        and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
+        this is possible.</p>
+    */
+    [optional, property] short MouseWheelBehavior;
 };
 
 //=============================================================================

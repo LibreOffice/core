@@ -62,7 +62,7 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
         Example: the name of a file has changed, but it is in the same location in the file system.
 
         To indicate the root has changed, <member>TreeDataModelEvent::Nodes</member> will contain
-        the root node and and <member>TreeDataModelEvent::ParentNode</member will be empty.
+        the root node and <member>TreeDataModelEvent::ParentNode</member> will be empty.
     */
     void treeNodesChanged( [in] TreeDataModelEvent Event );
 

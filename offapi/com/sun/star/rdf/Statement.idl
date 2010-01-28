@@ -43,7 +43,7 @@ module com {   module sun {   module star {   module rdf {
 //=============================================================================
 /** represents a RDF statement, or triple.
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see XRepository
  */
@@ -52,7 +52,7 @@ struct Statement
     /// the subject of the RDF statement.
     XResource Subject;
     /// the predicate of the RDF statement.
-    XResource Predicate;
+    XURI      Predicate;
     /// the object of the RDF statement.
     XNode     Object;
     /// the named graph that contains this statement, or <NULL/>.
