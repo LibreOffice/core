@@ -519,7 +519,7 @@ ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
     }
 }
 
-void ScDPObject::Output()
+void ScDPObject::Output( const ScAddress& rPos )
 {
     //  clear old output area
     pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
@@ -530,6 +530,8 @@ void ScDPObject::Output()
                           aOutRange.aStart.Tab(), SC_MF_AUTO );
 
     CreateOutput();             // create xSource and pOutput if not already done
+
+    pOutput->SetPosition( rPos );
 
     pOutput->Output();
 
@@ -2402,7 +2404,7 @@ ScDPCollection::ScDPCollection(const ScDPCollection& r) :
     ScCollection(r),
     pDoc(r.pDoc),
     maSharedString(r.maSharedString),
-    maCacheCellPool(r.maCacheCellPool)
+    maCacheCellPool()   // #i101725# don't copy hash_set with pointers from the other collection
 {
 }
 
@@ -2597,8 +2599,9 @@ void ScDPCollection::clearCacheCellPool()
     vector<ScDPCacheCell*> ps;
     ps.reserve(maCacheCellPool.size());
     copy(maCacheCellPool.begin(), maCacheCellPool.end(), back_inserter(ps));
-    for_each(ps.begin(), ps.end(), DeleteCacheCells());
     maCacheCellPool.clear();
+    // for correctness' sake, delete the elements after clearing the hash_set
+    for_each(ps.begin(), ps.end(), DeleteCacheCells());
 }
 
 //------------------------------------------------------------------------

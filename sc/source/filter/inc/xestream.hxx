@@ -43,6 +43,9 @@
 #include "xlstream.hxx"
 #include "xestring.hxx"
 
+#include <svx/mscodec.hxx>
+#include <vector>
+
 /* ============================================================================
 Output stream class for Excel export
 - CONTINUE record handling
@@ -50,6 +53,8 @@ Output stream class for Excel export
 ============================================================================ */
 
 class XclExpRoot;
+class XclExpBiff8Encrypter;
+typedef ScfRef< XclExpBiff8Encrypter > XclExpEncrypterRef;
 
 /** This class is used to export Excel record streams.
     @descr  An instance is constructed with an SvStream and the maximum size of Excel
@@ -108,14 +113,14 @@ public:
     /** Sets data slice length. 0 = no slices. */
     void                SetSliceSize( sal_uInt16 nSize );
 
-    inline XclExpStream& operator<<( sal_Int8 nValue );
-    inline XclExpStream& operator<<( sal_uInt8 nValue );
-    inline XclExpStream& operator<<( sal_Int16 nValue );
-    inline XclExpStream& operator<<( sal_uInt16 nValue );
-    inline XclExpStream& operator<<( sal_Int32 nValue );
-    inline XclExpStream& operator<<( sal_uInt32 nValue );
-    inline XclExpStream& operator<<( float fValue );
-    inline XclExpStream& operator<<( double fValue );
+    XclExpStream& operator<<( sal_Int8 nValue );
+    XclExpStream& operator<<( sal_uInt8 nValue );
+    XclExpStream& operator<<( sal_Int16 nValue );
+    XclExpStream& operator<<( sal_uInt16 nValue );
+    XclExpStream& operator<<( sal_Int32 nValue );
+    XclExpStream& operator<<( sal_uInt32 nValue );
+    XclExpStream& operator<<( float fValue );
+    XclExpStream& operator<<( double fValue );
 
     /** Writes nBytes bytes from memory. */
     sal_Size            Write( const void* pData, sal_Size nBytes );
@@ -158,6 +163,14 @@ public:
     /** Returns the absolute position of the system stream. */
     inline sal_Size     GetSvStreamPos() const { return mrStrm.Tell(); }
 
+    void                SetEncrypter( XclExpEncrypterRef xEncrypter );
+
+    bool                HasValidEncrypter() const;
+
+    void                EnableEncryption( bool bEnable = true );
+
+    void                DisableEncryption();
+
 private:
     /** Writes header data, internal setup. */
     void                InitRecord( sal_uInt16 nRecId );
@@ -180,6 +193,9 @@ private:
     SvStream&           mrStrm;         /// Reference to the system output stream.
     const XclExpRoot&   mrRoot;         /// Filter root data.
 
+    bool                mbUseEncrypter;
+    XclExpEncrypterRef  mxEncrypter;
+
                         // length data
     sal_uInt16          mnMaxRecSize;   /// Maximum size of record content.
     sal_uInt16          mnMaxContSize;  /// Maximum size of CONTINUE content.
@@ -197,64 +213,50 @@ private:
 
 // ----------------------------------------------------------------------------
 
-inline XclExpStream& XclExpStream::operator<<( sal_Int8 nValue )
-{
-    PrepareWrite( 1 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( sal_uInt8 nValue )
-{
-    PrepareWrite( 1 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( sal_Int16 nValue )
-{
-    PrepareWrite( 2 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( sal_uInt16 nValue )
-{
-    PrepareWrite( 2 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( sal_Int32 nValue )
-{
-    PrepareWrite( 4 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( sal_uInt32 nValue )
-{
-    PrepareWrite( 4 );
-    mrStrm << nValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( float fValue )
-{
-    PrepareWrite( 4 );
-    mrStrm << fValue;
-    return *this;
-}
-
-inline XclExpStream& XclExpStream::operator<<( double fValue )
-{
-    PrepareWrite( 8 );
-    mrStrm << fValue;
-    return *this;
-}
-
 
 // ============================================================================
+
+class XclExpBiff8Encrypter
+{
+public:
+    explicit XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_uInt8 nDocId[16],
+                                   const sal_uInt8 nSalt[16] );
+    ~XclExpBiff8Encrypter();
+
+    bool IsValid() const;
+
+    void GetSaltDigest( sal_uInt8 nSaltDigest[16] ) const;
+
+    void Encrypt( SvStream& rStrm, sal_uInt8  nData );
+    void Encrypt( SvStream& rStrm, sal_uInt16 nData );
+    void Encrypt( SvStream& rStrm, sal_uInt32 nData );
+
+    void Encrypt( SvStream& rStrm, sal_Int8  nData );
+    void Encrypt( SvStream& rStrm, sal_Int16 nData );
+    void Encrypt( SvStream& rStrm, sal_Int32 nData );
+
+    void Encrypt( SvStream& rStrm, float fValue );
+    void Encrypt( SvStream& rStrm, double fValue );
+
+    void EncryptBytes( SvStream& rStrm, ::std::vector<sal_uInt8>& aBytes );
+
+private:
+    void Init( const String& aPass, const sal_uInt8 nDocId[16],
+               const sal_uInt8 nSalt[16] );
+
+    sal_uInt32 GetBlockPos( sal_Size nStrmPos ) const;
+    sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos ) const;
+
+private:
+    ::svx::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
+    sal_uInt16          mnPassw[16];   /// Cached password data for copy construction.
+    sal_uInt8           mnDocId[16];   /// Cached document ID for copy construction.
+    sal_uInt8           mnSaltDigest[16];
+
+    const XclExpRoot&   mrRoot;
+    sal_Size            mnOldPos;      /// Last known stream position
+    bool                mbValid;
+};
 
 // ----------------------------------------------------------------------------
 
@@ -335,7 +337,7 @@ public:
     // only needed for import; ignore
     virtual bool importDocument() throw();
     virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
-    virtual const oox::vml::DrawingPtr getDrawings();
+    virtual oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::Theme* getCurrentTheme() const;
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual oox::drawingml::chart::ChartConverter& getChartConverter();

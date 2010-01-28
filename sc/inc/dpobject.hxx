@@ -133,7 +133,8 @@ public:
     void                InvalidateData();
     void                InvalidateSource();
 
-    void                Output();
+
+    void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( BOOL& rOverflow );
     const ScRange       GetOutputRangeByType( sal_Int32 nType );
 

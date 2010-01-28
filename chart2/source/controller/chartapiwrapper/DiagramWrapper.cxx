@@ -549,6 +549,9 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         if( aName.indexOf( C2U("Stock") ) != -1 )
             return C2U( "com.sun.star.chart.StockDiagram" );
 
+        if( aName.indexOf( C2U("Bubble") ) != -1 )
+            return C2U( "com.sun.star.chart.BubbleDiagram" );
+
         // Note: this must be checked after Bar, Net and Scatter
 
         // "Symbol" "StackedSymbol" "PercentStackedSymbol" "Line" "StackedLine"
@@ -593,6 +596,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" ) )
 
         ;
     return g_aChartTypeNameMap;

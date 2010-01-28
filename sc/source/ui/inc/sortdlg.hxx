@@ -32,6 +32,10 @@
 #define SC_SORTDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include "scui_def.hxx" //CHINA001
 
 #ifndef LAYOUT_SFX_TABDIALOG_BROKEN
 #define LAYOUT_SFX_TABDIALOG_BROKEN 1
@@ -64,6 +68,20 @@ inline void ScSortDlg::SetHeaders( BOOL bHeaders )  { bIsHeaders = bHeaders; }
 inline void ScSortDlg::SetByRows ( BOOL bByRows  )  { bIsByRows = bByRows; }
 inline BOOL ScSortDlg::GetHeaders() const           { return bIsHeaders; }
 inline BOOL ScSortDlg::GetByRows () const           { return bIsByRows; }
+
+class ScSortWarningDlg : public ModalDialog
+{
+public:
+    ScSortWarningDlg( Window* pParent, const String& rExtendText,const String& rCurrentText );
+            ~ScSortWarningDlg();
+    DECL_LINK( BtnHdl, PushButton* );
+private:
+    FixedText       aFtText;
+    FixedText       aFtTip;
+    PushButton      aBtnExtSort;
+    PushButton      aBtnCurSort;
+    CancelButton    aBtnCancel;
+};
 
 #if !LAYOUT_SFX_TABDIALOG_BROKEN
 #include <layout/layout-post.hxx>

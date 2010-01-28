@@ -86,7 +86,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -724,6 +723,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
+
+                OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
+                pSeries->setRoleOfSequenceForDataLabelNumberFormatDetection(aRole);
 
                 //ignore secondary axis for charttypes that do not suppoert them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
@@ -1742,7 +1744,7 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                     for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
                     {
                         if( nDimensionIndex != 0 )
-                            aRoleToMatch = aChartTypes[nCTIdx]->getRoleOfSequenceForSeriesLabel();
+                            aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( aChartTypes[nCTIdx] );
                         Reference< XDataSeriesContainer > xDSCnt( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
                         Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
                         for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aDataSeriesSeq.getLength(); ++nSeriesIdx )
@@ -1855,24 +1857,36 @@ sal_Int32 ExplicitValueProvider::getPercentNumberFormat( const Reference< util::
 }
 
 
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForLabel(
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
         const uno::Reference< XDataSeries >& xSeries,
         sal_Int32 nPointIndex /*-1 for whole series*/,
-        const uno::Reference< beans::XPropertySet >& xAttachedAxisProps
+        const uno::Reference< XDiagram >& xDiagram
         )
 {
     sal_Int32 nFormat=0;
     if( !xSeriesOrPointProp.is() )
         return nFormat;
+
     rtl::OUString aPropName( C2U( "NumberFormat" ) );
     if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
     {
-        if( xAttachedAxisProps.is() && !( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+        uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
+
+        bool bFormatFound = false;
+        if( ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( xChartType ) )
+        {
+            uno::Reference< beans::XPropertySet > xAttachedAxisProps( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY );
+            if( xAttachedAxisProps.is() && ( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+                bFormatFound = true;
+        }
+        if( !bFormatFound )
         {
             Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
+            OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
+
             Reference< data::XLabeledDataSequence > xLabeledSequence(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole, false ));
             if( xLabeledSequence.is() )
             {
                 Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
@@ -1886,7 +1900,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForLabel(
     return nFormat;
 }
 
-sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
         const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
         const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
 {

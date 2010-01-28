@@ -338,12 +338,12 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                         SdrObject* pObj = 0;
                         SdrPageView* pPV = 0;
                         Point aMDPos = PixelToLogic( aPosPixel );
-                        if ( pDrView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+                        if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER) )
                         {
                             if ( pObj->IsGroupObject() )
                             {
                                     SdrObject* pHit = 0;
-                                    if ( pDrView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                                    if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                                         pObj = pHit;
                             }
 #ifdef ISSUE66550_HLINK_FOR_SHAPES

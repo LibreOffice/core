@@ -36,8 +36,10 @@
 #include "detdata.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
 class ScDocument;
@@ -117,6 +119,62 @@ public:
     static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
 };
 
+// ============================================================================
+
+enum ScXMLConditionToken
+{
+    XML_COND_INVALID,                       /// Token not recognized.
+    XML_COND_AND,                           /// The 'and' token.
+    XML_COND_CELLCONTENT,                   /// The 'cell-content' token.
+    XML_COND_ISBETWEEN,                     /// The 'cell-content-is-between' token.
+    XML_COND_ISNOTBETWEEN,                  /// The 'cell-content-is-not-between' token.
+    XML_COND_ISWHOLENUMBER,                 /// The 'cell-content-is-whole-number' token.
+    XML_COND_ISDECIMALNUMBER,               /// The 'cell-content-is-decimal-number' token.
+    XML_COND_ISDATE,                        /// The 'cell-content-is-date' token.
+    XML_COND_ISTIME,                        /// The 'cell-content-is-time' token.
+    XML_COND_ISINLIST,                      /// The 'cell-content-is-in-list' token.
+    XML_COND_TEXTLENGTH,                    /// The 'cell-content-text-length' token.
+    XML_COND_TEXTLENGTH_ISBETWEEN,          /// The 'cell-content-text-length-is-between' token.
+    XML_COND_TEXTLENGTH_ISNOTBETWEEN,       /// The 'cell-content-text-length-is-not-between' token.
+    XML_COND_ISTRUEFORMULA                  /// The 'is-true-formula' token.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Result of an attempt to parse a single condition in a 'condition' attribute
+    value of e.g. conditional formatting or data validation.
+ */
+struct ScXMLConditionParseResult
+{
+    ScXMLConditionToken meToken;            /// The leading condition token.
+    ::com::sun::star::sheet::ValidationType
+                        meValidation;       /// A data validation type if existing.
+    ::com::sun::star::sheet::ConditionOperator
+                        meOperator;         /// A comparison operator if existing.
+    ::rtl::OUString     maOperand1;         /// First operand of the token or comparison value.
+    ::rtl::OUString     maOperand2;         /// Second operand of 'between' conditions.
+    sal_Int32           mnEndIndex;         /// Index of first character following the condition.
+};
+
+// ----------------------------------------------------------------------------
+
+class ScXMLConditionHelper
+{
+public:
+    /** Parses the next condition in a 'condition' attribute value of e.g.
+        conditional formatting or data validation.
+     */
+    static void         parseCondition(
+                            ScXMLConditionParseResult& rParseResult,
+                            const ::rtl::OUString& rAttribute,
+                            sal_Int32 nStartIndex );
+
+private:
+                        ScXMLConditionHelper();
+                        ~ScXMLConditionHelper();
+};
+
+// ============================================================================
 
 #endif
 

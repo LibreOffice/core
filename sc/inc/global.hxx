@@ -236,6 +236,7 @@ const USHORT IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const USHORT IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
 const USHORT IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
 const USHORT IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+const USHORT IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
@@ -725,7 +726,13 @@ enum ScQueryOp
         SC_TOPVAL,
         SC_BOTVAL,
         SC_TOPPERC,
-        SC_BOTPERC
+        SC_BOTPERC,
+        SC_CONTAINS,
+        SC_DOES_NOT_CONTAIN,
+        SC_BEGINS_WITH,
+        SC_DOES_NOT_BEGIN_WITH,
+        SC_ENDS_WITH,
+        SC_DOES_NOT_END_WITH
     };
 
 // -----------------------------------------------------------------------

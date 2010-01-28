@@ -79,11 +79,6 @@
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
-//REMOVE    #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-//REMOVE    #define SO2_DECL_SVSTORAGESTREAM_DEFINED
-//REMOVE    SO2_DECL_REF(SotStorageStream)
-//REMOVE    #endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "cell.hxx"
@@ -97,7 +92,6 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-//CHINA001 #include "tpstat.hxx"
 #include "scerrors.hxx"
 #include "brdcst.hxx"
 #include "stlpool.hxx"
@@ -126,6 +120,7 @@
 #include "cfgids.hxx"
 #include "warnpassword.hxx"
 #include "optsolver.hxx"
+#include "tabprotection.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -406,7 +401,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
         bRet = aImport.Import(sal_True, nError);
 
     if ( nError )
-        pLoadMedium->SetError( nError );
+        pLoadMedium->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     aDocument.SetXMLFromWrapper( FALSE );
     AfterXMLLoading(bRet);
@@ -467,10 +462,10 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
     }
 
     if (!bRet && !rMedium.GetError())
-        rMedium.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        rMedium.SetError( SVSTREAM_FILEFORMAT_ERROR, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     if (rMedium.GetError())
-        SetError( rMedium.GetError() );
+        SetError( rMedium.GetError(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     InitItems();
     CalcOutputFactor();
@@ -751,7 +746,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         }
 
                         if ( !bSuccess )
-                            SetError( ERRCODE_IO_ABORT ); // this error code will produce no error message, but will break the further saving process
+                            SetError( ERRCODE_IO_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) ); // this error code will produce no error message, but will break the further saving process
                     }
                 }
                 break;
@@ -853,7 +848,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
-                        SetError(eError);
+                        SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
                 }
                 else
                     bRet = TRUE;
@@ -884,7 +879,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError);
+                    SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
 
                 if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                     bRet = TRUE;
@@ -923,13 +918,13 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError == SCWARN_IMPORT_RANGE_OVERFLOW)
             {
                 if (!GetError())
-                    SetError(eError);
+                    SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
                 bRet = TRUE;
             }
             else if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError);
+                    SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             }
             else
                 bRet = TRUE;
@@ -989,12 +984,12 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError);
+                    SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             }
             else if ( bOverflow )
             {
                 if (!GetError())
-                    SetError(SCWARN_IMPORT_RANGE_OVERFLOW);
+                    SetError(SCWARN_IMPORT_RANGE_OVERFLOW, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             }
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
@@ -1024,7 +1019,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError);
+                    SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
                 bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
             }
             else
@@ -1068,7 +1063,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
-                        SetError(eError);
+                        SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
 
                     if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                         bRet = TRUE;
@@ -1103,7 +1098,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError);
+                SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
             bSetRowHeights = TRUE;
@@ -1116,7 +1111,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError( eError );
+                    SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                     bRet = TRUE;
             }
@@ -1142,7 +1137,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
-                            SetError(eError);
+                            SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
 
                         if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                             bRet = TRUE;
@@ -1161,7 +1156,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError);
+                SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
         }
         else if (aFltName.EqualsAscii(pFilterHtml) || aFltName.EqualsAscii(pFilterHtmlWebQ))
         {
@@ -1181,7 +1176,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
-                            SetError(eError);
+                            SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
 
                         if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                             bRet = TRUE;
@@ -1198,12 +1193,12 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError);
+                SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
         }
         else
         {
             if (!GetError())
-                SetError(SCERR_IMPORT_NI);
+                SetError(SCERR_IMPORT_NI, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
         }
 
         if (!bCalc3)
@@ -1326,6 +1321,16 @@ BOOL __EXPORT ScDocShell::Save()
 BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
+
+#if ENABLE_SHEET_PROTECTION
+    ScTabViewShell* pViewShell = GetBestViewShell();
+    if (pViewShell && ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_OOO))
+    {
+        if (!pViewShell->ExecuteRetypePassDlg(PASSHASH_OOO))
+            // password re-type cancelled.  Don't save the document.
+            return false;
+    }
+#endif
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1792,7 +1797,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     rStream.SetNumberFormatInt( nOldNumberFormatInt );
 }
 
-
 BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
@@ -1846,15 +1850,39 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-            /*  #115980 #If the imported document contained an encrypted password -
-                determine if we should save without it. */
-            ScExtDocSettings& rDocSett = pExtDocOpt->GetDocSettings();
-            if( rDocSett.mbEncrypted )
+#if ENABLE_SHEET_PROTECTION
+            bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL);
+            if (bNeedRetypePassDlg && !pViewShell->ExecuteRetypePassDlg(PASSHASH_XL))
             {
-                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
-                // #i42858# warn only on time
-                rDocSett.mbEncrypted = false;
+                SetError( ERRCODE_ABORT );
+                return false;
             }
+#else
+
+            do
+            {
+                SfxItemSet* pSet = rMed.GetItemSet();
+                if (!pSet)
+                    break;
+
+                const SfxPoolItem* pItem = NULL;
+                if (SFX_ITEM_SET != pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
+                    // password is not set.
+                    break;
+
+                /*  #115980 #If the imported document contained an encrypted password -
+                    determine if we should save without it. */
+                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
+
+                if (bDoSave)
+                {
+                    // #i42858# warn only one time
+                    pSet->ClearItem(SID_PASSWORD);
+                }
+            }
+            while (false);
+
+#endif
         }
 
         if( bDoSave )
@@ -1867,7 +1895,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
-                SetError( eError );
+                SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
             // don't return false for warnings
             bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == eERR_OK);
@@ -1875,7 +1903,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         else
         {
             // export aborted, i.e. "Save without password" warning
-            SetError( ERRCODE_ABORT );
+            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
     }
     else if (aFltName.EqualsAscii(pFilterAscii))
@@ -1908,7 +1936,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII);
+                    rMed.SetError(SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
         }
     }
     else if (aFltName.EqualsAscii(pFilterDBase))
@@ -1941,11 +1969,11 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {
 //!         if ( !rMed.GetError() )
-//!             rMed.SetError( eError );
+//!             rMed.SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             eError = eERR_OK;
         }
 //!     else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
-//!         rMed.SetError( SCWARN_EXPORT_ASCII );
+//!         rMed.SetError( SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
         if ( bHasMemo )
@@ -1953,7 +1981,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         if ( eError != eERR_OK )
         {
             if (!GetError())
-                SetError(eError);
+                SetError(eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             if ( bHasMemo && IsDocument( aTmpFile ) )
                 KillFile( aTmpFile );
         }
@@ -1974,7 +2002,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 {
                     KillFile( aTmpFile );
                     if ( !GetError() )
-                        SetError( SCERR_EXPORT_DATA );
+                        SetError( SCERR_EXPORT_DATA, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
             }
         }
@@ -2008,7 +2036,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII);
+                    rMed.SetError(SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
         }
     }
     else if (aFltName.EqualsAscii(pFilterSylk))
@@ -2041,13 +2069,13 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError( *new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ) );
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
     }
     else
     {
         if (GetError())
-            SetError(SCERR_IMPORT_NI);
+            SetError(SCERR_IMPORT_NI, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
     return bRet;
 }

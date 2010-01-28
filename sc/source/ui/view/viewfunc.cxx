@@ -599,6 +599,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     }
                     else
                     {
+                        DELETEZ(pUndoData);
                         ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                         if ( nError )
                         {
@@ -751,12 +752,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
         ScPatternAttr* pCellAttrs = NULL;
         EditTextObject* pNewData = NULL;
         String aString;
+
+        const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
+        aEngine.SetText(*pData);
+
         if (bTestSimple)                    // Testen, ob einfacher String ohne Attribute
         {
-            const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
-            ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
-            aEngine.SetText(*pData);
-
             ScEditAttrTester aAttrTester( &aEngine );
             bSimple = !aAttrTester.NeedsObject();
             bCommon = aAttrTester.NeedsCellAttr();
@@ -777,10 +779,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                 pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
                 //! remove common attributes from EditEngine?
             }
-
-            if (bSimple)
-                aString = aEngine.GetText();
         }
+
+        // #i97726# always get text for "repeat" of undo action
+        aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
         //
         //      Undo
@@ -838,7 +840,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             {   // wg. ChangeTrack erst jetzt
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nPos, pTabs,
-                                        ppOldCells, NULL, NULL, String(),
+                                        ppOldCells, NULL, NULL, aString,
                                         pUndoData ) );
             }
 
@@ -924,7 +926,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE,formula::FormulaGrammar::GRAM_DEFAULT );
+        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }
@@ -1179,103 +1181,69 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
                                     const SvxBoxInfoItem* pNewInner, BOOL bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    SCCOL nStartCol;
-    SCROW nStartRow;
-    SCTAB nStartTab;
-    SCCOL nEndCol;
-    SCROW nEndRow;
-    SCTAB nEndTab;
-
-    ScMarkType eMarkType = GetViewData()->GetSimpleArea( nStartCol, nStartRow,
-            nStartTab, nEndCol, nEndRow, nEndTab);
-    if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
-    {
-        bool bChangeSelection = false;
-        ScRange aMarkRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
-        if ( eMarkType == SC_MARK_SIMPLE_FILTERED )
-        {
-            ScMarkData aVisibleMark( rMark );
-            ScViewUtil::UnmarkFiltered( aVisibleMark, pDoc );
-            ScRangeList aRangeList;
-            aVisibleMark.FillRangeListWithMarks( &aRangeList, FALSE );
-            if ( aRangeList.Count() > 0 )
-            {
-                // use the first range of visible cells
-                // (might also show an error message instead, or, later, allow multiple ranges)
-
-                aMarkRange = *aRangeList.GetObject(0);
-            }
-            else    // all hidden -> cursor position
-            {
-                aMarkRange.aStart.SetCol(GetViewData()->GetCurX());
-                aMarkRange.aStart.SetRow(GetViewData()->GetCurY());
-                aMarkRange.aStart.SetTab(GetViewData()->GetTabNo());
-                aMarkRange.aEnd = aMarkRange.aStart;
-            }
-            aMarkRange.GetVars( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
-            bChangeSelection = true;    // change the selection to only the affected cells
-        }
-
-        rMark.MarkToSimple();   // not done by GetSimpleArea anymore
-
-        ScDocShell* pDocSh = GetViewData()->GetDocShell();
-
-        ScDocShellModificator aModificator( *pDocSh );
-
-        if (!rMark.IsMarked() || bChangeSelection)
-        {
-            DoneBlockMode();
-            InitOwnBlockMode();
-            rMark.SetMarkArea( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
-            MarkDataChanged();
-        }
-
-        if (bRecord)
-        {
-            SCTAB nTabCount = pDoc->GetTableCount();
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-            for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nStartTab && rMark.GetTableSelect(i))
-                    pUndoDoc->AddUndoTab( i, i );
-            pDoc->CopyToDocument( nStartCol, nStartRow, 0, nEndCol, nEndRow, nTabCount-1,
-                                    IDF_ATTRIB, FALSE, pUndoDoc );
-
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionAttr( pDocSh, rMark,
-                                         nStartCol, nStartRow, nStartTab,
-                                         nEndCol,   nEndRow,   nEndTab,
-                                         pUndoDoc, FALSE, &rAttr, pNewOuter, pNewInner ) );
-        }
-
-        USHORT nExt = SC_PF_TESTMERGE;
-        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
-                                      nEndCol,   nEndRow,   nEndTab );      // content before the change
-
-        pDoc->ApplySelectionFrame( rMark, pNewOuter, pNewInner );
-
-        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
-                                      nEndCol,   nEndRow,   nEndTab );      // content after the change
-
-        rMark.MarkToMulti();
-        pDoc->ApplySelectionPattern( rAttr, rMark );
-
-        pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                           nEndCol,   nEndRow,   nEndTab,
-                           PAINT_GRID, nExt );
-        pDocSh->UpdateOle(GetViewData());
-        aModificator.SetDocumentModified();
-        CellContentChanged();
-        rMark.MarkToSimple();
-    }
+    ScRange aMarkRange;
+    aFuncMark.MarkToSimple();
+    BOOL bMulti = aFuncMark.IsMultiMarked();
+    if (bMulti)
+        aFuncMark.GetMultiMarkArea( aMarkRange );
+    else if (aFuncMark.IsMarked())
+        aFuncMark.GetMarkArea( aMarkRange );
     else
-    {       // "Rahmen nicht auf Mehrfachselektion"
-        ErrorMessage(STR_MSSG_APPLYPATTLINES_0);
+    {
+        aMarkRange = ScRange( GetViewData()->GetCurX(),
+                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+        DoneBlockMode();
+        InitOwnBlockMode();
+        aFuncMark.SetMarkArea(aMarkRange);
+        MarkDataChanged();
     }
+
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+
+    ScDocShellModificator aModificator( *pDocSh );
+
+    if (bRecord)
+    {
+        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        SCTAB nStartTab = aMarkRange.aStart.Tab();
+        SCTAB nTabCount = pDoc->GetTableCount();
+        pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+        for (SCTAB i=0; i<nTabCount; i++)
+            if (i != nStartTab && aFuncMark.GetTableSelect(i))
+                pUndoDoc->AddUndoTab( i, i );
+
+        ScRange aCopyRange = aMarkRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+
+        pDocSh->GetUndoManager()->AddUndoAction(
+            new ScUndoSelectionAttr(
+            pDocSh, aFuncMark,
+            aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), aMarkRange.aStart.Tab(),
+            aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), aMarkRange.aEnd.Tab(),
+            pUndoDoc, bMulti, &rAttr, pNewOuter, pNewInner ) );
+    }
+
+    USHORT nExt = SC_PF_TESTMERGE;
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content before the change
+
+    pDoc->ApplySelectionFrame( aFuncMark, pNewOuter, pNewInner );
+
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content after the change
+
+    aFuncMark.MarkToMulti();
+    pDoc->ApplySelectionPattern( rAttr, aFuncMark );
+
+    pDocSh->PostPaint( aMarkRange, PAINT_GRID, nExt );
+    pDocSh->UpdateOle(GetViewData());
+    aModificator.SetDocumentModified();
+    CellContentChanged();
 
     StartFormatArea();
 }
@@ -2215,6 +2183,7 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             const SCCOLROW* pTabRanges = pRanges;
 
             pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+            pDoc->InitializeNoteCaptions( nTab );
             for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
             {
                 SCCOLROW nStartNo = *(pTabRanges++);
@@ -2578,6 +2547,36 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
     }
 
     ShowAllCursors();
+}
+
+void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
+{
+    if (nTab == TABLEID_DOC)
+        return;
+
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocFunc aFunc(*pDocSh);
+    bool bUndo(pDoc->IsUndoEnabled());
+
+    //  modifying several tables is handled here
+
+    if (bUndo)
+    {
+        String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+    }
+
+    SCTAB nCount = pDocSh->GetDocument()->GetTableCount();
+    for ( SCTAB i=0; i<nCount; i++ )
+        if ( rMark.GetTableSelect(i) )
+            aFunc.ProtectSheet(i, rProtect);
+
+    if (bUndo)
+        pDocSh->GetUndoManager()->LeaveListAction();
+
+    UpdateLayerLocks();         //! broadcast to all views
 }
 
 void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )

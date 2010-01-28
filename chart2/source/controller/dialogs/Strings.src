@@ -471,6 +471,11 @@ String STR_DATA_ROLE_Y
     Text [ en-US ] = "Y-Values" ;
 };
 
+String STR_DATA_ROLE_SIZE
+{
+    Text [ en-US ] = "Bubble Sizes" ;
+};
+
 String STR_DATA_ROLE_X_ERROR
 {
     Text [ en-US ] = "X-Error-Bars" ;

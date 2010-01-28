@@ -74,6 +74,7 @@
 #include "unonames.hxx"
 #include "rangeutl.hxx"
 #include "postit.hxx"
+#include "formulaparserpool.hxx"
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -2873,36 +2874,99 @@ void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
     }
 }
 
-// static
-bool ScXMLImport::IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
-                                             const rtl::OUString & rValue, formula::FormulaGrammar::Grammar& rGrammar,
-                                             const formula::FormulaGrammar::Grammar eStorageGrammar )
+sal_Int32 ScXMLImport::GetVisibleSheet()
 {
-    switch (nFormulaPrefix)
+    // Get the visible sheet number from model's view data (after settings were loaded),
+    // or 0 (default: first sheet) if no settings available.
+
+    uno::Reference<document::XViewDataSupplier> xSupp(GetModel(), uno::UNO_QUERY);
+    if (xSupp.is())
     {
-    case XML_NAMESPACE_OF:
-        rGrammar = formula::FormulaGrammar::GRAM_ODFF;
-        return true;
-    case XML_NAMESPACE_OOOC:
-        rGrammar = formula::FormulaGrammar::GRAM_PODF;
-        return true;
+        uno::Reference<container::XIndexAccess> xIndex = xSupp->getViewData();
+        if ( xIndex.is() && xIndex->getCount() > 0 )
+        {
+            uno::Any aAny( xIndex->getByIndex(0) );
+            uno::Sequence<beans::PropertyValue> aViewSettings;  // settings for (first) view
+            if ( aAny >>= aViewSettings )
+            {
+                sal_Int32 nCount = aViewSettings.getLength();
+                for (sal_Int32 i = 0; i < nCount; ++i)
+                {
+                    if ( aViewSettings[i].Name.compareToAscii(SC_ACTIVETABLE) == 0 )
+                    {
+                        rtl::OUString sValue;
+                        if(aViewSettings[i].Value >>= sValue)
+                        {
+                            String sTabName(sValue);
+                            SCTAB nTab = 0;
+                            if (pDoc->GetTable(sTabName, nTab))
+                                return nTab;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    // An invalid namespace can occur from a colon in the formula text if no
-    // namespace tag was added. First character in string has to be '=' in that
-    // case.
-    bool bNoNamespace = (nFormulaPrefix == XML_NAMESPACE_NONE ||
-        (nFormulaPrefix == XML_NAMESPACE_UNKNOWN && rValue.toChar() == '='));
-
-    if (bNoNamespace && eStorageGrammar == formula::FormulaGrammar::GRAM_PODF)
-        // There may be documents in the wild that stored no namespace in ODF 1.x
-        rGrammar = formula::FormulaGrammar::GRAM_PODF;
-    else if (bNoNamespace)
-        // The default for ODF 1.2 and later without namespace is 'of:' ODFF
-        rGrammar = formula::FormulaGrammar::GRAM_ODFF;
-    else
-        // Whatever ...
-        rGrammar = eStorageGrammar;
-
-    return false;
+    return 0;
 }
+
+void ScXMLImport::ExtractFormulaNamespaceGrammar(
+        OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
+        const OUString& rAttrValue, bool bRestrictToExternalNmsp ) const
+{
+    // parse the attribute value, extract namespace ID, literal namespace, and formula string
+    rFormulaNmsp = OUString();
+    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, sal_False );
+
+    // check if we have an ODF formula namespace
+    if( !bRestrictToExternalNmsp ) switch( nNsId )
+    {
+        case XML_NAMESPACE_OOOC:
+            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            reGrammar = FormulaGrammar::GRAM_PODF;
+            return;
+        case XML_NAMESPACE_OF:
+            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            reGrammar = FormulaGrammar::GRAM_ODFF;
+            return;
+    }
+
+    /*  Find default grammar for formulas without namespace. There may be
+        documents in the wild that stored no namespace in ODF 1.0/1.1. Use
+        GRAM_PODF then (old style ODF 1.0/1.1 formulas). The default for ODF
+        1.2 and later without namespace is GRAM_ODFF (OpenFormula). */
+    FormulaGrammar::Grammar eDefaultGrammar =
+        (GetDocument()->GetStorageGrammar() == FormulaGrammar::GRAM_PODF) ?
+            FormulaGrammar::GRAM_PODF : FormulaGrammar::GRAM_ODFF;
+
+    /*  Check if we have no namespace at all. The value XML_NAMESPACE_NONE
+        indicates that there is no colon. If the first character of the
+        attribute value is the equality sign, the value XML_NAMESPACE_UNKNOWN
+        indicates that there is a colon somewhere in the formula string. */
+    if( (nNsId == XML_NAMESPACE_NONE) || ((nNsId == XML_NAMESPACE_UNKNOWN) && (rAttrValue.toChar() == '=')) )
+    {
+        rFormula = rAttrValue;          // return entire string as formula
+        reGrammar = eDefaultGrammar;
+        return;
+    }
+
+    /*  Check if a namespace URL could be resolved from the attribute value.
+        Use that namespace only, if the Calc document knows an associated
+        external formula parser. This prevents that the range operator in
+        conjunction with defined names is confused as namespaces prefix, e.g.
+        in the expression 'table:A1' where 'table' is a named reference. */
+    if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && (rFormulaNmsp.getLength() > 0) &&
+        GetDocument()->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )
+    {
+        reGrammar = FormulaGrammar::GRAM_EXTERNAL;
+        return;
+    }
+
+    /*  All attempts failed (e.g. no namespace and no leading equality sign, or
+        an invalid namespace prefix), continue with the entire attribute value. */
+    rFormula = rAttrValue;
+    rFormulaNmsp = OUString();  // remove any namespace string
+    reGrammar = eDefaultGrammar;
+}
+

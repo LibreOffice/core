@@ -119,18 +119,19 @@ namespace sdr
         public:
             typedef ::std::vector< basegfx::B2DRange > RangeVector;
 
+        protected:
+            basegfx::B2DPolyPolygon impGetOverlayPolyPolygon() const;
+
         private:
             ScOverlayType   mePaintType;
             RangeVector     maRectangles;
 
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects);
             virtual ~OverlayObjectCell();
-
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
         };
 
     } // end of namespace overlay

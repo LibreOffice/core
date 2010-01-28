@@ -39,6 +39,7 @@
 #include "target.hxx"
 #include "rangelst.hxx"         // ScRangeListRef
 #include "shellids.hxx"
+#include "tabprotection.hxx" // for ScPasswordHash
 
 class FmFormShell;
 class SbxObject;
@@ -429,6 +430,8 @@ public:
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
     BOOL    HasAccessibilityObjects();
+
+    bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
 };

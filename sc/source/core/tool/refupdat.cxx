@@ -821,27 +821,27 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                  ScComplexRefData& rRef )
+                               SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
     if( rRef.Ref1.IsColRel() )
     {
         rRef.Ref1.nCol = rRef.Ref1.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), MAXCOL );
+        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), nMaxCol );
     }
     if( rRef.Ref2.IsColRel() )
     {
         rRef.Ref2.nCol = rRef.Ref2.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), MAXCOL );
+        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), nMaxCol );
     }
     if( rRef.Ref1.IsRowRel() )
     {
         rRef.Ref1.nRow = rRef.Ref1.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), MAXROW );
+        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), nMaxRow );
     }
     if( rRef.Ref2.IsRowRel() )
     {
         rRef.Ref2.nRow = rRef.Ref2.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), MAXROW );
+        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), nMaxRow );
     }
     SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )

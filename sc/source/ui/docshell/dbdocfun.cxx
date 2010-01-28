@@ -58,6 +58,7 @@
 #include "editable.hxx"
 #include "attrib.hxx"
 #include "drwlayer.hxx"
+#include "dpshttab.hxx"
 
 // -----------------------------------------------------------------
 
@@ -1299,6 +1300,22 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                 BOOL bOverflow = FALSE;
                 ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
+
+                //! test for overlap with other data pilot tables
+                if( pOldObj )
+                {
+                    const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
+                    if( pSheetDesc && pSheetDesc->aSourceRange.Intersects( aNewOut ) )
+                    {
+                        ScRange aOldRange = pOldObj->GetOutRange();
+                        SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();
+                        aNewOut.aStart.SetRow( aOldRange.aStart.Row() );
+                        aNewOut.aEnd.SetRow( aNewOut.aEnd.Row()+nDiff );
+                        if( !ValidRow( aNewOut.aStart.Row() ) || !ValidRow( aNewOut.aEnd.Row() ) )
+                            bOverflow = TRUE;
+                    }
+                }
+
                 if ( bOverflow )
                 {
                     //  like with STR_PROTECTIONERR, use undo to reverse everything
@@ -1354,9 +1371,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                     pDoc->CopyToDocument( aNewOut, IDF_ALL, FALSE, pNewUndoDoc );
                 }
 
-                //! test for overlap with other data pilot tables
-
-                pDestObj->Output();
+                pDestObj->Output( aNewOut.aStart );
 
                 rDocShell.PostPaintGridAll();           //! only necessary parts
                 bDone = TRUE;

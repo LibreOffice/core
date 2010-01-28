@@ -44,8 +44,6 @@
 #include "xistring.hxx"
 #include "xiroot.hxx"
 
-#include <boost/shared_ptr.hpp>
-
 namespace com { namespace sun { namespace star {
     namespace frame
     {
@@ -375,6 +373,7 @@ public:
 
 public:
     explicit            XclImpChSourceLink( const XclImpChRoot& rRoot );
+    virtual             ~XclImpChSourceLink();
 
     /** Reads the CHSOURCELINK record (link to source data). */
     void                ReadChSourceLink( XclImpStream& rStrm );
@@ -407,10 +406,7 @@ public:
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
     XclImpStringRef     mxString;           /// Text data (CHSTRING record).
-
-    // Tokens representing data ranges.  This must be ref-counted to allow the
-    // parent class to be stored in a STL container.
-    ::boost::shared_ptr<ScTokenArray> mpTokenArray;
+    ScfRef< ScTokenArray> mxTokenArray;     /// Token array representing the data ranges.
 };
 
 typedef ScfRef< XclImpChSourceLink > XclImpChSourceLinkRef;

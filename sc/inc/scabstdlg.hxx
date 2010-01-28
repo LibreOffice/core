@@ -314,6 +314,7 @@ public:
                                                     const String&   rStrLabel,
                                                     int nId,
                                                     BOOL                bColDefault = TRUE ) = 0;
+    virtual VclAbstractDialog * CreateScSortWarningDlg ( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId ) = 0;  //add for ScSortWarningDlg
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0; //add for ScDataPilotDatabaseDlg
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg ( Window* pParent, BOOL bEnableExternal, int nId ) = 0; //add for ScDataPilotSourceTypeDlg

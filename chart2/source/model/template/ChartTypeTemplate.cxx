@@ -68,27 +68,6 @@ using ::com::sun::star::uno::Any;
 namespace
 {
 
-sal_Int32 lcl_getSeriesLength( const Reference< XDataSeries > & xSeries )
-{
-    sal_Int32 nResult = 0;
-    try
-    {
-        Reference< data::XDataSource > xDataSource( xSeries, uno::UNO_QUERY_THROW );
-        Sequence< Reference< data::XLabeledDataSequence > > aLabSeq( xDataSource->getDataSequences());
-        if( aLabSeq.getLength())
-        {
-            Reference< data::XDataSequence > xSeq( aLabSeq[0]->getValues());
-            if( xSeq.is())
-                nResult = xSeq->getData().getLength();
-        }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-    return nResult;
-}
-
 void lcl_applyDefaultStyle(
     const Reference< XDataSeries > & xSeries,
     sal_Int32 nIndex,
@@ -347,12 +326,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
         Sequence< Sequence< Reference< XDataSeries > > > aSeriesSeq( aData.Series );
 
         sal_Int32 i, j, nIndex = 0;
-        sal_Int32 nFirstSeriesLength = 0;
         for( i=0; i<aSeriesSeq.getLength(); ++i )
             for( j=0; j<aSeriesSeq[i].getLength(); ++j, ++nIndex )
             {
-                if( i==0 && j==0 )
-                    nFirstSeriesLength = lcl_getSeriesLength( aSeriesSeq[0][0] );
                 if( nIndex >= nFormerSeriesCount )
                 {
                     lcl_applyDefaultStyle( aSeriesSeq[i][j], nIndex, xDiagram );

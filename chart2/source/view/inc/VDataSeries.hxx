@@ -89,13 +89,15 @@ public:
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
 
     sal_Int32   getTotalPointCount() const;
-    double      getX( sal_Int32 index ) const;
-    double      getY( sal_Int32 index ) const;
+    double      getXValue( sal_Int32 index ) const;
+    double      getYValue( sal_Int32 index ) const;
 
     double      getY_Min( sal_Int32 index ) const;
     double      getY_Max( sal_Int32 index ) const;
     double      getY_First( sal_Int32 index ) const;
     double      getY_Last( sal_Int32 index ) const;
+
+    double      getBubble_Size( sal_Int32 index ) const;
 
     double      getMinimumofAllDifferentYValues( sal_Int32 index ) const;
     double      getMaximumofAllDifferentYValues( sal_Int32 index ) const;
@@ -108,6 +110,7 @@ public:
     bool        hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
+    bool        shouldLabelNumberFormatKeyBeDetectedFromYAxis() const;
 
     sal_Int32   getLabelPlacement( sal_Int32 nPointIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                         , sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const;
@@ -140,6 +143,8 @@ public:
 
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
+
+    void setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole );
 
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
@@ -207,6 +212,10 @@ private: //member
     VDataSequence   m_aValues_Y_First;
     VDataSequence   m_aValues_Y_Last;
 
+    VDataSequence   m_aValues_Bubble_Size;
+
+    VDataSequence*  m_pValueSequenceForDataLabelNumberFormatDetection;
+
     mutable double m_fYMeanValue;
 
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aAttributedDataPointIndexList;
@@ -248,7 +257,8 @@ private: //member
     ::com::sun::star::awt::Size                     m_aReferenceSize;
     //
 
-    sal_Int32                                       m_nMissingValueTreatment;
+    sal_Int32   m_nMissingValueTreatment;
+    bool        m_bAllowPercentValueInDataLabel;
 };
 
 //.............................................................................

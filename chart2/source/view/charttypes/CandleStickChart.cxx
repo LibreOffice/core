@@ -250,7 +250,7 @@ void CandleStickChart::createShapes()
                 for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
                 {
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getX( nIndex ), fSlotX );
+                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getXValue( nIndex ), fSlotX );
                     double fY_First = (*aSeriesIter)->getY_First( nIndex );
                     double fY_Last = (*aSeriesIter)->getY_Last( nIndex );
                     double fY_Min = (*aSeriesIter)->getY_Min( nIndex );

@@ -81,6 +81,11 @@ private:
     USHORT          nIndex;
     BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
 
+    // max row and column to use for wrapping of references.  If -1 use the
+    // application's default.
+    SCROW           mnMaxRow;
+    SCCOL           mnMaxCol;
+
     friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
@@ -153,6 +158,11 @@ public:
 
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static BOOL        IsNameValid( const String& rName, ScDocument* pDoc );
+
+    SC_DLLPUBLIC void SetMaxRow(SCROW nRow);
+    SCROW GetMaxRow() const;
+    SC_DLLPUBLIC void SetMaxCol(SCCOL nCol);
+    SCCOL GetMaxCol() const;
 };
 
 inline BOOL ScRangeData::HasType( RangeType nType ) const

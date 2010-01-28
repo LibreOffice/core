@@ -1358,13 +1358,11 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 }
                 if (bDoCell && !bNeedEdit)
                 {
-                    BOOL bFormulaCell = (pCell->GetCellType() == CELLTYPE_FORMULA );
-                    if ( bFormulaCell )
+                    if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                         lcl_CreateInterpretProgress( bProgress, pDoc, (ScFormulaCell*)pCell );
                     if ( aVars.SetText(pCell) )
                         pOldPattern = NULL;
-                    bNeedEdit = aVars.HasEditCharacters() ||
-                                    (bFormulaCell && ((ScFormulaCell*)pCell)->IsMultilineResult());
+                    bNeedEdit = aVars.HasEditCharacters();
                 }
                 if (bDoCell && !bNeedEdit)
                 {

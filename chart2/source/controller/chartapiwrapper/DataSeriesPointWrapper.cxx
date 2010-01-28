@@ -50,6 +50,7 @@
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "WrappedScaleTextProperties.hxx"
+#include "WrappedNumberFormatProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -88,6 +89,7 @@ enum
     PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
     PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
     PROP_SERIES_NUMBERFORMAT,
+    PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
@@ -163,6 +165,13 @@ void lcl_AddPropertiesToVector_SeriesOnly(
         Property( C2U( "Axis" ),
                   PROP_SERIES_ATTACHED_AXIS,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LinkNumberFormatToSource" ),
+                  PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -713,6 +722,10 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     {
         WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
         aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
+
+        WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
+        aWrappedProperties.push_back( pWrappedNumberFormatProperty );
+        aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
     }
 
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );

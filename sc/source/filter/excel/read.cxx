@@ -354,7 +354,7 @@ FltError ImportExcel::Read( void )
                         Eof();
                         eAkt = Z_Ende;
                         break;
-                    case 0x12:  Protect(); break;       // SHEET PROTECTION
+                    case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
@@ -469,7 +469,7 @@ FltError ImportExcel::Read( void )
                         Eof();
                         eAkt = Z_Biff4E;
                     break;
-                    case 0x12:  Protect(); break;       // SHEET PROTECTION
+                    case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x1A:
@@ -596,7 +596,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Biff5T;
                             aIn.SeekGlobalPosition(); // und zurueck an alte Position
                             break;
-                        case 0x12:  Protect(); break;       // SHEET PROTECTION
+                        case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                         case 0x1A:
                         case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
                         case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
@@ -895,6 +895,7 @@ FltError ImportExcel8::Read( void )
                         }
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
+                    case 0x13:  DocPasssword(); break;
                     case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
@@ -1039,7 +1040,8 @@ FltError ImportExcel8::Read( void )
                         eAkt = EXC_STATE_SHEET;
                         aIn.SeekGlobalPosition();         // und zurueck an alte Position
                         break;
-                    case 0x12:  Protect(); break;
+                    case 0x12:  SheetProtect(); break;
+                    case 0x13:  SheetPassword(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x55:  DefColWidth(); break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345   ]
@@ -1055,6 +1057,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0221: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
+                    case 0x0867: SheetProtection(); break; // SHEETPROTECTION
                 }
             }
             break;

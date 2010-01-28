@@ -609,6 +609,7 @@ struct ScMyNamedExpression
 {
     rtl::OUString      sName;
     rtl::OUString      sContent;
+    rtl::OUString      sContentNmsp;
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sRangeType;
     formula::FormulaGrammar::Grammar eGrammar;
@@ -635,11 +636,14 @@ struct ScMyImportValidation
     rtl::OUString                                   sErrorMessage;
     rtl::OUString                                   sFormula1;
     rtl::OUString                                   sFormula2;
+    rtl::OUString                                   sFormulaNmsp1;
+    rtl::OUString                                   sFormulaNmsp2;
     rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
-    formula::FormulaGrammar::Grammar                              eGrammar;
+    formula::FormulaGrammar::Grammar                eGrammar1;
+    formula::FormulaGrammar::Grammar                eGrammar2;
     sal_Int16                                       nShowList;
     sal_Bool                                        bShowErrorMessage;
     sal_Bool                                        bShowImputMessage;
@@ -996,46 +1000,43 @@ public:
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
+    sal_Int32   GetVisibleSheet();
+    /** Extracts the formula string, the formula grammar namespace URL, and a
+        grammar enum value from the passed formula attribute value.
 
-    /** If namespace prefix is an accepted formula namespace.
+        @param rFormula
+            (out-parameter) Returns the plain formula string with the leading
+            equality sign if existing.
 
-        For an accepted namespace (return <TRUE/>), the formula text is the
-        part without the namespace tag (aFormula of the _GetKeyByAttrName()
-        example below).
+        @param rFormulaNmsp
+            (out-parameter) Returns the URL of the formula grammar namespace if
+            the attribute value contains the prefix of an unknown namespace.
 
-        For an invalid namespace (not defined in the file,
-        XML_NAMESPACE_UNKNOWN; may also be the result of no namespace with
-        colon in the formula text, in that case text has to start with
-        character '=') or no namespace tag (XML_NAMESPACE_NONE) the full text
-        (rValue) should be used (return <FALSE/>).
+        @param reGrammar
+            (out-parameter) Returns the exact formula grammar if the formula
+            is in a supported ODF format (e.g. FormulaGrammar::GRAM_PODF for
+            ODF 1.0/1.1 formulas, or FormulaGrammar::GRAM_ODFF for ODF 1.2
+            formulas a.k.a. OpenFormula). Returns the default storage grammar,
+            if the attribute value does not contain a namespace prefix. Returns
+            the special value FormulaGrammar::GRAM_EXTERNAL, if an unknown
+            namespace could be extracted from the formula which will be
+            contained in the parameter rFormulaNmsp then.
 
-        @param nFormulaPrefix
-            The result of a _GetKeyByAttrName( rValue, aFormula, sal_False)
-            call.
+        @param rAttrValue
+            The value of the processed formula attribute.
 
-        @param rValue
-            The attribute's string (formula text) including the namespace, if
-            any.
-
-        @param rGrammar
-            Return value set toformula::FormulaGrammar::GRAM_ODFF orformula::FormulaGrammar::GRAM_PODF or
-            eStorageGrammar, according to the namespace or absence thereof
-            encountered.
-
-        @param eStorageGrammar
-            Default storage grammar of the document,formula::FormulaGrammar::GRAM_ODFF for
-            ODF 1.2 and later documents,formula::FormulaGrammar::GRAM_PODF for ODF 1.x
-            documents.
-
-        @return
-            <TRUE/> if an accepted namespace (XML_NAMESPACE_OF or
-            XML_NAMESPACE_OOOC), else <FALSE/>.
+        @param bRestrictToExternalNmsp
+            If set to TRUE, only namespaces of external formula grammars will
+            be recognized. Internal namespace prefixes (e.g. 'oooc:' or 'of:'
+            will be considered to be part of the formula, e.g. an expression
+            with range operator.
      */
-
-    static bool IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
-            const rtl::OUString & rValue, formula::FormulaGrammar::Grammar& rGrammar,
-            const formula::FormulaGrammar::Grammar eStorageGrammar );
-
+    void ExtractFormulaNamespaceGrammar(
+            ::rtl::OUString& rFormula,
+            ::rtl::OUString& rFormulaNmsp,
+            ::formula::FormulaGrammar::Grammar& reGrammar,
+            const ::rtl::OUString& rAttrValue,
+            bool bRestrictToExternalNmsp = false ) const;
 };
 
 #endif

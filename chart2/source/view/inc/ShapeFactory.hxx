@@ -122,7 +122,7 @@ public:
                     , const Stripe& rStripe
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided = true);
+                    , sal_Bool bDoubleSided = true, bool bRotatedTexture=false );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createArea3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
@@ -158,6 +158,11 @@ public:
         createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createCircle2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::drawing::Position3D& rPos
+                    , const ::com::sun::star::drawing::Direction3D& rSize );
 
     //------------------- create 2D elements:
 

@@ -68,11 +68,11 @@
 #include "convuno.hxx"
 #include "patattr.hxx"
 #include "docoptio.hxx"
+#include "tabprotection.hxx"
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"
 
-#include "xcl97dum.hxx"
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 #include "xetable.hxx"
@@ -118,7 +118,7 @@ static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, ExcTable& self )
     aRecList.AppendNewRecord( new XclRefmode( rDoc ) );
     aRecList.AppendNewRecord( new XclIteration( rDoc ) );
     aRecList.AppendNewRecord( new XclDelta( rDoc ) );
-    aRecList.AppendNewRecord( new ExcDummy8_02 );
+    aRecList.AppendNewRecord( new XclExpBoolRecord(0x005F, true) ); // SAVERECALC
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );  // XML_calcPr
 }
 
@@ -209,7 +209,16 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new ExcDummy_00 );
     else
     {
-        Add( new ExcDummy8_00a );
+        if ( IsDocumentEncrypted() )
+            Add( new XclExpFilePass(GetRoot()) );
+
+        Add( new XclExpInterfaceHdr );
+        Add( new XclExpMMS );
+        Add( new XclExpInterfaceEnd );
+        Add( new XclExpWriteAccess );
+        Add( new XclExpCodePage );
+        Add( new XclExpDSF );
+        Add( new XclExpExcel9File );
         rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
         Add( rR.pTabId );
         if( HasVbaStorage() )
@@ -219,7 +228,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             if( rCodeName.Len() )
                 Add( new XclCodename( rCodeName ) );
         }
-        Add( new ExcDummy8_00b );
+
+        Add( new XclExpFnGroupCount );
     }
 
     // erst Namen- und Tabellen-Eintraege aufbauen
@@ -239,12 +249,22 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
     }
 
-    aRecList.AppendNewRecord( new XclExpWindowProtection( GetExtDocOptions().GetDocSettings().mbWinProtected ) );
-    aRecList.AppendNewRecord( new XclExpDocProtection( rDoc.IsDocProtected() ) );
-    aRecList.AppendNewRecord( new XclExpBoolRecord( EXC_ID_PASSWORD, false ) );
+    // document protection options
+    const ScDocProtection* pProtect = GetDoc().GetDocProtection();
+    if (pProtect && pProtect->isProtected())
+    {
+        Add( new XclExpWindowProtection(pProtect->isOptionEnabled(ScDocProtection::WINDOWS)) );
+        Add( new XclExpProtection(pProtect->isOptionEnabled(ScDocProtection::STRUCTURE)) );
+#if ENABLE_SHEET_PROTECTION
+        Add( new XclExpPassHash(pProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
+    }
 
     if( GetBiff() == EXC_BIFF8 )
-        Add( new ExcDummy8_040 );
+    {
+        Add( new XclExpProt4Rev );
+        Add( new XclExpProt4RevPass );
+    }
 
     // document protection options
     if( GetOutput() == EXC_OUTPUT_BINARY )
@@ -255,6 +275,12 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
 
+    if ( GetBiff() == EXC_BIFF8 )
+    {
+        Add( new XclExpBoolRecord(0x0040, false) ); // BACKUP
+        Add( new XclExpBoolRecord(0x008D, false) ); // HIDEOBJ
+    }
+
     if( GetBiff() <= EXC_BIFF5 )
     {
         Add( new ExcDummy_040 );
@@ -263,9 +289,11 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     }
     else
     {
+        // BIFF8
         Add( new Exc1904( rDoc ) );
         Add( new XclExpBoolRecord( 0x000E, !rDoc.GetDocOptions().IsCalcAsShown() ) );
-        Add( new ExcDummy8_041 );
+        Add( new XclExpBoolRecord(0x01B7, false) ); // REFRESHALL
+        Add( new XclExpBoolRecord(0x00DA, false) ); // BOOKBOOL
         // OOXTODO: The following /workbook/workbookPr attributes are mapped
         //          to various BIFF records that are not currently supported:
         //
@@ -361,10 +389,14 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         if( GetOutput() != EXC_OUTPUT_BINARY )
             lcl_AddCalcPr( aRecList, *this );
 
+        Add( new XclExpRecalcId );
+
         // MSODRAWINGGROUP per-document data
         Add( new XclMsodrawinggroup( rR, ESCHER_DggContainer ) );
         // Shared string table: SST, EXTSST
         aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
+
+        Add( new XclExpBookExt );
     }
 
     Add( new ExcEof );
@@ -425,8 +457,16 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     // page settings (SETUP and various other records)
     aRecList.AppendRecord( xPageSett );
 
-    if( rDoc.IsTabProtected( mnScTab ) )
-        Add( new XclProtection() );
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnScTab);
+    if (pTabProtect && pTabProtect->isProtected())
+    {
+        Add( new XclExpProtection(true) );
+        Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
+        Add( new XclExpBoolRecord(0x0063, pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS)) );
+#if ENABLE_SHEET_PROTECTION
+        Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
+    }
 
     // local link table: EXTERNCOUNT, EXTERNSHEET
     if( eBiff <= EXC_BIFF5 )
@@ -467,6 +507,9 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
 
     if( eBiff == EXC_BIFF8 )
     {
+        // sheet protection options
+        Add( new XclExpSheetProtectOptions( GetRoot(), mnScTab ) );
+
         // web queries
         Add( new XclExpWebQueryBuffer( GetRoot() ) );
 
@@ -771,7 +814,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
 
         rWorkbook->endElement( XML_workbook );
         rWorkbook.reset();
-        aStrm.commit();
+        aStrm.commitStorage();
     }
 #if 0
     if( pExpChangeTrack )

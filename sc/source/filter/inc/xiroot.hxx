@@ -61,6 +61,8 @@ class XclImpPivotTableManager;
 class XclImpPageSettings;
 class XclImpDocViewSettings;
 class XclImpTabViewSettings;
+class XclImpSheetProtectBuffer;
+class XclImpDocProtectBuffer;
 
 class _ScRangeListTabs;
 class ExcelToSc;
@@ -87,6 +89,8 @@ struct XclImpRootData : public XclRootData
     typedef ScfRef< XclImpPageSettings >        XclImpPageSettRef;
     typedef ScfRef< XclImpDocViewSettings >     XclImpDocViewSettRef;
     typedef ScfRef< XclImpTabViewSettings >     XclImpTabViewSettRef;
+    typedef ScfRef< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
+    typedef ScfRef< XclImpDocProtectBuffer >    XclImpDocProtectRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
     XclImpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
@@ -110,6 +114,11 @@ struct XclImpRootData : public XclRootData
     XclImpPageSettRef   mxPageSett;         /// Page settings for current sheet.
     XclImpDocViewSettRef mxDocViewSett;     /// View settings for entire document.
     XclImpTabViewSettRef mxTabViewSett;     /// View settings for current sheet.
+    XclImpTabProtectRef mxTabProtect;       /// Sheet protection options for current sheet.
+    XclImpDocProtectRef mxDocProtect;       /// Document protection options.
+
+    String              maPassw;            /// Entered password for stream decryption.
+    bool                mbPassQueried;      /// true = Password already querried.
 
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
 
@@ -181,6 +190,10 @@ public:
     XclImpWebQueryBuffer& GetWebQueryBuffer() const;
     /** Returns the pivot table manager. */
     XclImpPivotTableManager& GetPivotTableManager() const;
+    /** Returns the sheet protection options of the current sheet. */
+    XclImpSheetProtectBuffer& GetSheetProtectBuffer() const;
+    /** Returns the document protection options. */
+    XclImpDocProtectBuffer& GetDocProtectBuffer() const;
 
     /** Returns the page settings of the current sheet. */
     XclImpPageSettings& GetPageSettings() const;
@@ -191,6 +204,9 @@ public:
 
     /** Returns the Calc add-in function name for an Excel function name. */
     String              GetScAddInName( const String& rXclName ) const;
+
+    /** Queries a password from the user and returns it (empty string -> input cancelled). */
+    const String&       QueryPassword() const;
 
 private:
     mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
