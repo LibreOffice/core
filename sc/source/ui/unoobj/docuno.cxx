@@ -277,13 +277,6 @@ void ScModelObj::UpdateAllRowHeights(const ScMarkData* pTabMark)
         pDocShell->UpdateAllRowHeights(pTabMark);
 }
 
-ScDrawLayer* ScModelObj::MakeDrawLayer()
-{
-    if (pDocShell)
-        return pDocShell->MakeDrawLayer();
-    return NULL;
-}
-
 void ScModelObj::BeforeXMLLoading()
 {
     if (pDocShell)

@@ -127,7 +127,6 @@ public:
 
     void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
 
-    ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
 

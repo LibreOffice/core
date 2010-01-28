@@ -192,7 +192,7 @@ public:
 
     ScDPDimensions*         GetDimensionsObject();
 
-    void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
+//UNUSED2009-05 void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
 
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -441,7 +441,7 @@ public:
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
-    BOOL                        IsValidPage( const ScDPItemData& rData );
+//UNUSED2009-05 BOOL                        IsValidPage( const ScDPItemData& rData );
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<

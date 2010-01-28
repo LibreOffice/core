@@ -151,7 +151,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
 {
     if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO
-        && ::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue) )
+        && (::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue)) )
             rfValue = 0.0;
 }
 

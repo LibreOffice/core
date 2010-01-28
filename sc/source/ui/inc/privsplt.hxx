@@ -73,7 +73,6 @@ class ScPrivatSplit : public Control
 
         virtual void    CtrModified();
 
-        void            SetXRange(Range cRgeX);
         void            SetYRange(Range cRgeY);
 
         void            MoveSplitTo(Point aPos);

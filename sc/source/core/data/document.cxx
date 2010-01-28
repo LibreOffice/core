@@ -304,11 +304,6 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 pRangeName->UpdateTabRef( nPos, 1 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
@@ -396,11 +391,6 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 pRangeName->UpdateTabRef( nTab, 2 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if (pDetOpList)
@@ -4574,11 +4564,11 @@ void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 }
 
 
-void ScDocument::SetPrintRange( SCTAB nTab, const ScRange& rNew )
-{
-    if (ValidTab(nTab) && pTab[nTab])
-        pTab[nTab]->SetPrintRange( rNew );
-}
+//UNUSED2009-05 void ScDocument::SetPrintRange( SCTAB nTab, const ScRange& rNew )
+//UNUSED2009-05 {
+//UNUSED2009-05     if (ValidTab(nTab) && pTab[nTab])
+//UNUSED2009-05         pTab[nTab]->SetPrintRange( rNew );
+//UNUSED2009-05 }
 
 
 void ScDocument::SetPrintEntireSheet( SCTAB nTab )

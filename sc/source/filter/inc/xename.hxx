@@ -56,8 +56,8 @@ public:
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
     sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
 
-    /** Inserts a new built-in defined name. */
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
+//UNUSED2009-05 /** Inserts a new built-in defined name. */
+//UNUSED2009-05 sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Inserts a new built-in defined name, referring to the passed sheet range. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange );
     /** Inserts a new built-in defined name, referring to the passed sheet range list. */

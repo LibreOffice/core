@@ -137,7 +137,6 @@ public:
     void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
     void                    SetOrientation(USHORT nNew);
-    void                    SetSubTotals(BOOL bSet);        // to be removed!
     void                    SetSubTotals(long nCount, const USHORT* pFuncs);
     long                    GetSubTotalsCount() const { return nSubTotalCount; }
     USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }

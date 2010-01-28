@@ -248,8 +248,8 @@ public:
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 
-    BOOL    GetTableList( List& aList ) const;
-    void    SetTableList( const List& aList );
+//UNUSED2009-05 BOOL    GetTableList( List& aList ) const;
+//UNUSED2009-05 void    SetTableList( const List& aList );
 
 public:
     USHORT  nCount;

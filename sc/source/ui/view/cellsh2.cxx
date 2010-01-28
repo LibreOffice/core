@@ -1248,22 +1248,6 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                             bOk = pDBData->HasQueryParam() ||
                                   pDBData->HasSortParam() ||
                                   pDBData->HasSubTotalParam();
-#if OLD_PIVOT_IMPLEMENTATION
-                            if (!bOk)
-                            {
-                                //  Pivottabelle mit den Daten als Quellbereich ?
-                                ScRange aDataRange;
-                                pDBData->GetArea(aDataRange);
-                                ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
-                                USHORT nCount = pPivotCollection ? pPivotCollection->GetCount() : 0;
-                                for (USHORT i=0; i<nCount; i++)
-                                {
-                                    ScPivot* pTemp = (*pPivotCollection)[i];
-                                    if ( pTemp && pTemp->GetSrcArea().Intersects( aDataRange ) )
-                                        bOk = TRUE;
-                                }
-                            }
-#endif
                         }
                     }
                     if (!bOk)

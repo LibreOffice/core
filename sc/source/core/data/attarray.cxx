@@ -103,10 +103,10 @@ ScAttrArray::~ScAttrArray()
 }
 
 //------------------------------------------------------------------------
-
+#ifdef DBG_UTIL
 void ScAttrArray::TestData() const
 {
-#ifdef DBG_UTIL
+
     USHORT nErr = 0;
     if (pData)
     {
@@ -129,8 +129,8 @@ void ScAttrArray::TestData() const
         aMsg += ByteString::CreateFromInt32(nCol);
         DBG_ERROR( aMsg.GetBuffer() );
     }
-#endif
 }
+#endif
 
 //------------------------------------------------------------------------
 

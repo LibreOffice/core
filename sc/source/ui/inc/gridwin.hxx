@@ -38,6 +38,8 @@
 #include "cbutton.hxx"
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <vector>
 #include <memory>
 
@@ -45,9 +47,6 @@
 
 struct ScTableInfo;
 class ScViewSelectionEngine;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDPObject;
 class ScDPFieldPopupWindow;
 class ScDPFieldButton;
@@ -100,44 +99,7 @@ public:
 
 // ---------------------------------------------------------------------------
 // predefines
-class ScGridWindow;
-
-enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_SOLID, SC_OVERLAY_BORDER_TRANSPARENT };
-
-// #114409#
-namespace sdr
-{
-    namespace overlay
-    {
-        // predefines
-        class OverlayObjectList;
-
-        // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
-
-        class OverlayObjectCell : public OverlayObject
-        {
-        public:
-            typedef ::std::vector< basegfx::B2DRange > RangeVector;
-
-        protected:
-            basegfx::B2DPolyPolygon impGetOverlayPolyPolygon() const;
-
-        private:
-            ScOverlayType   mePaintType;
-            RangeVector     maRectangles;
-
-            // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
-
-        public:
-            OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects);
-            virtual ~OverlayObjectCell();
-        };
-
-    } // end of namespace overlay
-} // end of namespace sdr
-
-// ---------------------------------------------------------------------------
+namespace sdr { namespace overlay { class OverlayObjectList; }}
 
 class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {
@@ -174,14 +136,6 @@ private:
     BOOL                    bEEMouse;               // Edit-Engine hat Maus
     BYTE                    nMouseStatus;
     BYTE                    nNestedButtonState;     // track nested button up/down calls
-
-#if OLD_PIVOT_IMPLEMENTATION
-    BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
-    ScPivot*                pDragPivot;
-    BOOL                    bPivotColField;
-    SCCOL                   nPivotCol;
-    SCCOL                   nPivotField;
-#endif
 
     BOOL                    bDPMouse;               // DataPilot-D&D (neue Pivottabellen)
     long                    nDPField;
@@ -241,12 +195,6 @@ private:
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotMouseMove( const MouseEvent& rMEvt );
-    void            PivotMouseButtonUp( const MouseEvent& rMEvt );
-    BOOL            PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove );
-    void            DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos );
-#endif
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );

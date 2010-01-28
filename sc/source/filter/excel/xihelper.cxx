@@ -137,23 +137,23 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
     return bValidStart;
 }
 
-ScRange XclImpAddressConverter::CreateValidRange(
-        const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
-{
-    return ScRange(
-        CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
-        CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
-}
+//UNUSED2009-05 ScRange XclImpAddressConverter::CreateValidRange(
+//UNUSED2009-05         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
+//UNUSED2009-05 {
+//UNUSED2009-05     return ScRange(
+//UNUSED2009-05         CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
+//UNUSED2009-05         CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
+//UNUSED2009-05 }
 
 // cell range list ------------------------------------------------------------
 
-bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
-{
-    for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
-        if( !CheckRange( *aIt, bWarn ) )
-            return false;
-    return true;
-}
+//UNUSED2009-05 bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
+//UNUSED2009-05 {
+//UNUSED2009-05     for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
+//UNUSED2009-05         if( !CheckRange( *aIt, bWarn ) )
+//UNUSED2009-05             return false;
+//UNUSED2009-05     return true;
+//UNUSED2009-05 }
 
 void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
@@ -254,11 +254,11 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
 }
 
-EditTextObject* XclImpStringHelper::CreateNoteObject(
-        const XclImpRoot& rRoot, const XclImpString& rString )
-{
-    return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
-}
+//UNUSED2009-05 EditTextObject* XclImpStringHelper::CreateNoteObject(
+//UNUSED2009-05         const XclImpRoot& rRoot, const XclImpString& rString )
+//UNUSED2009-05 {
+//UNUSED2009-05     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
+//UNUSED2009-05 }
 
 ScBaseCell* XclImpStringHelper::CreateCell(
         const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )

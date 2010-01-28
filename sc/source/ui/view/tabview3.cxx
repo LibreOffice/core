@@ -466,19 +466,9 @@ void ScTabView::CursorPosChanged()
     //  Broadcast, damit andere Views des Dokuments auch umschalten
 
     ScDocument* pDoc = aViewData.GetDocument();
-#if OLD_PIVOT_IMPLEMENTATION
-    BOOL bPivot = ( NULL != pDoc->GetPivotAtCursor( aViewData.GetCurX(),
-                                                    aViewData.GetCurY(),
-                                                    aViewData.GetTabNo() ) ||
-                    NULL != pDoc->GetDPAtCursor( aViewData.GetCurX(),
-                                                    aViewData.GetCurY(),
-                                                    aViewData.GetTabNo() ) );
-    aViewData.GetViewShell()->SetPivotShell(bPivot);
-#else
     bool bDP = NULL != pDoc->GetDPAtCursor(
         aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
     aViewData.GetViewShell()->SetPivotShell(bDP);
-#endif
 
     //  UpdateInputHandler jetzt in CellContentChanged
 

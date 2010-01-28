@@ -995,7 +995,8 @@ IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
 
         aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
         this->fillAllControls( aParameter );
-        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel);
+        uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
+        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
     }
     return 0;
 }
