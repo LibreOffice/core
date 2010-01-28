@@ -107,6 +107,10 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL appendSequence()
         throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertComplexCategoryLevel( ::sal_Int32 nLevel )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deleteComplexCategoryLevel( ::sal_Int32 nLevel )
+        throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )

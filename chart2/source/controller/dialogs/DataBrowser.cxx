@@ -556,9 +556,12 @@ bool DataBrowser::MaySwapColumns() const
             return (static_cast< sal_uInt32 >( nColIndex ) < (m_aSeriesHeaders.size() - 1));
     }
 
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
     return ! IsReadOnly()
-        && ( GetCurColumnId() > 1 )
-        && ( GetCurColumnId() < ColCount() - 1 );
+        && ( nColIdx > 0 )
+        && ( nColIdx < ColCount()-2 )
+        && m_apDataBrowserModel.get()
+        && !m_apDataBrowserModel->isCategoriesColumn( nColIdx );
 }
 
 // bool DataBrowser::MaySortRow() const
@@ -880,7 +883,7 @@ void DataBrowser::InsertColumn()
         if( IsModified() )
             SaveModified();
 
-        m_apDataBrowserModel->insertDataSeries( nColIdx );
+        m_apDataBrowserModel->insertDataSeriesOrComplexCategoryLevel( nColIdx );
         RenewTable();
     }
 }
@@ -897,7 +900,7 @@ void DataBrowser::RemoveColumn()
             SaveModified();
 
         m_bDataValid = true;
-        m_apDataBrowserModel->removeDataSeries( nColIdx );
+        m_apDataBrowserModel->removeDataSeriesOrComplexCategoryLevel( nColIdx );
         RenewTable();
     }
 }

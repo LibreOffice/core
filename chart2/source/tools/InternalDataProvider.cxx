@@ -249,6 +249,55 @@ private:
     sal_Int32 m_nLevel;
 };
 
+struct lcl_insertStringAtLevel : public ::std::unary_function< vector< OUString >, void >
+{
+public:
+
+    explicit lcl_insertStringAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    {}
+
+    void operator() ( vector< OUString >& rVector )
+    {
+        if( m_nLevel > rVector.size() )
+            rVector.resize( m_nLevel );
+
+        vector< OUString >::iterator aIt( rVector.begin() );
+        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        {
+            if( nN==m_nLevel )
+                break;
+        }
+        rVector.insert( aIt, OUString() );
+    }
+
+private:
+    sal_Int32 m_nLevel;
+};
+
+struct lcl_removeStringAtLevel : public ::std::unary_function< vector< OUString >, void >
+{
+public:
+
+    explicit lcl_removeStringAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    {}
+
+    void operator() ( vector< OUString >& rVector )
+    {
+        vector< OUString >::iterator aIt( rVector.begin() );
+        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        {
+            if( nN==m_nLevel )
+            {
+                rVector.erase( aIt );
+                break;
+            }
+        }
+    }
+
+private:
+    sal_Int32 m_nLevel;
+};
+
 vector< OUString > lcl_AnyToStringVector( const Sequence< uno::Any >& aAnySeq )
 {
     vector< OUString > aStringVec;
@@ -852,6 +901,41 @@ void SAL_CALL InternalDataProvider::appendSequence()
         m_aInternalData.appendColumn();
     else
         m_aInternalData.appendRow();
+}
+
+void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel )
+        throw (uno::RuntimeException)
+{
+    OSL_ENSURE( nLevel> 0, "you can only insert category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
+    if( nLevel>0 )
+    {
+        vector< vector< OUString > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
+        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_insertStringAtLevel(nLevel) );
+        if( m_bDataInColumns )
+            m_aInternalData.setComplexRowLabels( aComplexCategories );
+        else
+            m_aInternalData.setComplexColumnLabels( aComplexCategories );
+
+        tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
+        ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+    }
+}
+void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel )
+        throw (uno::RuntimeException)
+{
+    OSL_ENSURE( nLevel>0, "you can only delete category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
+    if( nLevel>0 )
+    {
+        vector< vector< OUString > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
+        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_removeStringAtLevel(nLevel) );
+        if( m_bDataInColumns )
+            m_aInternalData.setComplexRowLabels( aComplexCategories );
+        else
+            m_aInternalData.setComplexColumnLabels( aComplexCategories );
+
+        tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
+        ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+    }
 }
 
 void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )

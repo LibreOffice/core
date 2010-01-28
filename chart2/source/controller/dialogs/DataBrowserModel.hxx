@@ -61,12 +61,12 @@ public:
     /** Inserts a new data series after the data series to which the data column
         with index nAfterColumnIndex belongs.
      */
-    void insertDataSeries( sal_Int32 nAfterColumnIndex );
+    void insertDataSeriesOrComplexCategoryLevel( sal_Int32 nAfterColumnIndex );
 
     /** Removes a data series to which the data column with index nAtColumnIndex
         belongs.
      */
-    void removeDataSeries( sal_Int32 nAtColumnIndex );
+    void removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex );
 
     /** Swaps the series to which the data column with index nFirstIndex belongs
         with the next series (which starts at an index >= nFirstIndex + 1)
@@ -100,6 +100,7 @@ public:
 
     // returns the UI string of the corresponding role
     ::rtl::OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
+    bool isCategoriesColumn( sal_Int32 nColumnIndex ) const;
 
     struct tDataHeader
     {
