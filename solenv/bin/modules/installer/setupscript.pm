@@ -159,7 +159,9 @@ sub add_lowercase_productname_setupscriptvariable
                 # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
+                $newline = "\%SYSTEMINTUNIXPACKAGENAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%UNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
@@ -169,9 +171,11 @@ sub add_lowercase_productname_setupscriptvariable
                 # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPACKAGENAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+                $newline = "\%SOLARISBRANDPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
             }
@@ -490,6 +494,40 @@ sub add_forced_properties
     foreach $property ( @installer::globals::forced_properties )
     {
         if ( ! exists($allvariables->{$property}) ) { $allvariables->{$property} = ""; }
+    }
+}
+
+#####################################################################################
+# Some properties are created automatically. It should be possible to
+# overwrite them, with PRESET properties. For example UNIXPRODUCTNAME
+# with PRESETUNIXPRODUCTNAME, if this is defined and the automatic process
+# does not deliver the desired results.
+#####################################################################################
+
+sub replace_preset_properties
+{
+    my ($allvariables) = @_;
+
+    # SOLARISBRANDPACKAGENAME
+    # needs to be replaced by
+    # PRESETSOLARISBRANDPACKAGENAME
+
+    my @presetproperties = ();
+    push(@presetproperties, "SOLARISBRANDPACKAGENAME");
+    push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
+    # push(@presetproperties, "UNIXPACKAGENAME");
+    # push(@presetproperties, "WITHOUTDOTUNIXPACKAGENAME");
+    # push(@presetproperties, "UNIXPRODUCTNAME");
+    # push(@presetproperties, "WITHOUTDOTUNIXPRODUCTNAME");
+
+
+    foreach $property ( @presetproperties )
+    {
+        my $presetproperty = "PRESET" . $property;
+        if (( exists($allvariables->{$presetproperty}) ) && ( $allvariables->{$presetproperty} ne "" ))
+        {
+            $allvariables->{$property} = $allvariables->{$presetproperty};
+        }
     }
 }
 
