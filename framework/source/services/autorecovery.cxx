@@ -2735,6 +2735,9 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
                 "unexpected document state" );
             Reference< XLoadable > xModelLoad( xModel, UNO_QUERY_THROW );
             xModelLoad->initNew();
+
+            // TODO: remove load-process specific arguments from the descriptor, e.g. the status indicator
+            xModel->attachResource( sURL, lDescriptor.getAsConstPropertyValueList() );
         }
         else
         {
@@ -2745,10 +2748,10 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
                 lDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString() ),
                 lDescriptor.getAsConstPropertyValueList()
             );
-        }
 
-        xModel->attachResource( sURL, lDescriptor.getAsConstPropertyValueList() );
-            // TODO: remove load-process specific arguments from the descriptor, e.g. the status indicator
+            // No attachResource needed here. By definition (of XDocumentRecovery), the implementation is responsible
+            // for completely initializing the model, which includes attachResource (or equivalent), if required.
+        }
 
         // re-create all the views
         ::std::vector< ::rtl::OUString > aViewsToRestore( rInfo.ViewNames.getLength() );

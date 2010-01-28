@@ -1687,6 +1687,13 @@ void SAL_CALL SfxBaseModel::recoverFromFile( const ::rtl::OUString& i_SourceLoca
     aMediaDescriptor.put( "URL", i_SourceLocation );
 
     load( aMediaDescriptor.getPropertyValues() );
+
+    // Note: The XDocumentRecovery interface specification requires us to do an attachResource after loading.
+    // However, we will not do this here, as we know that our load implementation (respectively some method
+    // called from there) already did so.
+    // In particular, the load process might already have modified some elements of the media
+    // descriptor, for instance the MacroExecMode (in case the user was involved to decide about it), and we do
+    // not want to overwrite it with the "old" elements passed to this method here.
 }
 
 //________________________________________________________________________________________________________
