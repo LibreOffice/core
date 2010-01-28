@@ -144,7 +144,7 @@ private:
     void                        ImplLoadImports();
     void                        ImplWriteImportList();
 
-    GalleryThemeEntry*          ImplGetThemeEntry( const String& rThemeName );
+    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const String& rThemeName );
     GalleryThemeEntry*          ImplGetThemeEntry( ULONG nThemeId );
     GalleryImportThemeEntry*    ImplGetImportThemeEntry( const String& rImportName );
 
@@ -168,7 +168,7 @@ public:
     SVX_DLLPUBLIC BOOL          CreateTheme( const String& rThemeName, UINT32 nNumFrom = 0 );
     BOOL                        CreateImportTheme( const INetURLObject& rURL, const String& rFileName );
     BOOL                        RenameTheme( const String& rOldName, const String& rNewName );
-    BOOL                        RemoveTheme( const String& rThemeName );
+    SVX_DLLPUBLIC BOOL                      RemoveTheme( const String& rThemeName );
 
     SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const String& rThemeName, SfxListener& rListener );
     SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );

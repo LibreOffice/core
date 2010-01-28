@@ -73,7 +73,7 @@ protected:
 
 public:
     SdrObjConnection() { ResetVars(); }
-    ~SdrObjConnection();
+    SVX_DLLPUBLIC ~SdrObjConnection();
 
     void ResetVars();
     FASTBOOL TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsolutePos) const;

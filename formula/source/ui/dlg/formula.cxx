@@ -1605,6 +1605,7 @@ void FormulaDlg_Impl::Update()
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     const String sExpression = pMEdit->GetText();
+    aOldFormula = String();
     UpdateTokenArray(sExpression);
     FormulaCursorHdl(&aMEFormula);
     CalcStruct(sExpression);

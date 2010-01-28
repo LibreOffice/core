@@ -109,7 +109,7 @@ namespace sdr
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class SvxViewHint : public SfxHint
+class SVX_DLLPUBLIC SvxViewHint : public SfxHint
 {
 public:
     enum HintType { SVX_HINT_VIEWCHANGED };

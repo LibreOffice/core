@@ -246,7 +246,6 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                            < m_aDropdownMenuList.size() ) )
                     {
                         m_aCurrentSelection = m_aDropdownMenuList[nPos];
-                        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
 
                         // send notification
                         uno::Sequence< beans::NamedValue > aInfo( 1 );
@@ -353,7 +352,6 @@ IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
     if ( nItemId > 0 && nItemId <= m_aDropdownMenuList.size() )
     {
         m_aCurrentSelection = m_aDropdownMenuList[nItemId-1];
-        m_pToolbar->SetItemText( m_nID, m_aCurrentSelection );
 
         execute( 0 );
     }

@@ -286,12 +286,14 @@ namespace drawinglayer
                     nIndex,
                     nLength);
 
-                return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                // #i102556# take empty results into account
+                if(!aRect.IsEmpty())
+                {
+                    return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                }
             }
-            else
-            {
-                return basegfx::B2DRange();
-            }
+
+            return basegfx::B2DRange();
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

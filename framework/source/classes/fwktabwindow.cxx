@@ -40,6 +40,7 @@
 #include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -90,7 +91,7 @@ FwkTabPage::FwkTabPage(
                const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
                const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
 
-    TabPage( pParent, WB_DIALOGCONTROL ),
+    TabPage( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_CHILDDLGCTRL ),
 
     m_sPageURL          ( rPageURL ),
     m_xEventHdl         ( rEventHdl ),
@@ -121,6 +122,18 @@ void FwkTabPage::CreateDialog()
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
                 m_sPageURL, rtl::OUString(), xParent, xHandler ), uno::UNO_QUERY );
+
+        uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
+        if ( xPageControl.is() )
+        {
+            uno::Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
+            if ( xWinPeer.is() )
+            {
+                Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                if ( pWindow )
+                    pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
+            }
+        }
 
         CallMethod( INITIALIZE_METHOD );
     }

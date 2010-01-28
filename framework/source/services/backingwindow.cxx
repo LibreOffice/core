@@ -167,6 +167,10 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
+    maWelcome.SetPaintTransparent( TRUE );
+    maProduct.SetPaintTransparent( TRUE );
+    EnableChildTransparentMode();
+
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     // add some breathing space for the images
@@ -279,9 +283,9 @@ void BackingWindow::initBackground()
     }
 
     maWelcome.SetControlForeground( maWelcomeTextColor );
-    maWelcome.SetControlBackground( aTextBGColor );
+    maWelcome.SetBackground();
     maProduct.SetControlForeground( maWelcomeTextColor );
-    maProduct.SetControlBackground( aTextBGColor );
+    maProduct.SetBackground();
     maCreateText.SetControlForeground( maLabelTextColor );
     maCreateText.SetControlBackground( aTextBGColor );
     maWriterText.SetControlForeground( maLabelTextColor );

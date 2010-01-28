@@ -430,6 +430,16 @@ USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
+void SvxOutlinerForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+{
+    return rOutliner.GetEditEngine().GetLineBoundaries( rStart, rEnd, nPara, nLine );
+}
+
+USHORT SvxOutlinerForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    return rOutliner.GetEditEngine().GetLineNumberAtIndex( nPara, nIndex );
+}
+
 sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL )
 {
     rOutliner.QuickFormatDoc();

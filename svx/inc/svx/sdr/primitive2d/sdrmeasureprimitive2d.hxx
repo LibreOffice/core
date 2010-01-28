@@ -63,8 +63,8 @@ namespace drawinglayer
         {
         private:
             attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
-            ::basegfx::B2DPoint                         maStart;
-            ::basegfx::B2DPoint                         maEnd;
+            basegfx::B2DPoint                           maStart;
+            basegfx::B2DPoint                           maEnd;
             MeasureTextPosition                         meHorizontal;
             MeasureTextPosition                         meVertical;
             double                                      mfDistance;
@@ -80,9 +80,9 @@ namespace drawinglayer
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
-                const ::basegfx::B2DHomMatrix& rObjectMatrix,
-                const ::basegfx::B2DPoint& rStart,
-                const ::basegfx::B2DPoint& rEnd,
+                const basegfx::B2DHomMatrix& rObjectMatrix,
+                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPoint& rEnd,
                 bool bLeftActive,
                 bool bRightActive) const;
 
@@ -93,7 +93,8 @@ namespace drawinglayer
         public:
             SdrMeasurePrimitive2D(
                 const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
-                const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd,
+                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPoint& rEnd,
                 MeasureTextPosition eHorizontal,
                 MeasureTextPosition eVertical,
                 double fDistance,
@@ -107,8 +108,8 @@ namespace drawinglayer
 
             // data access
             const attribute::SdrLineShadowTextAttribute& getSdrLSTAttribute() const { return maSdrLSTAttribute; }
-            const ::basegfx::B2DPoint& getStart() const { return maStart; }
-            const ::basegfx::B2DPoint& getEnd() const { return maEnd; }
+            const basegfx::B2DPoint& getStart() const { return maStart; }
+            const basegfx::B2DPoint& getEnd() const { return maEnd; }
             MeasureTextPosition getHorizontal() const { return meHorizontal; }
             MeasureTextPosition getVertical() const { return meVertical; }
             double getDistance() const { return mfDistance; }

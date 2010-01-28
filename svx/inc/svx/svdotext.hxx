@@ -259,7 +259,7 @@ protected:
     // Flag for allowing text animation. Default is sal_true.
     BOOL                        mbTextAnimationAllowed : 1;
 
-    SVX_DLLPRIVATE SdrOutliner& ImpGetDrawOutliner() const;
+    SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
     SVX_DLLPRIVATE void ImpCheckMasterCachable();

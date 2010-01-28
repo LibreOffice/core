@@ -404,6 +404,38 @@ TabPage OFA_TP_VIEW
         };
     };
 
+    // #i97672#
+    FixedLine FL_SELECTION
+    {
+        Pos = MAP_APPFONT ( 133 , ROW_FL_SELECTION ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
+
+    CheckBox CB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 139, ROW_CB_SELECTION + (((12 - RSC_CD_CHECKBOX_HEIGHT) / 2) + 1)) ;
+        Size = MAP_APPFONT ( 118 - 34 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Text [ en-US ] = "Transparency" ;
+    };
+
+    MetricField MF_SELECTION
+    {
+        Pos = MAP_APPFONT ( 139 + (95 - 12), ROW_CB_SELECTION ) ;
+        Size = MAP_APPFONT ( 31 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 90 ;
+        DecimalDigits = 0 ;
+        First = 10 ;
+        Last = 90 ;
+        SpinSize = 5 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ en-US ] = "%" ;
+    };
 };
 // *******************************************************************
 

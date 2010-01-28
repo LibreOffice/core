@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=unodraw
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,21 +43,18 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	\
-        $(SLO)$/UnoNamespaceMap.obj \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/UnoGraphicExporter.obj \
-        $(SLO)$/unopool.obj \
         $(SLO)$/XPropertyTable.obj \
         $(SLO)$/UnoNameItemTable.obj \
         $(SLO)$/unoshape.obj	\
         $(SLO)$/unoipset.obj	\
-        $(SLO)$/unoctabl.obj	\
         $(SLO)$/unoshap2.obj	\
         $(SLO)$/unoshap3.obj	\
         $(SLO)$/unoshap4.obj	\
         $(SLO)$/unopage.obj		\
         $(SLO)$/unoshtxt.obj	\
-        $(SLO)$/unoshcol.obj	\
         $(SLO)$/unoprov.obj		\
         $(SLO)$/unomod.obj      \
         $(SLO)$/unonrule.obj	\
@@ -69,9 +67,18 @@ SLOFILES =	\
         $(SLO)$/unomtabl.obj	\
         $(SLO)$/unodtabl.obj	\
         $(SLO)$/gluepts.obj     \
-        $(SLO)$/recoveryui.obj	\
         $(SLO)$/tableshape.obj  \
         $(SLO)$/shapepropertynotifier.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/UnoNamespaceMap.obj \
+        $(SLO)$/unopool.obj \
+        $(SLO)$/unoctabl.obj	\
+        $(SLO)$/unoshcol.obj	\
+        $(SLO)$/recoveryui.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 SRS1NAME=unodraw
 SRC1FILES =  \

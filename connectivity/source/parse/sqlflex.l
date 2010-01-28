@@ -483,7 +483,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			}
 
 		} 
-		else if (ch == '\r' || ch == '\n')
+		else if (nTyp != 1 && (ch == '\r' || ch == '\n') )
 			break;					
 		else
 		{

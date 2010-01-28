@@ -113,7 +113,7 @@ namespace connectivity
             if ( nStartPos >= nLen )
                 return;
 
-            sal_Unicode* pData = _rStr.AllocBuffer(nLen - nStartPos);
+            sal_Unicode* pData = _rStr.AllocBuffer( nLen - nStartPos + 1 );
             const sal_Unicode* pStart = pData;
             // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
             for( xub_StrLen i = nStartPos; i < nLen; ++i )
@@ -135,6 +135,7 @@ namespace connectivity
                         {
                             // String-Ende
                             bInString = FALSE;
+                            *pData = 0;
                         }
                     }
                     else
@@ -151,6 +152,7 @@ namespace connectivity
                         // Vorzeitiger Abbruch der Schleife moeglich, denn
                         // wir haben, was wir wollten.
                         nStartPos = i+1;
+                        *pData = 0;
                         break;
                     }
                     else

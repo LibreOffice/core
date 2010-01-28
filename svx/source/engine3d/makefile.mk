@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=engine3d
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,7 +43,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES= \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/e3dsceneupdater.obj \
         $(SLO)$/helperminimaldepth3d.obj	\
         $(SLO)$/helperhittest3d.obj			\
@@ -57,15 +59,20 @@ SLOFILES= \
         $(SLO)$/svx3ditems.obj	\
         $(SLO)$/deflt3d.obj		\
         $(SLO)$/e3dundo.obj     \
-        $(SLO)$/volume3d.obj	\
-        $(SLO)$/viewpt3d.obj	\
         $(SLO)$/viewpt3d2.obj	\
         $(SLO)$/camera3d.obj	\
         $(SLO)$/objfac3d.obj 	\
         $(SLO)$/dragmt3d.obj	\
         $(SLO)$/view3d.obj		\
-        $(SLO)$/view3d1.obj     \
+        $(SLO)$/view3d1.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/volume3d.obj	\
+        $(SLO)$/viewpt3d.obj	\
         $(SLO)$/float3d.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 #disable optimizer for MSCompiler and ICC
 .IF "$(COM)"=="ICC" || "$(COM)"=="MSC"

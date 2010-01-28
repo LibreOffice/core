@@ -689,7 +689,7 @@ public:
     void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
-    void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel ) { mxUnoModel = xModel; }
+    void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.

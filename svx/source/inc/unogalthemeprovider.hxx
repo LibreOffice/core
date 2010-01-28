@@ -36,6 +36,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/gallery/XGalleryThemeProvider.hpp>
 
+#include <svx/svxdllapi.h>
+
 class Gallery;
 
 namespace unogallery {
@@ -60,8 +62,8 @@ public:
     GalleryThemeProvider();
     ~GalleryThemeProvider();
 
-    static ::rtl::OUString getImplementationName_Static() throw();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
+    SVX_DLLPUBLIC static ::rtl::OUString getImplementationName_Static() throw();
+    SVX_DLLPUBLIC static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 

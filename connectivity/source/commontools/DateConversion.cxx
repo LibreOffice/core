@@ -87,6 +87,7 @@ using namespace ::com::sun::star::beans;
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
+                case DataType::LONGVARCHAR:
                     if (bQuote)
                         aRet += ::rtl::OUString::createFromAscii("'");
                     {

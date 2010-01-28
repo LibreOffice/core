@@ -1128,7 +1128,11 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     // <--
 
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
-    sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+    // --> OD 2009-07-22 #i73249#
+//    sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+    sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+    sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
+    // <--
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
     sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
@@ -2782,6 +2786,10 @@ void XMLTextParagraphExport::_exportTextFrame(
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
 
+    // --> OD 2009-07-22 #i73249#
+    // svg:title and svg:desc
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
 }
 
 void XMLTextParagraphExport::exportContour(
@@ -2973,8 +2981,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
 
-    // svg:desc
-    exportAlternativeText( rPropSet, rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+    // svg:title and svg:desc
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
 
     // draw:contour
     exportContour( rPropSet, rPropSetInfo );
@@ -3003,23 +3013,39 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     if (rPropSet->getPropertySetInfo()->hasPropertyByName(sImageMap))
         GetExport().GetImageMapExport().Export( rPropSet );
 }
-void XMLTextParagraphExport::exportAlternativeText(
+
+// --> OD 2009-07-22 #i73249#
+void XMLTextParagraphExport::exportTitleAndDescription(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     // svg:title
-    if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
+    if( rPropSetInfo->hasPropertyByName( sTitle ) )
     {
-        OUString sAltText;
-        rPropSet->getPropertyValue( sAlternativeText ) >>= sAltText;
-        if( sAltText.getLength() )
+        OUString sObjTitle;
+        rPropSet->getPropertyValue( sTitle ) >>= sObjTitle;
+        if( sObjTitle.getLength() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                       XML_TITLE, sal_True, sal_False );
-            GetExport().Characters( sAltText );
+            GetExport().Characters( sObjTitle );
+        }
+    }
+
+    // svg:description
+    if( rPropSetInfo->hasPropertyByName( sDescription ) )
+    {
+        OUString sObjDesc;
+        rPropSet->getPropertyValue( sDescription ) >>= sObjDesc;
+        if( sObjDesc.getLength() )
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
+                                      XML_DESC, sal_True, sal_False );
+            GetExport().Characters( sObjDesc );
         }
     }
 }
+// <--
 
 void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
     const Reference < XPropertySet >&,

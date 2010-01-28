@@ -32,6 +32,7 @@
 #include "precompiled_ucb.hxx"
 
 #include <hash_map>
+#include <vector>
 #include <string.h>
 #include <rtl/string.h>
 #include <ne_socket.h>
@@ -41,6 +42,8 @@
 #include <ne_ssl.h>
 #include "libxml/parser.h"
 #include <rtl/ustrbuf.hxx>
+#include "comphelper/sequence.hxx"
+
 #include "DAVAuthListener.hxx"
 #include "NeonTypes.hxx"
 #include "NeonSession.hxx"
@@ -395,6 +398,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int failures,
                                                 const ne_ssl_certificate *cert )
 {
+    OSL_ASSERT(cert);
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnv;
      uno::Reference< ::com::sun::star::security::XCertificateContainer > xCertificateContainer;
@@ -442,18 +446,44 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     xSecurityEnv = mxSecurityContext->getSecurityEnvironment();
 
 
-    char * rawCert;
+    //The end entity certificate
+    char * eeCertB64 = ne_ssl_cert_export( cert );
 
-    rawCert = ne_ssl_cert_export( cert );
+    ::rtl::OString sEECertB64( eeCertB64 );
 
-    ::rtl::OString sRawCert( rawCert );
+    uno::Reference< com::sun::star::security::XCertificate> xEECert =
+        xSecurityEnv->createCertificateFromAscii(
+        ::rtl::OStringToOUString( sEECertB64, RTL_TEXTENCODING_ASCII_US ) );
 
-    uno::Reference< com::sun::star::security::XCertificate> xCert = xSecurityEnv->createCertificateFromAscii( ::rtl::OStringToOUString( sRawCert, RTL_TEXTENCODING_ASCII_US ) );
+    free(eeCertB64);
+    eeCertB64 = NULL;
 
-    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xCert );
+    std::vector<uno::Reference<com::sun::star::security::XCertificate> > vecCerts;
+    const ne_ssl_certificate * issuerCert = cert;
+    do
+    {
+        //get the intermediate certificate
+        //the returned value is const ! Therfore it does not need to be freed
+        //with ne_ssl_cert_free, which takes a non-const argument
+        issuerCert = ne_ssl_cert_signedby(issuerCert);
+        if (NULL == issuerCert)
+            break;
+
+        char * imCertB64 = ne_ssl_cert_export(issuerCert);
+        ::rtl::OString sInterMediateCertB64(imCertB64);
+        free(imCertB64);
+        uno::Reference< com::sun::star::security::XCertificate> xImCert =
+            xSecurityEnv->createCertificateFromAscii(
+                ::rtl::OStringToOUString( sInterMediateCertB64, RTL_TEXTENCODING_ASCII_US ) );
+        if (xImCert.is())
+            vecCerts.push_back(xImCert);
+    }while (1);
+
+    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xEECert,
+        ::comphelper::containerToSequence(vecCerts) );
 
 
-    if ( pSession->isDomainMatch( GetHostnamePart( xCert.get()->getSubjectName())) )
+    if ( pSession->isDomainMatch( GetHostnamePart( xEECert.get()->getSubjectName())) )
     {
         //if host name matched with  certificate then look if the certificate was ok
         if( certValidity == ::security::CertificateValidity::VALID )
@@ -472,7 +502,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         if ( xIH.is() )
         {
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest > xRequest
-                = new ucbhelper::SimpleCertificateValidationRequest((sal_Int32)failures, xCert, pSession->getHostName() );
+                = new ucbhelper::SimpleCertificateValidationRequest((sal_Int32)failures, xEECert, pSession->getHostName() );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection

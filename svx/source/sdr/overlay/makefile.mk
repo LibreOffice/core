@@ -56,6 +56,7 @@ SLOFILES=\
         $(SLO)$/overlaypolypolygon.obj					\
         $(SLO)$/overlayprimitive2dsequenceobject.obj	\
         $(SLO)$/overlayrollingrectangle.obj				\
+        $(SLO)$/overlayselection.obj					\
         $(SLO)$/overlaytools.obj						\
         $(SLO)$/overlaytriangle.obj
 

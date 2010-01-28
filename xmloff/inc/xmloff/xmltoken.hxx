@@ -3075,6 +3075,7 @@ namespace xmloff { namespace token {
         XML_AT_LABELS,
         XML_AT_AXIS,
         XML_AT_LABELS_AND_AXIS,
+        XML_FILLED_RADAR,
 
         // MathML only
         XML_MATHVARIANT,

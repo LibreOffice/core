@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=unoedit
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,19 +43,25 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	\
-        $(SLO)$/UnoForbiddenCharsTable.obj \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/unoedsrc.obj	\
         $(SLO)$/unoedhlp.obj	\
-        $(SLO)$/unopracc.obj	\
-        $(SLO)$/unoedprx.obj	\
-        $(SLO)$/unoviwed.obj	\
         $(SLO)$/unoviwou.obj	\
         $(SLO)$/unofored.obj	\
         $(SLO)$/unoforou.obj	\
         $(SLO)$/unotext.obj		\
         $(SLO)$/unotext2.obj	\
         $(SLO)$/unofield.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/UnoForbiddenCharsTable.obj \
+        $(SLO)$/unopracc.obj	\
+        $(SLO)$/unoedprx.obj	\
+        $(SLO)$/unoviwed.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- Tagets -------------------------------------------------------
 
