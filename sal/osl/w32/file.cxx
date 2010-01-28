@@ -69,7 +69,8 @@
 //##################################################################
 struct FileHandle_Impl
 {
-    HANDLE m_hFile;
+    CRITICAL_SECTION m_mutex;
+    HANDLE           m_hFile;
 
     /** State
      */
@@ -103,6 +104,7 @@ struct FileHandle_Impl
     oslFileError  setPos (sal_uInt64 uPos);
 
     sal_uInt64    getSize() const;
+    oslFileError  setSize (sal_uInt64 uPos);
 
     oslFileError readAt (
         LONGLONG     nOffset,
@@ -161,6 +163,17 @@ struct FileHandle_Impl
         Allocator();
         ~Allocator();
     };
+
+    /** Guard.
+     */
+    class Guard
+    {
+        LPCRITICAL_SECTION m_mutex;
+
+    public:
+        explicit Guard(LPCRITICAL_SECTION pMutex);
+        ~Guard();
+    };
 };
 
 FileHandle_Impl::Allocator &
@@ -198,6 +211,18 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
         rtl_cache_free (m_cache, pBuffer);
 }
 
+FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
+    : m_mutex (pMutex)
+{
+    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::Guard(): null pointer.");
+    ::EnterCriticalSection (m_mutex);
+}
+FileHandle_Impl::Guard::~Guard()
+{
+    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    ::LeaveCriticalSection (m_mutex);
+}
+
 FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
     : m_hFile   (hFile),
       m_state   (STATE_READABLE | STATE_WRITEABLE),
@@ -209,6 +234,7 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_bufsiz  (0),
       m_buffer  (0)
 {
+    ::InitializeCriticalSection (&m_mutex);
     Allocator::get().allocate (&m_buffer, &m_bufsiz);
     if (m_buffer != 0)
         memset (m_buffer, 0, m_bufsiz);
@@ -217,6 +243,7 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
 FileHandle_Impl::~FileHandle_Impl()
 {
     Allocator::get().deallocate (m_buffer), m_buffer = 0;
+    ::DeleteCriticalSection (&m_mutex);
 }
 
 void * FileHandle_Impl::operator new(size_t n)
@@ -251,6 +278,23 @@ sal_uInt64 FileHandle_Impl::getSize() const
 {
     LONGLONG bufend = std::max((LONGLONG)(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
+}
+
+oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
+{
+    LARGE_INTEGER nDstPos; nDstPos.QuadPart = sal::static_int_cast< LONGLONG >(uSize);
+    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+        return oslTranslateFileError( GetLastError() );
+
+    if (!::SetEndOfFile(m_hFile))
+        return oslTranslateFileError( GetLastError() );
+    m_size = uSize;
+
+    nDstPos.QuadPart = m_offset;
+    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+        return oslTranslateFileError( GetLastError() );
+
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::readAt (
@@ -711,6 +755,8 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
+
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return result;
@@ -729,6 +775,8 @@ SAL_CALL osl_closeFile(oslFileHandle Handle)
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
+    ::EnterCriticalSection (&(pImpl->m_mutex));
+
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
     {
@@ -741,6 +789,7 @@ SAL_CALL osl_closeFile(oslFileHandle Handle)
         result = oslTranslateFileError( GetLastError() );
     }
 
+    ::LeaveCriticalSection (&(pImpl->m_mutex));
     delete pImpl;
     return (result);
 }
@@ -852,6 +901,7 @@ SAL_CALL osl_readLine(
     sal_uInt64 uBytesRead = 0;
 
     // read at current filepos; filepos += uBytesRead;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readLineAt (
         pImpl->m_filepos, ppSequence, &uBytesRead);
     if (result == osl_File_E_None)
@@ -872,6 +922,7 @@ SAL_CALL osl_readFile(
         return osl_File_E_INVAL;
 
     // read at current filepos; filepos += *pBytesRead;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readFileAt (
         pImpl->m_filepos, pBuffer, uBytesRequested, pBytesRead);
     if (result == osl_File_E_None)
@@ -893,6 +944,7 @@ SAL_CALL osl_writeFile(
         return osl_File_E_INVAL;
 
     // write at current filepos; filepos += *pBytesWritten;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->writeFileAt (
         pImpl->m_filepos, pBuffer, uBytesToWrite, pBytesWritten);
     if (result == osl_File_E_None)
@@ -922,6 +974,7 @@ SAL_CALL osl_readFileAt(
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
     // read at specified fileptr
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->readFileAt (nOffset, pBuffer, uBytesRequested, pBytesRead);
 }
 
@@ -947,6 +1000,7 @@ SAL_CALL osl_writeFileAt(
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
     // write at specified fileptr
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->writeFileAt (nOffset, pBuffer, uBytesToWrite, pBytesWritten);
 }
 
@@ -959,6 +1013,7 @@ SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pIsEOF))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pIsEOF = (pImpl->getPos() == pImpl->getSize());
     return osl_File_E_None;
 }
@@ -971,6 +1026,7 @@ SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pPos))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pPos = pImpl->getPos();
     return osl_File_E_None;
 }
@@ -988,6 +1044,7 @@ SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset
         return osl_File_E_OVERFLOW;
     LONGLONG nPos = 0, nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     switch (uHow)
     {
         case osl_Pos_Absolut:
@@ -1027,6 +1084,7 @@ SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pSize))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pSize = pImpl->getSize();
     return osl_File_E_None;
 }
@@ -1046,23 +1104,13 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
     if (g_limit_longlong < uSize)
         return osl_File_E_OVERFLOW;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
+    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
 
-    LARGE_INTEGER nDstPos; nDstPos.QuadPart = sal::static_int_cast< LONGLONG >(uSize);
-    if (!::SetFilePointerEx(pImpl->m_hFile, nDstPos, 0, FILE_BEGIN))
-        return oslTranslateFileError( GetLastError() );
-
-    if (!::SetEndOfFile(pImpl->m_hFile))
-        return oslTranslateFileError( GetLastError() );
-    pImpl->m_size = uSize;
-
-    nDstPos.QuadPart = pImpl->m_offset;
-    if (!::SetFilePointerEx(pImpl->m_hFile, nDstPos, 0, FILE_BEGIN))
-        return oslTranslateFileError( GetLastError() );
-
-    return osl_File_E_None;
+    return pImpl->setSize (uSize);
 }
 
 //##################################################################
