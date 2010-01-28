@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,42 +31,37 @@
 
 PRJ=..$/..$/..$/..$/..
 
-PRJNAME=offapi
+PRJNAME=api
 
-TARGET=csssax
-PACKAGE=com$/sun$/star$/xml$/sax
+TARGET=cssawtgrid
+PACKAGE=com$/sun$/star$/awt$/grid
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # ------------------------------------------------------------------------
-
 IDLFILES=\
-    InputSource.idl\
-    SAXException.idl\
-    SAXInvalidCharacterException.idl\
-    SAXParseException.idl\
-    XAttributeList.idl\
-    XDocumentHandler.idl\
-    XDTDHandler.idl\
-    XEntityResolver.idl\
-    XErrorHandler.idl\
-    XExtendedDocumentHandler.idl\
-    XLocator.idl\
-    XParser.idl\
-    XSAXSerializable.idl\
-    XFastParser.idl\
-    XFastDocumentHandler.idl\
-    XFastContextHandler.idl\
-    XFastSAXSerializable.idl\
-    XFastSerializer.idl\
-    XFastShapeContextHandler.idl\
-    XFastTokenHandler.idl\
-    XFastAttributeList.idl\
-    FastToken.idl \
-    FastShapeContextHandler.idl \
-    FastTokenHandler.idl
-
+    GridColumnEvent.idl\
+    GridControlEvent.idl\
+    GridDataEvent.idl\
+    SelectionEventType.idl\
+    GridSelectionEvent.idl\
+    XGridControlListener.idl\
+    XGridSelectionListener.idl\
+    XGridSelection.idl\
+    XGridColumn.idl\
+     XGridColumnListener.idl\
+    XGridDataListener.idl\
+    XGridCell.idl\
+    XGridCellRenderer.idl\
+    DefaultGridDataModel.idl\
+    XGridDataModel.idl\
+    XGridColumnModel.idl\
+    ScrollBarMode.idl\
+    XGridControl.idl\
+    UnoControlGrid.idl\
+    UnoControlGridModel.idl
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk

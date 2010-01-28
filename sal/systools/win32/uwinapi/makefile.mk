@@ -142,7 +142,9 @@ STDSHL=
 .IF "$(COM)"=="GCC"
 SHL1STDLIBS=\
         -lmingw32 \
-        -lgcc
+        $(MINGW_LIBGCC)
+MINGWSSTDOBJ=
+MINGWSSTDENDOBJ=
 .ELSE
 SHL1STDLIBS=\
         unicows.lib

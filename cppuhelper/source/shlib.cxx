@@ -315,7 +315,26 @@ static OUString getLibEnv(OUString         const & aModulePath,
     }
 
     if (!pEnv->is() && pEnvTypeName)
+    {
         *pSourceEnv_name = OUString::createFromAscii(pEnvTypeName);
+        const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
+        if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
+        {
+            OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
+            OString aEnv( pUNO_ENV_LOG );
+            sal_Int32 nIndex = 0;
+            do
+            {
+                const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
+                if ( aStr.equals(implName) )
+                {
+                    *pSourceEnv_name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":log"));
+                    break;
+                }
+            } while( nIndex != -1 );
+        }
+
+    }
 
     return aExcMsg;
 }

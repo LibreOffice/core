@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: UnoControlEdit.idl,v $
+ * $Revision: 1.9 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_UnoControlGrid_idl__
+#define __com_sun_star_awt_UnoControlGrid_idl__
+
+#ifndef __com_sun_star_awt_UnoControl_idl__
+#include <com/sun/star/awt/UnoControl.idl>
+#endif
+
+#ifndef __com_sun_star_awt_grid_XGridControl_idl__
+#include <com/sun/star/awt/grid/XGridControl.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {  module grid {
+
+//=============================================================================
+
+//=============================================================================
+
+/** A control that displays a set of tabular data.
+
+    <p>
+    <h4>The Column Model</h4>
+    <p>The horizontal structure of the grid is defined by the <type>XGridColumnModel</type> implemented in <type>DefaultGridColumnModel</type>
+    The <type>XGridColumn</type> implemented in <typeGridColumn</type> describes the properties and behavior of a single column. Use the <member>XGridColumnModel::addColumn()</member> to add a column to the column model.
+    </p>
+    <p>
+    <h4>The Data Model</h4>
+    <p> All row data are stored in the <type>XGridDataModel</type>.
+    Use the <type>DefaultGridDataModel</type> to add  <member>XGridDataModel::addRow()</member> or remove <member>XGridDataModel::removeRow()</member> rows.
+    </p>
+
+    <p>The column and data model must be set at the <member>UnoControlGridModel::ColumnModel</member> and <member>UnoControlGridModel::GridDataModel</member> properties.</p>
+
+    <h4>Selection</h4>
+    <p>If you are interested in knowing when the selection changes implement a
+    <type>XGridSelectionListener</type> and add the instance with the method
+    <member>XGridSelection::addSelectionListener()</member>.
+    You than will be notified for any selection change.
+
+    The <type>XGridSelection</type> interface provides a bunch of methods to set and get selection for the grid control.
+    </p>
+ */
+service UnoControlGrid
+{
+    service com::sun::star::awt::UnoControl;
+
+    interface com::sun::star::awt::grid::XGridControl;
+};
+
+//=============================================================================
+
+}; }; }; };};
+
+#endif

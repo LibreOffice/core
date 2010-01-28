@@ -91,6 +91,7 @@ IDLFILES=\
     Diagram.idl\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
+    FilledNetDiagram.idl\
     LineDiagram.idl\
     MissingValueTreatment.idl\
     NetDiagram.idl\
