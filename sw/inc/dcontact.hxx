@@ -305,7 +305,7 @@ class SwDrawVirtObj : public SdrVirtObj
 
         using SdrVirtObj::GetPlusHdl;
 
-   private:
+   protected:
         // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
         // not used but something own (top left of new SnapRect minus top left
         // of original SnapRect)

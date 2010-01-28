@@ -72,8 +72,7 @@ using namespace ::com::sun::star;
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sw_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -245,15 +244,15 @@ namespace drawinglayer
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
-                // create an invisible HitTestPrimitive to allow hitting the object. Use a filled primitive
-                // to get a HitTest which uses 'inside' as default object hit. The special cases from
+                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
+                // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
                 // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
                 // as it was done in the old implementation
                 const Primitive2DReference aHitTestReference(
-                    createFallbackHitTestPrimitive(
+                    createHiddenGeometryPrimitives2D(
                         true,
-                        basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getOuterRange()))));
+                        getOuterRange()));
 
                 aRetval = Primitive2DSequence(&aHitTestReference, 1);
             }

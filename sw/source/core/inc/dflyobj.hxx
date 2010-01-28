@@ -47,8 +47,10 @@ const UINT16 SwDrawFirst            = 0x0001;
 
 class SwFlyDrawObj : public SdrObject
 {
+private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
+protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -73,9 +75,10 @@ public:
 
 class SwVirtFlyDrawObj : public SdrVirtObj
 {
+private:
     SwFlyFrm *pFlyFrm;
 
-private:
+protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
     // of original SnapRect)
