@@ -4870,6 +4870,7 @@ if test -n "$with_system_altlinuxhyph" -o -n "$with_system_libs" && \
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
+    BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
