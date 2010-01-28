@@ -94,6 +94,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB)	\
         $(TKLIB)			\
         $(UNOTOOLSLIB)		\
+        $(SVXCORELIB)		\
         $(SVXLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib

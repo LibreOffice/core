@@ -33,6 +33,7 @@
 
 #include "soaprequest.hxx"
 #include "errormail.hxx"
+#include "config.hxx"
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -56,7 +57,7 @@ namespace
 {
     static unsigned long asUlong(sal_Int8 input)
     {
-        return *reinterpret_cast<unsigned char *>(&input) ;
+        return *reinterpret_cast<unsigned char *>(&input);
     };
 
     static Sequence<sal_Int8> base64_encode(const Sequence<sal_Int8>& input)
@@ -150,10 +151,22 @@ namespace
         "</SOAP-ENV:Envelope>\n");
     static const OString SOAP_ITEM_END("]]></value></item>\n");
 
-    static const OString getSoapSoapId(const OString& soap_id)
+    static const OString getSoapOfficeversion(const Reference<XMultiServiceFactory>& sf)
     {
         OStringBuffer buf =
-            "<body xsi:type=\"xsd:string\">" + xmlEncode(soap_id) + "</body>\n";
+            "<Officeversion Productname=\""
+            + ::rtl::OUStringToOString(oooimprovement::Config(sf).getCompleteProductname(), RTL_TEXTENCODING_ASCII_US)
+            + "\"/>\n";
+        return buf.makeStringAndClear();
+    };
+
+    static const OString getSoapSoapId(const Reference<XMultiServiceFactory>& sf, const OString& soap_id)
+    {
+        OStringBuffer buf;
+        buf.append("<body xsi:type=\"xsd:string\">");
+        buf.append(xmlEncode(soap_id)).append("\n");
+        buf.append(getSoapOfficeversion(sf));
+        buf.append("</body>\n");
         return buf.makeStringAndClear();
     };
 
@@ -180,7 +193,7 @@ namespace oooimprovement
         writeString(target, SOAP_START);
             writeString(
                 target,
-                getSoapSoapId(rtl::OUStringToOString(m_SoapId, RTL_TEXTENCODING_ASCII_US)));
+                getSoapSoapId(m_ServiceFactory, rtl::OUStringToOString(m_SoapId, RTL_TEXTENCODING_ASCII_US)));
             writeString(target, SOAP_ITEMS_START);
                 writeString(target, getSoapItemStart("reportmail.xml"));
                     writeString(target, Errormail(m_ServiceFactory).getXml());

@@ -2151,9 +2151,9 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 
         try
         {
+            sal_Int32 nFieldType = DataType::OTHER;
             if ( xFieldCandidate.is() )
             {
-                sal_Int32 nFieldType = 0;
                 xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
                 if ( approveDbColumnType( nFieldType ) )
                     impl_setField_noNotify( xFieldCandidate );
@@ -2165,6 +2165,8 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             {
                 if( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
                 {
+                    m_nFieldType = nFieldType;
+
                     // an wertaenderungen horchen
                     m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );

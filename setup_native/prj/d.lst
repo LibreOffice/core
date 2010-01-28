@@ -19,6 +19,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin%_EXT%\javaloader.sh
 ..\%__SRC%\bin\stclient_wrapper.sh %_DEST%\bin%_EXT%\stclient_wrapper
 ..\%__SRC%\bin\stclient_wrapper.exe %_DEST%\bin%_EXT%\stclient_wrapper.exe
+..\%__SRC%\misc\mac_ulffiles_dest\*.ulf %_DEST%\bin%_EXT%\*.ulf
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin%_EXT%\patchlist.txt
 ..\source\win32\desktophelper.txt %_DEST%\bin%_EXT%\desktophelper.txt
@@ -27,6 +28,8 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\win32\nsis\*.ico %_DEST%\bin%_EXT%\*.ico
 ..\source\win32\nsis\*.bmp %_DEST%\bin%_EXT%\*.bmp
 ..\source\linux\*.dat %_DEST%\bin%_EXT%\*.dat
+..\source\mac\*.icns %_DEST%\bin%_EXT%\*.icns
+..\source\mac\Info.plist.langpack %_DEST%\bin%_EXT%\Info.plist.langpack
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat
@@ -35,6 +38,9 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\packinfo\*.pcp %_DEST%\bin%_EXT%\*.pcp
 ..\scripts\admin.pl %_DEST%\bin%_EXT%\admin.pl
 ..\scripts\*.txt %_DEST%\bin%_EXT%\*.txt
+..\scripts\mac_install.script %_DEST%\bin%_EXT%\mac_install.script
+..\scripts\osx_install_languagepack.applescript %_DEST%\bin%_EXT%\osx_install_languagepack.applescript
+..\scripts\osx_install_patch.applescript %_DEST%\bin%_EXT%\osx_install_patch.applescript
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 

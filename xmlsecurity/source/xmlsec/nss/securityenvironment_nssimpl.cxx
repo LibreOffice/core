@@ -28,22 +28,20 @@
  *
  ************************************************************************/
 
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
+
+//todo before commit:  nssrenam.h is not delivered!!!
+#include "nssrenam.h"
+#include "cert.h"
+#include "secerr.h"
+
 #include <sal/config.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
 #include <rtl/uuid.h>
 
-#include "nspr.h"
-#include "nss.h"
-#include "secport.h"
-#include "secitem.h"
-#include "secder.h"
-#include "secerr.h"
-#include "limits.h"
-#include "certt.h"
-#include "prerror.h"
 
 #include <sal/types.h>
 //For reasons that escape me, this is what xmlsec does when size_t is not 4
@@ -64,7 +62,7 @@
 #include <xmlsecurity/biginteger.hxx>
 #include <rtl/logfile.h>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
+#include <vector>
 #include "boost/scoped_array.hpp"
 
 // MM : added for password exception
@@ -83,6 +81,7 @@ using ::com::sun::star::security::XCertificate ;
 
 extern X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
+
 
 char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
@@ -748,17 +747,23 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
     return createCertificateFromRaw( rawCert ) ;
 }
 
-sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+sal_Int32 SecurityEnvironment_NssImpl ::
+verifyCertificate( const Reference< csss::XCertificate >& aCert,
+                   const Sequence< Reference< csss::XCertificate > >&  intermediateCerts )
+    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
+{
     sal_Int32 validity = 0;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
-
+    ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
     if( !xCertTunnel.is() ) {
         throw RuntimeException() ;
     }
 
-
+    OSL_TRACE("[xmlsecurity] Start verification of certificate: %s",
+              OUStringToOString(
+                  aCert->getIssuerName(), osl_getThreadTextEncoding()).getStr());
 
 
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
@@ -769,7 +774,38 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
     cert = xcert->getNssCert() ;
     if( cert != NULL )
+    {
+
+        //prepare the intermediate certificates
+        CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
+        for (sal_Int32 i = 0; i < intermediateCerts.getLength(); i++)
         {
+            Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
+            SECItem item;
+            item.type = siBuffer;
+            item.data = (unsigned char*)der.getArray();
+            item.len = der.getLength();
+
+            CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item,
+                                           NULL     /* nickname */,
+                                           PR_FALSE /* isPerm */,
+                                           PR_TRUE  /* copyDER */);
+             if (!certTmp)
+             {
+                 OSL_TRACE("[xmlsecurity] Failed to add a temporary certificate: %s",
+                           OUStringToOString(intermediateCerts[i]->getIssuerName(),
+                                             osl_getThreadTextEncoding()).getStr());
+
+             }
+             else
+             {
+                 OSL_TRACE("[xmlsecurity] Added temporary certificate: %s",
+                           certTmp->subjectName ? certTmp->subjectName : "");
+                 vecTmpNSSCertificates.push_back(certTmp);
+             }
+        }
+
+
         int64 timeboundary ;
         SECStatus status ;
 
@@ -779,15 +815,15 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
         // create log
 
-    CERTVerifyLog realLog;
+        CERTVerifyLog realLog;
         CERTVerifyLog *log;
 
-    log = &realLog;
+        log = &realLog;
 
 
-    log->count = 0;
-    log->head = NULL;
-    log->tail = NULL;
+        log->count = 0;
+        log->head = NULL;
+        log->tail = NULL;
         log->arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
 
         //CERTVerifyLog *log;
@@ -797,11 +833,6 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
         //log = PORT_ArenaZNew( arena, CERTVerifyLog );
         //log->arena = arena;
         validity = csss::CertificateValidity::INVALID;
-
-        CERTCertificateList * certList;
-
-        certList = CERT_CertChainFromCert( (CERTCertificateStr *) cert, (SECCertUsage) 0, 0);
-
 
         if( m_pHandler != NULL )
         {
@@ -894,9 +925,23 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
     }
     else
     {
+
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
+    //Destroying the temporary certificates
+    std::vector<CERTCertificate*>::const_iterator cert_i;
+    for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); cert_i++)
+    {
+        OSL_TRACE("[xmlsecurity] Destroying temporary certificate");
+        CERT_DestroyCertificate(*cert_i);
+    }
+#if OSL_DEBUG_LEVEL > 1
+    if (validity == ::com::sun::star::security::CertificateValidity::VALID)
+        OSL_TRACE("[xmlsecurity] Certificate is valid.");
+    else
+        OSL_TRACE("[xmlsecurity] Certificate is invalid.");
+#endif
     return validity ;
 }
 

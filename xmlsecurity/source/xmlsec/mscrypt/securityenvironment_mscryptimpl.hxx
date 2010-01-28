@@ -108,7 +108,11 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const ::rtl::OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Int32 SAL_CALL verifyCertificate(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XCertificate > >& intermediateCertificates)
+            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
     virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInformation(  ) throw (::com::sun::star::uno::RuntimeException);
