@@ -33,17 +33,10 @@
 
 #define _SV_POLY2_CXX
 
-extern "C"
-{
-#if defined (HAVE_GPC_H) && !defined (__gpc_h)
-#  include <external/gpc/gpc.h>
-#else
-#  define GPC_INT   0
-#  define GPC_UNION 1
-#  define GPC_DIFF  2
-#  define GPC_XOR   3
-#endif // HAVE_GPC_H
-}
+#define POLY_CLIP_INT   0
+#define POLY_CLIP_UNION 1
+#define POLY_CLIP_DIFF  2
+#define POLY_CLIP_XOR   3
 
 #include <rtl/math.hxx>
 #include <poly.h>
@@ -389,112 +382,31 @@ void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) cons
 
 void PolyPolygon::GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, GPC_INT );
+    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_INT );
 }
 
 // -----------------------------------------------------------------------
 
 void PolyPolygon::GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, GPC_UNION );
+    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_UNION );
 }
 
 // -----------------------------------------------------------------------
 
 void PolyPolygon::GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, GPC_DIFF );
+    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_DIFF );
 }
 
 // -----------------------------------------------------------------------
 
 void PolyPolygon::GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, GPC_XOR );
+    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_XOR );
 }
 
 // -----------------------------------------------------------------------
-
-#ifdef HAVE_GPC_H
-
-void* PolyPolygon::ImplCreateGPCPolygon() const
-{
-    gpc_polygon* pRet = new gpc_polygon;
-
-    pRet->num_contours = 0;
-    pRet->hole = NULL;
-    pRet->contour = NULL;
-
-    for( USHORT i = 0, nCount = Count(); i < nCount; i++ )
-    {
-        const Polygon&  rPoly = GetObject( i );
-        const USHORT    nSize = rPoly.GetSize();
-
-        if( nSize > 1 )
-        {
-            gpc_vertex_list aVertexList;
-            gpc_vertex*     pVertex;
-
-            aVertexList.num_vertices = nSize;
-            aVertexList.vertex = pVertex = new gpc_vertex[ nSize ];
-
-            for( USHORT nPos = 0; nPos < nSize; nPos++, pVertex++ )
-            {
-                const Point& rPoint = rPoly[ nPos ];
-                pVertex->x = rPoint.X();
-                pVertex->y = rPoint.Y();
-            }
-
-            gpc_add_contour( pRet, &aVertexList, 0 );
-            delete[] aVertexList.vertex;
-        }
-    }
-
-    return pRet;
-}
-
-// -----------------------------------------------------------------------
-
-void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
-{
-    gpc_polygon* pGPCPoly1 = (gpc_polygon*) ImplCreateGPCPolygon();
-    gpc_polygon* pGPCPoly2 = (gpc_polygon*) rPolyPoly.ImplCreateGPCPolygon();
-    gpc_polygon* pResult = new gpc_polygon;
-
-    pResult->num_contours = 0;
-    pResult->hole = NULL;
-    pResult->contour = NULL;
-
-    gpc_polygon_clip( (gpc_op) nOperation, pGPCPoly1, pGPCPoly2, pResult );
-
-    rResult.Clear();
-
-    for( int i = 0; i < pResult->num_contours; i++ )
-    {
-        gpc_vertex_list&    rVertexList = pResult->contour[ i ];
-        Polygon             aPoly( ::sal::static_int_cast< USHORT >( rVertexList.num_vertices ) );
-
-        for( int j = 0; j < rVertexList.num_vertices; j++ )
-        {
-            Point& rPt = aPoly[ ::sal::static_int_cast< USHORT >( j ) ];
-            rPt.X() = FRound( rVertexList.vertex[ j ].x );
-            rPt.Y() = FRound( rVertexList.vertex[ j ].y );
-        }
-
-        rResult.Insert( aPoly );
-    }
-
-    gpc_free_polygon( pGPCPoly1 );
-    delete pGPCPoly1;
-
-    gpc_free_polygon( pGPCPoly2 );
-    delete pGPCPoly2;
-
-    gpc_free_polygon( pResult );
-    delete pResult;
-}
-
-#else
 
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
 {
@@ -514,21 +426,21 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         // All code extracted from svx/source/svdraw/svedtv2.cxx
         // -----------------------------------------------------
 
-        case GPC_UNION:
+        case POLY_CLIP_UNION:
         {
             // merge A and B (OR)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
-        case GPC_DIFF:
+        case POLY_CLIP_DIFF:
         {
             // substract B from A (DIFF)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
-        case GPC_XOR:
+        case POLY_CLIP_XOR:
         {
             // compute XOR between poly A and B
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
@@ -536,7 +448,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         }
 
         default:
-        case GPC_INT:
+        case POLY_CLIP_INT:
         {
             // cut poly 1 against polys 2..n (AND)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
@@ -546,8 +458,6 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
     rResult = PolyPolygon( aMergePolyPolygonA );
 }
-
-#endif // HAVE_GPC_H
 
 // -----------------------------------------------------------------------
 

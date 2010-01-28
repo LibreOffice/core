@@ -442,13 +442,20 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
-            if( pSet )
+            // --> OD 2009-06-22 #i100938#
+            // - always provide start_offset and end_offset
+//            if( pSet )
+            // <--
             {
                 accessibility::TextSegment aTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
                 *start_offset = aTextSegment.SegmentStart;
-                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+                // --> OD 2009-06-22 #i100938#
+                // Do _not_ increment the end_offset provide by <accessibility::TextSegment> instance
+//                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+                *end_offset = aTextSegment.SegmentEnd;
+                // <--
             }
         }
     }

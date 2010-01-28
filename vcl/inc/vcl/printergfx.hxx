@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: printergfx.hxx,v $
- * $Revision: 1.19.18.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -32,6 +29,7 @@
 #define _PSPRINT_PRINTERGFX_HXX_
 
 #include "vcl/helper.hxx"
+#include "vcl/sallayout.hxx"
 #include "osl/file.hxx"
 #include "tools/gen.hxx"
 
@@ -325,7 +323,7 @@ public:
                               const sal_Int32* pDeltaArray = NULL);
 
     void            drawGlyphs( const Point& rPoint,
-                                sal_uInt32* pGlyphIds,
+                                sal_GlyphId* pGlyphIds,
                                 sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 sal_Int32* pDeltaArray );
@@ -428,7 +426,7 @@ public:
 
     // for CTL
     void            DrawGlyphs( const Point& rPoint,
-                                sal_uInt32* pGlyphIds,
+                                sal_GlyphId* pGlyphIds,
                                 sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 sal_Int32* pDeltaArray );

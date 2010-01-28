@@ -54,6 +54,9 @@
 
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
+//#include "vclxgridcontrol.hxx"
+#include "unocontroltablemodel.hxx"
+#include <svtools/table/tablecontrol.hxx>
 
 namespace
 {
@@ -83,8 +86,6 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         if ( pParent )
         {
             pWindow = new MultiLineEdit( pParent, nWinBits|WB_IGNORETAB);
-            static_cast< MultiLineEdit* >( pWindow )->DisableSelectionOnFocus();
-                // #i89821# / 2008-12-17 / frank.schoenheit@sun.com
             *ppNewComp = new VCLXMultiLineEdit;
         }
         else
@@ -160,6 +161,21 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         {
             pWindow = new ::svt::FixedHyperlink( pParent, nWinBits );
             *ppNewComp = new VCLXFixedHyperlink;
+        }
+        else
+        {
+            *ppNewComp = NULL;
+            return NULL;
+        }
+    }
+    else if ( aServiceName.EqualsIgnoreCaseAscii( "Grid" ) )
+    {
+        if ( pParent )
+        {
+            ::svt::table::TableControl* m_pTable = new ::svt::table::TableControl(pParent, nWinBits);
+            UnoControlTableModel* pModel = new UnoControlTableModel();
+            *ppNewComp = pModel;
+            pWindow = m_pTable;
         }
         else
         {
