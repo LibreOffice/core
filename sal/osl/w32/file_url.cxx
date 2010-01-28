@@ -402,10 +402,8 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
         return fValid ? dwPathType : PATHTYPE_ERROR;
 }
 
-//#############################################
 //#####################################################
-//Undocumented in SHELL32.DLL ordinal 35
-static BOOL PathRemoveFileSpec(LPTSTR lpPath)
+static BOOL PathRemoveFileSpec(LPTSTR lpPath, LPTSTR lpFileName )
 {
     BOOL    fSuccess = FALSE;   // Assume failure
     LPTSTR  lpLastBkSlash = _tcsrchr( lpPath, '\\' );
@@ -419,17 +417,159 @@ static BOOL PathRemoveFileSpec(LPTSTR lpPath)
                 if ( lpLastDelimiter > lpPath && *(lpLastDelimiter - 1) != ':' )
                 {
                     *lpLastDelimiter = 0;
+                    *lpFileName = 0;
                     fSuccess = TRUE;
                 }
             }
             else
             {
+                _tcscpy( lpFileName, lpLastDelimiter + 1 );
                 *(++lpLastDelimiter) = 0;
                 fSuccess = TRUE;
             }
     }
     return fSuccess;
 }
+
+//#####################################################
+// Undocumented in SHELL32.DLL ordinal 32
+static LPTSTR PathAddBackslash(LPTSTR lpPath, sal_Int32 nBufLen)
+{
+    LPTSTR  lpEndPath = NULL;
+
+    if ( lpPath )
+    {
+            int     nLen = _tcslen(lpPath);
+
+            if ( !nLen || lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 )
+            {
+                lpEndPath = lpPath + nLen;
+                *lpEndPath++ = '\\';
+                *lpEndPath = 0;
+            }
+    }
+    return lpEndPath;
+}
+
+//#####################################################
+// Same as GetLongPathName but also 95/NT4
+static DWORD GetCaseCorrectPathNameEx(
+    LPCTSTR lpszShortPath,  // file name
+    LPTSTR  lpszLongPath,   // path buffer
+    DWORD   cchBuffer,      // size of path buffer
+    DWORD   nSkipLevels,
+    BOOL bCheckExistence )
+{
+        TCHAR   szPath[MAX_LONG_PATH];
+        TCHAR   szFile[MAX_LONG_PATH]; /* MAX_LONG_PATH is used here for the case of invalid long file names */
+        BOOL    fSuccess;
+
+        cchBuffer = cchBuffer; /* avoid warnings */
+
+        _tcscpy( szPath, lpszShortPath );
+
+        fSuccess = PathRemoveFileSpec( szPath, szFile );
+
+        if ( fSuccess )
+        {
+            int nLen = _tcslen( szPath );
+            LPCTSTR lpszFileSpec = lpszShortPath + nLen;
+            BOOL    bSkipThis;
+
+            if ( 0 == _tcscmp( lpszFileSpec, TEXT("..") ) )
+            {
+                bSkipThis = TRUE;
+                nSkipLevels += 1;
+            }
+            else if (
+                0 == _tcscmp( lpszFileSpec, TEXT(".") ) ||
+                0 == _tcscmp( lpszFileSpec, TEXT("\\") ) ||
+                0 == _tcscmp( lpszFileSpec, TEXT("/") )
+                )
+            {
+                bSkipThis = TRUE;
+            }
+            else if ( nSkipLevels )
+            {
+                bSkipThis = TRUE;
+                nSkipLevels--;
+            }
+            else
+                bSkipThis = FALSE;
+
+            GetCaseCorrectPathNameEx( szPath, szPath, MAX_LONG_PATH, nSkipLevels, bCheckExistence );
+
+            PathAddBackslash( szPath, ELEMENTS_OF_ARRAY( szPath ) );
+
+            /* Analyze parent if not only a trailing backslash was cutted but a real file spec */
+            if ( !bSkipThis )
+            {
+                if ( bCheckExistence )
+                {
+                    WIN32_FIND_DATA aFindFileData;
+                    HANDLE  hFind = FindFirstFile( lpszShortPath, &aFindFileData );
+
+                    if ( IsValidHandle(hFind) )
+                    {
+                        _tcscat( szPath, aFindFileData.cFileName[0] ? aFindFileData.cFileName : aFindFileData.cAlternateFileName );
+
+                        FindClose( hFind );
+                    }
+                    else
+                        return 0;
+                }
+                else
+                {
+                    /* add the segment name back */
+                    _tcscat( szPath, szFile );
+                }
+            }
+        }
+        else
+        {
+            /* File specification can't be removed therefore the short path is either a drive
+               or a network share. If still levels to skip are left, the path specification
+               tries to travel below the file system root */
+            if ( nSkipLevels )
+                return 0;
+
+            _tcsupr( szPath );
+        }
+
+        _tcscpy( lpszLongPath, szPath );
+
+        return _tcslen( lpszLongPath );
+}
+
+//#####################################################
+#define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
+
+DWORD GetCaseCorrectPathName(
+    LPCTSTR lpszShortPath,  // file name
+    LPTSTR  lpszLongPath,   // path buffer
+    DWORD   cchBuffer,      // size of path buffer
+    BOOL bCheckExistence
+)
+{
+    /* Special handling for "\\.\" as system root */
+    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+    {
+        if ( cchBuffer >= ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) )
+        {
+            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
+            return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
+        }
+        else
+        {
+            return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
+        }
+    }
+    else
+    {
+        return GetCaseCorrectPathNameEx( lpszShortPath, lpszLongPath, cchBuffer, 0, bCheckExistence );
+    }
+}
+
 
 //#############################################
 static sal_Bool _osl_decodeURL( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )

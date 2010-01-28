@@ -77,7 +77,8 @@ DWORD IsValidFilePath (
 DWORD GetCaseCorrectPathName (
     LPCTSTR lpszShortPath,  // file name
     LPTSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer       // size of path buffer
+    DWORD   cchBuffer,      // size of path buffer
+    BOOL bCheckExistence
 );
 
 oslFileError _osl_getSystemPathFromFileURL (

@@ -665,7 +665,26 @@ static DWORD create_dir_with_callback(
     // user specified callback function. On success
     // the function returns ERROR_SUCCESS else a Win32 error code.
 
-    if (CreateDirectory( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( dir_path ) ), NULL) )
+    BOOL bCreated = FALSE;
+
+    if ( rtl_uString_getLength( dir_path ) < MAX_PATH - 12 )
+    {
+        /* this is a normal short URL, ".." are acceptable here */
+        bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
+    }
+    else
+    {
+        /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
+        sal_Unicode pBuf[MAX_LONG_PATH];
+        sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( dir_path ) ),
+                                                      pBuf,
+                                                      MAX_LONG_PATH,
+                                                      sal_False );
+
+        bCreated = CreateDirectoryW( pBuf, NULL );
+    }
+
+    if ( bCreated )
     {
         if (aDirectoryCreationCallbackFunc)
         {
@@ -761,15 +780,34 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 
     if ( osl_File_E_None == error )
     {
-        if ( CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL ) )
-            error = osl_File_E_None;
-/*@@@ToDo
-  The else case is a hack because the ucb or the webtop had some
-  problems with the error code that CreateDirectory returns in
-  case the path is only a logical drive, should be removed!
-*/
+        BOOL bCreated = FALSE;
+
+        if ( rtl_uString_getLength( strSysPath ) < MAX_PATH - 12 )
+        {
+            /* this is a normal short URL, ".." are acceptable here */
+            bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
+        }
         else
         {
+            /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
+            sal_Unicode pBuf[MAX_LONG_PATH];
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( strSysPath ) ),
+                                                          pBuf,
+                                                          MAX_LONG_PATH,
+                                                          sal_False );
+
+            bCreated = CreateDirectoryW( pBuf, NULL );
+        }
+
+
+        if ( !bCreated )
+        {
+            /*@@@ToDo
+              The following case is a hack because the ucb or the webtop had some
+              problems with the error code that CreateDirectory returns in
+              case the path is only a logical drive, should be removed!
+            */
+
             const sal_Unicode   *pBuffer = rtl_uString_getStr( strSysPath );
             sal_Int32           nLen = rtl_uString_getLength( strSysPath );
 
@@ -1168,7 +1206,6 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
 
                 // MT: This costs 600ms startup time on fast v60x!
-                // if it is necessary in future, the system call GetLongPathName() should be used instead
                 // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
 
                 pItemImpl->uType = DIRECTORYITEM_FILE;
@@ -1748,29 +1785,15 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
-            sal_Unicode* pBuffer = reinterpret_cast<sal_Unicode*>( rtl_allocateMemory( sizeof(sal_Unicode) * ( nLen + 1 ) ) );
-            if ( pBuffer )
-            {
-                sal_uInt32 nNewLen = GetLongPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
+            sal_Unicode pBuffer[ MAX_LONG_PATH];
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
                                                       pBuffer,
-                                                      nLen );
-                if ( nNewLen > nLen )
-                {
-                    rtl_freeMemory( pBuffer );
-                    pBuffer = reinterpret_cast<sal_Unicode*>( rtl_allocateMemory( sizeof(sal_Unicode*) * ( nNewLen + 1 ) ) );
-                    if ( pBuffer )
-                    {
-                        sal_uInt32 nNewestLen = GetLongPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
-                                                                 pBuffer,
-                                                                 nNewLen );
-                        if ( nNewLen == nNewestLen )
-                            rtl_uString_newFromStr( &pItemImpl->m_pFullPath, reinterpret_cast< const sal_Unicode* >( pBuffer ) );
-                    }
-                }
-                else
-                    rtl_uString_newFromStr( &pItemImpl->m_pFullPath, reinterpret_cast< const sal_Unicode* >( pBuffer ) );
+                                                      MAX_LONG_PATH,
+                                                      sal_True );
 
-                rtl_freeMemory( pBuffer );
+            if ( nNewLen )
+            {
+                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, reinterpret_cast< const sal_Unicode* >( pBuffer ) );
                 pItemImpl->bFullPathNormalized = TRUE;
             }
         }
