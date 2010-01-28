@@ -1679,7 +1679,7 @@ void OQueryController::impl_reset()
                     m_pSqlIterator->traverseAll();
                     if ( m_pSqlIterator->hasErrors() )
                     {
-                        if ( !editingView() )
+                        if ( m_bGraphicalDesign && !editingView() )
                         {
                             impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
