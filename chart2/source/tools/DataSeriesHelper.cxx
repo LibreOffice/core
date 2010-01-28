@@ -36,6 +36,7 @@
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
@@ -57,6 +58,7 @@
 #include <set>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -152,6 +154,50 @@ void lcl_getCooSysAndChartTypeOfSeries(
                 }
             }
         }
+    }
+}
+
+void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries, bool bInsert )
+{
+    try
+    {
+        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
+        if( xSeriesProperties.is() )
+        {
+            DataPointLabel aLabelAtSeries;
+            xSeriesProperties->getPropertyValue( C2U( "Label" ) ) >>= aLabelAtSeries;
+            aLabelAtSeries.ShowNumber = bInsert;
+            if( !bInsert )
+            {
+                aLabelAtSeries.ShowNumberInPercent = false;
+                aLabelAtSeries.ShowCategoryName = false;
+            }
+            xSeriesProperties->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabelAtSeries ) );
+            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+            {
+                for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                {
+                    Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
+                    if( xPointProp.is() )
+                    {
+                        DataPointLabel aLabel;
+                        xPointProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
+                        aLabel.ShowNumber = bInsert;
+                        if( !bInsert )
+                        {
+                            aLabel.ShowNumberInPercent = false;
+                            aLabel.ShowCategoryName = false;
+                        }
+                        xPointProp->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ) );
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
     }
 }
 
@@ -733,6 +779,142 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
     {
     }
     return nIndex;
+}
+
+bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
+{
+    bool bRet = false;
+    try
+    {
+        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            DataPointLabel aLabel;
+            if( (xProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel) )
+                bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return bRet;
+}
+
+bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
+{
+    bool bRet = false;
+    try
+    {
+        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
+        if( xSeriesProperties.is() )
+        {
+            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+            {
+                for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                {
+                    Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
+                    if( xPointProp.is() )
+                    {
+                        DataPointLabel aLabel;
+                        if( (xPointProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel) )
+                            bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
+                        if( bRet )
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return bRet;
+}
+
+bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex )
+{
+    bool bRet = false;
+    try
+    {
+        Reference< beans::XPropertySet > xProp;
+        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
+        if( xSeriesProperties.is() )
+        {
+            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+            {
+                ::std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
+                ::std::vector< sal_Int32 >::iterator aIt = ::std::find( aIndices.begin(), aIndices.end(), nPointIndex );
+                if( aIt != aIndices.end())
+                    xProp = xSeries->getDataPointByIndex(nPointIndex);
+                else
+                    xProp = xSeriesProperties;
+            }
+            if( xProp.is() )
+            {
+                DataPointLabel aLabel;
+                if( (xProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel) )
+                    bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
+            }
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return bRet;
+}
+
+void insertDataLabelsToSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries )
+{
+    lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( xSeries, true /*bInsert*/ );
+}
+
+void deleteDataLabelsFromSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries )
+{
+    lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( xSeries, false /*bInsert*/ );
+}
+
+
+void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp )
+{
+    try
+    {
+        if( xPointProp.is() )
+        {
+            DataPointLabel aLabel;
+            xPointProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
+            aLabel.ShowNumber = true;
+            xPointProp->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ) );
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointProp )
+{
+    try
+    {
+        if( xPointProp.is() )
+        {
+            DataPointLabel aLabel;
+            xPointProp->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
+            aLabel.ShowNumber = false;
+            aLabel.ShowNumberInPercent = false;
+            aLabel.ShowCategoryName = false;
+            xPointProp->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ) );
+        }
+    }
+    catch( uno::Exception &e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
 }
 
 } //  namespace DataSeriesHelper

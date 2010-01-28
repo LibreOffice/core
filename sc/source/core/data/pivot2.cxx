@@ -64,7 +64,6 @@ using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
-
 // ============================================================================
 
 ScDPLabelData::Member::Member() :

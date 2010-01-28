@@ -663,6 +663,9 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
                 if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
                     ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
+                // #160184# Excel must refresh tables to make drilldown working
+                ::set_flag( maPCInfo.mnFlags, EXC_SXDB_REFRESH_LOAD );
+
                 // adjust row indexes, keep one row of empty area to surely have the empty cache item
                 if( nSrcRow1 < nDocRow1 )
                     nSrcRow1 = nDocRow1 - 1;

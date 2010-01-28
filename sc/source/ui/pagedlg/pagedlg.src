@@ -175,7 +175,7 @@ TabPage RID_SCPAGE_TABLE
     {
             Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ en-US ] = "~Notes" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_OBJECTS

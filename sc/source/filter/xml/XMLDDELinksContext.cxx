@@ -163,9 +163,20 @@ void ScXMLDDELinkContext::EndElement()
 {
     if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
     {
+        bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
+        DBG_ASSERT( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
+        // Excel writes bad ODF in that it does not write the
+        // table:number-columns-repeated attribute of the
+        // <table:table-column> element, but apparently uses the number of
+        // <table:table-cell> elements within a <table:table-row> element to
+        // determine the column count instead. Be lenient ...
+        if (!bSizeMatch && nColumns == 1)
+        {
+            nColumns = aDDELinkTable.size() / nRows;
+            DBG_ASSERT( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
+                    "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
+        }
         ScMatrixRef pMatrix = new ScMatrix( static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows) );
-
-        DBG_ASSERT(static_cast<sal_uInt32>(nColumns * nRows) == aDDELinkTable.size(), "there is a wrong cells count");
         sal_Int32 nCol(0);
         sal_Int32 nRow(-1);
         sal_Int32 nIndex(0);

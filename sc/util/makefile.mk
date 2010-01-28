@@ -101,7 +101,6 @@ SHL1STDLIBS=       \
     $(UNOTOOLSLIB) \
     $(SOTLIB)		\
     $(XMLOFFLIB)	\
-    $(DBTOOLSLIB)	\
     $(AVMEDIALIB) \
     $(FORLIB) \
     $(FORUILIB)

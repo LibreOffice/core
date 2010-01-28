@@ -72,6 +72,7 @@ class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
+class ScSheetSaveData;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -123,6 +124,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
     ScOptSolverSave*    pSolverSaveData;
+    ScSheetSaveData*    pSheetSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
@@ -166,6 +168,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
     SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
+
+    SC_DLLPRIVATE void          UseSheetSaveEntries();
 
 protected:
 
@@ -414,6 +418,8 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
+
+    ScSheetSaveData* GetSheetSaveData();
 };
 
 SO2_DECL_REF(ScDocShell)

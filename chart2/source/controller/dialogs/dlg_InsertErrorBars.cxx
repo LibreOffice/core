@@ -42,6 +42,7 @@
 #include "ObjectIdentifier.hxx"
 #include "DiagramHelper.hxx"
 #include "AxisHelper.hxx"
+#include "ObjectNameProvider.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -70,7 +71,8 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
                                    /* bNoneAvailable = */ true, eType ))
 {
     FreeResource();
-    this->SetText( String( SchResId( STR_PAGE_YERROR_BARS )));
+    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_ERRORS ) );
+
     m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }
 

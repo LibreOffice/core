@@ -305,6 +305,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
@@ -374,6 +375,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
@@ -412,6 +414,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
@@ -546,6 +549,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x3D:  Window1(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5]
@@ -902,6 +906,7 @@ FltError ImportExcel8::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = EXC_STATE_END;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x3D:  Window1(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]

@@ -46,6 +46,7 @@ VISIBILITY_HIDDEN=TRUE
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES =  \
             $(SLO)$/ConfigurationAccess.obj	\
+            $(SLO)$/ElementSelector.obj	\
             $(SLO)$/SelectionHelper.obj	\
             $(SLO)$/PositionAndSizeHelper.obj	\
             $(SLO)$/ChartWindow.obj	\

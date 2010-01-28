@@ -993,6 +993,8 @@ public:
     void LockSolarMutex();
     void UnlockSolarMutex();
 
+    sal_Int32 GetByteOffset();
+
     void SetRangeOverflowType(sal_uInt32 nType);
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;

@@ -786,7 +786,7 @@ static void lcl_appendCellAddress(
     if (rExtInfo.mbExternal)
     {
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo.mnFileId);
+        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo.mnFileId, true);
         if (!pFilePath)
             return;
 
@@ -821,7 +821,7 @@ static void lcl_appendCellRangeAddress(
         DBG_ASSERT(rExtInfo1.mnFileId == rExtInfo2.mnFileId, "File IDs do not match between 1st and 2nd addresses.");
 
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId);
+        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId, true);
         if (!pFilePath)
             return;
 

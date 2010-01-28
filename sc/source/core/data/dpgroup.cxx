@@ -251,7 +251,7 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
             break;
         case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
             //! cache getMonths() result?
-            aRet = ScGlobal::pCalendar->getDisplayName(
+            aRet = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
                         sal_Int16(nValue-1), 0 );    // 0-based, get short name
             break;
