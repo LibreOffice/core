@@ -2296,6 +2296,9 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
+    if( pObj )
+        pObj->SetLogicRect(aRect);
+
     return pObj;
 }
 
