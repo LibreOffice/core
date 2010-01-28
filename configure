@@ -658,8 +658,6 @@ SCPDEFS
 WITHOUT_AFMS
 WITHOUT_PPDS
 WITH_FONTS
-SYSTEM_MSPACK
-WITH_FONTOOO
 ENABLE_KAB
 ENABLE_EVOAB2
 GOBJECT_LIBS
@@ -1052,11 +1050,9 @@ with_epm
 with_package_format
 enable_odk
 enable_qadevooo
-enable_fontooo
 enable_mathmldtd
 enable_evolution2
 with_system_stdlibs
-with_system_mspack
 enable_cups
 enable_fontconfig
 enable_directx
@@ -1195,7 +1191,6 @@ with_zip_home
 with_mingwin
 with_use_shell
 with_build_version
-enable_sgistl
 with_alloc
 enable_verbose
 enable_largefile
@@ -1870,9 +1865,6 @@ Optional Features:
   --disable-qadevooo      OO.o includes some qa testsuites which some
                           packagers may wish to build without
 
-  --disable-fontooo       disable FontOOo
-                          (useful for distributions using fontconfig for OOo)
-
   --disable-mathmldtd     disable mathmldtd
                           (useful for distributions that want to avoid packaging
                           it)
@@ -2031,11 +2023,6 @@ Optional Features:
                           explicitly enable if your version of ccache doesn't
                           identify as version 2.4_OOo
 
-  --enable-sgistl         for IRIX users, use this option option to build
-                          OpenOffice.org using SGI's STL.
-
-                          Usage: --enable-sgistl=yes
-
   --enable-verbose        Increase build verbosity.
   --disable-verbose       Decrease build verbosity.
 
@@ -2096,8 +2083,6 @@ Optional Packages:
                           Usage: --with-package-format="foo bar"
 
   --with-system-stdlibs   use libstdc++/libgcc_s already on system
-
-  --with-system-mspack    use libmspack already installed on system
 
   --with-system-cairo      Use Cairo libraries already on system
 
@@ -3003,13 +2988,6 @@ else
   enable_qadevooo="yes"
 fi
 
-# Check whether --enable-fontooo was given.
-if test "${enable_fontooo+set}" = set; then
-  enableval=$enable_fontooo;
-else
-  enable_fontooo="yes"
-fi
-
 # Check whether --enable-mathmldtd was given.
 if test "${enable_mathmldtd+set}" = set; then
   enableval=$enable_mathmldtd;
@@ -3028,12 +3006,6 @@ if test "${with_system_stdlibs+set}" = set; then
   withval=$with_system_stdlibs;
 else
   checkforstdlibproblems=yes
-fi
-
-
-# Check whether --with-system-mspack was given.
-if test "${with_system_mspack+set}" = set; then
-  withval=$with_system_mspack;
 fi
 
 # Check whether --enable-cups was given.
@@ -3898,11 +3870,6 @@ if test "${with_build_version+set}" = set; then
   withval=$with_build_version; with_build_version=$withval
 fi
 
-# Check whether --enable-sgistl was given.
-if test "${enable_sgistl+set}" = set; then
-  enableval=$enable_sgistl;
-fi
-
 
 # Check whether --with-alloc was given.
 if test "${with_alloc+set}" = set; then
@@ -4512,9 +4479,6 @@ $as_echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		if getconf GNU_LIBPTHREAD_VERSION |grep -q NPTL; then
-			PTHREAD_CFLAGS="-DNPTL"
-		fi
 		_os=Linux
 		;;
 	gnu)
@@ -4598,12 +4562,6 @@ $as_echo "$PTHREAD_LIBS" >&6; }
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
-		;;
-	irix*)
-		test_cups=no
-        test_randr=no
-		test_freetype=yes
-		_os=IRIX
 		;;
 	aix*)
 		test_cups=no
@@ -6440,76 +6398,6 @@ $as_echo "not found " >&6; }
    LDFLAGS=$hash_style_ldflags_save
 fi
 
-
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-   if test "$CC" = "cc"; then
-      for ac_prog in cc
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_path__cc+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  case $_cc in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path__cc="$_cc" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_path__cc="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-_cc=$ac_cv_path__cc
-if test -n "$_cc"; then
-  { $as_echo "$as_me:$LINENO: result: $_cc" >&5
-$as_echo "$_cc" >&6; }
-else
-  { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$_cc" && break
-done
-
-      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-      { $as_echo "$as_me:$LINENO: checking the SGI MIPSpro C compiler version" >&5
-$as_echo_n "checking the SGI MIPSpro C compiler version... " >&6; }
-            _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
-      _mipspro_major=`echo $_mipspro_version | $AWK -F. '{ print $1 }'`
-      if test "$_mipspro_major" != "7"; then
-         { { $as_echo "$as_me:$LINENO: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&5
-$as_echo "$as_me: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&2;}
-   { (exit 1); exit 1; }; }
-      else
-         _mipspro_minor=`echo $_mipspro_version | $AWK -F. '{ if ($2 <= 1) print "false"; else print "true" }'`
-         if test "$_mipspro_minor" = "false"; then
-            { { $as_echo "$as_me:$LINENO: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&5
-$as_echo "$as_me: error: found version \"$_mipspro_version\", use version 7.2+ of the SGI MIPSpro C compiler" >&2;}
-   { (exit 1); exit 1; }; }
-         else
-                        { $as_echo "$as_me:$LINENO: result: checked" >&5
-$as_echo "checked" >&6; }
-         fi
-      fi
-   fi
-fi
 
 if test "$_os" = "OSF1"; then
    if test "$CC" = "cc"; then
@@ -10951,20 +10839,6 @@ $as_echo "checked" >&6; }
       fi
    fi
 fi
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-      if test "$CC" = "cc"; then
-      { $as_echo "$as_me:$LINENO: checking SGI MIPSpro C++ Compiler" >&5
-$as_echo_n "checking SGI MIPSpro C++ Compiler... " >&6; }
-      if test "$CXX" != "CC"; then
-         { $as_echo "$as_me:$LINENO: WARNING: SGI MIPSpro C++ was not found" >&5
-$as_echo "$as_me: WARNING: SGI MIPSpro C++ was not found" >&2;}
-         echo "SGI MIPSpro C++ was not found" >> warn
-      else
-         { $as_echo "$as_me:$LINENO: result: checked" >&5
-$as_echo "checked" >&6; }
-      fi
-   fi
-fi
 if test "$_os" = "OSF1"; then
    { $as_echo "$as_me:$LINENO: checking Compaq C++ compiler version" >&5
 $as_echo_n "checking Compaq C++ compiler version... " >&6; }
@@ -11152,25 +11026,6 @@ $as_echo "$as_me: WARNING: patch 107733-06 not found, please install linker patc
    fi
 fi
 
-if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
-	if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		{ $as_echo "$as_me:$LINENO: checking for SGI STL" >&5
-$as_echo_n "checking for SGI STL... " >&6; }
-		if test -d /usr/include/CC ; then
-			{ $as_echo "$as_me:$LINENO: result: yes." >&5
-$as_echo "yes." >&6; }
-
-		else
-			{ $as_echo "$as_me:$LINENO: result: not found." >&5
-$as_echo "not found." >&6; }
-		fi
-	else
-		{ { $as_echo "$as_me:$LINENO: error: Option --enable-sgistl is only valid for IRIX" >&5
-$as_echo "$as_me: error: Option --enable-sgistl is only valid for IRIX" >&2;}
-   { (exit 1); exit 1; }; }
-	fi
-else
-
    { $as_echo "$as_me:$LINENO: checking what the default STL should be" >&5
 $as_echo_n "checking what the default STL should be... " >&6; }
    DEFAULT_TO_STLPORT="no"
@@ -11303,24 +11158,6 @@ $as_echo "checked" >&6; }
 $as_echo "$as_me: error: STLport libraries not found" >&2;}
    { (exit 1); exit 1; }; }
 		      fi
-	      elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		      if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
-			      { $as_echo "$as_me:$LINENO: result: checked" >&5
-$as_echo "checked" >&6; }
-			   else
-				   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-					   { $as_echo "$as_me:$LINENO: result: checked" >&5
-$as_echo "checked" >&6; }
-				   elif test -f "$STLPORT4/lib/libstlport.so"; then
-					   { $as_echo "$as_me:$LINENO: result: checked" >&5
-$as_echo "checked" >&6; }
-					   STLPORT_VER=500
-				   else
-					   { { $as_echo "$as_me:$LINENO: error: STLport libraries not found" >&5
-$as_echo "$as_me: error: STLport libraries not found" >&2;}
-   { (exit 1); exit 1; }; }
-				   fi
-			   fi
 		   else
 			   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
 				   { $as_echo "$as_me:$LINENO: result: checked" >&5
@@ -11342,7 +11179,6 @@ $as_echo "$as_me: WARNING: using stlport. Warning, breaks your ABI compatability
          echo "using stlport. Warning, breaks your ABI compatability!" >>warn
       fi
    fi
-fi
 
 if test -z "$STLPORT4"; then
   STLPORT4="NO_STLPORT4"
@@ -11747,11 +11583,18 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
-             gccvisbroken=no;
-         else
-             gccvisbroken=yes;
-         fi
+         case "$build_cpu" in
+            i?86|x86_64)
+               if $EGREP -q '@PLT' visibility.s; then
+                  gccvisbroken=no
+               else
+                  gccvisbroken=yes
+               fi
+               ;;
+            *)
+               gccvisbroken=no
+               ;;
+         esac
       fi
       rm -f visibility.s
 
@@ -13351,9 +13194,6 @@ $as_echo_n "checking which package format to use... " >&6; }
 		;;
 	OSF1)
 		PKGFORMAT=setld
-		;;
-	IRIX)
-		PKGFORMAT=tardist
 		;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
@@ -28919,259 +28759,6 @@ else
    { $as_echo "$as_me:$LINENO: result: no" >&5
 $as_echo "no" >&6; }
    ENABLE_KAB=
-fi
-
-
-{ $as_echo "$as_me:$LINENO: checking whether to include FontOOo" >&5
-$as_echo_n "checking whether to include FontOOo... " >&6; }
-if test -n "$enable_fontooo"; then
-  if test "$enable_fontooo" = "no"; then
-    { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-    WITH_FONTOOO=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
-  else
-    { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-    WITH_FONTOOO=YES
-    BUILD_TYPE="$BUILD_TYPE MSFONTEXTRACT"
-  fi
-else
-  { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-  WITH_FONTOOO=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_FONTOOO"
-fi
-
-
-if test "$WITH_FONTOOO" = "YES"; then
-        { $as_echo "$as_me:$LINENO: checking whether to use system libmspack" >&5
-$as_echo_n "checking whether to use system libmspack... " >&6; }
-  if test -n "$with_system_mspack" -o -n "$with_system_libs" && \
-	  test "$with_system_mspack" != "no"; then
-    { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-    SYSTEM_MSPACK=YES
-    if test "${ac_cv_header_mspack_h+set}" = set; then
-  { $as_echo "$as_me:$LINENO: checking for mspack.h" >&5
-$as_echo_n "checking for mspack.h... " >&6; }
-if test "${ac_cv_header_mspack_h+set}" = set; then
-  $as_echo_n "(cached) " >&6
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
-$as_echo "$ac_cv_header_mspack_h" >&6; }
-else
-  # Is the header compilable?
-{ $as_echo "$as_me:$LINENO: checking mspack.h usability" >&5
-$as_echo_n "checking mspack.h usability... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <mspack.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ $as_echo "$as_me:$LINENO: checking mspack.h presence" >&5
-$as_echo_n "checking mspack.h presence... " >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <mspack.h>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: mspack.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: mspack.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: mspack.h: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: mspack.h:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: mspack.h: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: mspack.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: proceeding with the preprocessor's result" >&5
-$as_echo "$as_me: WARNING: mspack.h: proceeding with the preprocessor's result" >&2;}
-    { $as_echo "$as_me:$LINENO: WARNING: mspack.h: in the future, the compiler will take precedence" >&5
-$as_echo "$as_me: WARNING: mspack.h: in the future, the compiler will take precedence" >&2;}
-
-    ;;
-esac
-{ $as_echo "$as_me:$LINENO: checking for mspack.h" >&5
-$as_echo_n "checking for mspack.h... " >&6; }
-if test "${ac_cv_header_mspack_h+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  ac_cv_header_mspack_h=$ac_header_preproc
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_mspack_h" >&5
-$as_echo "$ac_cv_header_mspack_h" >&6; }
-
-fi
-if test "x$ac_cv_header_mspack_h" = x""yes; then
-  :
-else
-  { { $as_echo "$as_me:$LINENO: error: mspack.h not found, install libmspack" >&5
-$as_echo "$as_me: error: mspack.h not found, install libmspack" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-
-
-{ $as_echo "$as_me:$LINENO: checking for mspack_create_cab_decompressor in -lmspack" >&5
-$as_echo_n "checking for mspack_create_cab_decompressor in -lmspack... " >&6; }
-if test "${ac_cv_lib_mspack_mspack_create_cab_decompressor+set}" = set; then
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmspack  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char mspack_create_cab_decompressor ();
-int
-main ()
-{
-return mspack_create_cab_decompressor ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 $as_test_x conftest$ac_exeext
-       }; then
-  ac_cv_lib_mspack_mspack_create_cab_decompressor=yes
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_mspack_mspack_create_cab_decompressor=no
-fi
-
-rm -rf conftest.dSYM
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_mspack_mspack_create_cab_decompressor" >&5
-$as_echo "$ac_cv_lib_mspack_mspack_create_cab_decompressor" >&6; }
-if test "x$ac_cv_lib_mspack_mspack_create_cab_decompressor" = x""yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMSPACK 1
-_ACEOF
-
-  LIBS="-lmspack $LIBS"
-
-else
-  { { $as_echo "$as_me:$LINENO: error: libmspack not installed or functional" >&5
-$as_echo "$as_me: error: libmspack not installed or functional" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-  else
-    { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-    SYSTEM_MSPACK=NO
-  fi
 fi
 
 
