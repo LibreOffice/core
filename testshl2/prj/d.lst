@@ -1,23 +1,29 @@
-..\%__SRC%\bin\testshl2.exe    %_DEST%\bin%_EXT%\testshl2.exe
-..\%__SRC%\bin\testshl2_timeout.exe    %_DEST%\bin%_EXT%\testshl2_timeout.exe
-..\%__SRC%\bin\testshl2        %_DEST%\bin%_EXT%\testshl2
-..\%__SRC%\bin\testshl2_timeout    %_DEST%\bin%_EXT%\testshl2_timeout
-..\%__SRC%\bin\versioninfo.exe %_DEST%\bin%_EXT%\versioninfo.exe
-..\%__SRC%\bin\versioninfo     %_DEST%\bin%_EXT%\versioninfo
+../%__SRC%/bin/testshl2.exe    %_DEST%/bin%_EXT%/testshl2.exe
+../%__SRC%/bin/testshl2_timeout.exe    %_DEST%/bin%_EXT%/testshl2_timeout.exe
+../%__SRC%/bin/testshl2        %_DEST%/bin%_EXT%/testshl2
+../%__SRC%/bin/testshl2_timeout    %_DEST%/bin%_EXT%/testshl2_timeout
+../%__SRC%/bin/versioninfo.exe %_DEST%/bin%_EXT%/versioninfo.exe
+../%__SRC%/bin/versioninfo     %_DEST%/bin%_EXT%/versioninfo
 
-..\source\codegen\codegen.pl %_DEST%\bin%_EXT%\codegen_testshl2.pl
+../source/codegen/codegen.pl %_DEST%/bin%_EXT%/codegen_testshl2.pl
 
-mkdir: %_DEST%\inc%_EXT%\testshl
-..\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
-..\inc\*.h   %_DEST%\inc%_EXT%\testshl\*.h
+mkdir: %_DEST%/inc%_EXT%/testshl
+mkdir: %_DEST%/inc%_EXT%/testshl/autoregister
+mkdir: %_DEST%/inc%_EXT%/testshl/result
+../inc/testshl/*.hxx %_DEST%/inc%_EXT%/testshl/*.hxx
+../inc/testshl/*.h   %_DEST%/inc%_EXT%/testshl/*.h
+../inc/testshl/result/*.hxx %_DEST%/inc%_EXT%/testshl/result/*.hxx
+../inc/testshl/result/*.h   %_DEST%/inc%_EXT%/testshl/result/*.h
+../inc/testshl/autoregister/*.h   %_DEST%/inc%_EXT%/testshl/autoregister/*.h
 
-..\%__SRC%\lib\cppunit.lib %_DEST%\lib%_EXT%\cppunit.lib
-..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+../%__SRC%/lib/testshl2.lib %_DEST%/lib%_EXT%/testshl2.lib
+../%__SRC%/lib/*.a %_DEST%/lib%_EXT%/*.a
+../%__SRC%/lib/c5t_*.lib %_DEST%/lib%_EXT%/c5t_*.lib
 
 # The follows is a testshl2 selftest library, which must be delivered for tests.
 # But per default this library doesn't exists.
 # For more information see workben/selftest
-..\%__SRC%\bin\delivertest.dll      %_DEST%\bin%_EXT%\testshl2_deliver_test.dll
-..\%__SRC%\lib\libdelivertest.so    %_DEST%\lib%_EXT%\libtestshl2_deliver_test.so
-..\%__SRC%\lib\libdelivertest.dylib %_DEST%\lib%_EXT%\libtestshl2_deliver_test.dylib
+../%__SRC%/bin/delivertest.dll      %_DEST%/bin%_EXT%/testshl2_deliver_test.dll
+../%__SRC%/lib/libdelivertest.so    %_DEST%/lib%_EXT%/libtestshl2_deliver_test.so
+../%__SRC%/lib/libdelivertest.dylib %_DEST%/lib%_EXT%/libtestshl2_deliver_test.dylib
 

@@ -66,7 +66,7 @@ testcase tUpdtDialogExport
         hDestroyDocument()
         goto endsub
     endif
-    
+    sleep(1)
     printlog( "Click the Export button on the DialogBar" )
     kontext "DialogBar"
     Export.click()
