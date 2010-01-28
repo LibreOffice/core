@@ -639,7 +639,7 @@ void OStatement_Base::GetAssignValues()
                 aColumnNameList.push_back(pCol->getTokenValue());
             }
         }
-        if(!aColumnNameList.size())
+        if ( aColumnNameList.empty() )
             throwFunctionSequenceException(*this);
 
         // Werte ...
@@ -652,10 +652,10 @@ void OStatement_Base::GetAssignValues()
         if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
             throwFunctionSequenceException(*this);
 
-        OSL_ENSURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
+        OSL_ENSURE(pValuesOrQuerySpec->count() == 4,"OResultSet: pValuesOrQuerySpec->count() != 4");
 
         // Liste von Werten
-        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(1);
+        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(2);
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
@@ -665,40 +665,22 @@ void OStatement_Base::GetAssignValues()
         for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
-            if(pRow_Value_Const->count() == 3)  // '(' row_value_const_list ')'
+            OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
+            if(SQL_ISRULE(pRow_Value_Const,parameter))
             {
-                pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
-                OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
-                if(SQL_ISRULE(pRow_Value_Const,parameter))
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                        ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                else if(pRow_Value_Const->isToken())
-                    ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
-                else
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                    {
-                        for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
-                            ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
-                    }
-                    else
-                        throwFunctionSequenceException(*this);
-                }
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
             }
+            else if(pRow_Value_Const->isToken())
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
             else
             {
-                //  aStatus.SetStatementTooComplex();
-                throwFunctionSequenceException(*this);
+                if(pRow_Value_Const->count() == aColumnNameList.size())
+                {
+                    for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
+                        ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
+                }
+                else
+                    throwFunctionSequenceException(*this);
             }
         }
     }

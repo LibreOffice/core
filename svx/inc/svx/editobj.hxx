@@ -121,6 +121,9 @@ public:
     virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
     bool                operator==( const EditTextObject& rCompare ) const;
+
+    // #i102062#
+    bool isWrongListEqual(const EditTextObject& rCompare) const;
 };
 
 #endif  // _EDITOBJ_HXX

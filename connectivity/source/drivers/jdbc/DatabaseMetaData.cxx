@@ -616,7 +616,8 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
     const ::rtl::OUString* _pOptionalAdditionalString )
 {
     bool bCatalog = _rCatalog.hasValue();
-    ::rtl::OUString sCatalog( ::comphelper::getString( _rCatalog ) );
+    ::rtl::OUString sCatalog;
+    _rCatalog >>= sCatalog;
 
     bool bSchema = _rSchemaPattern.toChar() != '%';
 

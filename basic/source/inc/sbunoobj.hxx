@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
+#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <rtl/ustring.hxx>
 
 class SbUnoObject: public SbxObject
@@ -149,7 +150,7 @@ public:
 };
 
 // Wrapper fuer eine Uno-Klasse
-class SbUnoClass: public SbxObject
+class SbUnoClass : public SbxObject
 {
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
 
@@ -177,7 +178,55 @@ SV_DECL_IMPL_REF(SbUnoClass);
 
 // Funktion, um einen globalen Bezeichner im
 // UnoScope zu suchen und fuer Sbx zu wrappen
-SbxVariable* findUnoClass( const String& rName );
+SbUnoClass* findUnoClass( const String& rName );
+
+
+// Wrapper for UNO Service
+class SbUnoService : public SbxObject
+{
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >    m_xServiceTypeDesc;
+    bool                                                                                                m_bNeedsInit;
+
+public:
+    TYPEINFO();
+    SbUnoService( const String& aName_,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
+            : SbxObject( aName_ )
+            , m_xServiceTypeDesc( xServiceTypeDesc )
+            , m_bNeedsInit( true )
+    {}
+
+    virtual SbxVariable* Find( const String&, SbxClassType );
+
+    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+};
+SV_DECL_IMPL_REF(SbUnoService);
+
+SbUnoService* findUnoService( const String& rName );
+
+
+void clearUnoServiceCtors( void );
+
+class SbUnoServiceCtor : public SbxMethod
+{
+    friend class SbUnoService;
+    friend void clearUnoServiceCtors( void );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
+
+    SbUnoServiceCtor* pPrev;
+    SbUnoServiceCtor* pNext;
+
+public:
+    TYPEINFO();
+
+    SbUnoServiceCtor( const String& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
+    virtual ~SbUnoServiceCtor();
+    virtual SbxInfo* GetInfo();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > getServiceCtorDesc( void )
+        { return m_xServiceCtorDesc; }
+};
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any

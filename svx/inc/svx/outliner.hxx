@@ -387,6 +387,9 @@ public:
 
     void        SetInvalidateMore( USHORT nPixel );
     USHORT      GetInvalidateMore() const;
+
+    String      GetSurroundingText() const;
+     Selection  GetSurroundingTextSelection() const;
 };
 
 //#if 0 // _SOLAR__PRIVATE

@@ -108,7 +108,7 @@ namespace berkeleydbproxy {
             , m_pBuffer( NULL )
         {}
         ~DBData()
-            { delete m_pBuffer; }
+            { delete [] m_pBuffer; }
 
           int getSize() const
             { return m_nSize; }

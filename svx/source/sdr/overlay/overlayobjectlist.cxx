@@ -40,6 +40,8 @@
 // get access to basic algos like ::std::find
 #include <algorithm>
 
+#include <drawinglayer/processor2d/hittestprocessor2d.hxx>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -73,63 +75,92 @@ namespace sdr
         void OverlayObjectList::remove(OverlayObject& rOverlayObject)
         {
             const OverlayObjectVector::iterator aFindResult = ::std::find(maVector.begin(), maVector.end(), &rOverlayObject);
-            DBG_ASSERT((aFindResult != maVector.end()),
-                "OverlayObjectList::remove: Could not find given object in list (!)");
-            maVector.erase(aFindResult);
+            const bool bFound(aFindResult != maVector.end());
+            OSL_ENSURE(bFound, "Could not find given object in list (!)");
+
+            if(bFound)
+            {
+                maVector.erase(aFindResult);
+            }
         }
 
-        sal_Bool OverlayObjectList::isHit(const basegfx::B2DPoint& rPos, double fTol) const
+        bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
             if(maVector.size())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
+                sdr::overlay::OverlayObject* pFirst = *aStart;
+                OSL_ENSURE(pFirst, "Corrupt OverlayObjectList (!)");
+                OverlayManager* pManager = pFirst->getOverlayManager();
 
-                if(0.0 == fTol)
+                if(pManager)
                 {
-                    ::sdr::overlay::OverlayObject* pCandidate = *aStart;
-                    OverlayManager* pManager = pCandidate->getOverlayManager();
-
-                    if(pManager)
+                    if(0.0 == fLogicTolerance)
                     {
-                        Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
+                        const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
                             Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
-                        fTol = aSizeLogic.Width();
+                        fLogicTolerance = aSizeLogic.Width();
                     }
-                }
 
-                for(; aStart != maVector.end(); aStart++)
-                {
-                    ::sdr::overlay::OverlayObject* pCandidate = *aStart;
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(pManager->getCurrentViewInformation2D());
+                    drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
+                        aViewInformation2D,
+                        rLogicPosition,
+                        fLogicTolerance,
+                        false);
 
-                    if(pCandidate->isHit(rPos, fTol))
+                    for(; aStart != maVector.end(); aStart++)
                     {
-                        return sal_True;
+                        sdr::overlay::OverlayObject* pCandidate = *aStart;
+                        OSL_ENSURE(pCandidate, "Corrupt OverlayObjectList (!)");
+
+                        if(pCandidate->isHittable())
+                        {
+                            const drawinglayer::primitive2d::Primitive2DSequence& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
+
+                            if(rSequence.hasElements())
+                            {
+                                aHitTestProcessor2D.process(rSequence);
+
+                                if(aHitTestProcessor2D.getHit())
+                                {
+                                    return true;
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            return sal_False;
+            return false;
         }
 
-        sal_Bool OverlayObjectList::isHitPixel(const Point& rPos, sal_uInt32 nTol) const
+        bool OverlayObjectList::isHitPixel(const Point& rDiscretePosition, sal_uInt32 nDiscreteTolerance) const
         {
             if(maVector.size())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
-                ::sdr::overlay::OverlayObject* pCandidate = *aStart;
+                sdr::overlay::OverlayObject* pCandidate = *aStart;
                 OverlayManager* pManager = pCandidate->getOverlayManager();
 
                 if(pManager)
                 {
-                    Point aPosLogic(pManager->getOutputDevice().PixelToLogic(rPos));
-                    Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(Size(nTol, nTol)));
-                    basegfx::B2DPoint aPosition(aPosLogic.X(), aPosLogic.Y());
+                    const Point aPosLogic(pManager->getOutputDevice().PixelToLogic(rDiscretePosition));
+                    const basegfx::B2DPoint aPosition(aPosLogic.X(), aPosLogic.Y());
 
-                    return isHit(aPosition, (double)aSizeLogic.Width());
+                    if(nDiscreteTolerance)
+                    {
+                        const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(Size(nDiscreteTolerance, nDiscreteTolerance)));
+                        return isHitLogic(aPosition, (double)aSizeLogic.Width());
+                    }
+                    else
+                    {
+                        return isHitLogic(aPosition);
+                    }
                 }
             }
 
-            return sal_False;
+            return false;
         }
 
         basegfx::B2DRange OverlayObjectList::getBaseRange() const
@@ -148,20 +179,6 @@ namespace sdr
             }
 
             return aRetval;
-        }
-
-        void OverlayObjectList::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity() && maVector.size())
-            {
-                OverlayObjectVector::iterator aStart(maVector.begin());
-
-                for(; aStart != maVector.end(); aStart++)
-                {
-                    ::sdr::overlay::OverlayObject* pCandidate = *aStart;
-                    pCandidate->transform(rMatrix);
-                }
-            }
         }
     } // end of namespace overlay
 } // end of namespace sdr

@@ -1,4 +1,4 @@
-    /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -183,7 +183,8 @@ public:
 #endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
-    ::com::sun::star::util::DateTime GetInitFileDate();
+    sal_Bool            DocNeedsFileDateCheck();
+    ::com::sun::star::util::DateTime GetInitFileDate( sal_Bool bIgnoreOldValue );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > GetContent() const;
     const String&       GetPhysicalName() const;
@@ -206,7 +207,9 @@ public:
                         { return ERRCODE_TOERROR(GetErrorCode()); }
     sal_uInt32          GetLastStorageCreationState();
 
-    void                SetError( sal_uInt32 nError ) { eError = nError; }
+    void                SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage );
+
+    void                AddLog( const ::rtl::OUString& aMessage );
 
     void                CloseInStream();
     sal_Bool            CloseOutStream();
@@ -359,90 +362,6 @@ SV_DECL_COMPAT_WEAK( SfxMedium )
 #define SFXMEDIUM_LIST
 DECLARE_LIST( SfxMediumList, SfxMedium* )
 #endif
-
-/*========================================================================
- *
- * SvKeyValue.
- *
- *======================================================================*/
-
-#ifndef COPYCTOR_API
-#define COPYCTOR_API(C) C (const C&); C& operator= (const C&)
-#endif
-SV_DECL_REF(SvKeyValueIterator)
-
-class SvKeyValue
-{
-    /** Representation.
-    */
-    String m_aKey;
-    String m_aValue;
-
-public:
-    /** Construction.
-    */
-    SvKeyValue (void)
-    {}
-
-    SvKeyValue (const String &rKey, const String &rValue)
-        : m_aKey (rKey), m_aValue (rValue)
-    {}
-
-    SvKeyValue (const SvKeyValue &rOther)
-        : m_aKey (rOther.m_aKey), m_aValue (rOther.m_aValue)
-    {}
-
-    /** Assignment.
-    */
-    SvKeyValue& operator= (SvKeyValue &rOther)
-    {
-        m_aKey   = rOther.m_aKey;
-        m_aValue = rOther.m_aValue;
-        return *this;
-    }
-
-    /** Operation.
-    */
-    const String& GetKey   (void) const { return m_aKey; }
-    const String& GetValue (void) const { return m_aValue; }
-
-    void SetKey   (const String &rKey  ) { m_aKey = rKey; }
-    void SetValue (const String &rValue) { m_aValue = rValue; }
-};
-
-/*========================================================================
- *
- * SvKeyValueIterator.
- *
- *======================================================================*/
-class SvKeyValueList_Impl;
-class SFX2_DLLPUBLIC SvKeyValueIterator : public SvRefBase
-{
-    /** Representation.
-    */
-    SvKeyValueList_Impl* m_pList;
-    USHORT               m_nPos;
-
-    /** Not implemented.
-    */
-    COPYCTOR_API(SvKeyValueIterator);
-
-public:
-    /** Construction/Destruction.
-    */
-    SvKeyValueIterator (void);
-    virtual ~SvKeyValueIterator (void);
-
-    /** Operation.
-    */
-    virtual BOOL GetFirst (SvKeyValue &rKeyVal);
-    virtual BOOL GetNext  (SvKeyValue &rKeyVal);
-    virtual void Append   (const SvKeyValue &rKeyVal);
-};
-
-SV_IMPL_REF(SvKeyValueIterator);
-
-
 
 #endif
 

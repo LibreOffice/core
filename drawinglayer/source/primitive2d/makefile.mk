@@ -62,6 +62,7 @@ SLOFILES= \
         $(SLO)$/groupprimitive2d.obj			\
         $(SLO)$/helplineprimitive2d.obj			\
         $(SLO)$/hittestprimitive2d.obj			\
+        $(SLO)$/invertprimitive2d.obj			\
         $(SLO)$/markerarrayprimitive2d.obj		\
         $(SLO)$/pointarrayprimitive2d.obj		\
         $(SLO)$/maskprimitive2d.obj				\
@@ -71,6 +72,7 @@ SLOFILES= \
         $(SLO)$/pagepreviewprimitive2d.obj		\
         $(SLO)$/polypolygonprimitive2d.obj		\
         $(SLO)$/polygonprimitive2d.obj			\
+        $(SLO)$/primitivetools2d.obj			\
         $(SLO)$/sceneprimitive2d.obj			\
         $(SLO)$/shadowprimitive2d.obj			\
         $(SLO)$/structuretagprimitive2d.obj		\

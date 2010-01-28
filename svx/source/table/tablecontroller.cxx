@@ -493,7 +493,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
 
 // --------------------------------------------------------------------
 
-void SvxTableController::onInsert( sal_uInt16 nSId )
+void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 {
     ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
@@ -501,6 +501,21 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
 
     if( mxTable.is() ) try
     {
+        //
+        bool bInsertAfter = true;
+        sal_uInt16 nCount = 0;
+        if( pArgs )
+        {
+            const SfxPoolItem* pItem = 0;
+            pArgs->GetItemState(nSId, FALSE, &pItem);
+            if (pItem)
+            {
+                nCount = ((const SfxInt16Item* )pItem)->GetValue();
+                if(SFX_ITEM_SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, TRUE, &pItem))
+                    bInsertAfter = ((const SfxBoolItem* )pItem)->GetValue();
+            }
+        }
+
         CellPos aStart, aEnd;
         if( hasSelectedCells() )
         {
@@ -508,9 +523,12 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
         }
         else
         {
-            aStart.mnCol = mxTable->getColumnCount() - 1;
-            aStart.mnRow = mxTable->getRowCount() - 1;
-            aEnd = aStart;
+            if( bInsertAfter )
+            {
+                aStart.mnCol = mxTable->getColumnCount() - 1;
+                aStart.mnRow = mxTable->getRowCount() - 1;
+                aEnd = aStart;
+            }
         }
 
         if( pTableObj->IsTextEditActive() )
@@ -535,8 +553,9 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
             }
 
             Reference< XTableColumns > xCols( mxTable->getColumns() );
-            const sal_Int32 nNewColumns = aEnd.mnCol - aStart.mnCol + 1;
-            xCols->insertByIndex( aEnd.mnCol + 1, nNewColumns );
+            const sal_Int32 nNewColumns = (nCount == 0) ? (aEnd.mnCol - aStart.mnCol + 1) : nCount;
+            const sal_Int32 nNewStartColumn = aEnd.mnCol + (bInsertAfter ? 1 : 0);
+            xCols->insertByIndex( nNewStartColumn, nNewColumns );
 
             for( sal_Int32 nOffset = 0; nOffset < nNewColumns; nOffset++ )
             {
@@ -552,7 +571,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
             if( mpModel )
                 mpModel->SetChanged();
 
-            aStart.mnCol = aEnd.mnCol+1;
+            aStart.mnCol = nNewStartColumn;
             aStart.mnRow = 0;
             aEnd.mnCol = aStart.mnCol + nNewColumns - 1;
             aEnd.mnRow = mxTable->getRowCount() - 1;
@@ -570,8 +589,9 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
             }
 
             Reference< XTableRows > xRows( mxTable->getRows() );
-            const sal_Int32 nNewRows = aEnd.mnRow - aStart.mnRow + 1;
-            xRows->insertByIndex( aEnd.mnRow + 1, nNewRows );
+            const sal_Int32 nNewRows = (nCount == 0) ? (aEnd.mnRow - aStart.mnRow + 1) : nCount;
+            const sal_Int32 nNewRowStart = aEnd.mnRow + (bInsertAfter ? 1 : 0);
+            xRows->insertByIndex( nNewRowStart, nNewRows );
 
             for( sal_Int32 nOffset = 0; nOffset < nNewRows; nOffset++ )
             {
@@ -582,13 +602,16 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
             }
 
             if( bUndo )
+            {
                 mpModel->EndUndo();
+                mpModel->SetChanged();
+            }
 
             if( mpModel )
                 mpModel->SetChanged();
 
             aStart.mnCol = 0;
-            aStart.mnRow = aEnd.mnRow+1;
+            aStart.mnRow = nNewRowStart;
             aEnd.mnCol = mxTable->getColumnCount() - 1;
             aEnd.mnRow = aStart.mnRow + nNewRows - 1;
             break;
@@ -756,7 +779,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
     {
     case SID_TABLE_INSERT_ROW:
     case SID_TABLE_INSERT_COL:
-        onInsert( nSId );
+        onInsert( nSId, rReq.GetArgs() );
         break;
     case SID_TABLE_DELETE_ROW:
     case SID_TABLE_DELETE_COL:
@@ -987,6 +1010,9 @@ void SvxTableController::MergeMarkedCells()
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( pTableObj )
     {
+        if( pTableObj->IsTextEditActive() )
+            mpView->SdrEndTextEdit(sal_True);
+
         TableModelNotifyGuard aGuard( mxTable.get() );
         MergeRange( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow );
     }
@@ -1018,6 +1044,9 @@ void SvxTableController::SplitMarkedCells()
             SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
             if( pTableObj )
             {
+                if( pTableObj->IsTextEditActive() )
+                    mpView->SdrEndTextEdit(sal_True);
+
                 TableModelNotifyGuard aGuard( mxTable.get() );
 
                 const bool bUndo = mpModel && mpModel->IsUndoEnabled();
@@ -1476,7 +1505,16 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window
         if( bSelect )
             gotoCell( pTableObj->getPreviousCell( getSelectionEnd(), true ), false, pWindow, nAction );
         else
-            gotoCell( pTableObj->getNextCell( getSelectionEnd(), true ), false, pWindow, nAction );
+        {
+            CellPos aSelectionEnd( getSelectionEnd() );
+            CellPos aNextCell( pTableObj->getNextCell( aSelectionEnd, true ) );
+            if( aSelectionEnd == aNextCell )
+            {
+                onInsert( SID_TABLE_INSERT_ROW, 0 );
+                aNextCell = pTableObj->getNextCell( aSelectionEnd, true );
+            }
+            gotoCell( aNextCell, false, pWindow, nAction );
+        }
         break;
     }
     }
@@ -1934,7 +1972,6 @@ void SvxTableController::updateSelectionOverlay()
                     if( pOverlayManager )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
-                        // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_HATCH;
                         sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_TRANSPARENT;
 
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -1974,7 +2011,7 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
             for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
             {
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() )
+                if( xCell.is() && !xCell->isMerged() )
                 {
                     const SfxItemSet& rSet = xCell->GetItemSet();
                     SfxWhichIter aIter(rSet);

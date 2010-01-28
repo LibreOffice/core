@@ -272,6 +272,7 @@ SHL4OBJS=       \
                 $(SLO)$/menubarwrapper.obj          \
                 $(SLO)$/menudispatcher.obj          \
                 $(SLO)$/menumanager.obj             \
+                $(SLO)$/mischelper.obj             \
                 $(SLO)$/moduleacceleratorconfiguration.obj  \
                 $(SLO)$/moduleimagemanager.obj      \
                 $(SLO)$/modulemanager.obj           \

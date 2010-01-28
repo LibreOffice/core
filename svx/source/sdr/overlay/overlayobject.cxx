@@ -43,7 +43,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,206 +52,94 @@ namespace sdr
     {
         void OverlayObject::objectChange()
         {
-            if(mpOverlayManager)
+            const basegfx::B2DRange aPreviousRange(maBaseRange);
+            maBaseRange.reset();
+            setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DSequence());
+
+            if(getOverlayManager() && !aPreviousRange.isEmpty())
             {
-                basegfx::B2DRange aPreviousRange(maBaseRange);
+                getOverlayManager()->invalidateRange(aPreviousRange);
+            }
 
-                if(!aPreviousRange.isEmpty())
-                {
-                    mpOverlayManager->invalidateRange(aPreviousRange);
-                }
+            const basegfx::B2DRange& rCurrentRange = getBaseRange();
 
-                mbIsChanged = sal_True;
-                const basegfx::B2DRange& rCurrentRange = getBaseRange();
-
-                if(rCurrentRange != aPreviousRange && !rCurrentRange.isEmpty())
-                {
-                    mpOverlayManager->invalidateRange(rCurrentRange);
-                }
+            if(getOverlayManager() && rCurrentRange != aPreviousRange && !rCurrentRange.isEmpty())
+            {
+                getOverlayManager()->invalidateRange(rCurrentRange);
             }
         }
 
-        // support method to draw striped geometries
-        void OverlayObject::ImpDrawRangeStriped(OutputDevice& rOutputDevice, const basegfx::B2DRange& rRange)
+        // OverlayObject implementations.
+        drawinglayer::primitive2d::Primitive2DSequence OverlayObject::createOverlayObjectPrimitive2DSequence()
         {
-            if(getOverlayManager())
-            {
-                const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-
-                if(aPolygon.count())
-                {
-                    ImpDrawPolygonStriped(rOutputDevice, aPolygon);
-                }
-            }
+            // Default implementation has to assert a missing implementation. It cannot
+            // be useful to have overlay object derivations which have no visualisation
+            // at all
+            OSL_ENSURE(false, "OverlayObject derivation without visualisation definition (missing createOverlayObjectPrimitive2DSequence implementation) (!)");
+            return drawinglayer::primitive2d::Primitive2DSequence();
         }
 
-        void OverlayObject::ImpDrawLineStriped(OutputDevice& rOutputDevice, double x1, double y1, double x2, double y2)
+        void OverlayObject::allowAntiAliase(bool bNew)
         {
-            if(getOverlayManager())
+            if(bNew != (bool)mbAllowsAntiAliase)
             {
-                const basegfx::B2DPoint aStart(x1, y1);
-                const basegfx::B2DPoint aEnd(x2, y2);
+                // remember new value
+                mbAllowsAntiAliase = bNew;
 
-                if(!aStart.equal(aEnd))
-                {
-                    basegfx::B2DPolygon aPolygon;
-                    aPolygon.append(aStart);
-                    aPolygon.append(aEnd);
-
-                    ImpDrawPolygonStriped(rOutputDevice, aPolygon);
-                }
-            }
-        }
-
-        void OverlayObject::ImpDrawLineStriped(OutputDevice& rOutputDevice, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd)
-        {
-            if(getOverlayManager() && !rStart.equal(rEnd))
-            {
-                basegfx::B2DPolygon aPolygon;
-                aPolygon.append(rStart);
-                aPolygon.append(rEnd);
-
-                ImpDrawPolygonStriped(rOutputDevice, aPolygon);
-            }
-        }
-
-        void OverlayObject::ImpDrawPolygonStriped(OutputDevice& rOutputDevice, const basegfx::B2DPolygon& rPolygon)
-        {
-            if(getOverlayManager() && rPolygon.count())
-            {
-                if(getOverlayManager() && getOverlayManager()->getDrawinglayerOpt().IsAntiAliasing())
-                {
-                    // prepare ViewInformation2D
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                        basegfx::B2DHomMatrix(),
-                        rOutputDevice.GetViewTransformation(),
-                        basegfx::B2DRange(),
-                        0,
-                        0.0,
-                        0);
-
-                    // create processor
-                    drawinglayer::processor2d::BaseProcessor2D* pProcessor = ::sdr::contact::createBaseProcessor2DFromOutputDevice(
-                        rOutputDevice,
-                        aViewInformation2D);
-
-                    if(pProcessor)
-                    {
-                        // prepare primitives
-                        const drawinglayer::primitive2d::Primitive2DReference aPolygonMarkerPrimitive2D(
-                            new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
-                                rPolygon,
-                                getOverlayManager()->getStripeColorA().getBColor(),
-                                getOverlayManager()->getStripeColorB().getBColor(),
-                                getOverlayManager()->getStripeLengthPixel()));
-                        const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aPolygonMarkerPrimitive2D, 1);
-
-                        pProcessor->process(aSequence);
-
-                        delete pProcessor;
-                    }
-                }
-                else
-                {
-                    const sal_uInt32 nLenPixel(getOverlayManager()->getStripeLengthPixel());
-                    const Size aDashSizePixel(nLenPixel, nLenPixel);
-                    const Size aDashSizeLogic(rOutputDevice.PixelToLogic(aDashSizePixel));
-                    const double fDashLength(aDashSizeLogic.Width());
-                    const double fFullDotDashLength(fDashLength + fDashLength);
-
-                    // fill DashDot vector
-                    ::std::vector<double> aDotDashArray;
-                    aDotDashArray.push_back(fDashLength);
-                    aDotDashArray.push_back(fDashLength);
-
-                    // get dash polygons
-                    basegfx::B2DPolyPolygon aStripesA;
-                    basegfx::B2DPolyPolygon aStripesB;
-                    basegfx::tools::applyLineDashing(rPolygon, aDotDashArray, &aStripesA, &aStripesB, fFullDotDashLength);
-
-                    // draw stripes A
-                    if(aStripesA.count())
-                    {
-                        rOutputDevice.SetFillColor();
-                        rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorA());
-
-                        for(sal_uInt32 a(0L); a < aStripesA.count();a ++)
-                        {
-                            rOutputDevice.DrawPolyLine(aStripesA.getB2DPolygon(a));
-                        }
-                    }
-
-                    // draw stripes B
-                    if(aStripesB.count())
-                    {
-                        rOutputDevice.SetFillColor();
-                        rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorB());
-
-                        for(sal_uInt32 a(0L); a < aStripesB.count();a ++)
-                        {
-                            rOutputDevice.DrawPolyLine(aStripesB.getB2DPolygon(a));
-                        }
-                    }
-                }
+                // register change (after change)
+                objectChange();
             }
         }
 
         OverlayObject::OverlayObject(Color aBaseColor)
-        :   Event(0L),
-            mpOverlayManager(0L),
-            mpNext(0L),
-            mpPrevious(0L),
+        :   Event(0),
+            mpOverlayManager(0),
             maBaseColor(aBaseColor),
-            mbIsVisible(sal_True),
-            mbIsChanged(sal_True),
-            mbIsHittable(sal_True),
-            mbAllowsAnimation(sal_False)
+            mbIsVisible(true),
+            mbIsHittable(true),
+            mbAllowsAnimation(false),
+            mbAllowsAntiAliase(true)
         {
         }
 
         OverlayObject::~OverlayObject()
         {
-            DBG_ASSERT(0L == mpOverlayManager,
-                "OverlayObject is destructed which is still registered at OverlayManager (!)");
+            OSL_ENSURE(0 == getOverlayManager(), "OverlayObject is destructed which is still registered at OverlayManager (!)");
         }
 
-        sal_Bool OverlayObject::isHit(const basegfx::B2DPoint& rPos, double fTol) const
+        const drawinglayer::primitive2d::Primitive2DSequence& OverlayObject::getOverlayObjectPrimitive2DSequence() const
         {
-            if(isHittable())
+            if(!getPrimitive2DSequence().hasElements())
             {
-                if(0.0 != fTol)
-                {
-                    basegfx::B2DRange aRange(getBaseRange());
-                    aRange.grow(fTol);
-                    return aRange.isInside(rPos);
-                }
-                else
-                {
-                    return getBaseRange().isInside(rPos);
-                }
+                // no existing sequence; create one
+                const_cast< OverlayObject* >(this)->setPrimitive2DSequence(
+                    const_cast< OverlayObject* >(this)->createOverlayObjectPrimitive2DSequence());
             }
 
-            return sal_False;
+            return getPrimitive2DSequence();
         }
 
         const basegfx::B2DRange& OverlayObject::getBaseRange() const
         {
-            if(mbIsChanged)
+            if(getOverlayManager() && maBaseRange.isEmpty())
             {
-                if(mpOverlayManager)
-                {
-                    ((::sdr::overlay::OverlayObject*)this)->createBaseRange(mpOverlayManager->getOutputDevice());
-                }
+                const drawinglayer::primitive2d::Primitive2DSequence& rSequence = getOverlayObjectPrimitive2DSequence();
 
-                ((::sdr::overlay::OverlayObject*)this)->mbIsChanged = sal_False;
+                if(rSequence.hasElements())
+                {
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
+
+                    const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange =
+                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(rSequence, aViewInformation2D);
+                }
             }
 
             return maBaseRange;
         }
 
-        void OverlayObject::setVisible(sal_Bool bNew)
+        void OverlayObject::setVisible(bool bNew)
         {
-            if(bNew != mbIsVisible)
+            if(bNew != (bool)mbIsVisible)
             {
                 // remember new value
                 mbIsVisible = bNew;
@@ -262,9 +149,9 @@ namespace sdr
             }
         }
 
-        void OverlayObject::setHittable(sal_Bool bNew)
+        void OverlayObject::setHittable(bool bNew)
         {
-            if(bNew != mbIsHittable)
+            if(bNew != (bool)mbIsHittable)
             {
                 // remember new value
                 mbIsHittable = bNew;
@@ -289,11 +176,6 @@ namespace sdr
         void OverlayObject::Trigger(sal_uInt32 /*nTime*/)
         {
             // default does not register again
-        }
-
-        void OverlayObject::zoomHasChanged()
-        {
-            // default does not need to do anything
         }
 
         void OverlayObject::stripeDefinitionHasChanged()
@@ -328,15 +210,6 @@ namespace sdr
 
                 // register change (after change)
                 objectChange();
-            }
-        }
-
-        void OverlayObjectWithBasePosition::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                basegfx::B2DPoint aNewBasePosition = rMatrix * getBasePosition();
-                setBasePosition(aNewBasePosition);
             }
         }
     } // end of namespace overlay

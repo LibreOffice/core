@@ -64,17 +64,15 @@ namespace drawinglayer
         {
         }
 
-        SdrLineFillShadowAttribute::SdrLineFillShadowAttribute(const SdrLineFillShadowAttribute& rCandidate)
-        :   mpShadow(0L),
-            mpLine(0L),
-            mpLineStartEnd(0L),
-            mpFill(0L),
-            mpFillFloatTransGradient(0L)
+        SdrLineFillShadowAttribute::SdrLineFillShadowAttribute(
+            const SdrLineFillShadowAttribute& rCandidate)
+        :   mpShadow(0),
+            mpLine(0),
+            mpLineStartEnd(0),
+            mpFill(0),
+            mpFillFloatTransGradient(0)
         {
-            if(!(*this == rCandidate))
-            {
-                *this = rCandidate;
-            }
+            *this = rCandidate;
         }
 
         SdrLineFillShadowAttribute::~SdrLineFillShadowAttribute()
@@ -91,14 +89,14 @@ namespace drawinglayer
             // handle mpShadow
             {
                 // delete local mpShadow if necessary
-                if(mpShadow && ((!rCandidate.mpShadow) || (!(*mpShadow == *rCandidate.mpShadow))))
+                if(mpShadow)
                 {
                     delete mpShadow;
-                    mpShadow = 0L;
+                    mpShadow = 0;
                 }
 
                 // copy mpShadow if necessary
-                if(!mpShadow && rCandidate.mpShadow)
+                if(rCandidate.mpShadow)
                 {
                     mpShadow = new SdrShadowAttribute(*rCandidate.mpShadow);
                 }
@@ -107,14 +105,14 @@ namespace drawinglayer
             // handle mpLine
             {
                 // delete local mpLine if necessary
-                if(mpLine && ((!rCandidate.mpLine) || (!(*mpLine == *rCandidate.mpLine))))
+                if(mpLine)
                 {
                     delete mpLine;
-                    mpLine = 0L;
+                    mpLine = 0;
                 }
 
                 // copy mpLine if necessary
-                if(!mpLine && rCandidate.mpLine)
+                if(rCandidate.mpLine)
                 {
                     mpLine = new SdrLineAttribute(*rCandidate.mpLine);
                 }
@@ -123,14 +121,14 @@ namespace drawinglayer
             // handle mpLineStartEnd
             {
                 // delete local mpLineStartEnd if necessary
-                if(mpLineStartEnd && ((!rCandidate.mpLineStartEnd) || (!(*mpLineStartEnd == *rCandidate.mpLineStartEnd))))
+                if(mpLineStartEnd)
                 {
                     delete mpLineStartEnd;
-                    mpLineStartEnd = 0L;
+                    mpLineStartEnd = 0;
                 }
 
                 // copy mpLineStartEnd if necessary
-                if(!mpLineStartEnd && rCandidate.mpLineStartEnd)
+                if(rCandidate.mpLineStartEnd)
                 {
                     mpLineStartEnd = new SdrLineStartEndAttribute(*rCandidate.mpLineStartEnd);
                 }
@@ -139,14 +137,14 @@ namespace drawinglayer
             // handle mpFill
             {
                 // delete local mpFill if necessary
-                if(mpFill && ((!rCandidate.mpFill) || (!(*mpFill == *rCandidate.mpFill))))
+                if(mpFill)
                 {
                     delete mpFill;
-                    mpFill = 0L;
+                    mpFill = 0;
                 }
 
                 // copy mpFill if necessary
-                if(!mpFill && rCandidate.mpFill)
+                if(rCandidate.mpFill)
                 {
                     mpFill = new SdrFillAttribute(*rCandidate.mpFill);
                 }
@@ -155,14 +153,14 @@ namespace drawinglayer
             // handle mpFillFloatTransGradient
             {
                 // delete local mpFillFloatTransGradient if necessary
-                if(mpFillFloatTransGradient && ((!rCandidate.mpFillFloatTransGradient) || (!(*mpFillFloatTransGradient == *rCandidate.mpFillFloatTransGradient))))
+                if(mpFillFloatTransGradient)
                 {
                     delete mpFillFloatTransGradient;
-                    mpFillFloatTransGradient = 0L;
+                    mpFillFloatTransGradient = 0;
                 }
 
                 // copy mpFillFloatTransGradient if necessary
-                if(!mpFillFloatTransGradient && rCandidate.mpFillFloatTransGradient)
+                if(rCandidate.mpFillFloatTransGradient)
                 {
                     mpFillFloatTransGradient = new FillGradientAttribute(*rCandidate.mpFillFloatTransGradient);
                 }

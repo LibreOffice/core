@@ -92,6 +92,7 @@ class XMLErrors;
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
+    namespace uno { class XComponentContext; }
     namespace frame { class XModel; }
     namespace container { class XIndexContainer; }
 } } }
@@ -362,6 +363,22 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
+    /** ensures that the given namespace is in scope at the next started
+        element.
+
+        <p>If the namespace is not yet declared, the necessary attribute will
+        be added, as well.</p>
+
+        @param i_rNamespace         the namespace to be declared
+        @param i_rPreferredPrefix   (opt.) preferred prefix for the namespace
+
+        @returns the actual prefix that the namespace is associated with
+      */
+    ::rtl::OUString
+    EnsureNamespace(::rtl::OUString const & i_rNamespace,
+        ::rtl::OUString const & i_rPreferredPrefix
+        = ::rtl::OUString::createFromAscii("gen") );
+
     // Check if common attribute list is empty.
 #ifdef PRODUCT
     void CheckAttrList() {}
@@ -553,6 +570,9 @@ public:
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    GetComponentContext() const;
+
     // --> OD 2006-03-10 #i51726#
     SvtModuleOptions::EFactory GetModelType() const
     {
@@ -570,12 +590,16 @@ public:
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
 
-    /// relative path of stream in package, e.g. "someobject/content.xml"
-    ::rtl::OUString GetStreamPath() const;
+    /// name of stream in package, e.g., "content.xml"
+    ::rtl::OUString GetStreamName() const;
 
     /// add xml:id attribute (for RDF metadata)
     void AddAttributeXmlId(::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface> const & i_xIfc);
+
+    /// add RDFa attributes for a metadatable text content
+    void AddAttributesRDFa( ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XTextContent> const & i_xTextContent);
 
     // --> OD 2008-11-26 #158694#
     sal_Bool exportTextNumberElement() const;

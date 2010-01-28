@@ -1930,21 +1930,6 @@ void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
 
 // --------------------------------------------------------------------
 
-SdrObject* SdrTableObj::CheckHit(const Point& rPnt, USHORT /*nTol*/, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    if( (rPnt.X() >= aOutRect.Left()) && (rPnt.X() <= aOutRect.Right()) && (rPnt.Y() >= aOutRect.Top()) && rPnt.Y() <= aOutRect.Bottom() )
-        return const_cast<SdrObject*>(static_cast<const SdrObject*>(this));
-
-    return NULL;
-}
-
-// --------------------------------------------------------------------
-
 void SdrTableObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulTable);

@@ -43,16 +43,21 @@
 
 class OutputDevice;
 
-namespace drawinglayer { namespace primitive2d {
-    class ChartPrimitive2D;
-}}
+namespace drawinglayer { namespace primitive2d { class ChartPrimitive2D; }}
+namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
 
 //////////////////////////////////////////////////////////////////////////////
 // support chart PrettyPrinter usage from primitives
 
 namespace drawinglayer
 {
-    bool renderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate, OutputDevice& rOutputDevice);
+    // #i101811#
+    // Added current ViewInformation2D to take evtl. changed
+    // ObjectTransformation into account
+    bool renderChartPrimitive2D(
+        const primitive2d::ChartPrimitive2D& rChartCandidate,
+        OutputDevice& rOutputDevice,
+        const geometry::ViewInformation2D& rViewInformation2D);
 
 } // end of namespace drawinglayer
 

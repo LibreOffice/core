@@ -34,9 +34,8 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-
-// #i77674#
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,43 +56,30 @@ namespace sdr
             }
         }
 
-        void OverlayAnimatedBitmapEx::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
-            // #i77674# calculate discrete top-left
-            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
-            aDiscreteTopLeft -= (mbOverlayState)
-                ? basegfx::B2DPoint((double)mnCenterX1, (double)mnCenterY1)
-                : basegfx::B2DPoint((double)mnCenterX2, (double)mnCenterY2);
+            if(mbOverlayState)
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                    new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                        getBitmapEx1(),
+                        getBasePosition(),
+                        getCenterX1(),
+                        getCenterY1()));
 
-            // remember MapMode and switch to pixels
-            const bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
-            rOutputDevice.EnableMapMode(false);
+                return drawinglayer::primitive2d::Primitive2DSequence(&aPrimitive, 1);
+            }
+            else
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                    new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                        getBitmapEx2(),
+                        getBasePosition(),
+                        getCenterX2(),
+                        getCenterY2()));
 
-            // draw the bitmap
-            const Point aPixelTopLeft((sal_Int32)floor(aDiscreteTopLeft.getX()), (sal_Int32)floor(aDiscreteTopLeft.getY()));
-            rOutputDevice.DrawBitmapEx(aPixelTopLeft, (mbOverlayState) ? maBitmapEx1 : maBitmapEx2);
-
-            // restore MapMode
-            rOutputDevice.EnableMapMode(bMapModeWasEnabled);
-        }
-
-        void OverlayAnimatedBitmapEx::createBaseRange(OutputDevice& rOutputDevice)
-        {
-            // #i77674# calculate discrete top-left
-            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
-            aDiscreteTopLeft -= (mbOverlayState)
-                ? basegfx::B2DPoint((double)mnCenterX1, (double)mnCenterY1)
-                : basegfx::B2DPoint((double)mnCenterX2, (double)mnCenterY2);
-
-            // calculate discrete range
-            const Size aBitmapPixelSize((mbOverlayState) ? maBitmapEx1.GetSizePixel() : maBitmapEx2.GetSizePixel());
-            const basegfx::B2DRange aDiscreteRange(
-                aDiscreteTopLeft.getX(), aDiscreteTopLeft.getY(),
-                aDiscreteTopLeft.getX() + (double)aBitmapPixelSize.getWidth(), aDiscreteTopLeft.getY() + (double)aBitmapPixelSize.getHeight());
-
-            // set and go back to logic range
-            maBaseRange = aDiscreteRange;
-            maBaseRange.transform(rOutputDevice.GetInverseViewTransformation());
+                return drawinglayer::primitive2d::Primitive2DSequence(&aPrimitive, 1);
+            }
         }
 
         OverlayAnimatedBitmapEx::OverlayAnimatedBitmapEx(
@@ -111,10 +97,10 @@ namespace sdr
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),
             mnCenterX2(nCenX2), mnCenterY2(nCenY2),
             mnBlinkTime(nBlinkTime),
-            mbOverlayState(sal_False)
+            mbOverlayState(false)
         {
             // set AllowsAnimation flag to mark this object as animation capable
-            mbAllowsAnimation = sal_True;
+            mbAllowsAnimation = true;
 
             // #i53216# check blink time value range
             impCheckBlinkTimeValueRange();
@@ -213,11 +199,11 @@ namespace sdr
                 // switch state
                 if(mbOverlayState)
                 {
-                    mbOverlayState = sal_False;
+                    mbOverlayState = false;
                 }
                 else
                 {
-                    mbOverlayState = sal_True;
+                    mbOverlayState = true;
                 }
 
                 // re-insert me as event
@@ -226,12 +212,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        void OverlayAnimatedBitmapEx::zoomHasChanged()
-        {
-            // reset validity of range in logical coor to force recalculation
-            mbIsChanged = sal_True;
         }
     } // end of namespace overlay
 } // end of namespace sdr

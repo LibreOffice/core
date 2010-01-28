@@ -150,6 +150,9 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             &&  pBegin->Name.compareToAscii( "IgnoreDriverPrivileges" )
             &&  pBegin->Name.compareToAscii( "ImplicitCatalogRestriction" )
             &&  pBegin->Name.compareToAscii( "ImplicitSchemaRestriction" )
+            &&  pBegin->Name.compareToAscii( "SupportsTableCreation" )
+            &&  pBegin->Name.compareToAscii( "UseJava" )
+            &&  pBegin->Name.compareToAscii( "Authentication" )
             )
         {
             ::rtl::OUString aStr;

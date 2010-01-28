@@ -60,6 +60,7 @@ namespace xmloff
             case CCA_CURRENT_SELECTED:  return "current-selected";
             case CCA_CURRENT_VALUE:     return "current-value";
             case CCA_DISABLED:          return "disabled";
+            case CCA_ENABLEVISIBLE:     return "visible";
             case CCA_DROPDOWN:          return "dropdown";
             case CCA_FOR:               return "for";
             case CCA_IMAGE_DATA:        return "image-data";

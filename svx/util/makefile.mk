@@ -125,6 +125,7 @@ SHL1STDLIBS= \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
             $(I18NISOLANGLIB) \
+            $(I18NPAPERLIB) \
             $(XMLSCRIPTLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
@@ -174,7 +175,8 @@ SHL2STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
-            $(JVMFWKLIB)
+            $(JVMFWKLIB) \
+            $(ICUUCLIB)
 
 .IF "$(debug)$(dbgutil)"!=""
 SHL2STDLIBS += $(CPPUHELPERLIB)

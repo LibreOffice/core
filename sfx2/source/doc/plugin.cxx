@@ -168,7 +168,7 @@ throw( uno::RuntimeException )
         // we must destroy the plugin before the parent is destroyed
         xWindow->addEventListener( this );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
-        return TRUE;
+        return mxPlugin.is() ? TRUE : FALSE;
     }
 
     return FALSE;

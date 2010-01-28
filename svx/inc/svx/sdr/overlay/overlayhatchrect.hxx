@@ -47,38 +47,30 @@ namespace sdr
         {
             // geometric definitions
             basegfx::B2DPoint               maSecondPosition;
-            const double                    mfDiscreteWidth;
+            const double                    mfDiscreteGrow;
+            const double                    mfDiscreteShrink;
             const double                    mfHatchRotation;
             const double                    mfRotation;
 
-            // helper to create visualisation geometry from above values
-            basegfx::B2DPolyPolygon getGeometry(OutputDevice& rOutputDevice);
-
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayHatchRect(
                 const basegfx::B2DPoint& rBasePosition,
                 const basegfx::B2DPoint& rSecondPosition,
                 const Color& rHatchColor,
-                double fDiscreteWidth,
+                double fDiscreteGrow,
+                double fDiscreteShrink,
                 double fHatchRotation,
                 double fRotation);
 
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
             void setSecondPosition(const basegfx::B2DPoint&);
 
-            // Zoom has changed. If the objects logical size
-            // depends on the MapMode of the used OutputDevice, use this call
-            // to invalidate the range in logical coordinates.
-            virtual void zoomHasChanged();
-
             // data read access
-            double getDiscreteWidth() const { return mfDiscreteWidth; }
+            double getDiscreteGrow() const { return mfDiscreteGrow; }
+            double getDiscreteShrink() const { return mfDiscreteShrink; }
             double getHatchRotation() const { return mfHatchRotation; }
             double getRotation() const { return mfRotation; }
         };

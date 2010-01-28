@@ -32,6 +32,7 @@
 #include "precompiled_connectivity.hxx"
 
 #include "file/FStringFunctions.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace connectivity;
@@ -102,7 +103,7 @@ ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.empty() )
         return ORowSetValue();
 
-    ::rtl::OUString sRet;
+    ::rtl::OUStringBuffer sRet;
     ::std::vector<ORowSetValue>::const_reverse_iterator aIter = lhs.rbegin();
     ::std::vector<ORowSetValue>::const_reverse_iterator aEnd = lhs.rend();
     for (; aIter != aEnd; ++aIter)
@@ -110,10 +111,10 @@ ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
         if ( aIter->isNull() )
             return ORowSetValue();
 
-        sRet +=  *aIter;
+        sRet.append(aIter->operator ::rtl::OUString());
     }
 
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 //------------------------------------------------------------------
 ORowSetValue OOp_Locate::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -183,13 +184,13 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
         return lhs;
 
     const sal_Char c = ' ';
-    ::rtl::OUString sRet;
+    ::rtl::OUStringBuffer sRet;
     sal_Int32 nCount = lhs;
     for (sal_Int32 i=0; i < nCount; ++i)
     {
-        sRet += ::rtl::OUString(&c,1,RTL_TEXTENCODING_ASCII_US);
+        sRet.appendAscii(&c,1);
     }
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 //------------------------------------------------------------------
 ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const

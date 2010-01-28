@@ -41,6 +41,7 @@
 #include <svtools/chartprettypainter.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +51,10 @@ using namespace com::sun::star;
 
 namespace drawinglayer
 {
-    bool renderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate, OutputDevice& rOutputDevice)
+    bool renderChartPrimitive2D(
+        const primitive2d::ChartPrimitive2D& rChartCandidate,
+        OutputDevice& rOutputDevice,
+        const geometry::ViewInformation2D& rViewInformation2D)
     {
         bool bChartRendered(false);
 
@@ -73,14 +77,74 @@ namespace drawinglayer
 
                     if( pPrettyPainter )
                     {
-                        // create logic object range
+                        // create logic object range; do NOT use ObjectTransformation for this
+                        // (rViewInformation2D.getObjectTransformation()), only the logic object
+                        // size is wanted
                         basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
                         aObjectRange.transform(rChartCandidate.getTransformation());
                         const Rectangle aRectangle(
                                 (sal_Int32)aObjectRange.getMinX(), (sal_Int32)aObjectRange.getMinY(),
                                 (sal_Int32)aObjectRange.getMaxX(), (sal_Int32)aObjectRange.getMaxY());
 
-                        bChartRendered = pPrettyPainter->DoPaint(&rOutputDevice, aRectangle);
+                        // #i101811#
+                        if(rViewInformation2D.getObjectTransformation().isIdentity())
+                        {
+                            // no embedding in another transfromation, just paint with existing
+                            // MapMode. This is just a shortcut; using the below code will also
+                            // work; it has just a neutral ObjectTransformation
+                            bChartRendered = pPrettyPainter->DoPaint(&rOutputDevice, aRectangle);
+                        }
+                        else
+                        {
+                            // rViewInformation2D.getObjectTransformation() is used and
+                            // needs to be expressed in the MapMode for the PrettyPainter;
+                            // else it would call ChartModelHelper::setPageSize(...) with the
+                            // changed size what really will change the chart model and leads
+                            // to re-layouts and re-formattings
+                            const MapMode aOldMapMode(rOutputDevice.GetMapMode());
+                            basegfx::B2DVector aVTScale, aScale, aTranslate;
+                            double fRotate, fShearX;
+
+                            // get basic scaling with current MapMode (aVTScale), containing
+                            // mapping for set MapUnit (e.g. for 100th mm, the basic scale is
+                            // not 1.0, 1.0). This is needed since this scale is included in
+                            // the ObjectToView Transformation and needs to be removed (see
+                            // correction below) to re-create a MapMode
+                            rOutputDevice.SetMapMode(aOldMapMode.GetMapUnit());
+                            rOutputDevice.GetViewTransformation().decompose(aVTScale, aTranslate, fRotate, fShearX);
+
+                            // get complete ObjectToView Transformation scale and translate from current
+                            // transformation chain (combined view and object transform)
+                            rViewInformation2D.getObjectToViewTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+                            // assert when shear and/or rotation is used
+                            OSL_ENSURE(basegfx::fTools::equalZero(fRotate), "Chart PrettyPrinting with unsupportable rotation (!)");
+                            OSL_ENSURE(basegfx::fTools::equalZero(fShearX), "Chart PrettyPrinting with unsupportable shear (!)");
+
+                            // clean scale and translate from basic scaling (DPI, etc...)
+                            // since this will implicitely be part of the to-be-created MapMode
+                            const basegfx::B2DTuple aBasicCleaner(
+                                basegfx::fTools::equalZero(aVTScale.getX()) ? 1.0 : 1.0 / aVTScale.getX(),
+                                basegfx::fTools::equalZero(aVTScale.getY()) ? 1.0 : 1.0 / aVTScale.getY());
+                            aScale *= aBasicCleaner;
+                            aTranslate *= aBasicCleaner;
+
+                            // for MapMode, take scale out of translation
+                            const basegfx::B2DTuple aScaleRemover(
+                                basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : 1.0 / aScale.getX(),
+                                basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : 1.0 / aScale.getY());
+                            aTranslate *= aScaleRemover;
+
+                            // build new MapMode
+                            const MapMode aNewMapMode(aOldMapMode.GetMapUnit(),
+                                Point(basegfx::fround(aTranslate.getX()), basegfx::fround(aTranslate.getY())),
+                                Fraction(aScale.getX()), Fraction(aScale.getY()));
+
+                            // use, paint, restore
+                            rOutputDevice.SetMapMode(aNewMapMode);
+                            bChartRendered = pPrettyPainter->DoPaint(&rOutputDevice, aRectangle);
+                            rOutputDevice.SetMapMode(aOldMapMode);
+                        }
                     }
                 }
             }

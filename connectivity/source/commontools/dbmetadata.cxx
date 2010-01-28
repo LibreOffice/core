@@ -276,7 +276,15 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
+    {
+        bool doGenerate( true );
+        Any setting;
+        if ( lcl_getConnectionSetting( "AutoIncrementIsPrimaryKey", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doGenerate );
+        return doGenerate;
+    }
     //--------------------------------------------------------------------
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
     {

@@ -53,6 +53,9 @@
 #include <svx/frmdirlbox.hxx>
 
 #include <svx/svxenum.hxx>
+
+#include <i18npool/paper.hxx>
+
 #include "flagsdef.hxx" //CHINA001
 
 // enum ------------------------------------------------------------------
@@ -183,8 +186,8 @@ class SvxPageDescPage : public SfxTabPage
     BOOL                bLandscape;
     FASTBOOL            bBorderModified;
     SvxModeType         eMode;
-    SvxPaper            ePaperStart;
-    SvxPaper            ePaperEnd;
+    Paper               ePaperStart;
+    Paper               ePaperEnd;
 
     SvxPage_Impl*       pImpl;
 
@@ -242,7 +245,7 @@ public:
     virtual ~SvxPageDescPage();
 
     void                SetMode( SvxModeType eMType ) { eMode = eMType; }
-    void                SetPaperFormatRanges( SvxPaper eStart, SvxPaper eEnd )
+    void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
     void                SetCollectionList(const List* pList);

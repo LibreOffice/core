@@ -353,8 +353,10 @@ bool lcl_isSeriesAttachedToFirstAxis(
 OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
 {
     OUString aResult = rRange;
+    if( !xDoc.is() )
+        return aResult;
     Reference< chart2::data::XRangeXMLConversion > xConversion(
-        SchXMLExportHelper::GetDataProvider( xDoc ), uno::UNO_QUERY );
+        xDoc->getDataProvider(), uno::UNO_QUERY );
     if( xConversion.is())
         aResult = xConversion->convertRangeToXML( rRange );
     return aResult;
@@ -837,6 +839,28 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     return aResult;
 }
 
+bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequence > xValues, rtl::OUString& rFirstRangeForThisDomainIndex, SvXMLExport& rExport )
+{
+    bool bDomainExported = false;
+    if( xValues.is())
+    {
+        Reference< chart2::XChartDocument > xNewDoc( rExport.GetModel(), uno::UNO_QUERY );
+        OUString aRange( lcl_ConvertRange( xValues->getSourceRangeRepresentation(), xNewDoc ) );
+
+        //work around error in OOo 2.0 (problems with multiple series having a domain element)
+        if( !rFirstRangeForThisDomainIndex.getLength() || !aRange.equals(rFirstRangeForThisDomainIndex) )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, aRange);
+            SvXMLElementExport aDomain( rExport, XML_NAMESPACE_CHART, XML_DOMAIN, sal_True, sal_True );
+            bDomainExported = true;
+        }
+
+        if( !rFirstRangeForThisDomainIndex.getLength() )
+            rFirstRangeForThisDomainIndex = aRange;
+    }
+    return bDomainExported;
+}
+
 } // anonymous namespace
 
 struct SchXMLDataPointStruct
@@ -1092,6 +1116,16 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
 
     if( bExportContent )
     {
+        //export data provider in xlink:href attribute
+        const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+        if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+        {
+            OUString aDataProviderURL( RTL_CONSTASCII_USTRINGPARAM( ".." ) );
+            if( xNewDoc->hasInternalDataProvider() )
+                aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
+        }
+
         OUString sChartType( xDiagram->getDiagramType() );
 
         // attributes
@@ -2488,7 +2522,8 @@ void SchXMLExportHelper::exportSeries(
         return;
     Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
 
-    OUString aFirstXRange;
+    OUString aFirstXDomainRange;
+    OUString aFirstYDomainRange;
 
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -2537,7 +2572,6 @@ void SchXMLExportHelper::exportSeries(
                         xSource->getDataSequences());
                     sal_Int32 nMainSequenceIndex = -1;
                     sal_Int32 nSeriesLength = 0;
-                    sal_Int32 nSeqIdx=0;
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     sal_Bool bHasMeanValueLine = false;
                     chart::ChartRegressionCurveType eRegressionType( chart::ChartRegressionCurveType_NONE );
@@ -2550,29 +2584,32 @@ void SchXMLExportHelper::exportSeries(
                     {
                         Reference< chart2::data::XDataSequence > xValuesSeq;
                         Reference< chart2::data::XDataSequence > xLabelSeq;
-                        for( ;nMainSequenceIndex==-1 && nSeqIdx<aSeqCnt.getLength();
-                             ++nSeqIdx )
+                        sal_Int32 nSeqIdx=0;
+                        for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
                         {
                             OUString aRole;
                             Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
-                            Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
-                            if( xSeqProp.is())
-                                xSeqProp->getPropertyValue(OUString::createFromAscii("Role")) >>= aRole;
-                            // "main" sequence
-                            if( aRole.equals( aLabelRole ))
+                            if( nMainSequenceIndex==-1 )
                             {
-                                xValuesSeq.set( xTempValueSeq );
-                                xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());
-                                // "main" sequence attributes exported, now go on with domains
-                                nMainSequenceIndex = nSeqIdx;
-                                break;
+                                Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
+                                if( xSeqProp.is())
+                                    xSeqProp->getPropertyValue(OUString::createFromAscii("Role")) >>= aRole;
+                                // "main" sequence
+                                if( aRole.equals( aLabelRole ))
+                                {
+                                    xValuesSeq.set( xTempValueSeq );
+                                    xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());
+                                    nMainSequenceIndex = nSeqIdx;
+                                }
                             }
+                            sal_Int32 nSequenceLength = (xTempValueSeq.is()? xTempValueSeq->getData().getLength() : sal_Int32(0));
+                            if( nSeriesLength < nSequenceLength )
+                                nSeriesLength = nSequenceLength;
                         }
 
                         // have found the main sequence, then xValuesSeq and
                         // xLabelSeq contain those.  Otherwise both are empty
                         {
-                            nSeriesLength = (xValuesSeq.is()? xValuesSeq->getData().getLength() : sal_Int32(0));
                             // get property states for autostyles
                             try
                             {
@@ -2688,46 +2725,36 @@ void SchXMLExportHelper::exportSeries(
                     }
 
                     // export domain elements if we have a series parent element
-                    if( nMainSequenceIndex>-1 )
+                    if( pSeries )
                     {
                         // domain elements
                         if( bExportContent )
                         {
-                            for( nSeqIdx=0; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
+                            bool bIsScatterChart = aChartType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType"));
+                            bool bIsBubbleChart = aChartType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType"));
+                            Reference< chart2::data::XDataSequence > xYValuesForBubbleChart;
+                            if( bIsBubbleChart )
                             {
-                                if( nSeqIdx != nMainSequenceIndex )
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii("values-y" ) ) );
+                                if( xSequence.is() )
                                 {
-                                    bool bExportDomain = false;
-                                    //@todo: roles should be exported
-                                    Reference< chart2::data::XDataSequence > xSeq( aSeqCnt[nSeqIdx]->getValues() );
-                                    if( xSeq.is())
-                                    {
-                                        OUString aXRange( lcl_ConvertRange(
-                                                    xSeq->getSourceRangeRepresentation(), xNewDoc ) );
-                                        //work around error in OOo 2.0 (problems with multiple series having a domain element)
-                                        if( !aFirstXRange.getLength() || !aXRange.equals(aFirstXRange) )
-                                        {
-                                            bExportDomain = true;
-                                            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, aXRange);
-                                            m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xSeq ));
-                                        }
-
-                                        if( !aFirstXRange.getLength() )
-                                            aFirstXRange = aXRange;
-                                    }
-//                                     xSeq.set( aSeqCnt[nSeqIdx]->getLabel());
-//                                     if( xSeq.is())
-//                                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
-//                                                                lcl_ConvertRange(
-//                                                                    xSeq->getSourceRangeRepresentation(),
-//                                                                    xNewDoc ));
-                                    if( bExportDomain )
-                                    {
-                                        SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART,
-                                                                    XML_DOMAIN, sal_True, sal_True );
-                                    }
+                                    xYValuesForBubbleChart = xSequence->getValues();
+                                    if( !lcl_exportDomainForThisSequence( xYValuesForBubbleChart, aFirstYDomainRange, mrExport ) )
+                                        xYValuesForBubbleChart = 0;
                                 }
                             }
+                            if( bIsScatterChart || bIsBubbleChart )
+                            {
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii("values-x" ) ) );
+                                if( xSequence.is() )
+                                {
+                                    Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
+                                    if( lcl_exportDomainForThisSequence( xValues, aFirstXDomainRange, mrExport ) )
+                                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xValues ));
+                                }
+                            }
+                            if( xYValuesForBubbleChart.is() )
+                                m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xYValuesForBubbleChart ));
                         }
                     }
 
@@ -3506,7 +3533,7 @@ void SchXMLExport::_ExportContent()
             // check if we have own data.  If so we must not export the complete
             // range string, as this is our only indicator for having own or
             // external data. @todo: fix this in the file format!
-            Reference< lang::XServiceInfo > xDPServiceInfo( maExportHelper.GetDataProvider( xNewDoc ), uno::UNO_QUERY );
+            Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
             if( ! (xDPServiceInfo.is() &&
                    xDPServiceInfo->getImplementationName().equalsAsciiL(
                        RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.chart.InternalDataProvider" ))))
@@ -3566,45 +3593,12 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
         mxStatusIndicator->setValue( nPercentage );
 }
 
-// static
-Reference< chart2::data::XDataProvider > SchXMLExportHelper::GetDataProvider(
-    const Reference< chart2::XChartDocument > & xDoc )
-{
-    Reference< chart2::data::XDataProvider > xResult;
-    if( xDoc.is())
-    {
-        xResult.set( xDoc->getDataProvider());
-        // allowed to attach a new data provider in export?
-//         if( ! xResult.is())
-//         {
-//             Reference< container::XChild > xChild( xDoc, uno::UNO_QUERY );
-//             if( xChild.is())
-//             {
-//                 Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
-//                 if( xFact.is())
-//                 {
-//                     xResult.set(
-//                         xFact->createInstance( OUString::createFromAscii("com.sun.star.chart2.data.DataProvider")),
-//                         uno::UNO_QUERY );
-//                     if( xResult.is())
-//                     {
-//                         Reference< chart2::data::XDataReceiver > xReceiver( xDoc, uno::UNO_QUERY );
-//                         if( xReceiver.is())
-//                             xReceiver->attachDataProvider( xResult );
-//                     }
-//                 }
-//             }
-//         }
-    }
-    return xResult;
-}
-
 void SchXMLExportHelper::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
 {
     if( xChartDoc.is())
         try
         {
-            Reference< chart2::data::XDataProvider > xDataProvider( GetDataProvider( xChartDoc ));
+            Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
             OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
             if( xDataProvider.is())
             {

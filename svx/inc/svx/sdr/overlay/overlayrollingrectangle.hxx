@@ -52,18 +52,15 @@ namespace sdr
             // Flag to switch on/off the bounds itself
             unsigned                                mbShowBounds : 1;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayRollingRectangleStriped(
                 const basegfx::B2DPoint& rBasePos,
                 const basegfx::B2DPoint& rSecondPos,
-                sal_Bool bExtendedLines = sal_False,
-                sal_Bool bShowBounds = sal_True);
+                bool bExtendedLines = false,
+                bool bShowBounds = true);
             virtual ~OverlayRollingRectangleStriped();
 
             // change second position
@@ -71,42 +68,15 @@ namespace sdr
             void setSecondPosition(const basegfx::B2DPoint& rNew);
 
             // change extended lines
-            sal_Bool getExtendedLines() const { return mbExtendedLines; }
-            void setExtendedLines(sal_Bool bNew);
+            bool getExtendedLines() const { return mbExtendedLines; }
+            void setExtendedLines(bool bNew);
 
             // change show bounds
-            sal_Bool getShowBounds() const { return mbShowBounds; }
-            void setShowBounds(sal_Bool bNew);
+            bool getShowBounds() const { return mbShowBounds; }
+            void setShowBounds(bool bNew);
 
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-
-            // transform object coordinates. Needs to transform maSecondPosition.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayRollingRectangle : public OverlayRollingRectangleStriped
-        {
-        protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayRollingRectangle(
-                const basegfx::B2DPoint& rBasePos,
-                const basegfx::B2DPoint& rSecondPos,
-                Color aLineColor = Color(COL_BLACK),
-                sal_Bool bExtendedLines = sal_False,
-                sal_Bool bShowBounds = sal_True);
-            virtual ~OverlayRollingRectangle();
+            // react on stripe definition change
+            virtual void stripeDefinitionHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr

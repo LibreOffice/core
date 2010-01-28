@@ -205,7 +205,6 @@ namespace connectivity
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
-            ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
@@ -239,9 +238,6 @@ namespace connectivity
             sal_Bool                        isWritable(OConnection* _pCon);
 
             sal_uInt32                      InsertLoginInfo(OConnection* _pCon);
-
-            void                            setAttributes( ::std::vector< ::rtl::OUString>&);
-            const                           ::std::vector< ::rtl::OUString> &getAttributes(void) const;
 
             void                            setAddressbook( ::rtl::OUString&);
             ::rtl::OUString                 getAddressbook(void) const;

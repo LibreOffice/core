@@ -58,7 +58,7 @@ class PasswordCreateDialog : public ModalDialog
     DECL_LINK( EditHdl_Impl, Edit * );
 
 public:
-    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
+    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr, bool bMSCryptoMode = false );
 
     String          GetPassword() const { return aEDPasswordCrt.GetText(); }
 };

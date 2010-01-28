@@ -130,9 +130,6 @@ protected:
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
-    // Hintergrundfarbe fuer die Outlinerviews bestimmen
-    Color ImpGetTextEditBackgroundColor() const;
-
     // Feststellen, ob der gesamte Text markiert ist. Liefert auch TRUE wenn
     // kein Text vorhanden ist.
     BOOL ImpIsTextEditAllSelected() const;

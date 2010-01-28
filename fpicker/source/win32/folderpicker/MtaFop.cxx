@@ -448,33 +448,21 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
     if ( !aDirectory.getLength( ) )
         return NULL;
 
-    IMallocPtr pIMalloc;
-    SHGetMalloc(&pIMalloc);
+    LPITEMIDLIST lpItemIdList(NULL);
 
-    LPITEMIDLIST lpItemIdList = static_cast<LPITEMIDLIST>(
-        pIMalloc->Alloc(sizeof(ITEMIDLIST)));
+    IShellFolderPtr pIShellFolder;
+    SHGetDesktopFolder(&pIShellFolder);
 
-    if (lpItemIdList)
+    if (pIShellFolder.is())
     {
-        IShellFolderPtr pIShellFolder;
-        SHGetDesktopFolder(&pIShellFolder);
-
-        if (pIShellFolder.is())
-        {
-            pIShellFolder->ParseDisplayName(
-                NULL,
-                NULL,
-                reinterpret_cast<LPOLESTR>(const_cast< sal_Unicode* >( aDirectory.getStr( ) )),
-                NULL,
-                &lpItemIdList,
-                NULL );
-        }
+        pIShellFolder->ParseDisplayName(
+            NULL,
+            NULL,
+            reinterpret_cast<LPWSTR>(const_cast< sal_Unicode* >( aDirectory.getStr( ) )),
+            NULL,
+            &lpItemIdList,
+            NULL );
     }
-
-    if (pIMalloc.is())
-        pIMalloc->Free(lpItemIdList);
-
-    lpItemIdList = NULL;
 
     return lpItemIdList;
 }

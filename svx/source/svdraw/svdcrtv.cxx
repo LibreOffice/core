@@ -41,28 +41,19 @@
 #include <svx/svdetc.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/view3d.hxx>
-
-// #116425#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-
-// #116425#
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
-
 #define XOR_CREATE_PEN          PEN_SOLID
 #include <svx/svdopath.hxx>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlaysdrobject.hxx>
 #include <sdrpaintwindow.hxx>
-
-// #i72535#
 #include "fmobj.hxx"
-
-// #i68562#
 #include <svx/svdocirc.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -172,7 +163,10 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
         {
             if(pObject)
             {
-                ::sdr::overlay::OverlaySdrObject* pNew = new ::sdr::overlay::OverlaySdrObject(basegfx::B2DPoint(), *pObject);
+                const sdr::contact::ViewContact& rVC = pObject->GetViewContact();
+                const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
+                sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+
                 pOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
@@ -799,6 +793,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             // overlay objects instead.
             sal_Bool bUseSolidDragging(IsSolidDragging());
 
+            // #i101648# check if dragged object is a naked SdrObject (no
+            // derivation of). This is e.g. used in SW Frame construction
+            // as placeholder. Do not use SolidDragging for naked SDrObjects,
+            // they cannot have a valid optical representation
+            if(bUseSolidDragging && OBJ_NONE == pAktCreate->GetObjIdentifier())
+            {
+                bUseSolidDragging = false;
+            }
+
             // check for objects with no fill and no line
             if(bUseSolidDragging)
             {
@@ -821,13 +824,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
                 }
             }
 
-            // #i68562# Force to non-solid dragging when not creating a full circle and up to step three
-            if(bUseSolidDragging
-                && pAktCreate->ISA(SdrCircObj)
-                && OBJ_CIRC != (SdrObjKind)(static_cast< SdrCircObj* >(pAktCreate)->GetObjIdentifier())
-                && aDragStat.GetPointAnz() < 4L)
+              // #i101781# force to non-solid dragging when not creating a full circle
+            if(bUseSolidDragging)
             {
-                bUseSolidDragging = false;
+                SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pAktCreate);
+
+                if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
+                {
+                    bUseSolidDragging = false;
+                }
             }
 
             if(bUseSolidDragging)
@@ -868,6 +873,18 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             else
             {
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, 0, pAktCreate->TakeCreatePoly(aDragStat));
+            }
+
+            // #i101679# Force changed overlay to be shown
+            for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
+            {
+                SdrPaintWindow* pCandidate = GetPaintWindow(a);
+                sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+
+                if(pOverlayManager)
+                {
+                    pOverlayManager->flush();
+                }
             }
         }
 

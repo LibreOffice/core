@@ -86,7 +86,7 @@ namespace drawinglayer
                         const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
                         basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
                         aLocalPolygon.transform(getViewInformation2D().getObjectTransformation());
-                        maExtractedHairlines.append(aLocalPolygon);
+                        maExtractedHairlines.push_back(aLocalPolygon);
                     }
                     break;
                 }
@@ -98,7 +98,7 @@ namespace drawinglayer
                         const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
                         basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
                         aLocalPolyPolygon.transform(getViewInformation2D().getObjectTransformation());
-                        maExtractedLineFills.append(aLocalPolyPolygon);
+                        maExtractedLineFills.push_back(aLocalPolyPolygon);
                     }
                     break;
                 }

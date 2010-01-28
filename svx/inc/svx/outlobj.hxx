@@ -67,6 +67,9 @@ public:
     bool operator==(const OutlinerParaObject& rCandidate) const;
     bool operator!=(const OutlinerParaObject& rCandidate) const { return !operator==(rCandidate); }
 
+    // #i102062#
+    bool isWrongListEqual(const OutlinerParaObject& rCompare) const;
+
     // outliner mode access
     sal_uInt16 GetOutlinerMode() const;
     void SetOutlinerMode(sal_uInt16 nNew);

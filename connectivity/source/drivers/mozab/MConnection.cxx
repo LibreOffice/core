@@ -378,8 +378,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     // the statement can only be executed more than once
     OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
     Reference< XPreparedStatement > xReturn = pPrepared;
-    if ( !pPrepared->lateInit() )
-        throw SQLException();
+    pPrepared->lateInit();
 
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;

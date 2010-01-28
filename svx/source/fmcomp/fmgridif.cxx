@@ -1921,7 +1921,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
 
     if ( 0 == PropertyName.compareToAscii( FM_PROP_TEXTLINECOLOR ) )
     {
-        ::Color aTextLineColor(::comphelper::getINT32(Value));
+        ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::comphelper::getINT32( Value ) );
         if (bVoid)
         {
             pGrid->SetTextLineColor();

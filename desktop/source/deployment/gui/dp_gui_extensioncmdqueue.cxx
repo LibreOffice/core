@@ -136,7 +136,7 @@ class ProgressCmdEnv
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XAbortChannel> m_xAbortChannel;
 
-    ExtMgrDialog   *m_pDialog;
+    DialogHelper   *m_pDialogHelper;
     OUString        m_sTitle;
     bool            m_bAborted;
     bool            m_bWarnUser;
@@ -157,16 +157,16 @@ public:
     */
 
     ProgressCmdEnv( const uno::Reference< uno::XComponentContext > rContext,
-                    ExtMgrDialog *pDialog,
+                    DialogHelper *pDialogHelper,
                     const OUString &rTitle )
         :   m_xContext( rContext ),
-            m_pDialog( pDialog ),
+            m_pDialogHelper( pDialogHelper ),
             m_sTitle( rTitle ),
             m_bAborted( false ),
             m_bWarnUser( false )
     {}
 
-    Dialog * activeDialog() { return m_pDialog; }
+    Dialog * activeDialog() { return m_pDialogHelper->getWindow(); }
 
     void setTitle( const OUString& rNewTitle ) { m_sTitle = rNewTitle; }
     void startProgress();
@@ -197,14 +197,14 @@ public:
 //------------------------------------------------------------------------------
 struct ExtensionCmd
 {
-    enum E_CMD_TYPE { ADD, ENABLE, DISABLE, REMOVE, CHECK_FOR_UPDATE, CHECK_FOR_UPDATES };
+    enum E_CMD_TYPE { ADD, ENABLE, DISABLE, REMOVE, CHECK_FOR_UPDATES };
 
     E_CMD_TYPE  m_eCmdType;
     bool        m_bWarnUser;
     OUString    m_sExtensionURL;
     uno::Reference< deployment::XPackageManager > m_xPackageManager;
     uno::Reference< deployment::XPackage >        m_xPackage;
-    uno::Sequence< uno::Reference< deployment::XPackageManager > > m_xPackageManagers;
+    std::vector< TUpdateListEntry >               m_vExtensionList;
 
     ExtensionCmd( const E_CMD_TYPE eCommand,
                   const uno::Reference< deployment::XPackageManager > &rPackageManager,
@@ -227,10 +227,10 @@ struct ExtensionCmd
           m_bWarnUser( false ),
           m_xPackage( rPackage ) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers )
+                  const std::vector< TUpdateListEntry > &vExtensionList )
         : m_eCmdType( eCommand ),
           m_bWarnUser( false ),
-          m_xPackageManagers( rPackageManagers ) {};
+          m_vExtensionList( vExtensionList ) {};
 };
 
 typedef ::boost::shared_ptr< ExtensionCmd > TExtensionCmd;
@@ -239,7 +239,7 @@ typedef ::boost::shared_ptr< ExtensionCmd > TExtensionCmd;
 class ExtensionCmdQueue::Thread: public dp_gui::Thread
 {
 public:
-    Thread( ExtMgrDialog *pDialog,
+    Thread( DialogHelper *pDialogHelper,
             TheExtensionManager *pManager,
             const uno::Reference< uno::XComponentContext > & rContext );
 
@@ -250,9 +250,7 @@ public:
                           const uno::Reference< deployment::XPackage > &rPackage );
     void enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates( const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers );
-    void checkForUpdate( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                         const uno::Reference< deployment::XPackage > &rPackage );
+    void checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
     void stop();
     bool hasTerminated();
     bool isBusy();
@@ -280,16 +278,14 @@ private:
                            const uno::Reference< deployment::XPackage > &xPackage );
     void _disableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                             const uno::Reference< deployment::XPackage > &xPackage );
-    void _checkForUpdates( const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers,
-                           const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                           const uno::Reference< deployment::XPackage > &xPackage );
+    void _checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
 
     enum Input { NONE, START, STOP };
 
     uno::Reference< uno::XComponentContext > m_xContext;
     std::queue< TExtensionCmd >              m_queue;
 
-    ExtMgrDialog *m_pDialog;
+    DialogHelper *m_pDialogHelper;
     TheExtensionManager *m_pManager;
 
     const OUString   m_sEnablingPackages;
@@ -310,13 +306,15 @@ void ProgressCmdEnv::startProgress()
 {
     m_nCurrentProgress = 0;
 
-    m_pDialog->showProgress( true );
+    if ( m_pDialogHelper )
+        m_pDialogHelper->showProgress( true );
 }
 
 //------------------------------------------------------------------------------
 void ProgressCmdEnv::stopProgress()
 {
-    m_pDialog->showProgress( false );
+    if ( m_pDialogHelper )
+        m_pDialogHelper->showProgress( false );
 }
 
 //------------------------------------------------------------------------------
@@ -327,8 +325,11 @@ void ProgressCmdEnv::progressSection( const OUString &rText,
     if (! m_bAborted)
     {
         m_nCurrentProgress = 0;
-        m_pDialog->updateProgress( rText, xAbortChannel );
-        m_pDialog->updateProgress( 5 );
+        if ( m_pDialogHelper )
+        {
+            m_pDialogHelper->updateProgress( rText, xAbortChannel );
+            m_pDialogHelper->updateProgress( 5 );
+        }
     }
 }
 
@@ -338,7 +339,8 @@ void ProgressCmdEnv::updateProgress()
     if ( ! m_bAborted )
     {
         long nProgress = ((m_nCurrentProgress*5) % 100) + 5;
-        m_pDialog->updateProgress( nProgress );
+        if ( m_pDialogHelper )
+            m_pDialogHelper->updateProgress( nProgress );
     }
 }
 
@@ -434,7 +436,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            short n = DependencyDialog( m_pDialog, deps ).Execute();
+            short n = DependencyDialog( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, deps ).Execute();
             // Distinguish between closing the dialog and programatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK
@@ -445,19 +447,19 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     {
         vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         ResId warnId(WARNINGBOX_NOSHAREDALLOWED, *DeploymentGuiResMgr::get());
-        WarningBox warn( m_pDialog, warnId);
+        WarningBox warn( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, warnId);
         String msgText = warn.GetMessText();
         msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
         msgText.SearchAndReplaceAllAscii("%NAME", licAgreementExc.ExtensionName);
         warn.SetMessText(msgText);
         warn.Execute();
-        abort = true;
+          abort = true;
     }
     else if (request >>= licExc)
     {
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            m_xContext, VCLUnoHelper::GetInterface( m_pDialog ), licExc.Text ) );
+            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL ), licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
             abort = true;
@@ -488,7 +490,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            WarningBox box( m_pDialog, ResId(id, *DeploymentGuiResMgr::get()));
+            WarningBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
             String s;
             if (bEqualNames)
             {
@@ -526,9 +528,14 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         else
         {
-            vos::OGuard guard(Application::GetSolarMutex());
+            if ( m_pDialogHelper )
+            {
+                vos::OGuard guard(Application::GetSolarMutex());
 
-            approve = m_pDialog->installExtensionWarn( instExc.New->getDisplayName() );
+                approve = m_pDialogHelper->installExtensionWarn( instExc.New->getDisplayName() );
+            }
+            else
+                approve = false;
             abort = !approve;
         }
     }
@@ -537,7 +544,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         vos::OGuard guard( Application::GetSolarMutex() );
         String sMsg( ResId( RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get() ) );
         sMsg.SearchAndReplaceAllAscii( "%Name", platExc.package->getDisplayName() );
-        ErrorBox box( m_pDialog, WB_OK, sMsg );
+        ErrorBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, sMsg );
         box.Execute();
         approve = true;
     }
@@ -609,7 +616,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        const ::std::auto_ptr< ErrorBox > aBox( new ErrorBox( m_pDialog, WB_OK, text ) );
+        const ::std::auto_ptr< ErrorBox > aBox( new ErrorBox( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, text ) );
         aBox->Execute();
     }
     ++m_nCurrentProgress;
@@ -631,23 +638,23 @@ void ProgressCmdEnv::pop()
 }
 
 //------------------------------------------------------------------------------
-ExtensionCmdQueue::Thread::Thread( ExtMgrDialog *pDialog,
+ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
                                    TheExtensionManager *pManager,
                                    const uno::Reference< uno::XComponentContext > & rContext ) :
     m_xContext( rContext ),
-    m_pDialog( pDialog ),
+    m_pDialogHelper( pDialogHelper ),
     m_pManager( pManager ),
-    m_sEnablingPackages( ExtMgrDialog::getResourceString( RID_STR_ENABLING_PACKAGES ) ),
-    m_sDisablingPackages( ExtMgrDialog::getResourceString( RID_STR_DISABLING_PACKAGES ) ),
-    m_sAddingPackages( ExtMgrDialog::getResourceString( RID_STR_ADDING_PACKAGES ) ),
-    m_sRemovingPackages( ExtMgrDialog::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
-    m_sDefaultCmd( ExtMgrDialog::getResourceString( RID_STR_ADD_PACKAGES ) ),
+    m_sEnablingPackages( DialogHelper::getResourceString( RID_STR_ENABLING_PACKAGES ) ),
+    m_sDisablingPackages( DialogHelper::getResourceString( RID_STR_DISABLING_PACKAGES ) ),
+    m_sAddingPackages( DialogHelper::getResourceString( RID_STR_ADDING_PACKAGES ) ),
+    m_sRemovingPackages( DialogHelper::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
+    m_sDefaultCmd( DialogHelper::getResourceString( RID_STR_ADD_PACKAGES ) ),
     m_eInput( NONE ),
     m_bTerminated( false ),
     m_bStopped( false ),
     m_bWorking( false )
 {
-    OSL_ASSERT( pDialog );
+    OSL_ASSERT( pDialogHelper );
 }
 
 //------------------------------------------------------------------------------
@@ -713,38 +720,18 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::checkForUpdates( const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers )
+void ExtensionCmdQueue::Thread::checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
 {
     ::osl::MutexGuard aGuard( m_mutex );
 
-    //If someone called stop then we do not remove the extension -> game over!
+    //If someone called stop then we do not update the extension -> game over!
     if ( m_bStopped )
         return;
 
-    TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATES, rPackageManagers ) );
+    TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList ) );
     m_queue.push( pEntry );
     m_eInput = START;
     m_wakeup.set();
-}
-
-//------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::checkForUpdate( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                                const uno::Reference< deployment::XPackage > &rPackage )
-{
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
-    if ( rPackageManager.is() && rPackage.is() )
-    {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATE, rPackageManager, rPackage ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -779,7 +766,7 @@ void ExtensionCmdQueue::Thread::execute()
 {
 #ifdef WNT
     //Needed for use of the service "com.sun.star.system.SystemShellExecute" in
-    //ExtMgrDialog::openWebBrowser
+    //DialogHelper::openWebBrowser
     CoUninitialize();
     HRESULT r = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 #endif
@@ -813,7 +800,7 @@ void ExtensionCmdQueue::Thread::execute()
         if ( eInput == STOP )
             break;
 
-        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialog, m_sDefaultCmd ) );
+        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialogHelper, m_sDefaultCmd ) );
 
         // Do not lock the following part with addExtension. addExtension may be called in the main thread.
         // If the message box "Do you want to install the extension (or similar)" is shown and then
@@ -836,8 +823,7 @@ void ExtensionCmdQueue::Thread::execute()
                     m_queue.pop();
                 }
 
-                if ( bStartProgress && ( pEntry->m_eCmdType != ExtensionCmd::CHECK_FOR_UPDATE ) &&
-                                       ( pEntry->m_eCmdType != ExtensionCmd::CHECK_FOR_UPDATES ) )
+                if ( bStartProgress && ( pEntry->m_eCmdType != ExtensionCmd::CHECK_FOR_UPDATES ) )
                 {
                     currentCmdEnv->startProgress();
                     bStartProgress = false;
@@ -856,9 +842,8 @@ void ExtensionCmdQueue::Thread::execute()
                 case ExtensionCmd::DISABLE :
                     _disableExtension( currentCmdEnv, pEntry->m_xPackage );
                     break;
-                case ExtensionCmd::CHECK_FOR_UPDATE :
                 case ExtensionCmd::CHECK_FOR_UPDATES :
-                    _checkForUpdates( pEntry->m_xPackageManagers, pEntry->m_xPackageManager, pEntry->m_xPackage );
+                    _checkForUpdates( pEntry->m_vExtensionList );
                     break;
                 }
             }
@@ -908,7 +893,8 @@ void ExtensionCmdQueue::Thread::execute()
                 const ::vos::OGuard guard( Application::GetSolarMutex() );
                 ::std::auto_ptr<ErrorBox> box(
                     new ErrorBox( currentCmdEnv->activeDialog(), WB_OK, msg ) );
-                box->SetText( m_pDialog->GetText() );
+                if ( m_pDialogHelper )
+                    box->SetText( m_pDialogHelper->getWindow()->GetText() );
                 box->Execute();
                     //Continue with installation of the remaining extensions
             }
@@ -1009,21 +995,14 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::_checkForUpdates( const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers,
-                                                  const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                                  const uno::Reference< deployment::XPackage > &xPackage )
+void ExtensionCmdQueue::Thread::_checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
 {
     UpdateDialog* pUpdateDialog;
     std::vector< UpdateData > vData;
 
     const ::vos::OGuard guard( Application::GetSolarMutex() );
 
-    if ( xPackageManager.is() && xPackage.is() )
-        pUpdateDialog = new UpdateDialog( m_xContext, m_pDialog, new SelectedPackage( xPackage, xPackageManager ),
-                                          uno::Sequence< uno::Reference< deployment::XPackageManager > >(), &vData );
-    else
-        pUpdateDialog = new UpdateDialog( m_xContext, m_pDialog, rtl::Reference< SelectedPackage >(),
-                                          rPackageManagers, &vData );
+    pUpdateDialog = new UpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, vExtensionList, &vData );
 
     pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
@@ -1046,7 +1025,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates( const uno::Sequence< uno::Refe
         short nDialogResult = RET_OK;
         if ( !dataDownload.empty() )
         {
-            nDialogResult = UpdateInstallDialog( m_pDialog, dataDownload, m_xContext ).Execute();
+            nDialogResult = UpdateInstallDialog( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, dataDownload, m_xContext ).Execute();
             pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else
@@ -1057,8 +1036,8 @@ void ExtensionCmdQueue::Thread::_checkForUpdates( const uno::Sequence< uno::Refe
         {
             for ( cit i = vData.begin(); i < vData.end(); i++ )
             {
-                if ( i->sWebsiteURL.getLength() > 0 )
-                    m_pDialog->openWebBrowser( i->sWebsiteURL );
+                if ( m_pDialogHelper && ( i->sWebsiteURL.getLength() > 0 ) )
+                    m_pDialogHelper->openWebBrowser( i->sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
             }
         }
     }
@@ -1082,7 +1061,8 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     try
     {
         xPackage->registerPackage( xAbortChannel, rCmdEnv.get() );
-        m_pDialog->updatePackageInfo( xPackage );
+        if ( m_pDialogHelper )
+            m_pDialogHelper->updatePackageInfo( xPackage );
     }
     catch ( ::ucb::CommandAbortedException & )
     {}
@@ -1102,7 +1082,8 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     try
     {
         xPackage->revokePackage( xAbortChannel, rCmdEnv.get() );
-        m_pDialog->updatePackageInfo( xPackage );
+        if ( m_pDialogHelper )
+            m_pDialogHelper->updatePackageInfo( xPackage );
     }
     catch ( ::ucb::CommandAbortedException & )
     {}
@@ -1139,10 +1120,10 @@ OUString ExtensionCmdQueue::Thread::searchAndReplaceAll( const OUString &rSource
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-ExtensionCmdQueue::ExtensionCmdQueue( ExtMgrDialog * pDialog,
+ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
                                       TheExtensionManager *pManager,
                                       const uno::Reference< uno::XComponentContext > &rContext )
-  : m_thread( new Thread( pDialog, pManager, rContext ) )
+  : m_thread( new Thread( pDialogHelper, pManager, rContext ) )
 {
     m_thread->launch();
 }
@@ -1170,15 +1151,9 @@ void ExtensionCmdQueue::enableExtension( const uno::Reference< deployment::XPack
     m_thread->enableExtension( rPackage, bEnable );
 }
 
-void ExtensionCmdQueue::checkForUpdates( const uno::Sequence< uno::Reference< deployment::XPackageManager > > &rPackageManagers )
+void ExtensionCmdQueue::checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
 {
-    m_thread->checkForUpdates( rPackageManagers );
-}
-
-void ExtensionCmdQueue::checkForUpdate( const uno::Reference< deployment::XPackageManager > &rPackageManager,
-                                        const uno::Reference< deployment::XPackage > &rPackage )
-{
-    m_thread->checkForUpdate( rPackageManager, rPackage );
+    m_thread->checkForUpdates( vExtensionList );
 }
 
 void ExtensionCmdQueue::stop()

@@ -66,6 +66,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
+#include <stdio.h>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -108,7 +110,7 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(USHORT nWhich, long nIndex)
+|*    NameOrIndex::NameOrIndex(USHORT nWhich, INT32 nIndex)
 |*
 |*    Beschreibung
 |*    Ersterstellung    14.11.94
@@ -116,7 +118,7 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 |*
 *************************************************************************/
 
-NameOrIndex::NameOrIndex(USHORT _nWhich, long nIndex) :
+NameOrIndex::NameOrIndex(USHORT _nWhich, INT32 nIndex) :
     SfxStringItem(_nWhich, aNameOrIndexEmptyString),
     nPalIndex(nIndex)
 {
@@ -134,7 +136,7 @@ NameOrIndex::NameOrIndex(USHORT _nWhich, long nIndex) :
 
 NameOrIndex::NameOrIndex(USHORT _nWhich, const XubString& rName) :
     SfxStringItem(_nWhich, rName),
-    nPalIndex((long)-1)
+    nPalIndex(-1)
 {
 }
 
@@ -230,7 +232,7 @@ SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT /*nVer*/) const
 SvStream& NameOrIndex::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     SfxStringItem::Store( rOut, nItemVersion );
-    rOut << (INT32)nPalIndex;
+    rOut << nPalIndex;
     return rOut;
 }
 
@@ -369,11 +371,11 @@ TYPEINIT1_AUTOFACTORY(XColorItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(USHORT nWhich, long nIndex, const Color& rTheColor)
+|*    XColorItem::XColorItem(USHORT nWhich, INT32 nIndex, const Color& rTheColor)
 |*
 \************************************************************************/
 
-XColorItem::XColorItem(USHORT _nWhich, long nIndex, const Color& rTheColor) :
+XColorItem::XColorItem(USHORT _nWhich, INT32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
     aColor(rTheColor)
 {
@@ -884,7 +886,7 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(long nIndex, const XDash& rTheDash)
+|*    XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -892,7 +894,7 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XLineDashItem::XLineDashItem(long nIndex, const XDash& rTheDash) :
+XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, nIndex),
     aDash(rTheDash)
 {
@@ -1501,7 +1503,7 @@ TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(long nIndex, const Color& rTheColor)
+|*    XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -1509,7 +1511,7 @@ TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
 |*
 *************************************************************************/
 
-XLineColorItem::XLineColorItem(long nIndex, const Color& rTheColor) :
+XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
 {
 }
@@ -1720,7 +1722,7 @@ TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(long nIndex)
+|*    XLineStartItem::XLineStartItem(INT32 nIndex)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -1728,7 +1730,7 @@ TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(long nIndex)
+XLineStartItem::XLineStartItem(INT32 nIndex)
 :   NameOrIndex(XATTR_LINESTART, nIndex)
 {
 }
@@ -2192,7 +2194,7 @@ TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(long nIndex)
+|*    XLineEndItem::XLineEndItem(INT32 nIndex)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -2200,7 +2202,7 @@ TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(long nIndex)
+XLineEndItem::XLineEndItem(INT32 nIndex)
 :   NameOrIndex(XATTR_LINEEND, nIndex)
 {
 }
@@ -2664,7 +2666,7 @@ TYPEINIT1_AUTOFACTORY(XLineStartWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::XLineStartWidthItem(long nWidth)
+|*    XLineStartWidthItem::XLineStartWidthItem(INT32 nWidth)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -3249,7 +3251,7 @@ TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(long nIndex, const Color& rTheColor)
+|*    XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -3257,7 +3259,7 @@ TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
 |*
 *************************************************************************/
 
-XFillColorItem::XFillColorItem(long nIndex, const Color& rTheColor) :
+XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
 {
 }
@@ -3372,7 +3374,7 @@ sal_Bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 // -----------------------------
 TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
-XSecondaryFillColorItem::XSecondaryFillColorItem(long nIndex, const Color& rTheColor) :
+XSecondaryFillColorItem::XSecondaryFillColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, nIndex, rTheColor)
 {
 }
@@ -3510,7 +3512,7 @@ TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(long nIndex,
+|*    XFillGradientItem::XFillGradientItem(INT32 nIndex,
 |*                                       const XGradient& rTheGradient)
 |*
 |*    Beschreibung
@@ -3519,7 +3521,7 @@ TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XFillGradientItem::XFillGradientItem(long nIndex,
+XFillGradientItem::XFillGradientItem(INT32 nIndex,
                                    const XGradient& rTheGradient) :
     NameOrIndex(XATTR_FILLGRADIENT, nIndex),
     aGradient(rTheGradient)
@@ -4042,7 +4044,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem( long nIndex, const XGradient& rGradient, BOOL bEnable ) :
+XFillFloatTransparenceItem::XFillFloatTransparenceItem( INT32 nIndex, const XGradient& rGradient, BOOL bEnable ) :
     XFillGradientItem   ( nIndex, rGradient ),
     bEnabled            ( bEnable )
 {
@@ -4246,7 +4248,7 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(long nIndex,
+|*    XFillHatchItem::XFillHatchItem(INT32 nIndex,
 |*                                 const XHatch& rTheHatch)
 |*
 |*    Beschreibung
@@ -4255,7 +4257,7 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XFillHatchItem::XFillHatchItem(long nIndex,
+XFillHatchItem::XFillHatchItem(INT32 nIndex,
                              const XHatch& rTheHatch) :
     NameOrIndex(XATTR_FILLHATCH, nIndex),
     aHatch(rTheHatch)
@@ -5258,7 +5260,7 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
 |*
 *************************************************************************/
 
-XFormTextShadowColorItem::XFormTextShadowColorItem(long nIndex,
+XFormTextShadowColorItem::XFormTextShadowColorItem(INT32 nIndex,
                                                      const Color& rTheColor) :
     XColorItem(XATTR_FORMTXTSHDWCOLOR, nIndex, rTheColor)
 {

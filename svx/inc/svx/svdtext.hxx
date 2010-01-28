@@ -33,6 +33,7 @@
 
 #include <sal/types.h>
 #include "svx/svxdllapi.h"
+#include <tools/weakbase.hxx>
 
 // --------------------------------------------------------------------
 
@@ -49,7 +50,7 @@ namespace sdr { namespace properties {
 /** This class stores information about one text inside a shape.
 */
 
-class SVX_DLLPUBLIC SdrText
+class SVX_DLLPUBLIC SdrText : public tools::WeakBase< SdrText >
 {
 public:
     SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = 0 );

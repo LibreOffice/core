@@ -39,25 +39,23 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayTriangleStriped : public OverlayObjectWithBasePosition
+        class OverlayTriangle : public OverlayObjectWithBasePosition
         {
         protected:
             // second and third position in pixel
             basegfx::B2DPoint                       maSecondPosition;
             basegfx::B2DPoint                       maThirdPosition;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            OverlayTriangleStriped(
+            OverlayTriangle(
                 const basegfx::B2DPoint& rBasePos,
                 const basegfx::B2DPoint& rSecondPos,
-                const basegfx::B2DPoint& rThirdPos);
-            virtual ~OverlayTriangleStriped();
+                const basegfx::B2DPoint& rThirdPos,
+                Color aTriangleColor);
+            virtual ~OverlayTriangle();
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
@@ -66,36 +64,6 @@ namespace sdr
             // change third position
             const basegfx::B2DPoint& getThirdPosition() const { return maThirdPosition; }
             void setThirdPosition(const basegfx::B2DPoint& rNew);
-
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-
-            // transform object coordinates. Needs to transform maSecondPosition
-            // and maThirdPosition.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayTriangle : public OverlayTriangleStriped
-        {
-        protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayTriangle(
-                const basegfx::B2DPoint& rBasePos,
-                const basegfx::B2DPoint& rSecondPos,
-                const basegfx::B2DPoint& rThirdPos,
-                Color aTriangleColor = Color(COL_BLACK));
-            virtual ~OverlayTriangle();
         };
     } // end of namespace overlay
 } // end of namespace sdr

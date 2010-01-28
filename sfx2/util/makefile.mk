@@ -98,7 +98,9 @@ SHL1STDLIBS+=\
         $(CPPULIB) \
         $(VOSLIB) \
         $(SALLIB) \
-        $(SJLIB)
+        $(SJLIB) \
+        $(LIBXML2LIB) \
+
 
 .IF "$(GUI)"=="WNT"
 

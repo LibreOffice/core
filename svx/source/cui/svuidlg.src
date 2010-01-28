@@ -156,37 +156,37 @@ ModalDialog MD_UPDATE_BASELINKS
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 275 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Close" ;
     };
     HelpButton 1
     {
-        Pos = MAP_APPFONT ( 275 , 26 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 26 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
     };
     PushButton PB_UPDATE_NOW
     {
-        Pos = MAP_APPFONT ( 275 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Update" ;
     };
     PushButton PB_OPEN_SOURCE
     {
-        Pos = MAP_APPFONT ( 275 , 60 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 60 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Open" ;
     };
     PushButton PB_CHANGE_SOURCE
     {
-        Pos = MAP_APPFONT ( 275 , 77 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 77 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Modify..." ;
     };
     PushButton PB_BREAK_LINK
     {
-        Pos = MAP_APPFONT ( 275 , 94 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 270 , 94 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Break Link" ;
     };
     FixedText FT_FILES2

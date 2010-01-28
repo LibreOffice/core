@@ -292,23 +292,23 @@ String STR_OPERATOR_TOO_COMPLEX
 };
 String STR_QUERY_INVALID_LIKE_COLUMN
 {
-    Text [ en-US ] = "The query can not be executed. The 'LIKE' can only be used with a column name.";
+    Text [ en-US ] = "The query can not be executed. You cannot use 'LIKE' with columns of this type.";
 };
 String STR_QUERY_INVALID_LIKE_STRING
 {
-    Text [ en-US ] = "The query can not be executed. The 'LIKE' can only be used with a string argument.";
+    Text [ en-US ] = "The query can not be executed. 'LIKE' can be used with a string argument only.";
 };
 String STR_QUERY_NOT_LIKE_TOO_COMPLEX
 {
-    Text [ en-US ] = "The query can not be executed. The 'NOT LIKE' is too complex.";
+    Text [ en-US ] = "The query can not be executed. The 'NOT LIKE' condition is too complex.";
 };
 String STR_QUERY_LIKE_WILDCARD
 {
-    Text [ en-US ] = "The query can not be executed. The 'LIKE' statement contains wildcard in the middle.";
+    Text [ en-US ] = "The query can not be executed. The 'LIKE' condition contains wildcard in the middle.";
 };
 String STR_QUERY_LIKE_WILDCARD_MANY
 {
-    Text [ en-US ] = "The query can not be executed. The 'LIKE' statement contains too many wildcards.";
+    Text [ en-US ] = "The query can not be executed. The 'LIKE' condition contains too many wildcards.";
 };
 String STR_INVALID_COLUMNNAME
 {

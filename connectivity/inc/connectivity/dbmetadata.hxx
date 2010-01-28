@@ -135,7 +135,14 @@ namespace dbtools
             <code>SELECT * FROM table correlation_name</code> is generated.
         */
         bool generateASBeforeCorrelationName() const;
+
+        /** should date time be escaped like '2001-01-01' => #2001-01-01#
+        */
         bool shouldEscapeDateTime() const;
+
+        /** auto increment columns should be automaticly used as primary key.
+        */
+        bool isAutoIncrementPrimaryKey() const;
 
         /** determines the syntax to use for boolean comparison predicates
 

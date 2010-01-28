@@ -121,6 +121,7 @@ public:
     static void     Error( SbError );
     static void     Error( SbError, const String& rMsg );
     static void     FatalError( SbError );
+    static void     FatalError( SbError, const String& rMsg );
     static BOOL     IsRunning();
     static SbError  GetErrBasic();
     // #66536 make additional message accessible by RTL function Error

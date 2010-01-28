@@ -379,7 +379,8 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPass
     messageListener->AddRef();
 
     nsCAutoString nsBind;
-    nsBind.AssignWithConversion(sBindDN);
+    // PRUnichar != sal_Unicode in mingw
+    nsBind.AssignWithConversion(reinterpret_cast_mingw_only<const PRUnichar *>(sBindDN));
 
     // Now lets initialize the LDAP connection properly.
     rv = ldapConnection->Init(host.get(), port, useSSL, nsBind,
@@ -395,7 +396,8 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPass
     if ( pPasswd && *pPasswd )
     {
         nsCAutoString nsPassword;
-        nsPassword.AssignWithConversion(pPasswd);
+        // PRUnichar != sal_Unicode in mingw
+        nsPassword.AssignWithConversion(reinterpret_cast_mingw_only<const PRUnichar *>(pPasswd));
         rv = ldapOperation->SimpleBind(nsPassword);
     }
 

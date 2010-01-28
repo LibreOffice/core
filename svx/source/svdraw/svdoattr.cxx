@@ -34,7 +34,6 @@
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
 #include "svditext.hxx"
-#include "svdtouch.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
@@ -169,26 +168,6 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     }
 
     return nRetval;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-FASTBOOL SdrAttrObj::ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const
-{
-    const SfxItemSet& rSet = GetMergedItemSet();
-
-    nXDist = 0L;
-    nYDist = 0L;
-
-    BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
-    if(bShadOn)
-    {
-        nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 BOOL SdrAttrObj::HasFill() const

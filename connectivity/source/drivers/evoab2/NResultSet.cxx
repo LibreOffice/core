@@ -57,6 +57,7 @@
 #include <svtools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
 
+#include <cstring>
 #include <vector>
 
 namespace connectivity { namespace evoab {

@@ -39,6 +39,7 @@
 #include <functional>
 #include <set>
 #include <boost/shared_ptr.hpp>
+#include <rtl/ustrbuf.hxx>
 
 // forward declarations
 namespace com
@@ -428,22 +429,22 @@ namespace connectivity
                             bool _bSubstitute) const;
 
     private:
-        void impl_parseNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const;
-        void impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
-        void impl_parseTableRangeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
+        void impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseTableRangeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
         /** parses a table_name node into a SQL statement particle.
             @return
                 <TRUE/> if and only if parsing was successful, <FALSE/> if default handling should
                 be applied.
         */
-        bool impl_parseTableNameNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const;
+        bool impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
-        sal_Bool addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const;
+        sal_Bool addDateValue(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
         ::rtl::OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
         ::rtl::OUString convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
         ::rtl::OUString convertTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
-        void parseLeaf(::rtl::OUString & rString, const SQLParseNodeParameter& rParam) const;
+        void parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };
 
     //-----------------------------------------------------------------------------

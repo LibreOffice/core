@@ -25,6 +25,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\groupprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\groupprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\helplineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\helplineprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\hittestprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\hittestprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\invertprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\invertprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\markerarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\maskprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\maskprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\mediaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\mediaprimitive2d.hxx
@@ -34,6 +35,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\pointarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\pointarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\primitivetools2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\primitivetools2d.hxx
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\shadowprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\shadowprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\structuretagprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\structuretagprimitive2d.hxx
@@ -83,6 +85,8 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
 ..\inc\drawinglayer\processor2d\canvasprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\canvasprocessor.hxx
 ..\inc\drawinglayer\processor2d\contourextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\contourextractor2d.hxx
 ..\inc\drawinglayer\processor2d\linegeometryextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\linegeometryextractor2d.hxx
+..\inc\drawinglayer\processor2d\hittestprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\hittestprocessor2d.hxx
+..\inc\drawinglayer\processor2d\textaspolygonextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\textaspolygonextractor2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 ..\inc\drawinglayer\processor3d\baseprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\baseprocessor3d.hxx

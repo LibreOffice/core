@@ -61,6 +61,29 @@ CBaseReader( DocumentName )
     }
 }
 
+CContentReader::CContentReader( void* stream, LocaleSet_t const & DocumentLocale, zlib_filefunc_def* fa ) :
+CBaseReader( stream, fa )
+{
+try
+    {
+        m_DefaultLocale = DocumentLocale;
+        Initialize( DOC_CONTENT_NAME );
+    }
+    catch(xml_parser_exception&
+    #if OSL_DEBUG_LEVEL > 0
+    ex
+    #endif
+    )
+    {
+        ENSURE(false, ex.what());
+    }
+    catch(...)
+    {
+        ENSURE(false, "Unknown error");
+    }
+}
+
+
 /** destructor.
 */
 

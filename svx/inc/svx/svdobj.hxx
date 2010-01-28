@@ -683,20 +683,10 @@ public:
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
     sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
-
     BOOL LineGeometryUsageIsNecessary() const;
-
-    // HitTest, 2. Stufe. nTol ist die zulaessige Toleranz in logischen Einheiten.
-    // rVisiLayer ist hauptsaechlich fuer Gruppenobjekte gedacht, die ja Objekte
-    // mit unterschiedlichen Layerzuordnungen beinhalten koennen.
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    //SdrObject* CheckHit(const Point& rPnt, USHORT nTol) const { return CheckHit(rPnt,nTol,NULL); }
-    sal_Bool IsHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const { return CheckHit(rPnt,nTol,pVisiLayer)!=NULL; }
-    sal_Bool IsHit(const Point& rPnt, USHORT nTol) const { return CheckHit(rPnt,nTol,NULL)!=NULL; }
 
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
-    // #116235# virtual SdrObject* Clone(SdrPage* pPage, SdrModel* pModel) const;
     virtual void operator=(const SdrObject& rObj);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
@@ -878,10 +868,6 @@ public:
 
     // TextEdit
     virtual FASTBOOL HasTextEdit() const;
-    virtual SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    //SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol) const { return CheckTextEditHit(rPnt,nTol,NULL); }
-    sal_Bool IsTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const { return CheckTextEditHit(rPnt,nTol,pVisiLayer)!=NULL; }
-    sal_Bool IsTextEditHit(const Point& rPnt, USHORT nTol) const { return CheckTextEditHit(rPnt,nTol,NULL)!=NULL; }
 
     // Return==TRUE: TextEditMode gestartet
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);

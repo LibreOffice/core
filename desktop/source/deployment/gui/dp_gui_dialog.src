@@ -30,191 +30,9 @@
 #include "svtools/controldims.hrc"
 #include "dp_gui.hrc"
 
-ModelessDialog RID_DLG_PACKAGE_MANAGER
-{
-    HelpId = HID_PACKAGE_MANAGER;
-    Text [ en-US ] = "Extension Manager";
-
-    Size = MAP_APPFONT( 300, 200 );
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Closeable = TRUE;
-    Sizeable = TRUE;
-    Hide = TRUE;
-
-    FixedText RID_FT_PACKAGES
-    {
-        Group = TRUE;
-        Left = TRUE;
-        NoLabel = TRUE;
-        Text [ en-US ] = "Browse extensions";
-    };
-
-    PushButton RID_BTN_ADD
-    {
-        TabStop = TRUE;
-        Text [ en-US ] = "~Add...";
-    };
-    PushButton RID_BTN_REMOVE
-    {
-        TabStop = TRUE;
-        Text [ en-US ] = "~Remove";
-    };
-    PushButton RID_BTN_ENABLE
-    {
-        TabStop = TRUE;
-        Text [ en-US ] = "~Enable";
-    };
-    PushButton RID_BTN_DISABLE
-    {
-        TabStop = TRUE;
-        Text [ en-US ] = "~Disable";
-    };
-    PushButton RID_BTN_EXPORT
-    {
-        TabStop = TRUE;
-        Text [ en-US ] = "E~xport...";
-    };
-    PushButton RID_BTN_CHECK_UPDATES
-    {
-        Disable = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "~Updates...";
-    };
-    PushButton RID_BTN_OPTIONS
-    {
-        Disable = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "~Options...";
-    };
-
-
-
-    FixedText RID_BTN_GET_EXTENSIONS
-    {
-        NoLabel = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "Get more extensions here...";
-    };
-
-    OKButton RID_BTN_CLOSE
-    {
-        TabStop = TRUE;
-        DefButton = TRUE;
-        Text [ en-US ] = "Close";
-    };
-    HelpButton RID_BTN_HELP
-    {
-        TabStop = TRUE;
-    };
-
-    Image RID_IMG_PLUS
-    {
-        ImageBitmap = Bitmap { File = "plus.bmp"; };
-        MASKCOLOR
-    };
-
-    Image RID_IMG_PLUS_HC
-    {
-        ImageBitmap = Bitmap { File = "plus_sch.bmp"; };
-        MASKCOLOR
-    };
-    Image RID_IMG_MINUS
-    {
-        ImageBitmap = Bitmap { File = "minus.bmp"; };
-        MASKCOLOR
-    };
-    Image RID_IMG_MINUS_HC
-    {
-        ImageBitmap = Bitmap { File = "minus_sch.bmp"; };
-        MASKCOLOR
-    };
-};
-
-
-Image RID_IMG_DEF_INSTALLATION
-{
-    ImageBitmap = Bitmap { File = "harddisk_16.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_DEF_INSTALLATION_HC
-{
-    ImageBitmap = Bitmap { File = "harddisk_16_h.bmp"; };
-    MASKCOLOR
-};
-
-Image RID_IMG_DEF_DOCUMENT
-{
-    ImageBitmap = Bitmap { File = "sc05500.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_DEF_DOCUMENT_HC
-{
-    ImageBitmap = Bitmap { File = "sch05500.bmp"; };
-    MASKCOLOR
-};
-
-Image RID_IMG_DEF_PACKAGE
-{
-    ImageBitmap = Bitmap { File = "puzzleslice_16.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_DEF_PACKAGE_HC
-{
-    ImageBitmap = Bitmap { File = "puzzleslice_16_h.bmp"; };
-    MASKCOLOR
-};
-
-
-String RID_STR_USER_INSTALLATION
-{
-    Text [ en-US ] = "My Extensions";
-};
-
-String RID_STR_SHARED_INSTALLATION
-{
-    Text [ en-US ] = "%PRODUCTNAME Extensions";
-};
-
-String RID_STR_PACKAGE
-{
-    Text [ en-US ] = "Extension";
-};
-
-String RID_STR_PACKAGE_STATUS
-{
-    Text [ en-US ] = "Status";
-};
-
-String RID_STR_EXTENSION_VERSION
-{
-    Text [ en-US ] = "Version";
-};
-
 String RID_STR_ADD_PACKAGES
 {
     Text [ en-US ] = "Add Extension(s)";
-};
-
-String RID_STR_ENABLED
-{
-    Text [ en-US ] = "Enabled";
-};
-
-String RID_STR_DISABLED
-{
-    Text [ en-US ] = "Disabled";
-};
-
-String RID_STR_UNKNOWN
-{
-    Text [ en-US ] = "Unknown";
-};
-
-String RID_CTX_ITEM_ADD
-{
-    Text [ en-US ] = "~Add...";
 };
 String RID_CTX_ITEM_REMOVE
 {
@@ -228,28 +46,13 @@ String RID_CTX_ITEM_DISABLE
 {
     Text [ en-US ] = "~Disable";
 };
-String RID_CTX_ITEM_EXPORT
-{
-    Text [ en-US ] = "E~xport...";
-};
 String RID_CTX_ITEM_CHECK_UPDATE
 {
     Text [ en-US ] = "~Update...";
 };
-
 String RID_CTX_ITEM_OPTIONS
 {
     Text [ en-US ] = "~Options...";
-};
-
-String RID_STR_EXPORT_PACKAGE
-{
-    Text [ en-US ] = "Export Extension";
-};
-
-String RID_STR_EXPORT_PACKAGES
-{
-    Text [ en-US ] = "Export Extensions to...";
 };
 
 String RID_STR_ADDING_PACKAGES
@@ -272,11 +75,6 @@ String RID_STR_DISABLING_PACKAGES
     Text [ en-US ] = "Disabling %EXTENSION_NAME";
 };
 
-String RID_STR_EXPORTING_PACKAGES
-{
-    Text [ en-US ] = "Exporting Extension(s)";
-};
-
 String RID_STR_INSTALL_FOR_ALL
 {
     Text [ en-US ] = "~For all users";
@@ -287,14 +85,31 @@ String RID_STR_INSTALL_FOR_ME
     Text [ en-US ] = "~Only for me";
 };
 
-String RID_STR_PUBLISHER_LINK
-{
-    Text [ en-US ] = "Publisher";
-};
-
 String RID_STR_ERROR_UNKNOWN_STATUS
 {
     Text [ en-US ] = "Error: The status of this extension is unknown";
+};
+
+String RID_STR_CLOSE_BTN
+{
+    Text [ en-US ] = "Close";
+};
+
+String RID_STR_EXIT_BTN
+{
+    Text [ en-US ] = "Quit";
+};
+
+String RID_STR_NO_ADMIN_PRIVILEGE
+{
+    Text [ en-US ] = "%PRODUCTNAME has been updated to a new version. "
+                     "Some shared %PRODUCTNAME extensions are not compatible with this version and need to be updated before %PRODUCTNAME can be started.\n\n"
+                     "Updating of shared extension requires administrator privileges. Contact your system administrator to update the following shared extensions:";
+};
+
+String RID_STR_ERROR_MISSING_DEPENDENCIES
+{
+    Text [ en-US ] = "The extension cannot be enabled as the following system dependencies are not fulfilled:";
 };
 
 // Dialog layout

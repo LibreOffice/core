@@ -657,7 +657,11 @@ namespace
 
 bool SdrTextObj::impCheckSpellCheckForDecomposeTextPrimitive() const
 {
-    return false;
+    // #i102062# asked TL who killed this feature (CWS tl56). Obviously, there
+    // is no more support for EE_CNTRL_NOREDLINES anymore; redlining is always
+    // on nowadays. Unfortunately, not false, but true should be returned then.
+    // Trying if this is all...
+    return true;
 }
 
 bool SdrTextObj::impDecomposeContourTextPrimitive(
@@ -731,7 +735,9 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare outliner
     const bool bIsCell(rSdrBlockTextPrimitive.getCellText());
-    const SfxItemSet& rTextItemSet = rSdrBlockTextPrimitive.getSdrText().GetItemSet();
+    const SfxItemSet& rTextItemSet = rSdrBlockTextPrimitive.getSdrText()
+        ? rSdrBlockTextPrimitive.getSdrText()->GetItemSet()
+        : GetObjectItemSet();
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
     SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
@@ -767,17 +773,40 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     }
     else
     {
+        // check if block text is used (only one of them can be true)
+        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
+        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
-            rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
+            // #i103454# maximal paper size hor/ver needs to be limited to text
+            // frame size. If it's block text, still allow the 'other' direction
+            // to grow to get a correct real text size when using GetPaperSize().
+            // When just using aAnchorTextSize as maximum, GetPaperSize()
+            // would just return aAnchorTextSize again: this means, the wanted
+            // 'measurement' of the real size of block text would not work
+            Size aMaxAutoPaperSize(aAnchorTextSize);
+
+            if(bHorizontalIsBlock)
+            {
+                // allow to grow vertical for horizontal blocks
+                aMaxAutoPaperSize.setHeight(1000000);
+            }
+            else if(bVerticalIsBlock)
+            {
+                // allow to grow horizontal for vertical blocks
+                aMaxAutoPaperSize.setWidth(1000000);
+            }
+
+            rOutliner.SetMaxAutoPaperSize(aMaxAutoPaperSize);
         }
 
-        if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg)
+        // set minimal paper size hor/ver if needed
+        if(bHorizontalIsBlock)
         {
             rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
         }
-
-        if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg)
+        else if(bVerticalIsBlock)
         {
             rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
         }
@@ -903,7 +932,9 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
-    const SfxItemSet& rTextItemSet = rSdrStretchTextPrimitive.getSdrText().GetItemSet();
+    const SfxItemSet& rTextItemSet = rSdrStretchTextPrimitive.getSdrText()
+        ? rSdrStretchTextPrimitive.getSdrText()->GetItemSet()
+        : GetObjectItemSet();
     const Size aNullSize;
 
     rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
@@ -926,6 +957,16 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
     basegfx::B2DHomMatrix aNewTransformB;
+
+    // #i101957# Check for vertical text. If used, aNewTransformA
+    // needs to translate the text initially around object width to orient
+    // it relative to the topper right instead of the topper left
+    const bool bVertical(rSdrStretchTextPrimitive.getOutlinerParaObject().IsVertical());
+
+    if(bVertical)
+    {
+        aNewTransformA.translate(aScale.getX(), 0.0);
+    }
 
     // calculate global char stretching scale parameters. Use non-mirrored sizes
     // to layout without mirroring
@@ -1196,4 +1237,5 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

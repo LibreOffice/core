@@ -64,7 +64,7 @@
 			<info>
 				<desc>Specifies the UI name for the color or group name of the component.</desc>
 			</info>
-			<prop oor:name="DisplayName" oor:type="xs:string">
+			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
 				</info>
@@ -74,7 +74,7 @@
 			<info>
 				<desc>Specifies the ui strings for the component.</desc>
 			</info>
-			<prop oor:name="DisplayName" oor:type="xs:string">
+			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
 				</info>

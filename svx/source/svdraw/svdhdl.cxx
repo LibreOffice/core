@@ -34,7 +34,6 @@
 #include <algorithm>
 
 #include <svx/svdhdl.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmrkv.hxx>
@@ -62,8 +61,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
-#include <svx/sdr/overlay/overlaybitmap.hxx>
-#include <svx/sdr/overlay/overlaylinestriped.hxx>
+#include <svx/sdr/overlay/overlayline.hxx>
 #include <svx/sdr/overlay/overlaytriangle.hxx>
 #include <svx/sdr/overlay/overlayhatchrect.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -83,36 +81,63 @@
 class SdrHdlBitmapSet
 {
     // the bitmap holding all infos
-    BitmapEx                maMarkersBitmap;
+    BitmapEx                    maMarkersBitmap;
+
+    // the cropped Bitmaps for reusage
+    ::std::vector< BitmapEx >   maRealMarkers;
+
+    // elpers
+    BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
 
 public:
     SdrHdlBitmapSet(UINT16 nResId);
     ~SdrHdlBitmapSet();
 
-    BitmapEx GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
+    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#define KIND_COUNT          (14)
+#define INDEX_COUNT         (6)
+#define INDIVIDUAL_COUNT    (4)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(UINT16 nResId)
+:   maMarkersBitmap(),
+    // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
+    maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
     // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
-    Color aColTransparent(0x00ff00ff);
-    Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
-    maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
+    const Color aColTransparent(0x00ff00ff);
+    const Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
+    const Bitmap aMask(aBitmap.CreateMask(aColTransparent));
+
+    // create a real BitmapEx with an AlphaMask
+    maMarkersBitmap = BitmapEx(aBitmap, aMask);
+    // maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
 SdrHdlBitmapSet::~SdrHdlBitmapSet()
 {
 }
 
-// #i15222#
+BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle)
+{
+    BitmapEx& rTargetBitmap = maRealMarkers[nIndex];
+
+    if(rTargetBitmap.IsEmpty())
+    {
+        rTargetBitmap = maMarkersBitmap;
+        rTargetBitmap.Crop(rRectangle);
+    }
+
+    return rTargetBitmap;
+}
+
 // change getting of bitmap to use the big ressource bitmap
-BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
+const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
 {
     // fill in size and source position in maMarkersBitmap
     const sal_uInt16 nYPos(nInd * 11);
-    Rectangle aSourceRect;
 
     switch(eKindOfMarker)
     {
@@ -123,140 +148,135 @@ BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nIn
         }
         case Rect_7x7:
         {
-            aSourceRect = Rectangle(Point(0, nYPos), Size(7, 7));
-            break;
+            return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, Rectangle(Point(0, nYPos), Size(7, 7)));
         }
 
         case Rect_9x9:
         {
-            aSourceRect = Rectangle(Point(7, nYPos), Size(9, 9));
-            break;
+            return impGetOrCreateTargetBitmap((1 * INDEX_COUNT) + nInd, Rectangle(Point(7, nYPos), Size(9, 9)));
         }
 
         case Rect_11x11:
         {
-            aSourceRect = Rectangle(Point(16, nYPos), Size(11, 11));
-            break;
+            return impGetOrCreateTargetBitmap((2 * INDEX_COUNT) + nInd, Rectangle(Point(16, nYPos), Size(11, 11)));
         }
 
         case Rect_13x13:
         {
+            const sal_uInt16 nIndex((3 * INDEX_COUNT) + nInd);
+
             switch(nInd)
             {
-                case 0: aSourceRect = Rectangle(Point(72, 66), Size(13, 13)); break;
-                case 1: aSourceRect = Rectangle(Point(85, 66), Size(13, 13)); break;
-                case 2: aSourceRect = Rectangle(Point(72, 78), Size(13, 13)); break;
-                case 3: aSourceRect = Rectangle(Point(85, 78), Size(13, 13)); break;
-                case 4: aSourceRect = Rectangle(Point(98, 78), Size(13, 13)); break;
-                case 5: aSourceRect = Rectangle(Point(98, 66), Size(13, 13)); break;
+                case 0:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 66), Size(13, 13)));
+                }
+                case 1:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 66), Size(13, 13)));
+                }
+                case 2:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 78), Size(13, 13)));
+                }
+                case 3:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 78), Size(13, 13)));
+                }
+                case 4:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 78), Size(13, 13)));
+                }
+                default: // case 5:
+                {
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 66), Size(13, 13)));
+                }
             }
-
-            break;
         }
 
         case Circ_7x7:
         {
-            aSourceRect = Rectangle(Point(27, nYPos), Size(7, 7));
-            break;
+            return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
         case Circ_9x9:
         case Customshape1:
         {
-            aSourceRect = Rectangle(Point(34, nYPos), Size(9, 9));
-            break;
+            return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
         case Circ_11x11:
         {
-            aSourceRect = Rectangle(Point(43, nYPos), Size(11, 11));
-            break;
+            return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
         }
 
         case Elli_7x9:
         {
-            aSourceRect = Rectangle(Point(54, nYPos), Size(7, 9));
-            break;
+            return impGetOrCreateTargetBitmap((7 * INDEX_COUNT) + nInd, Rectangle(Point(54, nYPos), Size(7, 9)));
         }
 
         case Elli_9x11:
         {
-            aSourceRect = Rectangle(Point(61, nYPos), Size(9, 11));
-            break;
+            return impGetOrCreateTargetBitmap((8 * INDEX_COUNT) + nInd, Rectangle(Point(61, nYPos), Size(9, 11)));
         }
 
         case Elli_9x7:
         {
-            aSourceRect = Rectangle(Point(70, nYPos), Size(9, 7));
-            break;
+            return impGetOrCreateTargetBitmap((9 * INDEX_COUNT) + nInd, Rectangle(Point(70, nYPos), Size(9, 7)));
         }
 
         case Elli_11x9:
         {
-            aSourceRect = Rectangle(Point(79, nYPos), Size(11, 9));
-            break;
+            return impGetOrCreateTargetBitmap((10 * INDEX_COUNT) + nInd, Rectangle(Point(79, nYPos), Size(11, 9)));
         }
 
         case RectPlus_7x7:
         {
-            aSourceRect = Rectangle(Point(90, nYPos), Size(7, 7));
-            break;
+            return impGetOrCreateTargetBitmap((11 * INDEX_COUNT) + nInd, Rectangle(Point(90, nYPos), Size(7, 7)));
         }
 
         case RectPlus_9x9:
         {
-            aSourceRect = Rectangle(Point(97, nYPos), Size(9, 9));
-            break;
+            return impGetOrCreateTargetBitmap((12 * INDEX_COUNT) + nInd, Rectangle(Point(97, nYPos), Size(9, 9)));
         }
 
         case RectPlus_11x11:
         {
-            aSourceRect = Rectangle(Point(106, nYPos), Size(11, 11));
-            break;
+            return impGetOrCreateTargetBitmap((13 * INDEX_COUNT) + nInd, Rectangle(Point(106, nYPos), Size(11, 11)));
         }
 
         case Crosshair:
         {
-            aSourceRect = Rectangle(Point(0, 68), Size(15, 15));
-            break;
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 0, Rectangle(Point(0, 68), Size(15, 15)));
         }
 
         case Glue:
         {
-            aSourceRect = Rectangle(Point(15, 74), Size(9, 9));
-            break;
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 74), Size(9, 9)));
         }
 
-        case Anchor:
-        // #101688# AnchorTR for SW
+        case Anchor: // #101688# AnchorTR for SW
         case AnchorTR:
         {
-            aSourceRect = Rectangle(Point(24, 68), Size(24, 23));
-            break;
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 23)));
         }
 
         // #98388# add AnchorPressed to be able to aninate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            aSourceRect = Rectangle(Point(48, 68), Size(24, 23));
-            break;
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 23)));
         }
     }
 
-    // construct return bitmap
-    BitmapEx aRetval(maMarkersBitmap);
-    aRetval.Crop(aSourceRect);
-
-    return aRetval;
+    // cannot happen since all pathes return something; return Rect_7x7 as default (see switch)
+    return maRealMarkers[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdlBitmapSet* SdrHdl::pSimpleSet = NULL;
 SdrHdlBitmapSet* SdrHdl::pModernSet = NULL;
-
-// #101928#
 SdrHdlBitmapSet* SdrHdl::pHighContrastSet = NULL;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -810,7 +830,7 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 {
     // OVERLAYMANAGER
     basegfx::B2DPoint aPosition(rPnt.X(), rPnt.Y());
-    return maOverlayGroup.isHit(aPosition);
+    return maOverlayGroup.isHitLogic(aPosition);
 }
 
 Pointer SdrHdl::GetPointer() const
@@ -984,8 +1004,9 @@ void SdrHdlColor::CreateB2dIAObject()
                             Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
                             ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayBitmap(
-                                    aPosition, aBmpCol,
+                                ::sdr::overlay::OverlayBitmapEx(
+                                    aPosition,
+                                    BitmapEx(aBmpCol),
                                     (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
                                     (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
                                 );
@@ -1183,11 +1204,13 @@ void SdrHdlGradient::CreateB2dIAObject()
 
                             pNewOverlayObject = new
                                 ::sdr::overlay::OverlayTriangle(
-                                    aPositionLeft, aPosition2, aPositionRight
+                                    aPositionLeft,
+                                    aPosition2,
+                                    aPositionRight,
+                                    IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE)
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
-                            pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
                             rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
                             maOverlayGroup.append(*pNewOverlayObject);
                         }
@@ -1329,13 +1352,6 @@ void SdrHdlLine::CreateB2dIAObject()
             }
         }
     }
-}
-
-bool SdrHdlLine::IsHdlHit(const Point& rPnt) const
-{
-    // OVERLAYMANAGER
-    basegfx::B2DPoint aPosition(rPnt.X(), rPnt.Y());
-    return maOverlayGroup.isHit(aPosition);
 }
 
 Pointer SdrHdlLine::GetPointer() const
@@ -1689,7 +1705,8 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 aTopLeft,
                                 aBottomRight,
                                 aHatchCol,
-                                6.0,
+                                3.0,
+                                3.0,
                                 45 * F_PI180,
                                 nDrehWink * -F_PI18000);
                             pNewOverlayObject->setHittable(false);

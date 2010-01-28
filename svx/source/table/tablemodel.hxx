@@ -96,6 +96,9 @@ public:
     /** deletes rows and columns that are completly merged. Must be called between BegUndo/EndUndo! */
     void optimize();
 
+    /// merges the cell at the given position with the given span
+    void merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan );
+
     // ICellRange
     virtual sal_Int32 getLeft();
     virtual sal_Int32 getTop();

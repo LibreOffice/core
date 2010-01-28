@@ -381,7 +381,6 @@ BOOL ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
 
 void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 {
-#ifndef SVX_LIGHT
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
     if ( rCEvt.GetCommand() == COMMAND_VOICE )
@@ -642,7 +641,42 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             pView->GetWindow()->SetCursorRect();
         }
     }
-#endif // !SVX_LIGHT
+    else if ( rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE )
+    {
+        const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+
+        ESelection aSelection = pView->GetSelection();
+        aSelection.Adjust();
+
+        if( pView->HasSelection() )
+        {
+            aSelection.nEndPos = aSelection.nStartPos;
+            aSelection.nStartPos += pData->GetStart();
+            aSelection.nEndPos += pData->GetEnd();
+        }
+        else
+        {
+            aSelection.nStartPos = pData->GetStart();
+            aSelection.nEndPos = pData->GetEnd();
+        }
+        pView->SetSelection( aSelection );
+    }
+    else if ( rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION )
+    {
+        if ( pView->HasSelection() )
+        {
+            ESelection aSelection = pView->GetSelection();
+            aSelection.Adjust();
+
+            if ( aSelection.nStartPara != aSelection.nEndPara )
+            {
+                xub_StrLen aParaLen = pEditEngine->GetTextLen( aSelection.nStartPara );
+                aSelection.nEndPara = aSelection.nStartPara;
+                aSelection.nEndPos = aParaLen;
+                pView->SetSelection( aSelection );
+            }
+        }
+    }
 
     GetSelEngine().Command( rCEvt );
 }
@@ -1743,7 +1777,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         ::rtl::OUString aOUText( aText );
         USHORT nTextLen = (USHORT)aOUText.getLength();
 
-        long nPos = 0;
+        sal_Int32 nPos = 0;
         short nScriptType = _xBI->getScriptType( aOUText, nPos );
         rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
         nPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
@@ -1761,6 +1795,17 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             }
             else
             {
+                if ( _xBI->getScriptType( aOUText, nPos - 1 ) == i18n::ScriptType::WEAK )
+                {
+                    switch ( u_charType(aOUText.iterateCodePoints(&nPos, 0) ) ) {
+                    case U_NON_SPACING_MARK:
+                    case U_ENCLOSING_MARK:
+                    case U_COMBINING_SPACING_MARK:
+                        --nPos;
+                        rTypes[rTypes.Count()-1].nEndPos--;
+                        break;
+                    }
+                }
                 rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
             }
 

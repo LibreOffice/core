@@ -30,14 +30,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
 #include <MQueryHelper.hxx>
 #include <MNameMapper.hxx>
 #include <MConnection.hxx>
 #include <connectivity/dbexception.hxx>
 #include "MQuery.hxx"
-#ifndef _CONNECTIVITY_MAB_CONVERSIONS_HXX_
+#include "MLdapAttributeMap.hxx"
 #include "MTypeConverter.hxx"
-#endif
 #include "MNSMozabProxy.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <unotools/processfactory.hxx>
@@ -54,6 +54,7 @@ static NS_DEFINE_CID(kAbDirectoryQueryArgumentsCID, NS_ABDIRECTORYQUERYARGUMENTS
 static NS_DEFINE_CID(kBooleanConditionStringCID, NS_BOOLEANCONDITIONSTRING_CID);
 static NS_DEFINE_CID(kBooleanExpressionCID, NS_BOOLEANEXPRESSION_CID);
 static NS_DEFINE_CID(kAbDirectoryQueryProxyCID, NS_ABDIRECTORYQUERYPROXY_CID);
+static NS_DEFINE_CID(kAbLDAPAttributeMap, NS_IABLDAPATTRIBUTEMAP_IID);
 
 using namespace connectivity::mozab;
 using namespace connectivity;
@@ -137,31 +138,6 @@ void MQuery::construct()
     //
     m_aQueryHelper = new MQueryHelper();
     NS_IF_ADDREF( m_aQueryHelper);
-}
-// -------------------------------------------------------------------------
-void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
-{
-    OSL_TRACE("IN MQuery::setAttributes()\n");
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    m_aAttributes.clear();
-    m_aAttributes.reserve(attrs.size());
-    ::std::vector< ::rtl::OUString>::iterator aIterAttr = attrs.begin();
-    ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
-
-    for ( aIterAttr = attrs.begin(); aIterAttr != attrs.end();++aIterAttr )
-        m_aAttributes.push_back( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( *aIterAttr ) );
-
-    OSL_TRACE("\tOUT MQuery::setAttributes()\n");
-}
-// -------------------------------------------------------------------------
-const ::std::vector< ::rtl::OUString> &MQuery::getAttributes() const
-{
-    OSL_TRACE("IN MQuery::getAttributes()\n");
-
-    OSL_TRACE("\tOUT MQuery::getAttributes()\n");
-
-    return(m_aAttributes);
 }
 // -------------------------------------------------------------------------
 void MQuery::setAddressbook(::rtl::OUString &ab)
@@ -253,12 +229,9 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 
             // Set the 'name' property of the boolString.
             // Check if it's an alias first...
-            rtl::OUString attrName;
-            ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
-            attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToAlias( evStr->getName() );
-            ::std::string aMiName = MTypeConverter::ouStringToStlString(attrName);
-            boolString->SetName(strdup(aMiName.c_str()));
-            OSL_TRACE("Name = %s ;", aMiName.c_str() );
+            rtl::OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
+            boolString->SetName( strdup( attrName.getStr() ) );
+            OSL_TRACE("Name = %s ;", attrName.getStr() );
             // Set the 'matchType' property of the boolString. Check for equal length.
             sal_Bool requiresValue = sal_True;
             switch(evStr->getCond()) {
@@ -609,8 +582,8 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     PRInt32   count=1;
 
     nsCOMPtr< nsIAbDirectoryQueryArguments > arguments = do_CreateInstance( kAbDirectoryQueryArgumentsCID, &rv);
-
     NS_ENSURE_SUCCESS( rv, rv );
+
     rv = arguments->SetExpression(queryExpression);
     NS_ENSURE_SUCCESS( rv, rv );
 
@@ -618,6 +591,10 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     NS_ENSURE_SUCCESS( rv, rv );
 
     rv = arguments->SetQuerySubDirectories(m_bQuerySubDirs);
+    NS_ENSURE_SUCCESS( rv, rv );
+
+    nsCOMPtr< nsIAbLDAPAttributeMap > attributeMap( new MLdapAttributeMap );
+    rv = arguments->SetTypeSpecificArg( attributeMap );
     NS_ENSURE_SUCCESS( rv, rv );
 
     // Execute the query.
@@ -719,7 +696,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     switch ( nType )
     {
         case DataType::VARCHAR:
-            xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( aDBColumnName ), rValue.getString() );
+            xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ), rValue.getString() );
             break;
         default:
             OSL_ENSURE( sal_False, "invalid data type!" );
@@ -745,7 +722,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     switch ( nType )
     {
         case DataType::VARCHAR:
-            rValue = xResEntry->getValue( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( aDBColumnName ) );
+            rValue = xResEntry->getValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ) );
             break;
 
         default:
@@ -828,8 +805,7 @@ MQuery::FreeNameMapper( MNameMapper* _ptr )
     delete _ptr;
 }
 // -------------------------------------------------------------------------
-sal_Bool MQuery::
-isWritable(OConnection* _pCon)
+sal_Bool MQuery::isWritable(OConnection* _pCon)
 {
     if ( !m_aQueryDirectory )
         return sal_False;

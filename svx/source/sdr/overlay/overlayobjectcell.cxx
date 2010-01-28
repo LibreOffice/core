@@ -35,6 +35,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/hatch.hxx>
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 
 using namespace ::basegfx;
 
@@ -48,83 +53,60 @@ namespace sdr
             mePaintType( eType ),
             maRectangles( rRects )
         {
+            // no AA for selection overlays
+            allowAntiAliase(false);
         }
 
         OverlayObjectCell::~OverlayObjectCell()
         {
         }
 
-        void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
         {
-            // set colors
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(getBaseColor());
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            const sal_uInt32 nCount(maRectangles.size());
 
-            if ( mePaintType == CELL_OVERLAY_INVERT )
+            if(nCount)
             {
-                rOutputDevice.Push();
-                rOutputDevice.SetRasterOp( ROP_XOR );
-                rOutputDevice.SetFillColor( COL_WHITE );
-            }
+                const basegfx::BColor aRGBColor(getBaseColor().getBColor());
+                aRetval.realloc(nCount);
 
-            for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
-            {
-                const basegfx::B2DRange& rRange(maRectangles[a]);
-                const Rectangle aRectangle(fround(rRange.getMinX()), fround(rRange.getMinY()), fround(rRange.getMaxX()), fround(rRange.getMaxY()));
-
-                switch(mePaintType)
+                // create primitives for all ranges
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    case CELL_OVERLAY_INVERT :
-                    {
-                        rOutputDevice.DrawRect( aRectangle );
+                    const basegfx::B2DRange& rRange(maRectangles[a]);
+                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
 
-                        // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
-                        // {
-                        //  ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
-                        // }
+                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(aPolygon),
+                            aRGBColor));
+                }
 
-                        break;
-                    }
-                    case CELL_OVERLAY_HATCH :
-                    {
-                        rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
-                        break;
-                    }
-                    case CELL_OVERLAY_TRANSPARENT :
-                    {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
-                        break;
-                    }
-                    case CELL_OVERLAY_LIGHT_TRANSPARENT :
-                    {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 80);
-                        break;
-                    }
+
+                if(mePaintType == CELL_OVERLAY_TRANSPARENT)
+                {
+                    // embed in 50% transparent paint
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
+                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                            aRetval,
+                            0.5));
+
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
+                }
+                else // CELL_OVERLAY_INVERT
+                {
+                    // embed in invert primitive
+                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
+                        new drawinglayer::primitive2d::InvertPrimitive2D(
+                            aRetval));
+
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
                 }
             }
 
-            if ( mePaintType == CELL_OVERLAY_INVERT )
-                rOutputDevice.Pop();
+            return aRetval;
         }
-
-        void OverlayObjectCell::createBaseRange(OutputDevice& /*rOutputDevice*/)
-        {
-            maBaseRange.reset();
-
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
-            {
-                maBaseRange.expand(maRectangles[a]);
-            }
-        }
-
-        void OverlayObjectCell::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
-            {
-                maRectangles[a].transform(rMatrix);
-            }
-        }
-
     } // end of namespace overlay
 } // end of namespace sdr
 

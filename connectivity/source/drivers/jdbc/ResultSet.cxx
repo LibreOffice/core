@@ -261,7 +261,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getLong" );
     static jmethodID mID(NULL);
     jlong (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallLongMethod;
-    return callMethodWithIntArg<jlong>(pCallMethod,"getLong","(I)L",mID,columnIndex);
+    return callMethodWithIntArg<jlong>(pCallMethod,"getLong","(I)J",mID,columnIndex);
 }
 // -------------------------------------------------------------------------
 

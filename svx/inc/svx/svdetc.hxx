@@ -344,8 +344,12 @@ SVX_DLLPUBLIC String GetResourceString(sal_uInt16 nResID);
 
 }
 
+/////////////////////////////////////////////////////////////////////
+// #i101872# isolated GetTextEditBackgroundColor for tooling
+class SdrObjEditView;
+
+SVX_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
 
 /////////////////////////////////////////////////////////////////////
 
 #endif //_SVDETC_HXX
-

@@ -350,6 +350,15 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
                                                                                                                                                                    css::lang::IllegalArgumentException ,
                                                                                                                                                                    css::uno::RuntimeException          )
 {
+    {
+        // If the frame is closed the call might lead to crash even with target "_blank",
+        // so the DisposedException should be thrown in this case
+        // It still looks to be too dangerous to set the transaction for the whole loading process
+        // so the guard is used in scopes to let the standard check be used
+
+        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    }
+
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;

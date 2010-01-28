@@ -8777,3 +8777,29 @@ SfxBoolItem DockingWindow9 SID_DOCKWIN_9
     ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
 ]
+
+//--------------------------------------------------------------------------
+SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Volatile,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+

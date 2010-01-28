@@ -232,7 +232,8 @@ namespace connectivity
         // compares the _sFunctionName with all known function names and return the DataType of the return value
         static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext = NULL);
 
-
+        // returns the type for a parameter in a given function name
+        static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
 
         void error(sal_Char *fmt);
         int SQLlex();

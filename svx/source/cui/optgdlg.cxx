@@ -136,7 +136,6 @@ int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
     return LEAVE_PAGE;
 }
 
-#   ifdef ENABLE_GTK
 namespace
 {
         ::rtl::OUString impl_SystemFileOpenServiceName()
@@ -146,13 +145,33 @@ namespace
 
             if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
             {
+                #ifdef ENABLE_GTK
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
+            }
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
+            {
+                #ifdef ENABLE_KDE4
+                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDE4FilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             {
+                #ifdef ENABLE_KDE
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDEFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
+            #if defined WNT || (defined MACOSX && defined QUARTZ)
             return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+            #else
+            return rtl::OUString();
+            #endif
         }
 
         sal_Bool lcl_HasSystemFilePicker()
@@ -179,8 +198,6 @@ namespace
             return bRet;
         }
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -210,20 +227,11 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
-    //system fileopen only available in Windows and with gtk vclplug based
-    //picker and on MacOSX (aqua version)
-#if !defined( WNT ) && !defined( ENABLE_GTK ) && !(defined(MACOSX) && defined(QUARTZ))
-    aFileDlgFL.Hide();
-    aFileDlgCB.Hide();
-#else
-#   ifdef ENABLE_GTK
     if (!lcl_HasSystemFilePicker())
     {
         aFileDlgFL.Hide();
         aFileDlgCB.Hide();
     }
-#   endif
-#endif
 
     #if ! defined(QUARTZ)
     aPrintDlgFL.Hide();

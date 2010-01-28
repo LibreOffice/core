@@ -220,6 +220,26 @@ OUString MatchFixBrokenPath(const OUString& path)
     return path;
 }
 
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+static ::rtl::OUString trimTrailingSpaces(const ::rtl::OUString& rString)
+{
+    rtl::OUString aResult(rString);
+
+    sal_Int32 nIndex = rString.lastIndexOf(' ');
+    if (nIndex == rString.getLength()-1)
+    {
+        while (nIndex >= 0 && rString[nIndex] == ' ')
+            nIndex--;
+        if (nIndex >= 0)
+            aResult = rString.copy(0,nIndex+1);
+        else
+            aResult = ::rtl::OUString();
+    }
+    return aResult;
+}
+
 Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
 {
     OSL_PRECOND( aFileOpenDialog, "invalid parameter" );
@@ -258,8 +278,9 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
 
         for ( sal_Int32 i = 0; i < lenFileList; i++ )
         {
+            aFilePath = trimTrailingSpaces(aFilePathList[i]);
             rc = ::osl::FileBase::getFileURLFromSystemPath(
-                aFilePathList[i], aFilePathURL );
+                aFilePath, aFilePathURL );
 
             // we do return all or nothing, that means
             // in case of failures we destroy the sequence

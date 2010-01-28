@@ -62,59 +62,86 @@ namespace sdr
 
             if(pSdrText)
             {
-                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
+                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute =
+                    drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                        rItemSet,
+                        *pSdrText);
 
                 if(pAttribute)
                 {
                     if(pAttribute->isVisible())
                     {
-                        // prepare object transformation and unit polygon (direct model data)
-                        ::basegfx::B2DHomMatrix aObjectMatrix;
-                        ::basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
-                        const bool bIsLine(
-                            !aUnitPolyPolygon.areControlPointsUsed()
-                            && 1L == aUnitPolyPolygon.count()
-                            && 2L == aUnitPolyPolygon.getB2DPolygon(0L).count());
+                        basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
+                        const sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
 
-                        if(bIsLine)
+                        if(nPolyCount)
                         {
-                            // special handling for single line mode (2 points)
-                            const ::basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0L));
-                            const ::basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0L));
-                            const ::basegfx::B2DPoint aEnd(aSubPolygon.getB2DPoint(1L));
-                            const ::basegfx::B2DVector aLine(aEnd - aStart);
+                            // prepare object transformation and unit polygon (direct model data)
+                            basegfx::B2DHomMatrix aObjectMatrix;
+                            const bool bIsLine(
+                                !aUnitPolyPolygon.areControlPointsUsed()
+                                && 1 == nPolyCount
+                                && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
-                            // create new polygon
-                            ::basegfx::B2DPolygon aNewPolygon;
-                            aNewPolygon.append(::basegfx::B2DPoint(0.0, 0.0));
-                            aNewPolygon.append(::basegfx::B2DPoint(aLine.getLength(), 0.0));
-                            aUnitPolyPolygon.setB2DPolygon(0L, aNewPolygon);
+                            if(bIsLine)
+                            {
+                                // special handling for single line mode (2 points)
+                                const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
+                                const basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0));
+                                const basegfx::B2DPoint aEnd(aSubPolygon.getB2DPoint(1));
+                                const basegfx::B2DVector aLine(aEnd - aStart);
 
-                            // fill objectMatrix with rotation and offset (no shear for lines, scale in polygon)
-                            aObjectMatrix.rotate(atan2(aLine.getY(), aLine.getX()));
-                            aObjectMatrix.translate(aStart.getX(), aStart.getY());
+                                // #i102548# create new unit polygon for line (horizontal)
+                                basegfx::B2DPolygon aNewPolygon;
+                                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+                                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
+                                aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
+
+                                // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
+                                aObjectMatrix.scale(aLine.getLength(), 1.0);
+                                aObjectMatrix.rotate(atan2(aLine.getY(), aLine.getX()));
+                                aObjectMatrix.translate(aStart.getX(), aStart.getY());
+                            }
+                            else
+                            {
+                                // #i102548# create unscaled, unsheared, unrotated and untranslated polygon
+                                // (unit polygon) by creating the object matrix and back-transforming the polygon
+                                const basegfx::B2DRange aObjectRange(basegfx::tools::getRange(aUnitPolyPolygon));
+                                const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
+                                const double fWidth(aObjectRange.getWidth());
+                                const double fHeight(aObjectRange.getHeight());
+
+                                aObjectMatrix.scale(
+                                    basegfx::fTools::equalZero(fWidth) ? 1.0 : fWidth,
+                                    basegfx::fTools::equalZero(fHeight) ? 1.0 : fHeight);
+
+                                if(rGeoStat.nShearWink)
+                                {
+                                    aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
+                                }
+
+                                if(rGeoStat.nDrehWink)
+                                {
+                                    aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                                }
+
+                                aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+
+                                // ceate unit polygon from object's absolute path
+                                basegfx::B2DHomMatrix aInverse(aObjectMatrix);
+                                aInverse.invert();
+                                aUnitPolyPolygon.transform(aInverse);
+                            }
+
+                            // create primitive
+                            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                                new drawinglayer::primitive2d::SdrPathPrimitive2D(
+                                    aObjectMatrix,
+                                    *pAttribute,
+                                    aUnitPolyPolygon));
+
+                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                         }
-                        else
-                        {
-                            // create scaled, but unsheared, unrotated and untranslated polygon
-                            // by creating the object matrix and back-transforming the polygon
-                            const ::basegfx::B2DRange aObjectRange(::basegfx::tools::getRange(aUnitPolyPolygon));
-                            const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
-
-                            aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                            aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                            aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
-
-                            // ceate scaled unit polygon from object's absolute path
-                            ::basegfx::B2DHomMatrix aInverse(aObjectMatrix);
-                            aInverse.invert();
-                            aUnitPolyPolygon.transform(aInverse);
-                        }
-
-                        // create primitive
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(
-                            new drawinglayer::primitive2d::SdrPathPrimitive2D(aObjectMatrix, *pAttribute, aUnitPolyPolygon));
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }
 
                     delete pAttribute;

@@ -51,6 +51,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 
 using namespace sdr;
 
@@ -844,6 +845,9 @@ void SdrDragView::ShowDragObj()
             if(pOverlayManager)
             {
                 mpCurrentSdrDragMethod->CreateOverlayGeometry(*pOverlayManager);
+
+                // #i101679# Force changed overlay to be shown
+                pOverlayManager->flush();
             }
         }
 

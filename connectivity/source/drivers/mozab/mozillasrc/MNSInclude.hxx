@@ -34,6 +34,9 @@
 // Only include Mozilla include files once and using this file...
 //
 
+// moved this here and in first position due to "long l;" unxsoli4 warning
+#include <rtl/ustrbuf.hxx>
+
 #include "pre_include_mozilla.h"
 #if defined __GNUC__
     #pragma GCC system_header
@@ -44,6 +47,7 @@
 #include <nsCOMPtr.h>
 #include <nsISupportsArray.h>
 #include <nsString.h>
+
 #if defined __SUNPRO_CC
 #pragma disable_warn
     // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
@@ -70,6 +74,8 @@
 #include <nsIAbDirectoryQueryProxy.h>
 #include <nsIAbDirFactory.h>
 #include <nsIRunnable.h>
+#include <nsIAbLDAPAttributeMap.h>
+#include <nsILDAPMessage.h>
 
 #include <prerr.h>
 

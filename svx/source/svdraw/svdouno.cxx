@@ -297,11 +297,6 @@ namespace
     };
 }
 
-SdrObject* SdrUnoObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit(rPnt, nTol, pVisiLayer, TRUE, TRUE);
-}
-
 void SdrUnoObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulUno);

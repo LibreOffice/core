@@ -494,7 +494,7 @@ shell::associate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException();
+        throw beans::PropertyExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -507,7 +507,7 @@ shell::associate( const rtl::OUString& aUnqPath,
         PropertySet& properties = *(it->second.properties);
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException();
+            throw beans::PropertyExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         // Property does not exist
         properties.insert( newProperty );
@@ -530,7 +530,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException();
+        throw beans::NotRemoveableException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -542,7 +542,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     properties.erase( it1 );
 
@@ -838,7 +838,7 @@ shell::setv( const rtl::OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException();
+            ret[i] <<= beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -848,7 +848,7 @@ shell::setv( const rtl::OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException();
+            ret[i] <<= lang::IllegalAccessException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -919,7 +919,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException();
+                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -1027,7 +1027,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException();
+                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             }
         }
     }   // end for

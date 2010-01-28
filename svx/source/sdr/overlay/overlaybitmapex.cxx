@@ -33,9 +33,8 @@
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
-
-// #i77674#
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,39 +42,16 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayBitmapEx::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
-            // #i77674# calculate discrete top-left
-            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
-            aDiscreteTopLeft -= basegfx::B2DPoint((double)mnCenterX, (double)mnCenterY);
+            const drawinglayer::primitive2d::Primitive2DReference aReference(
+                new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                    getBitmapEx(),
+                    getBasePosition(),
+                    getCenterX(),
+                    getCenterY()));
 
-            // remember MapMode and switch to pixels
-            const bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
-            rOutputDevice.EnableMapMode(false);
-
-            // draw the bitmap
-            const Point aPixelTopLeft((sal_Int32)floor(aDiscreteTopLeft.getX()), (sal_Int32)floor(aDiscreteTopLeft.getY()));
-            rOutputDevice.DrawBitmapEx(aPixelTopLeft, maBitmapEx);
-
-            // restore MapMode
-            rOutputDevice.EnableMapMode(bMapModeWasEnabled);
-        }
-
-        void OverlayBitmapEx::createBaseRange(OutputDevice& rOutputDevice)
-        {
-            // #i77674# calculate discrete top-left
-            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
-            aDiscreteTopLeft -= basegfx::B2DPoint((double)mnCenterX, (double)mnCenterY);
-
-            // calculate discrete range
-            const Size aBitmapPixelSize(maBitmapEx.GetSizePixel());
-            const basegfx::B2DRange aDiscreteRange(
-                aDiscreteTopLeft.getX(), aDiscreteTopLeft.getY(),
-                aDiscreteTopLeft.getX() + (double)aBitmapPixelSize.getWidth(), aDiscreteTopLeft.getY() + (double)aBitmapPixelSize.getHeight());
-
-            // set and go back to logic range
-            maBaseRange = aDiscreteRange;
-            maBaseRange.transform(rOutputDevice.GetInverseViewTransformation());
+            return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
 
         OverlayBitmapEx::OverlayBitmapEx(
@@ -123,12 +99,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        void OverlayBitmapEx::zoomHasChanged()
-        {
-            // reset validity of range in logical coor to force recalculation
-            mbIsChanged = sal_True;
         }
     } // end of namespace overlay
 } // end of namespace sdr

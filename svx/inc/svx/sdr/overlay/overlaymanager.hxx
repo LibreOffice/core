@@ -38,7 +38,6 @@
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
 #include <svtools/optionsdrawinglayer.hxx>
-#include <boost/shared_ptr.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
@@ -68,13 +67,8 @@ namespace sdr
             // the OutputDevice to work on, set on construction and not to be changed
             OutputDevice&                               rmOutputDevice;
 
-            // start, end and number of the double linked list of OverlayObjects
-            // managed by this manager
-            OverlayObject*                              mpOverlayObjectStart;
-            OverlayObject*                              mpOverlayObjectEnd;
-
-            // MapMode for MapMode change watching
-            MapMode                                     maMapMode;
+            // the vector of registered OverlayObjects
+            OverlayObjectVector                         maOverlayObjects;
 
             // Stripe support. All striped OverlayObjects use these stripe
             // values. Changes change all those objects.
@@ -88,23 +82,33 @@ namespace sdr
             // hold buffered the logic length of discrete vector (1.0, 0.0) and the
             // view transformation belonging to it. Update happens in getDiscreteOne()
             basegfx::B2DHomMatrix                       maViewTransformation;
+            drawinglayer::geometry::ViewInformation2D   maViewInformation2D;
             double                                      mfDiscreteOne;
 
             // internal
             void ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const;
-            void ImpCheckMapModeChange() const;
             void ImpStripeDefinitionChanged();
+            void impApplyRemoveActions(OverlayObject& rTarget);
+            void impApplyAddActions(OverlayObject& rTarget);
 
             // return mfDiscreteOne to derivations, but also check for buffered local
             // ViewTransformation and evtl. correct mfDiscreteOne
             double getDiscreteOne() const;
 
         public:
-            OverlayManager(OutputDevice& rOutputDevice);
+            // when handing over another OverlayManager at construction, the OverlayObjects
+            // will be taken over from it. The new one will have added all OverlayObjects
+            // while the handed over one will have none
+            OverlayManager(
+                OutputDevice& rOutputDevice,
+                OverlayManager* pOldOverlayManager = 0);
             virtual ~OverlayManager();
 
+            // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D
+            const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;
+
             // complete redraw
-            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const;
+            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0) const;
 
             // flush. Do buffered updates.
             virtual void flush();
@@ -139,17 +143,6 @@ namespace sdr
 
             // access to maDrawinglayerOpt
             const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
-
-            /** Return a list of all OverlayObjects that currently belong to
-                the called OverlayManager.  Subsequent calls to add() or
-                remove() will not alter the content of the returned list.
-                Modifying the list will not change the list of
-                OverlayObjects that belong to the called OverlayManager.
-                @return
-                    The returned pointer is never empty but the pointed-to
-                    vector may be.
-            */
-            ::boost::shared_ptr<OverlayObjectVector> GetOverlayObjects (void) const;
         };
     } // end of namespace overlay
 } // end of namespace sdr
