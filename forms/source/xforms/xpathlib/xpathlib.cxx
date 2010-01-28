@@ -293,7 +293,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     */
     DateTime aDateTime;
     ::rtl::OString aDateTimeString = makeDateTimeString(aDateTime);
-    xmlChar *pString = (xmlChar*)rtl_allocateMemory(aDateTimeString.getLength()+1);
+    xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
     strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;
     xmlXPathReturnString(ctxt, pString);

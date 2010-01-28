@@ -40,6 +40,7 @@
 #include <Inflater.hxx>
 #endif
 
+#include <mutexholder.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -64,7 +65,6 @@ class EncryptionData;
 class ZipFile
 {
 protected:
-    ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
@@ -90,6 +90,7 @@ protected:
 
     // aMediaType parameter is used only for raw stream header creation
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
+            SotMutexHolderRef aMutexHolder,
             ZipEntry & rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Int8 nStreamMode,
@@ -128,7 +129,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bDecrypt)
+            sal_Bool bDecrypt,
+            SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     static sal_Bool StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode );
@@ -157,13 +159,15 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bDecrypt )
+            sal_Bool bDecrypt,
+            SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bDecrypt )
+            sal_Bool bDecrypt,
+            SotMutexHolderRef aMutexHolder )
         throw ( ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::packages::zip::ZipException,
@@ -172,7 +176,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
-            const ::rtl::OUString& aMediaType )
+            const ::rtl::OUString& aMediaType,
+            SotMutexHolderRef aMutexHolder )
         throw ( ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::packages::zip::ZipException,

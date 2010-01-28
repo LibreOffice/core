@@ -46,10 +46,3 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 
 ..\inc\setup_native\qswin32.h %_DEST%\inc%_EXT%\setup_native\qswin32.h
 
-mkdir: %_DEST%\xml%_EXT%\registry\spool
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
-
-..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs

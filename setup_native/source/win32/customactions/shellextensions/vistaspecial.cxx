@@ -194,6 +194,18 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 //    MessageBox(NULL, sRenameSrc.c_str(), "OFFICEINSTALLLOCATION", MB_OK);
 
     bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
+    if ( !bSuccess )
+    {
+        TCHAR sAppend[2] = TEXT("0");
+        for ( int i = 0; i < 10; i++ )
+        {
+            sRenameDst = sOfficeInstallPath + TEXT("program_old") + sAppend;
+            bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
+            if ( bSuccess )
+                break;
+            sAppend[0] += 1;
+        }
+    }
 
 #if 0
     if ( !bSuccess )
@@ -213,6 +225,14 @@ extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 //    MessageBox(NULL, sRemoveDir.c_str(), "REMOVING OLD DIR", MB_OK);
 
     bool bSuccess = RemoveCompleteDirectory( sRemoveDir );
+
+    TCHAR sAppend[2] = TEXT("0");
+    for ( int i = 0; i < 10; i++ )
+    {
+        sRemoveDir = sOfficeInstallPath + TEXT("program_old") + sAppend;
+        bSuccess = RemoveCompleteDirectory( sRemoveDir );
+        sAppend[0] += 1;
+    }
 
 #if 0
     if ( bSuccess )

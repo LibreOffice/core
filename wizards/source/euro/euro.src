@@ -429,10 +429,25 @@ Text [ en-US ] = "Slovenian Tolar";
 
 String CURRENCIES + 13
 {
-Text [ en-US ] = "The currency set for the document is not a European currency!";
+Text [ en-US ] = "Cypriot Pound";
 };
 
 String CURRENCIES + 14
+{
+Text [ en-US ] = "Maltese Lira";
+};
+
+String CURRENCIES + 15
+{
+Text [ en-US ] = "Slovak Koruna";
+};
+
+String CURRENCIES + 16
+{
+Text [ en-US ] = "The currency set for the document is not a European currency!";
+};
+
+String CURRENCIES + 17
 {
 Text [ en-US ] = "The language set for your operating system is not a language of the European Monetary Union.";
 };

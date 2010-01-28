@@ -41,6 +41,7 @@
 #define _SOLAR__PRIVATE 1
 
 #include <basidesh.hxx>
+#include <baside2.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
 #include <localizationmgr.hxx>
@@ -170,9 +171,10 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 // Nur wenn Dialogfenster oben:
 void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
-        return;
-
-    pCurWin->ExecuteCommand( rReq );
+    if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
+        (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )
+    {
+        pCurWin->ExecuteCommand( rReq );
+    }
 }
 

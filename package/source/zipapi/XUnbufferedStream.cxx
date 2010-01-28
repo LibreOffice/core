@@ -41,6 +41,8 @@
 #include <algorithm>
 #include <string.h>
 
+#include <osl/mutex.hxx>
+
 #if 0
 // for debugging purposes here
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -55,14 +57,16 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
-XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
+XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
+                          ZipEntry & rEntry,
                            Reference < XInputStream > xNewZipStream,
                            const vos::ORef < EncryptionData > &rData,
                            sal_Int8 nStreamMode,
                            sal_Bool bIsEncrypted,
                           const ::rtl::OUString& aMediaType,
                           sal_Bool bRecoveryMode )
-: mxZipStream ( xNewZipStream )
+: maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
+, mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
 , mxData ( rData )
@@ -115,7 +119,8 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
                     const vos::ORef < EncryptionData > &rData )
-: mxZipStream ( xRawStream )
+: maMutexHolder( new SotMutexHolder )
+, mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mxData ( rData )
 , maCipher ( NULL )
@@ -159,6 +164,8 @@ XUnbufferedStream::~XUnbufferedStream()
 sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( maMutexHolder->GetMutex() );
+
     sal_Int32 nRequestedBytes = nBytesToRead;
     OSL_ENSURE( !mnHeaderToRead || mbWrappedRaw, "Only encrypted raw stream can be provided with header!" );
     if ( mnMyCurrent + nRequestedBytes > mnZipSize + maHeader.getLength() )

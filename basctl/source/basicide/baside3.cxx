@@ -46,6 +46,7 @@
 #include <ide_pch.hxx>
 
 
+#include <vector>
 #include <basidesh.hrc>
 #include <baside3.hxx>
 #include <localizationmgr.hxx>
@@ -63,6 +64,7 @@
 #include <helpid.hrc>
 #include <bastype2.hxx>
 #include <svx/svdview.hxx>
+#include <svx/unolingu.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -73,6 +75,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
 #include <svtools/ehdl.hxx>
+#include <svtools/langtab.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -638,6 +641,10 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_EXPORT_DIALOG:
             SaveDialog();
             break;
+
+        case SID_IMPORT_DIALOG:
+            ImportDialog();
+            break;
     }
 
     rReq.Done();
@@ -859,6 +866,405 @@ BOOL DialogWindow::SaveDialog()
     return bDone;
 }
 
+extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
+                             const ::com::sun::star::lang::Locale& rLocaleRight );
+
+std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
+    ( Sequence< lang::Locale > aFirstSeq, Sequence< lang::Locale > aSecondSeq )
+{
+    std::vector< lang::Locale > avRet;
+
+    const lang::Locale* pFirst = aFirstSeq.getConstArray();
+    const lang::Locale* pSecond = aSecondSeq.getConstArray();
+    sal_Int32 nFirstCount = aFirstSeq.getLength();
+    sal_Int32 nSecondCount = aSecondSeq.getLength();
+
+    for( sal_Int32 iFirst = 0 ; iFirst < nFirstCount ; iFirst++ )
+    {
+        const lang::Locale& rFirstLocale = pFirst[ iFirst ];
+
+        bool bAlsoContainedInSecondSeq = false;
+        for( sal_Int32 iSecond = 0 ; iSecond < nSecondCount ; iSecond++ )
+        {
+            const lang::Locale& rSecondLocale = pSecond[ iSecond ];
+
+            bool bMatch = localesAreEqual( rFirstLocale, rSecondLocale );
+            if( bMatch )
+            {
+                bAlsoContainedInSecondSeq = true;
+                break;
+            }
+        }
+
+        if( !bAlsoContainedInSecondSeq )
+            avRet.push_back( rFirstLocale );
+    }
+    
+    return avRet;
+}
+
+
+class NameClashQueryBox : public MessBox
+{
+public:
+    NameClashQueryBox( Window* pParent,
+        const XubString& rTitle, const XubString& rMessage );
+};
+
+NameClashQueryBox::NameClashQueryBox( Window* pParent,
+    const XubString& rTitle, const XubString& rMessage )
+        : MessBox( pParent, 0, rTitle, rMessage )
+{
+    if ( rTitle.Len() )
+        SetText( rTitle );
+
+    maMessText = rMessage;
+
+    AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_RENAME ) ), RET_YES,
+        BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+    AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
+    AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+
+    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+}
+
+
+class LanguageMismatchQueryBox : public MessBox
+{
+public:
+    LanguageMismatchQueryBox( Window* pParent,
+        const XubString& rTitle, const XubString& rMessage );
+};
+
+LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
+    const XubString& rTitle, const XubString& rMessage )
+        : MessBox( pParent, 0, rTitle, rMessage )
+{
+    if ( rTitle.Len() )
+        SetText( rTitle );
+
+    maMessText = rMessage;
+    AddButton( String( IDEResId( RID_STR_DLGIMP_MISMATCH_ADD ) ), RET_YES,
+        BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+    AddButton( String( IDEResId( RID_STR_DLGIMP_MISMATCH_OMIT ) ), RET_NO, 0 );
+    AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+    AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
+
+    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+}
+
+BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
+{
+    BOOL bDone = FALSE;
+
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
+    {
+        Sequence <Any> aServiceType(1);
+        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+    }
+
+    Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    Any aValue;
+    aValue <<= (sal_Bool) sal_True;
+    xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
+
+    String aCurPath( rCurPath );
+    if ( aCurPath.Len() )
+        xFP->setDisplayDirectory ( aCurPath );
+
+    String aDialogStr( IDEResId( RID_STR_STDDIALOGNAME ) );
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( aDialogStr );
+
+    if( xFP->execute() == RET_OK )
+    {
+        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        aCurPath = aPaths[0];
+
+        ::rtl::OUString aBasePath;
+        ::rtl::OUString aOUCurPath( aCurPath );
+        sal_Int32 iSlash = aOUCurPath.lastIndexOf( '/' );
+        if( iSlash != -1 )
+            aBasePath = aOUCurPath.copy( 0, iSlash + 1 );
+
+        try
+        {
+            // create dialog model
+            Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
+
+            Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+         
+            Reference< XInputStream > xInput;
+            if( xSFI->exists( aCurPath ) )
+                xInput = xSFI->openFileRead( aCurPath ); 
+
+            Reference< XComponentContext > xContext;
+            Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+            OSL_ASSERT( xProps.is() );
+            OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+
+            String aXmlDlgName;
+            Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
+            if( xDialogModelPropSet.is() )
+            {
+                try
+                {
+                    Any aXmlDialogNameAny = xDialogModelPropSet->getPropertyValue( DLGED_PROP_NAME );
+                    ::rtl::OUString aOUXmlDialogName;
+                    aXmlDialogNameAny >>= aOUXmlDialogName;
+                    aXmlDlgName = aOUXmlDialogName;
+                }
+                catch( beans::UnknownPropertyException& )
+                {}
+            }
+            bool bValidName = (aXmlDlgName.Len() != 0);
+            OSL_ASSERT( bValidName );
+            if( !bValidName )
+                return bDone;
+
+            bool bDialogAlreadyExists = rDocument.hasDialog( aLibName, aXmlDlgName );
+
+            String aNewDlgName = aXmlDlgName;
+            enum NameClashMode
+            {
+                NO_CLASH,
+                CLASH_OVERWRITE_DIALOG,
+                CLASH_RENAME_DIALOG,
+            };
+            NameClashMode eNameClashMode = NO_CLASH;
+            if( bDialogAlreadyExists )
+            {
+                String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
+                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName ); 
+
+                NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
+                USHORT nRet = aQueryBox.Execute();
+                if( RET_YES == nRet )
+                {
+                    // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
+                    eNameClashMode = CLASH_RENAME_DIALOG;
+
+                    aNewDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
+                }
+                else if( RET_NO == nRet )
+                {
+                    // RET_NO == Replace, see NameClashQueryBox::NameClashQueryBox
+                    eNameClashMode = CLASH_OVERWRITE_DIALOG;
+                }
+                else if( RET_CANCEL == nRet )
+                {
+                    return bDone;
+                }
+            }
+     
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            if( pIDEShell == NULL )
+            {
+                OSL_ASSERT( pIDEShell != NULL );
+                return bDone;
+            }
+
+            // Resource?
+            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+            Reference< task::XInteractionHandler > xDummyHandler;
+            bool bReadOnly = true;
+            Reference< XStringResourceWithLocation > xImportStringResource =
+                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly, 
+                aLocale, aXmlDlgName, ::rtl::OUString(), xDummyHandler );
+
+            Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
+            sal_Int32 nImportLocaleCount = aImportLocaleSeq.getLength();
+
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
+            Reference< resource::XStringResourceManager > xLibStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+            sal_Int32 nLibLocaleCount = 0;
+            Sequence< lang::Locale > aLibLocaleSeq;
+            if( xLibStringResourceManager.is() )
+            {
+                aLibLocaleSeq = xLibStringResourceManager->getLocales();
+                nLibLocaleCount = aLibLocaleSeq.getLength();
+            }
+
+            // Check language matches
+            std::vector< lang::Locale > aOnlyInImportLanguages =
+                implGetLanguagesOnlyContainedInFirstSeq( aImportLocaleSeq, aLibLocaleSeq );
+            int nOnlyInImportLanguageCount = aOnlyInImportLanguages.size();
+
+            // For now: Keep languages from lib
+            bool bLibLocalized = (nLibLocaleCount > 0);
+            bool bImportLocalized = (nImportLocaleCount > 0);
+
+            bool bAddDialogLanguagesToLib = false;
+            if( nOnlyInImportLanguageCount > 0 )
+            {
+                String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_MISMATCH_TITLE ) );
+                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_MISMATCH_TEXT ) );
+                LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
+                USHORT nRet = aQueryBox.Execute();
+                if( RET_YES == nRet )
+                {
+                    // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
+                    bAddDialogLanguagesToLib = true;
+                }
+                // RET_NO == Omit, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
+                // -> nothing to do here
+                //else if( RET_NO == nRet )
+                //{
+                //}
+                else if( RET_CANCEL == nRet )
+                {
+                    return bDone;
+                }
+            }
+
+            if( bImportLocalized )
+            {
+                bool bCopyResourcesForDialog = true;
+                if( bAddDialogLanguagesToLib )
+                {
+                    LocalizationMgr* pCurMgr = pIDEShell->GetCurLocalizationMgr();
+
+                    lang::Locale aFirstLocale;
+                    aFirstLocale = aOnlyInImportLanguages[0];
+                    if( nOnlyInImportLanguageCount > 1 )
+                    {
+                        // Check if import default belongs to only import languages and use it then
+                        lang::Locale aImportDefaultLocale = xImportStringResource->getDefaultLocale();
+                        lang::Locale aTmpLocale;
+                        for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
+                        {
+                            aTmpLocale = aOnlyInImportLanguages[i];
+                            if( localesAreEqual( aImportDefaultLocale, aTmpLocale ) )
+                            {
+                                aFirstLocale = aImportDefaultLocale;
+                                break;
+                            }
+                        }
+                    }
+
+                    Sequence< lang::Locale > aFirstLocaleSeq( 1 );
+                    aFirstLocaleSeq[0] = aFirstLocale;
+                    pCurMgr->handleAddLocales( aFirstLocaleSeq );
+
+                    if( nOnlyInImportLanguageCount > 1 )
+                    {
+                        Sequence< lang::Locale > aRemainingLocaleSeq( nOnlyInImportLanguageCount - 1 );
+                        lang::Locale aTmpLocale;
+                        int iSeq = 0;
+                        for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
+                        {
+                            aTmpLocale = aOnlyInImportLanguages[i];
+                            if( !localesAreEqual( aFirstLocale, aTmpLocale ) )
+                                aRemainingLocaleSeq[iSeq++] = aTmpLocale;
+                        }
+                        pCurMgr->handleAddLocales( aRemainingLocaleSeq );
+                    }
+                }
+                else if( !bLibLocalized )
+                {
+                    Reference< resource::XStringResourceManager > xImportStringResourceManager( xImportStringResource, UNO_QUERY );
+                    LocalizationMgr::resetResourceForDialog( xDialogModel, xImportStringResourceManager );
+                    bCopyResourcesForDialog = false;
+                }
+
+                if( bCopyResourcesForDialog )
+                {
+                    Reference< resource::XStringResourceResolver > xImportStringResourceResolver( xImportStringResource, UNO_QUERY );
+                    LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, aXmlDlgName,
+                        xLibStringResourceManager, xImportStringResourceResolver );
+                }
+            }
+            else if( bLibLocalized )
+            {
+                LocalizationMgr::setResourceIDsForDialog( xDialogModel, xLibStringResourceManager );
+            }
+
+
+            LocalizationMgr::setStringResourceAtDialog( rDocument, aLibName, aNewDlgName, xDialogModel );
+
+            if( eNameClashMode == CLASH_OVERWRITE_DIALOG )
+            {
+                if ( BasicIDE::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
+                {
+                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, FALSE, TRUE );
+                    if( pDlgWin != NULL )
+                        pIDEShell->RemoveWindow( pDlgWin, TRUE );
+                    BasicIDE::MarkDocumentModified( rDocument );
+                }
+                else
+                {
+                    // TODO: Assertion?
+                    return bDone;
+                }
+            }
+
+            if( eNameClashMode == CLASH_RENAME_DIALOG )
+            {
+                bool bRenamed = false;
+                if( xDialogModelPropSet.is() )
+                {
+                    try
+                    {
+                        Any aXmlDialogNameAny;
+                        aXmlDialogNameAny <<= ::rtl::OUString( aNewDlgName );
+                        xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
+                        bRenamed = true;
+                    }
+                    catch( beans::UnknownPropertyException& )
+                    {}
+                }
+
+
+                if( bRenamed )
+                {
+                    LocalizationMgr::renameStringResourceIDs( rDocument, aLibName, aNewDlgName, xDialogModel );
+                }
+                else
+                {
+                    // TODO: Assertion?
+                    return bDone;
+                }
+            }
+
+            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+            bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
+            if( bSuccess )
+            {
+                DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
+                pIDEShell->SetCurWindow( pNewDlgWin, TRUE );
+            }
+
+            bDone = TRUE;
+        }
+        catch( Exception& )
+        {} 
+    }
+
+    return bDone;
+}
+
+BOOL DialogWindow::ImportDialog()
+{
+    DBG_CHKTHIS( DialogWindow, 0 );
+
+    const ScriptDocument& rDocument = GetDocument();
+    String aLibName = GetLibName();
+    BOOL bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
+    return bRet;
+}
 
 DlgEdModel* DialogWindow::GetModel() const
 {

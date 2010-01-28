@@ -61,6 +61,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sManifestElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
     const OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
     const OUString sAlgorithmElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
+    const OUString sStartKeyGenerationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) );
     const OUString sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
 
     const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
@@ -68,10 +69,12 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sVersionAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
     const OUString sFullPathAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
     const OUString sSizeAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
+    const OUString sKeySizeAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
     const OUString sSaltAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
     const OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
     const OUString sIterationCountAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
     const OUString sAlgorithmNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
+    const OUString sStartKeyGenerationNameAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) );
     const OUString sKeyDerivationNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
     const OUString sChecksumTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
     const OUString sChecksumAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
@@ -89,6 +92,9 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
     const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
     const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
+    const OUString sStartKeySize        ( RTL_CONSTASCII_USTRINGPARAM ( START_KEY_SIZE ) );
+    const OUString sDerivedKeySize      ( RTL_CONSTASCII_USTRINGPARAM ( DERIVED_KEY_SIZE ) );
+    const OUString sSHA1                ( RTL_CONSTASCII_USTRINGPARAM ( ALGORITHM_SHA1 ) );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
     const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
@@ -96,15 +102,16 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
     // find the mediatype of the document if any
     OUString aDocMediaType;
+    OUString aDocVersion;
     for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
     {
         OUString aMediaType;
         OUString aPath;
+        OUString aVersion;
 
         const PropertyValue *pValue = pSequence[nInd].getConstArray();
         for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
         {
-
             if (pValue->Name.equals (sMediaTypeProperty) )
             {
                 pValue->Value >>= aMediaType;
@@ -113,20 +120,26 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             {
                 pValue->Value >>= aPath;
             }
+            else if (pValue->Name.equals (sVersionProperty) )
+            {
+                pValue->Value >>= aVersion;
+            }
 
-            if ( aPath.getLength() && aMediaType.getLength() )
+            if ( aPath.getLength() && aMediaType.getLength() && aVersion.getLength() )
                 break;
         }
 
         if ( aPath.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ) )
         {
             aDocMediaType = aMediaType;
+            aDocVersion = aVersion;
             break;
         }
     }
 
     sal_Bool bProvideDTD = sal_False;
     sal_Bool bAcceptNonemptyVersion = sal_False;
+    sal_Bool bStoreStartKeyGeneration = sal_False;
     if ( aDocMediaType.getLength() )
     {
         if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
@@ -152,6 +165,11 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                                         sCdataAttribute,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
             bAcceptNonemptyVersion = sal_True;
+            if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+            {
+                // this is ODF12 generation, let encrypted streams contain start-key-generation entry
+                bStoreStartKeyGeneration = sal_True;
+            }
         }
         else
         {
@@ -224,6 +242,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount )
         {
+            // ==== Encryption Data
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             Reference < XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
@@ -239,6 +258,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             }
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
 
+            // ==== Algorithm
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
@@ -253,10 +273,14 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
+            // ==== Key Derivation
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
             pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
+
+            if ( bStoreStartKeyGeneration )
+                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sDerivedKeySize );
 
             sal_Int32 nCount = 0;
             pIterationCount->Value >>= nCount;
@@ -271,6 +295,25 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             xHandler->startElement( sKeyDerivationElement , xNewAttrList);
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sKeyDerivationElement );
+
+            // we have to store start-key-generation element as the last one to workaround the parsing problem
+            // in OOo3.1 and older versions
+            if ( bStoreStartKeyGeneration )
+            {
+                // ==== Start Key Generation
+                pNewAttrList = new ::comphelper::AttributeList;
+                xNewAttrList = pNewAttrList;
+
+                // currently SHA1 is used to generate 20-bytes start key
+                pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sSHA1 );
+                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );
+
+                xHandler->ignorableWhitespace ( sWhiteSpace );
+                xHandler->startElement( sStartKeyGenerationElement , xNewAttrList);
+                xHandler->ignorableWhitespace ( sWhiteSpace );
+                xHandler->endElement( sStartKeyGenerationElement );
+            }
+
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sEncryptionDataElement );
         }

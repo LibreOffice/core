@@ -539,18 +539,21 @@ Model::XModel_t Model::newModel( const Reference<com::sun::star::frame::XModel>&
                                  const OUString& sName )
     throw( RuntimeException )
 {
-    Model* pModel = NULL;
+    Model::XModel_t xModel;
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
     if( xModels.is()
         && ! xModels->hasByName( sName ) )
     {
-        pModel = new Model();
+        Model* pModel = new Model();
+        xModel.set( pModel );
+
         pModel->setID( sName );
         pModel->newInstance( OUString(), OUString(), sal_False );
-        xModels->insertByName( sName, makeAny( Reference<XModel>( pModel ) ) );
+        pModel->initialize();
+        xModels->insertByName( sName, makeAny( xModel ) );
     }
 
-    return pModel;
+    return xModel;
 }
 
 void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,

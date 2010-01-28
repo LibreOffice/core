@@ -48,13 +48,19 @@
 #include <com/sun/star/security/CertificateValidity.hdl>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/packages/manifest/XManifestReader.hpp>
+
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/uri.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
 #include "dialogs.hrc"
+#include "digitalsignaturesdialog.hrc"
 #include "helpids.hrc"
 #include "resourcemanager.hxx"
 
@@ -62,18 +68,20 @@
 #include <unotools/configitem.hxx>
 #include <comphelper/componentcontext.hxx>
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
-using namespace ::com::sun::star::security;
-namespace css = ::com::sun::star;
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)    // 4355: this used in initializer-list
 #endif
 
+using namespace ::com::sun::star::security;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
+namespace css = ::com::sun::star;
 using ::rtl::OUString;
+
 namespace
 {
     class SaveODFItem: public utl::ConfigItem
@@ -109,49 +117,70 @@ namespace
                 OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion")), 0);
     }
-
 }
 
-sal_Bool HandleStreamAsXML_Impl( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
+/* Using the zip storage, we cannot get the properties "MediaType" and "IsEncrypted"
+    We use the manifest to find out if a file is xml and if it is encrypted.
+    The parameter is an encoded uri. However, the manifest contains paths. Therefore
+    the path is encoded as uri, so they can be compared.
+*/
+bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
 {
-    sal_Bool bResult = sal_False;
+    OSL_ASSERT(mxStore.is());
 
-    try
+    bool bIsXML = false;
+    bool bPropsAvailable = false;
+    const OUString sPropFullPath(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
+    const OUString sPropMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+    const OUString sPropDigest(RTL_CONSTASCII_USTRINGPARAM("Digest"));
+
+    for (int i = 0; i < m_manifest.getLength(); i++)
     {
-        sal_Int32 nSepPos = rURI.indexOf( '/' );
-        if ( nSepPos == -1 )
+        Any digest;
+        const Sequence< css::beans::PropertyValue >& entry = m_manifest[i];
+        OUString sPath, sMediaType;
+        bool bEncrypted = false;
+        for (int j = 0; j < entry.getLength(); j++)
         {
-            uno::Reference< io::XStream > xStream;
-            xStream = rxStore->cloneStreamElement( rURI );
-            if ( !xStream.is() )
-                throw uno::RuntimeException();
+            const css::beans::PropertyValue & prop = entry[j];
 
-            ::rtl::OUString aMediaType;
-            sal_Bool bEncrypted = sal_False;
-            uno::Reference< beans::XPropertySet > xProps( xStream, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= aMediaType;
-            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEncrypted" ) ) ) >>= bEncrypted;
-            bResult = ( aMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) && !bEncrypted );
+            if (prop.Name.equals( sPropFullPath ) )
+                prop.Value >>= sPath;
+            else if (prop.Name.equals( sPropMediaType ) )
+                prop.Value >>= sMediaType;
+            else if (prop.Name.equals( sPropDigest ) )
+                bEncrypted = true;
         }
-        else
+        if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))
         {
-            rtl::OUString aStoreName = rURI.copy( 0, nSepPos );
-            rtl::OUString aElement = rURI.copy( nSepPos+1 );
-            uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
-            bResult = HandleStreamAsXML_Impl( xSubStore, aElement );
+            bIsXML = sMediaType.equals(OUSTR("text/xml")) && ! bEncrypted;
+            bPropsAvailable = true;
+            break;
         }
     }
-    catch( uno::Exception& )
+    if (!bPropsAvailable)
     {
-    }
-
-    return bResult;
+        //This would be the case for at least mimetype, META-INF/manifest.xml
+        //META-INF/macrosignatures.xml.
+        //Files can only be encrypted if they are in the manifest.xml.
+        //That is, the current file cannot be encrypted, otherwise bPropsAvailable
+        //would be true.
+        OUString aXMLExt( RTL_CONSTASCII_USTRINGPARAM( "XML" ) );
+        sal_Int32 nSep = rURI.lastIndexOf( '.' );
+        if ( nSep != (-1) )
+        {
+            OUString aExt = rURI.copy( nSep+1 );
+            if (aExt.equalsIgnoreAsciiCase(aXMLExt ))
+                bIsXML = true;
+        }
+     }
+    return bIsXML;
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-    sal_Bool bReadOnly)
+    sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature)
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
     ,mxCtx              ( rxCtx )
     ,maSignatureHelper  ( rxCtx )
@@ -166,6 +195,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,maSigsInvalidFI    ( this, XMLSEC_RES( FI_STATE_BROKEN ) )
     ,maSigsNotvalidatedImg( this, XMLSEC_RES( IMG_STATE_NOTVALIDATED ) )
     ,maSigsNotvalidatedFI ( this, XMLSEC_RES( FI_STATE_NOTVALIDATED ) )
+    ,maSigsOldSignatureFI ( this, XMLSEC_RES( FI_STATE_OLDSIGNATURE) )
     ,maViewBtn          ( this, XMLSEC_RES( BTN_VIEWCERT ) )
     ,maAddBtn           ( this, XMLSEC_RES( BTN_ADDCERT ) )
     ,maRemoveBtn        ( this, XMLSEC_RES( BTN_REMOVECERT ) )
@@ -173,6 +203,9 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,maOKBtn            ( this, XMLSEC_RES( BTN_OK ) )
     ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
     ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
+    ,m_sODFVersion (sODFVersion)
+    ,m_bHasDocumentSignature(bHasDocumentSignature)
+    ,m_bWarningShowSignMacro(false)
 {
     // --> PB #i48253 the tablistbox needs its own unique id
     maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
@@ -209,6 +242,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     maRemoveBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
     maRemoveBtn.Disable();
 
+    maOKBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
+
     switch( meSignatureMode )
     {
         case SignatureModeDocumentContent:  maHintDocFT.Show();     break;
@@ -220,6 +255,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     XmlSec::AlignAndFitImageAndControl( maSigsValidImg, maSigsValidFI, 5 );
     XmlSec::AlignAndFitImageAndControl( maSigsInvalidImg, maSigsInvalidFI, 5 );
     XmlSec::AlignAndFitImageAndControl( maSigsNotvalidatedImg, maSigsNotvalidatedFI, 5 );
+    XmlSec::AlignAndFitImageAndControl( maSigsNotvalidatedImg, maSigsOldSignatureFI, 5 );
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
@@ -243,7 +279,21 @@ BOOL DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
 void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore )
 {
     mxStore = rxStore;
-    maSignatureHelper.SetStorage( mxStore );
+    maSignatureHelper.SetStorage( mxStore, m_sODFVersion);
+
+    Reference < css::packages::manifest::XManifestReader > xReader(
+        mxCtx->getServiceManager()->createInstanceWithContext(
+        OUSTR("com.sun.star.packages.manifest.ManifestReader"), mxCtx), UNO_QUERY_THROW);
+
+    //Get the manifest.xml
+    Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
+                OUSTR("META-INF"), css::embed::ElementModes::READ), UNO_QUERY_THROW);
+
+    Reference< css::io::XInputStream > xStream(
+        xSubStore->openStreamElement(OUSTR("manifest.xml"), css::embed::ElementModes::READ),
+        UNO_QUERY_THROW);
+
+    m_manifest = xReader->readManifestSequence(xStream);
 }
 
 void DigitalSignaturesDialog::SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream )
@@ -251,40 +301,70 @@ void DigitalSignaturesDialog::SetSignatureStream( const cssu::Reference < css::i
     mxSignatureStream = rxStream;
 }
 
-
-bool DigitalSignaturesDialog::canAdd()
+bool DigitalSignaturesDialog::canAddRemove()
 {
-    bool ret = false;
+    //m56
+    bool ret = true;
     OSL_ASSERT(mxStore.is());
-    bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(mxStore);
+    bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
     SaveODFItem item;
     bool bSave1_1 = item.isLessODF1_2();
 
     // see specification
     //cvs: specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //Paragraph 'Behavior with regard to ODF 1.2'
+    //For both, macro and document
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
         ErrorBox err(NULL, XMLSEC_RES(RID_XMLSECDLG_OLD_ODF_FORMAT));
         err.Execute();
+        ret = false;
     }
-    else
-        ret = true;
 
+    //As of OOo 3.2 the document signature includes in macrosignatures.xml. That is
+    //adding a macro signature will break an existing document signature.
+    //The sfx2 will remove the documentsignature when the user adds a macro signature
+    if (meSignatureMode == SignatureModeMacros
+        && ret)
+    {
+        if (m_bHasDocumentSignature && !m_bWarningShowSignMacro)
+        {
+            //The warning says that the document signatures will be removed if the user
+            //continues. He can then either press 'OK' or 'NO'
+            //It the user presses 'Add' or 'Remove' several times then, then the warning
+            //is shown every time until the user presses 'OK'. From then on, the warning
+            //is not displayed anymore as long as the signatures dialog is alive.
+            if (QueryBox(
+                NULL, XMLSEC_RES(MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)).Execute() == RET_NO)
+                ret = false;
+            else
+                m_bWarningShowSignMacro = true;
+
+        }
+    }
     return ret;
+}
+
+bool DigitalSignaturesDialog::canAdd()
+{
+    if (canAddRemove())
+        return true;
+    return false;
 }
 
 bool DigitalSignaturesDialog::canRemove()
 {
-    return canAdd();
+    if (canAddRemove())
+        return true;
+    return false;
 }
 
 short DigitalSignaturesDialog::Execute()
 {
     // Verify Signatures and add certificates to ListBox...
     mbVerifySignatures = true;
-    ImplGetSignatureInformations();
+    ImplGetSignatureInformations(false);
     ImplFillSignaturesBox();
 
     // Only verify once, content will not change.
@@ -301,6 +381,35 @@ IMPL_LINK( DigitalSignaturesDialog, SignatureHighlightHdl, void*, EMPTYARG )
     if ( maAddBtn.IsEnabled() ) // not read only
         maRemoveBtn.Enable( bSel );
 
+    return 0;
+}
+
+IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
+{
+    // Export all other signatures...
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
+        embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false );
+    uno::Reference< io::XOutputStream > xOutputStream(
+        aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+    uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler =
+        maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
+
+    int nInfos = maCurrentSignatureInformations.size();
+    for( int n = 0 ; n < nInfos ; ++n )
+        maSignatureHelper.ExportSignature(
+        xDocumentHandler, maCurrentSignatureInformations[ n ] );
+
+    maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+
+    // If stream was not provided, we are responsible for committing it....
+    if ( !mxSignatureStream.is() )
+    {
+        uno::Reference< embed::XTransactedObject > xTrans(
+            aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+        xTrans->commit();
+    }
+
+    EndDialog(RET_OK);
     return 0;
 }
 
@@ -353,34 +462,33 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 xCert->getIssuerName(), aCertSerial,
                 aStrBuffer.makeStringAndClear());
 
+            std::vector< rtl::OUString > aElements =
+                DocumentSignatureHelper::CreateElementList(
+                    mxStore, rtl::OUString(), meSignatureMode, OOo3_2Document);
 
-            std::vector< rtl::OUString > aElements = DocumentSignatureHelper::CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
-
-            ::rtl::OUString aXMLExt( RTL_CONSTASCII_USTRINGPARAM( "XML" ) );
             sal_Int32 nElements = aElements.size();
             for ( sal_Int32 n = 0; n < nElements; n++ )
             {
-                bool bBinaryMode = true;
-                sal_Int32 nSep = aElements[n].lastIndexOf( '.' );
-                if ( nSep != (-1) )
-                {
-                    ::rtl::OUString aExt = aElements[n].copy( nSep+1 );
-                    if ( aExt.equalsIgnoreAsciiCase( aXMLExt ) )
-                    {
-                        bBinaryMode = !HandleStreamAsXML_Impl( mxStore, aElements[n] );
-                    }
-                }
+                bool bBinaryMode = !isXML(aElements[n]);
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }
 
             maSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
 
-            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
-            uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-            uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
+            // We open a signature stream in which the existing and the new
+            //signature is written. ImplGetSignatureInformation (later in this function) will
+            //then read the stream an will fill  maCurrentSignatureInformations. The final signature
+            //is written when the user presses OK. Then only maCurrentSignatureInformation and
+            //a sax writer are used to write the information.
+            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
+                css::embed::ElementModes::WRITE|css::embed::ElementModes::TRUNCATE, true);
+            Reference< css::io::XOutputStream > xOutputStream(
+                aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
+            Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
+                maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
-            int nInfos = maCurrentSignatureInformations.size();
+             int nInfos = maCurrentSignatureInformations.size();
             for ( int n = 0; n < nInfos; n++ )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
@@ -392,14 +500,9 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
             maSignatureHelper.EndMission();
 
-            // If stream was not provided, we are responsible for committing it....
-            if ( !mxSignatureStream.is() )
-            {
-                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-                xTrans->commit();
-            }
-
             aStreamHelper = SignatureStreamHelper();    // release objects...
+
+            mbSignaturesChanged = true;
 
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
 
@@ -412,7 +515,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 // will not contain
                 // SecurityOperationStatus_OPERATION_SUCCEEDED
                 mbVerifySignatures = true;
-                ImplGetSignatureInformations();
+                ImplGetSignatureInformations(true);
                 ImplFillSignaturesBox();
             }
         }
@@ -421,7 +524,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     {
         DBG_ERROR( "Exception while adding a signature!" );
         // Don't keep invalid entries...
-        ImplGetSignatureInformations();
+        ImplGetSignatureInformations(true);
         ImplFillSignaturesBox();
     }
 
@@ -440,9 +543,12 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
-            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
-            uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-            uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
+            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
+                css::embed::ElementModes::WRITE | css::embed::ElementModes::TRUNCATE, true);
+            Reference< css::io::XOutputStream > xOutputStream(
+                aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
+            Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
+                maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             int nInfos = maCurrentSignatureInformations.size();
             for( int n = 0 ; n < nInfos ; ++n )
@@ -452,13 +558,6 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 
             mbSignaturesChanged = true;
 
-            // If stream was not provided, we are responsible for committing it....
-            if ( !mxSignatureStream.is() )
-            {
-                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-                xTrans->commit();
-            }
-
             aStreamHelper = SignatureStreamHelper();    // release objects...
 
             ImplFillSignaturesBox();
@@ -467,7 +566,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         {
             DBG_ERROR( "Exception while removing a signature!" );
             // Don't keep invalid entries...
-            ImplGetSignatureInformations();
+            ImplGetSignatureInformations(true);
             ImplFillSignaturesBox();
         }
     }
@@ -493,12 +592,18 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     String aNullStr;
     int nInfos = maCurrentSignatureInformations.size();
     int nValidSigs = 0, nValidCerts = 0;
+    bool bAllNewSignatures = true;
 
     if( nInfos )
     {
-        std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( mxStore, ::rtl::OUString(), meSignatureMode );
         for( int n = 0; n < nInfos; ++n )
         {
+            DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
+                m_sODFVersion, maCurrentSignatureInformations[n]);
+            std::vector< rtl::OUString > aElementsToBeVerified =
+                DocumentSignatureHelper::CreateElementList(
+                mxStore, ::rtl::OUString(), meSignatureMode, mode);
+
             const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
             //First we try to get the certificate which is embedded in the XML Signature
             if (rInfo.ouX509Certificate.getLength())
@@ -559,28 +664,42 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             if ( bSigValid )
             {
-                // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
-                unsigned int nRealCount = 0;
-                for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
-                {
-                    const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];
-                    // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
-                    if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
-                        nRealCount++;
-                }
-                bSigValid = ( aElementsToBeVerified.size() == nRealCount );
+                 bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
+                      aElementsToBeVerified, rInfo, mode);
 
                 if( bSigValid )
                     nValidSigs++;
             }
 
             Image aImage;
-            if ( bSigValid && bCertValid )
-                aImage = maSigsValidImg.GetImage();
-            else if ( bSigValid && !bCertValid )
-                aImage = maSigsNotvalidatedImg.GetImage();
-            else if ( !bSigValid )
+            if (!bSigValid)
+            {
                 aImage = maSigsInvalidImg.GetImage();
+            }
+            else if (bSigValid && !bCertValid)
+            {
+                aImage = maSigsNotvalidatedImg.GetImage();
+            }
+            //Check if the signature is a "old" document signature, that is, which was created
+            //by an version of OOo previous to 3.2
+            else if (meSignatureMode == SignatureModeDocumentContent
+                && bSigValid && bCertValid && !DocumentSignatureHelper::isOOo3_2_Signature(
+                maCurrentSignatureInformations[n]))
+            {
+                aImage = maSigsNotvalidatedImg.GetImage();
+                bAllNewSignatures &= false;
+            }
+            else if (meSignatureMode == SignatureModeDocumentContent
+                && bSigValid && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
+                maCurrentSignatureInformations[n]))
+            {
+                aImage = maSigsValidImg.GetImage();
+            }
+            else if (meSignatureMode == SignatureModeMacros
+                && bSigValid && bCertValid)
+            {
+                aImage = aImage = maSigsValidImg.GetImage();
+            }
 
             SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImage, aImage );
             maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
@@ -590,28 +709,37 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         }
     }
 
-    bool bAllSigsValid = ( nValidSigs == nInfos );
-    bool bAllCertsValid = ( nValidCerts == nInfos );
-    bool bShowValidState = nInfos && ( bAllSigsValid && bAllCertsValid );
-    bool bShowNotValidatedState = nInfos && ( bAllSigsValid && !bAllCertsValid );
+    bool bAllSigsValid = (nValidSigs == nInfos);
+    bool bAllCertsValid = (nValidCerts == nInfos);
+    bool bShowValidState = nInfos && (bAllSigsValid && bAllCertsValid && bAllNewSignatures);
+
+    bool bShowNotValidatedState = nInfos && (bAllSigsValid && (!bAllCertsValid || !bAllNewSignatures));
     bool bShowInvalidState = nInfos && !bAllSigsValid;
-    maSigsValidImg.Show( bShowValidState );
+
+    maSigsValidImg.Show( bShowValidState);
     maSigsValidFI.Show( bShowValidState );
     maSigsInvalidImg.Show( bShowInvalidState );
     maSigsInvalidFI.Show( bShowInvalidState );
-    maSigsNotvalidatedImg.Show( bShowNotValidatedState );
-    maSigsNotvalidatedFI.Show( bShowNotValidatedState );
+
+    maSigsNotvalidatedImg.Show(bShowNotValidatedState);
+    //bAllNewSignatures is always true if we are not in document mode
+    maSigsNotvalidatedFI.Show(nInfos && bAllSigsValid && ! bAllCertsValid);
+    maSigsOldSignatureFI.Show(nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures);
 
     SignatureHighlightHdl( NULL );
 }
 
-void DigitalSignaturesDialog::ImplGetSignatureInformations()
+
+//If bUseTempStream is true then the temporary signature stream is used.
+//Otherwise the real signature stream is used.
+void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream)
 {
     maCurrentSignatureInformations.clear();
 
     maSignatureHelper.StartMission();
 
-    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::READ );
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
+        css::embed::ElementModes::READ, bUseTempStream);
     if ( aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
@@ -651,28 +779,70 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     }
 }
 
-SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream( sal_Int32 nStreamOpenMode )
+//If bTempStream is true, then a temporary stream is return. If it is false then, the actual
+//signature stream is used.
+//Everytime the user presses Add a new temporary stream is created.
+//We keep the temporary stream as member because ImplGetSignatureInformations
+//will later access the stream to create DocumentSignatureInformation objects
+//which are stored in maCurrentSignatureInformations.
+SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
+    sal_Int32 nStreamOpenMode, bool bTempStream)
 {
     SignatureStreamHelper aHelper;
-    if ( !mxSignatureStream.is() )
+    if (bTempStream)
     {
-        aHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, nStreamOpenMode, meSignatureMode );
-    }
-    else
-    {
-        aHelper.xSignatureStream = mxSignatureStream;
-        if ( nStreamOpenMode & embed::ElementModes::TRUNCATE )
+        if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
         {
-            css::uno::Reference < css::io::XTruncate > xTruncate( mxSignatureStream, uno::UNO_QUERY );
-            DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
-            xTruncate->truncate();
+            //We write always into a new temporary stream.
+            mxTempSignatureStream = Reference < css::io::XStream >(
+                mxCtx->getServiceManager()->createInstanceWithContext(
+                OUSTR( "com.sun.star.io.TempFile" ), mxCtx) ,
+                UNO_QUERY_THROW);
+            aHelper.xSignatureStream = mxTempSignatureStream;
         }
         else
         {
-            css::uno::Reference < css::io::XSeekable > xSeek( mxSignatureStream, uno::UNO_QUERY );
-            DBG_ASSERT( xSeek.is(), "ImplOpenSignatureStream - Stream does not support xSeekable!" );
-            xSeek->seek( 0 );
+            //When we read from the temp stream, then we must have previously
+            //created one.
+            OSL_ASSERT(mxTempSignatureStream.is());
         }
+        aHelper.xSignatureStream = mxTempSignatureStream;
+    }
+    else
+    {
+        //No temporary stream
+        if (!mxSignatureStream.is())
+        {
+            //We may not have a dedicated stream for writing the signature
+            //So we take one directly from the storage
+            //Or DocumentDigitalSignatures::showDocumentContentSignatures was called,
+            //in which case Add/Remove is not allowed. This is done, for example, if the
+            //document is readonly
+            aHelper = DocumentSignatureHelper::OpenSignatureStream(
+                mxStore, nStreamOpenMode, meSignatureMode );
+        }
+        else
+        {
+            aHelper.xSignatureStream = mxSignatureStream;
+        }
+    }
+
+    if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
+    {
+        css::uno::Reference < css::io::XTruncate > xTruncate(
+            aHelper.xSignatureStream, UNO_QUERY_THROW);
+        DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
+        xTruncate->truncate();
+    }
+    else if ( bTempStream || mxSignatureStream.is())
+    {
+        //In case we read the signature stream from the storage directly,
+        //which is the case when DocumentDigitalSignatures::showDocumentContentSignatures
+        //then XSeakable is not supported
+        css::uno::Reference < css::io::XSeekable > xSeek(
+            aHelper.xSignatureStream, UNO_QUERY_THROW);
+        DBG_ASSERT( xSeek.is(), "ImplOpenSignatureStream - Stream does not support xSeekable!" );
+        xSeek->seek( 0 );
     }
 
     return aHelper;
