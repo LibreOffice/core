@@ -82,14 +82,19 @@ interface XDocumentRecovery
                         ::com::sun::star::lang::WrappedTargetException
                     );
 
-    /** recovers the document after a previous emergency save.
+    /** recovers the document after a previous emergency or session save.
 
         <p>The document itself has previously been created, but <em>not</em> loaded
         (via <member scope="com::sun::star::frame">XLoadable::load</member>) or initialized (via
         <member scope="com::sun::star::frame">XLoadable::initNew</member>).</p>
 
+        <p>Upon successful return, the document must be fully initialized. In particular, the
+        caller is not responsible for calling <member scope="com::sun::star::frame">XModel::attachResource</member>.
+        Instead, the implementation is responsible to do so, if required.</p>
+
         <p>A default implementation of this method could simply delegate this call to
-        <member scope="::com::sun::star::frame:">XLodable::load</member>.</p>
+        <member scope="::com::sun::star::frame:">XLodable::load</member>, followed by
+        <member scope="com::sun::star::frame">XModel::attachResource</member>.</p>
 
         @param SourceLocation
             specifies the URL of the location to which the document was previously emergency-saved.
