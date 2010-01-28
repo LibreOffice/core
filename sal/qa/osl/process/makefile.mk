@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl 
+# auto generated Target:testjob by codegen.pl
 
 .IF "$(GUI)" == "WNT"
     CFLAGS+=/Ob1
@@ -55,17 +55,7 @@ SHL1OBJS=  \
     $(SLO)$/osl_Thread.obj
 
 SHL1TARGET= osl_Thread
-SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-# .IF "$(OS)" == "SOLARIS"
-# SHL1STDLIBS += -lrt -laio
-# .ENDIF
-.ENDIF
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
@@ -82,14 +72,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
-SHL2STDLIBS=$(SALLIB) 
-
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-SHL2STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
@@ -98,7 +81,7 @@ DEF2EXPORTFILE=export.exp
 
 # END ------------------------------------------------------------------
 
-OBJ3FILES=$(OBJ)$/osl_process_child.obj 
+OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
 

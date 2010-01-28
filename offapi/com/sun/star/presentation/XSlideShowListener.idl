@@ -65,8 +65,12 @@ interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
     /** Notify that the current slide has ended,
         e.g. the user has clicked on the slide.
         Calling displaySlide() twice will not issue this event.
+        @param reverse
+            For the default order (forward) this flag is <FALSE/>.
+            When the main sequence was traversed in reverse order then this
+            flag is <TRUE/>.
     */
-    void slideEnded();
+    void slideEnded( [in] boolean reverse );
 
     /** Notifies that a hyperlink has been clicked.
         @param hyperLink hyperlink URL
