@@ -197,7 +197,7 @@ namespace connectivity
             static ::rtl::OUString getStringValue(  OConnection* _pConnection,
                                                     SQLHANDLE _aStatementHandle,
                                                     sal_Int32 columnIndex,
-                                                    SWORD  _fSqlType,
+                                                    SQLSMALLINT _fSqlType,
                                                     sal_Bool &_bWasNull,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                                     rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -205,7 +205,7 @@ namespace connectivity
             static  ::com::sun::star::uno::Sequence<sal_Int8> getBytesValue(OConnection* _pConnection,
                                                                             SQLHANDLE _aStatementHandle,
                                                                             sal_Int32 columnIndex,
-                                                                            SWORD  _fSqlType,
+                                                                            SQLSMALLINT _fSqlType,
                                                                             sal_Bool &_bWasNull,
                                                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             static void getValue(   OConnection* _pConnection,
@@ -215,7 +215,7 @@ namespace connectivity
                                     sal_Bool &_bWasNull,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                     void* _pValue,
-                                    SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                    SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             /**
                 bindData copies the from pValue to pData
@@ -229,10 +229,10 @@ namespace connectivity
             static void bindData(   SQLSMALLINT _nOdbcType,
                                     sal_Bool _bUseWChar,
                                     sal_Int8 *&_pData,
-                                    SQLINTEGER*& pLen,
+                                    SQLLEN*& pLen,
                                     const void* _pValue,
                                     rtl_TextEncoding _nTextEncoding,
-                                    SQLUINTEGER& _nColumnSize);
+                                    SQLULEN& _nColumnSize);
 
             static void bindParameter(  OConnection* _pConnection,
                                         SQLHANDLE _hStmt,
@@ -254,7 +254,7 @@ namespace connectivity
                                     SQLSMALLINT _nMaxLen,
                                     const void* _pValue,
                                     void*       _pData,
-                                    SQLINTEGER *pLen,
+                                    SQLLEN *pLen,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                     rtl_TextEncoding _nTextEncoding,
                                     sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
