@@ -37,9 +37,17 @@
 #include <svtools/svarray.hxx>
 #include <svtools/svparser.hxx>
 
+
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
+} } }
+
 class Color;
 class SvNumberFormatter;
 class SvULongs;
+class SvKeyValueIterator;
 
 #define HTMLFONTSZ1_DFLT 7
 #define HTMLFONTSZ2_DFLT 10
@@ -223,6 +231,28 @@ public:
 //  virtual void SaveState( int nToken );
 //  virtual void RestoreState();
     virtual void Continue( int nToken );
+
+
+protected:
+
+    static rtl_TextEncoding GetEncodingByMIME( const String& rMime );
+
+    /// template method: called when ParseMetaOptions adds a user-defined meta
+    virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
+
+private:
+    /// parse meta options into XDocumentProperties and encoding
+    bool ParseMetaOptionsImpl( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator*,
+            const HTMLOptions*,
+            rtl_TextEncoding& rEnc );
+
+public:
+    /// overriding method must call this implementation!
+    virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator* );
 
     // Ist der uebergebene 0-terminierte String (vermutlich) der Anfang
     // eines HTML-Files? Er sollte mind. 80 Zeichen lang sein.

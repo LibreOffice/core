@@ -135,11 +135,15 @@ public:
 
     static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (::com::sun::star::lang::IllegalArgumentException);
     static sal_Int16 /* com.sun.star.util.MeasureUnit.* */ ConvertToMeasurementUnit(MapUnit /* MapModeUnit */ _nMapModeUnit) throw (::com::sun::star::lang::IllegalArgumentException);
+
     static ::Size /* VCLSize */ ConvertToVCLSize(::com::sun::star::awt::Size const& _aSize);
     static ::com::sun::star::awt::Size ConvertToAWTSize(::Size /* VCLSize */ const& _aSize);
+
     static ::Point /* VCLPoint */ ConvertToVCLPoint(::com::sun::star::awt::Point const& _aPoint);
     static ::com::sun::star::awt::Point ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint);
 
+    static ::Rectangle ConvertToVCLRect( ::com::sun::star::awt::Rectangle const & _rRect );
+    static ::com::sun::star::awt::Rectangle ConvertToAWTRect( ::Rectangle const & _rRect );
 };
 
 

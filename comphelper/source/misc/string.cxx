@@ -36,10 +36,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "comphelper/string.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "comphelper/stlunosequence.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <sal/types.h>
+
+#include <comphelper/string.hxx>
+#include <comphelper/stlunosequence.hxx>
+#include <comphelper/stl_types.hxx>
 
 
 namespace comphelper { namespace string {
@@ -96,12 +99,12 @@ rtl::OUString searchAndReplaceAsciiL(
 ::rtl::OUString convertCommaSeparated(
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const& i_rSeq)
 {
-    ::rtl::OUString ret;
-    for (sal_Int32 i = 0; i < i_rSeq.getLength(); ++i) {
-        if (i != 0) ret += ::rtl::OUString::createFromAscii(", ");
-        ret += i_rSeq[i];
-    }
-    return ret;
+    ::rtl::OUStringBuffer buf;
+    ::comphelper::intersperse(
+        ::comphelper::stl_begin(i_rSeq), ::comphelper::stl_end(i_rSeq),
+        ::comphelper::OUStringBufferAppender(buf),
+        ::rtl::OUString::createFromAscii(", "));
+    return buf.makeStringAndClear();
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -119,10 +122,6 @@ rtl::OUString searchAndReplaceAsciiL(
     } while (idx >= 0);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > kws(vec.size());
     std::copy(vec.begin(), vec.end(), stl_begin(kws));
-    /*
-    for (size_t i = 0; i < vec.size(); ++i) {
-        kws[i] = vec.at(i);
-    }*/
     return kws;
 }
 

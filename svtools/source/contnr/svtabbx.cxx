@@ -980,10 +980,12 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
 
     if ( !AreChildrenTransient() )
     {
+        const sal_uInt16 nColumnCount = GetColumnCount();
+
         // first call? -> initial list
         if ( m_aAccessibleChildren.empty() )
         {
-            sal_Int32 nCount = ( GetRowCount() + 1 ) * GetColumnCount();
+            sal_Int32 nCount = ( GetRowCount() + 1 ) * nColumnCount;
             m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
         }
 
@@ -1021,8 +1023,9 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     // first call? -> initial list
     if ( m_aAccessibleChildren.empty() )
     {
-        sal_Int32 nCount = AreChildrenTransient() ? GetColumnCount()
-                                                  : ( GetRowCount() + 1 ) * GetColumnCount();
+        const sal_uInt16 nColumnCount = GetColumnCount();
+        sal_Int32 nCount = AreChildrenTransient() ?
+                nColumnCount : ( GetRowCount() + 1 ) * nColumnCount;
         m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
     }
 
@@ -1098,9 +1101,12 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             if ( _nPos >= 0 )
             {
                 sal_uInt16 nColumnCount = GetColumnCount();
-                sal_Int32 nRow = _nPos / nColumnCount;
-                sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
-                aRetText = GetCellText( nRow, nColumn );
+                if (nColumnCount > 0)
+                {
+                    sal_Int32 nRow = _nPos / nColumnCount;
+                    sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
+                    aRetText = GetCellText( nRow, nColumn );
+                }
             }
             break;
         }
@@ -1135,16 +1141,19 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
         static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
 
         sal_uInt16 nColumnCount = GetColumnCount();
-        sal_Int32 nRow = _nPos / nColumnCount;
-        sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
+        if (nColumnCount > 0)
+        {
+            sal_Int32 nRow = _nPos / nColumnCount;
+            sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-        String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
-        aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
-        String sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
-        if ( sColHeader.Len() == 0 )
-            sColHeader = String::CreateFromInt32( nColumn );
-        aText.SearchAndReplace( sVar2, sColHeader );
-        aRetText = aText;
+            String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
+            aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
+            String sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
+            if ( sColHeader.Len() == 0 )
+                sColHeader = String::CreateFromInt32( nColumn );
+            aText.SearchAndReplace( sVar2, sColHeader );
+            aRetText = aText;
+        }
     }
 
     return aRetText;

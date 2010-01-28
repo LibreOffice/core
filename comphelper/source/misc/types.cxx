@@ -87,8 +87,7 @@ sal_Bool operator ==(const Time& _rLeft, const Time& _rRight)
 sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;
-    _rAny >>= nReturn;
-
+    OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
 
@@ -96,7 +95,7 @@ sal_Int32 getINT32(const Any& _rAny)
 sal_Int16 getINT16(const Any& _rAny)
 {
     sal_Int16 nReturn = 0;
-    _rAny >>= nReturn;
+    OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
 
@@ -104,7 +103,7 @@ sal_Int16 getINT16(const Any& _rAny)
 double getDouble(const Any& _rAny)
 {
     double nReturn = 0.0;
-    _rAny >>= nReturn;
+    OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
 
@@ -112,7 +111,7 @@ double getDouble(const Any& _rAny)
 float getFloat(const Any& _rAny)
 {
     float nReturn = 0.0;
-    _rAny >>= nReturn;
+    OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
 
@@ -120,7 +119,7 @@ float getFloat(const Any& _rAny)
 ::rtl::OUString getString(const Any& _rAny)
 {
     ::rtl::OUString nReturn;
-    _rAny >>= nReturn;
+    OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
 

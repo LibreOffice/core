@@ -202,7 +202,7 @@ sal_Bool DocumentLockFile::OverwriteOwnLockFile()
         WriteEntryToStream( aNewEntry, xOutput );
         xOutput->closeOutput();
     }
-    catch( ucb::NameClashException& )
+    catch( uno::Exception& )
     {
         return sal_False;
     }

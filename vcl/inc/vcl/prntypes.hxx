@@ -33,6 +33,7 @@
 
 #include <tools/string.hxx>
 #include <vcl/sv.h>
+#include <i18npool/paper.hxx>
 
 // ---------------
 // - Duplex Mode -
@@ -45,33 +46,6 @@ enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_ON };
 // ---------------
 
 enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
-
-// ---------
-// - Paper -
-// ---------
-
-typedef USHORT Paper;
-#define PAPER_A3                    ((Paper)0)
-#define PAPER_A4                    ((Paper)1)
-#define PAPER_A5                    ((Paper)2)
-#define PAPER_B4                    ((Paper)3)
-#define PAPER_B5                    ((Paper)4)
-#define PAPER_LETTER                ((Paper)5)
-#define PAPER_LEGAL                 ((Paper)6)
-#define PAPER_TABLOID               ((Paper)7)
-#define PAPER_USER                  ((Paper)8)
-
-namespace vcl
-{
-struct PaperInfo
-{
-    String              m_aPaperName;       // user readable name of paper
-    unsigned long       m_nPaperWidth;      // width in mm
-    unsigned long       m_nPaperHeight;     // height in mm
-
-    PaperInfo() : m_nPaperWidth( 0 ), m_nPaperHeight( 0 ) {}
-};
-}
 
 // -------------------
 // - QueueInfo-Types -

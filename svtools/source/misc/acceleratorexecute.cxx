@@ -476,8 +476,14 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
         css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
+    try
+    {
+        css::uno::Reference< css::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
+        xAccCfg = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    }
+    catch(const css::container::NoSuchElementException&)
+        {}
     return xAccCfg;
 }
 

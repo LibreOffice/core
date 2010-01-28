@@ -82,6 +82,11 @@
 
 #include <hash_set>
 
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_serverfont.hxx>
+#endif
+
 struct cairo_surface_t;
 struct cairo_t;
 struct cairo_font_face_t;
@@ -1681,11 +1686,29 @@ BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    GenericSalLayout* pLayout = NULL;
+    SalLayout* pLayout = NULL;
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    {
+#ifdef ENABLE_GRAPHITE
+        // Is this a Graphite font?
+        if (!bDisableGraphite_ &&
+            GraphiteFontAdaptor::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+        {
+            sal_Int32 xdpi, ydpi;
+
+            xdpi = GetDisplay()->GetResolution().A();
+            ydpi = GetDisplay()->GetResolution().B();
+
+            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *mpServerFont[nFallbackLevel], xdpi, ydpi);
+            if (!pGrfont) return NULL;
+            pLayout = new GraphiteServerFontLayout(pGrfont);
+        }
+        else
+#endif
+            pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    }
     else if( mXFont[ nFallbackLevel ] )
         pLayout = new X11FontLayout( *mXFont[ nFallbackLevel ] );
     else

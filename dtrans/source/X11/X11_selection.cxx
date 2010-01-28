@@ -515,6 +515,15 @@ SelectionManager::~SelectionManager()
         // destroy message window
         if( m_aWindow )
             XDestroyWindow( m_pDisplay, m_aWindow );
+        // release cursors
+        if (m_aMoveCursor != None)
+            XFreeCursor(m_pDisplay, m_aMoveCursor);
+        if (m_aCopyCursor != None)
+            XFreeCursor(m_pDisplay, m_aCopyCursor);
+        if (m_aLinkCursor != None)
+            XFreeCursor(m_pDisplay, m_aLinkCursor);
+        if (m_aNoneCursor != None)
+            XFreeCursor(m_pDisplay, m_aNoneCursor);
 
         // paranoia setting, the drag thread should have
         // done that already
@@ -1117,7 +1126,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         bSuccess = getPasteData( selection, m_nImageBmpAtom, rData );
         #if OSL_DEBUG_LEVEL > 1
         if( bSuccess )
-            fprintf( stderr, "got %d bytes of image/bmp\n" ), (int)rData.getLength();
+            fprintf( stderr, "got %d bytes of image/bmp\n", (int)rData.getLength() );
         #endif
         if( ! bSuccess )
         {
@@ -1685,7 +1694,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                              XA_INTEGER, 32, PropModeReplace, (const unsigned char*)&nTimeStamp, 1 );
             aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "sending timestamp: %d\n", nTimeStamp );
+                fprintf( stderr, "sending timestamp: %d\n", (int)nTimeStamp );
 #endif
         }
         else

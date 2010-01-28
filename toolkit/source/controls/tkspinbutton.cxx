@@ -60,6 +60,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_ENABLED );
+        ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
         ImplRegisterProperty( BASEPROPERTY_HELPURL );
         ImplRegisterProperty( BASEPROPERTY_ORIENTATION );

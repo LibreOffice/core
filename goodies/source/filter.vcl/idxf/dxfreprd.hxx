@@ -101,13 +101,18 @@ public:
     DXFEntities aEntities;
         // Die Entities (aus der Entities-Section) der DXF-Datei
 
-    rtl_TextEncoding mEnc;
+    rtl_TextEncoding mEnc;  // $DWGCODEPAGE
+
+    double mfGlobalLineTypeScale; // $LTSCALE
 
     DXFRepresentation();
     ~DXFRepresentation();
 
         rtl_TextEncoding getTextEncoding() const;
         void setTextEncoding(rtl_TextEncoding aEnc);
+
+        double getGlobalLineTypeScale() const;
+        void setGlobalLineTypeScale(double fGlobalLineTypeScale);
 
     BOOL Read( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent);
         // Liesst die komplette DXF-Datei ein.
@@ -128,7 +133,8 @@ inline BYTE DXFPalette::GetGreen(BYTE nIndex) const { return pGreen[nIndex]; }
 inline BYTE DXFPalette::GetBlue(BYTE nIndex) const { return pBlue[nIndex]; }
 inline rtl_TextEncoding DXFRepresentation::getTextEncoding() const { return mEnc; }
 inline void DXFRepresentation::setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
-
+inline double DXFRepresentation::getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }
+inline void DXFRepresentation::setGlobalLineTypeScale(double fGlobalLineTypeScale) { mfGlobalLineTypeScale = fGlobalLineTypeScale; }
 
 #endif
 

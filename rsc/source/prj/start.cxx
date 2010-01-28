@@ -306,8 +306,10 @@ int cdecl main ( int argc, char ** argv)
     BOOL            bHelp    = FALSE;
     BOOL            bError   = FALSE;
     BOOL            bResponse = FALSE;
-    ByteString      aPrePro( "rscpp" );
-    ByteString      aRsc2Name( "rsc2" );
+    ByteString      aSolarbin(getenv("SOLARBINDIR"));
+    ByteString      aDelim("/");
+    ByteString      aPrePro; //( aSolarbin + aDelim + ByteString("rscpp"));
+    ByteString      aRsc2Name; //(  aSolarbin + aDelim + ByteString("rsc2"));
     ByteString      aSrsName;
     ByteString      aResName;
     RscStrList      aInputList;
@@ -317,6 +319,14 @@ int cdecl main ( int argc, char ** argv)
     RscPtrPtr       aCmdLine;       // Kommandozeile
     sal_uInt32      i;
     ByteString*     pString;
+
+    aPrePro = aSolarbin;
+    aPrePro += aDelim;
+    aPrePro += ByteString("rscpp");
+
+    aRsc2Name = aSolarbin;
+    aRsc2Name += aDelim;
+    aRsc2Name += ByteString("rsc2");
 
     printf( "VCL Resource Compiler 3.0\n" );
 
