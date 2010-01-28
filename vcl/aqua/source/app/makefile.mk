@@ -50,8 +50,6 @@ dummy:
 
 .ELSE		# "$(GUIBASE)"!="aqua"
 
-#CFLAGS+=-x objective-c++
-
 SLOFILES=   $(SLO)$/salinst.obj			\
             $(SLO)$/saldata.obj         \
             $(SLO)$/vclnsapp.obj        \

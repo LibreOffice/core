@@ -5,6 +5,5 @@
 ..\source\win32\clipb\sysdtrans.xml %_DEST%\xml%_EXT%\sysdtrans.xml
 ..\source\win32\dnd\dnd.xml %_DEST%\xml%_EXT%\dnd.xml
 ..\source\win32\ftransl\ftransl.xml %_DEST%\xml%_EXT%\ftransl.xml
-..\source\X11\dtransX11.xml %_DEST%\xml%_EXT%\dtransX11.xml
 ..\source\cnttype\mcnttype.xml %_DEST%\xml%_EXT%\mcnttype.xml
 ..\source\generic\dtrans.xml %_DEST%\xml%_EXT%\dtrans.xml

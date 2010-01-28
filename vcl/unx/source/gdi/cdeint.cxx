@@ -216,6 +216,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
 
         aStyleSettings.SetDialogTextColor( aDeactive );
         aStyleSettings.SetMenuTextColor( aDeactive );
+        aStyleSettings.SetMenuBarTextColor( aDeactive );
         aStyleSettings.SetButtonTextColor( aDeactive );
         aStyleSettings.SetRadioCheckTextColor( aDeactive );
         aStyleSettings.SetGroupTextColor( aDeactive );

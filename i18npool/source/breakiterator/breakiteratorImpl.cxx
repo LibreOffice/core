@@ -261,13 +261,29 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_I
                             getScriptClass(Text.iterateCodePoints(&nPos, 0));
 }
 
+
+/** Increments/decrements position first, then obtains character.
+    @return current position, may be -1 or text length if string was consumed.
+ */
 static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
-        if (nStartPos + inc < 0 || nStartPos + inc >= Text.getLength()) {
+        sal_Int32 nLen = Text.getLength();
+        if (nStartPos + inc < 0 || nStartPos + inc >= nLen) {
             ch = 0;
-            nStartPos = nStartPos + inc < 0 ? -1 : Text.getLength();
+            nStartPos = nStartPos + inc < 0 ? -1 : nLen;
         } else {
             ch = Text.iterateCodePoints(&nStartPos, inc);
-            if (inc > 0) ch = Text.iterateCodePoints(&nStartPos, 0);
+            // Fix for #i80436#.
+            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
+            // suspicious as if it cures a symptom.. anyway, had to add
+            // nStartPos < Text.getLength() to silence the (correct) assertion
+            // in rtl_uString_iterateCodePoints() if Text was one character
+            // (codepoint) only, made up of a surrogate pair.
+            //if (inc > 0 && nStartPos < Text.getLength())
+            //    ch = Text.iterateCodePoints(&nStartPos, 0);
+            // With surrogates, nStartPos may actually point behind string
+            // now, even if inc is only +1
+            if (inc > 0)
+                ch = (nStartPos < nLen ? Text.iterateCodePoints(&nStartPos, 0) : 0);
         }
         return nStartPos;
 }

@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/cgm.obj		\
             $(SLO)$/chart.obj	\
             $(SLO)$/class0.obj	\
@@ -76,6 +76,7 @@ SHL1STDLIBS = \
             $(TOOLSLIB)		\
             $(CPPULIB)		\
             $(SALLIB)
+.ENDIF
 
 # --- Targets --------------------------------------------------------------
 

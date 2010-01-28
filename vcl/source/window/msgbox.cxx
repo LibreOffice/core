@@ -500,7 +500,7 @@ void InfoBox::ImplInitInfoBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                 InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
@@ -591,7 +591,7 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }
@@ -637,7 +637,7 @@ void QueryBox::ImplInitQueryBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_QUERY)+1;
 }

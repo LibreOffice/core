@@ -232,6 +232,16 @@ void KDEData::Init()
 extern "C" {
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         rtl::OString aVersion( qVersion() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );

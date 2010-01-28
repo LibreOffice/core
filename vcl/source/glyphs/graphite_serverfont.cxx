@@ -45,7 +45,7 @@
 #include "graphite_textsrc.hxx"
 #include <vcl/graphite_serverfont.hxx>
 
-#ifndef MSC
+#ifndef WNT
 
 //
 // An implementation of the GraphiteLayout interface to enable Graphite enabled fonts to be used.

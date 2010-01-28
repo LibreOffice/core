@@ -35,6 +35,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
+#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 
 #include <vcl/metric.hxx>
@@ -42,6 +43,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tools/canvastools.hxx>
 
 #include "impltools.hxx"
 #include "textlayout.hxx"
@@ -116,16 +118,104 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        // TODO(F1)
-        return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
+        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+        VirtualDevice aVDev( rOutDev );
+        aVDev.SetFont( mpFont->getVCLFont() );
+
+        setupLayoutMode( aVDev, mnTextDirection );
+
+        const rendering::ViewState aViewState(
+            geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            NULL);
+
+        rendering::RenderState aRenderState (
+            geometry::AffineMatrix2D(1,0,0,0,1,0),
+            NULL,
+            uno::Sequence<double>(4),
+            rendering::CompositeOperation::SOURCE);
+
+        ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+        setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
+
+        uno::Sequence< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
+        ::basegfx::B2DPolyPolygonVector aOutlines;
+        if (aVDev.GetTextOutlines(
+            aOutlines,
+            maText.Text,
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+            FALSE,
+            0,
+            aOffsets.get()))
+        {
+            aOutlineSequence.realloc(aOutlines.size());
+            sal_Int32 nIndex (0);
+            for (::basegfx::B2DPolyPolygonVector::const_iterator
+                     iOutline(aOutlines.begin()),
+                     iEnd(aOutlines.end());
+                 iOutline!=iEnd;
+                 ++iOutline)
+            {
+                aOutlineSequence[nIndex++] = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    mxDevice,
+                    *iOutline);
+            }
+        }
+
+        return aOutlineSequence;
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  ) throw (uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
-        // TODO(F1)
-        return uno::Sequence< geometry::RealRectangle2D >();
+
+        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+        VirtualDevice aVDev( rOutDev );
+        aVDev.SetFont( mpFont->getVCLFont() );
+
+        setupLayoutMode( aVDev, mnTextDirection );
+
+        const rendering::ViewState aViewState(
+            geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            NULL);
+
+        rendering::RenderState aRenderState (
+            geometry::AffineMatrix2D(1,0,0,0,1,0),
+            NULL,
+            uno::Sequence<double>(4),
+            rendering::CompositeOperation::SOURCE);
+
+        ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+        setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
+
+        MetricVector aMetricVector;
+        uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
+        if (aVDev.GetGlyphBoundRects(
+            Point(0,0),
+            maText.Text,
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            aMetricVector))
+        {
+            aBoundingBoxes.realloc(aMetricVector.size());
+            sal_Int32 nIndex (0);
+            for (MetricVector::const_iterator
+                     iMetric(aMetricVector.begin()),
+                     iEnd(aMetricVector.end());
+                 iMetric!=iEnd;
+                 ++iMetric)
+            {
+                aBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
+                    iMetric->getX(),
+                    iMetric->getY(),
+                    iMetric->getX() + iMetric->getWidth(),
+                    iMetric->getY() + iMetric->getHeight());
+            }
+        }
+        return aBoundingBoxes;
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  ) throw (uno::RuntimeException)
@@ -171,7 +261,7 @@ namespace vclcanvas
 
         setupLayoutMode( aVDev, mnTextDirection );
 
-        const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
+        const sal_Int32 nAboveBaseline( /*-aMetric.GetIntLeading()*/ - aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
 
         if( maLogicalAdvancements.getLength() )

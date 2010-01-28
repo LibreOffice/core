@@ -40,6 +40,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -947,6 +948,7 @@ void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
     RELEASE( wrapper->mpMultiLineText )
     RELEASE( wrapper->mpTable )
     RELEASE( wrapper->mpText )
+    RELEASE( wrapper->mpTextMarkup )
     RELEASE( wrapper->mpTextAttributes )
     RELEASE( wrapper->mpValue )
 }

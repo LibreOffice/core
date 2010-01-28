@@ -1,14 +1,12 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\vcl
-mkdir: %_DEST%\inc%_EXT%\vcl\plug
-mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 
 ..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\bin%_EXT%\*.zip
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\vcl*.res %_DEST%\bin%_EXT%\vcl*.res
 ..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
-..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\libvcl*.so
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\ivcl.lib %_DEST%\lib%_EXT%\ivcl.lib
 ..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
@@ -154,3 +152,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\ppdparser.hxx %_DEST%\inc%_EXT%\vcl\ppdparser.hxx
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
+..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
