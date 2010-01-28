@@ -555,8 +555,9 @@ void DAVResourceAccess::GET(
 void DAVResourceAccess::ABORT()
   throw( DAVException )
 {
-    initialize();
-    m_xSession->ABORT();
+   // 17.11.09 (tkr): abort currently disabled caused by issue i106766
+   // initialize();
+   // m_xSession->ABORT();
 }
 //=========================================================================
 namespace {

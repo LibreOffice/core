@@ -31,7 +31,7 @@
 #ifndef _SB_HRC
 #define _SB_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #ifndef IDS_SBERR_START
  #define IDS_SBERR_START RID_BASIC_START

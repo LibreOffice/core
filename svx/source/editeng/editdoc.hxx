@@ -38,9 +38,9 @@
 #include <editattr.hxx>
 #include <edtspell.hxx>
 #include <svx/svxfont.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/style.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/style.hxx>
+#include <svl/itempool.hxx>
 #include <tools/table.hxx>
 
 class ImpEditEngine;

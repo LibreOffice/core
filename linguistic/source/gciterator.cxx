@@ -63,7 +63,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/extract.hxx>
 #include <cppuhelper/factory.hxx>
-#include <vcl/unohelp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/processfactory.hxx>
 
@@ -579,7 +578,8 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                     sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                     sal_Int32 nSuggestedEnd = GetSuggestedEndOfSentence( aCurTxt, nStartPos, aCurLocale );
-                    DBG_ASSERT( nSuggestedEnd > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
+                    DBG_ASSERT( (nSuggestedEnd == 0 && aCurTxt.getLength() == 0) || nSuggestedEnd > nStartPos,
+                            "nSuggestedEndOfSentencePos calculation failed?" );
 
                     linguistic2::ProofreadingResult aRes;
 
@@ -790,7 +790,10 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
     uno::Reference< i18n::XBreakIterator > xBreakIterator;
     if (!m_xBreakIterator.is())
     {
-        m_xBreakIterator = vcl::unohelper::CreateBreakIterator();
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        if ( xMSF.is() )
+            xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator") ), uno::UNO_QUERY );
     }
     sal_Int32 nTextLen = rText.getLength();
     sal_Int32 nEndPosition = nTextLen;

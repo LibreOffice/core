@@ -37,12 +37,11 @@
 
 #include <stdio.h>
 #include <tools/urlobj.hxx>
-#include <svtools/cstitem.hxx>
 #include <tools/config.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/startoptions.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/urihelper.hxx>
+#include <unotools/startoptions.hxx>
+#include <svl/itempool.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>
 #include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>
@@ -124,7 +123,7 @@ void SfxApplication::Init
 */
 {
 #ifdef DDE_AVAILABLE
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     InitializeDde();
 #else
     if( !InitializeDde() )

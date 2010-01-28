@@ -32,7 +32,7 @@
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
 
 //------------------------------------------------------------------

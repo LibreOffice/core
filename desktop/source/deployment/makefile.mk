@@ -82,6 +82,7 @@ SHL1STDLIBS = \
         $(TOOLSLIB) \
         $(XMLSCRIPTLIB) \
         $(SVLLIB) \
+        $(UNOTOOLSLIB) \
         $(DEPLOYMENTMISCLIB) \
     $(HELPLINKERLIB)
 

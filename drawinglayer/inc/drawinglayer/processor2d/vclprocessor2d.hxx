@@ -51,6 +51,7 @@ namespace drawinglayer { namespace primitive2d {
     class BitmapPrimitive2D;
     class FillBitmapPrimitive2D;
     class PolyPolygonGradientPrimitive2D;
+    class PolyPolygonBitmapPrimitive2D;
     class PolyPolygonColorPrimitive2D;
     class MetafilePrimitive2D;
     class MaskPrimitive2D;
@@ -63,6 +64,7 @@ namespace drawinglayer { namespace primitive2d {
     class PolygonStrokePrimitive2D;
     class ControlPrimitive2D;
     class PagePreviewPrimitive2D;
+    class EpsPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -100,6 +102,7 @@ namespace drawinglayer
             void RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
             void RenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapCandidate);
             void RenderPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
+            void RenderPolyPolygonBitmapPrimitive2D(const primitive2d::PolyPolygonBitmapPrimitive2D& rPolygonCandidate);
             void RenderPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate);
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
             void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
@@ -111,6 +114,7 @@ namespace drawinglayer
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
+            void RenderEpsPrimitive2D(const primitive2d::EpsPrimitive2D& rEpsPrimitive2D);
 
             /////////////////////////////////////////////////////////////////////////////
             // DrawMode adaption support

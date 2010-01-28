@@ -38,7 +38,7 @@
 #include "srchdlg.hrc"
 #include "dialog.hrc"
 #include <tools/debug.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 
