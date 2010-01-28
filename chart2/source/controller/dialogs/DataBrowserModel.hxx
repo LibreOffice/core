@@ -61,7 +61,11 @@ public:
     /** Inserts a new data series after the data series to which the data column
         with index nAfterColumnIndex belongs.
      */
-    void insertDataSeriesOrComplexCategoryLevel( sal_Int32 nAfterColumnIndex );
+    void insertDataSeries( sal_Int32 nAfterColumnIndex );
+
+    /** Inserts a new text column for complex categories.
+     */
+    void insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex );
 
     /** Removes a data series to which the data column with index nAtColumnIndex
         belongs.
@@ -157,9 +161,7 @@ private:
         sal_Int32 & rInOutSequenceIndex,
         sal_Int32 & rInOutHeaderEnd );
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >
-        getCategories() const throw();
+    sal_Int32 getCategoryColumnCount();
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;

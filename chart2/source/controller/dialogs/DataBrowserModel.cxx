@@ -320,43 +320,22 @@ private:
 };
 }
 
-void DataBrowserModel::insertDataSeriesOrComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
+void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 {
     OSL_ASSERT( m_apDialogModel.get());
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     if( xDataProvider.is())
     {
+        if( isCategoriesColumn(nAfterColumnIndex) )
+            nAfterColumnIndex = getCategoryColumnCount()-1;
+
         sal_Int32 nStartCol = 0;
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
+        Reference< chart2::XChartType > xChartType;
         Reference< chart2::XDataSeries > xSeries;
         if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
             xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
-
-        bool bCreateASeries = true;
-        if( !xSeries.is() )
-        {
-            //if the cursor is in a categories column -> create a categories column be default
-            bCreateASeries = false;
-            //only in case we do not have an series yet, we create a series
-            if( m_aColumns.empty() )
-                bCreateASeries = true;
-            else if( !m_aColumns.back().m_xDataSeries.is() )
-                bCreateASeries = true;
-        }
-
-        if(!bCreateASeries)
-        {
-            //create a new complex category level column
-
-            m_apDialogModel->startControllerLockTimer();
-            ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
-            xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
-            updateFromModel();
-            return;
-        }
-
-        Reference< chart2::XChartType > xChartType;
 
         sal_Int32 nSeriesNumberFormat = 0;
         if( xSeries.is())
@@ -382,7 +361,7 @@ void DataBrowserModel::insertDataSeriesOrComplexCategoryLevel( sal_Int32 nAfterC
         {
             sal_Int32 nOffset = 0;
             if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
-                ++nOffset;
+                nOffset=getCategoryColumnCount();
             // get shared sequences of current series
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
             lcl_tSharedSeqVec aSharedSequences;
@@ -449,6 +428,30 @@ void DataBrowserModel::insertDataSeriesOrComplexCategoryLevel( sal_Int32 nAfterC
                 updateFromModel();
             }
         }
+    }
+}
+
+void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
+{
+    //create a new text column for complex categories
+
+    OSL_ASSERT( m_apDialogModel.get());
+    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+    if( xDataProvider.is() )
+    {
+        if( !isCategoriesColumn(nAfterColumnIndex) )
+            nAfterColumnIndex = getCategoryColumnCount()-1;
+
+        if(nAfterColumnIndex<0)
+        {
+            OSL_ENSURE( false, "wrong index for category level insertion" );
+            return;
+        }
+
+        m_apDialogModel->startControllerLockTimer();
+        ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+        xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
+        updateFromModel();
     }
 }
 
@@ -742,11 +745,18 @@ bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const
     return bIsCategories;
 }
 
-Reference< chart2::data::XLabeledDataSequence >
-    DataBrowserModel::getCategories() const throw()
+sal_Int32 DataBrowserModel::getCategoryColumnCount()
 {
-    OSL_ASSERT( m_apDialogModel.get());
-    return m_apDialogModel->getCategories();
+    sal_Int32 nLastTextColumnIndex = -1;
+    tDataColumnVector::const_iterator aIt = m_aColumns.begin();
+    for( ; aIt != m_aColumns.end(); ++aIt )
+    {
+        if( !aIt->m_xDataSeries.is() )
+            nLastTextColumnIndex++;
+        else
+            break;
+    }
+    return nLastTextColumnIndex+1;
 }
 
 const DataBrowserModel::tDataHeaderVector& DataBrowserModel::getDataHeaders() const
@@ -789,13 +799,10 @@ void DataBrowserModel::updateFromModel()
 
             tDataColumn aCategories;
             aCategories.m_xLabeledDataSequence.set( xCategories );
-            if( nL == 0 )
-            {
-                if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
-                    aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
-                else
-                    aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
-            }
+            if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
+                aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
+            else
+                aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
             aCategories.m_eCellType = TEXT;
             m_aColumns.push_back( aCategories );
             ++nHeaderStart;

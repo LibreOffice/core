@@ -124,12 +124,10 @@ public:
     bool MaySwapRows() const;
     bool MaySwapColumns() const;
 
-//     bool MaySortRow() const;
-//     bool MaySortColumn() const;
-
     // mutators mutating data
     void InsertRow();
     void InsertColumn();
+    void InsertTextColumn();
     void RemoveRow();
     void RemoveColumn();
 

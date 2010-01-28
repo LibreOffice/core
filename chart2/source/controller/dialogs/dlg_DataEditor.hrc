@@ -36,19 +36,14 @@
 #define CTL_DATA 1
 
 // images for toolbox image list
+//the numbers correspond to the icon names: default_images\chart2\res\dataeditor_icon_xy
 #define TBI_DATA_INSERT_ROW 1
 #define TBI_DATA_INSERT_COL 2
 #define TBI_DATA_DELETE_ROW 3
 #define TBI_DATA_DELETE_COL 4
 #define TBI_DATA_SWAP_COL 5
 #define TBI_DATA_SWAP_ROW 6
-#define TBI_DATA_TRANSFER 7
-
-// #define TBI_DATA_SORT_ROW 7
-// #define TBI_DATA_SORT_COL 8
-// #define TBI_DATA_SORT_TABLE_ROW 9
-// #define TBI_DATA_SORT_TABLE_COL 10
-// #define TBI_DATA_TRANSFER 11
+#define TBI_DATA_INSERT_TEXT_COL 7
 
 // image lists (normal and high-contrast) for toolbox
 #define IL_DIAGRAM_DATA     1

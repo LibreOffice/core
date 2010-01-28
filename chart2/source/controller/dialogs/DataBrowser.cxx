@@ -564,20 +564,6 @@ bool DataBrowser::MaySwapColumns() const
         && !m_apDataBrowserModel->isCategoriesColumn( nColIdx );
 }
 
-// bool DataBrowser::MaySortRow() const
-// {
-//     // not implemented
-//     return false;
-// //     return ! IsReadOnly() && ( GetCurRow() >= 0 );
-// }
-
-// bool DataBrowser::MaySortColumn() const
-// {
-//     // not implemented
-//     return false;
-// //     return ! IsReadOnly() && ( GetCurColumnId() > 1 );
-// }
-
 void DataBrowser::clearHeaders()
 {
     ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
@@ -883,7 +869,23 @@ void DataBrowser::InsertColumn()
         if( IsModified() )
             SaveModified();
 
-        m_apDataBrowserModel->insertDataSeriesOrComplexCategoryLevel( nColIdx );
+        m_apDataBrowserModel->insertDataSeries( nColIdx );
+        RenewTable();
+    }
+}
+
+void DataBrowser::InsertTextColumn()
+{
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+
+    if( nColIdx >= 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->insertComplexCategoryLevel( nColIdx );
         RenewTable();
     }
 }
