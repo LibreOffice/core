@@ -87,7 +87,7 @@
 #include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/task/DocumentMacroConfirmationRequest2.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -2441,9 +2441,9 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
 
                         if ( xInteraction.is() )
                         {
-                            task::DocumentMacroConfirmationRequest2 aRequest;
+                            task::DocumentMacroConfirmationRequest aRequest;
                             aRequest.DocumentURL = getDocumentLocation();
-                            aRequest.DocumentZipStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                            aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
                             aRequest.DocumentSignatureInformation = aInfo;
                             aRequest.DocumentVersion = aVersion;
                             aRequest.Classification = task::InteractionClassification_QUERY;

@@ -69,7 +69,6 @@
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
 #include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
-#include "com/sun/star/task/DocumentMacroConfirmationRequest2.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionDisapprove.hpp"
@@ -1286,21 +1285,8 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
         handleMacroConfirmRequest(
             aMacroConfirmRequest.DocumentURL,
             aMacroConfirmRequest.DocumentStorage,
-            ODFVER_012_TEXT,
+            aMacroConfirmRequest.DocumentVersion.getLength() ? aMacroConfirmRequest.DocumentVersion : ODFVER_012_TEXT,
             aMacroConfirmRequest.DocumentSignatureInformation,
-            rRequest->getContinuations()
-        );
-        return true;
-    }
-
-    star::task::DocumentMacroConfirmationRequest2 aMacroConfirmRequest2;
-    if (aAnyRequest >>= aMacroConfirmRequest2)
-    {
-        handleMacroConfirmRequest(
-            aMacroConfirmRequest2.DocumentURL,
-            aMacroConfirmRequest2.DocumentZipStorage,
-            aMacroConfirmRequest2.DocumentVersion,
-            aMacroConfirmRequest2.DocumentSignatureInformation,
             rRequest->getContinuations()
         );
         return true;
@@ -1380,7 +1366,7 @@ UUIInteractionHelper::handle_impl(
                         {
                             uno::Sequence< uno::Any > propertyValues(1);
                             beans::PropertyValue    aProperty;
-                            
+
                             aProperty.Name = rtl::OUString::createFromAscii( "Parent" );
                             aProperty.Value <<= getParentXWindow();
                             propertyValues[ 0 ] <<= aProperty;
