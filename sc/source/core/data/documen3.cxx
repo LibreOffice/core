@@ -1734,11 +1734,8 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    USHORT d,m,y;
-
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
     *pDocOptions = rOpt;
-    rOpt.GetDate( d,m,y );
 
     xPoolHelper->SetFormTableOpt(rOpt);
 }

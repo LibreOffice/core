@@ -2170,10 +2170,15 @@ void XclExpFmlaCompImpl::PushOperatorPos( sal_uInt16 nTokPos, const XclExpOperan
 
 sal_uInt16 XclExpFmlaCompImpl::PopOperandPos()
 {
-    DBG_ASSERT( !mxData->maOpPosStack.empty(), "XclExpFmlaCompImpl::PopOperandPos - token stack broken" );
-    sal_uInt16 nTokPos = mxData->maOpPosStack.back();
-    mxData->maOpPosStack.pop_back();
-    return nTokPos;
+    DBG_ASSERT( !mxData->mbOk || !mxData->maOpPosStack.empty(), "XclExpFmlaCompImpl::PopOperandPos - token stack broken" );
+    mxData->mbOk &= !mxData->maOpPosStack.empty();
+    if( mxData->mbOk )
+    {
+        sal_uInt16 nTokPos = mxData->maOpPosStack.back();
+        mxData->maOpPosStack.pop_back();
+        return nTokPos;
+    }
+    return 0;
 }
 
 namespace {

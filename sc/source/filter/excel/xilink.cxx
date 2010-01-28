@@ -153,6 +153,7 @@ struct XclImpXti
     sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
     sal_uInt16          mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
     sal_uInt16          mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
+    inline explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
@@ -204,8 +205,10 @@ public:
     const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
+    /** Returns the specified XTI (link entry from BIFF8 EXTERNSHEET record). */
+    const XclImpXti*    GetXti( sal_uInt16 nXtiIndex ) const;
     /** Returns the specified SUPBOOK (external document). */
-    const XclImpSupbook* GetSupbook( sal_uInt32 nXtiIndex ) const;
+    const XclImpSupbook* GetSupbook( sal_uInt16 nXtiIndex ) const;
 //UNUSED2009-05 /** Returns the SUPBOOK (external workbook) specified by its URL. */
 //UNUSED2009-05 const XclImpSupbook* GetSupbook( const String& rUrl ) const;
 
@@ -222,10 +225,10 @@ private:
 //UNUSED2009-05                         sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
 
 private:
-    typedef ScfDelList< XclImpXti >     XclImpXtiList;
+    typedef ::std::vector< XclImpXti >  XclImpXtiVector;
     typedef ScfDelList< XclImpSupbook > XclImpSupbookList;
 
-    XclImpXtiList       maXtiList;          /// List of all XTI structures.
+    XclImpXtiVector     maXtiList;          /// List of all XTI structures.
     XclImpSupbookList   maSupbookList;      /// List of external documents.
     bool                mbCreated;          /// true = Calc sheets already created.
 };
@@ -582,15 +585,17 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 {
     sal_uInt16 nXtiCount;
     rStrm >> nXtiCount;
+    DBG_ASSERT( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
+    nXtiCount = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
 
-    XclImpXti* pXti;
-    while( nXtiCount )
-    {
-        pXti = new XclImpXti;
-        rStrm >> *pXti;
-        maXtiList.Append( pXti );
-        --nXtiCount;
-    }
+    /*  #i104057# A weird external XLS generator writes multiple EXTERNSHEET
+        records instead of only one as expected. Surprisingly, Excel seems to
+        insert the entries of the second record before the entries of the first
+        record. */
+    XclImpXtiVector aNewEntries( nXtiCount );
+    for( XclImpXtiVector::iterator aIt = aNewEntries.begin(), aEnd = aNewEntries.end(); rStrm.IsValid() && (aIt != aEnd); ++aIt )
+        rStrm >> *aIt;
+    maXtiList.insert( maXtiList.begin(), aNewEntries.begin(), aNewEntries.end() );
 
     LoadCachedValues();
 }
@@ -627,7 +632,7 @@ bool XclImpLinkManagerImpl::IsSelfRef( sal_uInt16 nXtiIndex ) const
 bool XclImpLinkManagerImpl::GetScTabRange(
         SCTAB& rnFirstScTab, SCTAB& rnLastScTab, sal_uInt16 nXtiIndex ) const
 {
-    if( const XclImpXti* pXti = maXtiList.GetObject( nXtiIndex ) )
+    if( const XclImpXti* pXti = GetXti( nXtiIndex ) )
     {
         if (maSupbookList.GetObject(pXti->mnSupbook))
         {
@@ -671,9 +676,14 @@ const String& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uIn
     return pSupbook ? pSupbook->GetMacroName( nExtName ) : EMPTY_STRING;
 }
 
-const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt32 nXtiIndex ) const
+const XclImpXti* XclImpLinkManagerImpl::GetXti( sal_uInt16 nXtiIndex ) const
 {
-    const XclImpXti* pXti = maXtiList.GetObject( nXtiIndex );
+    return (nXtiIndex < maXtiList.size()) ? &maXtiList[ nXtiIndex ] : 0;
+}
+
+const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt16 nXtiIndex ) const
+{
+    const XclImpXti* pXti = GetXti( nXtiIndex );
     return pXti ? maSupbookList.GetObject( pXti->mnSupbook ) : 0;
 }
 

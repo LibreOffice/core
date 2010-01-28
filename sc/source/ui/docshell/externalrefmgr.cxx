@@ -384,11 +384,6 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         return TokenArrayRef();
 
     DocItem& rDoc = itrDoc->second;
-    RangeArrayMap::const_iterator itrRange = rDoc.maRangeArrays.find(rRange);
-    if (itrRange != rDoc.maRangeArrays.end())
-    {
-        return itrRange->second;
-    }
 
     TableNameIndexMap::iterator itrTabId = rDoc.maTableNameIndex.find(
         ScGlobal::pCharClass->upper(rTabName));
@@ -409,6 +404,13 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     if (nTabLastId >= rDoc.maTables.size())
         // not all tables are cached.
         return TokenArrayRef();
+
+    ScRange aCacheRange( nCol1, nRow1, static_cast<SCTAB>(nTabFirstId), nCol2, nRow2, static_cast<SCTAB>(nTabLastId));
+    RangeArrayMap::const_iterator itrRange = rDoc.maRangeArrays.find( aCacheRange);
+    if (itrRange != rDoc.maRangeArrays.end())
+    {
+        return itrRange->second;
+    }
 
     TokenArrayRef pArray(new ScTokenArray);
     bool bFirstTab = true;
@@ -462,7 +464,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
         bFirstTab = false;
     }
-    rDoc.maRangeArrays.insert(RangeArrayMap::value_type(rRange, pArray));
+    rDoc.maRangeArrays.insert( RangeArrayMap::value_type( aCacheRange, pArray));
     return pArray;
 }
 
@@ -545,13 +547,13 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
         return;
     }
 
-    size_t nTab1 = itrTabName->second;
+    size_t nTabFirstId = itrTabName->second;
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
     SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
     vector<SingleRangeData>::const_iterator itrDataBeg = rData.begin(), itrDataEnd = rData.end();
     for (vector<SingleRangeData>::const_iterator itrData = itrDataBeg; itrData != itrDataEnd; ++itrData)
     {
-        size_t i = nTab1 + ::std::distance(itrDataBeg, itrData);
+        size_t i = nTabFirstId + ::std::distance(itrDataBeg, itrData);
         TableTypeRef& pTabData = rDoc.maTables[i];
         if (!pTabData.get())
             pTabData.reset(new Table);
@@ -575,7 +577,9 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
         }
     }
 
-    rDoc.maRangeArrays.insert(RangeArrayMap::value_type(rRange, pArray));
+    size_t nTabLastId = nTabFirstId + rRange.aEnd.Tab() - rRange.aStart.Tab();
+    ScRange aCacheRange( nCol1, nRow1, static_cast<SCTAB>(nTabFirstId), nCol2, nRow2, static_cast<SCTAB>(nTabLastId));
+    rDoc.maRangeArrays.insert( RangeArrayMap::value_type( aCacheRange, pArray));
 }
 
 bool ScExternalRefCache::isDocInitialized(sal_uInt16 nFileId)

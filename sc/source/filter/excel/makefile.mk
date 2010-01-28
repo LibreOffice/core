@@ -121,6 +121,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/excimp8.obj					\
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
+        $(SLO)$/impop.obj					\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/tokstack.obj				\
         $(SLO)$/xecontent.obj				\
