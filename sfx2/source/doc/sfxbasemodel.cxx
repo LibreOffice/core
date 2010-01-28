@@ -2549,7 +2549,9 @@ void SfxBaseModel::NotifyModifyListeners_Impl() const
         pIC->notifyEach( &util::XModifyListener::modified, aEvent );
     }
 
-    m_pData->m_bModifiedSinceLastSave = sal_True;
+    // this notification here is done too generously, we cannot simply assume that we're really modified
+    // now, but we need to check it ...
+    m_pData->m_bModifiedSinceLastSave = const_cast< SfxBaseModel* >( this )->isModified();
 }
 
 void SfxBaseModel::changing()
