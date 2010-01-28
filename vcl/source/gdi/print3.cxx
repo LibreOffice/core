@@ -39,6 +39,7 @@
 #include "vcl/svids.hrc"
 #include "vcl/metaact.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/configsettings.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -330,9 +331,25 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // setup printer
 
     // if no specific printer is already set, create one
+
+    // #i108686#
+    // in case of a UI (platform independent or system dialog) print job, make the printer persistent over jobs
+    // however if no printer was already set by the print job's originator,
+    // and this is an API job, then use the system default location (because
+    // this is the only sensible default available if the user has no means of changing
+    // the destination
     if( ! pController->getPrinter() )
     {
-        boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
+        rtl::OUString aPrinterName( i_rInitSetup.GetPrinterName() );
+        if( ! aPrinterName.getLength() && pController->isShowDialogs() )
+        {
+            // get printer name from configuration
+            SettingsConfigItem* pItem = SettingsConfigItem::get();
+            aPrinterName = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ) );
+        }
+
+        boost::shared_ptr<Printer> pPrinter( new Printer( aPrinterName ) );
         pController->setPrinter( pPrinter );
     }
 
@@ -651,6 +668,16 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
 
         if( i_pController->getJobState() == view::PrintableState_JOB_STARTED )
             i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
+    }
+
+    // make last used printer persistent for UI jobs
+    if( i_pController->isShowDialogs() )
+    {
+        SettingsConfigItem* pItem = SettingsConfigItem::get();
+        pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ),
+                         GetName()
+                         );
     }
 
     return true;
