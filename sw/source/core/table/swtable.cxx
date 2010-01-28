@@ -2060,9 +2060,11 @@ BOOL SwTable::GetInfo( SfxPoolItem& rInfo ) const
     return TRUE;
 }
 
-SwTable* SwTable::FindTable( SwFrmFmt* pFmt )
+SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 {
-    return pFmt ? (SwTable*)SwClientIter( *pFmt ).First( TYPE(SwTable) ) : 0;
+    return (pFmt)
+        ? static_cast<SwTable*>(SwClientIter(*pFmt).First( TYPE(SwTable) ))
+        : 0;
 }
 
 SwTableNode* SwTable::GetTableNode() const

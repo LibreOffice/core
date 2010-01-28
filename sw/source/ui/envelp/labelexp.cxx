@@ -43,7 +43,7 @@
 #include <labfmt.hxx>
 #include <unotools.hxx>
 #include <unoatxt.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unoprnms.hxx>
 
 

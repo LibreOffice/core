@@ -36,9 +36,11 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
+
 #include <unocrsrhelper.hxx>
 #include <unoport.hxx>
-#include <unoobj.hxx>
+#include <unoparaframeenum.hxx>
+#include <unotextrange.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
@@ -48,6 +50,7 @@
 #include <doc.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtfld.hxx>
+#include <frmfmt.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
@@ -237,7 +240,7 @@ void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeExcep
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    SwXTextCursor::SetString(*pUnoCrsr, aString);
+    SwUnoCursorHelper::SetString(*pUnoCrsr, aString);
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
@@ -271,7 +274,7 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet,
+    SwUnoCursorHelper::SetPropertyValue(*pUnoCrsr, *m_pPropSet,
             rPropertyName, aValue);
 }
 /*-- 04.11.03 09:56:58---------------------------------------------------
@@ -422,7 +425,7 @@ void SwXTextPortion::GetPropertyValue(
                             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                             RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                             0L);
-                        SwXTextCursor::GetCrsrAttr(*pUnoCrsr, *pSet);
+                        SwUnoCursorHelper::GetCrsrAttr(*pUnoCrsr, *pSet);
                     }
                     m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);
                 }
@@ -499,7 +502,7 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            SwXTextCursor::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
+            SwUnoCursorHelper::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
                      pPropertyNames[nProp], pValues[nProp]);
         }
     }
@@ -602,7 +605,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
                     pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::PROPERTY_VETO;
                 else
                 {
-                    SwXTextCursor::SetPropertyValue(
+                    SwUnoCursorHelper::SetPropertyValue(
                                 *pUnoCrsr, *m_pPropSet, pProp[i], pValue[i] );
                 }
             }
@@ -679,7 +682,8 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 
     const SfxItemPropertyMap* pPropMap = m_pPropSet->getPropertyMap();
 
-    uno::Sequence< beans::PropertyState > aPropertyStates = SwXTextCursor::GetPropertyStates(
+    uno::Sequence< beans::PropertyState > aPropertyStates =
+        SwUnoCursorHelper::GetPropertyStates(
             *pUnoCrsr, *m_pPropSet,
             rPropertyNames,
             SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
@@ -828,7 +832,7 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
     }
     else
     {
-        eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, *m_pPropSet,
+        eRet = SwUnoCursorHelper::GetPropertyState(*pUnoCrsr, *m_pPropSet,
                 rPropertyName);
     }
     return eRet;
@@ -846,7 +850,7 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
         throw uno::RuntimeException();
 
     uno::Sequence< beans::PropertyState > aRet =
-        SwXTextCursor::GetPropertyStates(*pUnoCrsr, *m_pPropSet,
+        SwUnoCursorHelper::GetPropertyStates(*pUnoCrsr, *m_pPropSet,
                 rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
     if(GetTextPortionType() == PORTION_RUBY_START)
@@ -872,7 +876,8 @@ void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    SwXTextCursor::SetPropertyToDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
+    SwUnoCursorHelper::SetPropertyToDefault(
+            *pUnoCrsr, *m_pPropSet, rPropertyName);
 }
 /*-- 08.03.99 09:41:48---------------------------------------------------
 
@@ -886,7 +891,7 @@ uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    aRet = SwXTextCursor::GetPropertyDefault(*pUnoCrsr, *m_pPropSet,
+    aRet = SwUnoCursorHelper::GetPropertyDefault(*pUnoCrsr, *m_pPropSet,
                 rPropertyName);
     return aRet;
 }
