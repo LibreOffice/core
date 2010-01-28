@@ -63,7 +63,7 @@ public final class StopMessageDispatcherTest extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest test = (XTest) UnoRuntime.queryInterface(
+            XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
             Thread[] threads = new Thread[101];
             int n = Thread.enumerate(threads);

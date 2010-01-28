@@ -591,6 +591,10 @@ UDK_3.9 { # OOo 3.1
 UDK_3.10 { # OOo 3.2
     global:
         rtl_logfile_hasLogFile;
+        rtl_math_erf;
+        rtl_math_erfc;
+        rtl_math_asinh;
+        rtl_math_acosh;
 } UDK_3.9;
 
 PRIVATE_1.0 {

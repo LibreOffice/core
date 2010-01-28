@@ -120,7 +120,7 @@ public class Factory_Test
     //==============================================================================================
     static void service_info_test( Object inst )
     {
-        XServiceInfo xInfo = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class, inst );
+        XServiceInfo xInfo = UnoRuntime.queryInterface( XServiceInfo.class, inst );
 
         if (! xInfo.getImplementationName().equals( m_impl_name ))
         {
@@ -159,7 +159,7 @@ public class Factory_Test
 
             // bootstrap service manager
             XMultiServiceFactory xMgr = RegistryServiceFactory.create( rdb );
-            XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xMgr );
             XComponentContext xContext = (XComponentContext)AnyConverter.toObject(
                 new Type( XComponentContext.class ), xProps.getPropertyValue( "DefaultContext" ) );
@@ -172,7 +172,7 @@ public class Factory_Test
                 new Type( XSimpleRegistry.class ), xProps.getPropertyValue( "Registry" ) );
             // register impl
             XImplementationRegistration xImpReg =
-                (XImplementationRegistration)UnoRuntime.queryInterface(
+                UnoRuntime.queryInterface(
                     XImplementationRegistration.class,
                     xContext.getServiceManager().createInstanceWithContext(
                         "com.sun.star.registry.ImplementationRegistration", xContext ) );
@@ -196,7 +196,7 @@ public class Factory_Test
                         m_supported_services[ nPos ], xContext ) );
             }
 
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface( XComponent.class, xContext );
+            XComponent xComp = UnoRuntime.queryInterface( XComponent.class, xContext );
             xComp.dispose();
         }
         catch (Exception exc)

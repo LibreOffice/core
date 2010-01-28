@@ -51,6 +51,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\lang
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\logging
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\oooimprovement
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\office
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\mail
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\media
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\packages
@@ -226,6 +227,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 ..\%__SRC%\inc\offuh\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\linguistic2\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\logging\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\logging\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\logging\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\logging\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\office\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\office\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\office\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\office\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\oooimprovement\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\oooimprovement\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\oooimprovement\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\oooimprovement\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\mail\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\mail\*.hpp
@@ -371,4 +374,3 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 
 ..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hdl
-

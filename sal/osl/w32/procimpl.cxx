@@ -59,7 +59,7 @@
 #include <string>
 
 //#################################################
-extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile );
+extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile, sal_uInt32 uFlags );
 
 //#################################################
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
@@ -576,13 +576,13 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                 WaitForSingleObject(pProcImpl->m_hProcess, INFINITE);
 
             if (pProcessInputWrite)
-                *pProcessInputWrite = osl_createFileHandleFromOSHandle(hInputWrite);
+                *pProcessInputWrite = osl_createFileHandleFromOSHandle(hInputWrite, osl_File_OpenFlag_Write);
 
             if (pProcessOutputRead)
-                *pProcessOutputRead = osl_createFileHandleFromOSHandle(hOutputRead);
+                *pProcessOutputRead = osl_createFileHandleFromOSHandle(hOutputRead, osl_File_OpenFlag_Read);
 
             if (pProcessErrorRead)
-                *pProcessErrorRead = osl_createFileHandleFromOSHandle(hErrorRead);
+                *pProcessErrorRead = osl_createFileHandleFromOSHandle(hErrorRead, osl_File_OpenFlag_Read);
 
             return osl_Process_E_None;
         }
