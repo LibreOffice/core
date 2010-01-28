@@ -341,7 +341,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     if( ! pController->getPrinter() )
     {
         rtl::OUString aPrinterName( i_rInitSetup.GetPrinterName() );
-        if( ! aPrinterName.getLength() && pController->isShowDialogs() )
+        if( ! aPrinterName.getLength() && pController->isShowDialogs() && ! pController->isDirectPrint() )
         {
             // get printer name from configuration
             SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -671,7 +671,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     }
 
     // make last used printer persistent for UI jobs
-    if( i_pController->isShowDialogs() )
+    if( i_pController->isShowDialogs() && ! i_pController->isDirectPrint() )
     {
         SettingsConfigItem* pItem = SettingsConfigItem::get();
         pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
