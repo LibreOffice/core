@@ -116,6 +116,8 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >          m_xHoldAlive;
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
         ::com::sun::star::awt::Size                                                             m_aVisualAreaSize;
 
         ::boost::shared_ptr<rptui::OReportModel>
@@ -473,6 +475,9 @@ namespace rptui
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const;
+        ::rtl::OUString getColumnLabel_throw(const ::rtl::OUString& i_sColumnName) const;
 
     private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );

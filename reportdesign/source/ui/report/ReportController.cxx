@@ -354,6 +354,8 @@ void OReportController::disposing()
 
     try
     {
+        m_xHoldAlive.clear();
+        m_xColumns.clear();
         ::comphelper::disposeComponent( m_xRowSet );
         ::comphelper::disposeComponent( m_xRowSetMediator );
         ::comphelper::disposeComponent( m_xFormatter );
@@ -2303,6 +2305,8 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     ||  evt.PropertyName.equals( PROPERTY_FILTER )
                     )
             {
+                m_xColumns.clear();
+                m_xHoldAlive.clear();
                 InvalidateFeature(SID_FM_ADD_FIELD);
                 if ( !m_pMyOwnView->isAddFieldVisible() && isUiVisible() )
                     m_pMyOwnView->toggleAddField();
@@ -4384,3 +4388,26 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
 {
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
+// -----------------------------------------------------------------------------
+uno::Reference< container::XNameAccess > OReportController::getColumns() const
+{
+    if ( !m_xColumns.is() && m_xReportDefinition.is() && m_xReportDefinition->getCommand().getLength() )
+    {
+        m_xColumns = dbtools::getFieldsByCommandDescriptor(getConnection(),m_xReportDefinition->getCommandType(),m_xReportDefinition->getCommand(),m_xHoldAlive);
+    }
+    return m_xColumns;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OReportController::getColumnLabel_throw(const ::rtl::OUString& i_sColumnName) const
+{
+    ::rtl::OUString sLabel;
+    uno::Reference< container::XNameAccess > xColumns = getColumns();
+    if ( xColumns.is() && xColumns->hasByName(i_sColumnName) )
+    {
+        uno::Reference< beans::XPropertySet> xColumn(xColumns->getByName(i_sColumnName),uno::UNO_QUERY_THROW);
+        if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+            xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+    }
+    return sLabel;
+}
+// -----------------------------------------------------------------------------

@@ -50,6 +50,8 @@
 #include "CondFormat.hrc"
 #include "ModuleHelper.hxx"
 #include "uistrings.hrc"
+#include "ColumnInfo.hxx"
+
 #include <comphelper/property.hxx>
 #include <svtools/imgdef.hxx>
 
@@ -70,23 +72,6 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-struct ColumnInfo
-{
-    ::rtl::OUString sColumnName;
-    ::rtl::OUString sLabel;
-    bool bColumn;
-    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
-        : sColumnName(i_sColumnName)
-        , sLabel(i_sLabel)
-        , bColumn(true)
-    {
-    }
-    ColumnInfo(const ::rtl::OUString& i_sColumnName)
-        : sColumnName(i_sColumnName)
-        , bColumn(false)
-    {
-    }
-};
 class OAddFieldWindowListBox    : public SvTreeListBox
 {
     OAddFieldWindow*                    m_pTabWin;
@@ -247,6 +232,15 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
 //-----------------------------------------------------------------------
 OAddFieldWindow::~OAddFieldWindow()
 {
+    if ( m_pListBox.get() )
+    {
+        SvLBoxTreeList* pModel = m_pListBox->GetModel();
+        ULONG nCount = pModel->GetEntryCount();
+        for(ULONG i = 0; i< nCount;++i)
+        {
+            delete pModel->GetEntry(i)->GetUserData();
+        }
+    }
     if (m_pChangeListener.is())
         m_pChangeListener->dispose();
     if ( m_pContainerListener.is() )

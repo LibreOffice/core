@@ -103,7 +103,22 @@ namespace rptui
                 if ( sDataField.getLength() )
                 {
                     ReportFormula aFormula( sDataField );
-                    sDataField = aFormula.getEqualUndecoratedContent();
+                    bool bSet = true;
+                    if ( aFormula.getType() == ReportFormula::Field )
+                    {
+                        const ::rtl::OUString sColumnName = aFormula.getFieldName();
+                        ::rtl::OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
+                        if ( sLabel.getLength() )
+                        {
+                            ::rtl::OUStringBuffer aBuffer;
+                            aBuffer.appendAscii( "=" );
+                            aBuffer.append( sLabel );
+                            sDataField = aBuffer.makeStringAndClear();
+                            bSet = false;
+                        }
+                    }
+                    if ( bSet )
+                        sDataField = aFormula.getEqualUndecoratedContent();
                 }
             }
 
