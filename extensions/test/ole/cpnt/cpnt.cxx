@@ -49,7 +49,7 @@
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <rtl/ustring>
+#include <rtl/ustring.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oletest/XTestSequence.hpp>
 #include <oletest/XTestStruct.hpp>
@@ -374,7 +374,7 @@ Sequence<OUString> OComponent_getSupportedServiceNames(void)
 }
 
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(   void * pServiceManager, void * pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, void * pRegistryKey )
 {
     if(pRegistryKey)
     {
@@ -395,7 +395,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * pServiceManager, void
 }
 
 extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     static void * pRet= NULL;
     if( ! pRet)
@@ -421,7 +421,7 @@ extern "C" void * SAL_CALL component_getFactory(
 }
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -983,11 +983,11 @@ void SAL_CALL OComponent::testout_methodMulParams2(sal_Int32& rout1, sal_Int32& 
     rout2= 1222;
     rout3= L" another string";
 }
-void SAL_CALL OComponent::testout_methodMulParams3(const OUString& sin, OUString& sout) throw( RuntimeException )
+void SAL_CALL OComponent::testout_methodMulParams3(const OUString&, OUString& sout) throw( RuntimeException )
 {
     sout= L"Out Hallo!";
 }
-void SAL_CALL OComponent::testout_methodMulParams4( float in1, float& out1, sal_Int32 in2, sal_Int32& out2, sal_Int32 in3 ) throw(RuntimeException)
+void SAL_CALL OComponent::testout_methodMulParams4( float in1, float& out1, sal_Int32 in2, sal_Int32& out2, sal_Int32 ) throw(RuntimeException)
 {
     out1= in1 + 1;
     out2= in2 + 1;
@@ -1091,11 +1091,11 @@ Reference<XInvocation > SAL_CALL OComponent::in_methodInvocation( const Referenc
     try{
     inv->invoke( OUString(RTL_CONSTASCII_USTRINGPARAM("disposing")),
                 params, outIndex, outParams);
-    }catch(IllegalArgumentException & iae) {
+    }catch(IllegalArgumentException &) {
     }
-    catch(CannotConvertException & cce) {
+    catch(CannotConvertException &){
     }
-    catch(InvocationTargetException& ite) {
+    catch(InvocationTargetException&) {
     }
     return inv;
 }
@@ -1113,9 +1113,10 @@ SimpleStruct SAL_CALL OComponent::in_methodStruct( const SimpleStruct& aStruct )
         "This string was set in OleTest"));
     return aStruct;
 }
-void SAL_CALL OComponent::in_methodAll( sal_Int8 b, float f, double d, sal_Bool boo, sal_Int16 sh, sal_uInt16 us,
-                                        sal_Int32 l, sal_uInt32 ul, const OUString& s, sal_Unicode c,
-                                        const Any& a, const Type& t, const Reference<XInvocation>& inv ) throw (RuntimeException)
+void SAL_CALL OComponent::in_methodAll(
+    sal_Int8, float, double, sal_Bool, sal_Int16, sal_uInt16,
+    sal_Int32, sal_uInt32, const OUString&, sal_Unicode,
+    const Any&, const Type&, const Reference<XInvocation>&) throw (RuntimeException)
 {
 }
 
@@ -1324,7 +1325,7 @@ Property SAL_CALL OComponent::methodStruct2( const Property& aProp ) throw (Runt
 }
 
 // XTestOther ==================================================================================
-void SAL_CALL OComponent::other_methodAnyIn(const Any& rAny) throw( RuntimeException )
+void SAL_CALL OComponent::other_methodAnyIn(const Any& ) throw( RuntimeException )
 {
 }
 void SAL_CALL OComponent::other_methodAnyOut(Any& rAny) throw( RuntimeException )
@@ -1471,8 +1472,8 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
     sal_Int8 aByte;
     sal_Int16 aShort;
     sal_Int32 aLong;
-    sal_uInt16 aUShort;
-    sal_uInt32 aULong;
+//  sal_uInt16 aUShort;
+//  sal_uInt32 aULong;
 
     switch( mode)
     {
@@ -1590,8 +1591,8 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             sal_Int8    aByte;
             sal_Int16   aShort;
             sal_Int32   aLong;
-            sal_uInt16  aUShort;
-            sal_uInt32  aULong;
+//          sal_uInt16  aUShort;
+//          sal_uInt32  aULong;
             xCallback->outValuesAll( xSimple, aSimpleStruct, aSimpleEnum, seqAny, aAny, aBool,
                 aChar, aString,
             aFloat, aDouble,
@@ -1731,7 +1732,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         }
     case 108:
         {
-            float f= 3.14;
+            float f= 3.14f;
             xCallback->inoutFloat(f);
             char buff[1024];
             sprintf( buff, "out value float: %f", f);
@@ -1811,7 +1812,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         sal_Bool aBool= sal_True;
         sal_Unicode aChar= L'A';
         OUString aString( L"OleTest");
-        float aFloat=3.14;
+        float aFloat=3.14f;
         double aDouble= 3.145;
         sal_Int8 aByte= 0xf;
         sal_Int16 aShort= 0xff;
@@ -1981,15 +1982,15 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             arAny[6] <<= L'B';
             OUString stringParam(L" a string parameter");
             arAny[7] <<= stringParam;
-            float _float= 3.14;
+            float _float= 3.14f;
             arAny[8] <<= _float;
             double _double= 3.145;
             arAny[9] <<= _double;
-            sal_Int8 _byte= 0xff;
+            sal_Int8 _byte= -1;
             arAny[10] <<= _byte;
-            sal_Int16 _short= 0xffff;
+            sal_Int16 _short= -1;
             arAny[11] <<= _short;
-            sal_Int32 _long= 0xffffffff;
+            sal_Int32 _long= -1;
             arAny[12] <<= _long;
 //
             Sequence<Any> params( arAny, 13);
@@ -2089,7 +2090,7 @@ Reference< XInterface > SAL_CALL OComponent::getThis(  ) throw (RuntimeException
     return ret;
 }
 
-void SAL_CALL EventListener::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+void SAL_CALL EventListener::disposing( const ::com::sun::star::lang::EventObject& ) throw (RuntimeException)
 {
     bCalled= sal_True;
 }

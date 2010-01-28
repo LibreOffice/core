@@ -115,7 +115,7 @@ public class RelationController extends CommandName
         try
         {
             CommandName oLocCommandName = new CommandName(super.getCommandMetaData(), _sreferencedtablename);
-            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), _sreferencedtablename);
+            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), oLocCommandName.getTableName());
             XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
             boolean bleaveLoop = false;
             Vector aMasterFieldNamesVector = new Vector();
@@ -128,7 +128,7 @@ public class RelationController extends CommandName
                 {
                     sPrimaryCatalog = xRow.getString(PKTABLE_CAT);
                 }
-                if (super.getCommandMetaData().xDBMetaData.supportsCatalogsInDataManipulation())
+                if (super.getCommandMetaData().xDBMetaData.supportsSchemasInDataManipulation())
                 {
                     sPrimarySchema = xRow.getString(PKTABLE_SCHEM);
                 }
@@ -137,7 +137,7 @@ public class RelationController extends CommandName
                 String sForeignColumnName = xRow.getString(FKCOLUMN_NAME);
                 if (JavaTools.isSame(getTableName(), sPrimaryTableName))
                 {
-                    if (JavaTools.isSame(getSchemaName(), sPrimarySchema))
+                    if (sPrimarySchema == null || JavaTools.isSame(getSchemaName(), sPrimarySchema))
                     {
                         if (JavaTools.isSame(getCatalogName(), sPrimaryCatalog))
                         {

@@ -66,7 +66,6 @@ private:
 
 protected:
     DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName);
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
@@ -140,7 +139,6 @@ public:
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer);
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 };
 
 
@@ -161,9 +159,6 @@ private:
 
 
 protected:
-    DlgEdForm(const ::rtl::OUString& rModelName);
-    DlgEdForm(const ::rtl::OUString& rModelName,
-              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
     DlgEdForm();
 
     virtual void NbcMove( const Size& rSize );
@@ -193,8 +188,6 @@ public:
     virtual void UpdateTabOrder();
     virtual void UpdateGroups();
     virtual void UpdateTabOrderAndGroups();
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 
     ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
 

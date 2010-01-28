@@ -59,6 +59,8 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
  */
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
+    final static int PRIVATE = 0;
+    final static int BUSINESS = 1;
 
     private XFixedText lblExplanation;
     private XFixedText lblCategories;
@@ -163,18 +165,18 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             e.printStackTrace(System.out);
         }
-        initializeCategory(0);
+        initializeCategory(BUSINESS);
     }
 
     public int getCategory()
     {
         if (optBusiness.getState())
         {
-            curcategory = 0;
+            curcategory = BUSINESS;
         }
         else
         {
-            curcategory = 1;
+            curcategory = PRIVATE;
         }
         return curcategory;
     }
@@ -183,11 +185,11 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     {
         if (optBusiness.getState())
         {
-            initializeCategory(0);
+            initializeCategory(BUSINESS);
         }
         else
         {
-            initializeCategory(1);
+            initializeCategory(PRIVATE);
         }
     }
 

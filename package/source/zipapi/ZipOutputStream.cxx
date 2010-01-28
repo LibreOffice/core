@@ -37,9 +37,7 @@
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
-#endif
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/storagehelper.hxx>

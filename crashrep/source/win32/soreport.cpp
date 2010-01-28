@@ -1564,8 +1564,60 @@ static void repatch_soffice_exe( void *pBuffer, size_t nBufSize )
     } while ( !bPatched && nBufSize );
 }
 
+// Normalize executable/library images to prevent different MD5 checksums due
+// to a different PE header date/checksum (this doesn't affect the code/data
+// sections of a executable/library. Please see tools/source/bootstrp/md5.cxx
+// where the same method is also used. The tool so_checksum creates the MD5
+// checksums during build time. You have to make sure that both methods use the
+// same algorithm otherwise there could be problems with stack reports.
+static void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
+{
+    const int OFFSET_PE_OFFSET                  = 0x3c;
+    const int OFFSET_COFF_TIMEDATESTAMP         = 4;
+    const int PE_SIGNATURE_SIZE                 = 4;
+    const int COFFHEADER_SIZE                   = 20;
+    const int OFFSET_PE_OPTIONALHEADER_CHECKSUM = 64;
+
+    // Check the header part of the file buffer
+    if (buffer[0] == 'M' && buffer[1] == 'Z')
+    {
+        unsigned long PEHeaderOffset = (long)buffer[OFFSET_PE_OFFSET];
+        if (PEHeaderOffset < nBufferSize-4)
+        {
+            if ( buffer[PEHeaderOffset] == 'P' &&
+                 buffer[PEHeaderOffset+1] == 'E' &&
+                 buffer[PEHeaderOffset+2] == 0 &&
+                 buffer[PEHeaderOffset+3] == 0 )
+            {
+                PEHeaderOffset += PE_SIGNATURE_SIZE;
+                if (PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP < nBufferSize-4)
+                {
+                    // Set timedatestamp and checksum fields to a normalized
+                    // value to enforce the same MD5 checksum for identical
+                    // Windows  executables/libraries.
+                    buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP] = 0;
+                    buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+1] = 0;
+                    buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+2] = 0;
+                    buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+3] = 0;
+                }
+
+                if (PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM < nBufferSize-4)
+                {
+                    // Set checksum to a normalized value
+                    buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM] = 0;
+                    buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM+1] = 0;
+                    buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM+2] = 0;
+                    buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM+3] = 0;
+                }
+            }
+        }
+    }
+}
+
 static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
 {
+    const int MINIMAL_FILESIZE = 512;
+
     sal_uInt32  nBytesProcessed = 0;
 
     FILE *fp = fopen( filename, "rb" );
@@ -1585,6 +1637,8 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
             {
                 if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.bin" ) )
                     repatch_soffice_exe( pBuffer, nBytesRead );
+                else if ( nFileSize > MINIMAL_FILESIZE )
+                    normalize_pe_image( pBuffer, nBytesRead );
 
                 rtlDigestError error = rtl_digest_MD5 (
                     pBuffer,   nBytesRead,

@@ -150,8 +150,8 @@
 #define RID_STR_INPUT_REQUIRED              ( RID_FORMBROWSER_START + 119 )
 #define RID_STR_UNCHECKEDREFVALUE           ( RID_FORMBROWSER_START + 120 )
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
-    // FREE
-    // FREE
+#define RID_STR_ENABLE_VISIBLE              ( RID_FORMBROWSER_START + 122 )
+#define RID_STR_WHEEL_BEHAVIOR              ( RID_FORMBROWSER_START + 123 )
     // FREE
     // FREE
     // FREE
@@ -345,8 +345,9 @@
 #define RID_RSC_ENUM_YESNO                  ( RID_PROPCONTROLLER_START + 27 )
 #define RID_RSC_ENUM_SHOWHIDE               ( RID_PROPCONTROLLER_START + 28 )
 #define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 29 )
-#define RID_RSC_ENUM_TEXT_ANCHOR_TYPE       ( RID_PROPCONTROLLER_START + 30 )
-#define RID_RSC_ENUM_SHEET_ANCHOR_TYPE      ( RID_PROPCONTROLLER_START + 31 )
+#define RID_RSC_ENUM_WHEEL_BEHAVIOR         ( RID_PROPCONTROLLER_START + 30 )
+#define RID_RSC_ENUM_TEXT_ANCHOR_TYPE       ( RID_PROPCONTROLLER_START + 31 )
+#define RID_RSC_ENUM_SHEET_ANCHOR_TYPE      ( RID_PROPCONTROLLER_START + 32 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids

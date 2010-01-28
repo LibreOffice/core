@@ -32,6 +32,7 @@
 Start
 module = "gid_Module_Root"
 solarispackagename = "%SOLSUREPACKAGEPREFIX-ure"
+solarisrequires = "SUNWzlibr"
 packagename = "%UREPACKAGEPREFIX-ure"
 copyright = "2005-2009 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
@@ -44,6 +45,7 @@ End
 Start
 module = "gid_Module_Root_Ure_Hidden"
 solarispackagename = "%SOLSUREPACKAGEPREFIX-ure"
+solarisrequires = "SUNWzlibr"
 packagename = "%UREPACKAGEPREFIX-ure"
 copyright = "2005-2009 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"

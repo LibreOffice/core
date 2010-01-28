@@ -80,31 +80,6 @@ namespace BasicIDE
 {
 //----------------------------------------------------------------------------
 
-SfxMacro* CreateMacro()
-{
-    DBG_ERROR( "BasicIDE::CreateMacro() - war eigentlich nur fuer Macro-Recording!" );
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
-    SFX_APP()->EnterBasicCall();
-    Window* pParent = Application::GetDefDialogParent();
-    SfxMacro* pMacro = 0;
-    MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
-    Window* pOldModalDialogParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( pChooser );
-    //pChooser->SetMode( MACROCHOOSER_RECORDING );
-    short nRetValue = pChooser->Execute();
-    (void)nRetValue;
-
-    Application::SetDefDialogParent( pOldModalDialogParent );
-    delete pChooser;
-
-    SFX_APP()->LeaveBasicCall();
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
-
-    return pMacro;
-}
-
-//----------------------------------------------------------------------------
-
 void Organize( INT16 tabId )
 {
     BasicIDEDLL::Init();

@@ -70,6 +70,7 @@ namespace frm
         sal_Int16                           m_nBorder;
         sal_Int32                           m_nDelay;
         sal_Bool                            m_bEnabled;
+        sal_Bool                            m_bEnableVisible;
         sal_Bool                            m_bShowPosition;
         sal_Bool                            m_bShowNavigation;
         sal_Bool                            m_bShowActions;

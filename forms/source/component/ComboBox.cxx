@@ -733,6 +733,8 @@ void OComboBoxModel::onDisconnectedDbColumn()
     // reset the string item list
     if ( !hasExternalListSource() )
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( m_aDesignModeStringItems ) );
+
+    m_aListRowSet.dispose();
 }
 
 //------------------------------------------------------------------------------
