@@ -580,7 +580,6 @@ sal_Int8 Clipboard::ExecuteDrop (
                 || ( nXOffset >= 2 && nYOffset >= 2 );
 
             // Get insertion position and then turn off the insertion indicator.
-            view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
             mrController.GetInsertionIndicatorHandler()->UpdatePosition(aEventModelPosition);
             USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
             OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",

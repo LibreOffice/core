@@ -238,7 +238,6 @@ SlideSorter::~SlideSorter (void)
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
     mpScrollBarBox.reset();
-    const int nCount (mpContentWindow.use_count());
     OSL_ASSERT(mpContentWindow.unique());
     OSL_ASSERT(mpContentWindow.use_count()==1);
     mpContentWindow.reset();

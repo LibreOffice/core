@@ -379,8 +379,8 @@ Rectangle Layouter::GetPageObjectBox (
     const sal_Int32 nIndex,
     const bool bIncludeBorderAndGap) const
 {
-    int nColumn = nIndex % mnColumnCount;
-    int nRow = nIndex / mnColumnCount;
+    const sal_Int32 nRow (GetRow(nIndex));
+    const sal_Int32 nColumn (GetColumn(nIndex));
     Rectangle aBoundingBox(
         Point (mnLeftBorder
             + nColumn * maPageObjectSize.Width()
@@ -391,8 +391,6 @@ Rectangle Layouter::GetPageObjectBox (
         maPageObjectSize);
     if (bIncludeBorderAndGap)
     {
-        const sal_Int32 nRow (GetRow(nIndex));
-        const sal_Int32 nColumn (GetColumn(nIndex));
         if (nColumn == 0)
             aBoundingBox.Left() = 0;
         else

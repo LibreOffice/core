@@ -92,7 +92,6 @@ using namespace ::drawinglayer::primitive2d;
 using ::sd::slidesorter::controller::Animator;
 using ::sd::slidesorter::controller::AnimationFunction;
 
-//#define VERBOSE
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -218,11 +217,11 @@ public:
         const Color aBackgroundColor,
         const bool bIsAnimated)
         : mpAnimator(rpAnimator),
-          mnAnimationId(controller::Animator::NotAnAnimationId),
           maBackgroundColor(aBackgroundColor),
           maSpheres(),
           mpInvalidator(),
-          mpWindow(rpWindow)
+          mpWindow(rpWindow),
+          mnAnimationId(controller::Animator::NotAnAnimationId)
     {
         if (bIsAnimated)
         {
@@ -753,7 +752,7 @@ Rectangle SlideSorterView::GetModelArea (void)
 }
 
 
-static sal_Int32 nPaintIndex = 0;
+
 
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
@@ -771,28 +770,12 @@ void SlideSorterView::CompleteRedraw (
 
     if (mnLockRedrawSmph == 0)
     {
-#ifdef VERBOSE
-        OSL_TRACE("%5d CompleteRedraw %d %d %d %d",
-            nPaintIndex++,
-            rPaintArea.GetBoundRect().Left(),
-            rPaintArea.GetBoundRect().Top(),
-            rPaintArea.GetBoundRect().GetWidth(),
-            rPaintArea.GetBoundRect().GetHeight());
-#endif
-
         mrSlideSorter.GetContentWindow()->IncrementLockCount();
         mpLayeredDevice->Repaint(rPaintArea);
         mrSlideSorter.GetContentWindow()->DecrementLockCount();
-
-#ifdef VERBOSE
-        OSL_TRACE("CompleteRedraw done");
-#endif
     }
     else
     {
-#ifdef VERBOSE
-        OSL_TRACE("%5d CompleteRedraw while locked", nPaintIndex++);
-#endif
         View::CompleteRedraw(pDevice, rPaintArea, pRedirector);
     }
 }
@@ -973,6 +956,10 @@ bool SlideSorterView::SetState (
         case PageDescriptor::ST_Current:
         case PageDescriptor::ST_Excluded:
             AddVisualStateAnimation(rpDescriptor);
+            break;
+
+        case PageDescriptor::ST_WasSelected:
+            // Ignore.
             break;
     }
 

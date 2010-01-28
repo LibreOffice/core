@@ -331,6 +331,9 @@ void Listener::Notify (
                     rSdrHint.GetPage(),
                     true);
                 break;
+
+            default:
+                break;
         }
     }
     else if (rHint.ISA(ViewShellHint))

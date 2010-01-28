@@ -249,16 +249,14 @@ Animator::Animation::Animation (
     const Animator::FinishFunctor& rFinishFunctor)
     : maAnimation(rAnimation),
       maFinishFunctor(rFinishFunctor),
+      mnAnimationId(nId),
       mnValue(0),
       mnEnd(nEnd),
       mnDelta(nDelta),
-      mnAnimationId(nId),
       mbIsExpired(false)
 {
-
     maAnimation(mnValue);
     mnValue = mnDelta;
-
 }
 
 

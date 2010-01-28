@@ -289,7 +289,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
     const sal_Int32 nCount (maPageDescriptors.size());
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
-        SharedPageDescriptor pDescriptor (maPageDescriptors[nIndex]);
+        pDescriptor = maPageDescriptors[nIndex];
 
         // Make sure that the descriptor exists.  Without it the given slide
         // can not be found.

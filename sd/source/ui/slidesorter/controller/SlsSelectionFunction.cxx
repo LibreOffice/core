@@ -653,7 +653,6 @@ void SelectionFunction::StartDrag (const Point& rMousePosition)
     if (mbPageHit
         &&  ! mrSlideSorter.GetProperties()->IsUIReadOnly())
     {
-        view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
         mpSubstitutionHandler->Start(rMousePosition);
         mbPageHit = false;
         mpWindow->ReleaseMouse();
@@ -839,6 +838,8 @@ sal_uInt32 SelectionFunction::EncodeKeyEvent (
     const EventDescriptor& rDescriptor,
     const KeyEvent& rEvent) const
 {
+    (void)rDescriptor;
+
     // Initialize as key event.
     sal_uInt32 nEventCode (KEY_EVENT);
 

@@ -237,8 +237,6 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     return  Rectangle(
         aBoundingBox.TopLeft() + aLocation,
         aBoundingBox.BottomRight() + aLocation);
-
-    return aBoundingBox;
 }
 
 

@@ -221,7 +221,7 @@ void PageObjectPainter::PaintBackground (
 
     const ColorData nColor (GetColorForVisualState(rpDescriptor));
     rDevice.SetFillColor(Color(nColor & 0x00ffffff));
-    const double nTransparency (COLORDATA_TRANSPARENCY(nColor)/255.0);
+    double nTransparency (COLORDATA_TRANSPARENCY(nColor)/255.0);
     rDevice.DrawTransparent(
         ::basegfx::B2DPolyPolygon(
             ::basegfx::tools::createPolygonFromRect(
@@ -233,7 +233,7 @@ void PageObjectPainter::PaintBackground (
     if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
     {
         rDevice.SetFillColor(Color(MouseOverColor & 0x00ffffff));
-        double nTransparency (COLORDATA_TRANSPARENCY(MouseOverColor)/255.0);
+        nTransparency = COLORDATA_TRANSPARENCY(MouseOverColor)/255.0;
         nTransparency *= 1-rpDescriptor->GetVisualState().GetVisualStateBlend();
         rDevice.DrawTransparent(
             ::basegfx::B2DPolyPolygon(

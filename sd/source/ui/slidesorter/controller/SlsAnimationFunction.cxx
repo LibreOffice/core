@@ -271,12 +271,12 @@ double AnimationParametricFunction::operator() (const double nX)
 {
     const sal_Int32 nIndex0 (nX * maY.size());
     const double nX0 (nIndex0 / double(maY.size()-1));
-    const sal_Int32 nIndex1 (nIndex0 + 1);
+    const sal_uInt32 nIndex1 (nIndex0 + 1);
     const double nX1 (nIndex1 / double(maY.size()-1));
 
     if (nIndex0<=0)
         return maY[0];
-    else if (nIndex0>=maY.size() || nIndex1>=maY.size())
+    else if (sal_uInt32(nIndex0)>=maY.size() || nIndex1>=maY.size())
         return maY[maY.size()-1];
 
     const double nU ((nX-nX1) / (nX0 - nX1));

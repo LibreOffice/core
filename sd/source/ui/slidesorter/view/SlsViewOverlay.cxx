@@ -518,12 +518,13 @@ void SelectionRectangleOverlay::Paint (
         ::std::min(maAnchor.Y(), maSecondCorner.Y()),
         ::std::max(maAnchor.X(), maSecondCorner.X()),
         ::std::max(maAnchor.Y(), maSecondCorner.Y()));
-    rDevice.DrawTransparent(
+    if (rRepaintArea.IsOver(aBox))
+        rDevice.DrawTransparent(
             ::basegfx::B2DPolyPolygon(
-            ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                5.0/aBox.GetWidth(),
-                5.0/aBox.GetHeight())),
+                ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
+                    5.0/aBox.GetWidth(),
+                    5.0/aBox.GetHeight())),
             0.5);
 }
 

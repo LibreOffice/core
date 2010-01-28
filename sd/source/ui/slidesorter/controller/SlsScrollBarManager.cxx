@@ -58,8 +58,10 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mnHorizontalScrollFactor (0.1),
       mnVerticalScrollFactor (0.1),
       mpScrollBarFiller(mrSlideSorter.GetScrollBarFiller()),
-      mpContentWindow(mrSlideSorter.GetContentWindow()),
+      maAutoScrollTimer(),
+      maAutoScrollOffset(0,0),
       mbIsAutoScrollActive(false),
+      mpContentWindow(mrSlideSorter.GetContentWindow()),
       maAutoScrollFunctor()
 {
     // Hide the scroll bars by default to prevent display errors while

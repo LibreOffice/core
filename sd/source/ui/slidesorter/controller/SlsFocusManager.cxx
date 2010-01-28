@@ -265,7 +265,6 @@ void FocusManager::ShowFocusIndicator (
         {
             // Scroll the focused page object into the visible area and repaint
             // it, so that the focus indicator becomes visible.
-            view::SlideSorterView& rView (mrSlideSorter.GetView());
             mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
                 GetFocusedPageDescriptor()->GetBoundingBox());
         }

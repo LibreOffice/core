@@ -132,7 +132,7 @@ void LayeredDevice::Invalidate (
     const Rectangle& rInvalidationArea,
     const sal_Int32 nLayer)
 {
-    if (nLayer<0 || nLayer>=maLayers.size())
+    if (nLayer<0 || sal_uInt32(nLayer)>=maLayers.size())
     {
         OSL_ASSERT(nLayer>=0 && nLayer<maLayers.size());
         return;
@@ -146,7 +146,7 @@ void LayeredDevice::Invalidate (
 
 void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
 {
-    for (sal_Int32 nLayer=0; nLayer<maLayers.size(); ++nLayer)
+    for (sal_uInt32 nLayer=0; nLayer<maLayers.size(); ++nLayer)
         maLayers[nLayer].Invalidate(rInvalidationArea);
 }
 
@@ -168,7 +168,7 @@ void LayeredDevice::RegisterPainter (
         return;
     }
 
-    if (nLayer >= maLayers.size())
+    if (sal_uInt32(nLayer) >= maLayers.size())
         maLayers.resize(nLayer+1);
     maLayers[nLayer].AddPainter(rpPainter);
     if (nLayer == 0)
@@ -190,7 +190,7 @@ void LayeredDevice::RemovePainter (
         OSL_ASSERT(rpPainter);
         return;
     }
-    if (nLayer<0 || nLayer>=maLayers.size())
+    if (nLayer<0 || sal_uInt32(nLayer)>=maLayers.size())
     {
         OSL_ASSERT(nLayer>=0 && nLayer<maLayers.size());
         return;
@@ -210,7 +210,9 @@ void LayeredDevice::RemovePainter (
 
 bool LayeredDevice::HasPainter (const sal_Int32 nLayer)
 {
-    return maLayers.size()>nLayer && maLayers[nLayer].HasPainter();
+    return nLayer>=0
+        && sal_uInt32(nLayer)<maLayers.size()
+        && maLayers[nLayer].HasPainter();
 }
 
 
