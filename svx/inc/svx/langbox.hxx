@@ -78,6 +78,7 @@ private:
 
     SVX_DLLPRIVATE void                    Init();
     SVX_DLLPRIVATE USHORT                  ImplInsertImgEntry( const String& rEntry, USHORT nPos, bool bChecked );
+    SVX_DLLPRIVATE USHORT                  ImplInsertLanguage(LanguageType, USHORT, sal_Int16 );
 
 public:
     SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck = FALSE);
@@ -89,6 +90,7 @@ public:
                             BOOL bCheckSpellAvail = FALSE );
 
     USHORT          InsertLanguage( const LanguageType eLangType, USHORT nPos = LISTBOX_APPEND );
+    USHORT          InsertDefaultLanguage( sal_Int16 nType, USHORT nPos = LISTBOX_APPEND );
     USHORT          InsertLanguage( const LanguageType eLangType,
                             BOOL bCheckEntry, USHORT nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );

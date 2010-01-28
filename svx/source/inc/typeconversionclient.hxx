@@ -31,7 +31,7 @@
 #ifndef SVX_TYPECONVERSION_CLIENT_HXX
 #define SVX_TYPECONVERSION_CLIENT_HXX
 
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 
 //........................................................................
 namespace svxform

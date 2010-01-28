@@ -170,7 +170,6 @@ private:
     long                    nCurFormatHeight;
     long                    nStdFormatY;
     long                    nStdFormatHeight;
-    LocalizedString aStrEurope;
     LocalizedString sAutomaticEntry;
 
     Window*                 pLastActivWindow;

@@ -94,7 +94,17 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     osl_incrementInterlockedCount( &m_refCount );
     m_pConnection->acquire();
     m_aStatementHandle = m_pConnection->createStatementHandle();
-    setMaxFieldSize(0);
+
+    //setMaxFieldSize(0);
+    // Don't do this. By ODBC spec, "0" is the default for the SQL_ATTR_MAX_LENGTH attribute. We once introduced
+    // this line since an PostgreSQL ODBC driver had a default other than 0. However, current drivers (at least 8.3
+    // and later) have a proper default of 0, so there should be no need anymore.
+    // On the other hand, the NotesSQL driver (IBM's ODBC driver for the Lotus Notes series) wrongly interprets
+    // "0" as "0", whereas the ODBC spec says it should in fact mean "unlimited".
+    // So, removing this line seems to be the best option for now.
+    // If we ever again encounter a ODBC driver which needs this option, then we should introduce a data source
+    // setting for it, instead of unconditionally doing it.
+
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------

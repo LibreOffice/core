@@ -118,7 +118,6 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
 
                 width += maColumns[aPos.mnCol++].mnSize;
                 nColSpan--;
-                nColSpan--;
             }
         }
     }

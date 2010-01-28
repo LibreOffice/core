@@ -35,6 +35,10 @@
 // includes
 //-----------------------------------------------------------------------------
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning( disable : 4917 )
+#endif
+
 #include "comptr.hxx"
 #include "vistatypes.h"
 #include "IVistaFilePickerInternalNotify.hxx"

@@ -452,9 +452,11 @@ namespace svxform
         bool bIsDocModified = false;
         m_pNaviWin->DisableNotify( true );
 
-        if ( TBI_ITEM_ADD == _nToolBoxID
-            || TBI_ITEM_ADD_ELEMENT == _nToolBoxID
-            || TBI_ITEM_ADD_ATTRIBUTE == _nToolBoxID )
+        switch ( _nToolBoxID )
+        {
+        case TBI_ITEM_ADD:
+        case TBI_ITEM_ADD_ELEMENT:
+        case TBI_ITEM_ADD_ATTRIBUTE:
         {
             bHandled = true;
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -643,7 +645,9 @@ namespace svxform
                 }
             }
         }
-        else if ( TBI_ITEM_EDIT == _nToolBoxID )
+        break;
+
+        case TBI_ITEM_EDIT:
         {
             bHandled = true;
             SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
@@ -737,7 +741,9 @@ namespace svxform
                 }
             }
         }
-        else if ( TBI_ITEM_REMOVE == _nToolBoxID )
+        break;
+
+        case TBI_ITEM_REMOVE:
         {
             bHandled = true;
             if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
@@ -747,6 +753,18 @@ namespace svxform
                     return bHandled;
             }
             bIsDocModified = RemoveEntry();
+        }
+        break;
+
+        case MID_INSERT_CONTROL:
+        {
+            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
+        }
+        break;
+
+        default:
+            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: unknown ID!" );
+            break;
         }
 
         m_pNaviWin->DisableNotify( false );

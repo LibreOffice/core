@@ -139,6 +139,29 @@ DriversConfig::DriversConfig(const uno::Reference< lang::XMultiServiceFactory >&
 {
     m_aNode->Load(_rxORB,m_aDrivers);
 }
+
+// -----------------------------------------------------------------------------
+DriversConfig::~DriversConfig()
+{
+}
+
+// -----------------------------------------------------------------------------
+DriversConfig::DriversConfig( const DriversConfig& _rhs )
+{
+    *this = _rhs;
+}
+
+// -----------------------------------------------------------------------------
+DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
+{
+    if ( this != &_rhs )
+    {
+        m_aDrivers = _rhs.m_aDrivers;
+        m_aNode = _rhs.m_aNode;
+    }
+    return *this;
+}
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString DriversConfig::getDriverFactoryName(const ::rtl::OUString& _sURL) const
 {

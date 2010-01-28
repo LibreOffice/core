@@ -133,21 +133,8 @@ protected:
         sal_Int32 nCommandType
     );
 
-    ::rtl::OUString getDefaultName(
-                        sal_Int16 _nClassId,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _rxControls,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
-                    ) const;
-
 public:
-
-    static UniString getDefaultName(
-                        sal_Int16 nClassId,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
-                    );
-
     ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
-    ::rtl::OUString getUniqueName(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& xNamedSet) const;
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );

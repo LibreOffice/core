@@ -1163,30 +1163,38 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         if (pListBlock || pNumberedParagraph)
         {
-            sal_Bool bSameNumRules = xNewNumRules == xNumRules;
-            if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
+            // --> OD 2009-08-24 #i101349#
+            // Assure that list style of automatic paragraph style is applied at paragraph.
+            sal_Bool bApplyNumRules = pStyle && pStyle->IsListStyleSet();
+            if ( !bApplyNumRules )
             {
-                // If the interface pointers are different then this does
-                // not mean that the num rules are different. Further tests
-                // are required then. However, if only one num rule is
-                // set, no tests are required of course.
-                Reference< XNamed > xNewNamed( xNewNumRules, UNO_QUERY );
-                Reference< XNamed > xNamed( xNumRules, UNO_QUERY );
-                if( xNewNamed.is() && xNamed.is() )
+                sal_Bool bSameNumRules = xNewNumRules == xNumRules;
+                if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
                 {
-                    bSameNumRules = xNewNamed->getName() == xNamed->getName();
-                }
-                else
-                {
-                    Reference< XAnyCompare > xNumRuleCompare( xNumRules, UNO_QUERY );
-                    if( xNumRuleCompare.is() )
+                    // If the interface pointers are different then this does
+                    // not mean that the num rules are different. Further tests
+                    // are required then. However, if only one num rule is
+                    // set, no tests are required of course.
+                    Reference< XNamed > xNewNamed( xNewNumRules, UNO_QUERY );
+                    Reference< XNamed > xNamed( xNumRules, UNO_QUERY );
+                    if( xNewNamed.is() && xNamed.is() )
                     {
-                        bSameNumRules = (xNumRuleCompare->compare( Any(xNumRules), Any(xNewNumRules) ) == 0);
+                        bSameNumRules = xNewNamed->getName() == xNamed->getName();
+                    }
+                    else
+                    {
+                        Reference< XAnyCompare > xNumRuleCompare( xNumRules, UNO_QUERY );
+                        if( xNumRuleCompare.is() )
+                        {
+                            bSameNumRules = (xNumRuleCompare->compare( Any(xNumRules), Any(xNewNumRules) ) == 0);
+                        }
                     }
                 }
+                bApplyNumRules = !bSameNumRules;
             }
 
-            if( !bSameNumRules )
+            if ( bApplyNumRules )
+            // <--
             {
                 // #102607# This may except when xNewNumRules contains
                 // a Writer-NumRule-Implementation bug gets applied to

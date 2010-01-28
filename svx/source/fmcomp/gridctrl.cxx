@@ -36,7 +36,7 @@
 #endif
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 
@@ -698,25 +698,6 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             else
                 pWnd->SetText(aText);
 
-            {
-                vos::OGuard aPaintSafety(Application::GetSolarMutex());
-                // we want to update only the window, not our parent, so lock the latter
-                // (In fact, if we are in DbGridControl::RecalcRows, perhaps as a result of an setDataSource or
-                // a VisibleRowsChanged, the grid will be frozen and a SeekRow triggered implicitly by the update
-                // of pWnd will fail.)
-                // (the SetUpdateMode call goes to the data window : it's sufficient to prevent SeekRow's, but it
-                // avoids the Invalidate which would be triggered by BrowseBox::SetUpdateMode (which lead to massive
-                // flicker when scrolling))
-                // FS - 06.10.99
-
-                // don't use SetUpdateMode in those situations as all necessary paints get lost DG
-                // so update only if necessary (DG)
-                if (pParent->IsPaintEnabled())
-                {
-                    pWnd->Update();
-                    pWnd->Flush();
-                }
-            }
             pParent->SetRealRowCount(aText);
         }   break;
     }

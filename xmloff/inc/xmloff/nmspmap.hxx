@@ -152,6 +152,11 @@ public:
     sal_uInt16 GetFirstKey() const;
     sal_uInt16 GetNextKey( sal_uInt16 nOldKey ) const;
 
+    /* Give access to all namespace definitions, including multiple entries
+       for the same key (needed for saving sheets separately in Calc).
+       This might be replaced by a better interface later. */
+    const NameSpaceHash& GetAllEntries() const { return aNameHash; }
+
     static sal_Bool NormalizeOasisURN( ::rtl::OUString& rName );
     static sal_Bool NormalizeW3URI( ::rtl::OUString& rName );
     static sal_Bool NormalizeURI( ::rtl::OUString& rName );

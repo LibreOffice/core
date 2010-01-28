@@ -384,7 +384,7 @@ namespace
 }
 namespace
 {
-    Reference<XPropertySet> lcl_createSDBCXColumn(
+    Reference<XPropertySet> lcl_createSDBCXColumn(const Reference<XNameAccess>& _xPrimaryKeyColumns,
                                           const Reference<XConnection>& _xConnection,
                                           const Any& _aCatalog,
                                           const ::rtl::OUString& _aSchema,
@@ -424,8 +424,7 @@ namespace
                         const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
                         ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
                         ::rtl::OUString sComposedName;
-                        sComposedName = composeTableNameForSelect(
-                            _xConnection, getString( _aCatalog ), _aSchema, _aTable );
+                        sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
@@ -445,11 +444,19 @@ namespace
                     {
                         try
                         {
-                            Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
-                            Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
-                            while( xPKeys->next() ) // there can be only one primary key
+                            if ( _xPrimaryKeyColumns.is() )
+                            {
+                                if ( _xPrimaryKeyColumns->hasByName(_rName) )
+                                    nField11 = ColumnValue::NO_NULLS;
+
+                            }
+                            else
+                            {
+                                Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
+                                Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
+                                while( xPKeys->next() ) // there can be only one primary key
                                 {
-                                ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
+                                    ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
                                     if ( aMixCompare(_rName,sKeyColumn) )
                                     {
                                         nField11 = ColumnValue::NO_NULLS;
@@ -457,6 +464,7 @@ namespace
                                     }
                                 }
                             }
+                        }
                         catch(SQLException&)
                         {
                             OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
@@ -521,10 +529,33 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
 
-    xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+    Reference<XKeysSupplier> xKeysSup(_xTable,UNO_QUERY);
+    Reference<XNameAccess> xPrimaryKeyColumns;
+    if ( xKeysSup.is() )
+    {
+        const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
+        if ( xKeys.is() )
+        {
+            const sal_Int32 nKeyCount = xKeys->getCount();
+            for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
+            {
+                const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
+                sal_Int32 nType = 0;
+                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
+                if ( nType == KeyType::PRIMARY )
+                {
+                    const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
+                    xPrimaryKeyColumns = xColS->getColumns();
+                    break;
+                }
+            } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
+        }
+    }
+
+    xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )
     {
-        xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
         if ( !xProp.is() )
             xProp = new connectivity::sdbcx::OColumn(_rName,
                                                 ::rtl::OUString(),::rtl::OUString(),

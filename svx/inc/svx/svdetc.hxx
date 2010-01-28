@@ -309,6 +309,9 @@ public:
 
 class SVX_DLLPUBLIC SdrGlobalData
 {
+    const SvtSysLocale*         pSysLocale;     // follows always locale settings
+    const CharClass*            pCharClass;     // follows always SysLocale
+    const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
     SdrLinkList         aUserMakeObjHdl;
     SdrLinkList         aUserMakeObjUserDataHdl;
@@ -317,10 +320,11 @@ public:
     ResMgr*             pResMgr;
     ULONG               nExchangeFormat;
     OLEObjCache         aOLEObjCache;
-    const SvtSysLocale*         pSysLocale;     // follows always locale settings
-    const CharClass*            pCharClass;     // follows always SysLocale
-    const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 
+
+    const SvtSysLocale*         GetSysLocale();     // follows always locale settings
+    const CharClass*            GetCharClass();     // follows always SysLocale
+    const LocaleDataWrapper*    GetLocaleData();    // follows always SysLocale
 public:
     SdrGlobalData();
     ~SdrGlobalData();

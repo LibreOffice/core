@@ -215,10 +215,9 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
 
     try
     {
-        refreshKeys();
+        if ( !m_pKeys )
+            refreshKeys();
         xKeys = m_pKeys;
-        if(!isNew())
-            m_pKeys = NULL;
     }
     catch( const RuntimeException& )
     {
@@ -283,8 +282,8 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sOldComposedName = getName();
-    Reference< XDatabaseMetaData> xMetaData = getMetaData();
+    const ::rtl::OUString sOldComposedName = getName();
+    const Reference< XDatabaseMetaData> xMetaData = getMetaData();
     if ( xMetaData.is() )
         ::dbtools::qualifiedNameComponents(xMetaData,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInDataManipulation);
     else

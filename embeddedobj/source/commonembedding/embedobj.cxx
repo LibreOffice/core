@@ -696,3 +696,9 @@ void SAL_CALL OCommonEmbeddedObject::setParent( const com::sun::star::uno::Refer
     }
 }
 
+// XDefaultSizeTransmitter
+void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const ::com::sun::star::awt::Size& rSize_100TH_MM ) throw (::com::sun::star::uno::RuntimeException)
+{
+    //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
+    m_aDefaultSizeForChart_In_100TH_MM = rSize_100TH_MM;
+}

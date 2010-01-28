@@ -317,7 +317,7 @@ void SAL_CALL ODriver::disposing( const EventObject& Source ) throw(RuntimeExcep
                 }
             }
         }
-        m_xORB = NULL;
+    m_xORB.clear();
     }
 }
 // --------------------------------------------------------------------------------

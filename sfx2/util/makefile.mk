@@ -98,7 +98,6 @@ SHL1STDLIBS+=\
         $(CPPULIB) \
         $(VOSLIB) \
         $(SALLIB) \
-        $(SJLIB) \
         $(LIBXML2LIB) \
 
 

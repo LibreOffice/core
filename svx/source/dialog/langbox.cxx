@@ -37,8 +37,9 @@
 #include <com/sun/star/linguistic2/XLinguServiceManager.hdl>
 #endif
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
-#include<rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <svtools/langtab.hxx>
@@ -315,6 +316,13 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
 
 USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos )
 {
+    return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
+}
+
+//------------------------------------------------------------------------
+
+USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT nPos, sal_Int16 nType )
+{
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
     // replacement already exists and if so don't add an entry with identical
@@ -329,6 +337,15 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
     String aStrEntry = m_pLangTable->GetString( nLang );
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
+
+    LanguageType nRealLang = nLang;
+    if (nRealLang == LANGUAGE_SYSTEM)
+    {
+        nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, nType);
+        aStrEntry.AppendAscii(" - ");
+        aStrEntry.Append(m_pLangTable->GetString( nRealLang ));
+    }
+
     aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
 
     USHORT nAt = 0;
@@ -343,7 +360,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
                 m_pSpellUsedLang = new Sequence< INT16 >( xSpell->getLanguages() );
         }
         bFound = m_pSpellUsedLang ?
-                    lcl_SeqHasLang( *m_pSpellUsedLang, nLang ) : FALSE;
+            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : FALSE;
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
@@ -352,6 +369,13 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
 
     SetEntryData( nAt, (void*)(ULONG)nLangType );
     return nAt;
+}
+
+//------------------------------------------------------------------------
+
+USHORT SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, USHORT nPos )
+{
+    return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
 //------------------------------------------------------------------------

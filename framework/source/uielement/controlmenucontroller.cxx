@@ -44,7 +44,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -228,7 +227,7 @@ ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Refer
     m_pResPopupMenu( 0 )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
 }
@@ -346,51 +345,17 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 }
 
 // XMenuListener
-void SAL_CALL ControlMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aURL)
 {
-}
-
-void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xRefDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xRefDispatch    = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is() )
+    UrlToDispatchMap::iterator pIter = m_aURLToDispatchMap.find( aURL.Complete );
+    if ( pIter != m_aURLToDispatchMap.end() )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs( 1 );
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            UrlToDispatchMap::iterator pIter = m_aURLToDispatchMap.find( aTargetURL.Complete );
-            if ( pIter != m_aURLToDispatchMap.end() )
-            {
-                Reference< XDispatch > xDispatch = pIter->second;
-                if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                    UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-                if ( xDispatch.is() )
-                    xDispatch->dispatch( aTargetURL, aArgs );
-            }
-        }
+        Sequence<PropertyValue>      aArgs;
+        Reference< XDispatch > xDispatch = pIter->second;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aURL, aArgs);
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aURL, aArgs );
     }
 }
 
@@ -404,7 +369,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bIsHiContrast      = rSettings.GetMenuColor().IsDark();
+        sal_Bool bIsHiContrast      = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
         sal_Bool bUpdateImages      = (( m_bWasHiContrast != bIsHiContrast ) || ( bShowMenuImages != m_bShowMenuImages ));
 
@@ -425,54 +390,26 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
     }
 }
 
-void SAL_CALL ControlMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 // XPopupMenuController
-void SAL_CALL ControlMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
+void ControlMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
+    if ( m_pResPopupMenu == 0 )
     {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        rtl::OStringBuffer aBuf( 32 );
+        aBuf.append( "svx" );
 
-        if ( m_pResPopupMenu == 0 )
+        ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
+        if ( pResMgr )
         {
-            rtl::OStringBuffer aBuf( 32 );
-            aBuf.append( "svx" );
+            ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
+            aResId.SetRT( RSC_MENU );
+            if ( pResMgr->IsAvailable( aResId ))
+                m_pResPopupMenu = new PopupMenu( aResId );
 
-            ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
-            if ( pResMgr )
-            {
-                ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
-                aResId.SetRT( RSC_MENU );
-                if ( pResMgr->IsAvailable( aResId ))
-                    m_pResPopupMenu = new PopupMenu( aResId );
-
-                updateImagesPopupMenu( m_pResPopupMenu );
-                delete pResMgr;
-            }
+            updateImagesPopupMenu( m_pResPopupMenu );
+            delete pResMgr;
         }
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-    }
+    } // if ( m_pResPopupMenu == 0 )
 }
 
 void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
@@ -485,10 +422,6 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
         URL aTargetURL;
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
@@ -496,7 +429,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
         for (sal_uInt32 i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
         {
             aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
-            xURLTransformer->parseStrict( aTargetURL );
+            m_xURLTransformer->parseStrict( aTargetURL );
 
             Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
             if ( xDispatch.is() )
@@ -512,36 +445,9 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
 // XInitialization
 void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
     ResetableGuard aLock( m_aLock );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
-        {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_bInitialized = sal_True;
-        }
-    }
+    PopupMenuControllerBase::initialize(aArguments);
+    m_aBaseURL = ::rtl::OUString();
 }
 
 }

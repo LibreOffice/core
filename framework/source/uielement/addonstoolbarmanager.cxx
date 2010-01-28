@@ -343,20 +343,20 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         PropertyValue   aPropValue;
 
                         aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                        aPropValue.Value    = makeAny( m_aModuleIdentifier );
-                        aArgs[0] = makeAny( aPropValue );
+                        aPropValue.Value    <<= m_aModuleIdentifier;
+                        aArgs[0] <<= aPropValue;
                         aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                        aPropValue.Value    = makeAny( m_xFrame );
-                        aArgs[1] = makeAny( aPropValue );
+                        aPropValue.Value    <<= m_xFrame;
+                        aArgs[1] <<= aPropValue;
                         aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                        aPropValue.Value    = makeAny( m_xServiceManager );
-                        aArgs[2] = makeAny( aPropValue );
+                        aPropValue.Value    <<= m_xServiceManager;
+                        aArgs[2] <<= aPropValue;
                         aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                        aPropValue.Value    = makeAny( xToolbarWindow );
-                        aArgs[3] = makeAny( aPropValue );
+                        aPropValue.Value    <<= xToolbarWindow;
+                        aArgs[3] <<= aPropValue;
                         aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemId" ));
                         aPropValue.Value    = makeAny( sal_Int32( nId ));
-                        aArgs[4] = makeAny( aPropValue );
+                        aArgs[4] <<= aPropValue;
 
                         try
                         {
@@ -387,14 +387,14 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     PropertyValue aPropValue;
                     Sequence< Any > aArgs( 3 );
                     aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                    aPropValue.Value = makeAny( m_xFrame );
-                    aArgs[0] = makeAny( aPropValue );
+                    aPropValue.Value <<= m_xFrame;
+                    aArgs[0] <<= aPropValue;
                     aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-                    aPropValue.Value = makeAny( aURL );
-                    aArgs[1] = makeAny( aPropValue );
+                    aPropValue.Value <<= aURL;
+                    aArgs[1] <<= aPropValue;
                     aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                    aPropValue.Value = makeAny( m_xServiceManager );
-                    aArgs[2] = makeAny( aPropValue );
+                    aPropValue.Value <<= m_xServiceManager;
+                    aArgs[2] <<= aPropValue;
                     try
                     {
                         xInit->initialize( aArgs );

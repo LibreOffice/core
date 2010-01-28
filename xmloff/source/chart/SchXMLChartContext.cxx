@@ -318,7 +318,12 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
-    awt::Size aChartSize;
+
+    uno::Reference< embed::XVisualObject > xVisualObject( mrImportHelper.GetChartDocument(), uno::UNO_QUERY);
+    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    if( xVisualObject.is() )
+        maChartSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ); //#i103460# take the size given from the parent frame as default
+
     // this flag is necessarry for pie charts in the core
     sal_Bool bSetSwitchData = sal_False;
 
@@ -377,11 +382,11 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 break;
 
             case XML_TOK_CHART_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( aChartSize.Width, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maChartSize.Width, aValue );
                 break;
 
             case XML_TOK_CHART_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( aChartSize.Height, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( maChartSize.Height, aValue );
                 break;
 
             case XML_TOK_CHART_STYLE_NAME:
@@ -406,7 +411,11 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, false /* bUseOldNames */ );
     }
 
-    InitChart (aChartSize, aOldChartTypeName, bSetSwitchData);
+    //  Set the size of the draw page.
+    if( xVisualObject.is() )
+        xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, maChartSize );
+
+    InitChart( aOldChartTypeName, bSetSwitchData);
 
     if( bHasAddin )
     {
@@ -1198,11 +1207,9 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         4.  Set the chart type.
 */
 void SchXMLChartContext::InitChart(
-    awt::Size aChartSize,
     const OUString & rChartTypeServiceName, // currently the old service name
     sal_Bool /* bSetSwitchData */ )
 {
-    maChartSize = aChartSize;
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     DBG_ASSERT( xDoc.is(), "No valid document!" );
     uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
@@ -1216,12 +1223,6 @@ void SchXMLChartContext::InitChart(
         if( xTitled.is())
             xTitled->setTitleObject( 0 );
     }
-
-    //  Set the size of the draw page.
-    uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
-    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
-    if( xVisualObject.is() )
-        xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aChartSize );
 
     //  Set the chart type via setting the diagram.
     if( rChartTypeServiceName.getLength() &&

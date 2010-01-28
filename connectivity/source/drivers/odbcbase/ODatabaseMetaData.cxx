@@ -43,6 +43,7 @@
 #include "stdio.h"
 #include "TPrivilegesResultSet.hxx"
 #include <connectivity/dbexception.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -830,9 +831,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
+    return m_pConnection->isReadOnly();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
@@ -1324,186 +1323,197 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    ::rtl::OUString aValue;
+    ::rtl::OUStringBuffer aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_STRING_FUNCTIONS,nValue,*this);
     if(nValue & SQL_FN_STR_ASCII)
-        aValue = ::rtl::OUString::createFromAscii("ASCII,");
+        aValue.appendAscii("ASCII,");
     if(nValue & SQL_FN_STR_BIT_LENGTH)
-        aValue += ::rtl::OUString::createFromAscii("BIT_LENGTH,");
+        aValue.appendAscii("BIT_LENGTH,");
     if(nValue & SQL_FN_STR_CHAR)
-        aValue += ::rtl::OUString::createFromAscii("CHAR,");
+        aValue.appendAscii("CHAR,");
     if(nValue & SQL_FN_STR_CHAR_LENGTH)
-        aValue += ::rtl::OUString::createFromAscii("CHAR_LENGTH,");
+        aValue.appendAscii("CHAR_LENGTH,");
     if(nValue & SQL_FN_STR_CHARACTER_LENGTH)
-        aValue += ::rtl::OUString::createFromAscii("CHARACTER_LENGTH,");
+        aValue.appendAscii("CHARACTER_LENGTH,");
     if(nValue & SQL_FN_STR_CONCAT)
-        aValue += ::rtl::OUString::createFromAscii("CONCAT,");
+        aValue.appendAscii("CONCAT,");
     if(nValue & SQL_FN_STR_DIFFERENCE)
-        aValue += ::rtl::OUString::createFromAscii("DIFFERENCE,");
+        aValue.appendAscii("DIFFERENCE,");
     if(nValue & SQL_FN_STR_INSERT)
-        aValue += ::rtl::OUString::createFromAscii("INSERT,");
+        aValue.appendAscii("INSERT,");
     if(nValue & SQL_FN_STR_LCASE)
-        aValue += ::rtl::OUString::createFromAscii("LCASE,");
+        aValue.appendAscii("LCASE,");
     if(nValue & SQL_FN_STR_LEFT)
-        aValue += ::rtl::OUString::createFromAscii("LEFT,");
+        aValue.appendAscii("LEFT,");
     if(nValue & SQL_FN_STR_LENGTH)
-        aValue += ::rtl::OUString::createFromAscii("LENGTH,");
+        aValue.appendAscii("LENGTH,");
     if(nValue & SQL_FN_STR_LOCATE)
-        aValue += ::rtl::OUString::createFromAscii("LOCATE,");
+        aValue.appendAscii("LOCATE,");
     if(nValue & SQL_FN_STR_LOCATE_2)
-        aValue += ::rtl::OUString::createFromAscii("LOCATE_2,");
+        aValue.appendAscii("LOCATE_2,");
     if(nValue & SQL_FN_STR_LTRIM)
-        aValue += ::rtl::OUString::createFromAscii("LTRIM,");
+        aValue.appendAscii("LTRIM,");
     if(nValue & SQL_FN_STR_OCTET_LENGTH)
-        aValue += ::rtl::OUString::createFromAscii("OCTET_LENGTH,");
+        aValue.appendAscii("OCTET_LENGTH,");
     if(nValue & SQL_FN_STR_POSITION)
-        aValue += ::rtl::OUString::createFromAscii("POSITION,");
+        aValue.appendAscii("POSITION,");
     if(nValue & SQL_FN_STR_REPEAT)
-        aValue += ::rtl::OUString::createFromAscii("REPEAT,");
+        aValue.appendAscii("REPEAT,");
     if(nValue & SQL_FN_STR_REPLACE)
-        aValue += ::rtl::OUString::createFromAscii("REPLACE,");
+        aValue.appendAscii("REPLACE,");
     if(nValue & SQL_FN_STR_RIGHT)
-        aValue += ::rtl::OUString::createFromAscii("RIGHT,");
+        aValue.appendAscii("RIGHT,");
     if(nValue & SQL_FN_STR_RTRIM)
-        aValue += ::rtl::OUString::createFromAscii("RTRIM,");
+        aValue.appendAscii("RTRIM,");
     if(nValue & SQL_FN_STR_SOUNDEX)
-        aValue += ::rtl::OUString::createFromAscii("SOUNDEX,");
+        aValue.appendAscii("SOUNDEX,");
     if(nValue & SQL_FN_STR_SPACE)
-        aValue += ::rtl::OUString::createFromAscii("SPACE,");
+        aValue.appendAscii("SPACE,");
     if(nValue & SQL_FN_STR_SUBSTRING)
-        aValue += ::rtl::OUString::createFromAscii("SUBSTRING,");
+        aValue.appendAscii("SUBSTRING,");
     if(nValue & SQL_FN_STR_UCASE)
-        aValue += ::rtl::OUString::createFromAscii("UCASE,");
+        aValue.appendAscii("UCASE,");
 
 
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    if ( aValue.getLength() )
+        aValue.setLength(aValue.getLength()-1);
+
+    return aValue.makeStringAndClear();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    ::rtl::OUString aValue;
+    ::rtl::OUStringBuffer aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TIMEDATE_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_TD_CURRENT_DATE)
-        aValue = ::rtl::OUString::createFromAscii("CURRENT_DATE,");
+        aValue.appendAscii("CURRENT_DATE,");
     if(nValue & SQL_FN_TD_CURRENT_TIME)
-        aValue += ::rtl::OUString::createFromAscii("CURRENT_TIME,");
+        aValue.appendAscii("CURRENT_TIME,");
     if(nValue & SQL_FN_TD_CURRENT_TIMESTAMP)
-        aValue += ::rtl::OUString::createFromAscii("CURRENT_TIMESTAMP,");
+        aValue.appendAscii("CURRENT_TIMESTAMP,");
     if(nValue & SQL_FN_TD_CURDATE)
-        aValue += ::rtl::OUString::createFromAscii("CURDATE,");
+        aValue.appendAscii("CURDATE,");
     if(nValue & SQL_FN_TD_CURTIME)
-        aValue += ::rtl::OUString::createFromAscii("CURTIME,");
+        aValue.appendAscii("CURTIME,");
     if(nValue & SQL_FN_TD_DAYNAME)
-        aValue += ::rtl::OUString::createFromAscii("DAYNAME,");
+        aValue.appendAscii("DAYNAME,");
     if(nValue & SQL_FN_TD_DAYOFMONTH)
-        aValue += ::rtl::OUString::createFromAscii("DAYOFMONTH,");
+        aValue.appendAscii("DAYOFMONTH,");
     if(nValue & SQL_FN_TD_DAYOFWEEK)
-        aValue += ::rtl::OUString::createFromAscii("DAYOFWEEK,");
+        aValue.appendAscii("DAYOFWEEK,");
     if(nValue & SQL_FN_TD_DAYOFYEAR)
-        aValue += ::rtl::OUString::createFromAscii("DAYOFYEAR,");
+        aValue.appendAscii("DAYOFYEAR,");
     if(nValue & SQL_FN_TD_EXTRACT)
-        aValue += ::rtl::OUString::createFromAscii("EXTRACT,");
+        aValue.appendAscii("EXTRACT,");
     if(nValue & SQL_FN_TD_HOUR)
-        aValue += ::rtl::OUString::createFromAscii("HOUR,");
+        aValue.appendAscii("HOUR,");
     if(nValue & SQL_FN_TD_MINUTE)
-        aValue += ::rtl::OUString::createFromAscii("MINUTE,");
+        aValue.appendAscii("MINUTE,");
     if(nValue & SQL_FN_TD_MONTH)
-        aValue += ::rtl::OUString::createFromAscii("MONTH,");
+        aValue.appendAscii("MONTH,");
     if(nValue & SQL_FN_TD_MONTHNAME)
-        aValue += ::rtl::OUString::createFromAscii("MONTHNAME,");
+        aValue.appendAscii("MONTHNAME,");
     if(nValue & SQL_FN_TD_NOW)
-        aValue += ::rtl::OUString::createFromAscii("NOW,");
+        aValue.appendAscii("NOW,");
     if(nValue & SQL_FN_TD_QUARTER)
-        aValue += ::rtl::OUString::createFromAscii("QUARTER,");
+        aValue.appendAscii("QUARTER,");
     if(nValue & SQL_FN_TD_SECOND)
-        aValue += ::rtl::OUString::createFromAscii("SECOND,");
+        aValue.appendAscii("SECOND,");
     if(nValue & SQL_FN_TD_TIMESTAMPADD)
-        aValue += ::rtl::OUString::createFromAscii("TIMESTAMPADD,");
+        aValue.appendAscii("TIMESTAMPADD,");
     if(nValue & SQL_FN_TD_TIMESTAMPDIFF)
-        aValue += ::rtl::OUString::createFromAscii("TIMESTAMPDIFF,");
+        aValue.appendAscii("TIMESTAMPDIFF,");
     if(nValue & SQL_FN_TD_WEEK)
-        aValue += ::rtl::OUString::createFromAscii("WEEK,");
+        aValue.appendAscii("WEEK,");
     if(nValue & SQL_FN_TD_YEAR)
-        aValue += ::rtl::OUString::createFromAscii("YEAR,");
+        aValue.appendAscii("YEAR,");
 
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    if ( aValue.getLength() )
+        aValue.setLength(aValue.getLength()-1);
+
+    return aValue.makeStringAndClear();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    ::rtl::OUString aValue;
+    ::rtl::OUStringBuffer aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SYSTEM_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_SYS_DBNAME)
-        aValue += ::rtl::OUString::createFromAscii("DBNAME,");
+        aValue.appendAscii("DBNAME,");
     if(nValue & SQL_FN_SYS_IFNULL)
-        aValue += ::rtl::OUString::createFromAscii("IFNULL,");
+        aValue.appendAscii("IFNULL,");
     if(nValue & SQL_FN_SYS_USERNAME)
-        aValue += ::rtl::OUString::createFromAscii("USERNAME,");
+        aValue.appendAscii("USERNAME,");
 
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    if ( aValue.getLength() )
+        aValue.setLength(aValue.getLength()-1);
+
+    return aValue.makeStringAndClear();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
-    ::rtl::OUString aValue;
+    ::rtl::OUStringBuffer aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NUMERIC_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_NUM_ABS)
-        aValue += ::rtl::OUString::createFromAscii("ABS,");
+        aValue.appendAscii("ABS,");
     if(nValue & SQL_FN_NUM_ACOS)
-        aValue += ::rtl::OUString::createFromAscii("ACOS,");
+        aValue.appendAscii("ACOS,");
     if(nValue & SQL_FN_NUM_ASIN)
-        aValue += ::rtl::OUString::createFromAscii("ASIN,");
+        aValue.appendAscii("ASIN,");
     if(nValue & SQL_FN_NUM_ATAN)
-        aValue += ::rtl::OUString::createFromAscii("ATAN,");
+        aValue.appendAscii("ATAN,");
     if(nValue & SQL_FN_NUM_ATAN2)
-        aValue += ::rtl::OUString::createFromAscii("ATAN2,");
+        aValue.appendAscii("ATAN2,");
     if(nValue & SQL_FN_NUM_CEILING)
-        aValue += ::rtl::OUString::createFromAscii("CEILING,");
+        aValue.appendAscii("CEILING,");
     if(nValue & SQL_FN_NUM_COS)
-        aValue += ::rtl::OUString::createFromAscii("COS,");
+        aValue.appendAscii("COS,");
     if(nValue & SQL_FN_NUM_COT)
-        aValue += ::rtl::OUString::createFromAscii("COT,");
+        aValue.appendAscii("COT,");
     if(nValue & SQL_FN_NUM_DEGREES)
-        aValue += ::rtl::OUString::createFromAscii("DEGREES,");
+        aValue.appendAscii("DEGREES,");
     if(nValue & SQL_FN_NUM_EXP)
-        aValue += ::rtl::OUString::createFromAscii("EXP,");
+        aValue.appendAscii("EXP,");
     if(nValue & SQL_FN_NUM_FLOOR)
-        aValue += ::rtl::OUString::createFromAscii("FLOOR,");
+        aValue.appendAscii("FLOOR,");
     if(nValue & SQL_FN_NUM_LOG)
-        aValue += ::rtl::OUString::createFromAscii("LOGF,");
+        aValue.appendAscii("LOGF,");
     if(nValue & SQL_FN_NUM_LOG10)
-        aValue += ::rtl::OUString::createFromAscii("LOG10,");
+        aValue.appendAscii("LOG10,");
     if(nValue & SQL_FN_NUM_MOD)
-        aValue += ::rtl::OUString::createFromAscii("MOD,");
+        aValue.appendAscii("MOD,");
     if(nValue & SQL_FN_NUM_PI)
-        aValue += ::rtl::OUString::createFromAscii("PI,");
+        aValue.appendAscii("PI,");
     if(nValue & SQL_FN_NUM_POWER)
-        aValue += ::rtl::OUString::createFromAscii("POWER,");
+        aValue.appendAscii("POWER,");
     if(nValue & SQL_FN_NUM_RADIANS)
-        aValue += ::rtl::OUString::createFromAscii("RADIANS,");
+        aValue.appendAscii("RADIANS,");
     if(nValue & SQL_FN_NUM_RAND)
-        aValue += ::rtl::OUString::createFromAscii("RAND,");
+        aValue.appendAscii("RAND,");
     if(nValue & SQL_FN_NUM_ROUND)
-        aValue += ::rtl::OUString::createFromAscii("ROUND,");
+        aValue.appendAscii("ROUND,");
     if(nValue & SQL_FN_NUM_SIGN)
-        aValue += ::rtl::OUString::createFromAscii("SIGN,");
+        aValue.appendAscii("SIGN,");
     if(nValue & SQL_FN_NUM_SIN)
-        aValue += ::rtl::OUString::createFromAscii("SIN,");
+        aValue.appendAscii("SIN,");
     if(nValue & SQL_FN_NUM_SQRT)
-        aValue += ::rtl::OUString::createFromAscii("SQRT,");
+        aValue.appendAscii("SQRT,");
     if(nValue & SQL_FN_NUM_TAN)
-        aValue += ::rtl::OUString::createFromAscii("TAN,");
+        aValue.appendAscii("TAN,");
     if(nValue & SQL_FN_NUM_TRUNCATE)
-        aValue += ::rtl::OUString::createFromAscii("TRUNCATE,");
+        aValue.appendAscii("TRUNCATE,");
 
+    if ( aValue.getLength() )
+        aValue.setLength(aValue.getLength()-1);
 
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    return aValue.makeStringAndClear();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)

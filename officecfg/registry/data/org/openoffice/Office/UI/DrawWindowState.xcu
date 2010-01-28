@@ -666,7 +666,21 @@
                     <value>true</value>
                 </prop>
             </node>
-            <node oor:name="private:resource/toolbar/masterviewtoolbar" oor:op="replace">
+      <node oor:name="private:resource/toolbar/commentsbar" oor:op="replace">
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/masterviewtoolbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>

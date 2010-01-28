@@ -613,15 +613,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 }
 
 //-----------------------------------------------
-sal_Bool PresetHandler::existsTarget(const ::rtl::OUString& sTarget) const
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    return (m_lTargets.findConst(sTarget) != m_lTargets.end());
-    // <- SAFE ----------------------------------
-}
-
-//-----------------------------------------------
 void PresetHandler::copyPresetToTarget(const ::rtl::OUString& sPreset,
                                        const ::rtl::OUString& sTarget)
 {

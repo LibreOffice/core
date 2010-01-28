@@ -43,6 +43,7 @@
 #include <comphelper/attributelist.hxx>
 
 #include <vcl/svapp.hxx>
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -54,7 +55,7 @@ namespace framework{
 
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1DocumentHandler ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject(),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
      m_xLocator( 0 ),
      xDocumentHandler( rSax1DocumentHandler ),
      m_nDepth( 0 )
@@ -63,17 +64,6 @@ SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1Docu
 
 SaxNamespaceFilter::~SaxNamespaceFilter()
 {
-}
-
-Any SAL_CALL SaxNamespaceFilter::queryInterface( const Type & rType ) throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 // XDocumentHandler
@@ -92,7 +82,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     throw(  SAXException, RuntimeException )
 {
     XMLNamespaces aXMLNamespaces;
-    if ( m_aNamespaceStack.size() > 0 )
+    if ( !m_aNamespaceStack.empty() )
         aXMLNamespaces = m_aNamespaceStack.top();
 
     ::comphelper::AttributeList* pNewList = new ::comphelper::AttributeList();

@@ -174,13 +174,13 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+    m_xStatement.clear();
+    m_xMetaData.clear();
     m_pParseTree    = NULL;
-    m_xColNames     = NULL;
-    m_xColumns      = NULL;
+    m_xColNames.clear();
+    m_xColumns = NULL;
     m_xParamColumns = NULL;
-    m_xColsIdx      = NULL;
+    m_xColsIdx.clear();
 
     Reference<XComponent> xComp = m_pTable;
     if ( xComp.is() )

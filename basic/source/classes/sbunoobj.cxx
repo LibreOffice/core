@@ -750,7 +750,11 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
-            if ( SbiRuntime::isVBAEnabled() )
+            //If this is called externally e.g. from the scripting 
+            //framework then there is no 'active' runtime the default property will not be set up
+            //only a vba object will have XDefaultProp set anyway so... this
+            //test seems a bit of overkill
+            //if ( SbiRuntime::isVBAEnabled() )
             {
                 String sDfltPropName;
 

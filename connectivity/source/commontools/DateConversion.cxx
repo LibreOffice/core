@@ -45,6 +45,7 @@
 #include "TConnection.hxx"
 #include "diagnose_ex.h"
 #include <comphelper/numbers.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 using namespace ::connectivity;
@@ -63,7 +64,7 @@ using namespace ::com::sun::star::beans;
 ::rtl::OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
 {
-    ::rtl::OUString aRet;
+    ::rtl::OUStringBuffer aRet;
     if (_rVal.hasValue())
     {
         try
@@ -78,18 +79,22 @@ using namespace ::com::sun::star::beans;
                     if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
                     {
                         if (::cppu::any2bool(_rVal))
-                            aRet = ::rtl::OUString::createFromAscii("1");
+                            aRet.appendAscii("1");
                         else
-                            aRet = ::rtl::OUString::createFromAscii("0");
+                            aRet.appendAscii("0");
                     }
                     else
-                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                    {
+                        ::rtl::OUString sTemp;
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= sTemp;
+                        aRet.append(sTemp);
+                    }
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                     if (bQuote)
-                        aRet += ::rtl::OUString::createFromAscii("'");
+                        aRet.appendAscii("'");
                     {
                         ::rtl::OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
@@ -104,17 +109,22 @@ using namespace ::com::sun::star::beans;
                                 aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(),sQuotToReplace);
                         } while (nIndex != -1);
 
-                        aRet += aTemp;
+                        aRet.append(aTemp);
                     }
                     if (bQuote)
-                        aRet += ::rtl::OUString::createFromAscii("'");
+                        aRet.appendAscii("'");
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 case DataType::BIGINT:
-                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                default:
+                    {
+                        ::rtl::OUString sTemp;
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= sTemp;
+                        aRet.append(sTemp);
+                    }
                     break;
                 case DataType::TIMESTAMP:
                 {
@@ -123,9 +133,11 @@ using namespace ::com::sun::star::beans;
                     // check if this is really a timestamp or only a date
                     if ( _rVal >>= aDateTime )
                     {
-                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("{TS '");
-                        aRet += DBTypeConversion::toDateTimeString(aDateTime);
-                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                        if (bQuote)
+                            aRet.appendAscii("{TS '");
+                        aRet.append(DBTypeConversion::toDateTimeString(aDateTime));
+                        if (bQuote)
+                            aRet.appendAscii("'}");
                         break;
                     }
                     break;
@@ -134,20 +146,22 @@ using namespace ::com::sun::star::beans;
                 {
                     Date aDate;
                     OSL_VERIFY_RES( _rVal >>= aDate, "DBTypeConversion::toSQLString: _rVal is not date!");
-                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{D '");
-                    aRet += DBTypeConversion::toDateString(aDate);;
-                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                    if (bQuote)
+                        aRet.appendAscii("{D '");
+                    aRet.append(DBTypeConversion::toDateString(aDate));
+                    if (bQuote)
+                        aRet.appendAscii("'}");
                 }   break;
                 case DataType::TIME:
                 {
                     Time aTime;
                     OSL_VERIFY_RES( _rVal >>= aTime,"DBTypeConversion::toSQLString: _rVal is not time!");
-                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{T '");
-                    aRet += DBTypeConversion::toTimeString(aTime);
-                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                    if (bQuote)
+                        aRet.appendAscii("{T '");
+                    aRet.append(DBTypeConversion::toTimeString(aTime));
+                    if (bQuote)
+                        aRet.appendAscii("'}");
                 } break;
-                default:
-                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
             }
         }
         catch ( const Exception&  )
@@ -156,8 +170,8 @@ using namespace ::com::sun::star::beans;
         }
     }
     else
-        aRet = ::rtl::OUString::createFromAscii(" NULL ");
-    return aRet;
+        aRet.appendAscii(" NULL ");
+    return aRet.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
 Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xSupplier)

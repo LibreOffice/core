@@ -124,6 +124,8 @@ public:
     const ::rtl::OUString& GetName() const { return msName; }
     const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
     sal_uInt32 GetPos() const { return mnPos; }
+
+    void SetName( const ::rtl::OUString& rNew ) { msName = rNew; }
 };
 
 typedef SvXMLAutoStylePoolPropertiesP_Impl *SvXMLAutoStylePoolPropertiesPPtr;
@@ -149,6 +151,8 @@ public:
     ~SvXMLAutoStylePoolParentP_Impl();
 
     sal_Bool Add( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName, bool bDontSeek = false );
+
+    sal_Bool AddNamed( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const ::rtl::OUString& rName );
 
     ::rtl::OUString Find( const XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
@@ -197,6 +201,10 @@ public:
                 const ::std::vector< XMLPropertyState >& rProperties,
                 sal_Bool bCache = sal_False,
                 bool bDontSeek = false );
+    sal_Bool AddNamed( const ::rtl::OUString& rName, sal_Int32 nFamily,
+                const ::rtl::OUString& rParent,
+                const ::std::vector< XMLPropertyState >& rProperties );
+
     ::rtl::OUString AddToCache( sal_Int32 nFamily,
                                 const ::rtl::OUString& rParent );
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,

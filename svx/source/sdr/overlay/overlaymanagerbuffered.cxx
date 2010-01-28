@@ -39,6 +39,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/cursor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -255,15 +256,21 @@ namespace sdr
                     maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
                 aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
 
+                // prepare cursor handling
                 const bool bTargetIsWindow(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType());
-                Cursor* pCursor = 0;
+                bool bCursorWasEnabled(false);
 
-                // #i75172# switch off VCL cursor during overlay refresh
+                // #i80730# switch off VCL cursor during overlay refresh
                 if(bTargetIsWindow)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    pCursor = rWindow.GetCursor();
-                    rWindow.SetCursor(0);
+                    Cursor* pCursor = rWindow.GetCursor();
+
+                    if(pCursor && pCursor->IsVisible())
+                    {
+                        pCursor->Hide();
+                        bCursorWasEnabled = true;
+                    }
                 }
 
                 if(DoRefreshWithPreRendering())
@@ -363,47 +370,17 @@ namespace sdr
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, getOutputDevice());
                 }
 
-                // VCL hack for transparent child windows
-                // Problem is e.g. a radiobuttion form control in life mode. The used window
-                // is a transparence vcl childwindow. This flag only allows the parent window to
-                // paint into the child windows area, but there is no mechanism which takes
-                // care for a repaint of the child window. A transparent child window is NOT
-                // a window which always keeps it's content consistent over the parent, but it's
-                // more like just a paint flag for the parent.
-                // To get the update, the windows in question are updated manulally here.
-                if(bTargetIsWindow)
+                // #i80730# restore visibility of VCL cursor
+                if(bCursorWasEnabled)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    Cursor* pCursor = rWindow.GetCursor();
 
-                    if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                    if(pCursor)
                     {
-                        const Rectangle aRegionRectanglePixel(
-                            maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                            maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-
-                        for(sal_uInt16 a(0); a < rWindow.GetChildCount(); a++)
-                        {
-                            Window* pCandidate = rWindow.GetChild(a);
-
-                            if(pCandidate && pCandidate->IsPaintTransparent())
-                            {
-                                const Rectangle aCandidatePosSizePixel(pCandidate->GetPosPixel(), pCandidate->GetSizePixel());
-
-                                if(aCandidatePosSizePixel.IsOver(aRegionRectanglePixel))
-                                {
-                                    pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
-                                    pCandidate->Update();
-                                }
-                            }
-                        }
+                        // check if cursor still exists. It may have been deleted from someone
+                        pCursor->Show();
                     }
-                }
-
-                // #i75172# restore VCL cursor
-                if(bTargetIsWindow)
-                {
-                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    rWindow.SetCursor(pCursor);
                 }
 
                 // forget remembered Region

@@ -236,7 +236,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "No descriptions available for this extension.";
     };
     String RID_DLG_UPDATE_NOINSTALL {
-        Text[en-US] = "The extension cannot be installed because:";
+        Text[en-US] = "The extension cannot be updated because:";
     };
     String RID_DLG_UPDATE_NODEPENDENCY {
         Text[en-US] = "Required OpenOffice.org version doesn't match:";

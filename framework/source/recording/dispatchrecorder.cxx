@@ -187,7 +187,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     /* SAFE{ */
     WriteGuard aWriteLock(m_aLock);
 
-    if ( !m_aStatements.size() )
+    if ( m_aStatements.empty() )
         return ::rtl::OUString();
 
     ::rtl::OUStringBuffer aScriptBuffer;

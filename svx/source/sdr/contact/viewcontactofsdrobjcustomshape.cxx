@@ -66,10 +66,11 @@ namespace sdr
             // no need to correct if no extra text range
             if(aTextRange != aObjectRange)
             {
+                const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearWink || rGeoStat.nDrehWink)
+                if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -91,6 +92,11 @@ namespace sdr
                     if(rGeoStat.nDrehWink)
                     {
                         aRotMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                    }
+
+                    if(!basegfx::fTools::equalZero(fExtraTextRotation))
+                    {
+                        aRotMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -210,7 +216,11 @@ namespace sdr
 
                     // create primitive
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        *pAttribute, xGroup, aTextBoxMatrix, bWordWrap));
+                        *pAttribute,
+                        xGroup,
+                        aTextBoxMatrix,
+                        bWordWrap,
+                        false));        // #SJ# New parameter to force to clipped BlockText for SC
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
 

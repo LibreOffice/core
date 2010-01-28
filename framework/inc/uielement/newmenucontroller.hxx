@@ -51,7 +51,6 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -84,10 +83,6 @@ namespace framework
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
-            // XPopupMenuController
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
-
             // XInitialization
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -95,10 +90,8 @@ namespace framework
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
             // XMenuListener
-            virtual void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
@@ -106,6 +99,7 @@ namespace framework
             DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument* );
 
         private:
+            virtual void impl_setPopupMenu();
             struct AddInfo
             {
                 rtl::OUString aTargetFrame;
@@ -133,7 +127,6 @@ namespace framework
             rtl::OUString       m_aTargetFrame;
             rtl::OUString       m_aModuleIdentifier;
             rtl::OUString       m_aEmptyDocURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >                 m_xURLTransformer;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;

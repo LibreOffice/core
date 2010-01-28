@@ -58,6 +58,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
@@ -462,6 +463,15 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport ) );
+
+    //#i103460# ODF: take the size given from the parent frame as default
+    uno::Reference< chart2::XChartDocument > xChart( xDocument, uno::UNO_QUERY );
+    if( xChart.is() )
+    {
+        uno::Reference< embed::XVisualObject > xChartVisualObject( xChart, uno::UNO_QUERY );
+        if( xChartVisualObject.is() )
+            xChartVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, m_aDefaultSizeForChart_In_100TH_MM );
+    }
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc

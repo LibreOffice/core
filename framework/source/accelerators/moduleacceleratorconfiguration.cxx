@@ -109,6 +109,7 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : XCUBasedAcceleratorConfiguration(xSMGR)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration" );
 }
 
 //-----------------------------------------------
@@ -122,6 +123,7 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::initialize" );
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
@@ -143,6 +145,7 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
 //-----------------------------------------------
 void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::impl_ts_fillCache" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     ::rtl::OUString sModule = m_sModule;

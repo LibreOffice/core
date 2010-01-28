@@ -79,7 +79,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <unotools/configitem.hxx>
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "formcontrolling.hxx"
 #include "fmdocumentclassification.hxx"
 

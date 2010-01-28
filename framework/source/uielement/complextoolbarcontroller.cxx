@@ -92,7 +92,7 @@ ComplexToolbarController::ComplexToolbarController(
     ,   m_nID( nID )
     ,   m_bMadeInvisible( sal_False )
 {
-    m_xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
+    m_xURLTransformer.set( m_xServiceManager->createInstance(
                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
                                                       UNO_QUERY_THROW );
 }
@@ -119,7 +119,16 @@ throw ( RuntimeException )
 }
 
 // ------------------------------------------------------------------
+Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
+{
+    Sequence<PropertyValue> aArgs( 1 );
 
+    // Add key modifier to argument list
+    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Value <<= KeyModifier;
+    return aArgs;
+}
+// -----------------------------------------------------------------------------
 void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
 throw ( RuntimeException )
 {
@@ -127,6 +136,7 @@ throw ( RuntimeException )
     Reference< XURLTransformer > xURLTransformer;
     ::rtl::OUString                     aCommandURL;
     ::com::sun::star::util::URL  aTargetURL;
+    Sequence<PropertyValue> aArgs;
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -143,17 +153,12 @@ throw ( RuntimeException )
             xDispatch = getDispatchFromCommand( m_aCommandURL );
             aCommandURL = m_aCommandURL;
             aTargetURL = getInitializedURL();
+            aArgs = getExecuteArgs(KeyModifier);
         }
     }
 
     if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
     {
-        Sequence<PropertyValue> aArgs( 1 );
-
-        // Add key modifier to argument list
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
-        aArgs[0].Value <<= KeyModifier;
-
         // Execute dispatch asynchronously
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;

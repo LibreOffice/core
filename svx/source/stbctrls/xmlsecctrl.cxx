@@ -143,6 +143,9 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
         nResId = RID_SVXSTR_XMLSEC_SIG_NOT_OK;
     else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
         nResId = RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY;
+    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK )
+        nResId = RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG;
+
     GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( nResId ) );
 }
 
@@ -192,7 +195,8 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         ++aRect.Top();
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
-    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+        || mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
     {
         ++aRect.Top();
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageNotValidated );

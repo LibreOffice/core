@@ -123,7 +123,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServic
         // <- SAFE ------------------------------
 
         css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(
-                            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                            xSMGR->createInstance(SERVICENAME_DESKTOP),
                             css::uno::UNO_QUERY_THROW);
 
         // SAFE -> ------------------------------
@@ -276,7 +276,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::impl_st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration")),
+        xSMGR->createInstance(SERVICENAME_GLOBALACCELERATORCONFIGURATION),
         css::uno::UNO_QUERY_THROW);
     return xAccCfg;
 }
@@ -286,7 +286,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::im
                                                                                                         const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
+        xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
         css::uno::UNO_QUERY_THROW);
 
     ::rtl::OUString sModule;
@@ -300,7 +300,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::im
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
+        xSMGR->createInstance(SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER),
         css::uno::UNO_QUERY_THROW);
 
     css::uno::Reference< css::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
@@ -331,7 +331,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser(
-                xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+                xSMGR->createInstance(SERVICENAME_URLTRANSFORMER),
                 css::uno::UNO_QUERY_THROW);
 
     // SAFE -> ----------------------------------

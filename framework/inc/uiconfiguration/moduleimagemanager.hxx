@@ -38,6 +38,7 @@
 #include <vector>
 #include <list>
 #include <hash_map>
+#include <memory>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -68,7 +69,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
@@ -80,64 +81,12 @@
 
 namespace framework
 {
-    class CmdImageList
+    class ImageManagerImpl;
+
+    class ModuleImageManager :    private ThreadHelpBase                                          , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                  public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
     {
         public:
-            CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
-                          const ::rtl::OUString& aModuleIdentifier );
-            virtual ~CmdImageList();
-
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual ::std::vector< rtl::OUString >& getImageNames();
-            virtual ::std::vector< rtl::OUString >& getImageCommandNames();
-
-        protected:
-            void                            impl_fillCommandToImageNameMap();
-            ImageList*                      impl_getImageList( sal_Int16 nImageType );
-            std::vector< ::rtl::OUString >& impl_getImageNameVector();
-            std::vector< ::rtl::OUString >& impl_getImageCommandNameVector();
-
-        private:
-            sal_Bool                                                                         m_bVectorInit;
-            rtl::OUString                                                                    m_aModuleIdentifier;
-            ImageList*                                                                       m_pImageList[ImageType_COUNT];
-            CommandToImageNameMap                                                            m_aCommandToImageNameMap;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-            ::std::vector< rtl::OUString >                                                   m_aImageNameVector;
-            ::std::vector< rtl::OUString >                                                   m_aImageCommandNameVector;
-            sal_Int16                                                                        m_nSymbolsStyle;
-    };
-
-    class GlobalImageList : public CmdImageList, public rtl::IReference
-    {
-        public:
-            GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
-            virtual ~GlobalImageList();
-
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual ::std::vector< rtl::OUString >& getImageNames();
-            virtual ::std::vector< rtl::OUString >& getImageCommandNames();
-
-            // ÍReference
-            virtual oslInterlockedCount SAL_CALL acquire();
-            virtual oslInterlockedCount SAL_CALL release();
-
-        private:
-            oslInterlockedCount                                                              m_nRefCount;
-    };
-
-    class ModuleImageManager :    public com::sun::star::lang::XTypeProvider                      ,
-                                  public ::com::sun::star::ui::XImageManager                ,
-                                  private ThreadHelpBase                                          , // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::OWeakObject
-    {
-        public:
-            //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
-
             ModuleImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
             virtual ~ModuleImageManager();
 
@@ -170,59 +119,7 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() throw (::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef std::hash_map< rtl::OUString,
-                                   sal_Bool,
-                                   OUStringHashCode,
-                                   ::std::equal_to< ::rtl::OUString > > ImageNameMap;
-
-            // private data types
-            enum Layer
-            {
-                LAYER_DEFAULT,
-                LAYER_USERDEFINED,
-                LAYER_COUNT
-            };
-
-            enum NotifyOp
-            {
-                NotifyOp_Remove,
-                NotifyOp_Insert,
-                NotifyOp_Replace
-            };
-
-            typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-
-            // private methods
-            void                                      implts_initialize();
-            void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
-            const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();
-            CmdImageList*                             implts_getDefaultImageList();
-            ImageList*                                implts_getUserImageList( ImageType nImageType );
-            sal_Bool                                  implts_loadUserImages( ImageType nImageType,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
-            sal_Bool                                  implts_storeUserImages( ImageType nImageType,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
-
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserImageStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
-            bool                                                                            m_bReadOnly;
-            bool                                                                            m_bInitialized;
-            bool                                                                            m_bModified;
-            bool                                                                            m_bConfigRead;
-            bool                                                                            m_bDisposed;
-            rtl::OUString                                                                   m_aXMLPostfix;
-            rtl::OUString                                                                   m_aModuleIdentifier;
-            rtl::OUString                                                                   m_aResourceString;
-            com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
-            rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
-            CmdImageList*                                                                   m_pDefaultImageList;
-            ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
-            bool                                                                            m_bUserImageListModified[ImageType_COUNT];
+            ::std::auto_ptr<ImageManagerImpl>                                               m_pImpl;
    };
 }
 

@@ -65,9 +65,8 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
-    ,m_aTypeInfo(_TypeInfo)
     ,numParams(0)
     ,boundParams(NULL)
     ,m_bPrepared(sal_False)
@@ -80,12 +79,11 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
             OSQLParser aParser(_pConnection->getDriver()->getORB());
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
-            OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
-            if(pNode)
+            ::std::auto_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
+            if ( pNode.get() )
             {   // special handling for parameters
-                OSQLParseNode::substituteParameterNames(pNode);
+                OSQLParseNode::substituteParameterNames(pNode.get());
                 pNode->parseNodeToStr( sNewSql, _pConnection );
-                delete pNode;
                 m_sSqlStatement = sNewSql;
             }
         }
@@ -819,12 +817,18 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     sal_Int32 prec = -1;
-    if (m_aTypeInfo.size())
+    const TTypeInfoVector& rTypeInfo = m_pConnection->getTypeInfo();
+    if ( !rTypeInfo.empty() )
+    {
+        m_pConnection->buildTypeInfo();
+    }
+
+    if ( !rTypeInfo.empty() )
     {
         OTypeInfo aInfo;
         aInfo.nType = (sal_Int16)sqlType;
-        TTypeInfoVector::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
-        if(aIter != m_aTypeInfo.end())
+        TTypeInfoVector::const_iterator aIter = ::std::find(rTypeInfo.begin(),rTypeInfo.end(),aInfo);
+        if(aIter != rTypeInfo.end())
             prec = (*aIter).nPrecision;
     }
     return prec;

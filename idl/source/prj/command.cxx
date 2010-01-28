@@ -93,7 +93,7 @@ char const * SyntaxStrings[] = {
 "\t\tAccelConfig, MenuConfig, StatusBarConfig, ToolbarConfig",
 "\t\tAutomation*",
 "\t\tAutoUpdate",
-"\t\tCachable*, Volatile",
+// "\t\tCachable*, Volatile",
 "\t\tContainer",
 "\t\tDefault        = Identifier",
 "\t\tExecMethod     = Identifier",

@@ -340,6 +340,13 @@ namespace accessibility
             if( mbEditSourceEmpty )
                 Switch2ProxyEditSource();
         }
+        else if (pSdrHint && pSdrHint->GetObject()!=NULL)
+        {
+            // When the SdrObject just got a para outliner object then
+            // switch the edit source.
+            if (pSdrHint->GetObject()->GetOutlinerParaObject() != NULL)
+                Switch2ProxyEditSource();
+        }
 
         // forward messages
         Broadcast( rHint );

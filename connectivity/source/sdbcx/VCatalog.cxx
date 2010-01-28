@@ -226,7 +226,7 @@ void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rName
         {
             _rNames.push_back( buildName(xRow) );
         }
-        xRow = NULL;
+        xRow.clear();
         ::comphelper::disposeComponent(_xResult);
     }
 }

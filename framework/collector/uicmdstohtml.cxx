@@ -697,7 +697,7 @@ bool WriteJumpTable( osl::File& rFile )
     sal_uInt32 i = 0;
     while ( ModuleName[i] != 0 )
     {
-        if ( moduleMapFiles[i].size() > 0 )
+        if ( !moduleMapFiles[i].empty() )
         {
             OString aTableNameStr( ModuleName[i] );
             OStringBuffer aJumpMark( aTableNameStr );
@@ -850,7 +850,7 @@ bool WriteHTMLFile( const OUString& aOutputDirURL)
         while ( ModuleToXML_Mapping[i] != 0 )
         {
             SortCommandTable( MODULES( i ));
-            if ( moduleCmdVector[i].size() > 0 )
+            if ( !moduleCmdVector[i].empty() )
             {
                 WriteHTMLTable( aHTMLFile, OUString::createFromAscii( ModuleName[i] ));
 

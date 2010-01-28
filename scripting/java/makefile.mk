@@ -35,6 +35,8 @@ TARGET=scriptruntimeforjava
 
 .INCLUDE : ant.mk
 
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)"!=""
 ALLTAR : ANTBUILD
+.ENDIF
 .ENDIF

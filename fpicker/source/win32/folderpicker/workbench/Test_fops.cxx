@@ -45,7 +45,7 @@
 #include <cppuhelper/servicefactory.hxx>
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -120,7 +120,7 @@ void CreateDeepDirectory( )
 //--------------------------------------------------------------
 
 
-int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
+int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 {
     CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
@@ -175,7 +175,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         rootDir = xFolderPicker->getDisplayDirectory( );
         selectedDir = xFolderPicker->getDirectory( );
     }
-    catch(...)
+    catch( ::com::sun::star::uno::Exception& )
     {
         MessageBox( NULL, "Exception caught!", "Error", MB_OK );
     }

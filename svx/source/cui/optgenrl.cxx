@@ -103,6 +103,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aCompanyEdit    ( this, SVX_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
     aNameLbl        ( this, SVX_RES( FT_NAME ), true ),
     aNameLblRuss    ( this, SVX_RES( FT_NAME_RUSS ), true ),
+    aNameLblEastern ( this, SVX_RES( FT_NAME_EASTERN ), true ),
     aFirstName      ( this, SVX_RES( ED_FIRSTNAME ), 0, &aNameLbl ),
     aFatherName     ( this, SVX_RES( ED_FATHERNAME ) ),
     aName           ( this, SVX_RES( ED_NAME ), 1, &aNameLbl ),
@@ -188,6 +189,23 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
         aName.SetZOrder( &aNameLblRuss, WINDOW_ZORDER_BEHIND );
         aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
         aFatherName.SetZOrder( &aFirstName, WINDOW_ZORDER_BEHIND );
+    }
+    else if ( LANGUAGE_JAPANESE == eLang ||
+          LANGUAGE_KOREAN == eLang ||
+          LANGUAGE_CHINESE_TRADITIONAL == eLang ||
+          LANGUAGE_CHINESE_SIMPLIFIED == eLang)
+    {
+        aUsCityEdit.Hide();
+        aUsStateEdit.Hide();
+        aUsZipEdit.Hide();
+        aNameLbl.Hide();
+        aNameLblEastern.Show();
+
+        // swap "first name" field and "last name" field
+        Point aPosTmp = aFirstName.GetPosPixel();
+        aFirstName.SetPosPixel( aName.GetPosPixel() );
+        aName.SetPosPixel( aPosTmp );
+        aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
     }
     else
     {

@@ -102,7 +102,7 @@ private:
     std::vector< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > maActionList;
     std::set< rtl::OUString > maDisabledSmartTagTypes;
     std::multimap < rtl::OUString, ActionReference > maSmartTagMap;
-    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIter;
+    mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIter;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > mxConfigurationSettings;
@@ -128,6 +128,8 @@ private:
     /** Sets up a map that maps smart tag type names to actions references.
     */
     void AssociateActionsWithRecognizers();
+
+    void CreateBreakIterator() const;
 
 public:
 

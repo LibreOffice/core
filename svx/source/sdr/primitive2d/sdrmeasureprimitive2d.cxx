@@ -129,7 +129,10 @@ namespace drawinglayer
                     &pTextAttribute->getSdrText(),
                     pTextAttribute->getOutlinerParaObject(),
                     aTextMatrix,
+                    SDRTEXTHORZADJUST_CENTER,
+                    SDRTEXTVERTADJUST_CENTER,
                     pTextAttribute->isScroll(),
+                    false,
                     false,
                     false);
                 aTextRange = pBlockText->getB2DRange(aViewInformation);

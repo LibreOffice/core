@@ -1912,12 +1912,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             XGradientStyle eGrad = XGRAD_LINEAR;
             sal_Int32 nChgColors = 0;
 
-            if ( !nAngle )
-                nChgColors ^= 1;
-
-            if ( !nFocus )
-                nChgColors ^= 1;
-            else if ( nFocus < 0 )      // Bei negativem Focus sind die Farben zu tauschen
+            if ( nFocus < 0 )       // Bei negativem Focus sind die Farben zu tauschen
             {
                 nFocus =- nFocus;
                 nChgColors ^= 1;
@@ -1925,8 +1920,8 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             if( nFocus > 40 && nFocus < 60 )
             {
                 eGrad = XGRAD_AXIAL;    // Besser gehts leider nicht
-                nChgColors ^= 1;
             }
+
             USHORT nFocusX = (USHORT)nFocus;
             USHORT nFocusY = (USHORT)nFocus;
 
@@ -3785,6 +3780,10 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         nColorCode &= 0x00ffffff;
 
     sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
+
+    // sj: below change from 0x1b to 0x19 was done because of i84812 (0x02 -> rgb color),
+    // now I have some problems to fix i104685 (there the color value is 0x02000000 whichs requires
+    // a 0x2 scheme color to be displayed properly), the color docu seems to be incomplete
     if( nUpper & 0x19 )      // if( nUpper & 0x1f )
     {
         if( ( nUpper & 0x08 ) || ( ( nUpper & 0x10 ) == 0 ) )
@@ -4952,6 +4951,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             if ( bGraphic )
             {
                 pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
+                ApplyAttributes( rSt, aSet, aObjData );
+                pRet->SetMergedItemSet(aSet);
+            }
+            else if ( aObjData.eShapeType == mso_sptLine )
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
+                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }

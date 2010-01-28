@@ -45,7 +45,7 @@ ModalDialog DLG_UUI_LOGIN
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 265 , 158 ) ;
+    Size = MAP_APPFONT ( 265 , 170 ) ;
     FixedText INFO_LOGIN_ERROR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -138,6 +138,12 @@ ModalDialog DLG_UUI_LOGIN
         Pos = MAP_APPFONT ( 12 , 136 ) ;
         Size = MAP_APPFONT ( 185 , 10 ) ;
         Text [ en-US ] = "~Save password" ;
+    };
+    CheckBox CB_LOGIN_USESYSCREDS
+    {
+        Pos = MAP_APPFONT ( 12 , 148 ) ;
+        Size = MAP_APPFONT ( 185 , 10 ) ;
+        Text [ en-US ] = "~Use System Credentials" ;
     };
     FixedLine GB_LOGIN_LOGIN
     {

@@ -163,7 +163,7 @@ SHL1STDLIBS= \
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=$(TARGET)_5
+DEFLIB1NAME=$(TARGET)_5 $(TARGET)_6
 
 # svx
 SHL2TARGET= svx$(DLLPOSTFIX)
@@ -280,7 +280,7 @@ SHL4STDLIBS= \
 
 SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=	$(SHL4TARGET)
-DEFLIB4NAME=$(TARGET)_6
+DEFLIB4NAME=$(TARGET)_7
 
 # ------------------------------------------------------------------------------
 

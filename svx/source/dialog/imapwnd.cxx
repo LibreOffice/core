@@ -819,11 +819,12 @@ void IMapWindow::DoMacroAssign()
 
     if ( pSdrObj )
     {
-        SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG );
+        SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
 
         SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
         aNamesItem.AddEvent( String::CreateFromAscii( "MouseOver" ), String(), SFX_EVENT_MOUSEOVER_OBJECT );
         aNamesItem.AddEvent( String::CreateFromAscii( "MouseOut" ), String(), SFX_EVENT_MOUSEOUT_OBJECT );
+        aSet.Put( aNamesItem );
 
         SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
         IMapObject*     pIMapObj = GetIMapObj( pSdrObj );

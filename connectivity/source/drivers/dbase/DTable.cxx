@@ -1765,7 +1765,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                        xCol = NULL;
+                        xCol.clear();
                     } // if ( !aColName.getLength() )
                     const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                             STR_DUPLICATE_VALUE_IN_COLUMN
