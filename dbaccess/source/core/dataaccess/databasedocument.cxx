@@ -668,6 +668,11 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
         // Without a controller, we are unable to recover the sub components, as they're always tied to a controller.
         // So, everything else is done when the first controller is connected.
         m_bHasBeenRecovered = true;
+
+        // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
+        // which includes an attachResource call.
+        impl_attachResource( i_SourceLocation, aMediaDescriptor.getPropertyValues(), aGuard );
+        // <- SYNCHRONIZED
     }
     catch( const Exception& )
     {
@@ -690,10 +695,16 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
+    return impl_attachResource( _rURL, _rArguments, aGuard );
+}
 
-    if  (   ( _rURL == getURL() )
-        &&  ( _rArguments.getLength() == 1 )
-        &&  ( _rArguments[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
+// -----------------------------------------------------------------------------
+sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rURL, const Sequence< PropertyValue >& i_rMediaDescriptor,
+            DocumentGuard& _rDocGuard )
+{
+    if  (   ( i_rURL == getURL() )
+        &&  ( i_rMediaDescriptor.getLength() == 1 )
+        &&  ( i_rMediaDescriptor[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
         )
     {
         // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,
@@ -703,13 +714,13 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
     }
 
     // if no URL has been provided, the caller was lazy enough to not call our getLocation/getURL - which is allowed ...
-    ::rtl::OUString sURL( _rURL );
+    ::rtl::OUString sURL( i_rURL );
     if ( !sURL.getLength() )
         sURL = getLocation();
     if ( !sURL.getLength() )
         sURL = getURL();
 
-    m_pImpl->attachResource( sURL, _rArguments );
+    m_pImpl->attachResource( sURL, i_rMediaDescriptor );
 
     if ( impl_isInitializing() )
     {   // this means we've just been loaded, and this is the attachResource call which follows
@@ -721,7 +732,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         // should know this before anybody actually uses the object.
         m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
 
-        aGuard.clear();
+        _rDocGuard.clear();
         // <- SYNCHRONIZED
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }

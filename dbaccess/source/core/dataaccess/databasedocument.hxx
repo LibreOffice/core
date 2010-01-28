@@ -609,6 +609,23 @@ private:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor,
                 DocumentGuard& _rDocGuard
             ) const;
+
+
+    /** impl-version of attachResource
+
+        @param  i_rURL
+            denotes the URL the document was loaded from
+        @param  i_rMediaDescriptor
+            denotes additional document parameters
+        @param  _rDocGuard
+            is the guard which currently protects the document instance
+
+    */
+    sal_Bool    impl_attachResource(
+                    const ::rtl::OUString& i_rURL,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
+                    DocumentGuard& _rDocGuard
+                );
 };
 
 /** an extended version of the ModelMethodGuard, which also cares for the initialization state
