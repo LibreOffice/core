@@ -44,15 +44,12 @@
 class SVX_DLLPUBLIC E3dSphereObj : public E3dCompoundObject
 {
 private:
-    // #110094# DrawContact section
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     basegfx::B3DPoint               aCenter;
     basegfx::B3DVector              aSize;
 
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
 public:

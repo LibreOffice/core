@@ -62,11 +62,10 @@ private:
     SVX_DLLPRIVATE void GetObjRef_Impl();
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     String                      aProgName;

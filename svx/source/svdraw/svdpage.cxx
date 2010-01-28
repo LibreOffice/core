@@ -1168,7 +1168,8 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        ((SdrPage*)this)->mpViewContact = ((SdrPage*)this)->CreateObjectSpecificViewContact();
+        const_cast< SdrPage* >(this)->mpViewContact =
+            const_cast< SdrPage* >(this)->CreateObjectSpecificViewContact();
     }
 
     return *mpViewContact;

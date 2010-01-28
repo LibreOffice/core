@@ -88,14 +88,15 @@ struct SdrCustomShapeInteraction
 
 class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
+private:
     // fObjectRotation is containing the object rotation in degrees.
     double fObjectRotation;
 
-private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+public:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;

@@ -109,8 +109,7 @@ public:
 
 class SVX_DLLPUBLIC E3dObject : public SdrAttrObj
 {
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+private:
     // to allow sdr::properties::E3dProperties access to StructureChanged()
     friend class sdr::properties::E3dProperties;
 
@@ -119,6 +118,8 @@ class SVX_DLLPUBLIC E3dObject : public SdrAttrObj
     friend class E3dDragMethod;
 
  protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     E3dObjList                  maSubList;          // Subliste (Childobjekte)
 
     basegfx::B3DRange           maLocalBoundVol;    // umschliessendes Volumen des Objekts (aus geometrieerzeugung)
@@ -223,8 +224,7 @@ public:
 
 class SVX_DLLPUBLIC E3dCompoundObject : public E3dObject
 {
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+private:
     // to allow sdr::properties::E3dCompoundProperties access to SetGeometryValid()
     friend class sdr::properties::E3dCompoundProperties;
     friend class sdr::properties::E3dExtrudeProperties;
@@ -232,6 +232,8 @@ class SVX_DLLPUBLIC E3dCompoundObject : public E3dObject
     friend class sdr::properties::E3dSphereProperties;
 
 protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     // Material des Objektes
     Color                   aMaterialAmbientColor;
 

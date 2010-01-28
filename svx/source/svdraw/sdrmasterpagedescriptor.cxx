@@ -76,7 +76,8 @@ namespace sdr
     {
         if(!mpViewContact)
         {
-            ((MasterPageDescriptor*)this)->mpViewContact = ((MasterPageDescriptor*)this)->CreateObjectSpecificViewContact();
+            const_cast< MasterPageDescriptor* >(this)->mpViewContact =
+                const_cast< MasterPageDescriptor* >(this)->CreateObjectSpecificViewContact();
         }
 
         return *mpViewContact;

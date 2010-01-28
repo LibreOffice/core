@@ -403,6 +403,7 @@ public:
     // #110094# DrawContact section
 private:
     sdr::contact::ViewContact*                                      mpViewContact;
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;

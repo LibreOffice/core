@@ -37,9 +37,6 @@
 class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {
 private:
-    // #110094# DrawContact section
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // Parameter
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
@@ -48,6 +45,9 @@ private:
 
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
+
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 public:
     void SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);

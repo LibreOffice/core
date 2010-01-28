@@ -52,16 +52,19 @@ namespace sdr
 {
     class MasterPageDescriptor : public sdr::PageUser
     {
+    private:
         SdrPage&                                        maOwnerPage;
         SdrPage&                                        maUsedPage;
         SetOfByte                                       maVisibleLayers;
 
         // ViewContact part
         sdr::contact::ViewContact*                      mpViewContact;
-        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
         // assignment operator defined, but not implemented
         void operator=(const MasterPageDescriptor& rCandidate);
+
+    protected:
+        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     public:
         MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage);

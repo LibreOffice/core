@@ -426,6 +426,7 @@ public:
     // BaseProperties section
 private:
     sdr::properties::BaseProperties*                                mpProperties;
+protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const;
@@ -434,6 +435,7 @@ public:
     // #110094# DrawContact section
 private:
     sdr::contact::ViewContact*                                      mpViewContact;
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;

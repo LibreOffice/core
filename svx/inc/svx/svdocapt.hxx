@@ -63,19 +63,16 @@ public:
 
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 private:
-
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
     friend class sdr::properties::CaptionProperties;
-
     friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
 
 protected:
-    // DrawContact section
-private:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
+private:
     Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE

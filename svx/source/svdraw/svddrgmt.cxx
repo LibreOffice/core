@@ -678,7 +678,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         createSdrDragEntries();
     }
 
-    // if there are entries, derive OverlayObjects fromthe entries, including
+    // if there are entries, derive OverlayObjects from the entries, including
     // modification from current interactive state
     if(maSdrDragEntries.size())
     {
@@ -823,7 +823,18 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                     // this polygon is a temporary calculated connector path, so it is not possible to fetch
                     // the needed primitives directly from the pEdge object which does not get changed. If full
                     // drag is on, use the SdrObjects ItemSet to create a adequate representation
-                    if(getSolidDraggingActive())
+                    bool bUseSolidDragging(getSolidDraggingActive());
+
+                    if(bUseSolidDragging)
+                    {
+                        // switch off solid dragging if connector is not visible
+                        if(!pEdge->HasLineStyle())
+                        {
+                            bUseSolidDragging = false;
+                        }
+                    }
+
+                    if(bUseSolidDragging)
                     {
                         const SfxItemSet& rItemSet = pEdge->GetMergedItemSet();
                         const drawinglayer::attribute::SdrLineAttribute aLine(

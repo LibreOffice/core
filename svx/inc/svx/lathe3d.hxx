@@ -47,16 +47,13 @@
 class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
 {
 private:
-    // #110094# DrawContact section
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // Partcodes fuer Wireframe-Generierung: Standard oder Deckelflaeche
     enum { LATHE_PART_STD = 1, LATHE_PART_COVER = 2 };
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
  protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
  public:

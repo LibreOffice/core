@@ -65,13 +65,12 @@ public:
 
 class SVX_DLLPUBLIC SdrPathObj : public SdrTextObj
 {
+private:
     friend class ImpPathForDragAndCreate;
 
-    // DrawContact section
-private:
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-protected:
     basegfx::B2DPolyPolygon maPathPolygon;
     SdrObjKind                  meKind;
 

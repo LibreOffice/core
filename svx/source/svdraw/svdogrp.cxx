@@ -83,7 +83,7 @@
 
 sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::GroupProperties((SdrObject&)(*this));
+    return new sdr::properties::GroupProperties(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////

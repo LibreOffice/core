@@ -49,14 +49,11 @@ class SfxItemSet;
 
 class SVX_DLLPUBLIC SdrObjGroup : public SdrObject
 {
-    // BaseProperties section
+private:
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    // #110094# DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
-protected:
     SdrObjList*                 pSub;    // Subliste (Kinder)
     long                        nDrehWink;
     long                        nShearWink;

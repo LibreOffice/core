@@ -98,47 +98,42 @@ namespace drawinglayer
 
         Primitive2DSequence SdrCellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
+            // prepare unit polygon
             Primitive2DSequence aRetval;
+            const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::tools::createUnitPolygon());
 
-            if(!getSdrFTAttribute().getFill().isDefault()
-                || !getSdrFTAttribute().getText().isDefault())
+            // add fill
+            if(!getSdrFTAttribute().getFill().isDefault())
             {
-                // prepare unit polygon
-                const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::tools::createUnitPolygon());
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolyPolygonFillPrimitive(
+                        aUnitPolyPolygon,
+                        getTransform(),
+                        getSdrFTAttribute().getFill(),
+                        getSdrFTAttribute().getFillFloatTransGradient()));
+            }
+            else
+            {
+                // if no fill create one for HitTest and BoundRect fallback
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        true,
+                        aUnitPolyPolygon,
+                        getTransform()));
+            }
 
-                // add fill
-                if(!getSdrFTAttribute().getFill().isDefault())
-                {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
-                        createPolyPolygonFillPrimitive(
-                            aUnitPolyPolygon,
-                            getTransform(),
-                            getSdrFTAttribute().getFill(),
-                            getSdrFTAttribute().getFillFloatTransGradient()));
-                }
-                else
-                {
-                    // if no fill create one for HitTest and BoundRect fallback
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
-                        createHiddenGeometryPrimitives2D(
-                            true,
-                            aUnitPolyPolygon,
-                            getTransform()));
-                }
-
-                // add text
-                if(!getSdrFTAttribute().getText().isDefault())
-                {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
-                        createTextPrimitive(
-                            aUnitPolyPolygon,
-                            getTransform(),
-                            getSdrFTAttribute().getText(),
-                            attribute::SdrLineAttribute(),
-                            true,
-                            false,
-                            false));
-                }
+            // add text
+            if(!getSdrFTAttribute().getText().isDefault())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        aUnitPolyPolygon,
+                        getTransform(),
+                        getSdrFTAttribute().getText(),
+                        attribute::SdrLineAttribute(),
+                        true,
+                        false,
+                        false));
             }
 
             return aRetval;

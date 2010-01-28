@@ -50,6 +50,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -487,6 +488,49 @@ namespace drawinglayer
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // The recently added BitmapEx::GetTransparency() makes it easy to extend
+                        // the BitmapPrimitive2D HitTest to take the contained BotmapEx and it's
+                        // transparency into account
+                        const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+
+                        if(!aRange.isEmpty())
+                        {
+                            const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                            const BitmapEx& rBitmapEx = rBitmapCandidate.getBitmapEx();
+                            const Size& rSizePixel(rBitmapEx.GetSizePixel());
+
+                            if(rSizePixel.Width() && rSizePixel.Height())
+                            {
+                                basegfx::B2DHomMatrix aBackTransform(
+                                    getViewInformation2D().getObjectToViewTransformation() *
+                                    rBitmapCandidate.getTransform());
+                                aBackTransform.invert();
+
+                                const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
+                                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                                if(aUnitRange.isInside(aRelativePoint))
+                                {
+                                    const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
+                                    const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
+
+                                    mbHit = (0xff != rBitmapEx.GetTransparency(nX, nY));
+                                }
+                            }
+                            else
+                            {
+                                // fallback to standard HitTest
+                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                                mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                            }
+                        }
+                    }
+
+                    break;
+                }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D :
