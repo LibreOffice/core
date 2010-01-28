@@ -814,7 +814,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                             }
                             else
                             {
-                                if(0x00 != aBitmapColor.GetIndex())
+                                if(0x00 == aBitmapColor.GetIndex())
                                 {
                                     nTransparency = 0x00;
                                 }
