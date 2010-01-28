@@ -65,12 +65,12 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
 #include <svx/unoapi.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>

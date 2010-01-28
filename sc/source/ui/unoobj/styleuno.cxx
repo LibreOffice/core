@@ -45,10 +45,10 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zformat.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/table/BorderLine.hpp>

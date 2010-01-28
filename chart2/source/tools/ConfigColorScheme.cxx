@@ -76,6 +76,7 @@ public:
 
 protected:
     // ____ ::utl::ConfigItem ____
+    virtual void                    Commit();
     virtual void Notify( const Sequence< OUString > & aPropertyNames );
 
 private:
@@ -99,6 +100,9 @@ void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
             m_rListener.notify( aPropertyNames[nIdx] );
     }
 }
+
+void ChartConfigItem::Commit()
+{}
 
 void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
 {

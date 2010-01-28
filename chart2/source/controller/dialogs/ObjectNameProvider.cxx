@@ -49,8 +49,6 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-// #include <svtools/syslocale.hxx>
-
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 

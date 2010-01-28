@@ -103,7 +103,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
 
 //.............................................................................

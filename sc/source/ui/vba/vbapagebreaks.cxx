@@ -90,8 +90,8 @@ public:
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        //if( m_bColumn )
-            // return excel::XVPageBreak::static_type(0);
+        if( m_bColumn )
+             return excel::XVPageBreak::static_type(0);
         return  excel::XHPageBreak::static_type(0);
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
@@ -137,8 +137,8 @@ uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index ) throw (lang::In
         if( (nPos < xIndexAccess->getCount()) && (nPos > -1) )
         {
             uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nPos), uno::UNO_QUERY_THROW );
-            //if( m_bColumn )
-            //  return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+            if( m_bColumn )
+                return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
             return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
         }
     }
@@ -187,8 +187,8 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = sal_True;
     aTablePageBreakData.Position = nAPIRowColIndex;
-    //if( m_bColumn )
-    //  return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+    if( m_bColumn )
+        return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
     return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
 }
 
@@ -263,6 +263,67 @@ ScVbaHPageBreaks::getServiceNames()
     {
         aServiceNames.realloc( 1 );
         aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.HPageBreaks" ) );
+    }
+    return aServiceNames;
+}
+
+//VPageBreak
+ScVbaVPageBreaks::ScVbaVPageBreaks( const uno::Reference< XHelperInterface >& xParent,
+                                    const uno::Reference< uno::XComponentContext >& xContext,
+                                    uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak ) throw ( uno::RuntimeException )
+:   ScVbaVPageBreaks_BASE( xParent, xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, sal_True ) ),
+    mxSheetPageBreak( xSheetPageBreak )
+{
+}
+
+ScVbaVPageBreaks::~ScVbaVPageBreaks()
+{
+}
+
+uno::Any SAL_CALL
+ScVbaVPageBreaks::Add( const uno::Any& Before ) throw ( script::BasicErrorException, uno::RuntimeException )
+{
+    RangePageBreaks* pPageBreaks = dynamic_cast< RangePageBreaks* >( m_xIndexAccess.get() );
+    if( pPageBreaks )
+    {
+        return pPageBreaks->Add( Before );
+    }
+    return uno::Any();
+}
+
+uno::Reference< container::XEnumeration >
+ScVbaVPageBreaks::createEnumeration() throw ( uno::RuntimeException )
+{
+    return new RangePageBreaksEnumWrapper( m_xIndexAccess );
+}
+
+uno::Any
+ScVbaVPageBreaks::createCollectionObject( const css::uno::Any& aSource )
+{
+    return aSource; // its already a pagebreak object
+}
+
+uno::Type
+ScVbaVPageBreaks::getElementType() throw ( uno::RuntimeException )
+{
+    return excel::XVPageBreak::static_type( 0 );
+}
+
+rtl::OUString&
+ScVbaVPageBreaks::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "ScVbaVPageBreaks" ) );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaVPageBreaks::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.VPageBreaks" ) );
     }
     return aServiceNames;
 }

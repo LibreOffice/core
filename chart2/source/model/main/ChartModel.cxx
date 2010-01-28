@@ -52,7 +52,7 @@
 #include <comphelper/processfactory.hxx>
 
 // header for class SvNumberFormatsSupplierObj
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -71,7 +71,7 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 
 // header for class SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

@@ -30,7 +30,7 @@
 #ifndef CHART_HELPIDS_HRC
 #define CHART_HELPIDS_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 //next is 120
 //free: 20, 21, 22, 30, 31, 32, 33
 

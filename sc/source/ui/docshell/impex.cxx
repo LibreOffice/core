@@ -53,9 +53,9 @@ class StarBASIC;
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <unotools/charclass.hxx>

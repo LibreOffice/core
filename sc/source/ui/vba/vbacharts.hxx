@@ -31,8 +31,8 @@
 #define SC_VBA_CHARTS_HXX
 #include <ooo/vba/excel/XCharts.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include"vbacollectionimpl.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
+#include "excelvbahelper.hxx"
 #include <hash_map>
 
 typedef CollTestImplHelper< ov::excel::XCharts > Charts_BASE;
@@ -43,7 +43,7 @@ class ScVbaCharts : public Charts_BASE
     css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadsheetDocument;
     css::uno::Reference< css::lang::XComponent > xComponent;
 public:
-    ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext );
+    ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::frame::XModel >& xModel );
     // XCharts
     virtual css::uno::Any SAL_CALL Add() throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getActiveChart(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

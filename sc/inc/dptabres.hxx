@@ -31,7 +31,7 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>

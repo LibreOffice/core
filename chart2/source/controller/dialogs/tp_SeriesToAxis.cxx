@@ -38,11 +38,11 @@
 #include "NoWarningThisInCTOR.hxx"
 
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #include <svtools/controldims.hrc>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>

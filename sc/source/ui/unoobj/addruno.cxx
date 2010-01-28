@@ -36,7 +36,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include "docsh.hxx"
 #include "unonames.hxx"
