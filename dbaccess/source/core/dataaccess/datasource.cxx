@@ -199,8 +199,6 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) thr
 //--------------------------------------------------------------------
 void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
 {
-    DBG_ASSERT( Source.Source == m_aBroadcaster.get(), "FlushNotificationAdapter::disposing: where did this come from?" );
-
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
         xListener->disposing( Source );
@@ -561,21 +559,22 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl)
             :ModelDependentComponent( _pImpl )
-            ,OSubComponent( getMutex(), Reference< XInterface >() )
-            ,OPropertySetHelper(OComponentHelper::rBHelper)
+            ,ODatabaseSource_Base( getMutex() )
+            ,OPropertySetHelper( ODatabaseSource_Base::rBHelper )
             ,m_aBookmarks( *this, getMutex() )
             ,m_aFlushListeners( getMutex() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::ODatabaseSource" );
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
+    OSL_TRACE( "DS: ctor: %p: %p", this, m_pImpl.get() );
 }
 
 //--------------------------------------------------------------------------
 ODatabaseSource::~ODatabaseSource()
 {
+    OSL_TRACE( "DS: dtor: %p: %p", this, m_pImpl.get() );
     DBG_DTOR(ODatabaseSource,NULL);
-    if ( !OComponentHelper::rBHelper.bInDispose && !OComponentHelper::rBHelper.bDisposed )
+    if ( !ODatabaseSource_Base::rBHelper.bInDispose && !ODatabaseSource_Base::rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -603,11 +602,8 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
                                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(
-        ::comphelper::concatSequences(
-            OSubComponent::getTypes(),
-            aPropertyHelperTypes.getTypes()
-        ),
-        ODatabaseSource_Base::getTypes()
+        ODatabaseSource_Base::getTypes(),
+        aPropertyHelperTypes.getTypes()
     );
 }
 
@@ -633,39 +629,26 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::queryInterface" );
-    Any aIface = OSubComponent::queryInterface( rType );
-    if (!aIface.hasValue())
-    {
-        aIface = ODatabaseSource_Base::queryInterface( rType );
-        if ( !aIface.hasValue() )
-        {
-            aIface = ::cppu::queryInterface(
-                        rType,
-                        static_cast< XPropertySet* >( this ),
-                        static_cast< XFastPropertySet* >( this ),
-                        static_cast< XMultiPropertySet* >( this ));
-        }
-    }
+    Any aIface = ODatabaseSource_Base::queryInterface( rType );
+    if ( !aIface.hasValue() )
+        aIface = ::cppu::OPropertySetHelper::queryInterface( rType );
     return aIface;
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::acquire() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::acquire" );
-    OSubComponent::acquire();
+    ODatabaseSource_Base::acquire();
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::release() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::release" );
-    OSubComponent::release();
+    ODatabaseSource_Base::release();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
 }
@@ -719,8 +702,8 @@ sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName 
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
-    OSubComponent::disposing();
+    OSL_TRACE( "DS: disp: %p, %p", this, m_pImpl.get() );
+    ODatabaseSource_Base::WeakComponentImplHelperBase::disposing();
     OPropertySetHelper::disposing();
 
     EventObject aDisposeEvent(static_cast<XWeak*>(this));
@@ -798,8 +781,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 m_pImpl->m_xSettings->getPropertyValues(),
                 m_pImpl->getDefaultDataSourceSettings()
             );
-
-            impl_insertJavaDriverClassPath_nothrow(aDriverInfo);
 
             if ( m_pImpl->isEmbeddedDatabase() )
             {
@@ -1502,29 +1483,6 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseSource::impl_insertJavaDriverClassPath_nothrow(Sequence< PropertyValue >& _rDriverInfo)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::impl_insertJavaDriverClassPath_nothrow" );
-    Reference< XPropertySet > xPropertySet( m_pImpl->m_xSettings, UNO_QUERY_THROW );
-    ::rtl::OUString sJavaDriverClass;
-    xPropertySet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))) >>= sJavaDriverClass;
-    if ( sJavaDriverClass.getLength() )
-    {
-        static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
-        ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            m_pImpl->m_aContext.getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-        if ( aNamesRoot.isValid() && aNamesRoot.hasByName( sJavaDriverClass ) )
-        {
-            ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( sJavaDriverClass );
-            ::rtl::OUString sURL;
-            OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
-
-            ::comphelper::NamedValueCollection aDriverSettings( _rDriverInfo );
-            aDriverSettings.put( "JavaDriverClassPath", sURL );
-            aDriverSettings >>= _rDriverInfo;
-        }
-    }
-}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

@@ -33,7 +33,7 @@
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/report/XFormattedField.hpp>

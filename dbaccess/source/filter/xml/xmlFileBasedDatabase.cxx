@@ -58,8 +58,8 @@
 #include <tools/diagnose_ex.h>
 #endif
 #include <comphelper/sequence.hxx>
-#include <svtools/filenotation.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/filenotation.hxx>
+#include <unotools/pathoptions.hxx>
 #include "dsntypes.hxx"
 namespace dbaxml
 {
@@ -102,7 +102,11 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                     rtl::OUString sFileName = aPathOptions.SubstituteVariable(sValue);
                     if ( sValue == sFileName )
                     {
-                        sLocation = ::svt::OFileNotation(rImport.GetAbsoluteReference(sValue)).get( ::svt::OFileNotation::N_SYSTEM );
+                        const sal_Int32 nFileNameLength = sFileName.getLength();
+                        if ( ( nFileNameLength > 0 ) && ( sFileName.getStr()[ nFileNameLength - 1 ] == '/' ) )
+                            sFileName = sFileName.copy( 0, nFileNameLength - 1 );
+
+                        sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
                     }
 
                     if ( sLocation.getLength() == 0 )

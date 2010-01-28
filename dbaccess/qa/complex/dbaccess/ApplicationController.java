@@ -53,7 +53,7 @@ import java.io.IOException;
 
 /** complex test case for Base's application UI
  */
-public class ApplicationController extends complexlib.ComplexTestCase
+public class ApplicationController extends TestCase
 {
 
     private HsqlDatabase m_database;
@@ -65,22 +65,6 @@ public class ApplicationController extends complexlib.ComplexTestCase
         super();
     }
 
-    // --------------------------------------------------------------------------------------------------------
-    protected final XComponentContext getComponentContext()
-    {
-        XComponentContext context = null;
-        try
-        {
-            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getORB());
-            context = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
-                    orbProps.getPropertyValue("DefaultContext"));
-        }
-        catch (Exception ex)
-        {
-            failed("could not retrieve the ComponentContext");
-        }
-        return context;
-    }
     // --------------------------------------------------------------------------------------------------------
 
     public String[] getTestMethodNames()
@@ -95,12 +79,6 @@ public class ApplicationController extends complexlib.ComplexTestCase
     public String getTestObjectName()
     {
         return getClass().getName();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    protected final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory) param.getMSF();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -129,29 +107,31 @@ public class ApplicationController extends complexlib.ComplexTestCase
 
         // load it into a frame
         final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
-        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
+        final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, object);
         final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
         assure("too many document instances!",
                 UnoRuntime.areSame(loadedComponent, m_databaseDocument));
 
         // get the controller, which provides access to various UI operations
-        final XModel docModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        final XModel docModel = UnoRuntime.queryInterface(XModel.class,
                 loadedComponent);
-        m_documentUI = (XDatabaseDocumentUI) UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
+        m_documentUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
                 docModel.getCurrentController());
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void before() throws Exception, java.lang.Exception
+    public void before() throws java.lang.Exception
     {
+        super.before();
         impl_switchToDocument(null);
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void after()
+    public void after() throws java.lang.Exception
     {
         impl_closeDocument();
+        super.after();
     }
     // --------------------------------------------------------------------------------------------------------
 
@@ -161,16 +141,11 @@ public class ApplicationController extends complexlib.ComplexTestCase
         // then those changes are saved in the old document, actually
         final String oldDocumentURL = m_database.getDocumentURL();
 
-        final File documentFile = java.io.File.createTempFile(getTestObjectName(), ".odb");
-        documentFile.deleteOnExit();
-        final String newDocumentURL = URLHelper.getFileURLFromSystemPath(documentFile.getAbsoluteFile());
+        final String newDocumentURL = createTempFileURL();
 
         // store the doc in a new location
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                m_databaseDocument);
-        storeDoc.storeAsURL(newDocumentURL, new PropertyValue[]
-                {
-                });
+        final XStorable storeDoc = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
+        storeDoc.storeAsURL( newDocumentURL, new PropertyValue[] { } );
 
         // connect
         m_documentUI.connect();
@@ -188,8 +163,7 @@ public class ApplicationController extends complexlib.ComplexTestCase
         impl_switchToDocument(oldDocumentURL);
         m_documentUI.connect();
         assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
-        XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
+        XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         XNameAccess tables = suppTables.getTables();
         assure("the table was created in the wrong database", !tables.hasByName("abc"));
 
@@ -198,8 +172,7 @@ public class ApplicationController extends complexlib.ComplexTestCase
         m_documentUI.connect();
         assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
-        suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
+        suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         tables = suppTables.getTables();
         assure("the newly created table has not been written", tables.hasByName("abc"));
     }

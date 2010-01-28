@@ -185,7 +185,7 @@ String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension)
 {
-    String sURL;
+    String sURL, sFallbackURL;
     const uno::Sequence< ::rtl::OUString > aURLs = m_aDriverConfig.getURLs();
     const ::rtl::OUString* pIter = aURLs.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
@@ -195,13 +195,19 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
         if ( aFeatures.getOrDefault("MediaType",::rtl::OUString()) == _sMediaType )
         {
             const ::rtl::OUString sFileExtension = aFeatures.getOrDefault("Extension",::rtl::OUString());
-            if ( (sFileExtension.getLength() && _sExtension == sFileExtension ) || !sFileExtension.getLength() || !_sExtension.getLength() )
+            if ( _sExtension == sFileExtension )
             {
                 sURL = *pIter;
                 break;
             }
+            if ( !sFileExtension.getLength() && _sExtension.getLength() )
+                sFallbackURL = *pIter;
         }
     } // for(;pIter != pEnd;++pIter )
+
+    if ( !sURL.Len() && sFallbackURL.Len() )
+        sURL = sFallbackURL;
+
     sURL.EraseTrailingChars('*');
     return sURL;
 }
@@ -299,12 +305,6 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const ::rtl::O
     return aProperties.getPropertyValues();
 }
 
-// -----------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeExtension(const ::rtl::OUString& _sURL) const
-{
-    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("Extension",::rtl::OUString());
-}
 //-------------------------------------------------------------------------
 bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) const
 {

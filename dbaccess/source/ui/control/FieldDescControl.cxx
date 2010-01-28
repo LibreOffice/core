@@ -53,12 +53,12 @@
 #include <svx/numfmtsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/algitem.hxx>
-#include <svtools/itempool.hxx>
-#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svtools/zforlist.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/rngitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/itempool.hxx>
+#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svl/zforlist.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/rngitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/numuno.hxx>
 #include <svtools/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -1375,6 +1375,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 ActivateAggregate( tpFormat );
                 break;
             case DataType::BIT:
+                if ( pFieldType->aCreateParams.getLength() )
+                {
+                    DeactivateAggregate( tpFormat );
+                    DeactivateAggregate( tpTextLen );
+                    DeactivateAggregate( tpBoolDefault );
+                    break;
+                }
+                // run through
             case DataType::BOOLEAN:
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpFormat );
@@ -1473,7 +1481,9 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
-        String sDef = BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
+        ::rtl::OUString sValue;
+        pFieldDescr->GetControlDefault() >>= sValue;
+        String sDef = BoolStringUI(sValue);
 
         // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
         if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
@@ -1667,8 +1677,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     ::rtl::OUString sDefault;
     if (pDefault)
     {
-        if ( pDefault->GetSavedValue() != pDefault->GetText() )
-            sDefault = pDefault->GetText();
+        sDefault = pDefault->GetText();
     }
     else if (pBoolDefault)
     {

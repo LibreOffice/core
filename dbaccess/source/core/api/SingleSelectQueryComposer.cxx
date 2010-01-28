@@ -58,7 +58,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
@@ -1529,6 +1529,27 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::LONGVARCHAR:
                 aSQL.append( STR_LIKE );
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                break;
+            case DataType::CLOB:
+                {
+                    Reference< XClob > xClob(aValue,UNO_QUERY);
+                    if ( xClob.is() )
+                    {
+                        const ::sal_Int64 nLength = xClob->length();
+                        if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
+                        {
+                            aSQL.append( STR_LIKE );
+                            aSQL.appendAscii("'");
+                            aSQL.append( xClob->getSubString(1,(sal_Int32)nLength) );
+                            aSQL.appendAscii("'");
+                        }
+                    }
+                    else
+                    {
+                        aSQL.append( STR_LIKE );
+                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                    }
+                }
                 break;
             case DataType::VARBINARY:
             case DataType::BINARY:

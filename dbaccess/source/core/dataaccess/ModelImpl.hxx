@@ -104,13 +104,32 @@ struct AsciiPropertyValue
     // note: the canonic member order would be AsciiName / DefaultValue, but
     // this crashes on unxlngi6.pro, since there's a bug which somehow results in
     // getDefaultDataSourceSettings returning corrupted Any instances then.
-    ::com::sun::star::uno::Any  DefaultValue;
-    const sal_Char*             AsciiName;
+    ::com::sun::star::uno::Any          DefaultValue;
+    const sal_Char*                     AsciiName;
+    const ::com::sun::star::uno::Type&  ValueType;
+
+    AsciiPropertyValue()
+        :DefaultValue( )
+        ,AsciiName( NULL )
+        ,ValueType( ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
+    {
+    }
 
     AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rDefaultValue )
         :DefaultValue( _rDefaultValue )
         ,AsciiName( _pAsciiName )
+        ,ValueType( _rDefaultValue.getValueType() )
     {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
+    }
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Type& _rValeType )
+        :DefaultValue()
+        ,AsciiName( _pAsciiName )
+        ,ValueType( _rValeType )
+    {
+        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+            "AsciiPropertyValue::AsciiPropertyValue: VOID property values not supported!" );
     }
 };
 
@@ -143,8 +162,6 @@ private:
 //============================================================
 //= ODatabaseModelImpl
 //============================================================
-DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
-
 typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedStorage;
 
 class ODatabaseContext;
@@ -182,7 +199,6 @@ private:
     ::comphelper::SharedMutex                                                   m_aMutex;
     VosMutexFacade                                                              m_aMutexFacade;
     ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
-    TStorages                                                                   m_aStorages;
     ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
     sal_Int16                                                                   m_nImposedMacroExecMode;
 
@@ -242,7 +258,6 @@ public:
     sal_Bool                                            m_bSuppressVersionColumns : 1;
     sal_Bool                                            m_bModified : 1;
     sal_Bool                                            m_bDocumentReadOnly : 1;
-    sal_Bool                                            m_bDisposingSubStorages;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyAccess >
                                                         m_xSettings;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
@@ -267,10 +282,9 @@ public:
             call.
         @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
     */
-    sal_Bool    commitEmbeddedStorage( sal_Bool _bPreventRootCommits = sal_False );
+    bool        commitEmbeddedStorage( bool _bPreventRootCommits = false );
 
-    /** commits all storages storages which have been obtained via getStorage
-    */
+    /// commits all sub storages
     void commitStorages()
             SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
 
@@ -296,7 +310,10 @@ public:
     inline ::rtl::OUString getURL() const               { return m_sDocumentURL;     }
     inline ::rtl::OUString getDocFileLocation() const   { return m_sDocFileLocation; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+            getStorage(
+                const ObjectType _eType, const sal_Int32 _nDesiredMode = ::com::sun::star::embed::ElementModes::READWRITE );
+
 // helper
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
@@ -402,10 +419,6 @@ public:
     /** retrieves the requested container of objects (forms/reports/tables/queries)
     */
     TContentPtr&    getObjectContainer( const ObjectType _eType );
-
-    /** determines whether the given storage is the storage of our embedded database (named "database"), if any
-    */
-    bool            isDatabaseStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage ) const;
 
     /** returns the name of the storage which is used to stored objects of the given type, if applicable
     */

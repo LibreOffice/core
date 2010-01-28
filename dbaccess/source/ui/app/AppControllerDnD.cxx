@@ -204,7 +204,7 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
@@ -900,18 +900,6 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
 sal_Bool OApplicationController::isTableFormat()  const
 {
     return m_aTableCopyHelper.isTableFormat(getViewClipboard());
-}
-// -----------------------------------------------------------------------------
-sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
-{
-    // first get the dest connection
-    ::osl::MutexGuard aGuard( getMutex() );
-
-    SharedConnection xConnection( ensureConnection() );
-    if ( !xConnection.is() )
-        return sal_False;
-
-    return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )

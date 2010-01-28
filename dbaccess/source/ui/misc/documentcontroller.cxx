@@ -58,16 +58,6 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    ModelControllerConnector::ModelControllerConnector( const Reference< XModel >& _rxModel, const Reference< XController >& _rxController )
-        :m_xModel( _rxModel )
-        ,m_xController( _rxController )
-    {
-        DBG_CTOR( ModelControllerConnector, NULL );
-        DBG_ASSERT( _rxModel.is() && m_xController.is(), "ModelControllerConnector::ModelControllerConnector: invalid model or controller!" );
-        impl_connect();
-    }
-
-    //--------------------------------------------------------------------
     ModelControllerConnector::ModelControllerConnector( const ModelControllerConnector& _rSource )
     {
         DBG_CTOR( ModelControllerConnector, NULL );

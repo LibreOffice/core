@@ -138,12 +138,12 @@
 #include "dlgpage.hxx"
 #include "RptResId.hrc"
 
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/aeitem.hxx> //CHINA001
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/aeitem.hxx> //CHINA001
 #include <svtools/cliplistener.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <vos/mutex.hxx>
 #include "PropertyForward.hxx"
@@ -1731,7 +1731,9 @@ void OReportController::impl_initialize( )
                     m_xReportDefinition->setCommand(aNames[0]);
                     m_xReportDefinition->setCommandType(sdb::CommandType::TABLE);
                 }
-            }
+            } // if ( !sHierarchicalDocumentName.getLength() && getConnection().is() )
+
+            m_aVisualAreaSize = m_xReportDefinition->getVisualAreaSize(0);
 
         } // if ( m_xReportDefinition.is() )
 
@@ -4283,7 +4285,7 @@ void OReportController::openZoomDialog()
             aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
             pDescriptor->Put(aZoomItem);
 
-            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get(), RID_SVXDLG_ZOOM) );
+            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get()) );
             pDlg->SetLimits( 20, 400 );
             bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 

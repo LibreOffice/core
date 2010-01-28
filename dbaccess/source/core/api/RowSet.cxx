@@ -36,156 +36,56 @@
 #include "sdbcoretools.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "module_dba.hxx"
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#include <cppuhelper/exc_hlp.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
-#include <comphelper/componentcontext.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
-#include <com/sun/star/sdb/RowSetVetoException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
-#include <com/sun/star/sdb/RowChangeAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
-#include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
-#include "RowSetCache.hxx"
-#endif
-#if OSL_DEBUG_LEVEL > 1
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
-#include <com/sun/star/sdbc/XDriverManager.hpp>
-#endif
-#endif
-#ifndef _DBACORE_DATACOLUMN_HXX_
-#include "CRowSetDataColumn.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
+#include "sdbcoretools.hxx"
 #include "CRowSetColumn.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_SEQSTREAM_HXX
-#include <comphelper/seqstream.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
-#include "tablecontainer.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XParametersSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
-#include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "CRowSetDataColumn.hxx"
+#include "RowSetCache.hxx"
 #include "core_resource.hrc"
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "core_resource.hxx"
+#include "tablecontainer.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/interaction.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
+#include <connectivity/BlobHelper.hxx>
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
-#endif
+#include <unotools/syslocale.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/configmgr.hxx>
 
 using namespace utl;
 using namespace dbaccess;
@@ -814,7 +714,18 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
 // XRowUpdate
 void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,ORowSetValue());
+    ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
+
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    checkUpdateConditions(columnIndex);
+    checkUpdateIterator();
+
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
+    m_pCache->updateNull(columnIndex);
+    // we have to notify all listeners
+    ((*m_aCurrentRow)->get())[columnIndex].setNull();
+    firePropertyChange(columnIndex-1 ,aOldValue);
+    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
@@ -886,25 +797,23 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    ::connectivity::ORowSetValue aOldValue;
-    if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
-    {
-        m_pCache->updateBinaryStream(columnIndex,x,length);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
-    }
-    else
+
+    //if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
+    //{
+ //       ::connectivity::ORowSetValue aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
+    //  m_pCache->updateBinaryStream(columnIndex,x,length);
+    //  ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
+ //       ((*m_aCurrentRow)->get())[columnIndex].setTypeKind(DataType::BLOB);
+ //       firePropertyChange(columnIndex-1 ,aOldValue);
+    //    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
+    //}
+    //else
     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
             x->readBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = aSeq;
     }
-
-    firePropertyChange(columnIndex-1 ,aOldValue);
-    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -1481,14 +1390,19 @@ Reference< XRef > SAL_CALL ORowSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQ
     return Reference< XRef >();
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XBlob >();
+    if ( m_pCache && isInsertRow() )
+    {
+        checkCache();
+        return new ::connectivity::BlobHelper(((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
+    }
+    return ORowSetBase::getBlob(columnIndex);
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XClob >();
+    return Reference< XClob >(getInsertValue(columnIndex).makeAny(),UNO_QUERY);
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
@@ -2191,36 +2105,36 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     if (!m_xActiveConnection.is())
     {
         Reference< XConnection > xNewConn;
-        if (m_aDataSourceName.getLength())
+        if ( m_aDataSourceName.getLength() )
         {
-            // is it a file url?
-            Reference< XNameAccess > xNamingContext;
-            if ( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xNamingContext ) )
-            if (xNamingContext.is() )
+            Reference< XNameAccess > xDatabaseContext(
+                m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ),
+                UNO_QUERY_THROW );
+            try
             {
-                try
+                Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_aDataSourceName ), UNO_QUERY_THROW );
+
+                // try connecting with the interaction handler
+                Reference< XCompletedConnection > xComplConn( xDataSource, UNO_QUERY );
+                if ( _rxHandler.is() && xComplConn.is() )
                 {
-                    if(_rxHandler.is())
-                    {
-                        Reference< XCompletedConnection> xComplConn(xNamingContext->getByName(m_aDataSourceName), UNO_QUERY);
-                        if(xComplConn.is())
-                            xNewConn = xComplConn->connectWithCompletion(_rxHandler);
-                    }
-                    else
-                    {
-                        Reference< XDataSource >  xDataSource(xNamingContext->getByName(m_aDataSourceName), UNO_QUERY);
-                        if (xDataSource.is())
-                            xNewConn = xDataSource->getConnection(m_aUser, m_aPassword);
-                    }
+                    xNewConn = xComplConn->connectWithCompletion( _rxHandler );
                 }
-                catch (SQLException &e)
+                else
                 {
-                    throw e;
+                    xNewConn = xDataSource->getConnection( m_aUser, m_aPassword );
                 }
-                catch (Exception&)
-                {
-                    throw SQLException();
-                }
+            }
+            catch ( const SQLException& e )
+            {
+                throw;
+            }
+            catch ( const Exception& e )
+            {
+                Any aError = ::cppu::getCaughtException();
+                ::rtl::OUString sMessage = ResourceManager::loadString( RID_NO_SUCH_DATA_SOURCE,
+                    "$name$", m_aDataSourceName, "$error$", extractExceptionMessage( m_aContext, aError ) );
+                ::dbtools::throwGenericSQLException( sMessage, *this );
             }
         }
         setActiveConnection(xNewConn);
@@ -2245,7 +2159,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
     else
     {
         if ( !m_xActiveConnection.is() )
-                throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBA_RES(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
         sal_Bool bCase = sal_True;
         try
@@ -2838,7 +2752,8 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             m_aDataColumns.push_back(pColumn);
 
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-            sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+            sal_Int32 nFormatKey = 0;
+            xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT) >>= nFormatKey;
             if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
                 nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));

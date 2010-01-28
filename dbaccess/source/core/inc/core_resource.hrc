@@ -32,12 +32,11 @@
 #define _DBA_CORE_RESOURCE_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 //------------------------------------------------------------------------------
 #define RID_CORE_STRINGS_START                  RID_DBACCESS_START
-#define RID_CORE_OTHER_START                    RID_DBACCESS_START
 
 //------------------------------------------------------------------------------
 //- String-IDs
@@ -89,6 +88,7 @@
 #define RID_STR_NAME_NOT_FOUND                  ( RID_CORE_STRINGS_START + 45 )
 #define RID_STR_QUERY_DOES_NOT_EXIST            ( RID_CORE_STRINGS_START + 46 )
 #define RID_STR_ERROR_WHILE_SAVING              ( RID_CORE_STRINGS_START + 47 )
+#define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 48 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 

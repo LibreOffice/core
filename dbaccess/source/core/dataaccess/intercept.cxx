@@ -31,28 +31,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
-#include <com/sun/star/embed/EmbedStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef DBA_INTERCEPT_HXX
 #include "intercept.hxx"
-#endif
 #include "dbastrings.hrc"
-#ifndef _TOOLS_DEBUG_HXX
+
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <cppuhelper/weak.hxx>
+
+#include <comphelper/types.hxx>
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 
 namespace dbaccess
@@ -140,66 +129,78 @@ struct DispatchHelper
 //XDispatch
 void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyValue >& Arguments ) throw (RuntimeException)
 {
-    osl::ClearableMutexGuard aClearableGuard(m_aMutex);
-    if( m_pContentHolder )
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( !m_pContentHolder )
+        return;
+
+    if ( _URL.Complete == m_aInterceptedURL[ DISPATCH_SAVE ] )
     {
-        if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVE] )
-        {
-            m_pContentHolder->save(sal_False);
-        }
-        else if( _URL.Complete == m_aInterceptedURL[DISPATCH_RELOAD] )
-        {
-            m_pContentHolder->fillReportData(aClearableGuard);
-            // IMPORTANT: m_aMutex is cleared!
-        }
-        else if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVEAS] )
-        {
-            if ( m_pContentHolder->isNewReport() )
-            {
-                m_pContentHolder->saveAs();
-            }
-            else if ( m_xSlaveDispatchProvider.is() )
-            {
-                Sequence< PropertyValue > aNewArgs = Arguments;
-                sal_Int32 nInd = 0;
+        m_pContentHolder->save( sal_False );
+        return;
+    }
 
-                while( nInd < aNewArgs.getLength() )
-                {
-                    if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
-                    {
-                        aNewArgs[nInd].Value <<= sal_True;
-                        break;
-                    }
-                    nInd++;
-                }
+    if ( _URL.Complete == m_aInterceptedURL[ DISPATCH_RELOAD ] )
+    {
+        ODocumentDefinition::fillReportData(
+            m_pContentHolder->getContext(),
+            m_pContentHolder->getComponent(),
+            m_pContentHolder->getConnection()
+        );
+        return;
+    }
 
-                if ( nInd == aNewArgs.getLength() )
+    if( _URL.Complete == m_aInterceptedURL[ DISPATCH_SAVEAS ] )
+    {
+        if ( m_pContentHolder->isNewReport() )
+        {
+            m_pContentHolder->saveAs();
+        }
+        else if ( m_xSlaveDispatchProvider.is() )
+        {
+            Sequence< PropertyValue > aNewArgs = Arguments;
+            sal_Int32 nInd = 0;
+
+            while( nInd < aNewArgs.getLength() )
+            {
+                if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
                 {
-                    aNewArgs.realloc( nInd + 1 );
-                    aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
                     aNewArgs[nInd].Value <<= sal_True;
+                    break;
                 }
-
-                Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                    _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
-                if ( xDispatch.is() )
-                    xDispatch->dispatch( _URL, aNewArgs );
+                nInd++;
             }
+
+            if ( nInd == aNewArgs.getLength() )
+            {
+                aNewArgs.realloc( nInd + 1 );
+                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                aNewArgs[nInd].Value <<= sal_True;
+            }
+
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+            if ( xDispatch.is() )
+                xDispatch->dispatch( _URL, aNewArgs );
         }
-        else if (  _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEDOC]
-                || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEWIN]
-                || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEFRAME])
-        {
-            DispatchHelper* pHelper = new DispatchHelper;
-            pHelper->aArguments = Arguments;
-            pHelper->aURL = _URL;
-            Application::PostUserEvent(LINK(this, OInterceptor, OnDispatch),reinterpret_cast<void*>(pHelper) );
-        }
+        return;
+    }
+
+    if  (   _URL.Complete == m_aInterceptedURL[ DISPATCH_CLOSEDOC ]
+        ||  _URL.Complete == m_aInterceptedURL[ DISPATCH_CLOSEWIN ]
+        ||  _URL.Complete == m_aInterceptedURL[ DISPATCH_CLOSEFRAME ]
+        )
+    {
+        DispatchHelper* pHelper = new DispatchHelper;
+        pHelper->aArguments = Arguments;
+        pHelper->aURL = _URL;
+        Application::PostUserEvent( LINK( this, OInterceptor, OnDispatch ), reinterpret_cast< void* >( pHelper ) );
+        return;
     }
 }
-IMPL_LINK( OInterceptor, OnDispatch, void*, _nId)
+
+IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
 {
-    ::std::auto_ptr<DispatchHelper> pHelper(reinterpret_cast<DispatchHelper*>(_nId));
+    ::std::auto_ptr<DispatchHelper> pHelper( reinterpret_cast< DispatchHelper* >( _pDispatcher ) );
     try
     {
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
@@ -217,10 +218,11 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _nId)
             }
         }
     }
-    catch(const Exception&)
+    catch ( const Exception& )
     {
-        OSL_ENSURE(sal_False, "caught an exception while starting the table wizard!");
+        DBG_UNHANDLED_EXCEPTION();
     }
+
     return 0L;
 }
 

@@ -1207,6 +1207,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 case DataType::CHAR:
                                 case DataType::VARCHAR:
                                 case DataType::LONGVARCHAR:
+                                case DataType::CLOB:
                                     if(aText.GetChar(0) != '\'' || aText.GetChar(aText.Len() -1) != '\'')
                                     {
                                         aText.SearchAndReplaceAll(String::CreateFromAscii("'"),String::CreateFromAscii("''"));
@@ -1834,6 +1835,32 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
         if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // das GroupBy wird bereits von rInfo "ubernommen
             pTmp->SetGroupBy(sal_False);
     }
+}
+//------------------------------------------------------------------------------
+void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
+{
+    DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    const sal_uInt16 nNewLevel = nLevel +1;
+    OTableFields& rFields = getFields();
+    OTableFields::iterator aIter = rFields.begin();
+    OTableFields::iterator aEnd = rFields.end();
+    for(;aIter != aEnd;++aIter)
+    {
+        OTableFieldDescRef pEntry = *aIter;
+
+        ::rtl::OUString sValue = pEntry->GetCriteria(nLevel);
+        if ( sValue.getLength() )
+        {
+            pEntry->SetCriteria( nNewLevel, sValue);
+            if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
+            {
+                RowInserted( GetRowCount()-1, 1, TRUE );
+                m_bVisibleRow.push_back(sal_True);
+                ++m_nVisibleCount;
+            }
+            m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = sal_True;
+        } // if (!pEntry->GetCriteria(nLevel).getLength() )
+    } // for(;aIter != getFields().end();++aIter)
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel,bool _bAddOrOnOneLine )

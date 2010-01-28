@@ -198,7 +198,7 @@
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -207,16 +207,16 @@
 #include "dbaccess_helpid.hrc"
 #endif
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
 #endif
 #ifndef _SFXRNGITEM_HXX
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SVX_ALGITEM_HXX
 #include <svx/algitem.hxx>
@@ -229,7 +229,7 @@
 #include <svx/numinf.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
@@ -283,13 +283,13 @@
 #include <tools/diagnose_ex.h>
 #endif
 #ifndef _NUMUNO_HXX
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
@@ -803,6 +803,12 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     aName = _rsTypeNames.GetToken(TYPE_DATETIME);
                     break;
                 case DataType::BIT:
+                    if ( pInfo->aCreateParams.getLength() )
+                    {
+                        aName = _rsTypeNames.GetToken(TYPE_BIT);
+                        break;
+                    }
+                    // run through
                 case DataType::BOOLEAN:
                     aName = _rsTypeNames.GetToken(TYPE_BOOL);
                     break;
@@ -1155,7 +1161,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     if (_bHasFormat)
     {
         // if the col is bound to a text field we have to disallow all non-text formats
-        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType))
+        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
             bText = sal_True;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
@@ -1620,6 +1626,10 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         case DataType::VARCHAR:
             if (  pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo) )
+                break;
+            break;
+        case DataType::LONGVARCHAR:
+            if (  pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo) )
                 break;
             break;
         default:

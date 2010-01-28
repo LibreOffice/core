@@ -70,8 +70,11 @@
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECTCONTAINER_HPP_
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _COM_SUN_STAR_SDB_DATABASEOBJECTCONTAINER_HPP_
+#include <com/sun/star/sdb/XDatabaseRegistrationsListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -113,10 +116,11 @@ namespace dbaui
     class ImageProvider;
 
     // =====================================================================
-    typedef ::cppu::ImplHelper4 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::document::XScriptInvocationContext
                                 ,   ::com::sun::star::ui::XContextMenuInterception
+                                ,   ::com::sun::star::sdb::XDatabaseRegistrationsListener
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
@@ -256,6 +260,11 @@ namespace dbaui
         virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL releaseContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XDatabaseRegistrationsListener
+        virtual void SAL_CALL registeredDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL revokedDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL changedDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         // SbaXDataBrowserController overridables
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
@@ -338,6 +347,11 @@ namespace dbaui
                 String& _rTableName, Image& _rTableImage,
                 const SharedConnection& _rxConnection
             );
+
+        void    implAddDatasource( const String& _rDataSourceName, const SharedConnection& _rxConnection );
+
+        /// removes (and cleans up) the entry for the given data source
+        void        impl_cleanupDataSourceEntry( const String& _rDataSourceName );
 
         /// clears the tree list box
         void clearTreeModel();

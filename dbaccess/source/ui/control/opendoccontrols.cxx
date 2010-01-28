@@ -72,7 +72,7 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
@@ -81,7 +81,7 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 
 //........................................................................
@@ -210,13 +210,6 @@ namespace dbaui
     //= OpenButton
     //====================================================================
     //--------------------------------------------------------------------
-    OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle )
-        :PushButton( _pParent, _nStyle )
-    {
-        impl_init( _pAsciiModuleName );
-    }
-
-    //--------------------------------------------------------------------
     OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId )
         :PushButton( _pParent, _rResId )
     {
@@ -246,13 +239,6 @@ namespace dbaui
     //====================================================================
     //= OpenDocumentListBox
     //====================================================================
-    //--------------------------------------------------------------------
-    OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle )
-        :ListBox( _pParent, _nStyle )
-    {
-        impl_init( _pAsciiModuleName );
-    }
-
     //--------------------------------------------------------------------
     OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId )
         :ListBox( _pParent, _rResId )
