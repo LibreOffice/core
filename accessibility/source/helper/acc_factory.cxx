@@ -74,6 +74,7 @@
 #include <vcl/combobox.hxx>
 #include <accessibility/extended/AccessibleGridControl.hxx>
 #include <svtools/accessibletable.hxx>
+//#include "vcl/popupmenuwindow.hxx"
 
 #include <floatingwindowaccessible.hxx>
 
@@ -385,7 +386,17 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
             {
-                xContext = new FloatingWindowAccessible( _pXWindow );
+                PopupMenuFloatingWindow* pChild = dynamic_cast<PopupMenuFloatingWindow*>(
+                    pWindow->GetAccessibleChildWindow(0));
+                if ( pChild && pChild->IsPopupMenu() )
+                {
+                    // Get the accessible context from the child window.
+                    Reference<XAccessible> xAccessible = pChild->CreateAccessible();
+                    if (xAccessible.is())
+                        xContext = xAccessible->getAccessibleContext();
+                }
+                else
+                    xContext = new FloatingWindowAccessible( _pXWindow );
             }
             else if ( nType == WINDOW_HELPTEXTWINDOW )
             {
