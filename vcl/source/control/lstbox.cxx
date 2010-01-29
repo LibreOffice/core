@@ -127,9 +127,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        // FIXME: this is currently only on mac/aqua
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
+        if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
@@ -305,6 +303,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
         mpFloatWin->StartFloat( TRUE );
@@ -365,6 +364,7 @@ void ListBox::ToggleDropDown()
             mpFloatWin->EndPopupMode();
         else
         {
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( TRUE );
             mpFloatWin->StartFloat( TRUE );
@@ -921,6 +921,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( mpFloatWin && !mpFloatWin->IsInPopupMode() &&
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                         mpBtn->SetPressed( TRUE );
                         mpFloatWin->StartFloat( FALSE );
                         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );

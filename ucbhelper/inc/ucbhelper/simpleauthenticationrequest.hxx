@@ -33,8 +33,11 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
-#include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include "ucbhelper/ucbhelperdllapi.h"
+
+namespace com { namespace sun { namespace star { namespace ucb {
+  class URLAuthenticationRequest;
+} } } }
 
 namespace ucbhelper {
 
@@ -63,12 +66,13 @@ class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::Intera
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 private:
-    void initialize( ::com::sun::star::ucb::AuthenticationRequest aRequest,
-                const sal_Bool &  bCanSetRealm,
-                const sal_Bool &  bCanSetUserName,
-                const sal_Bool &  bCanSetPassword,
-                const sal_Bool &  bCanSetAccount,
-                 const sal_Bool &  bAllowPersistentStoring );
+    void initialize( const ::com::sun::star::ucb::URLAuthenticationRequest & rRequest,
+                     sal_Bool bCanSetRealm,
+                     sal_Bool bCanSetUserName,
+                     sal_Bool bCanSetPassword,
+                     sal_Bool bCanSetAccount,
+                      sal_Bool bAllowPersistentStoring,
+                     sal_Bool bAllowUseSystemCredentials );
 
 public:
     /** Specification whether some entity (realm, username, password, account)
@@ -84,6 +88,7 @@ public:
     /**
       * Constructor.
       *
+      * @param rURL contains a URL for which authentication is requested.
       * @param rServerName contains a server name.
       * @param rRealm contains a realm, if applicable.
       * @param rUserName contains a username, if available (for instance from
@@ -92,7 +97,8 @@ public:
       *        a previous try).
       * @param rAccount contains an account, if applicable.
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+    SimpleAuthenticationRequest( const rtl::OUString & rURL,
+                                 const rtl::OUString & rServerName,
                                  const rtl::OUString & rRealm,
                                  const rtl::OUString & rUserName,
                                  const rtl::OUString & rPassword,
@@ -102,6 +108,7 @@ public:
     /**
       * Constructor.
       *
+      * @param rURL contains a URL for which authentication is requested.
       * @param rServerName contains a server name.
       * @param rRealm contains a realm, if applicable.
       * @param rUserName contains a username, if available (for instance from
@@ -109,14 +116,19 @@ public:
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
       * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should stored in the passowrd container persistently
+      * @param bAllowPersistentStoring specifies if the credentials should
+      *        be stored in the passowrd container persistently
+      * @param bAllowUseSystemCredntials specifies if requesting client is
+      *        able to obtain and use system credentials for authentication
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+    SimpleAuthenticationRequest( const rtl::OUString & rURL,
+                                 const rtl::OUString & rServerName,
                                  const rtl::OUString & rRealm,
                                  const rtl::OUString & rUserName,
                                  const rtl::OUString & rPassword,
                                  const rtl::OUString & rAccount,
-                                 const sal_Bool & bAllowPersistentStoring);
+                                 sal_Bool bAllowPersistentStoring,
+                                 sal_Bool bAllowUseSystemCredentials );
 
 
     /**
@@ -138,7 +150,8 @@ public:
                modifiable.
       * @param rAccount contains an account, if applicable.
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+    SimpleAuthenticationRequest( const rtl::OUString & rURL,
+                                 const rtl::OUString & rServerName,
                                  EntityType eRealmType,
                                  const rtl::OUString & rRealm,
                                  EntityType eUserNameType,
@@ -152,6 +165,7 @@ public:
      /**
       * Constructor.
       *
+      * @param rURL contains a URL for which authentication is requested.
       * @param rServerName contains a server name.
       * @param eRealmType specifies whether a realm is applicable and
                modifiable.
@@ -167,9 +181,13 @@ public:
       * @param eAccountType specifies whether an account is applicable and
                modifiable.
       * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should stored in the passowrd container persistently
+      * @param bAllowPersistentStoring specifies if the credentials should
+      *        be stored in the passowrd container persistently
+      * @param bAllowUseSystemCredntials specifies if requesting client is
+      *        able to obtain and use system credentials for authentication
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+    SimpleAuthenticationRequest( const rtl::OUString & rURL,
+                                 const rtl::OUString & rServerName,
                                  EntityType eRealmType,
                                  const rtl::OUString & rRealm,
                                  EntityType eUserNameType,
@@ -178,7 +196,8 @@ public:
                                  const rtl::OUString & rPassword,
                                  EntityType eAccountType,
                                  const rtl::OUString & rAccount,
-                                 const sal_Bool & bAllowPersistentStoring);
+                                 sal_Bool bAllowPersistentStoring,
+                                 sal_Bool bAllowUseSystemCredentials );
 
     /**
       * This method returns the supplier for the missing authentication data,

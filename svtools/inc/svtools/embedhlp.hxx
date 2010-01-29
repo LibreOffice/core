@@ -131,6 +131,7 @@ namespace svt
         BOOL            is() const { return mxObj.is(); }
 
         BOOL            IsChart() const;
+        void            SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM );//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     };
 }
 

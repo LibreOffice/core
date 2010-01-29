@@ -114,6 +114,12 @@ void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
     mpSerializer->endFastElement(elementTokenId);
 }
 
+void FastSerializerHelper::startElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+{
+    mpSerializer->startFastElement(elementTokenId, xAttrList);
+}
+
+
 void FastSerializerHelper::singleElement(const char* elementName, XFastAttributeListRef xAttrList)
 {
     mpSerializer->singleUnknownElement(::rtl::OUString(), ::rtl::OUString::createFromAscii(elementName), xAttrList);
@@ -181,9 +187,9 @@ void FastSerializerHelper::mark()
     mpSerializer->mark();
 }
 
-void FastSerializerHelper::mergeTopMarks( bool bPrepend )
+void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
 {
-    mpSerializer->mergeTopMarks( bPrepend );
+    mpSerializer->mergeTopMarks( eMergeType );
 }
 
 FastAttributeList * FastSerializerHelper::createAttrList()

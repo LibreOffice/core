@@ -191,7 +191,13 @@ namespace rtl {
 #define BASEPROPERTY_IMAGE_SCALE_MODE               137
 #define BASEPROPERTY_WRITING_MODE                   138
 #define BASEPROPERTY_CONTEXT_WRITING_MODE           139
-#define BASEPROPERTY_ENABLEVISIBLE                  140  // sal_Bool
+#define BASEPROPERTY_GRID_SHOWROWHEADER             140
+#define BASEPROPERTY_GRID_SHOWCOLUMNHEADER          141
+#define BASEPROPERTY_GRID_DATAMODEL                 142
+#define BASEPROPERTY_GRID_COLUMNMODEL               143
+#define BASEPROPERTY_GRID_SELECTIONMODE             144
+#define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
+
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000

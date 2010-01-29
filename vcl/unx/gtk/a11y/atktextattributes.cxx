@@ -76,6 +76,7 @@ static AtkTextAttribute atk_text_attribute_tab_interval = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
+static AtkTextAttribute atk_text_attribute_misspelled = ATK_TEXT_ATTR_INVALID;
 
 /*****************************************************************************/
 
@@ -1294,6 +1295,18 @@ attribute_set_new_from_property_values(
 
     attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_stops,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], TabStops2String));
+
+    return attribute_set;
+}
+
+
+AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set )
+{
+    if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_misspelled )
+        atk_text_attribute_misspelled = atk_text_attribute_register( "text-spelling" );
+
+    attribute_set = attribute_set_prepend( attribute_set, atk_text_attribute_misspelled,
+        g_strdup_printf( "misspelled" ) );
 
     return attribute_set;
 }

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: glyphset.cxx,v $
- * $Revision: 1.24 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -38,6 +35,7 @@
 
 #include "vcl/printergfx.hxx"
 #include "vcl/fontmanager.hxx"
+#include "vcl/fontsubset.hxx"
 
 #include "osl/thread.h"
 
@@ -787,8 +785,32 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
     return sal_True;
 }
 
+static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
+    const char* pGlyphSetName, int nGlyphCount,
+    /*const*/ sal_uInt16* pRequestedGlyphs, /*const*/ sal_uChar* pEncoding,
+    bool bAllowType42, bool /*bAllowCID*/ )
+{
+    // match the font-subset to the printer capabilities
+     // TODO: allow CFF for capable printers
+    int nTargetMask = FontSubsetInfo::TYPE1_PFA | FontSubsetInfo::TYPE3_FONT;
+    if( bAllowType42 )
+        nTargetMask |= FontSubsetInfo::TYPE42_FONT;
+
+    FontSubsetInfo aInfo;
+    aInfo.LoadFont( pSrcFont );
+
+#if 1 // TODO: remove 16bit->long conversion when input args has been changed
+        long aRequestedGlyphs[256];
+        for( int i = 0; i < nGlyphCount; ++i )
+            aRequestedGlyphs[i] = pRequestedGlyphs[i];
+#endif
+
+    aInfo.CreateFontSubset( nTargetMask, pTmpFile, pGlyphSetName,
+        aRequestedGlyphs, pEncoding, nGlyphCount, NULL );
+}
+
 sal_Bool
-GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts )
+GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::list< OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)
@@ -811,6 +833,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
     // of the glyph in the output file
     sal_uChar  pEncoding[256];
     sal_uInt16 pTTGlyphMapping[256];
+    const bool bAllowCID = false; // TODO: nPSLanguageLevel>=3
 
     // loop thru all the font subsets
     sal_Int32 nCharSetID;
@@ -838,13 +861,8 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
         // create the current subset
         OString aCharSetName = GetCharSetName(nCharSetID);
         fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aCharSetName.getStr() );
-        if( bAsType42 )
-            CreateT42FromTTGlyphs (pTTFont, pTmpFile, aCharSetName.getStr(),
-                                   pTTGlyphMapping, pEncoding, (*aCharSet).size() );
-        else
-            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, aCharSetName.getStr(),
-                                   pTTGlyphMapping, pEncoding, (*aCharSet).size(),
-                                   0 /* 0 = horizontal, 1 = vertical */ );
+        CreatePSUploadableFont( pTTFont, pTmpFile, aCharSetName.getStr(), (*aCharSet).size(),
+                                pTTGlyphMapping, pEncoding, bAllowType42, bAllowCID );
         fprintf( pTmpFile, "%%%%EndResource\n" );
         rSuppliedFonts.push_back( aCharSetName );
     }
@@ -872,13 +890,8 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
         // create the current subset
         OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
         fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aGlyphSetName.getStr() );
-        if( bAsType42 )
-            CreateT42FromTTGlyphs (pTTFont, pTmpFile, aGlyphSetName.getStr(),
-                                   pTTGlyphMapping, pEncoding, (*aGlyphSet).size() );
-        else
-            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, aGlyphSetName.getStr(),
-                                   pTTGlyphMapping, pEncoding, (*aGlyphSet).size(),
-                                   0 /* 0 = horizontal, 1 = vertical */ );
+        CreatePSUploadableFont( pTTFont, pTmpFile, aGlyphSetName.getStr(), (*aGlyphSet).size(),
+                                pTTGlyphMapping, pEncoding, bAllowType42, bAllowCID );
         fprintf( pTmpFile, "%%%%EndResource\n" );
         rSuppliedFonts.push_back( aGlyphSetName );
     }
@@ -903,5 +916,3 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
 
     return sal_True;
 }
-
-

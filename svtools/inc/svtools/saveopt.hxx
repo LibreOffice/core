@@ -60,12 +60,16 @@ public:
         E_ODFDEFAULTVERSION
     };
 
+    // keep enum values sorted that a less or greater compare maps to older and newer versions!
     enum ODFDefaultVersion
     {
         ODFVER_UNKNOWN = 0, // unknown
-        ODFVER_010,         // ODF 1.0
-        ODFVER_011,         // ODF 1.1
-        ODFVER_012          // ODF 1.2
+        ODFVER_010 = 1,         // ODF 1.0
+        ODFVER_011 = 2,         // ODF 1.1
+        DO_NOT_USE = 3,         // Do not use this, only here for compatibility with pre OOo 3.2 configuration
+        ODFVER_012 = 4,         // ODF 1.2
+
+        ODFVER_LATEST = SAL_MAX_ENUM,      // ODF latest version with enhancements
     };
 
     SvtSaveOptions();

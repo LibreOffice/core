@@ -105,8 +105,7 @@ APP1STDLIBS=	\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)			\
-    -lXext -lX11
+    $(SALLIB)
 
 UNIXTEXT = $(MISC)$/spadmin.sh
 

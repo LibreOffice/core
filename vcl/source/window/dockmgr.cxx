@@ -1238,8 +1238,8 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
     ULONG nFlags =  FLOATWIN_POPUPMODE_ALLOWTEAROFF         |
                     FLOATWIN_POPUPMODE_NOFOCUSCLOSE         |
                     FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  |
-                    FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE       |
-                    FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+                    FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;
+//                    |FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar

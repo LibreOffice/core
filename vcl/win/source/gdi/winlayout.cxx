@@ -71,6 +71,17 @@
 typedef std::hash_map<int,int> IntMap;
 typedef std::set<int> IntSet;
 
+// Graphite headers
+#ifdef ENABLE_GRAPHITE
+#include <i18npool/mslangid.hxx>
+#include <graphite/GrClient.h>
+#include <graphite/WinFont.h>
+#include <graphite/Segment.h>
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_cache.hxx>
+#include <vcl/graphite_features.hxx>
+#endif
+
 #define DROPPED_OUTGLYPH 0xFFFF
 
 using namespace rtl;
@@ -1757,6 +1768,8 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
         if( nMaxGlyphPos < n )
             nMaxGlyphPos = n;
     }
+    if (nMaxGlyphPos > rVisualItem.mnEndGlyphPos)
+        nMaxGlyphPos = rVisualItem.mnEndGlyphPos - 1;
 
     // extend the glyph range to account for all glyphs in referenced clusters
     if( !rVisualItem.IsRTL() ) // LTR-item
@@ -1907,7 +1920,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
     // calculate the absolute position of the first result glyph in pixel units
     const GOFFSET aGOffset = mpGlyphOffsets[ nStart ];
-    Point aRelativePos( nXOffset + aGOffset.du, aGOffset.dv );
+    Point aRelativePos( nXOffset + aGOffset.du, -aGOffset.dv );
     rPos = GetDrawPosition( aRelativePos );
 
     // fill the result arrays
@@ -2041,11 +2054,25 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
     long nDelta = nNewXPos - pVI->mnXOffset;
     if( nStart > nMinGlyphPos )
     {
-        // move the glyph by expanding its left glyph
-        int i;
+        // move the glyph by expanding its left glyph but ignore dropped glyphs
+        int i, nLastUndropped = nMinGlyphPos - 1;
         for( i = nMinGlyphPos; i < nStart; ++i )
-            nDelta -= mpGlyphAdvances[ i ];
-        mpGlyphAdvances[ i-1 ] += nDelta;
+        {
+            if (mpOutGlyphs[i] != DROPPED_OUTGLYPH)
+            {
+                nDelta -= (mpJustifications)? mpJustifications[ i ] : mpGlyphAdvances[ i ];
+                nLastUndropped = i;
+            }
+        }
+        if (nLastUndropped >= nMinGlyphPos)
+        {
+            mpGlyphAdvances[ nLastUndropped ] += nDelta;
+            if (mpJustifications) mpJustifications[ nLastUndropped ] += nDelta;
+        }
+        else
+        {
+            pVI->mnXOffset += nDelta;
+        }
     }
     else
     {
@@ -2066,11 +2093,18 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
         --nStart;
     else                    // nStart<=0 for first visible glyph
     {
-        const VisualItem* pVI = mpVisualItems;
+        VisualItem* pVI = mpVisualItems;
         for( int i = mnItemCount, nDummy; --i >= 0; ++pVI )
             if( GetItemSubrange( *pVI, nStart, nDummy ) )
                 break;
         DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
+        int nOffset = 0;
+        int j = pVI->mnMinGlyphPos;
+        while (mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
+        if (j == nStart)
+        {
+            pVI->mnXOffset += ((mpJustifications)? mpJustifications[nStart] : mpGlyphAdvances[nStart]);
+        }
     }
 
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
@@ -2127,11 +2161,12 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         }
 
         // handle dropped glyphs at start of visual item
-        int nEndGlyphPos;
-        GetItemSubrange( rVI, i, nEndGlyphPos );
+        int nMinGlyphPos, nEndGlyphPos, nOrigMinGlyphPos = rVI.mnMinGlyphPos;
+        GetItemSubrange( rVI, nMinGlyphPos, nEndGlyphPos );
+        i = nMinGlyphPos;
         while( (mpOutGlyphs[i] == cDroppedGlyph) && (i < nEndGlyphPos) )
         {
-            rVI.mnXOffset += pGlyphWidths[ i ];
+            //rVI.mnXOffset += pGlyphWidths[ i ];
             rVI.mnMinGlyphPos = ++i;
         }
 
@@ -2140,6 +2175,17 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         {
             rVI.mnEndGlyphPos = 0;
             continue;
+        }
+        // If there are still glyphs in the cluster and mnMinGlyphPos
+        // has changed then we need to remove the dropped glyphs at start
+        // to correct logClusters, which is unsigned and relative to the
+        // item start.
+        if (rVI.mnMinGlyphPos != nOrigMinGlyphPos)
+        {
+            // drop any glyphs in the visual item outside the range
+            for (i = nOrigMinGlyphPos; i < nMinGlyphPos; i++)
+                mpOutGlyphs[ i ] = cDroppedGlyph;
+            rVI.mnMinGlyphPos = i = nOrigMinGlyphPos;
         }
 
         // handle dropped glyphs in the middle of visual item
@@ -2157,9 +2203,10 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
             mpGlyphAdvances[ j ]  = mpGlyphAdvances[ i ];
             if( mpJustifications )
                 mpJustifications[ j ] = mpJustifications[ i ];
-            int k = mpGlyphs2Chars[ i ];
+            const int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
-            mpLogClusters[ k ]    = sal::static_int_cast<WORD>(j++);
+            const int nRelGlyphPos = (j++) - rVI.mnMinGlyphPos;
+            mpLogClusters[ k ]    = static_cast<WORD>(nRelGlyphPos);
         }
 
         rVI.mnEndGlyphPos = j;
@@ -2751,6 +2798,234 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 
 #endif // USE_UNISCRIBE
 
+#ifdef ENABLE_GRAPHITE
+
+class GraphiteLayoutWinImpl : public GraphiteLayout
+{
+public:
+    GraphiteLayoutWinImpl(const gr::Font & font, ImplWinFontEntry & rFont)
+        throw()
+    : GraphiteLayout(font), mrFont(rFont) {};
+    virtual ~GraphiteLayoutWinImpl() throw() {};
+    virtual sal_GlyphId getKashidaGlyph(int & rWidth);
+private:
+    ImplWinFontEntry & mrFont;
+};
+
+sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
+{
+    rWidth = mrFont.GetMinKashidaWidth();
+    return mrFont.GetMinKashidaGlyph();
+}
+
+// This class uses the SIL Graphite engine to provide complex text layout services to the VCL
+// @author tse
+//
+class GraphiteWinLayout : public WinLayout
+{
+private:
+    mutable gr::WinFont   mpFont;
+    grutils::GrFeatureParser * mpFeatures;
+    mutable GraphiteLayoutWinImpl maImpl;
+public:
+    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE);
+
+    static bool IsGraphiteEnabledFont(HDC hDC) throw();
+
+    // used by upper layers
+    virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
+    virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
+    //  virtual void  InitFont() const;
+    virtual void  DrawText( SalGraphics& ) const;
+
+    // methods using string indexing
+    virtual int   GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const;
+    virtual long  FillDXArray( long* pDXArray ) const;
+
+    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+
+    // methods using glyph indexing
+    virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
+                      long* pGlyphAdvAry = 0, int* pCharPosAry = 0 ) const;
+
+    // used by glyph+font+script fallback
+    virtual void    MoveGlyph( int nStart, long nNewXPos );
+    virtual void    DropGlyph( int nStart );
+    virtual void    Simplify( bool bIsBase );
+    ~GraphiteWinLayout() { delete mpFeatures; mpFeatures = NULL; };
+protected:
+    virtual void    ReplaceDC(gr::Segment & segment) const;
+    virtual void    RestoreDC(gr::Segment & segment) const;
+};
+
+bool GraphiteWinLayout::IsGraphiteEnabledFont(HDC hDC) throw()
+{
+  return gr::WinFont::FontHasGraphiteTables(hDC);
+}
+
+GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw()
+  : WinLayout(hDC, rWFD, rWFE), mpFont(hDC),
+    maImpl(mpFont, rWFE)
+{
+    const rtl::OString aLang = MsLangId::convertLanguageToIsoByteString( rWFE.maFontSelData.meLanguage );
+    rtl::OString name = rtl::OUStringToOString(
+        rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
+    sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
+    if (nFeat > 0)
+    {
+        rtl::OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
+        mpFeatures = new grutils::GrFeatureParser(mpFont, aFeat.getStr(), aLang.getStr());
+    }
+    else
+    {
+        mpFeatures = new grutils::GrFeatureParser(mpFont, aLang.getStr());
+    }
+    maImpl.SetFeatures(mpFeatures);
+}
+
+void GraphiteWinLayout::ReplaceDC(gr::Segment & segment) const
+{
+    COLORREF color = GetTextColor(mhDC);
+    dynamic_cast<gr::WinFont&>(segment.getFont()).replaceDC(mhDC);
+    SetTextColor(mhDC, color);
+}
+
+void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
+{
+    dynamic_cast<gr::WinFont&>(segment.getFont()).restoreDC();
+}
+
+bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
+{
+    HFONT hUnRotatedFont;
+    if (args.mnOrientation)
+    {
+        // Graphite gets very confused if the font is rotated
+        LOGFONTW aLogFont;
+        ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+        aLogFont.lfEscapement = 0;
+        aLogFont.lfOrientation = 0;
+        hUnRotatedFont = ::CreateFontIndirectW( &aLogFont);
+        ::SelectFont(mhDC, hUnRotatedFont);
+    }
+    WinLayout::AdjustLayout(args);
+    mpFont.replaceDC(mhDC);
+    maImpl.SetFontScale(WinLayout::mfFontScale);
+    //bool succeeded = maImpl.LayoutText(args);
+#ifdef GRCACHE
+    GrSegRecord * pSegRecord = NULL;
+    gr::Segment * pSegment = maImpl.CreateSegment(args, &pSegRecord);
+#else
+    gr::Segment * pSegment = maImpl.CreateSegment(args);
+#endif
+    bool bSucceeded = false;
+    if (pSegment)
+    {
+        // replace the DC on the font within the segment
+        ReplaceDC(*pSegment);
+        // create glyph vectors
+#ifdef GRCACHE
+        bSucceeded = maImpl.LayoutGlyphs(args, pSegment, pSegRecord);
+#else
+        bSucceeded = maImpl.LayoutGlyphs(args, pSegment);
+#endif
+        // restore original DC
+        RestoreDC(*pSegment);
+#ifdef GRCACHE
+        if (pSegRecord) pSegRecord->unlock();
+        else delete pSegment;
+#else
+        delete pSegment;
+#endif
+    }
+    mpFont.restoreDC();
+    if (args.mnOrientation)
+    {
+        // restore the rotated font
+        ::SelectFont(mhDC, mhFont);
+        ::DeleteObject(hUnRotatedFont);
+    }
+    return bSucceeded;
+}
+
+void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
+{
+    WinLayout::AdjustLayout(rArgs);
+    maImpl.DrawBase() = WinLayout::maDrawBase;
+    maImpl.DrawOffset() = WinLayout::maDrawOffset;
+    if ( (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) && rArgs.mpDXArray)
+    {
+        mrWinFontEntry.InitKashidaHandling(mhDC);
+    }
+    maImpl.AdjustLayout(rArgs);
+}
+
+void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
+{
+    HFONT hOrigFont = DisableFontScaling();
+    HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).mhDC;
+    maImpl.DrawBase() = WinLayout::maDrawBase;
+    maImpl.DrawOffset() = WinLayout::maDrawOffset;
+    const int MAX_GLYPHS = 2;
+    sal_GlyphId glyphIntStr[MAX_GLYPHS];
+    WORD glyphWStr[MAX_GLYPHS];
+    int glyphIndex = 0;
+    Point aPos(0,0);
+    int nGlyphs = 0;
+    do
+    {
+        nGlyphs = maImpl.GetNextGlyphs(1, glyphIntStr, aPos, glyphIndex);
+        if (nGlyphs < 1)
+          break;
+        std::copy(glyphIntStr, glyphIntStr + nGlyphs, glyphWStr);
+        ::ExtTextOutW(aHDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX,
+                      NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
+    } while (nGlyphs);
+    if( hOrigFont )
+          DeleteFont( SelectFont( mhDC, hOrigFont ) );
+}
+
+int GraphiteWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+{
+    mpFont.replaceDC(mhDC);
+    int nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
+    mpFont.restoreDC();
+    return nBreak;
+}
+
+long  GraphiteWinLayout::FillDXArray( long* pDXArray ) const
+{
+    return maImpl.FillDXArray(pDXArray);
+}
+
+void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
+{
+    maImpl.GetCaretPositions(nArraySize, pCaretXArray);
+}
+
+int GraphiteWinLayout::GetNextGlyphs( int length, sal_GlyphId* glyph_out,
+        ::Point & pos_out, int &glyph_slot, long * glyph_adv, int *char_index) const
+{
+    maImpl.DrawBase() = WinLayout::maDrawBase;
+    maImpl.DrawOffset() = WinLayout::maDrawOffset;
+    return maImpl.GetNextGlyphs(length, glyph_out, pos_out, glyph_slot, glyph_adv, char_index);
+}
+
+void GraphiteWinLayout::MoveGlyph( int glyph_idx, long new_x_pos )
+{
+    maImpl.MoveGlyph(glyph_idx, new_x_pos);
+}
+
+void GraphiteWinLayout::DropGlyph( int glyph_idx )
+{
+    maImpl.DropGlyph(glyph_idx);
+}
+
+void GraphiteWinLayout::Simplify( bool is_base )
+{
+    maImpl.Simplify(is_base);
+}
+#endif // ENABLE_GRAPHITE
 // =======================================================================
 
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
@@ -2766,6 +3041,11 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
     {
+#ifdef ENABLE_GRAPHITE
+        if (rFontFace.SupportsGraphite())
+            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+        else
+#endif // ENABLE_GRAPHITE
         // script complexity is determined in upper layers
         pWinLayout = new UniscribeLayout( mhDC, rFontFace, rFontInstance );
         // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
@@ -2788,7 +3068,12 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         BYTE eCharSet = ANSI_CHARSET;
         if( mpLogFont )
             eCharSet = mpLogFont->lfCharSet;
-        pWinLayout = new SimpleWinLayout( mhDC, eCharSet, rFontFace, rFontInstance );
+#ifdef ENABLE_GRAPHITE
+        if (rFontFace.SupportsGraphite())
+            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+        else
+#endif // ENABLE_GRAPHITE
+            pWinLayout = new SimpleWinLayout( mhDC, eCharSet, rFontFace, rFontInstance );
     }
 
     if( mfFontScale != 1.0 )

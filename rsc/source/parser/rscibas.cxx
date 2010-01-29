@@ -67,7 +67,7 @@ void RscTypCont::SETCONST( RscConst * pClass, const char * szString, UINT32 nVal
 void RscTypCont::SETCONST( RscConst * pClass, Atom nName, UINT32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "setconst hash: %d\n", nName );
+    fprintf( stderr, "setconst hash: %u\n", (unsigned int)nName );
 #endif
     pClass->SetConstant( aNmTb.Put( nName,
                          CONSTNAME, nVal ), nVal );
@@ -106,9 +106,9 @@ void RscLangEnum::Init( RscNameTable& rNames )
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d %d %s\n",
-                 nIndex,
-                 pLangEntry->meLang,
-                 MsLangId::convertLanguageToIsoByteString( pLangEntry->meLang ).GetBuffer() );
+                 (int)nIndex,
+                 pLangEntry->mnLang,
+                 MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
 #endif
         aLang = pLangEntry->maLangStr;
         aCountry = pLangEntry->maCountry;
@@ -118,7 +118,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%hx\n", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, "ISO Language out: %s 0x%lx\n", aLang.GetBuffer(), mnLangId );
 #endif
             mnLangId++;
         }
@@ -128,7 +128,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%hx", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.GetBuffer(), mnLangId );
 #endif
             mnLangId++;
             aLang += csep;
@@ -137,7 +137,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, " %s 0x%hx\n", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, " %s 0x%lx\n", aLang.GetBuffer(), mnLangId );
 #endif
             mnLangId++;
 // hack - survive "x-no-translate"
@@ -167,7 +167,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
                 if ( ! GetLangId( aIsoToken ))
                     ULong_Iso_map[ aIsoToken ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "Env ISO Language out: %s 0x%hx\n", aIsoToken.GetBuffer(), mnLangId );
+                fprintf( stderr, "Env ISO Language out: %s 0x%lx\n", aIsoToken.GetBuffer(), mnLangId );
 #endif
                 mnLangId++;
             }

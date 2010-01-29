@@ -1212,7 +1212,12 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 
         XLIB_Time nUserTime = 0;
         if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-            nUserTime = pDisplay_->GetLastUserEventTime();
+        {
+            if( GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") )
+                nUserTime = pDisplay_->GetLastUserEventTime( true );
+            else
+                nUserTime = pDisplay_->GetLastUserEventTime();
+        }
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
 
         // actually map the window

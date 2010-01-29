@@ -40,6 +40,35 @@
 #include <hash_map>
 #include <vector>
 
+#define STR_EVENT_STARTAPP                   0
+#define STR_EVENT_CLOSEAPP                   1
+#define STR_EVENT_DOCCREATED                 2
+#define STR_EVENT_CREATEDOC                  3
+#define STR_EVENT_LOADFINISHED               4
+#define STR_EVENT_OPENDOC                    5
+#define STR_EVENT_PREPARECLOSEDOC            6
+#define STR_EVENT_CLOSEDOC                   7
+#define STR_EVENT_SAVEDOC                    8
+#define STR_EVENT_SAVEDOCDONE                9
+#define STR_EVENT_SAVEDOCFAILED             10
+#define STR_EVENT_SAVEASDOC                 11
+#define STR_EVENT_SAVEASDOCDONE             12
+#define STR_EVENT_SAVEASDOCFAILED           13
+#define STR_EVENT_SAVETODOC                 14
+#define STR_EVENT_SAVETODOCDONE             15
+#define STR_EVENT_SAVETODOCFAILED           16
+#define STR_EVENT_ACTIVATEDOC               17
+#define STR_EVENT_DEACTIVATEDOC             18
+#define STR_EVENT_PRINTDOC                  19
+#define STR_EVENT_VIEWCREATED               20
+#define STR_EVENT_PREPARECLOSEVIEW          21
+#define STR_EVENT_CLOSEVIEW                 22
+#define STR_EVENT_MODIFYCHANGED             23
+#define STR_EVENT_TITLECHANGED              24
+#define STR_EVENT_VISAREACHANGED            25
+#define STR_EVENT_MODECHANGED               26
+#define STR_EVENT_STORAGECHANGED            27
+
 typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventBindingHash;
 typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > > FrameVector;
 typedef ::std::vector< ::rtl::OUString > SupportedEventsVector;
@@ -67,7 +96,7 @@ public:
     ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
     ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
-
+    ::rtl::OUString GetEventName( sal_Int32 nID );
 };
 
 class SVL_DLLPUBLIC GlobalEventConfig:
@@ -86,7 +115,7 @@ class SVL_DLLPUBLIC GlobalEventConfig:
         ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
         ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
-
+        static ::rtl::OUString GetEventName( sal_Int32 nID );
 
     private:
         static GlobalEventConfig_Impl* m_pImpl;

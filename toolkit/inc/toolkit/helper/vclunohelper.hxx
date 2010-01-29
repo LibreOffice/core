@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
 
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -59,6 +60,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct SimpleFontMetric;
     struct FontDescriptor;
     struct Rectangle;
+    struct KeyEvent;
 }}}}
 
 
@@ -71,6 +73,8 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 class Window;
 class OutputDevice;
+class MouseEvent;
+class KeyEvent;
 
 //  ----------------------------------------------------
 //  class VclUnoHelper
@@ -144,6 +148,18 @@ public:
 
     static ::Rectangle ConvertToVCLRect( ::com::sun::star::awt::Rectangle const & _rRect );
     static ::com::sun::star::awt::Rectangle ConvertToAWTRect( ::Rectangle const & _rRect );
+
+    static ::com::sun::star::awt::MouseEvent
+        createMouseEvent(
+            const ::MouseEvent& _rVclEvent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        );
+
+    static ::com::sun::star::awt::KeyEvent
+        createKeyEvent(
+            const ::KeyEvent& _rVclEvent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        );
 };
 
 

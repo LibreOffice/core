@@ -50,6 +50,7 @@
 #include <vcl/outdev.h>
 #include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/fontsubset.hxx>
 #include <svsys.h>
 #include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -804,7 +805,7 @@ class Matrix3
 {
     double f[6];
 
-    void set( double *pn ) { for( int i = 0 ; i < 5; i++ ) f[i] = pn[i]; }
+    void set( double *pn ) { for( int i = 0 ; i < 6; i++ ) f[i] = pn[i]; }
 public:
     Matrix3();
     ~Matrix3() {}
@@ -2812,6 +2813,38 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 n
     return nFontObject;
 }
 
+typedef int ThreeInts[3];
+static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
+    ThreeInts& rSegmentLengths )
+{
+    if( !pFontBytes || (nByteLen < 0) )
+        return false;
+    const unsigned char* pPtr = pFontBytes;
+    const unsigned char* pEnd = pFontBytes + nByteLen;
+
+    for( int i = 0; i < 3; ++i) {
+        // read segment1 header
+        if( pPtr+6 >= pEnd )
+            return false;
+        if( (pPtr[0] != 0x80) || (pPtr[1] >= 0x03) )
+            return false;
+        const int nLen = (pPtr[5]<<24) + (pPtr[4]<<16) + (pPtr[3]<<8) + pPtr[2];
+        if( nLen <= 0)
+            return false;
+        rSegmentLengths[i] = nLen;
+        pPtr += nLen + 6;
+    }
+
+    // read segment-end header
+    if( pPtr+2 >= pEnd )
+        return false;
+    if( (pPtr[0] != 0x80) || (pPtr[1] != 0x03) )
+        return false;
+
+    return true;
+}
+
+// TODO: always subset instead of embedding the full font => this method becomes obsolete then
 std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFontData* pFont, EmbedFont& rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
@@ -2852,7 +2885,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
     sal_Int32 nLength1, nLength2;
     if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
     {
-        if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
+        if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
             goto streamend;
         // see whether it is pfb or pfa; if it is a pfb, fill ranges
         // of 6 bytes that are not part of the font program
@@ -2873,6 +2906,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         }
 
         // search for eexec
+        // TODO: use getPfbSegmentLengths() if possible to skip the search thingies below
         nIndex = 0;
         int nEndAsciiIndex;
         int nBeginBinaryIndex;
@@ -3573,10 +3607,11 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
                   "/FontFile" );
     switch( rInfo.m_nFontType )
     {
-        case SAL_FONTSUBSETINFO_TYPE_TRUETYPE:
+        case FontSubsetInfo::SFNT_TTF:
             aLine.append( '2' );
             break;
-        case SAL_FONTSUBSETINFO_TYPE_TYPE1:
+        case FontSubsetInfo::TYPE1_PFA:
+        case FontSubsetInfo::TYPE1_PFB:
             break;
         default:
             DBG_ERROR( "unknown fonttype in PDF font descriptor" );
@@ -3609,7 +3644,6 @@ bool PDFWriterImpl::emitFonts()
         return false;
 
     OStringBuffer aLine( 1024 );
-    char buf[8192];
 
     std::map< sal_Int32, sal_Int32 > aFontIDToObject;
 
@@ -3652,14 +3686,13 @@ bool PDFWriterImpl::emitFonts()
             FontSubsetInfo aSubsetInfo;
             if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
-                DBG_ASSERT( aSubsetInfo.m_nFontType == SAL_FONTSUBSETINFO_TYPE_TRUETYPE, "wrong font type in font subset" );
                 // create font stream
                 oslFileHandle aFontFile;
                 CHECK_RETURN( (osl_File_E_None == osl_openFile( aTmpName.pData, &aFontFile, osl_File_OpenFlag_Read ) ) );
                 // get file size
-                sal_uInt64 nLength;
+                sal_uInt64 nLength1;
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_End, 0 ) ) );
-                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( aFontFile, &nLength ) ) );
+                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( aFontFile, &nLength1 ) ) );
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -3681,25 +3714,74 @@ bool PDFWriterImpl::emitFonts()
                               "/Filter/FlateDecode"
 #endif
                               "/Length1 " );
-                aLine.append( (sal_Int32)nLength );
+
+            sal_uInt64 nStartPos = 0;
+            if( aSubsetInfo.m_nFontType == FontSubsetInfo::SFNT_TTF )
+            {
+                      aLine.append( (sal_Int32)nLength1 );
+
                 aLine.append( ">>\n"
                               "stream\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-
-                sal_uInt64 nStartPos = 0;
                 CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
 
                 // copy font file
                 beginCompression();
                 checkAndEnableStreamEncryption( nFontStream );
-                sal_uInt64 nRead;
                 sal_Bool bEOF = sal_False;
                 do
                 {
+                    char buf[8192];
+                    sal_uInt64 nRead;
                     CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) );
                     CHECK_RETURN( writeBuffer( buf, nRead ) );
                     CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
                 } while( ! bEOF );
+            }
+            else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
+            {
+                // TODO: implement
+                DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
+            }
+            else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
+            {
+                unsigned char* pBuffer = new unsigned char[ (int)nLength1 ];
+
+                   sal_uInt64 nBytesRead = 0;
+                CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer, nLength1, &nBytesRead ) ) );
+                DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
+                   CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
+                // get the PFB-segment lengths
+                ThreeInts aSegmentLengths = {0,0,0};
+                getPfbSegmentLengths( pBuffer, (int)nBytesRead, aSegmentLengths );
+                // the lengths below are mandatory for PDF-exported Type1 fonts
+                // because the PFB segment headers get stripped! WhyOhWhy.
+                   aLine.append( (sal_Int32)aSegmentLengths[0] );
+                aLine.append( "/Length2 " );
+                aLine.append( (sal_Int32)aSegmentLengths[1] );
+                aLine.append( "/Length3 " );
+                aLine.append( (sal_Int32)aSegmentLengths[2] );
+
+                aLine.append( ">>\n"
+                              "stream\n" );
+                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+
+                // emit PFB-sections without section headers
+                beginCompression();
+                checkAndEnableStreamEncryption( nFontStream );
+                CHECK_RETURN( writeBuffer( pBuffer+ 6, aSegmentLengths[0] ) );
+                CHECK_RETURN( writeBuffer( pBuffer+12 + aSegmentLengths[0], aSegmentLengths[1] ) );
+                CHECK_RETURN( writeBuffer( pBuffer+18 + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
+
+                delete[] pBuffer;
+            }
+            else
+            {
+                fprintf( stderr, "PDF: CreateFontSubset result in not yet supported format=%d\n",aSubsetInfo.m_nFontType);
+                aLine.append( "0 >>\nstream\n" );
+            }
+
                 endCompression();
                 disableStreamEncryption();
                 // close the file
@@ -3731,8 +3813,11 @@ bool PDFWriterImpl::emitFonts()
                 CHECK_RETURN( updateObject( nFontObject ) );
                 aLine.setLength( 0 );
                 aLine.append( nFontObject );
-                aLine.append( " 0 obj\n"
-                              "<</Type/Font/Subtype/TrueType/BaseFont/" );
+
+                aLine.append( " 0 obj\n" );
+                aLine.append( ((aSubsetInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) != 0) ?
+                    "<</Type/Font/Subtype/Type1/BaseFont/" :
+                    "<</Type/Font/Subtype/TrueType/BaseFont/" );
                 appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
                 aLine.append( "\n"
                               "/FirstChar 0\n"
@@ -6702,14 +6787,15 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         for( sal_uInt32 nPos = nBeginRun+1; nPos < aRunEnds[nRun]; nPos++ )
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
-            // check if glyph advance matches with the width of the previous glyph, else adjust
+            // check if default glyph positioning is sufficient
             const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
-            fAdvance *= 1000.0 / (fXScale * nPixelFontHeight);
-            const sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fAdvance+0.5);
+            fAdvance *= 1000.0 / nPixelFontHeight;
+            const sal_Int32 nAdjustment = (sal_Int32)(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
             if( nAdjustment != 0 )
             {
+                // apply individual glyph positioning
                 bNeedKern = true;
                 aKernedLine.append( ">" );
                 aKernedLine.append( nAdjustment );
@@ -8558,6 +8644,8 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
 
                 for(sal_uInt32 a(0); a < nEdgeCount; a++)
                 {
+                    if( a > 0 )
+                        aLine.append( " " );
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     const basegfx::B2DPoint aNext(aPoly.getB2DPoint(nNextIndex));
 
@@ -11811,3 +11899,4 @@ according to the table 3.15, pdf v 1.4 */
         m_aContext.Encrypt = false; //then turn the encryption off
 }
 /* end i12626 methods */
+

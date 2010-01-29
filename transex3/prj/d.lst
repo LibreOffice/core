@@ -1,4 +1,10 @@
 mkdir: %_DEST%\inc%_EXT%\transex3
+mkdir: %_DEST%\bin%_EXT%
+mkdir: %_DEST%\bin%_EXT%\help
+mkdir: %_DEST%\bin%_EXT%\help\com
+mkdir: %_DEST%\bin%_EXT%\help\com\sun
+mkdir: %_DEST%\bin%_EXT%\help\com\sun\star
+mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 
 ..\%__SRC%\bin\cfgex.exe %_DEST%\bin%_EXT%\cfgex.exe
 ..\%__SRC%\bin\cfgex %_DEST%\bin%_EXT%\cfgex
@@ -20,6 +26,14 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\txtconv %_DEST%\bin%_EXT%\txtconv
 ..\%__SRC%\bin\tralay.exe %_DEST%\bin%_EXT%\tralay.exe
 ..\%__SRC%\bin\tralay %_DEST%\bin%_EXT%\tralay
+..\%__SRC%\bin\ulfconv %_DEST%\bin%_EXT%\ulfconv
+..\%__SRC%\class\FCFGMerge.jar %_DEST%\bin%_EXT%\FCFGMerge.jar
+..\%__SRC%\class\HelpIndexerTool.jar %_DEST%\bin%_EXT%\HelpIndexerTool.jar
+..\%__SRC%\bin\HelpLinker %_DEST%\bin%_EXT%\HelpLinker
+..\%__SRC%\bin\HelpCompiler %_DEST%\bin%_EXT%\HelpCompiler
+..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin%_EXT%\HelpCompiler.exe
+..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin%_EXT%\HelpLinker.exe
+..\%__SRC%\bin\HelpLinker* %_DEST%\bin%_EXT%
 
 ..\%__SRC%\class\converter\converter.jar %_DEST%\bin%_EXT%\converter.jar
 ..\%__SRC%\doc\converter_javadoc.zip %_DEST%\bin%_EXT%\converter_javadoc.zip
@@ -38,3 +52,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
 ..\%__SRC%\lib\libtransex.a %_DEST%\lib%_EXT%\libtransex.a
+
+..\source\help\compilehelp.hxx %_DEST%\inc%_EXT%\transex3\compilehelp.hxx
+#..\source\help\helplinkerdllapi.h  %_DEST%\inc%_EXT%\transex3\helplinkerdllapi.h
+..\%__SRC%\lib\* %_DEST%\lib%_EXT%\*
+..\%__SRC%\class\com\sun\star\help\* %_DEST%\bin%_EXT%\help\com\sun\star\help\*
