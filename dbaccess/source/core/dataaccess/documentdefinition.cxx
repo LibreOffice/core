@@ -741,7 +741,7 @@ void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XF
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_onActivateEmbeddedObject()
+void ODocumentDefinition::impl_onActivateEmbeddedObject( const bool i_bReactivated )
 {
     try
     {
@@ -771,7 +771,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject()
         LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
 
         // init the edit view
-        if ( m_bOpenInDesign )
+        if ( m_bOpenInDesign && !i_bReactivated )
             impl_initObjectEditView( xController );
     }
     catch( const RuntimeException& )
@@ -1085,7 +1085,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     if ( _bActivate && !bOpenHidden )
     {
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-        impl_onActivateEmbeddedObject();
+        impl_onActivateEmbeddedObject( false );
     }
 
     // LLA: Alle fillReportData() calls prÅfen, sollte es welche geben, die danach noch viel machen
@@ -1126,7 +1126,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
                 if ( bIsActive && !bIsAliveNewStyleReport )
                 {
-                    impl_onActivateEmbeddedObject();
+                    impl_onActivateEmbeddedObject( true );
                     return makeAny( getComponent() );
                 }
             }

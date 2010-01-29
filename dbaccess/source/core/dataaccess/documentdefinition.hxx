@@ -217,10 +217,8 @@ public:
 
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
-        @param _bOpenedInDesignMode
-            determines whether the embedded object has been opened for designing it or for data display
     */
-    void    impl_onActivateEmbeddedObject();
+    void    impl_onActivateEmbeddedObject( const bool i_bReactivated );
 
     /** initializes a newly created view/controller which is displaying our embedded object
 
