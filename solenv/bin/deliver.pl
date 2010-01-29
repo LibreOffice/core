@@ -400,8 +400,6 @@ sub parse_options
 {
     my $arg;
     my $dontdeletecommon = 0;
-    $opt_silent = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE');
-    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE');
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/      and $opt_force  = 1  and next;
         $arg =~ /^-minor$/      and $opt_minor  = 1  and next;
@@ -422,13 +420,15 @@ sub parse_options
         }
         $dest = $arg;
     }
+    $opt_silent = 1 if ( !defined $ENV{VERBOSE} || (defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE')) && ( ! $opt_verbose );
+    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE') && ( ! $opt_silent );
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
         usage(1);
     }
     # $opt_silent and $opt_check or $opt_verbose are mutually exclusive
     if ( ($opt_check or $opt_verbose) and $opt_silent ) {
-        print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
+        print STDERR "Error on command line: options '-check'/'-verbose' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
     if ($dontdeletecommon) {
@@ -1225,7 +1225,19 @@ sub zip_files
             $work_file =~ s/\.zip$//;
             $work_file .= (sprintf('.%d-%d', $$, time())) . ".zip";
             die "Error: temp file $work_file already exists" if ( -e $work_file);
-            copy($zip_file, $work_file) if ( -e $zip_file );
+            if ( -e $zip_file ) {
+                if ( -z $zip_file) {
+                    # sometimes there are files of 0 byte size - remove them
+                    unlink $zip_file or print_error("can't remove empty file '$zip_file': $!",0);
+                } else {
+                    if ( ! copy($zip_file, $work_file)) {
+                        # give a warning, not an error:
+                        # we can zip from scratch instead of just updating the old zip file
+                        print_warning("can't copy'$zip_file' into '$work_file': $!", 0);
+                        unlink $work_file;
+                    }
+                }
+            }
         } else {
             # No pre processing necessary, working directly on solver.
             $work_file = $zip_file;
@@ -1267,9 +1279,21 @@ sub zip_files
         } elsif ( $zip_file eq $common_zip_file) {
             # rename work file back
             if ( -e $work_file ) {
-                if (! rename($work_file, $zip_file)) {
-                    print_error("can't rename temporary file to $zip_file: $!",0);
-                    unlink $work_file;
+                if ( -e $zip_file) {
+                    # do some tricks to be fast. otherwise we may disturb other platforms
+                    # by unlinking a file which just gets copied -> stale file handle.
+                    my $buffer_file=$work_file . '_rm';
+                    rename($zip_file, $buffer_file) or warn "Warning: can't rename old zip file '$zip_file': $!";
+                    if (! rename($work_file, $zip_file)) {
+                        print_error("can't rename temporary file to $zip_file: $!",0);
+                        unlink $work_file;
+                    }
+                    unlink $buffer_file;
+                } else {
+                    if (! rename($work_file, $zip_file)) {
+                        print_error("can't rename temporary file to $zip_file: $!",0);
+                        unlink $work_file;
+                    }
                 }
             }
         }

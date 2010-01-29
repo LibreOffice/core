@@ -902,6 +902,11 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators
     HostName = "Accelerators";
 End
 
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Paths
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Paths";
+End
+
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Common
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Common";

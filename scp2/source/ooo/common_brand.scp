@@ -91,6 +91,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
+             gid_Brand_File_Lib_Mingw_GccS,
+             gid_Brand_File_Lib_Mingw_Stdcpp,
              gid_Brand_File_Lib_Mingwm10,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
@@ -502,7 +504,10 @@ File gid_Brand_File_Bin_Unopkg
     Name = "unopkg.bin";
 End
 
-#if defined WNT && defined M1310
+#if defined WNT && \
+    (defined M1310 || \
+     ((defined M1400 || defined M1500) && \
+      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
 File gid_Brand_File_Bin_Msvcr71
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -705,6 +710,32 @@ File gid_Brand_File_Lib_Msvcr80
 End
 #endif
 #endif
+#endif
+
+#if defined(WNT) && defined( _gcc3 )
+
+#if defined(MINGW_GCCDLL)
+
+File gid_Brand_File_Lib_Mingw_GccS
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_Brand_File_Lib_Mingw_Stdcpp
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
 #endif
 
 #if defined(WNT)

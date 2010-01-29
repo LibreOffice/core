@@ -135,50 +135,62 @@ sub register_unocomponents
 
     my $error_occured = 0;
     my $filestring = "";
-    for ( my $i = 0; $i <= $#{$unocomponents}; )
+    for ( my $i = 0; $i <= $#{$unocomponents}; ++$i )
     {
-        my $sourcepath = ${$unocomponents}[$i++]->{'sourcepath'};
-
-        $filestring = $filestring . make_file_url($sourcepath);
-
-        if ( $i % $installer::globals::unomaxservices == 0 || $i > $#{$unocomponents} )    # limiting to $installer::globals::maxservices files
+        my $sourcepath = make_file_url(${$unocomponents}[$i]->{'sourcepath'});
+        my $urlprefix = ${$unocomponents}[$i]->{'NativeServicesURLPrefix'};
+        if (defined($urlprefix))
         {
-            my @regcompoutput = ();
-
-            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $nativeservicesurlprefix . $installer::globals::quote . " 2\>\&1 |";
-
-            open (REG, "$systemcall");
-            while (<REG>) {push(@regcompoutput, $_); }
-            close (REG);
-
-            my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-            my $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
-
-            if ($returnvalue)
-            {
-                $infoline = "ERROR: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                $error_occured = 1;
-            }
-            else
-            {
-                $infoline = "SUCCESS: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
-
-            $filestring = "";
+            call_regcomp(
+                $regcompfileref, $servicesfile, $sourcepath, $urlprefix);
         }
         else
         {
-            $filestring = $filestring . ";";
+            $filestring .= ";" unless $filestring eq "";
+            $filestring .= $sourcepath;
+        }
+        if (length($filestring) > $installer::globals::unomaxservices ||
+            ($i == $#{$unocomponents} && $filestring ne ""))
+        {
+            call_regcomp(
+                $regcompfileref, $servicesfile, $filestring,
+                $nativeservicesurlprefix);
+            $filestring = "";
         }
     }
 
     return $error_occured;
+}
+
+sub call_regcomp
+{
+    my ($regcompfileref, $servicesfile, $filestring, $urlprefix) = @_;
+    my @regcompoutput = ();
+
+    my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
+
+    open (REG, "$systemcall");
+    while (<REG>) {push(@regcompoutput, $_); }
+    close (REG);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        $error_occured = 1;
+    }
+    else
+    {
+        $infoline = "SUCCESS: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 ################################################################
@@ -262,7 +274,7 @@ sub fix_cygwin_path
 {
     my ( $path ) = @_;
 
-    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" && $installer::globals::wrapcmd eq "" )
+    if ( $installer::globals::iswin eq 1 && $installer::globals::wrapcmd eq "" )
     {
     $path = qx{cygpath -m "$path"};
     chomp($path);
@@ -281,7 +293,7 @@ sub get_source_path_cygwin_safe
     my ( $name, $array, $int ) = @_;
 
     my $ret = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$name, $array, $int);
-    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" )
+    if ( $installer::globals::iswin eq 1 )
     {
     if( substr( $$ret, 1,1 ) eq ":" )
     {
@@ -343,7 +355,6 @@ sub register_pythoncomponents
                 $counter++;
             }
 
-#           if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$pythoncomponents} )))   # limiting to $installer::globals::maxservices files
             if ( $counter > 0 )
             {
                 $filestring =~ s/\;\s*$//;
@@ -512,7 +523,7 @@ sub prepare_classpath_for_java_registration
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
         else { $oldclasspathstring = "\."; }
         my $classpathstring = $$jarfileref . $local_pathseparator . $oldclasspathstring;
-        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )) {
+        if ( $^O =~ /cygwin/i ) {
             $classpathstring =~ s/\//\\/g;      # guw.pl likes '\' in $PATH.
         }
         $ENV{'CLASSPATH'} = $classpathstring;
@@ -922,12 +933,12 @@ sub create_services_rdb
             # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
 
-            if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
-            {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
-                $servicesdir = qx{cygpath -d "$servicesdir"};
-                chomp($servicesdir);
-                $servicesdir =~ s/\\/\//g;
-            }
+#           if ( $^O =~ /cygwin/i )
+#           {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
+#               $servicesdir = qx{cygpath -d "$servicesdir"};
+#               chomp($servicesdir);
+#               $servicesdir =~ s/\\/\//g;
+#           }
 
             push(@installer::globals::removedirs, $servicesdir);
 

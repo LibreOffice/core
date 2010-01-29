@@ -230,6 +230,7 @@ Map_esc( tok )/*
 char *tok;
 {
    if( strchr( "\"\\vantbrf01234567", tok[1] ) ) {
+      size_t len;
       switch( tok[1] ) {
      case 'a' : *tok = 0x07; break;
      case 'b' : *tok = '\b'; break;
@@ -246,13 +247,15 @@ char *tok;
         register int j = 0;
         for( ; i<2 && isdigit(tok[2]); i++ ) {
            j = (j << 3) + (tok[1] - '0');
-           strcpy( tok+1, tok+2 );
+           len = strlen(tok+2)+1;
+           memmove( tok+1, tok+2, len );
         }
         j = (j << 3) + (tok[1] - '0');
         *tok = j;
      }
       }
-      strcpy( tok+1, tok+2 );
+      len = strlen(tok+2)+1;
+      memmove( tok+1, tok+2, len );
    }
 }
 
@@ -365,7 +368,8 @@ char *src;
       if( (e = Basename(s)) != s) {
      if( !(mod & DIRECTORY_FLAG) ) {
         /* Move the basename to the start. */
-        strcpy(s, e);
+        size_t len = strlen(e)+1;
+        memmove(s, e, len);
      }
      else
         s = e;
@@ -382,7 +386,8 @@ char *src;
 
       if( !(mod & FILE_FLAG) ) {
      /* Move the suffix to the start. */
-     strcpy( s, e );
+     size_t len = strlen(e)+1;
+         memmove(s, e, len);
       }
       else
      s = e;
@@ -725,8 +730,10 @@ int  doexpand;          /* If TRUE enables macro expansion  */
           done = !lev;
           break;
             } else {
+              size_t len;
           s[1] = ' ';
-          strcpy( s, s+1 );
+              len = strlen(s+1)+1;
+          memmove( s, s+1, len );
         }
         /*FALLTHRU*/
      case ' ':
@@ -835,8 +842,10 @@ int  doexpand;          /* If TRUE enables macro expansion  */
        * converted them to a real space. Let's verify this. */
       for( p=s; *p && *p != edelim && *p; p++ ) {
     if( p[0] == '\\' && p[1] == '\n' ) {
+      size_t len;
       p[1] = ' ';
-      strcpy( p, p+1 );
+      len = strlen(p+1)+1;
+      memmove( p, p+1, len );
     }
       }
       if( !*p )
@@ -1120,7 +1129,10 @@ int  *flag;
       *flag = 1;
       res   = Expand( start );
 
-      if( (t = DmStrSpn( res, " \t" )) != res ) strcpy( res, t );
+      if( (t = DmStrSpn( res, " \t" )) != res ) {
+          size_t len = strlen(t)+1;
+          memmove( res, t, len );
+      }
    }
 
    FREE( start );       /* this is ok! start is assigned a DmSubStr above */

@@ -371,10 +371,10 @@ en-US = "Icelandic"
 en-US = "Installs Icelandic support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_NB]
-en-US = "Norwegian (Bokmal)"
+en-US = "Norwegian (Bokmål)"
 
 [STR_DESC_MODULE_LANGPACK_NB]
-en-US = "Installs Norwegian (Bokmal) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Norwegian (Bokmål) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_NN]
 en-US = "Norwegian (Nynorsk)"

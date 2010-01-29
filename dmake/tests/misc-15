@@ -37,7 +37,7 @@ MYTARGET:=\$(PWD)/target.abc
 
 EOT
 
-output=`eval ${DMAKEPROG} -r -f $file1`
+output=`eval ${DMAKEPROG} -vm -r -f $file1`
 result=$?
 
 if echo "$output" | grep "target.abc' is up to date"  > /dev/null 2>&1 ; then

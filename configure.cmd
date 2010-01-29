@@ -1,7 +1,7 @@
 @echo off
 setlocal
-SET ANT_HOME=C:\PROGRAMMI\jsdk142\apache-ant-1.7.0
-SET JAVA_HOME=C:\PROGRAMMI\jsdk142
-SET PATH=%JAVA_HOME%\bin;%PATH%;%ANT_HOME%\bin;
-sh -c "configure --disable-werror --with-use-shell=4nt --disable-mozilla --disable-epm --disable-odk --disable-qadevooo --with-x=no --disable-fontconfig --disable-gnome-vfs --disable-gtk --with-java=yes --disable-gcjaot --without-nas --without-fonts" | tee configure.log
+SET MY_ANT_HOME=e:/java150/apache-ant-1.7.0
+SET JAVA_HOME=e:\java150
+SET PATH=%JAVA_HOME%\bin;%PATH%;%MY_ANT_HOME%\bin;
+sh -c "configure --with-system-openssl --with-system-icu --with-system-libxml --with-system-libxslt --disable-werror --with-use-shell=4nt --disable-mozilla --disable-epm --disable-odk --disable-qadevooo --with-x=no --disable-fontconfig --disable-gnome-vfs --disable-gtk --with-java=yes --disable-gcjaot --without-nas --without-fonts --with-ant-home=%MY_ANT_HOME%" | tee configure.log
 endlocal

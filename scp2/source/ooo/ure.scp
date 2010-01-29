@@ -410,6 +410,13 @@ File gid_File_Dl_AffineUnoUno
     // CompID = "CF542EC3-7A51-4EAA-8480-65D5E8906D05";
 End
 
+File gid_File_Dl_LogUnoUno
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("log_uno_uno");
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
 #if defined WNT && defined _MSC
 File gid_File_Dl_Cli_Uno
     TXT_FILE_BODY;
@@ -832,7 +839,7 @@ File gid_File_Dl_Libxml2
 #else
     Name = SCP2_URE_DL_VER("xml2", "2");
 #endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED, PATCH, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "BE6FAD97-F84C-43E3-8392-6FE2CDA04D8E";
 End
 #endif
@@ -908,6 +915,32 @@ File gid_File_Lib_Mingwm10_Ure
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "601FEC1D-8665-4476-9911-83BDCCE83025";
 End
+#endif
+
+#if defined(WNT) && defined( _gcc3 )
+
+#if defined(MINGW_GCCDLL)
+
+File gid_File_Lib_Mingw_GccS_Ure
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_File_Lib_Mingw_Stdcpp_Ure
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
+#endif
+
 #endif
 
 #ifdef WNT
@@ -1121,6 +1154,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_UrpUno,
             gid_File_Dl_UnsafeUnoUno,
             gid_File_Dl_AffineUnoUno,
+            gid_File_Dl_LogUnoUno,
             gid_File_Dl_Jpipe,
             gid_File_Dl_Juh,
             gid_File_Dl_Juhx,
@@ -1146,6 +1180,8 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Stlport,
             gid_File_Dl_GccS,
             gid_File_Dl_Stdcpp,
+            gid_File_Lib_Mingw_GccS_Ure,
+            gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Lib_Mingwm10_Ure,
             gid_File_Dl_Msvcr71,
             gid_File_Dl_Msvcp71,

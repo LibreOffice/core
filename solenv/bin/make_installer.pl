@@ -408,8 +408,12 @@ installer::logger::print_message( "... analyzing directories ... \n" );
 my $dirsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Directory");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1.log", $dirsinproductarrayref); }
 
-if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
+if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_hostname($dirsinproductarrayref); }
+if ( $installer::globals::patch ) { installer::scriptitems::use_patch_hostname($dirsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1a.log", $dirsinproductarrayref); }
+
+if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
 if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
 
@@ -471,6 +475,10 @@ if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isx
     $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($scpactionsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1a.log", $scpactionsinproductarrayref); }
 }
+
+if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
+if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1b.log", $scpactionsinproductarrayref); }
 
 # $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
 # if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
@@ -1008,7 +1016,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $profilesinproductlanguageresolvedarrayref;
     my $profileitemsinproductlanguageresolvedarrayref;
 
-    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )))
+    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )) && (!($installer::globals::languagepack)))
     {
         installer::logger::print_message( "... creating profiles ...\n" );
 
@@ -1363,7 +1371,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {

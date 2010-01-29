@@ -39,6 +39,7 @@ use Getopt::Long;
 use File::Basename;
 use File::Path;
 use Cwd;
+use Benchmark;
 
 #### module lookup
 my @lib_dirs;
@@ -58,6 +59,10 @@ use Cws;
 
 #### globals ####
 
+# TODO: replace dummy vales with actual SVN->hg migration milestones
+my $dev300_migration_milestone = 'm64';
+my $ooo320_migration_milestone = 'm999';
+
 # valid command with possible abbreviations
 my @valid_commands = (
                         'help', 'h', '?',
@@ -69,22 +74,24 @@ my @valid_commands = (
                         'task', 't',
                         'integrate',
                         'cdiff', 'cd',
-                        'eisclone'
+                        'eisclone',
+                        'setcurrent'
                      );
 
 # list the valid options to each command
 my %valid_options_hash = (
-                            'help'      => ['help'],
-                            'create'    => ['help', 'milestone', 'migration'],
-                            'fetch'     => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
+                            'help'       => ['help'],
+                            'create'     => ['help', 'milestone', 'migration', 'hg'],
+                            'fetch'      => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
                                             'onlysolver'],
-                            'rebase'    => ['help', 'milestone','commit'],
-                            'analyze'   => ['help'],
-                            'query'     => ['help', 'milestone','masterworkspace','childworkspace'],
-                            'task'      => ['help'],
-                            'integrate' => ['help', 'childworkspace'],
-                            'cdiff'     => ['help', 'childworkspace', 'masterworkspace', 'files', 'modules'],
-                            'eisclone'  => ['help']
+                            'rebase'     => ['help', 'milestone','commit'],
+                            'analyze'    => ['help'],
+                            'query'      => ['help', 'milestone','masterworkspace','childworkspace'],
+                            'task'       => ['help'],
+                            'integrate'  => ['help', 'childworkspace'],
+                            'cdiff'      => ['help', 'childworkspace', 'masterworkspace', 'files', 'modules'],
+                            'setcurrent' => ['help', 'milestone'],
+                            'eisclone'   => ['help']
                          );
 
 my %valid_commands_hash;
@@ -115,6 +122,7 @@ sub parse_command_line
     Getopt::Long::Configure ("no_auto_abbrev", "no_ignorecase");
     my $success = GetOptions(\%options_hash, 'milestone|m=s',
                                              'masterworkspace|master|M=s',
+                                             'hg',
                                              'migration',
                                              'childworkspace|child|c=s',
                                              'debug',
@@ -357,7 +365,13 @@ sub get_cws_by_name
 
     # Update masterws part of Cws object.
     my $masterws = $cws->get_mws();
-    $cws->master($masterws);
+    if ( $cws->master() ne $masterws ) {
+        # can this still happen?
+        if ( $debug ) {
+            print STDERR "CWS-DEBUG: get_cws_by_name(): fixup of masterws in cws object detected\n";
+        }
+        $cws->master($masterws);
+    }
     return ($cws);
 }
 
@@ -365,6 +379,7 @@ sub get_cws_by_name
 sub register_child_workspace
 {
     my $cws          = shift;
+    my $scm          = shift;
     my $is_promotion = shift;
 
     my $milestone = $cws->milestone();
@@ -387,9 +402,9 @@ sub register_child_workspace
     }
 
     if ( $is_promotion ) {
-        my $rc = $cws->set_subversion_flag(1);
+        my $rc = $cws->set_scm($scm);
         if ( !$rc ) {
-            print_error("Failed to set subversion flag on child workspace '$child'.\nContact EIS administrator!\n", 12);
+            print_error("Failed to set the SCM property '$scm' on child workspace '$child'.\nContact EIS administrator!\n", 12);
         }
 
         $rc = $cws->promote($vcsid, "");
@@ -410,14 +425,216 @@ sub register_child_workspace
             print_error("Failed to register child workspace '$child' for master '$master'.", 12);
         }
         else {
-            my $rc = $cws->set_subversion_flag(1);
+            my $rc = $cws->set_scm($scm);
             if ( !$rc ) {
-                print_error("Failed to set subversion flag on child workspace '$child'.\nContact EIS administrator!\n", 12);
+                print_error("Failed to set the SCM property '$scm' on child workspace '$child'.\nContact EIS administrator!\n", 12);
             }
             print "\n***** Successfully ***** registered child workspace '$child'\n";
             print "for master workspace '$master' (milestone '$milestone').\n";
             print "Child workspace Id: $eis_id.\n";
         }
+    }
+    return 0;
+}
+
+sub print_time_elapsed
+{
+    my $t_start = shift;
+    my $t_stop  = shift;
+
+    my $time_diff = timediff($t_stop, $t_start);
+    print_message("... finished in " . timestr($time_diff));
+}
+
+sub hgrc_append_push_path_and_hooks
+{
+    my $target     = shift;
+    my $cws_source = shift;
+
+    $cws_source =~ s/http:\/\//ssh:\/\/hg@/;
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: hgrc_append_push_path_and_hooks(): default-push path: '$cws_source'\n";
+    }
+    if ( !open(HGRC, ">>$target/.hg/hgrc") ) {
+        print_error("Can't append to hgrc file of repository '$target'.\n", 88);
+    }
+    print HGRC "default-push = " . "$cws_source\n";
+    print HGRC "[extensions]\n";
+    print HGRC "hgext.win32text=\n";
+    print HGRC "[hooks]\n";
+    print HGRC "# Reject commits which would introduce windows-style CR/LF files\n";
+    print HGRC "pretxncommit.crlf = python:hgext.win32text.forbidcrlf\n";
+    close(HGRC);
+}
+
+sub is_hg_strip_available
+{
+    my $profile = hg_show();
+
+    foreach (@{$profile}) {
+        if ( $_ =~ /hgext.mq=/ ) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+sub hg_clone_repository
+{
+    my $rep_type             = shift;
+    my $cws                  = shift;
+    my $target               = shift;
+    my $clone_milestone_only = shift;
+
+    my ($hg_local_source, $hg_lan_source, $hg_remote_source);
+    my $config = CwsConfig->new();
+    if ( $rep_type eq 'ooo') {
+        $hg_local_source = $config->get_ooo_hg_local_source();
+        $hg_lan_source = $config->get_ooo_hg_lan_source();
+        $hg_remote_source = $config->get_ooo_hg_remote_source();
+    }
+    else {
+        $hg_local_source = $config->get_so_hg_local_source();
+        $hg_lan_source = $config->get_so_hg_lan_source();
+        $hg_remote_source = $config->get_so_hg_remote_source();
+    }
+
+    my $masterws = $cws->master();
+    my $master_local_source = "$hg_local_source/" . $masterws;
+    my $master_lan_source = "$hg_lan_source/" . $masterws;
+
+    my $milestone_tag;
+    if ( $clone_milestone_only ) {
+        $milestone_tag = uc($masterws) . '_' . $clone_milestone_only;
+    }
+    else {
+        my @tags = $cws->get_tags();
+        $milestone_tag = $tags[3];
+    }
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: master_local_source: '$master_local_source'\n";
+        print STDERR "CWS-DEBUG: master_lan_source: '$master_lan_source'\n";
+        if ( !-d $master_local_source ) {
+            print STDERR "CWS-DEBUG: not a directory '$master_local_source'\n";
+        }
+    }
+
+    # clone from local source if possible, otherwise from LAN source
+    if ( -d $master_local_source && can_use_hardlinks($master_local_source, dirname($target)) ) {
+        hg_local_clone_repository($master_local_source, $target, $milestone_tag);
+    }
+    else {
+        hg_lan_clone_repository($master_lan_source, $target, $milestone_tag);
+    }
+
+    # now pull from the remote cws outgoing repository if it already contains something
+    if ( !$clone_milestone_only ) {
+        my $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+
+        # The outgoing repository might not yet be available. Which is not
+        # an error. Since pulling from the cws outgoing URL results in an ugly
+        # and hardly understandable error message, we check for the availaility
+        # first. TODO: incorporate configured proxy instead of env_proxy. Use
+        # a dedicated request and content-type to find out if the repo is there
+        # instead of parsing the content of the page
+        require LWP::Simple;
+        my $content = LWP::Simple::get($cws_remote_source);
+        my $pattern = "<title>cws/". $cws->child();
+        if ( $content =~ /$pattern/ ) {
+            hg_remote_pull_repository($cws_remote_source, $target);
+        }
+        else {
+            print_message("The 'outgoing' repository '$cws_remote_source' is not accessible/available");
+        }
+        hgrc_append_push_path_and_hooks($target, $cws_remote_source);
+    }
+
+    # update the result
+    hg_update_repository($target);
+
+}
+
+sub hg_local_clone_repository
+{
+    my $local_source  = shift;
+    my $dest          = shift;
+    my $milestone_tag = shift;
+
+    # fastest way to clone a repository up to a certain milestone
+    # 1) clone w/o -r options (hard links!)
+    # 2) find (local) revision which corresponds to milestone
+    # 3) strip revision+1
+
+    my $t1 = Benchmark->new();
+    print_message("... clone LOCAL repository '$local_source' to '$dest'");
+    hg_clone($local_source, $dest, '-U');
+    my $id_option = "-n -r $milestone_tag";
+    my $revision = hg_ident($dest, $milestone_tag);
+    if ( defined($revision) ) {
+        my $strip_revision = $revision+1;
+        hg_strip($dest, $revision);
+    }
+    my $t2 = Benchmark->new();
+    print_time_elapsed($t1, $t2);
+}
+
+sub hg_lan_clone_repository
+{
+    my $lan_source    = shift;
+    my $dest          = shift;
+    my $milestone_tag = shift;
+
+    my $t1 = Benchmark->new();
+    print_message("... clone LAN repository '$lan_source' to '$dest'");
+    hg_clone($lan_source, $dest, "-U -r $milestone_tag");
+    my $t2 = Benchmark->new();
+    print_time_elapsed($t1, $t2);
+}
+
+sub hg_remote_pull_repository
+{
+    my $remote_source = shift;
+    my $dest          = shift;
+
+    my $t1 = Benchmark->new();
+    print_message("... pull from REMOTE repository '$remote_source' to '$dest'");
+    hg_pull($dest, $remote_source);
+    my $t2 = Benchmark->new();
+    print_time_elapsed($t1, $t2);
+}
+
+sub hg_update_repository
+{
+    my $dest          = shift;
+
+    my $t1 = Benchmark->new();
+    print_message("... update repository '$dest'");
+    hg_update($dest);
+    my $t2 = Benchmark->new();
+    print_time_elapsed($t1, $t2);
+}
+
+# Check if clone source and destination are on the same filesystem,
+# in that case hg clone can employ hard links.
+sub can_use_hardlinks
+{
+    my $source = shift;
+    my $dest = shift;
+
+    if ( $^O eq 'cygwin' ) {
+        # no hard links on windows
+        return 0;
+    }
+    # st_dev is the first field return by stat()
+    my @stat_source = stat($source);
+    my @stat_dest = stat($dest);
+
+    if ( $debug ) {
+        print STDERR "can_use_hardlinks(): source device: '$stat_source[0]', destination device: '$stat_dest[0]'\n";
+    }
+    if ( $stat_source[0] == $stat_dest[0] ) {
+        return 1;
     }
     return 0;
 }
@@ -435,7 +652,7 @@ sub query_cws
         print_error("Can't determine master workspace environment.\n", 30);
     }
 
-    if ( ($query_mode eq 'integratedinto' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
+    if ( ($query_mode eq 'integratedinto' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'status' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n", 30);
     }
 
@@ -512,31 +729,20 @@ sub query_status
     return;
 }
 
-sub query_vcs
+sub query_scm
 {
     my $cws = shift;
     my $masterws = $cws->master();
     my $childws  = $cws->child();
 
     if ( is_valid_cws($cws) ) {
-        my $issvn = $cws->get_subversion_flag();
-        if ( !defined($issvn) ) {
-            print_error("Internal error: can't get isSubVersion flag.", 3);
+        my $scm = $cws->get_scm();
+        if ( !defined($scm) ) {
+            print_error("Internal error: can't retrieve scm info.", 3);
         } else {
-            if ( $issvn==1 ) {
-                print_message("Child workspace uses SubVersion");
-            } else {
-                print_message("Child workspace uses CVS");
-            }
+                print_message("Child workspace uses '$scm'.");
         }
     }
-
-    # check if we got a valid child workspace
-    my $id = $cws->eis_id();
-    if ( !$id ) {
-        print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
-    }
-
     return;
 }
 
@@ -557,12 +763,6 @@ sub query_ispublic
                 print_message("Child workspace is internal");
             }
         }
-    }
-
-    # check if we got a valid child workspace
-    my $id = $cws->eis_id();
-    if ( !$id ) {
-        print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
     }
 
     return;
@@ -1229,6 +1429,49 @@ sub diff_print_files
     }
 }
 
+# TODO: special provisions for SVN->HG migrations, remove this
+# some time after migration
+sub get_scm_for_milestone
+{
+    my $masterws = shift;
+    my $milestone = shift;
+
+    my $milestone_sequence_number = extract_milestone_sequence_number($milestone);
+    my $dev300_migration_sequence_number = extract_milestone_sequence_number($dev300_migration_milestone);
+    my $ooo320_migration_sequence_number = extract_milestone_sequence_number($ooo320_migration_milestone);
+
+    my $scm = 'SVN';
+
+    if ( $masterws eq 'DEV300' ) {
+        if ( $milestone_sequence_number >= $dev300_migration_sequence_number ) {
+            $scm = 'HG';
+        }
+    }
+    elsif ( $masterws eq 'OOO320' ) {
+        if ( $milestone_sequence_number >= $ooo320_migration_sequence_number ) {
+            $scm = 'HG';
+        }
+    }
+    else {
+        $scm = 'SVN'
+    }
+    return $scm;
+}
+
+sub extract_milestone_sequence_number
+{
+    my $milestone = shift;
+
+    my $milestone_sequence_number;
+    if ( $milestone =~ /m(\d+)/ ) {
+        $milestone_sequence_number = $1;
+    }
+    else {
+        print_error("can't extract milestone sequence number from milestone '$milestone'", 99);
+    }
+    return $milestone_sequence_number;
+}
+
 # Executes the help command.
 sub do_help
 {
@@ -1248,6 +1491,7 @@ sub do_help
         print STDERR "\tquery (q)\n";
         print STDERR "\ttask (t)\n";
         print STDERR "\tcdiff (cd)\n";
+        print STDERR "\tsetcurrent\n";
         print STDERR "\tintegrate *** release engineers only ***\n";
         print STDERR "\teisclone *** release engineers only ***\n";
     }
@@ -1260,10 +1504,11 @@ sub do_help
     }
     elsif ($arg eq 'create') {
         print STDERR "create: Create a new child workspace\n";
-        print STDERR "usage: create [-m milestone] <master workspace> <child workspace>\n";
+        print STDERR "usage: create [--hg] [-m milestone] <master workspace> <child workspace>\n";
         print STDERR "\t-m milestone:          Milestone to base the child workspace on. If ommitted the\n";
         print STDERR "\t                       last published milestone will be used.\n";
         print STDERR "\t--milestone milestone: Same as -m milestone.\n";
+        print STDERR "\t--hg:                  Create Mercurial (hg) based CWS.\n";
         print STDERR "\t--migration:           Used only for the migration of an exitisting CWS from CVS to SVN.\n";
         print STDERR "\t                       Disables existence check in EIS, creates CWS branch in SVN, sets SVN flag.\n";
     }
@@ -1274,7 +1519,7 @@ sub do_help
     elsif ($arg eq 'query') {
         print STDERR "query: Query child workspace for miscellaneous information\n";
         print STDERR "usage: query [-M master] [-c child] <current|integratedinto|incompatible|owner|qarep|status|taskids>\n";
-        print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|vcs|build>\n";
+        print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|scm|build>\n";
         print STDERR "       query [-M master] <latest|milestones|ispublicmaster>\n";
         print STDERR "       query  <masters>\n";
         print STDERR "       query [-M master] [-m milestone] <integrated|buildid>\n";
@@ -1308,7 +1553,7 @@ sub do_help
         print STDERR "\tnominated\tquery nominated CWSs\n";
         print STDERR "\tready\t\tquery CWSs ready for QA\n";
         print STDERR "\tispublic\tquery public flag of CWS\n";
-        print STDERR "\tvcs\t\tquery Version Control System used for CWS (either CVS or SubVersion)\n";
+        print STDERR "\tscm\t\tquery Source Control Management (SCM) system used for CWS\n";
         print STDERR "\tmasters\t\tquery available MWS\n";
         print STDERR "\tmilestones\tquery which milestones are know on the given MWS\n";
         print STDERR "\tispublicmaster\tquery public flag of MWS\n";
@@ -1367,6 +1612,14 @@ sub do_help
         print STDERR "\t--files:                Print only file names\n";
         print STDERR "\t--modules:              Print only top level directories aka modules\n"
     }
+    elsif ($arg eq 'setcurrent') {
+        print STDERR "setcurrent: Set the current milestone for the CWS (only hg based CWSs)\n";
+        print STDERR "usage: setcurrent [-m milestone]\n";
+        print STDERR "\t-m milestone:           Set milestone to <milestone> to workspace <workspace>\n";
+        print STDERR "\t                        Use 'latest' for the for lastest published milestone on the current master\n";
+        print STDERR "\t                        For cross master change use the form <MWS>:<milestone>\n";
+        print STDERR "\t--milestone milestone:  Same as -m milestone\n";
+    }
     else {
         print STDERR "'$arg': unknown subcommand\n";
         exit(1);
@@ -1387,6 +1640,11 @@ sub do_create
     my $is_migration = 0;
     if ( exists $options_ref->{'migration'} ) {
         $is_migration = 1;
+    }
+
+    my $is_hg = 0;
+    if ( exists $options_ref->{'hg'} ) {
+        $is_hg = 1;
     }
 
     my $master   = uc $args_ref->[0];
@@ -1449,6 +1707,19 @@ sub do_create
     # set milestone
     $cws->milestone($milestone);
 
+    # handle mercurial(hg) based CWSs
+    if ( $is_hg ) {
+        register_child_workspace($cws, 'hg', $is_promotion);
+        return;
+    }
+
+    # Refuse to create Subversion hosted cildworkspaces after
+    # migration milestone
+    my $milestone_scm = get_scm_for_milestone($cws->master(), $cws->milestone());
+    if ( $milestone_scm eq 'HG' ) {
+        print_error("This code line has been migrated to Mercurial.", 0);
+        print_error("Please use the '--hg' option to create a Mercurial hosted CWS.", 8);
+    }
 
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
@@ -1550,7 +1821,7 @@ sub do_create
         }
     }
     else {
-        register_child_workspace($cws, $is_promotion);
+        register_child_workspace($cws, 'svn', $is_promotion);
     }
     return;
 }
@@ -1582,6 +1853,7 @@ sub do_rebase
     }
 
     my $cws = get_cws_from_environment();
+
     my $old_masterws = $cws->master();
     my $new_masterws;
     my $new_milestone;
@@ -1605,7 +1877,7 @@ sub do_rebase
                 print_error("Can't determine latest milestone of '$old_masterws' available for rebase.", 22);
             }
             $new_masterws  = $old_masterws;
-            $new_milestone = $cws->get_current_milestone($old_masterws);
+            $new_milestone = $latest;
         }
         else {
             ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
@@ -1613,6 +1885,17 @@ sub do_rebase
     }
     else {
         do_help(['rebase']);
+    }
+
+    if ( $cws->get_scm() eq 'HG' ) {
+        my $child = $cws->child();
+        print_error("cws rebase is not supported for mercurial based childworkspaces", 0);
+        print_error("re-synchronize your CWS with:", 0);
+        print_error("hg pull <master>", 0);
+        print_error("hg merge", 0);
+        print_error("hg commit -m\"$child: merge with $new_masterws $new_milestone\"", 0);
+        print_error("and update EIS with:", 0);
+        print_error("cws setcurrent -m $new_milestone", 99);
     }
 
     my $so_setup = 0;
@@ -1695,7 +1978,7 @@ sub do_rebase
 
         }
 
-        print_message("... updating EIS database\n");
+        print_message("... updating EIS database");
         my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
         # sanity check
         if ( $$push_return[1] ne $new_milestone) {
@@ -1764,6 +2047,7 @@ sub do_fetch
     my $args_ref    = shift;
     my $options_ref = shift;
 
+    my $time_fetch_start = Benchmark->new();
     if ( exists $options_ref->{'help'} || @{$args_ref} != 1) {
         do_help(['fetch']);
     }
@@ -1786,7 +2070,7 @@ sub do_fetch
     }
 
     if ( defined($platforms) && $switch ) {
-        print_error("Option '-p' is not yet usuable with Option '-s'. Will be fixed RSN.", 0);
+        print_error("Option '-p' is not usuable with Option '-s'.", 0);
         do_help(['fetch']);
     }
 
@@ -1802,6 +2086,7 @@ sub do_fetch
     }
     $cws->master($masterws);
     my $milestone;
+    my $scm;
     if( defined($milestone_opt) ) {
         if ( $milestone_opt eq 'latest' ) {
             $cws->master($masterws);
@@ -1815,14 +2100,34 @@ sub do_fetch
         else {
             ($masterws, $milestone) =  verify_milestone($cws, $milestone_opt);
         }
+        $scm = get_scm_for_milestone($masterws, $milestone);
     }
     elsif ( defined($child) ) {
         $cws = get_cws_by_name($child);
         $masterws = $cws->master(); # CWS can have another master than specified in ENV
         $milestone = $cws->milestone();
+        $scm = $cws->get_scm();
     }
     else {
         do_help(['fetch']);
+    }
+
+    if ( $switch && $scm eq 'HG' ) {
+        print_error("Option '-s' is not supported with a hg based CWS.", 0);
+        do_help(['fetch']);
+    }
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: SCM: $scm\n";
+    }
+
+    if ( $scm eq 'HG' ) {
+        if ( !is_hg_strip_available() ) {
+            print_error("The 'cws fetch' command requires that 'hg strip' is enabled", 0);
+            print_error("Please add the following lines to your hg profile (\$HOME/.hgrc)", 0);
+            print_error("[extensions]", 0);
+            print_error("hgext.mq=", 33);
+        }
     }
 
     my $config = CwsConfig->new();
@@ -1878,11 +2183,12 @@ sub do_fetch
     }
 
     my $cwsname = $cws->child();
-    my $url_suffix = $milestone_opt ? ("/tags/$masterws" . "_$milestone") : ('/cws/' . $cwsname);
     my $linkdir = $milestone_opt ? "src.$milestone" : "src." . $cws->milestone;
 
     my $workspace = $args_ref->[0];
+
     if ( !$onlysolver ) {
+        my $url_suffix = $milestone_opt ? ("/tags/$masterws" . "_$milestone") : ('/cws/' . $cwsname);
         if ( $switch ) {
             # check if to be switched working copy exist or bail out
             if ( ! -d $workspace ) {
@@ -1934,8 +2240,11 @@ sub do_fetch
                 print_error("File or directory '$workspace' already exists.", 8);
             }
 
-            # Check if working directory already exists
+            if ( !(($scm eq 'SVN') || ($scm eq 'HG')) ) {
+                print_error("Unsupported SCM '$scm'.", 8);
+            }
 
+            my $clone_milestone_only = $milestone_opt ? $milestone : 0;
             if ( defined($so_svn_server) ) {
                 if ( !mkdir($workspace) ) {
                     print_error("Can't create directory '$workspace': $!.", 8);
@@ -1944,11 +2253,17 @@ sub do_fetch
                 if ( !mkdir($work_master) ) {
                     print_error("Can't create directory '$work_master': $!.", 8);
                 }
-                print_message("... checkout '$ooo_url' to '$work_master/ooo'");
-                svn_checkout($ooo_url, "$work_master/ooo", $quiet);
-                my $so_url = $so_svn_server . $url_suffix;
-                print_message("... checkout '$so_url' to '$work_master/sun'");
-                svn_checkout($so_url, "$work_master/sun", $quiet);
+                if ( $scm eq 'SVN' ) {
+                    print_message("... checkout '$ooo_url' to '$work_master/ooo'");
+                    svn_checkout($ooo_url, "$work_master/ooo", $quiet);
+                    my $so_url = $so_svn_server . $url_suffix;
+                    print_message("... checkout '$so_url' to '$work_master/sun'");
+                    svn_checkout($so_url, "$work_master/sun", $quiet);
+                }
+                else{
+                    hg_clone_repository('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
+                    hg_clone_repository('so', $cws, "$work_master/sun", $clone_milestone_only);
+                }
                 my $linkdir = "$work_master/src.$milestone";
                 if ( !mkdir($linkdir) ) {
                     print_error("Can't create directory '$linkdir': $!.", 8);
@@ -1956,8 +2271,13 @@ sub do_fetch
                 relink_workspace($linkdir);
             }
             else {
-                print_message("... checkout '$ooo_url' to '$workspace'");
-                svn_checkout($ooo_url, $workspace, $quiet);
+                if ( $scm eq 'SVN' ) {
+                    print_message("... checkout '$ooo_url' to '$workspace'");
+                    svn_checkout($ooo_url, $workspace, $quiet);
+                }
+                else {
+                    hg_clone_repository('ooo', $cws, $workspace, $clone_milestone_only);
+                }
             }
         }
     }
@@ -1975,10 +2295,16 @@ sub do_fetch
             }
         }
         foreach(@platforms) {
+            my $time_solver_start = Benchmark->new();
             print_message("... copying platform solver '$_'.");
             update_solver($_, $prebuild_dir, $solver, $milestone);
+            my $time_solver_stop = Benchmark->new();
+            print_time_elapsed($time_solver_start, $time_solver_stop);
         }
     }
+    my $time_fetch_stop = Benchmark->new();
+    my $time_fetch = timediff($time_fetch_stop, $time_fetch_start);
+    print_message("cws fetch: total time required " . timestr($time_fetch));
 }
 
 sub do_query
@@ -1987,7 +2313,7 @@ sub do_query
     my $options_ref = shift;
 
     # list of available query modes
-    my @query_modes = qw(integratedinto incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
+    my @query_modes = qw(integratedinto incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters scm ispublic ispublicmaster);
     my %query_modes_hash = ();
     foreach (@query_modes) {
         $query_modes_hash{$_}++;
@@ -2001,6 +2327,10 @@ sub do_query
     # cwquery mode 'state' has been renamed to 'status' to be more consistent
     # with CVS etc. 'state' is still an alias for 'status'
     $mode = 'status' if $mode eq 'state';
+
+    # cwquery mode 'vcs' has been renamed to 'scm' to be more consistent
+    # with general use etc. 'vcs' is still an alias for 'scm'
+    $mode = 'scm' if $mode eq 'vcs';
 
     # there will be more query modes over time
     if ( !exists $query_modes_hash{$mode} ) {
@@ -2170,6 +2500,46 @@ sub do_cdiff
         }
     }
 
+}
+
+sub do_setcurrent
+{
+    my $args_ref    = shift;
+    my $options_ref = shift;
+
+    if ( exists $options_ref->{'help'} || @{$args_ref} != 0) {
+        do_help(['setcurrent']);
+    }
+
+    if ( !exists $options_ref->{'milestone'} ) {
+        do_help(['setcurrent']);
+    }
+
+    my $cws = get_cws_from_environment();
+    my $old_masterws = $cws->master();
+    my $new_masterws;
+    my $new_milestone;
+
+    my $milestone = $options_ref->{'milestone'};
+    if ( $milestone eq 'latest' ) {
+        my $latest = $cws->get_current_milestone($old_masterws);
+
+        if ( !$latest ) {
+            print_error("Can't determine latest milestone of '$old_masterws'.", 22);
+        }
+        $new_masterws  = $old_masterws;
+        $new_milestone = $latest;
+    }
+    else {
+        ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
+    }
+
+    print_message("... updating EIS database");
+    my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
+    # sanity check
+    if ( $$push_return[1] ne $new_milestone) {
+        print_error("Couldn't push new milestone '$new_milestone' to database", 0);
+    }
 }
 
 sub do_eisclone
@@ -2556,4 +2926,138 @@ sub execute_svnversion_command
 
     return $result;
 }
+
+### HG glue ###
+
+sub hg_clone
+{
+    my $source  = shift;
+    my $dest    = shift;
+    my $options = shift;
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg clone: '$source -> $dest', options: '$options'\n";
+    }
+
+    # The to be cloned revision might not yet be avaliable. In this case clone
+    # the available tip.
+    my @result = execute_hg_command(0, 'clone', $options, $source, $dest);
+    if ( defined($result[0]) && $result[0] =~ /abort: unknown revision/ ) {
+        $options =~ s/-r \w+//;
+        @result = execute_hg_command(1, 'clone', $options, $source, $dest);
+    }
+    return @result;
+}
+
+sub hg_ident
+{
+    my $repository  = shift;
+    my $rev_id = shift;
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg ident: 'repository', revision: '$rev_id'\n";
+    }
+
+    my @result = execute_hg_command(0, 'ident', "--cwd $repository", "-n -r $rev_id");
+    my $line = $result[0];
+    if ($line =~ /abort: unknown revision/) {
+        return undef;
+    }
+    else {
+        chomp($line);
+        return $line;
+    }
+}
+
+sub hg_strip
+{
+    my $repository  = shift;
+    my $rev_id = shift;
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg strip: 'repository', revision: '$rev_id'\n";
+    }
+
+    my @result = execute_hg_command(1, 'strip', "--cwd $repository", '-n', $rev_id);
+    my $line = $result[0];
+    if ($line =~ /abort: unknown revision/) {
+        return undef;
+    }
+    else {
+        chomp($line);
+        return $line;
+    }
+}
+
+sub hg_pull
+{
+    my $repository  = shift;
+    my $remote = shift;
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg pull: 'repository', remote: '$remote'\n";
+    }
+
+    my @result = execute_hg_command(0, 'pull', "--cwd $repository", $remote);
+    my $line = $result[0];
+    if ($line =~ /abort: /) {
+        return undef;
+    }
+}
+
+sub hg_update
+{
+    my $repository  = shift;
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg update: 'repository'\n";
+    }
+
+    my @result = execute_hg_command(1, 'update', "--cwd $repository");
+    return @result;
+}
+
+sub hg_show
+{
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg show\n";
+    }
+    my $result = execute_hg_command(0, 'show', '');
+    return $result;
+}
+
+sub execute_hg_command
+{
+    my $terminate_on_rc = shift;
+    my $command = shift;
+    my $options = shift;
+    my @args = @_;
+
+    my $args_str = join(" ", @args);
+
+    # we can only parse english strings, hopefully a C locale is available everywhere
+    $ENV{LC_ALL}='C';
+    $command = "hg $command $options $args_str";
+
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... execute command line: '$command'\n";
+    }
+
+    my @result;
+    open(OUTPUT, "$command 2>&1 |") or print_error("Can't execute mercurial command line client", 98);
+    while (<OUTPUT>) {
+        push(@result, $_);
+    }
+    close(OUTPUT);
+
+    my $rc = $? >> 8;
+
+    if ( $rc > 0 && $terminate_on_rc) {
+        print STDERR @result;
+        print_error("The mercurial command line client failed with exit status '$rc'", 99);
+    }
+    return wantarray ? @result : \@result;
+}
+
+
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:

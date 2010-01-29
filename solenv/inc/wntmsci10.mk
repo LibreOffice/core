@@ -89,7 +89,7 @@ CFLAGS+= -Ob1
 .ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
-#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
 # full debug for RE builds only due to size concerns
 .IF "$(UPDATER)"!=""
 CFLAGSENABLESYMBOLS=-Z7 -Yd
@@ -120,9 +120,9 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
 
-CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
@@ -146,7 +146,7 @@ CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
-CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
+CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
 CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
@@ -272,7 +272,7 @@ LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ENDIF			# "$(DYNAMIC_CRT)"!=""
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -292,8 +292,8 @@ LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
-ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/atlmfc/include
+ATL_LIB*=$(COMPATH)/atlmfc/lib
 
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib

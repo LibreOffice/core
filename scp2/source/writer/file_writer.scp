@@ -39,7 +39,7 @@ File gid_File_Lib_Hwpreader
   #else
     Name = "hwp.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED, UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
