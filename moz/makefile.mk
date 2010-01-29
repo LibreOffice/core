@@ -167,7 +167,7 @@ MOZILLA_CONFIGURE_FLAGS+= --enable-default-toolkit=$(DEFAULT_MOZILLA_TOOLKIT)
 # create a objdir build = build files in a seperate directory, not in the sourcetree directly
 CONFIGURE_DIR=$(CPU)_objdir
 BUILD_DIR=$(CONFIGURE_DIR)
-MOZ_CROSSCOMPILE=CROSS_COMPILE=1 CC="gcc -arch $(MOZ_ARCH)" CXX="g++ -arch $(MOZ_ARCH)" AR=ar
+MOZ_CROSSCOMPILE=CROSS_COMPILE=1 CC="$(CC) -arch $(MOZ_ARCH)" CXX="$(CXX) -arch $(MOZ_ARCH)" AR=ar
 
 CONFIGURE_ACTION=$(null,$(MOZ_ARCH) $(NULL) $(MOZ_CROSSCOMPILE)) ../configure $(MOZILLA_CONFIGURE_FLAGS)
 
