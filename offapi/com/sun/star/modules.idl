@@ -90,6 +90,9 @@ module datatransfer {};
 /// Office document related interfaces.
 module document {};
 
+/// Office document content related interfaces.
+module office {};
+
 /// Drawing and shape specific interfaces.
 module drawing {};
 

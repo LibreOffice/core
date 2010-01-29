@@ -75,7 +75,7 @@ public final class BridgeFactory_Test extends ComplexTestCase {
         assure("", UnoRuntime.areSame(xBridge, xBridges[0]));
 
         // dispose the bridge
-        XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge);
+        XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xBridge);
         xComponent.dispose();
 
 
@@ -103,7 +103,7 @@ public final class BridgeFactory_Test extends ComplexTestCase {
                && UnoRuntime.areSame(xBridge_new, xBridges[0]));
 
         // dispose the new bridge
-        XComponent xComponent_new = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge_new);
+        XComponent xComponent_new = UnoRuntime.queryInterface(XComponent.class, xBridge_new);
         xComponent_new.dispose();
     }
 }

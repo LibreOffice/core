@@ -35,9 +35,10 @@ PRJNAME=sal
 TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
-ENABLE_EXCEPTIONS=TRUE
+#ENABLE_EXCEPTIONS=TRUE
+NO_DEFAULT_STL=YES
 
-TESTAPP=test_osl_getVolInfo
+#TESTAPP=test_osl_getVolInfo
 #TESTAPP=test_osl_joinProcess
 #TESTAPP=getlocaleinfotest
 #TESTAPP=test_osl_joinProcess
@@ -45,6 +46,7 @@ TESTAPP=test_osl_getVolInfo
 #TESTAPP=salstattest
 #TESTAPP=saldyntest
 
+TESTAPP=t_readline
 #TESTAPP=t_cipher
 #TESTAPP=t_digest
 #TESTAPP=t_random
@@ -172,6 +174,23 @@ DEF1EXPORTFILE=export.exp
     APP1DEPN=	$(LB)$/isal.lib
 
 .ENDIF # salstattest
+
+#
+# t_readline
+#
+.IF "$(TESTAPP)" == "t_readline"
+
+CFILES=		t_readline.c
+OBJFILES=	$(OBJ)$/t_readline.obj
+
+APP1TARGET=	t_readline
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
+
+APP1RPATH=UREBIN
+
+.ENDIF # t_readline
 
 #
 # t_cipher

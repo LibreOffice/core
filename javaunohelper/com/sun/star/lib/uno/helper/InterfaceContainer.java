@@ -715,7 +715,7 @@ public class InterfaceContainer implements Cloneable
                 try
                 {
                     Object o= aIt.next();
-                    XEventListener evtListener= (XEventListener) UnoRuntime.queryInterface(
+                    XEventListener evtListener= UnoRuntime.queryInterface(
                     XEventListener.class, o);
                     if( evtListener != null )
                         evtListener.disposing( evt );

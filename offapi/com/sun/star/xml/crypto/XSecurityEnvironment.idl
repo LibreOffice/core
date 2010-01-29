@@ -78,14 +78,26 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
     com::sun::star::security::XCertificate createCertificateFromAscii( [in] string asciiCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
-     * Verify a certificate.
-     *
-     * The method provides a way to verify a certificate.
-     *
-     * The validation status will returned as a bit-wise long, please refer to
-     * CertificateValidity definition.
+      Verify a certificate.
+
+      The method provides a way to verify a certificate.
+      @param xEECertificate
+          The certificate which is to be validated.
+
+      @param intermediateCertificates
+          Additional certificates which can be used by the method in constructing
+          the certificate chain. The root certificate may also be contained. However,
+          the implementation must check if the root certificate is indeed trusted by
+          the user.
+          All entries of the sequence must be non-null references.
+
+      @return
+          The validation status will returned as a bit-wise long, please refer to
+          CertificateValidity definition.
      */
-    long verifyCertificate( [in] com::sun::star::security::XCertificate xCertificate ) raises( com::sun::star::uno::SecurityException ) ;
+    long verifyCertificate( [in] com::sun::star::security::XCertificate xEECertificate,
+        [in] sequence< com::sun::star::security::XCertificate > intermediateCertificates)
+        raises( com::sun::star::uno::SecurityException ) ;
 
     /**
      * Get a certificate characters.
