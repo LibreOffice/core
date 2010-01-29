@@ -66,7 +66,7 @@ SLOFILES=   $(SLO)$/macromigrationwizard.obj \
 # --- library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
         $(CPPULIB)          \

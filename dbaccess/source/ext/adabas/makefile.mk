@@ -80,7 +80,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(TARGET).dxp
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- .res file ----------------------------------------------------------
 RES1FILELIST=\
