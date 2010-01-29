@@ -41,13 +41,13 @@ module com { module sun { module star { module document {
  */
 interface XDocumentRecovery
 {
-    /** determines whether the document has been modified since the last call to <member>saveToRecoveryFile</member>.
+    /** determines whether the document has been modified since the last call to <member>storeToRecoveryFile</member>.
 
-        <p>If <code>saveToRecoveryFile</code> has not been called before, this method returns whether the document
+        <p>If <code>storeToRecoveryFile</code> has not been called before, this method returns whether the document
         has been modified since it has been loaded respectively created.</p>
 
         <p>When saving a session, either in case of a emergency (when OpenOffice.org crashed), or during a
-        periodic session save as configured by the user, <member>saveToRecoveryFile</member> is called for every
+        periodic session save as configured by the user, <member>storeToRecoveryFile</member> is called for every
         document where <code>wasModifiedSinceLastSave</code> returns <TRUE/>.</p>
 
         <p>It's allowed to implement this method sloppy, by returning <TRUE/> in cases where it is not sure whether
@@ -74,7 +74,7 @@ interface XDocumentRecovery
 
         @see MediaDescriptor
     */
-    void    saveToRecoveryFile(
+    void    storeToRecoveryFile(
                 [in] string TargetLocation,
                 [in] sequence< ::com::sun::star::beans::PropertyValue > MediaDescriptor
             )
