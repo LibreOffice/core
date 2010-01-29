@@ -697,7 +697,7 @@ void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const ::comphelper:
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
+void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bReactivated )
 {
     try
     {
@@ -724,7 +724,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
         LifetimeCoupler::couple( *this, xFrame.get() );
 
         // init the edit view
-        if ( m_bForm && m_bOpenInDesign )
+        if ( m_bForm && m_bOpenInDesign && !i_bReactivated )
             impl_initFormEditView( xController );
     }
     catch( const RuntimeException& )
@@ -1034,7 +1034,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     if ( _bActivate && !bOpenHidden )
     {
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-        ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
+        ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( false );
     }
     else
     {
@@ -1091,7 +1091,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
             if ( bIsActive && !bIsAliveNewStyleReport )
             {
-                ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
+                ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( true );
                 return makeAny( getComponent() );
             }
         }
