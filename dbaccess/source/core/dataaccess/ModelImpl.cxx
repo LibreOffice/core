@@ -57,7 +57,6 @@
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
@@ -840,13 +839,13 @@ void ODatabaseModelImpl::attachResource( const ::rtl::OUString& _rURL, const Seq
 
     }
 
-    m_aArgs = stripLoadArguments( aMediaDescriptor );
+    m_aMediaDescriptor = stripLoadArguments( aMediaDescriptor );
 
     switchToURL( sDocumentLocation, sDocumentURL );
 }
 
 // -----------------------------------------------------------------------------
-Sequence< PropertyValue > ODatabaseModelImpl::stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments )
+::comphelper::NamedValueCollection ODatabaseModelImpl::stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments )
 {
     OSL_ENSURE( !_rArguments.has( "Model" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (1)!" );
     OSL_ENSURE( !_rArguments.has( "ViewName" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (2)!" );
@@ -854,7 +853,7 @@ Sequence< PropertyValue > ODatabaseModelImpl::stripLoadArguments( const ::comphe
     ::comphelper::NamedValueCollection aMutableArgs( _rArguments );
     aMutableArgs.remove( "Model" );
     aMutableArgs.remove( "ViewName" );
-    return aMutableArgs.getPropertyValues();
+    return aMutableArgs;
 }
 
 // -----------------------------------------------------------------------------
@@ -888,11 +887,9 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
         if ( xStorageFactory.is() )
         {
             Any aSource;
-            ::comphelper::NamedValueCollection aArgs( m_aArgs );
-
-            aSource = aArgs.get( "Stream" );
+            aSource = m_aMediaDescriptor.get( "Stream" );
             if ( !aSource.hasValue() )
-                aSource = aArgs.get( "InputStream" );
+                aSource = m_aMediaDescriptor.get( "InputStream" );
             if ( !aSource.hasValue() && m_sDocFileLocation.getLength() )
                 aSource <<= m_sDocFileLocation;
             // TODO: shouldn't we also check URL?
@@ -1048,7 +1045,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
             // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
-            xModel->attachResource( ::rtl::OUString(), m_aArgs );
+            xModel->attachResource( ::rtl::OUString(), m_aMediaDescriptor.getPropertyValues() );
         }
 
         if ( _bInitialize )
@@ -1197,9 +1194,8 @@ bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 // -----------------------------------------------------------------------------
 bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
-    ::comphelper::NamedValueCollection aArgs( m_aArgs );
     Reference< XInteractionHandler > xInteraction;
-    xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
+    xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
     return m_aMacroMode.checkMacrosOnLoading( xInteraction );
 }
 
@@ -1377,8 +1373,7 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     sal_Int16 nCurrentMode = MacroExecMode::NEVER_EXECUTE;
     try
     {
-        ::comphelper::NamedValueCollection aArgs( m_aArgs );
-        nCurrentMode = aArgs.getOrDefault( "MacroExecutionMode", nCurrentMode );
+        nCurrentMode = m_aMediaDescriptor.getOrDefault( "MacroExecutionMode", nCurrentMode );
     }
     catch( const Exception& )
     {
@@ -1390,19 +1385,8 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
-    try
-    {
-        ::comphelper::NamedValueCollection aArgs( m_aArgs );
-        aArgs.put( "MacroExecutionMode", nMacroMode );
-        aArgs >>= m_aArgs;
-        return sal_True;
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
-    return sal_False;
+    m_aMediaDescriptor.put( "MacroExecutionMode", nMacroMode );
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------

@@ -993,7 +993,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
-    ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->getResource() );
+    const ::comphelper::NamedValueCollection& aDBDocArgs( m_pImpl->m_pDataSource->getMediaDescriptor() );
     aDocumentArgs.put( "InteractionHandler", aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
 
     ::boost::optional< sal_Int16 > aDocumentMacroMode;

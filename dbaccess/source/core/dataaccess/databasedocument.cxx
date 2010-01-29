@@ -378,15 +378,15 @@ namespace
     }
 
     // -----------------------------------------------------------------------------
-    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const Sequence< PropertyValue >& _rDescriptor, const ::rtl::OUString _rURL )
+    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const ::rtl::OUString _rURL )
     {
-        ::comphelper::NamedValueCollection aMediaDescriptor( _rDescriptor );
+        ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
         if ( _rURL.getLength() )
         {
-            aMediaDescriptor.put( "FileName", _rURL );
-            aMediaDescriptor.put( "URL", _rURL );
+            aMutableDescriptor.put( "FileName", _rURL );
+            aMutableDescriptor.put( "URL", _rURL );
         }
-        return aMediaDescriptor.getPropertyValues();
+        return aMutableDescriptor.getPropertyValues();
     }
 }
 
@@ -428,9 +428,9 @@ void ODatabaseDocument::impl_reset_nothrow()
 void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentContext _rContext, const Reference< XInterface >& _rxTargetComponent,
                                                  const ::comphelper::NamedValueCollection& _rResource )
 {
-    Sequence< Any > aFilterArgs;
+    Sequence< Any > aFilterCreationArgs;
     Reference< XStatusIndicator > xStatusIndicator;
-    lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterArgs );
+    lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
     /** property map for import info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
@@ -443,19 +443,20 @@ void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentCo
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
 
-    const sal_Int32 nCount = aFilterArgs.getLength();
-    aFilterArgs.realloc(nCount + 1);
-    aFilterArgs[nCount] <<= xInfoSet;
+    const sal_Int32 nCount = aFilterCreationArgs.getLength();
+    aFilterCreationArgs.realloc(nCount + 1);
+    aFilterCreationArgs[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
+        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs ),
         UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( _rxTargetComponent, UNO_QUERY_THROW );
     xImporter->setTargetDocument( xComponent );
 
     Reference< XFilter > xFilter( xImporter, UNO_QUERY_THROW );
-    xFilter->filter( ODatabaseModelImpl::stripLoadArguments( _rResource ) );
+    Sequence< PropertyValue > aFilterArgs( ODatabaseModelImpl::stripLoadArguments( _rResource ).getPropertyValues() );
+    xFilter->filter( aFilterArgs );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -751,7 +752,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rURL, 
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
-    return m_pImpl->getResource();
+    return m_pImpl->getMediaDescriptor().getPropertyValues();
 }
 
 // -----------------------------------------------------------------------------
@@ -781,7 +782,12 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
     m_pImpl->checkMacrosOnLoading();
 
     // check if there are sub components to recover from our document storage
-    if ( !m_bHasBeenRecovered )
+    bool bAttemptRecovery = m_bHasBeenRecovered;
+    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
+        // do not use getOrDefault, it will throw for invalid types, which is not desired here
+        m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
+
+    if ( !bAttemptRecovery )
         return;
 
     try
@@ -921,11 +927,11 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
         if ( m_pImpl->m_bDocumentReadOnly )
             throw IOException();
 
-    impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getResource(), SAVE, aGuard );
+    impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getMediaDescriptor(), SAVE, aGuard );
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const Sequence< PropertyValue>& _rArguments,
+void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const ::comphelper::NamedValueCollection& _rArguments,
     const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),

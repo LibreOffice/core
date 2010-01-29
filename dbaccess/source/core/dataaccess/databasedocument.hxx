@@ -227,7 +227,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     void impl_storeAs_throw(
             const ::rtl::OUString& _rURL,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArguments,
+            const ::comphelper::NamedValueCollection& _rArguments,
             const StoreType _eType,
             DocumentGuard& _rGuard
          )

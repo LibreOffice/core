@@ -73,6 +73,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/sharedmutex.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -191,7 +192,7 @@ private:
     ODatabaseContext*                                                           m_pDBContext;
     DocumentEventsData                                                          m_aDocumentEvents;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aArgs;
+    ::comphelper::NamedValueCollection                                          m_aMediaDescriptor;
     /// the URL the document was loaded from
     ::rtl::OUString                                                             m_sDocFileLocation;
 
@@ -302,14 +303,14 @@ public:
     DocumentEventsData&
             getDocumentEvents() { return m_aDocumentEvents; }
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
-            getResource() const { return m_aArgs; }
+    const ::comphelper::NamedValueCollection&
+            getMediaDescriptor() const { return m_aMediaDescriptor; }
 
     void    attachResource(
                 const ::rtl::OUString& _rURL,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs );
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    static ::comphelper::NamedValueCollection
             stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments );
 
 // other stuff
