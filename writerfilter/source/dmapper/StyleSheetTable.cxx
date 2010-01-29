@@ -209,7 +209,9 @@ XMLTag::Pointer_t TableStyleSheetEntry::toTag()
     {
         PropertyMapPtr pMap = GetProperties(1 << nBit);
 
-        pResult->addTag(pMap->toTag());
+        XMLTag::Pointer_t pTag = pMap->toTag();
+        pTag->addAttr("kind", nBit);
+        pResult->addTag(pTag);
     }
 
     return pResult;
