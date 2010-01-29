@@ -276,21 +276,24 @@ interface XDatabaseDocumentUI
                  ::com::sun::star::container::NoSuchElementException,
                  ::com::sun::star::sdbc::SQLException );
 
-    /** creates a new sub cokmponent of the given type
+    /** creates a new sub component of the given type
 
-        <p>In opposite to <member>createComponent</member>, this method allows you to specify
-        additional arguments which are passed to the to-be-loaded component.</p>
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
 
-        <p>The meaning of the the arguments is defined at the service which is effectively
-        created. See the <a href="#component_types">above table</a> for a list of those
-        services.</p>
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.
     */
     ::com::sun::star::lang::XComponent createComponent(
-                    [in] long ObjectType )
+                    [in] long ObjectType,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
         raises ( ::com::sun::star::lang::IllegalArgumentException,
                  ::com::sun::star::sdbc::SQLException );
 
-    /** creates a new sub cokmponent of the given type
+    /** creates a new sub component of the given type
 
         <p>In opposite to <member>createComponent</member>, this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
@@ -298,10 +301,24 @@ interface XDatabaseDocumentUI
         <p>The meaning of the the arguments is defined at the service which is effectively
         created. See the <a href="#component_types">above table</a> for a list of those
         services.</p>
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.<br/>
+            You can use this object to control various aspects of the sub component. For instance, you could decide
+            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,
+            manipulate the component, and then finally show it by invoking the <code>show</code> command at the
+            definition object.
     */
     ::com::sun::star::lang::XComponent createComponentWithArguments(
                     [in] long ObjectType,
-                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments )
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
         raises ( ::com::sun::star::lang::IllegalArgumentException,
                  ::com::sun::star::sdbc::SQLException );
 };
