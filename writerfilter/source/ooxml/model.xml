@@ -4424,7 +4424,27 @@
     <resource name="ST_Coordinate32" resource="Integer" generated="yes"/>
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_Angle" resource="Integer" generated="yes"/>
+    <resource name="CT_Angle" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Angle_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
+    <resource name="CT_PositiveFixedAngle" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_PositiveFixedAngle_val" action="setValue"/>
+    </resource>
     <resource name="ST_Percentage" resource="Integer" generated="yes"/>
+    <resource name="CT_Percentage" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Percentage_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
+    <resource name="CT_PositivePercentage" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val" action="setValue"/>
+    </resource>
+    <resource name="CT_FixedPercentage" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FixedPercentage_val" action="setValue"/>
+    </resource>
+    <resource name="CT_PositiveFixedPercentage" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val" action="setValue"/>
+    </resource>
     <resource name="CT_Point2D" resource="Properties">
       <attribute name="x" tokenid="ooxml:CT_Point2D_x"/>
       <attribute name="y" tokenid="ooxml:CT_Point2D_y"/>
@@ -8181,10 +8201,30 @@
       </define>
     </grammar>
     <resource name="ST_Integer255" resource="Integer" generated="yes"/>
+    <resource name="CT_Integer255" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Integer255_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
     <resource name="ST_Integer2" resource="Integer" generated="yes"/>
+    <resource name="CT_Integer2" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Integer2_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
     <resource name="ST_SpacingRule" resource="Integer" generated="yes"/>
+    <resource name="CT_SpacingRule" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_SpacingRule_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
     <resource name="ST_UnSignedInteger" resource="Integer" generated="yes"/>
+    <resource name="CT_UnSignedInteger" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_UnSignedInteger_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
     <resource name="ST_Char" resource="String" generated="yes"/>
+    <resource name="CT_Char" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Char_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_OnOff" resource="List" generated="yes">
       <value name="on" tokenid="ooxml:Value_math_ST_OnOff_on">on</value>
       <value name="off" tokenid="ooxml:Value_math_ST_OnOff_off">off</value>
@@ -8194,19 +8234,32 @@
       <action name="start" action="setDefaultBooleanValue"/>
     </resource>
     <resource name="ST_String" resource="String" generated="yes"/>
+    <resource name="CT_String" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="ST_XAlign" resource="List" generated="yes">
       <value name="left" tokenid="ooxml:Value_math_ST_XAlign_left">left</value>
       <value name="center" tokenid="ooxml:Value_math_ST_XAlign_center">center</value>
       <value name="right" tokenid="ooxml:Value_math_ST_XAlign_right">right</value>
+    </resource>
+    <resource name="CT_XAlign" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_XAlign_val" action="setValue"/>
     </resource>
     <resource name="ST_YAlign" resource="List" generated="yes">
       <value name="top" tokenid="ooxml:Value_math_ST_YAlign_top">top</value>
       <value name="center" tokenid="ooxml:Value_math_ST_YAlign_center">center</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_YAlign_bot">bot</value>
     </resource>
+    <resource name="CT_YAlign" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_YAlign_val" action="setValue"/>
+    </resource>
     <resource name="ST_Shp" resource="List" generated="yes">
       <value name="centered" tokenid="ooxml:Value_math_ST_Shp_centered">centered</value>
       <value name="match" tokenid="ooxml:Value_math_ST_Shp_match">match</value>
+    </resource>
+    <resource name="CT_Shp" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Shp_val" action="setValue"/>
     </resource>
     <resource name="ST_FType" resource="List" generated="yes">
       <value name="bar" tokenid="ooxml:Value_math_ST_FType_bar">bar</value>
@@ -8214,13 +8267,22 @@
       <value name="lin" tokenid="ooxml:Value_math_ST_FType_lin">lin</value>
       <value name="noBar" tokenid="ooxml:Value_math_ST_FType_noBar">noBar</value>
     </resource>
+    <resource name="CT_FType" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_FType_val" action="setValue"/>
+    </resource>
     <resource name="ST_LimLoc" resource="List" generated="yes">
       <value name="undOvr" tokenid="ooxml:Value_math_ST_LimLoc_undOvr">undOvr</value>
       <value name="subSup" tokenid="ooxml:Value_math_ST_LimLoc_subSup">subSup</value>
     </resource>
+    <resource name="CT_LimLoc" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_LimLoc_val" action="setValue"/>
+    </resource>
     <resource name="ST_TopBot" resource="List" generated="yes">
       <value name="top" tokenid="ooxml:Value_math_ST_TopBot_top">top</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_TopBot_bot">bot</value>
+    </resource>
+    <resource name="CT_TopBot" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_TopBot_val" action="setValue"/>
     </resource>
     <resource name="ST_Script" resource="List" generated="yes">
       <value name="roman" tokenid="ooxml:Value_math_ST_Script_roman">roman</value>
@@ -8229,6 +8291,9 @@
       <value name="doublemstruck" tokenid="ooxml:Value_math_ST_Script_doublemstruck">double-struck</value>
       <value name="sansmserif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
       <value name="monospace" tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
+    </resource>
+    <resource name="CT_Script" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Script_val" action="setValue"/>
     </resource>
     <resource name="ST_Style" resource="List">
       <value tokenid="ooxml:Value_ST_Style_b">b</value>
@@ -8245,16 +8310,29 @@
       <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
       <value name="centerGroup" tokenid="ooxml:Value_math_ST_Jc_centerGroup">centerGroup</value>
     </resource>
+    <resource name="CT_OMathJc" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
+    </resource>
     <resource name="ST_TwipsMeasure" resource="Integer" generated="yes"/>
+    <resource name="CT_TwipsMeasure" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
+      <action name="start" action="setDefaultIntegerValue"/>
+    </resource>
     <resource name="ST_BreakBin" resource="List" generated="yes">
       <value name="before" tokenid="ooxml:Value_math_ST_BreakBin_before">before</value>
       <value name="after" tokenid="ooxml:Value_math_ST_BreakBin_after">after</value>
       <value name="repeat" tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
     </resource>
+    <resource name="CT_BreakBin" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_BreakBin_val" action="setValue"/>
+    </resource>
     <resource name="ST_BreakBinSub" resource="List" generated="yes">
       <value name="mm" tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
       <value name="mp" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
       <value name="pm" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
+    </resource>
+    <resource name="CT_BreakBinSub" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_BreakBinSub_val" action="setValue"/>
     </resource>
   </namespace>
   <namespace name="shared-relationshipReference" file="shared-relationshipReference.rng">
@@ -21693,6 +21771,9 @@
       <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
     </resource>
+    <resource name="CT_TextAlignment" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_TextAlignment_val" action="setValue"/>
+    </resource>
     <resource name="ST_DisplacedByCustomXml" resource="List" generated="yes">
       <value name="next" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
       <value name="prev" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
@@ -22540,6 +22621,10 @@
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_Cnf" resource="String" generated="yes"/>
+    <resource name="CT_Cnf" resource="Value" generated="yes">
+      <attribute name="val" tokenid="ooxml:CT_Cnf_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
     <resource name="CT_TrPrBase" resource="Properties">
       <kind name="table"/>
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
